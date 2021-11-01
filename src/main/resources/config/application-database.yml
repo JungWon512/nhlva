@@ -1,0 +1,202 @@
+# profile(로컬 서버 환경)
+spring.profiles: database-local
+#        driverClassName: net.sf.log4jdbc.sql.jdbcapi.DriverSpy
+#        jdbcUrl: "jdbc:log4jdbc:tibero:thin:@192.168.0.92:8629:tibero"
+
+spring:
+  datasource:
+   driverClassName: com.tmax.tibero.jdbc.TbDriver
+   url: "jdbc:tibero:thin:@192.168.0.92:8629:tibero"
+   username: lalm
+   password: lalm123
+
+---
+# profile(개발 서버 환경)
+spring.profiles: database-develop
+
+spring:
+  datasource:
+    dbcp2:
+      initial-size: 500
+      max-idle: 500
+      min-idle: 500
+      max-wait-millis: 3000
+      max-total: 500
+    hikari:
+      main:
+        driverClassName: org.mariadb.jdbc.Driver
+        jdbcUrl: "jdbc:mariadb://115.41.222.25:8888/auction?allowMultiQueries=true&useCursorFetch=true&fetchSize=10000&autoReconnect=true&characterEncoding=utf-8"
+        username: ishiftTest
+        password: ishift7150!
+        maxLifetime: 18000000
+        poolName: HikariCP
+        readOnly: false
+        connectionTestQuery: SELECT 1
+        autoCommit: true # AOP로 트랜잭션을 제어하기 때문에 false로 사용 (default: true)
+        connectionTimeout: 18000000 # 커넥션 타임 아웃 (120s)
+        idleTimeout: 1200000 # pool 미사용 커넥션 유지 시간 (20m)
+        minimumIdle: 100 # 최소 커넥션 유지 개수 (default: same as maximumPoolSize)
+        maximumPoolSize: 500 # pool에 유지시킬 수 있는 최대 커넥션 수
+      hadong:
+        driverClassName: org.mariadb.jdbc.Driver
+        jdbcUrl: "jdbc:mariadb://115.41.222.25:8888/auction?allowMultiQueries=true&useCursorFetch=true&fetchSize=10000&autoReconnect=true&characterEncoding=utf-8"
+        username: ishiftTest
+        password: ishift7150!
+#        driverClassName: net.sf.log4jdbc.sql.jdbcapi.DriverSpy
+#        jdbcUrl: "jdbc:log4jdbc:sqlserver://hdcow.iptime.org:2353;databaseName=lalm;autoReconnect=true;encrypt=true;trustServerCertificate=true"
+#        username: lalm
+#        password: lalm123
+        maxLifetime: 18000000
+        poolName: HikariCP
+        readOnly: false
+        connectionTestQuery: SELECT 1
+        autoCommit: true # AOP로 트랜잭션을 제어하기 때문에 false로 사용 (default: true)
+        connectionTimeout: 18000000 # 커넥션 타임 아웃 (120s)
+        idleTimeout: 1200000 # pool 미사용 커넥션 유지 시간 (20m)
+        minimumIdle: 100 # 최소 커넥션 유지 개수 (default: same as maximumPoolSize)
+        maximumPoolSize: 500 # pool에 유지시킬 수 있는 최대 커넥션 수
+      hwasoon:
+        driverClassName: org.mariadb.jdbc.Driver
+        jdbcUrl: "jdbc:mariadb://115.41.222.25:8888/auction?allowMultiQueries=true&useCursorFetch=true&fetchSize=10000&autoReconnect=true&characterEncoding=utf-8"
+        username: ishiftTest
+        password: ishift7150!
+#        driverClassName: net.sf.log4jdbc.sql.jdbcapi.DriverSpy
+#        jdbcUrl: "jdbc:log4jdbc:sqlserver://hwasooncow.iptime.org:80;databaseName=lalm;autoReconnect=true"
+#        username: lalm
+#        password: lalm123
+        maxLifetime: 18000000
+        poolName: HikariCP
+        readOnly: false
+        connectionTestQuery: SELECT 1
+        autoCommit: true # AOP로 트랜잭션을 제어하기 때문에 false로 사용 (default: true)
+        connectionTimeout: 18000000 # 커넥션 타임 아웃 (120s)
+        idleTimeout: 1200000 # pool 미사용 커넥션 유지 시간 (20m)
+        minimumIdle: 100 # 최소 커넥션 유지 개수 (default: same as maximumPoolSize)
+        maximumPoolSize: 500 # pool에 유지시킬 수 있는 최대 커넥션 수
+      mujinjang:
+        driverClassName: org.mariadb.jdbc.Driver
+        jdbcUrl: "jdbc:mariadb://115.41.222.25:8888/auction?allowMultiQueries=true&useCursorFetch=true&fetchSize=10000&autoReconnect=true&characterEncoding=utf-8"
+        username: ishiftTest
+        password: ishift7150!
+#        driverClassName: net.sf.log4jdbc.sql.jdbcapi.DriverSpy
+#        jdbcUrl: "jdbc:log4jdbc:sqlserver://jscow1.iptime.org:2353;databaseName=lalm;autoReconnect=true;encrypt=true;trustServerCertificate=true"
+#        username: lalm
+#        password: lalm123
+        maxLifetime: 18000000
+        poolName: HikariCP
+        readOnly: false
+        connectionTestQuery: SELECT 1
+        autoCommit: true # AOP로 트랜잭션을 제어하기 때문에 false로 사용 (default: true)
+        connectionTimeout: 18000000 # 커넥션 타임 아웃 (120s)
+        idleTimeout: 1200000 # pool 미사용 커넥션 유지 시간 (20m)
+        minimumIdle: 100 # 최소 커넥션 유지 개수 (default: same as maximumPoolSize)
+        maximumPoolSize: 500 # pool에 유지시킬 수 있는 최대 커넥션 수
+  mail:
+    smtp:
+      starttls:
+        enable: true
+      host: smtp.gmail.com
+      auth: true
+      port: 587
+      ssl:
+        enable: true
+
+
+---
+# profile(상용 서버 환경)
+spring.profiles: database-production
+
+spring:
+  datasource:
+    #driver-class-name: org.mariadb.jdbc.Driver
+    #url: jdbc:mariadb://192.168.0.100:3306/auction?allowMultiQueries=true&useCursorFetch=true&fetchSize=100000
+    #username: auction
+    #password: auction1@
+#    driver-class-name: org.mariadb.jdbc.Driver
+#    url: jdbc:mariadb://115.41.222.25:8888/auction?allowMultiQueries=true&useCursorFetch=true&fetchSize=10000&autoReconnect=true&characterEncoding=utf-8
+#    username: ishiftTest
+#    password: ishift7150!
+    dbcp2:
+      initial-size: 500
+      max-idle: 500
+      min-idle: 500
+      max-wait-millis: 3000
+      max-total: 500
+    hikari:
+      main:
+        driverClassName: org.mariadb.jdbc.Driver
+        jdbcUrl: "jdbc:mariadb://1.201.161.58:3306/auction?allowMultiQueries=true&useCursorFetch=true&fetchSize=10000&autoReconnect=true&characterEncoding=utf-8"
+        username: ishift
+        password: ishift7150!
+        maxLifetime: 18000000
+        poolName: HikariCP
+        readOnly: false
+        connectionTestQuery: SELECT 1
+        autoCommit: true # AOP로 트랜잭션을 제어하기 때문에 false로 사용 (default: true)
+        connectionTimeout: 18000000 # 커넥션 타임 아웃 (120s)
+        idleTimeout: 1200000 # pool 미사용 커넥션 유지 시간 (20m)
+        minimumIdle: 100 # 최소 커넥션 유지 개수 (default: same as maximumPoolSize)
+        maximumPoolSize: 500 # pool에 유지시킬 수 있는 최대 커넥션 수
+      hadong:
+#        driverClassName: org.mariadb.jdbc.Driver
+#        jdbcUrl: "jdbc:mariadb://1.201.161.58:3306/auction?allowMultiQueries=true&useCursorFetch=true&fetchSize=10000&autoReconnect=true&characterEncoding=utf-8"
+#        username: ishift
+#        password: ishift7150!
+        driverClassName: net.sf.log4jdbc.sql.jdbcapi.DriverSpy
+        jdbcUrl: "jdbc:log4jdbc:sqlserver://hdcow.iptime.org:2353;databaseName=lalm;autoReconnect=true;encrypt=true;trustServerCertificate=true"
+        username: lalm
+        password: lalm123
+        maxLifetime: 18000000
+        poolName: HikariCP
+        readOnly: false
+        connectionTestQuery: SELECT 1
+        autoCommit: true # AOP로 트랜잭션을 제어하기 때문에 false로 사용 (default: true)
+        connectionTimeout: 18000000 # 커넥션 타임 아웃 (120s)
+        idleTimeout: 1200000 # pool 미사용 커넥션 유지 시간 (20m)
+        minimumIdle: 100 # 최소 커넥션 유지 개수 (default: same as maximumPoolSize)
+        maximumPoolSize: 500 # pool에 유지시킬 수 있는 최대 커넥션 수
+      hwasoon:
+#        driverClassName: org.mariadb.jdbc.Driver
+#        jdbcUrl: "jdbc:mariadb://1.201.161.58:3306/auction?allowMultiQueries=true&useCursorFetch=true&fetchSize=10000&autoReconnect=true&characterEncoding=utf-8"
+#        username: ishift
+#        password: ishift7150!
+        driverClassName: net.sf.log4jdbc.sql.jdbcapi.DriverSpy
+        jdbcUrl: "jdbc:log4jdbc:sqlserver://hwasooncow.iptime.org:80;databaseName=lalm;autoReconnect=true"
+        username: lalm
+        password: lalm123
+        maxLifetime: 18000000
+        poolName: HikariCP
+        readOnly: false
+        connectionTestQuery: SELECT 1
+        autoCommit: true # AOP로 트랜잭션을 제어하기 때문에 false로 사용 (default: true)
+        connectionTimeout: 18000000 # 커넥션 타임 아웃 (120s)
+        idleTimeout: 1200000 # pool 미사용 커넥션 유지 시간 (20m)
+        minimumIdle: 100 # 최소 커넥션 유지 개수 (default: same as maximumPoolSize)
+        maximumPoolSize: 500 # pool에 유지시킬 수 있는 최대 커넥션 수
+      mujinjang:
+#        driverClassName: org.mariadb.jdbc.Driver
+#        jdbcUrl: "jdbc:mariadb://1.201.161.58:3306/auction?allowMultiQueries=true&useCursorFetch=true&fetchSize=10000&autoReconnect=true&characterEncoding=utf-8"
+#        username: ishift
+#        password: ishift7150!
+        driverClassName: net.sf.log4jdbc.sql.jdbcapi.DriverSpy
+        jdbcUrl: "jdbc:log4jdbc:sqlserver://jscow1.iptime.org:2353;databaseName=lalm;autoReconnect=true;encrypt=true;trustServerCertificate=true"
+        username: lalm
+        password: lalm123
+        maxLifetime: 18000000
+        poolName: HikariCP
+        readOnly: false
+        connectionTestQuery: SELECT 1
+        autoCommit: true # AOP로 트랜잭션을 제어하기 때문에 false로 사용 (default: true)
+        connectionTimeout: 18000000 # 커넥션 타임 아웃 (120s)
+        idleTimeout: 1200000 # pool 미사용 커넥션 유지 시간 (20m)
+        minimumIdle: 100 # 최소 커넥션 유지 개수 (default: same as maximumPoolSize)
+        maximumPoolSize: 500 # pool에 유지시킬 수 있는 최대 커넥션 수
+  mail:
+    smtp:
+      starttls:
+        enable: true
+      host: smtp.gmail.com
+      auth: true
+      port: 587
+      ssl:
+        enable: true

@@ -1,0 +1,100 @@
+<!DOCTYPE tiles-definitions PUBLIC "-//Apache Software Foundation//DTD Tiles Configuration 3.0//EN" "http://tiles.apache.org/dtds/tiles-config_3_0.dtd">
+
+<tiles-definitions>
+    <definition name="default" template="/WEB-INF/tiles/layouts/front/template_default.jsp">
+        <put-attribute name="title" expression="AUCTION"/>
+        <put-attribute name="body_footer_script" value="/WEB-INF/tiles/layouts/front/body_footer_script.jsp"/>
+        <put-attribute name="content" value="/WEB-INF/tiles/layouts/front/content.jsp"/>
+        <put-attribute name="head_footer_script" value="/WEB-INF/tiles/layouts/front/head_footer_script.jsp"/>
+        <put-attribute name="wrapper_footer" value="/WEB-INF/tiles/layouts/front/wrapper_footer.jsp"/>
+        <put-attribute name="wrapper_header" value="/WEB-INF/tiles/layouts/front/wrapper_header.jsp"/>
+    </definition>
+    <definition name="front-layout" template="/WEB-INF/tiles/layouts/front/layout_front.jsp">
+        <put-attribute name="title" expression="AUCTION"/>
+        <put-attribute name="body_footer_script" value="/WEB-INF/tiles/layouts/front/body_footer_script_base.jsp"/>
+        <put-attribute name="content" value="/WEB-INF/tiles/layouts/front/content.jsp"/>
+        <put-attribute name="head_footer_script" value="/WEB-INF/tiles/layouts/front/head_footer_script_base.jsp"/>
+        <put-attribute name="wrapper_footer" value="/WEB-INF/tiles/layouts/front/wrapper_footer_base.jsp"/>
+        <put-attribute name="wrapper_header" value="/WEB-INF/tiles/layouts/front/wrapper_header_base.jsp"/>
+    </definition> 
+    <definition name="admin-layout" template="/WEB-INF/tiles/layouts/admin/layout_admin.jsp">
+        <put-attribute name="commons_css_block" value="/WEB-INF/tiles/layouts/admin/commons_css_block.jsp"/>
+        <put-attribute name="commons_js_block" value="/WEB-INF/tiles/layouts/admin/commons_js_block.jsp"/>
+        <put-attribute name="content" value="/WEB-INF/tiles/layouts/admin/content.jsp"/>
+        <put-attribute name="head_footer_script" value="/WEB-INF/tiles/layouts/admin/head_footer_script.jsp"/>
+        <put-attribute name="body_footer_script" value="/WEB-INF/tiles/layouts/admin/body_footer_script.jsp"/>
+        <put-attribute name="wrapper_header" value="/WEB-INF/tiles/layouts/admin/wrapper_header.jsp"/>
+    </definition>
+    <definition name="admin-login-layout" template="/WEB-INF/tiles/layouts/admin/layout_admin_login.jsp">
+        <put-attribute name="commons_css_block" value="/WEB-INF/tiles/layouts/admin/commons_css_block.jsp"/>
+        <put-attribute name="commons_js_block" value="/WEB-INF/tiles/layouts/admin/commons_js_block.jsp"/>
+        <put-attribute name="content" value="/WEB-INF/tiles/layouts/admin/content.jsp"/>
+        <put-attribute name="head_footer_script" value="/WEB-INF/tiles/layouts/admin/head_footer_script.jsp"/>
+        <put-attribute name="body_footer_script" value="/WEB-INF/tiles/layouts/admin/body_footer_script.jsp"/>
+    </definition>
+    <definition name="board-layout" template="/WEB-INF/tiles/layouts/admin/layout_board.jsp">
+        <put-attribute name="content" value="/WEB-INF/tiles/layouts/admin/content.jsp"/>
+        <put-attribute name="head_footer_script" value="/WEB-INF/tiles/layouts/admin/head_footer_script_board.jsp"/>
+        <put-attribute name="body_footer_script" value="/WEB-INF/tiles/layouts/admin/body_footer_script_board.jsp"/>
+        <put-attribute name="wrapper_header" value="/WEB-INF/tiles/layouts/admin/wrapper_header.jsp"/>
+    </definition>  
+    <definition name="monster-layout" template="/WEB-INF/tiles/layouts/admin/layout_monster.jsp">
+        <put-attribute name="content" value="/WEB-INF/tiles/layouts/admin/content.jsp"/>
+        <put-attribute name="head_footer_script" value="/WEB-INF/tiles/layouts/admin/head_footer_script_board.jsp"/>
+        <put-attribute name="body_footer_script" value="/WEB-INF/tiles/layouts/admin/body_footer_script_board.jsp"/>
+        <put-attribute name="wrapper_header" value="/WEB-INF/tiles/layouts/admin/wrapper_header.jsp"/>
+    </definition>  
+    
+    <definition name="popup-layout" template="/WEB-INF/tiles/layouts/front/popup/layout_popup.jsp">
+        <put-attribute name="title" expression="AUCTION"/>
+        <put-attribute name="body_footer_script" value="/WEB-INF/tiles/layouts/front/body_footer_script_base.jsp"/>
+        <put-attribute name="content" value="/WEB-INF/tiles/layouts/front/content.jsp"/>
+        <put-attribute name="head_footer_script" value="/WEB-INF/tiles/layouts/front/head_footer_script_base.jsp"/>
+        <put-attribute name="wrapper_footer" value="/WEB-INF/tiles/layouts/front/wrapper_footer_base.jsp"/>
+        <put-attribute name="wrapper_header" value="/WEB-INF/tiles/layouts/front/wrapper_header_base.jsp"/>
+    </definition> 
+    <definition name="popup-modal-layout" template="/WEB-INF/tiles/layouts/front/popup/layout_popup_modal.jsp">
+        <put-attribute name="title" expression="AUCTION"/>
+        <put-attribute name="content" value="/WEB-INF/tiles/layouts/front/content.jsp"/>
+    </definition> 
+     
+    <definition name="pop/modal/*" extends="popup-modal-layout">
+        <put-attribute name="content" value="/WEB-INF/jsp/pop/modal/{1}.jsp"/>
+    </definition>
+    <definition name="pop/*" extends="popup-layout">
+        <put-attribute name="content" value="/WEB-INF/jsp/pop/{1}.jsp"/>
+        <put-attribute name="page_footer_script" value="/static/js/page/pop/{1}.js" />
+    </definition>
+    <definition name="auction/*/*" extends="front-layout">
+        <put-attribute name="content" value="/WEB-INF/jsp/auction/{1}/{2}.jsp"/>
+        <put-attribute name="page_footer_script" value="/static/js/page/auction/{1}/{2}.js" />
+    </definition>
+    <definition name="mypage/*/*" extends="front-layout">
+        <put-attribute name="content" value="/WEB-INF/jsp/mypage/{1}/{2}.jsp"/>
+        <put-attribute name="page_footer_script" value="/static/js/page/mypage/{1}/{2}.js" />
+    </definition>  
+    <definition name="front/*/*" extends="front-layout">
+        <put-attribute name="content" value="/WEB-INF/jsp/front/{1}/{2}.jsp"/>
+        <put-attribute name="page_footer_script" value="/static/js/page/{1}/{2}.js" />
+    </definition> 
+    <definition name="admin/auction/board/*" extends="board-layout">
+        <put-attribute name="content" value="/WEB-INF/jsp/admin/auction/board/{1}.jsp"/>
+        <put-attribute name="page_footer_script" value="/static/js/page/admin/auction/board/{1}.js" />
+    </definition>
+    <definition name="admin/auction/monster/*" extends="monster-layout">
+        <put-attribute name="content" value="/WEB-INF/jsp/admin/auction/monster/{1}.jsp"/>
+        <put-attribute name="page_footer_script" value="/static/js/page/admin/auction/monster/{1}.js" />
+    </definition>
+    <definition name="admin/user/*" extends="admin-login-layout">
+        <put-attribute name="content" value="/WEB-INF/jsp/admin/user/{1}.jsp"/>
+        <put-attribute name="page_footer_script" value="/static/js/page/admin/user/{1}.js" />
+    </definition>
+    <definition name="admin/*/*" extends="admin-layout">
+        <put-attribute name="content" value="/WEB-INF/jsp/admin/{1}/{2}.jsp"/>
+        <put-attribute name="page_footer_script" value="/static/js/page/admin/{1}/{2}.js" />
+    </definition>       
+    <definition name="admin/*/*/*" extends="admin-layout">
+        <put-attribute name="content" value="/WEB-INF/jsp/admin/{1}/{2}/{3}.jsp"/>
+        <put-attribute name="page_footer_script" value="/static/js/page/admin/{1}/{2}/{3}.js" />
+    </definition>   
+</tiles-definitions>

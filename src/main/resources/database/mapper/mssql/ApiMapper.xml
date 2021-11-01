@@ -1,0 +1,305 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="ApiMapper">
+	<select id="sealectAuctQcn" parameterType="map" resultType="map">
+		SELECT A.*,
+		  CASE WHEN A.AUC_OBJ_DSC = '1' THEN 10000 ELSE 10000 END as divisionPrice
+		  ,B.SEL_STS_DSC
+		  FROM tb_la_is_mh_auc_qcn A
+		  LEFT JOIN TB_LA_IS_MH_AUC_STN B ON A.NA_BZPLC     = B.NA_BZPLC     
+										AND A.AUC_OBJ_DSC  = B.AUC_OBJ_DSC  
+										AND A.AUC_DT       = B.AUC_DT
+		  WHERE A.AUC_DT = #{aucDt}
+		  AND A.NA_BZPLC = #{naBzplc}
+		<if test="aucObjDsc !=null and !aucObjDsc.equals('')">
+		  AND A.AUC_OBJ_DSC = #{aucObjDsc}
+		</if>
+		ORDER BY A.AUC_OBJ_DSC ASC
+	</select>
+	
+	<select id="selectAuctStn" parameterType="map" resultType="map">
+		SELECT A.*
+		FROM TB_LA_IS_MH_AUC_STN A
+		WHERE A.AUC_DT = #{aucDt}
+		AND A.NA_BZPLC = #{naBzplc}
+		AND A.AUC_OBJ_DSC = #{aucObjDsc}
+	</select>
+	
+	<select id="sealectAuctCowCnt" parameterType="map" resultType="java.lang.Integer">
+		SELECT count(*)
+		 FROM TB_LA_IS_MH_SOG_COW A LEFT OUTER JOIN TB_LA_IS_MM_FHS B ON A.NA_BZPLC = B.NA_BZPLC
+		         AND A.FHS_ID_NO  = B.FHS_ID_NO
+		         AND A.FARM_AMNNO  = B.FARM_AMNNO
+		         LEFT OUTER JOIN TB_LA_IS_MM_INDV C ON A.NA_BZPLC = C.NA_BZPLC
+		         AND A.SRA_INDV_AMNNO = C.SRA_INDV_AMNNO
+		         AND A.SRA_SRS_DSC  = C.SRA_SRS_DSC
+		         LEFT OUTER JOIN ( SELECT SIMP_C, SIMP_CNM
+		              FROM TB_LA_IS_MH_COMN_APL
+		              WHERE SIMP_TPC = 'SRA_INDV_BRDSRA_RG_DSC') D ON C.RG_DSC = D.SIMP_C 
+		         LEFT OUTER JOIN ( SELECT SIMP_C, SIMP_CNM
+		              FROM TB_LA_IS_MH_COMN_APL
+		              WHERE SIMP_TPC = 'SRA_INDV_BRDSRA_RG_DSC') E ON C.MCOW_DSC = E.SIMP_C
+		        JOIN TB_LA_IS_MH_AUC_QCN AS F
+		               ON
+		               A.NA_BZPLC = F.NA_BZPLC AND
+		               A.AUC_DT = F.AUC_DT AND
+		               A.AUC_OBJ_DSC = F.AUC_OBJ_DSC
+		 WHERE A.NA_BZPLC = #{naBzplc}
+		 AND A.AUC_DT  = #{aucDt}
+		 AND A.AUC_OBJ_DSC = CASE WHEN #{aucObjDsc} = '0' THEN A.AUC_OBJ_DSC ELSE #{aucObjDsc} END
+		 
+		 <if test="mAuctionResult !=null and !mAuctionResult.equals('')">
+		  AND A.SEL_STS_DSC = #{mAuctionResult}
+		 </if>
+		 
+		 <if test="stAucNo !=null and !stAucNo.equals('') and edAucNo !=null and !edAucNo.equals('')">
+		 	AND A.AUC_PRG_SQ <![CDATA[>=]]> ${stAucNo}
+		 	AND A.AUC_PRG_SQ <![CDATA[<=]]> ${edAucNo}
+		 </if>
+	</select>
+	
+	<select id="selectAuctCowList" parameterType="map" resultType="map">
+		SELECT
+         A.NA_BZPLC,                    <!-- 경제통합사업장코드   -->
+	     A.AUC_PRG_SQ,                   <!-- 경매진행순서   -->
+	     A.COW_SOG_WT,                   <!-- 우출하중량    -->
+	     A.AUC_OBJ_DSC,                   <!-- 경매대상구분코드  -->
+	     A.FIR_LOWS_SBID_LMT_AM / 10000  AS FIR_LOWS_SBID_LMT_AM,        <!-- 최초최저낙찰한도금액  -->
+	     A.LOWS_SBID_LMT_AM / 10000   AS LOWS_SBID_LMT_AM,         <!-- 최저낙찰한도금액  -->
+	     A.SRA_SBID_AM / 10000    AS SRA_SBID_AM,           <!-- 축산낙찰금액   -->
+	     A.SRA_SBID_UPR,                   <!-- 낙찰 단가   -->
+	     A.RMK_CNTN,                    <!-- 비고 내용   -->
+	     A.BRANDNM,                    <!-- 브랜드명   -->
+	     A.PRNY_MTCN,                   <!-- 임신개월수   -->
+	     A.AUC_DT,                    <!-- 경매일자   -->
+	     REPLACE(REPLACE(REPLACE(CONVERT(varchar,A.LSCHG_DTM,20),'-',''),' ',''),':','') as LSCHG_DTM, <!-- 최종변경일시   -->
+	     A.LS_CMENO,                    <!-- 최종변경자개인번호  -->
+	     A.SEL_STS_DSC,                   <!-- 판매상태구분코드  -->
+	     A.LWPR_CHG_NT,                   <!-- 최저가변경횟수  -->
+	     A.LVST_AUC_PTC_MN_NO,                 <!-- 가축경매참여자번호  -->
+	     A.DNA_YN,                    <!-- DNA    -->
+	     A.SRA_PD_RGNNM,                   <!-- 축산생산지역명  -->
+	     A.OSLP_NO,                    <!-- 원표번호   -->
+	     A.TRMN_AMNNO,                   <!-- 거래인관리번호  -->
+	     A.LED_SQNO,                    <!-- 원장일련번호   -->                   <!-- 응찰일시   -->
+	     A.TRPCS_PY_YN,                   <!-- 운송비지급여부  -->
+	     A.PPGCOW_FEE_DSC,                  <!-- 번식우수수료구분코드  -->
+	     A.AUC_PRG_SQ as STAND_POSITION,               <!-- 계류대번호   -->
+	  (SELECT TOP 1 E.ATDR_DTM 
+	   FROM TB_LA_IS_MH_ATDR_LOG E
+	   WHERE E.NA_BZPLC = A.NA_BZPLC
+	    AND E.AUC_OBJ_DSC = A.AUC_OBJ_DSC 
+	    AND E.AUC_DT = A.AUC_DT
+	    AND E.OSLP_NO = A.OSLP_NO
+	    AND E.TRMN_AMNNO = A.TRMN_AMNNO
+	    AND E.LVST_AUC_PTC_MN_NO = A.LVST_AUC_PTC_MN_NO
+	    AND E.ATDR_AM = A.SRA_SBID_UPR
+	   ) AS ATDR_DTM,   <!-- 응찰일시  -->
+	     'N' as IS_EXCESS_COW,                 <!-- 계류대번호 플래그  -->
+	     B.FTSNM,                    <!-- 농가명    -->
+	     B.MACO_YN,                    <!-- 조합원여부   -->
+	     C.SRA_INDV_AMNNO,                  <!-- 축산개체관리번호     -->
+	     C.SRA_SRS_DSC,                   <!-- 축산축종구분코드    -->
+	     C.FHS_ID_NO,                   <!--  농가식별번호     -->
+	     C.FARM_AMNNO,                   <!--  농장관리번호     -->
+	     C.BIRTH,                    <!--  생년월일     -->
+	     ltrim(rtrim(C.KPN_NO)) as KPN_NO,              <!-- KPN번호     -->
+	     C.INDV_SEX_C,                   <!-- 축산개체성별코드    -->
+	     C.MCOW_SRA_INDV_AMNNO,                 <!-- 어미소축산개체관리번호   -->
+	     C.MATIME,                    <!--  산차      -->
+	     C.SRA_INDV_PASG_QCN,                 <!--  계대      -->
+	     C.INDV_ID_NO,                   <!--  개체식별번호     -->
+	     C.SRA_INDV_BRDSRA_RG_NO,                <!-- 축산개체종축등록번호    -->
+	     C.RG_DSC,                    <!--  등록구분코드     -->
+	     C.ANW_YN,                    <!--  신규여부(데이터전환시 구데이터인지) -->
+	     CASE WHEN C.INDV_SEX_C = '0' THEN '없음' WHEN C.INDV_SEX_C = '1' THEN '암'
+	     WHEN C.INDV_SEX_C = '2' THEN '수'   WHEN C.INDV_SEX_C = '3' THEN '거세'
+	     WHEN C.INDV_SEX_C = '4' THEN '미경산'  WHEN C.INDV_SEX_C = '5' THEN '비거세'
+	     WHEN C.INDV_SEX_C = '6' THEN '프리마틴'  WHEN C.INDV_SEX_C = '9' THEN '공통' END INDV_SEX_C_NAME, <!--  성별 문자열  -->
+	     E.SIMP_C,                      <!-- 혈통코드 -->
+	     E.SIMP_CNM AS MCOW_DSC ,                  <!-- 혈통명  -->
+	     F.QCN                       <!-- 차수 -->
+	  FROM TB_LA_IS_MH_SOG_COW A LEFT OUTER JOIN TB_LA_IS_MM_FHS B ON A.NA_BZPLC = B.NA_BZPLC
+	          AND A.FHS_ID_NO  = B.FHS_ID_NO
+	          AND A.FARM_AMNNO  = B.FARM_AMNNO
+	          LEFT OUTER JOIN TB_LA_IS_MM_INDV C ON A.NA_BZPLC = C.NA_BZPLC
+	          AND A.SRA_INDV_AMNNO = C.SRA_INDV_AMNNO
+	          AND A.SRA_SRS_DSC  = C.SRA_SRS_DSC
+	          LEFT OUTER JOIN ( SELECT SIMP_C, SIMP_CNM
+	               FROM TB_LA_IS_MH_COMN_APL
+	               WHERE SIMP_TPC = 'SRA_INDV_BRDSRA_RG_DSC') D ON C.RG_DSC = D.SIMP_C 
+	          LEFT OUTER JOIN ( SELECT SIMP_C, SIMP_CNM
+	               FROM TB_LA_IS_MH_COMN_APL
+	               WHERE SIMP_TPC = 'SRA_INDV_BRDSRA_RG_DSC') E ON C.MCOW_DSC = E.SIMP_C
+	         JOIN TB_LA_IS_MH_AUC_QCN AS F
+	                ON
+	                A.NA_BZPLC = F.NA_BZPLC AND
+	                A.AUC_DT = F.AUC_DT AND
+	                A.AUC_OBJ_DSC = F.AUC_OBJ_DSC
+	  WHERE A.NA_BZPLC = #{naBzplc}
+	  AND A.AUC_DT  = #{aucDt}
+	  AND A.AUC_OBJ_DSC = CASE WHEN #{aucObjDsc} = '0' THEN A.AUC_OBJ_DSC ELSE #{aucObjDsc} END	  
+	  <if test="mAuctionResult !=null and !mAuctionResult.equals('')">
+	   AND A.SEL_STS_DSC = #{mAuctionResult}
+	  </if>  
+		 
+		<if test="stAucNo !=null and !stAucNo.equals('') and edAucNo !=null and !edAucNo.equals('')">
+			AND A.AUC_PRG_SQ <![CDATA[>=]]> ${stAucNo}
+			AND A.AUC_PRG_SQ <![CDATA[<=]]> ${edAucNo}
+		</if>
+	  ORDER BY AUC_PRG_SQ	
+	</select>
+	
+	<update id="updateLowSbidAmt" parameterType="map" >
+		<foreach collection="list" item="item" index="index" open="" close="" separator=";">
+		   UPDATE TB_LA_IS_MH_SOG_COW
+		      SET LOWS_SBID_LMT_AM = #{item.mLowPrice},
+		        LWPR_CHG_NT = #{item.mLwprChgNt},
+		        LSCHG_DTM = GETDATE(),
+		        LS_CMENO = #{item.mLsCmeNo}
+		    WHERE NA_BZPLC = #{item.mAuctionHouseCode}
+		      AND AUC_OBJ_DSC = #{item.mEntryType}
+		      AND OSLP_NO  = #{item.mOslpNo}
+		      AND LED_SQNO     = #{item.mLedSqno}
+		      AND AUC_DT  = #{item.mAucDt}
+	     </foreach>		
+	</update>
+	
+	<update id="updateAuctCowSt" parameterType="map" >  
+		UPDATE TB_LA_IS_MH_SOG_COW
+	     SET SEL_STS_DSC = #{mAuctionResult},
+	       LSCHG_DTM = GETDATE(),
+	       LS_CMENO = #{mLsCmeNo}
+	   WHERE AUC_PRG_SQ = #{mEntryNum}
+	     AND NA_BZPLC = #{mAuctionHouseCode}
+	     AND AUC_OBJ_DSC = #{mEntryType}
+	     AND AUC_DT  = #{mAucDt}
+	</update>
+	
+	<update id="updateAuctCowResult" parameterType="map" >  
+	 UPDATE TB_LA_IS_MH_SOG_COW
+	     SET SRA_SBID_AM  = #{mSuccessBidPrice},
+	      SRA_SBID_UPR = #{mSuccessBidUpr},
+	      LVST_AUC_PTC_MN_NO = #{mSuccessAuctionJoinNum},
+	      TRMN_AMNNO = #{mSuccessBidder},
+	       SEL_STS_DSC = #{mResultCode},
+	       LSCHG_DTM = GETDATE(),
+	       LS_CMENO = #{mLsCmeNo}
+	   WHERE NA_BZPLC = #{mAuctionHouseCode}
+	     AND AUC_DT  = #{mAucDt}
+	     AND AUC_OBJ_DSC = #{mEntryType}
+	     AND OSLP_NO  = #{mOslpNo}
+	     AND LED_SQNO = #{mLedSqno}
+	</update>
+	
+	<select id="selectBidLogCnt" parameterType="map" resultType="java.lang.Integer">  
+	 SELECT COUNT(*)
+	  FROM TB_LA_IS_MH_ATDR_LOG
+	  WHERE NA_BZPLC = #{naBzplc}
+	  AND AUC_DT = #{aucDt}
+	  AND AUC_OBJ_DSC = #{aucObjDsc}
+	  AND OSLP_NO = #{oslpNo}
+	  AND RG_SQNO = #{rgSqno}
+	</select>
+	
+	<select id="selectNextBidNum" parameterType="map" resultType="map">  
+	 SELECT ISNULL(MAX(RG_SQNO)+1,1)
+	  FROM TB_LA_IS_MH_ATDR_LOG
+	  WHERE NA_BZPLC = #{naBzplc}
+	  AND AUC_DT = #{aucDt}
+	  AND AUC_OBJ_DSC = #{aucObjDsc}
+	  AND OSLP_NO = #{oslpNo}
+	  AND RG_SQNO <![CDATA[>]]> '0' AND RG_SQNO <![CDATA[<]]> '99999999'
+	</select>
+	
+	<insert id="insertBidLog" parameterType="map">  
+		INSERT INTO TB_LA_IS_MH_ATDR_LOG(
+		   NA_BZPLC,
+		   AUC_OBJ_DSC,
+		   AUC_DT,
+		   OSLP_NO,
+		   RG_SQNO,
+		   TRMN_AMNNO,
+		   LVST_AUC_PTC_MN_NO,
+		   ATDR_AM,
+		   RMK_CNTN,
+		   ATDR_DTM,
+		   AUC_PRG_SQ,
+		   MMO_INP_YN,
+		   TMS_YN
+		  )
+		  VALUES (
+		   #{naBzplc},
+		   #{aucObjDsc},
+		   #{aucDt},
+		   #{oslpNo},
+		   #{rgSqno},
+		   #{trmnAmnno},
+		   #{lvstAucPtcMnNo},
+		   #{atdrAm},
+		   #{rmkCntn},
+		   #{atdrDtm},
+		   #{aucPrgSq},
+		   '0',  <!-- 수기입력여부  -->
+		   '0' <!-- 전송여부  -->
+		  )
+	</insert>
+	
+	<select id="selectFeeInfo" parameterType="map" resultType="map"> 
+		SELECT A.* 
+		  ,B.FEE_CHK_DNA_YN_FEE 
+		  ,B.SELFEE_CHK_DNA_YN_FEE
+		FROM TB_LA_IS_MH_FEE  A LEFT JOIN TB_LA_IS_MM_ENV_EST B
+		                      ON A.NA_BZPLC = B.NA_BZPLC
+		WHERE  A.APL_DT = (SELECT MAX(APL_DT) FROM TB_LA_IS_MH_FEE
+		                   WHERE AUC_OBJ_DSC = #{aucObjDsc}
+		                     AND NA_BZPLC    = #{naBzplc}
+		                     AND DEL_YN      = '0'
+		                     AND APL_DT <![CDATA[<=]]> #{aplDt})
+		                   
+		AND A.AUC_OBJ_DSC = #{aucObjDsc}
+		AND A.DEL_YN      = '0'
+		AND A.NA_BZPLC    = #{naBzplc}
+	</select>
+	
+	<delete id="deleteFeeInfo" parameterType="map"> 
+		DELETE FROM TB_LA_IS_MH_FEE_IMPS
+		  WHERE  NA_BZPLC  = #{naBzplc}
+		   AND  AUC_DT   = #{aucDt}
+		   AND  AUC_OBJ_DSC  = #{aucObjDsc}
+		   AND  OSLP_NO   = #{oslpNo}
+		   AND  LED_SQNO  = #{ledSqNo}
+	</delete>	
+	
+	<insert id="insertFeeLog" parameterType="map">  
+		<foreach collection="list" item="item" index="index" open="" close="" separator=";">
+		  INSERT INTO TB_LA_IS_MH_FEE_IMPS VALUES (
+		   #{item.naBzplc},
+		   #{item.aucObjDsc},
+		   #{item.aucDt},
+		   #{item.oslpNo},
+		   #{item.ledSqNo},
+		   #{item.feeRgSqno},
+		   #{item.aplDt},
+		   #{item.naFee_c},
+		   #{item.feeAplObj_c},
+		   #{item.ansDsc},
+		   #{item.sBidYn},
+		   #{item.sraTrFee},
+		   #{item.tmsYn}
+		  )
+		  </foreach>
+	</insert>
+	
+		
+	
+	<select id="selectAuctBidNum" parameterType="map" resultType="map">
+		SELECT A.LVST_AUC_PTC_MN_NO
+		FROM TB_LA_IS_MH_AUC_ENTR as A
+		WHERE A.NA_BZPLC = #{auctionHouseCode}
+		  AND A.AUC_DT = #{auctionDate}
+		  AND A.AUC_OBJ_DSC = #{entryType}
+		  And A.TRMN_AMNNO = #{userMemNum}
+	</select>
+</mapper>

@@ -1,0 +1,439 @@
+@charset "utf-8";
+/* ==========================================================================
+Base styles: popup_layer css
+========================================================================== */
+/* ========================모달팝업======================= */
+	%clearfix {*zoom: 1;&:before, &:after {content: " ";display: table;}&:after {clear: both;}}
+	.modal-wrap {overflow: auto;overflow-x: hidden;-webkit-overflow-scrolling: touch;display:none;position: fixed;top:0;left:0;width:100%;height:100%;z-index:10001;box-sizing:border-box;background:rgba(0,0,0,0.6)}
+	.modal-wrap .modal-content {padding:45px 40px 60px;margin:0 auto;position:relative;width:100%;min-width:300px;background:#fff;-webkit-transition:all 0.5s ease; -moz-transition:all 0.5s ease;-o-transition:all 0.5s ease;transition:all 0.5s ease;-webkit-perspective:1000;-moz-perspective:1000;-o-perspective:1000;perspective:1000;border-radius:0;-webkit-overflow-scrolling: touch;}
+	.overlay {display:block;position:fixed;left:0;top:0;width:100%;bottom:0;background:#000;opacity: 0; filter: alpha(opacity=0);z-index:10000}
+/* layer_popup */
+	.modal_popup_close{
+		position:absolute;
+		right:left;
+		top:45px;
+		left:70px;
+		display:block;
+		width:24px;
+		height:24px;
+		background:url(/static/images/guide/ico_close.svg) no-repeat center center;
+		background-size:24px 24px;
+		z-index:10;
+		text-indent:-9999px;
+	}
+/* ========================== 팝업 ===========================*/
+
+//이용약관
+.modal-wrap.pop_Terms .modal-content{
+	max-width:800px;
+	width:calc(100% - 20px);
+	padding:45px 60px 45px 70px;
+	min-height:100px;
+	border-radius:10px;
+	.modal_popup_close{
+		top:49px;
+	}
+	h3{
+		padding-left:45px;
+		font-family: Noto Sans KR;
+		font-size: 28px;
+		font-weight: 700;
+		letter-spacing: -0.7px;
+		text-align: left;
+		color: #1a1a1a;
+	}
+	p{
+		font-family: Noto Sans KR;
+		font-size: 18px;
+		font-weight: 700;
+		line-height: 1.56;
+		letter-spacing: -0.45px;
+		text-align: left;
+		color: #1a1a1a;
+	}
+	.pop_TermsBox{
+		margin-top:40px;
+		max-height:600px;
+		.mCustomScrollBox{
+			padding-right:10px;
+		}
+	}
+	@media only all and (max-width:640px){
+		max-width:100%;
+		width:100%;
+		padding:15px 10px 15px 24px;
+		min-height:auto;
+		height:calc(100%);
+		border-radius:0;
+		.modal_popup_close{
+			top:15px;
+			left:24px;
+			background-size:16px 16px !important;
+		}
+		h3{
+			padding-left:35px;
+			font-size: 20px;
+		}
+		p{
+			font-size: 14px;
+		}
+		.pop_TermsBox{
+			margin-top:25px;
+			max-height:auto;
+			height:calc(100% - 57px);
+			.mCustomScrollBox{
+				padding-right:10px;
+			}
+		}
+	
+	}
+}
+
+//찜
+.modal-wrap.pop_jjim .modal-content,.modal-wrap.pop_net .modal-content,.modal-wrap.pop_logout .modal-content{
+	max-width:330px;
+	width:calc(100% - 20px);
+	padding:17px 0 0 0;
+	height:250px;
+	border-radius:20px;
+	overflow:hidden;
+	position: relative;
+	.modal_popup_close{
+		right:20px;
+		left:auto;
+		top:15px;
+		background-size:16px 16px;
+	}
+	h3{
+		padding-left:24px;
+		font-family: Noto Sans KR;
+		font-size: 20px;
+		font-weight: 700;
+		letter-spacing: -1px;
+		text-align: left;
+		color: #1a1a1a;
+	}
+	p{
+		font-family: Roboto;
+		font-size: 50px;
+		font-weight: 700;
+		text-align: center;
+		line-height: 0.81;
+		letter-spacing: -2.5px;
+		color: #1a1a1a;
+		margin-top:40px;
+		span{
+			font-size:20px;
+			margin-left:7px;
+		}
+		&.pop-txt{
+			font-family: Noto Sans KR;
+			font-size: 20px;
+			line-height: 1.75;
+			letter-spacing: -1px;
+			margin-top:50px;
+			&.logout{
+				margin-top:70px;
+			}
+		}
+	}
+	.btn_area{
+		position:absolute;
+		bottom:0;
+		left:0;
+		right:0;
+		text-align: center;
+		@extend %clearfix;
+		button{
+			float: left;
+			width:50%;
+			height:60px;
+			display:block;
+			font-family: Noto Sans KR;
+			font-size: 18px;
+			font-weight: 700;
+			line-height: 1.07;
+			letter-spacing: -0.9px;
+			color: #fff;
+			&.btn_cancel{
+				background:#ccc;
+			}
+			&.btn_ok{
+				background:#007eff;
+			}
+			&:only-child{
+				width:100%;
+				float:none;
+			}
+		}
+	}
+}
+
+//찜 입력
+.modal-wrap.pop_jjim_input .modal-content{
+	max-width:330px;
+	width:calc(100% - 20px);
+	padding:0 0 0 0;
+	height:250px;
+	border-radius:20px;
+	overflow:hidden;
+	position: relative;
+	h3{
+		font-family: Noto Sans KR;
+		font-size: 20px;
+		font-weight: 700;
+		letter-spacing: -1px;
+		color: #007eff;
+		line-height:40px;
+		min-height:40px;
+		background:#eeeeee;
+		text-align: center;
+	}
+	.jjim_dl{
+		padding:25px 35px;
+		dt{
+			margin-bottom:20px;
+			p{
+				font-family: Noto Sans KR;
+				font-size: 19px;
+				font-weight: 700;
+				font-style: normal;
+				line-height: 1.01;
+				letter-spacing: -0.95px;
+				text-align: center;
+				color:#767676;
+				span{
+					margin:0 2px;
+					font-weight:normal;
+					color:#eee;	
+				}
+			}
+		}
+		dd{
+			input[type="text"]{
+				height:60px;
+				line-height:1;
+				font-family: Noto Sans KR;
+				font-size: 24px;
+				font-weight: 500;
+				letter-spacing: -1.2px;
+				font-style: normal;
+				text-align:right;
+				padding:0 10px;
+			}
+		}
+	}
+	.btn_area{
+		position:absolute;
+		bottom:0;
+		left:0;
+		right:0;
+		text-align: center;
+		@extend %clearfix;
+		button{
+			float: left;
+			width:50%;
+			height:60px;
+			display:block;
+			font-family: Noto Sans KR;
+			font-size: 18px;
+			font-weight: 700;
+			line-height: 1.07;
+			letter-spacing: -0.9px;
+			color: #fff;
+			&.btn_cancel{
+				background:#ccc;
+			}
+			&.btn_ok{
+				background:#007eff;
+			}
+			&:only-child{
+				width:100%;
+				float:none;
+			}
+		}
+	}
+}
+
+//app 보기
+.modal-wrap.pop_app .modal-content{
+	max-width:330px;
+	width:calc(100% - 20px);
+	padding:55px 45px 70px ;
+	height:300px;
+	border-radius:20px;
+	overflow:hidden;
+	position: relative;
+	text-align: center;
+	.modal_popup_close{
+		right:20px;
+		left:auto;
+		top:15px;
+		background-size:16px 16px;
+	}
+	h4{
+		font-family: Noto Sans KR;
+		font-size: 20px;
+		font-weight: 700;
+		line-height:1.2;
+		letter-spacing: -1px;
+		text-align: center;
+		color: #1a1a1a;
+		margin-bottom:20px;
+	}
+	.btn_app{
+		width:100%;
+		max-width:230px;
+		margin:0 auto;
+		height:57px;
+		line-height:57px;
+		text-align: center;
+		font-family: Noto Sans KR;
+		font-size: 18px;
+		font-weight: 700;
+		display:block;
+		border-radius:10px;
+		background:#007eff;
+		color:#fff;
+		box-shadow: 0px 3px 10px 4px rgba(0,0,0,0.20);
+		margin-bottom:25px;
+	}
+	.no_app{
+		font-family: Noto Sans KR;
+		font-size: 17px;
+		line-height: 1.25;
+		letter-spacing: -0.8px;
+		text-align: center;
+		color: #1a1a1a;
+		display:inline-block;
+		border-bottom: 1px solid #1a1a1a;
+	}	
+}
+
+//경매응찰 레이어팝업
+.modal-wrap.pop_auction .modal-content{
+	max-width:700px;
+	width:calc(100% - 20px);
+	padding:50px 10px 25px 20px;
+	height:800px;
+	border-radius:10px;
+	.modal_popup_close{
+		top:20px;
+		left:30px
+	}
+	.mCustomScrollBox{
+		height:450px;
+		@media only all and (max-width:640px){
+			height:auto
+		}
+	}
+	@media only all and (max-width:640px){
+		max-width:100%;
+		width:100%;
+		padding:45px 0 15px 0;
+		min-height:auto;
+		height:auto;
+		border-radius:0;
+		.modal_popup_close{
+			top:15px;
+			left:20px;
+			background-size:16px 16px !important;
+		}
+	}
+	.tab_list{
+		li{
+			width:33.33%;
+		}
+	}
+}
+
+.modal-wrap.pop_auction_only .modal-content{
+	max-width:700px;
+	width:calc(100% - 20px);
+	padding:50px 10px 25px 20px;
+	height:650px;
+	border-radius:10px;
+	h3{
+		font-family: Noto Sans KR;
+		font-size: 28px;
+		font-weight: 700;
+		letter-spacing: -0.7px;
+		text-align: left;
+		color: #1a1a1a;
+		position: absolute;
+		left: 70px;
+		top:15px;
+		@media only all and (max-width:640px){
+    		font-size: 20px;
+			top:15px;
+			left:50px;
+		}
+	}
+	.dayAndJoin{
+		font-family: Noto Sans KR;
+		font-size: 24px;
+		font-weight: 700;
+		font-style: normal;
+		line-height: 1.2;
+		letter-spacing: -0.8px;
+		text-align: left;
+		color: #1a1a1a;
+		margin:30px 0 20px;
+		span{
+			margin:0 10px;
+			color:#eee;
+		}
+		@media only all and (max-width:1024px){
+    		padding:0 10px;
+		}
+		@media only all and (max-width:640px){
+			font-size: 16px;
+			margin:20px 0 10px;
+			padding:0 20px;
+			span{
+				margin:0 10px;
+				color:#eee;
+			}
+		}
+	}
+	.modal_popup_close{
+		top:20px;
+		left:30px
+	}
+	.mCustomScrollBox{
+		height:450px;
+		@media only all and (max-width:640px){
+			height:auto
+		}
+	}
+	.pd_ea{
+		width:25% !important;
+	}
+	.pd_pay4,.pd_pay3,.pd_sex{
+		width:20% !important;
+	}
+	@media only all and (max-width:640px){
+		max-width:100%;
+		width:100%;
+		padding:45px 0 15px 0;
+		min-height:auto;
+		height:auto;
+		border-radius:0;
+		.pd_ea{
+			width:32% !important;
+		}
+		.pd_pay4,.pd_pay3,.pd_sex{
+			width:18% !important;
+		}
+		.modal_popup_close{
+			top:15px;
+			left:20px;
+			background-size:16px 16px !important;
+		}
+	}
+	.tab_list{
+		li{
+			width:33.33%;
+		}
+	}
+}

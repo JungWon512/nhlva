@@ -1,0 +1,80 @@
+server:
+  port: 18080
+  error:
+    whitelabel:
+      enabled: false
+  servlet:
+    session:
+      tracking-modes: cookie
+      timeout: 600m
+    encoding:
+      charset: UTF-8
+      force: true
+spring:
+  application:
+    name: Auction
+  profiles:
+    active: local
+#    active: develop
+#    active: production
+    include:
+      - database
+      - properties
+  resources:
+    chain:
+      cache: false
+      enabled: true
+      html-application-cache: true
+      strategy:
+        content:
+          enabled: true
+          paths:
+            - /static/**
+      compressed: true
+    static-locations: classpath:/static/**
+    add-mappings: true
+  security:
+    user:
+      name: test
+      password: test
+  mvc:
+    view:
+      prefix: /WEB-INF/jsp/
+      suffix: .jsp
+  devtools:
+    livereload:
+      enabled: true
+  messages:
+    basename: messages/message
+    encoding: UTF-8
+    cache-duration: 3600
+#    static-path-pattern: /static/**
+
+mybatis:
+  config-location: classpath:database/mybatis-config.xml
+  mapper-locations: classpath:database/mapper/**/*Mapper.xml
+
+---
+# local profile(개발자 환경)
+spring:
+  devtools:
+    livereload:
+      enabled: true
+    restart:
+      enabled: false
+spring.profiles: local
+spring.profiles.include:
+  - database-local
+  - properties-local
+---
+# develop profile(개발 서버 환경)
+spring.profiles: develop
+spring.profiles.include:
+  - database-develop
+  - properties-develop
+---
+# production profile(상용 서버 환경)
+spring.profiles: production
+spring.profiles.include:
+  - database-production
+  - properties-production

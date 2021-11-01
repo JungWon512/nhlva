@@ -1,0 +1,293 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="admin">
+ 	<select id="selectOneJohap" parameterType="map" resultType="map">
+ 		SELECT			
+			NA_BZPLCNO
+			, NA_BZPLCLOC
+			, CLNTNM
+			, NA_BZPLC
+			, AREAORD
+			, AREANM
+			, AUC_DSC	/* 경매 구분 (1:단일, 2:일괄) */
+			, LAT
+			, LNG
+			, AUC_YN	/* 경매 여부 */
+			, DEL_YN
+			, FSRG_DTM
+			, FSRGMN_ENO
+			, LSCHG_DTM
+			, LS_CMENO
+			, RMK_CNTN
+			, TEL_NO
+			, KKO_SVC_ID
+			, KKO_SVC_KEY
+ 		FROM TB_LA_IS_BM_BZLOC
+ 		WHERE 1=1
+		<if test="naBzPlcNo != null and naBzPlcNo != ''">
+ 			AND NA_BZPLCNO = #{naBzPlcNo}
+ 		</if>
+		<if test="naBzplc != null and naBzplc != ''">
+ 			AND NA_BZPLC = #{naBzplc}
+ 		</if>
+    </select>
+        
+	<select id="selectListNotice" parameterType="map" resultType="map">
+        SELECT
+            A.NA_BZPLC
+            , A.SEQ_NO
+            , A.TITLE
+            , A.CONTENT
+            , A.DEL_YN
+            , TO_CHAR(A.FSRG_DTM,'YYYY-MM-DD') FSRG_DTM
+            , A.FSRGMN_ENO
+            , TO_CHAR(A.LSCHG_DTM,'YYYY-MM-DD') LSCHG_DTM
+            , A.LS_CMENO
+            , B.CLNTNM
+        FROM  TB_LA_IS_BM_NOTI A
+        INNER JOIN TB_LA_IS_BM_BZLOC B ON A.NA_BZPLC = B.NA_BZPLC
+        WHERE 1=1
+        AND B.NA_BZPLCNO = #{naBzPlcNo}
+		<if test="delYn != null and delYn != ''">
+        	AND A.DEL_YN = #{delYn} -- 0:N , 1:Y
+        </if>
+        ORDER BY A.NA_BZPLC,A.SEQ_NO DESC
+	</select>
+	
+    <select id="selectOne" parameterType="map" resultType="map">
+        SELECT
+            A.NA_BZPLC
+            , A.SEQ_NO
+            , A.TITLE
+            , A.CONTENT
+            , A.DEL_YN
+            , TO_CHAR(A.FSRG_DTM,'YYYY-MM-DD') FSRG_DTM
+            , A.FSRGMN_ENO
+            , TO_CHAR(A.LSCHG_DTM,'YYYY-MM-DD') LSCHG_DTM
+            , A.LS_CMENO
+            , B.CLNTNM
+        FROM  TB_LA_IS_BM_NOTI A
+        INNER JOIN TB_LA_IS_BM_BZLOC B ON A.NA_BZPLC = B.NA_BZPLC
+        <trim  prefix="WHERE" suffixOverrides="AND | OR">
+            A.NA_BZPLC = #{naBzplc} AND
+            A.SEQ_NO = #{seqNo} AND
+        </trim>
+    </select>
+
+    <insert id="insertNotice" parameterType="map" >
+        INSERT IGNORE INTO tb_la_is_bm_noti
+        (
+        <trim suffixOverrides=",">
+            <if test="johpCd!=null and johpCd!=''">
+                NA_BZPLC,
+            </if>
+            <if test="seqNo!=null">
+                SEQ_NO,
+            </if>
+            <if test="title!=null and title!=''">
+                TITLE,
+            </if>
+            <if test="content!=null and content!=''">
+                CONTENT,
+            </if>
+            <if test="delYn!=null and delYn!=''">
+                DEL_YN,
+            </if>
+             FSRG_DTM,
+             FSRGMN_ENO,
+             LSCHG_DTM,
+             LS_CMENO,
+        </trim>
+        )
+        VALUES
+        (
+        <trim suffixOverrides=",">
+            <if test="johpCd!=null and johpCd!=''">
+                #{johpCd},
+            </if>
+            <if test="seqNo!=null">
+                #{seqNo},
+            </if>
+            <if test="title!=null and title!=''">
+                #{title},
+            </if>
+            <if test="content!=null and content!=''">
+                #{content},
+            </if>
+            <if test="delYn!=null and delYn!=''">
+                #{delYn},
+            </if>
+            <if test="rdCnt!=null">
+                #{rdCnt},
+            </if>
+             SYSDATE,
+             #{regUsrid},
+             SYSDATE,
+             #{uptUsrid},
+        </trim>
+        )
+    </insert>
+        
+    <update id="updateNotice" parameterType="map" >
+        UPDATE tb_la_is_bm_noti
+        SET
+        <trim suffixOverrides=",">
+            <if test="johpCd != null and johpCd!=''">
+                NA_BZPLC = #{johpCd},
+            </if>
+            <if test="seqNo != null">
+                SEQ_NO = #{seqNo},
+            </if>
+            <if test="title != null and title!=''">
+                TITLE = #{title},
+            </if>
+            <if test="content != null and content!=''">
+                CONTENT = #{content},
+            </if>
+            <if test="delYn != null and delYn!=''">
+                DEL_YN = #{delYn},
+            </if>
+             LSCHG_DTM = SYSDATE,
+             LS_CMENO = #{uptUsrid},
+        </trim>
+        <trim prefix="WHERE" suffixOverrides="AND ">
+            NA_BZPLC = #{johpCd} AND
+            SEQ_NO = #{seqNo} AND
+        </trim>
+    </update>
+    
+	<resultMap type="HashMap" id="AucNoticeMap">
+        <result property="johpCd" column="NA_BZPLC"/>
+        <result property="seqNo" column="SEQ_NO"/>
+        <result property="title" column="TITLE"/>
+        <result property="content" column="CONTENT"/>
+        <result property="delYn" column="DEL_YN"/>
+        <result property="regDtm" column="FSRG_DTM"/>
+        <result property="regUsrid" column="FSRGMN_ENO"/>
+        <result property="uptDtm" column="LSCHG_DTM"/>
+        <result property="uptUsrid" column="LS_CMENO"/>
+    </resultMap>
+    
+    <delete id="deleteNotice" parameterType="map" >
+        DELETE
+        FROM  tb_la_is_bm_noti
+        <trim  prefix="WHERE" suffixOverrides="AND | OR">
+            NA_BZPLC = #{johpCd} AND
+            SEQ_NO = #{seqNo} AND
+        </trim>
+    </delete>
+    
+    <select id="countNotice" resultType="Integer">
+        select count (*) from tb_la_is_bm_noti
+        <include refid="selectCountWhere"></include>
+    </select>
+    
+    <select id="selectOneMaxNotice" parameterType="HashMap" resultMap="AucNoticeMap">
+        SELECT
+        MAX(SEQ_NO)+1 AS SEQ_NO
+        FROM  tb_la_is_bm_noti
+        <trim  prefix="WHERE" suffixOverrides="AND | OR">
+            NA_BZPLC = #{johpCd} AND
+        </trim>
+    </select>
+
+    <sql id="allResult">
+        <trim suffixOverrides=",">
+            NA_BZPLC,
+            SEQ_NO,
+            TITLE,
+            CONTENT,
+            DEL_YN,
+            TO_CHAR(FSRG_DTM,'YYYY-MM-DD') FSRG_DTM,
+            FSRGMN_ENO,
+            TO_CHAR(LSCHG_DTM,'YYYY-MM-DD') LSCHG_DTM,
+            LS_CMENO,
+        </trim>
+    </sql>
+    
+    <sql id="selectCountWhere">
+        <trim prefix="WHERE" suffixOverrides="AND | OR">
+            <if test="johpCd != null and johpCd!=''">
+                NA_BZPLC = #{johpCd} AND
+            </if>
+        
+            <if test="seqNo != null">
+                SEQ_NO = #{seqNo} AND
+            </if>
+        
+            <if test="title != null and title!=''">
+                TITLE = #{title} AND
+            </if>
+        
+            <if test="content != null and content!=''">
+                CONTENT = #{content} AND
+            </if>
+        
+            <if test="delYn != null and delYn!=''">
+                DEL_YN = #{delYn} AND
+            </if>
+        
+            <if test="fromRegDtm != null and toRegDtm != null ">
+                ( 
+                FSRG_DTM <![CDATA[>]]> #{fromRegDtm} AND
+                FSRG_DTM <![CDATA[<=]]> #{toRegDtm} 
+                ) AND
+            </if>
+        
+            <if test="regUsrid != null and regUsrid!=''">
+                FSRGMN_ENO = #{regUsrid} AND
+            </if>
+        
+            <if test="fromUptDtm != null and toUptDtm != null ">
+                ( 
+                LSCHG_DTM <![CDATA[>]]> #{fromUptDtm} AND
+                LSCHG_DTM <![CDATA[<=]]> #{toUptDtm} 
+                ) AND
+            </if>
+        
+            <if test="uptUsrid != null and uptUsrid!=''">
+                LS_CMENO = #{uptUsrid} AND
+            </if>
+        
+        </trim>
+    </sql>
+    
+ 	<select id="selectListVisit" parameterType="map" resultType="map">
+ 		SELECT *
+ 		FROM(
+ 			<include refid="selectVisitSql"></include>
+ 			
+ 		) TMP
+		WHERE 1=1
+ 		<if test="pagePerSize !=null and pagePerSize != ''">
+ 			AND RNUM > #{pagePerSize}
+ 		</if>
+ 		<if test="pageSize !=null and pageSize != ''">
+ 			LIMIT ${pageSize}
+ 		</if>
+    </select>
+    
+ 	<select id="selectVisitTotalCnt" parameterType="map" resultType="java.lang.Integer">
+ 		SELECT COUNT(*)
+ 		FROM(
+ 			<include refid="selectVisitSql"></include>
+ 			
+ 		) TMP
+    </select>
+    
+    <sql id="selectVisitSql" >
+ 		SELECT
+			SEQ_NO
+			, VISIT_IP
+			, VISIT_REFER
+			, VISIT_AGENT
+			, TO_CHAR(VISIT_DTM,'YYYY-MM-DD HH24:mm:ss') VISIT_DTM
+			, ROW_NUMBER() OVER(ORDER BY SEQ_NO DESC) RNUM
+ 		FROM TB_LA_IS_BM_VISIT
+ 		WHERE 1=1
+ 		<if test="searchDate !=null and searchDate != ''">
+ 			AND TO_CHAR(VISIT_DTM,'YYYYMM') = ${searchDate}
+ 		</if>
+    </sql>
+</mapper>

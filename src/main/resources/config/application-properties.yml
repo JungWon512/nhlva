@@ -1,0 +1,33 @@
+
+# profile(로컬 서버 환경)
+spring.profiles: properties-local
+
+logging:
+  level:
+    org.hibernate.type.descriptor.sql.BasicBinder: trace
+  config: classpath:config/logback-spring-local.xml
+  file:
+    name: logExample
+    path: ./data/logs
+---
+# profile(개발 서버 환경)
+spring.profiles: properties-develop
+
+logging:
+  level:
+    org.hibernate.type.descriptor.sql.BasicBinder: trace
+  config: classpath:config/logback-spring-develop.xml
+  file:
+    name: logExample
+    path: /home/phps/data/logs
+---
+# profile(상용 서버 환경)
+spring.profiles: properties-production
+
+logging:
+  level:
+    org.hibernate.type.descriptor.sql.BasicBinder: trace
+  config: classpath:config/logback-spring-develop.xml
+  file:
+    name: logExample
+    path: /home/phps/data/logs

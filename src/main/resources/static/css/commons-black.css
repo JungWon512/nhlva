@@ -1,0 +1,348 @@
+
+@media (min-width: 1025px) {
+    .kt-aside--fixed .kt-wrapper {
+        padding-left: 0px;
+    }
+}
+@import url('https://fonts.googleapis.com/css?family=Muli&display=swap');
+* {
+    box-sizing: border-box;
+}
+
+
+@media (min-width: 1800px) {
+    .container, .container-sm, .container-md, .container-lg, .container-xl, .container-xxl {
+        max-width: 3040px; } }
+
+@media (min-width: 992px) {
+    .aside-enabled.header-fixed .header {
+        left: 0px;
+    }
+}
+@media (min-width: 992px) {
+    .aside-fixed .wrapper {
+        padding-left: 0px;
+    }
+}
+
+@media (min-width: 1900px) {
+    .container, .container-sm, .container-md, .container-lg, .container-xl, .container-xxl {
+        max-width: 1640px; } }
+tr.datatable-row-detail > td.datatable-detail > table {
+    width:100%;
+}
+
+/*tr.datatable-row > td.datatable-cell {*/
+/*    width:60px;*/
+/*}*/
+/*.datatable.datatable-default > .datatable-table > .datatable-body .datatable-row-detail .datatable-detail .datatable-row > .datatable-cell:first-child {*/
+/*    font-weight: 500;*/
+/*    width: 20%;*/
+/*    text-align: center;*/
+/*}*/
+/*th.datatable-toggle-detail {*/
+/*    visibility: hidden;*/
+/*}*/
+/*.datatable-toggle-detail{*/
+/*    visibility: hidden;*/
+/*}*/
+
+
+
+/*.datatable.datatable-default.datatable-bordered > .datatable-table > .datatable-head .datatable-row, .datatable.datatable-default.datatable-bordered > .datatable-table > .datatable-body .datatable-row, .datatable.datatable-default.datatable-bordered > .datatable-table > .datatable-foot .datatable-row {*/
+/*    border-bottom: 1px solid #EBEDF3;*/
+/*}*/
+
+.datatable.datatable-default > .datatable-table > .datatable-body .datatable-row-detail .datatable-detail {
+    display: block;
+     padding: 0 0;
+}
+.datatable.datatable-default > .datatable-table > .datatable-head .datatable-row > .datatable-cell.datatable-cell-center > span, .datatable.datatable-default > .datatable-table > .datatable-body .datatable-row > .datatable-cell.datatable-cell-center > span, .datatable.datatable-default > .datatable-table > .datatable-foot .datatable-row > .datatable-cell.datatable-cell-center > span {
+    text-align: unset;
+}
+.datatable.datatable-default > .datatable-table > .datatable-body .datatable-row-detail .datatable-detail .datatable-row > .datatable-cell:first-child {
+    width: 80px;
+}
+
+
+
+
+.table-striped tbody tr:nth-of-type(odd) {
+    background-color: unset;
+}
+/*@media(min-width:767.9px){ !* md size *!*/
+/*    td.mobile-only { !* PC에서 짝수번째 TR 숨김 *!*/
+/*        display:none;*/
+/*    }*/
+/*    td.pc-only { !* PC에서 짝수번째 TR 숨김 *!*/
+/*        display:unset;*/
+/*    }*/
+/*}*/
+/*@media(max-width:767.9px){ !* md size *!*/
+/*    td.pc-only { !* PC에서 짝수번째 TR 숨김 *!*/
+/*        display:none;*/
+/*    }*/
+/*    td.mobile-only { !* PC에서 짝수번째 TR 숨김 *!*/
+/*        display:unset;*/
+/*    }*/
+/*}*/
+
+.datatable.datatable-default.datatable-head-custom > .datatable-table > .datatable-head .datatable-row > .datatable-cell > span, .datatable.datatable-default.datatable-head-custom > .datatable-table > .datatable-foot .datatable-row > .datatable-cell > span {
+    color: #B5B5C3;
+    font-size: 1.2rem;
+    text-transform: uppercase;
+    font-weight: 600;
+    letter-spacing: 0.1rem;
+}
+
+.header-mobile {
+    background-color: #1e1e2e;
+}
+div#kt_header_mobile p.font-size-h1 {
+    /*margin-top: 0;*/
+    /*margin-bottom: 0;*/
+    color : #ffffff;
+}
+
+body {
+    background: #1e1e2e;
+}
+
+div.footer div.container h4 {
+    color : #ffffff;
+}
+
+
+/*.card.card-custom > .card-body {*/
+/*    padding: 0rem 0rem;*/
+/*}*/
+
+/*.col-xxl, .col-xxl-auto, .col-xxl-12, .col-xxl-11, .col-xxl-10, .col-xxl-9, .col-xxl-8, .col-xxl-7, .col-xxl-6, .col-xxl-5, .col-xxl-4, .col-xxl-3, .col-xxl-2, .col-xxl-1, .col-xl, .col-xl-auto, .col-xl-12, .col-xl-11, .col-xl-10, .col-xl-9, .col-xl-8, .col-xl-7, .col-xl-6, .col-xl-5, .col-xl-4, .col-xl-3, .col-xl-2, .col-xl-1, .col-lg, .col-lg-auto, .col-lg-12, .col-lg-11, .col-lg-10, .col-lg-9, .col-lg-8, .col-lg-7, .col-lg-6, .col-lg-5, .col-lg-4, .col-lg-3, .col-lg-2, .col-lg-1, .col-md, .col-md-auto, .col-md-12, .col-md-11, .col-md-10, .col-md-9, .col-md-8, .col-md-7, .col-md-6, .col-md-5, .col-md-4, .col-md-3, .col-md-2, .col-md-1, .col-sm, .col-sm-auto, .col-sm-12, .col-sm-11, .col-sm-10, .col-sm-9, .col-sm-8, .col-sm-7, .col-sm-6, .col-sm-5, .col-sm-4, .col-sm-3, .col-sm-2, .col-sm-1, .col, .col-auto, .col-12, .col-11, .col-10, .col-9, .col-8, .col-7, .col-6, .col-5, .col-4, .col-3, .col-2, .col-1 {*/
+/*     padding-right: 0px;*/
+/*     padding-left: 0px;*/
+/*}*/
+
+/*.card-body {*/
+/*     padding: 0px;*/
+/*}*/
+
+/*.row.keen-ml-1{*/
+/*     margin-left: -12.5px;*/
+/*}*/
+
+
+.datatable-toggle-detail {
+    display:none;
+}
+.datatable-row > .datatable-cell {
+    padding-left: 0.6rem !important;
+    padding-right: 0.6rem !important;
+    padding-top: 1rem !important;
+    padding-bottom: 1rem !important;
+}
+
+.datatable-head > .datatable-row span {
+    color:#56afff !important;
+}
+.blue-text > span {
+    color:#57d1ff !important;
+}
+
+tr.datatable-row {
+    border-collapse: separate !important;
+    /*border-spacing: 0 10px !important;*/
+    border-bottom: 10px solid #1e1e2e !important;
+}
+
+div.card-body {
+    background-color: #1e1e2e ;
+}
+
+#kt_datatable_search_query {
+    background: #1e1e2e;
+    text: #ffffff;
+    font-size: 1.3rem !important;
+}
+
+#kt_datatable_search_date{
+    background: #1e1e2e;
+    text: #ffffff;
+    font-size: 1.3rem !important;
+}
+
+#kt_datatable_search_field {
+    background: #1e1e2e;
+    text: #ffffff;
+    font-size: 1.3rem !important;
+}
+.datatable.datatable-default > .datatable-table > .datatable-body > .datatable-row {
+    background-color: #27293d !important;
+}
+
+.datatable.datatable-default{
+    background-color: #27293d !important;
+}
+
+td.datatable-cell span {
+    color:#ffffff;
+    font-size: 1.3rem !important;
+}
+thead.datatable-head > tr.datatable-row {
+    background-color: #1e1e2e;
+}
+
+thead.datatable-head > tr.datatable-row span {
+    font-size: 1.3rem !important;
+}
+
+.form-control {
+    color: #ffffff;
+    font-size: 1.3rem !important;
+    border-radius: 0.21rem !important;
+}
+
+a.search_text {
+    background: #007eff !important;
+    color: #ffffff !important;
+}
+
+.pd1 {
+    padding:1px !important;
+}
+
+div.header-menu-wrapper {
+    width:100% !important;
+}
+
+@media (max-width: 991.98px) {
+    .header-menu-wrapper.header-menu-wrapper-right {
+        left: 100vw;
+    }
+    .header-menu-mobile {
+        background-color: #1e1e2f !important;
+    }
+    ul.menu-nav li::before {
+        content: "\2022";  /* Add content: \2022 is the CSS Code/unicode for a bullet */
+        color: #0f4e97; /* Change the color */
+        font-size: large;
+        font-weight: bold; /* If you want it to be bold */
+        display: inline-block; /* Needed to add space between the bullet and the text */
+        width: 1em; /* Also needed for space (tweak if needed) */
+        margin-left: 2em; /* Also needed for space (tweak if needed) */
+    }
+    div.keen-padding-0 {
+        padding-right: 0px !important;
+        padding-left: 0px !important;
+    }
+    div#entry-datatable > div.row {
+        height:100px;
+        background-color: #27293d;
+    }
+    div#entry-datatable > div.row > div:first-child{
+        border-bottom: 2px solid #3d3f51;
+    }
+}
+
+tbody.datatable-body {
+    background-color: #1e1e2e !important;
+}
+span.datatable-error {
+    color:#ffffff !important;
+}
+
+#kt_header_menu > .container > .row > .close-block > div.card{
+    height:70px !important;
+}
+/*#kt_header_menu > .container > .row > .close-block  div.card-body{*/
+/*    padding:1.5rem !important;*/
+/*    padding-right:0.5rem !important;*/
+/*}*/
+
+.color-56afff {
+    color:#56afff !important;
+}
+
+.bg-color-0f4e97 {
+    background:#0f4e97 !important;
+}
+
+.color-ffffff {
+    color:#ffffff !important;
+}
+
+
+
+
+/*.login-block {*/
+/*    border-bottom: 10px solid red !important;*/
+/*}*/
+.mobile-only .gutter-b {
+    margin-bottom: 0px !important;
+}
+
+.pl-0 {
+    padding-left: 0px !important;
+}
+.header-menu-wrapper {
+    background-color: #1e1e2f !important;
+}
+
+@media (max-width: 991.98px) {
+
+}
+@media (min-width: 992px) {
+    .header {
+         background-color: unset;
+    }
+}
+.border-color-007eff{
+    border-color:#007eff !important;
+    background-color:#1e1e2f !important;
+}
+
+.color-cccccc{
+    color:#cccccc !important;
+}
+.bg-color-3d3f51 {
+    background-color: #3d3f51 !important;
+}
+
+.color-adb5bd{
+ color:#adb5bd !important;
+}
+.datatable.datatable-default > .datatable-table {
+    background-color: unset !important;
+}
+
+div.auction-table-text-white {
+    color: #ffffff;
+    font-size: medium;
+}
+div.auction-table-text-blue {
+    color: #57d1ff;
+    font-size: medium;
+}
+
+div#entry-datatable {
+    scrollbar-base-color: #00b300 !important;
+    scrollbar-color: rebeccapurple green;
+}
+/* width */
+::-webkit-scrollbar {
+    width: 10px;
+}
+
+/* Track */
+::-webkit-scrollbar-track {
+    background: #1e1e2e;
+}
+
+/* Handle */
+::-webkit-scrollbar-thumb {
+    background: #555555;
+}
+
+/* Handle on hover */
+::-webkit-scrollbar-thumb:hover {
+    background: #555;
+}
