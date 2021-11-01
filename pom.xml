@@ -8,39 +8,33 @@
     <version>1.0.0</version>
     <packaging>war</packaging>
 
-    <repositories>
-        <repository>
-            <id>maven1</id>
-            <name>Spring Snapshot Repository</name>
-            <url>https://repo1.maven.org/maven2/</url>
-            <snapshots>
-                <enabled>true</enabled>
-            </snapshots>
-            <releases>
-                <enabled>false</enabled>
-            </releases>
-        </repository>
-        <repository>
-            <id>maven2</id>
-            <name>Spring Snapshot Repository</name>
-            <url>https://repo.maven.apache.org/maven2/</url>
-            <snapshots>
-                <enabled>true</enabled>
-            </snapshots>
-            <releases>
-                <enabled>false</enabled>
-            </releases>
-        </repository>
+<!--     <repositories> -->
 <!--         <repository> -->
-<!--             <id>local-repo</id> -->
-<!--             <name>local Repository</name> -->
-<!--             <url>file://${project.basedir}/src/main/resources/static/libs/</url> -->
+<!--             <id>maven1</id> -->
+<!--             <name>Spring Snapshot Repository</name> -->
+<!--             <url>https://repo1.maven.org/maven2/</url> -->
+<!--             <snapshots> -->
+<!--                 <enabled>true</enabled> -->
+<!--             </snapshots> -->
+<!--             <releases> -->
+<!--                 <enabled>false</enabled> -->
+<!--             </releases> -->
 <!--         </repository> -->
-    </repositories>
+<!--         <repository> -->
+<!--             <id>maven2</id> -->
+<!--             <name>Spring Snapshot Repository</name> -->
+<!--             <url>https://repo.maven.apache.org/maven2/</url> -->
+<!--             <snapshots> -->
+<!--                 <enabled>true</enabled> -->
+<!--             </snapshots> -->
+<!--             <releases> -->
+<!--                 <enabled>false</enabled> -->
+<!--             </releases> -->
+<!--         </repository> -->
+<!--     </repositories> -->
     <properties>
         <java-version>1.8</java-version>
         <finalName>${project.artifactId}</finalName>
-		<java.version>11</java.version>
     </properties>
     <build>
         <finalName>${finalName}</finalName>
@@ -132,11 +126,11 @@
             <artifactId>guava</artifactId>
             <version>30.0-jre</version>
         </dependency>
-        <dependency>
-            <groupId>com.zaxxer</groupId>
-            <artifactId>HikariCP</artifactId>
-            <version>4.0.3</version>
-        </dependency>
+<!--         <dependency> -->
+<!--             <groupId>com.zaxxer</groupId> -->
+<!--             <artifactId>HikariCP</artifactId> -->
+<!--             <version>4.0.3</version> -->
+<!--         </dependency> -->
         <dependency>
             <groupId>org.mybatis</groupId>
             <artifactId>mybatis</artifactId>
@@ -285,6 +279,12 @@
 		    <groupId>org.springframework.boot</groupId>
 		    <artifactId>spring-boot-starter-batch</artifactId>
 		    <version>2.5.3</version>
+		    <exclusions>
+		    	<exclusion>
+		    		<groupId>com.zaxxer</groupId>
+		    		<artifactId>HikariCP</artifactId>
+		    	</exclusion>
+		    </exclusions>
 		</dependency>				        
 		<dependency>
 			<groupId>org.springframework.boot</groupId>

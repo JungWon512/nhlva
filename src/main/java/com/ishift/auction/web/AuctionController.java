@@ -1,5 +1,6 @@
 package com.ishift.auction.web;
 
+import java.math.BigDecimal;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -277,8 +278,8 @@ public class AuctionController extends CommonController {
 		List<Map<String,Object>> bizList = auctionService.selectBizLocList(map);
 		mav.addObject("bizList",bizList);
 		long aucYn = bizList.size() < 1?0:Integer.parseInt((String)bizList.get(0).get("AUC_YN"));
-		long aucCnt = bizList.size() < 1?0:(Long)bizList.get(0).get("AUC_CNT");
-		//long aucCnt = bizList.size() < 1?0:((BigDecimal)bizList.get(0).get("AUC_CNT")).longValue();
+//		long aucCnt = bizList.size() < 1?0:(Long)bizList.get(0).get("AUC_CNT");
+		long aucCnt = bizList.size() < 1?0:((BigDecimal)bizList.get(0).get("AUC_CNT")).longValue();
 		
 		log.debug("instanceof : {}", sessionUtill.getUserVo() instanceof BidUserDetails);
 		

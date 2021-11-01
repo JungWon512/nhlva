@@ -49,22 +49,6 @@ public class Util {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(Util.class);
 
-    @Value("${spring.mail.smtp.host}")
-    public String host;
-
-    @Value("${spring.mail.smtp.port}")
-    public Integer port;
-
-    @Value("${spring.mail.smtp.auth}")
-    public String isAuth;
-
-    @Value("${spring.mail.smtp.ssl.enable}")
-    public String isSsl;
-
-
-
-
-
     public Date getCurrentDate(){
 
 //        Date date = new Date();
@@ -156,53 +140,6 @@ public class Util {
         }
         return returnValue;
     }
-
-    public void sendPasswordMail(String receiver, String sender, String title, String content) throws Exception{
-
-
-
-        Properties prop = new Properties();
-        prop.put("mail.smtp.host",host);
-        prop.put("mail.smtp.port", port);
-        prop.put("mail.smtp.auth", isAuth);
-        prop.put("mail.smtp.ssl.enable", isSsl);
-        prop.put("mail.smtp.starttls.enable", "true");
-//        prop.put("mail.smtp.ssl.trust", "smtp.gmail.com");
-
-
-
-
-
-
-
-        Session session = Session.getDefaultInstance(prop, new javax.mail.Authenticator() {
-            protected javax.mail.PasswordAuthentication getPasswordAuthentication() {
-                return new javax.mail.PasswordAuthentication("photoprogrammer@gmail.com", "dlQmsdl2!");
-            }
-        });
-
-        try {
-            MimeMessage message = new MimeMessage(session);
-            message.setFrom(new InternetAddress(sender));
-
-            //수신자메일주소
-            message.addRecipient(Message.RecipientType.TO, new InternetAddress(receiver));
-
-            // Subject
-            message.setSubject(title); //메일 제목을 입력
-
-            message.setContent(content,"text/html; charset=UTF-8");
-            Transport.send(message); ////전송
-            LOGGER.debug("message sent successfully...");
-        } catch (AddressException e) {
-            // TODO Auto-generated catch block
-            LOGGER.debug("message sent fail AddressException...");
-        } catch (MessagingException e) {
-            // TODO Auto-generated catch block
-            LOGGER.debug("message sent fail MessageException...");
-        }
-    }
-
 
     public String convertFileName(String input){
         String returnValue = Normalizer.normalize(input, Normalizer.Form.NFC);

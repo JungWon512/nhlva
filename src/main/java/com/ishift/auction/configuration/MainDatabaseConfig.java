@@ -35,7 +35,7 @@ public class MainDatabaseConfig {
         sessionFactoryBean.setDataSource(dataSource);
         PathMatchingResourcePatternResolver resolver = new PathMatchingResourcePatternResolver();
         sessionFactoryBean.setConfigLocation(resolver.getResource("classpath:database/mybatis-config.xml"));
-        sessionFactoryBean.setMapperLocations(resolver.getResources("classpath:database/mapper/mariadb/**/*.xml"));
+        sessionFactoryBean.setMapperLocations(resolver.getResources("classpath:database/mapper/tibero/**/*.xml"));
         sessionFactoryBean.setTypeAliasesPackage("com.ishift.auction.vo");
         sessionFactoryBean.getObject().getConfiguration().setMapUnderscoreToCamelCase(true);
         return sessionFactoryBean.getObject();
