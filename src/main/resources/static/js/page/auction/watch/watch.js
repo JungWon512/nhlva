@@ -9,6 +9,7 @@ $(function() {
 		$('.m_sound').addClass('off');
 		
 		$('.seeBox_slick ul.slider').on('afterChange', function(event, slick, currentSlide, nextSlide){
+			//setLoopJoinEvent();
 			$('video[id^=remoteVideo]').each(function(){
 				if(!$('.m_sound').hasClass('off') && $(this).attr('id') == 'remoteVideo1') return;
 				$(this).get(0).muted = true;
@@ -76,7 +77,7 @@ $(function() {
 		});
 		console.log(getTodayStr().replaceAll('-','')+ ' : '+$('#aucDate').val());
 		if($('#aucDate').val() != getTodayStr().replaceAll('-','')){
-			modalAlert('','경매일이 아닙니다..',function(){pageMove('/main', false);});
+			modalAlert('','경매일이 아닙니다.',function(){pageMove('/main', false);});
 			return;
 		}else{
 			socketStart();			
@@ -342,14 +343,12 @@ var setLoopChDraw = function(castList){
 	});
 	
 	var height = $('div.seeBox_slick ul.slider .boarder').closest('.slick-slide').height();
+	$('div.seeBox_slick ul.slider li.video_item').height(height-1);
 	
-	if(sortingCastList.length > 0){		
+	if(sortingCastList.length > 0){
 		for(var i=0;i<sortingCastList.length;i++){
-			$('div.seeBox_slick ul.slider').slick('slickAdd','<div><li class="video_item" style="width: 100%;height: '+(height?height:350)+'px;">'
-			//+'<iframe id="remoteVideoIframe'+(i+1)+'" src="/watchIframe"></iframe>'
-			//+'<video id="remoteVideo'+(i+1)+'" castName = "'+sortingCastList[i].name+'" style="width: 100%;background: black;height: 100%;" poster="/static/images/assets/no_video_18980.png" playsinline webkit-playsinline autoplay '+(i !=0?'muted':'')+'>Your browser does not support HTML5 video.</video>'
-			+'<video id="remoteVideo'+(i+1)+'" castName = "'+sortingCastList[i].name+'" style="width: 100%;background: black;height: 100%;" poster="/static/images/assets/no_video_18980.png" muted="muted"  playsinline webkit-playsinline>Your browser does not support HTML5 video.</video>'
-			+'</li></div>');			//autoplay controls playsinline
+			if($('#kkoSvcCnt').val() <= i) return;
+			 $('#remoteVideo'+(i+1)).attr('castName',sortingCastList[i].name);
 			 setLoopChJoinInIn(sortingCastList[i],i+1);
 	 	};
 	
@@ -357,10 +356,6 @@ var setLoopChDraw = function(castList){
 		if(castName && castName.indexOf('remote') >= 0){
 			if(sortingCastList.length > 0) $('div.seeBox_slick ul.slider').slick('goTo', 0);
 		}
-	}else{
-			$('div.seeBox_slick ul.slider').slick('slickAdd','<div><li class="video_item" style="width: 100%;height: '+(height?height:350)+'px;">'
-			+'<video id="remoteVideo_Blank" style="width: 100%;background: black;height: 100%;" poster="/static/images/assets/no_video_18980.png" playsinline webkit-playsinline autoplay muted>Your browser does not support HTML5 video.</video>'
-			+'</li></div>');			//autoplay controls playsinline		
 	}
 };
 var remoteVideoArr = {};

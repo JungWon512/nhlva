@@ -16,6 +16,7 @@
 	<input type="hidden" id="aucDsc" value="${johapData.AUC_DSC}" />
 	<input type="hidden" id="kkoSvcId" value="${johapData.KKO_SVC_ID}" />
 	<input type="hidden" id="kkoSvcKey" value="${johapData.KKO_SVC_KEY}" />
+	<input type="hidden" id="kkoSvcCnt" value="${johapData.KKO_SVC_CNT}" />
 	<input type="hidden" id="aucDate" value="${dateVo.AUC_DT}" />
 
 	<div class="auction_seeBox" style="${johapData.AUC_DSC eq '2'?'margin-bottom: 0px;':'' }">
@@ -178,6 +179,13 @@
 									</ul>
 								</div>	
 							</li>
+							<c:forEach begin="1" end="1" varStatus="st">
+								<li class="video_item" style="width: 100%;height: auto;">
+									<video id="remoteVideo${st.index }" style="width: 100%;background: black;height: 100%;" poster="/static/images/assets/no_video_18980.png" muted="muted"  playsinline webkit-playsinline>
+										Your browser does not support HTML5 video.
+									</video>
+								</li>
+							</c:forEach>
 					</ul>
 				</div>
 				<div class="seeBox_gp">
