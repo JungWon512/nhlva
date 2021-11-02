@@ -9,18 +9,20 @@ $(function() {
 		$('.m_sound').addClass('off');
 		
 		$('.seeBox_slick ul.slider').on('afterChange', function(event, slick, currentSlide, nextSlide){
-			//setLoopJoinEvent();
 			$('video[id^=remoteVideo]').each(function(){
 				if(!$('.m_sound').hasClass('off') && $(this).attr('id') == 'remoteVideo1') return;
 				$(this).get(0).muted = true;
 				if(!$(this).get(0).paused) $(this).get(0).pause();
 			});
 			
+			var callback = function(currentSlide){
 			var video =$('#remoteVideo'+currentSlide).get(0);
 			if($('#remoteVideo1').get(0) && currentSlide == 1 && !$('.m_sound').hasClass('off')){
 				$('#remoteVideo1').get(0).muted = false;
 			}
 			if(video && video.paused) video.play();
+			}
+			setRemonJoinRemote(currentSlide,callback);
 		});
 		
 		if($('#aucDsc').val() == '2'){
@@ -75,7 +77,7 @@ $(function() {
 			}
 			$(".m_sound").toggleClass('off');
 		});
-		console.log(getTodayStr().replaceAll('-','')+ ' : '+$('#aucDate').val());
+		
 		if($('#aucDate').val() != getTodayStr().replaceAll('-','')){
 			modalAlert('','경매일이 아닙니다.',function(){pageMove('/main', false);});
 			return;
@@ -313,7 +315,8 @@ var listener = {
     },
     onError(error) { 
 		console.log(`EVENT FIRED: onError: ${error}`);
-    }, onStat(result) { 
+    }
+    , onStat(result) { 
 	}
 };
 
@@ -333,6 +336,32 @@ var setLoopJoinEvent = async function () {
 		setLoopChDraw(data);
 	});
 }
+
+var setRemonJoinRemote =async function (index,callback) {  
+	dummyRemon.config.credential.serviceId = serviceId;
+    dummyRemon.config.credential.key = serviceKey;
+	await dummyRemon.fetchCasts().then(function(data){
+		console.log(data);		
+		var castList = data.filter(function(cast){if(cast.name.indexOf($('#naBzPlc').val()+'_remoteVideo'+index)>=0) return this;})
+			.sort(function(castPre,castNext){
+			var pre = castPre.name.split('_')[1].replace('remoteVideo','');
+			var next = castNext.name.split('_')[1].replace('remoteVideo','');			
+			return pre-next;
+		});
+		var height = $('div.seeBox_slick ul.slider .boarder').closest('.slick-slide').height();
+		$('div.seeBox_slick ul.slider li.video_item').height(height-1);
+		
+		if(castList.length > 0){
+			if($('#kkoSvcCnt').val() < index) return;
+			 $('#remoteVideo'+(index)).attr('castName',castList[0].name);
+			 setLoopChJoinInIn(castList[0],index);
+		
+			var castName = $('#remoteVideo1').attr('castName');
+		}
+		callback();
+	});
+}
+
 var setLoopChDraw = function(castList){
 	var sortingCastList = castList.filter(function(cast){if(cast.name.indexOf($('#naBzPlc').val()+'_remoteVideo')>=0) return this;})
 		.sort(function(castPre,castNext){
@@ -349,7 +378,7 @@ var setLoopChDraw = function(castList){
 		for(var i=0;i<sortingCastList.length;i++){
 			if($('#kkoSvcCnt').val() <= i) return;
 			 $('#remoteVideo'+(i+1)).attr('castName',sortingCastList[i].name);
-			 setLoopChJoinInIn(sortingCastList[i],i+1);
+			 //setLoopChJoinInIn(sortingCastList[i],i+1);
 	 	};
 	
 		var castName = $('#remoteVideo1').attr('castName');

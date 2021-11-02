@@ -16,6 +16,7 @@
 <%--<link href="/static/assets/css/themes/layout/brand/dark.css" rel="stylesheet" type="text/css" />--%>
 <%--<link href="/static/assets/css/themes/layout/aside/dark.css" rel="stylesheet" type="text/css" />--%>
 <link href="/static/css/commons.css" rel="stylesheet" type="text/css" />
+<link rel="stylesheet" type="text/css" href="/static/css/guide/popup.css">
 
 <%--<link href="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.3.1/semantic.min.css" rel="stylesheet" type="text/css" />--%>
 <%--<link href="https://cdn.datatables.net/1.10.25/css/dataTables.semanticui.min.css" rel="stylesheet" type="text/css" />--%>

@@ -12,9 +12,9 @@
   <div class="collapse navbar-collapse" id="navbarToggleExternalContent">
 	<c:set var="uri" value="${requestScope['javax.servlet.forward.servlet_path']}" />
     <ul class="navbar-nav mr-auto mt-2 mt-lg-0">
-		<li class="nav-item">
-			<a class="nav-link ${fn:indexOf(uri, '/admin/task/') > -1 ? 'active' : ''}" href="/admin/task/main">경매업무</a> 
-		</li>
+<!-- 		<li class="nav-item"> -->
+<%-- 			<a class="nav-link ${fn:indexOf(uri, '/admin/task/') > -1 ? 'active' : ''}" href="/admin/task/main">경매업무</a>  --%>
+<!-- 		</li> -->
 		<li class="nav-item"> 
 			<a class="nav-link ${uri eq '/admin/broad/cast' ? 'active' : ''}" href="/admin/broad/cast">영상송출</a> 
 		</li>

@@ -23,6 +23,7 @@
 			, TEL_NO
 			, KKO_SVC_ID
 			, KKO_SVC_KEY
+			, KKO_SVC_CNT
  		FROM TB_LA_IS_BM_BZLOC
  		WHERE 1=1
 		<if test="naBzPlcNo != null and naBzPlcNo != ''">
@@ -76,7 +77,7 @@
     </select>
 
     <insert id="insertNotice" parameterType="map" >
-        INSERT IGNORE INTO tb_la_is_bm_noti
+        INSERT INTO tb_la_is_bm_noti
         (
         <trim suffixOverrides=",">
             <if test="johpCd!=null and johpCd!=''">

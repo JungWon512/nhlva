@@ -287,4 +287,14 @@ public class AuctionServiceImpl implements AuctionService {
 	public Map<String, Object> selectCowInfo(Map<String, Object> params) throws Exception {
 		return auctionDAO.selectCowInfo(params);
 	}
+	/**
+	 * 출장우 정보 업데이트(중량, 계류대, 하한가)
+	 * @param params
+	 * @return
+	 * @throws Exception
+	 */
+	@Override
+	public int updateCowInfo(Map<String, Object> params) throws Exception {
+		return auctionDAO.updateCowInfo(params);
+	}
 }

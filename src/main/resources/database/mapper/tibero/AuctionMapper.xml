@@ -250,12 +250,12 @@
     </select>
     
     <select id="selectAucDateList" parameterType="map" resultType="map">
-		SELECT
-			DISTINCT AUC_DT 
+		SELECT AUC_DT 
 			,NA_BZPLC
 			,TO_CHAR(TO_DATE(AUC_DT,'YYYYMMDD'),'YY.MM.DD') AUC_DT_STR
+			, AGGR_CONCAT(AUC_OBJ_DSC, ',') AS AUC_OBJ_DSC
 		FROM (
-			SELECT AUC_DT ,NA_BZPLC 
+			SELECT AUC_DT ,NA_BZPLC , AUC_OBJ_DSC
 			FROM TB_LA_IS_MH_AUC_QCN
 			WHERE NA_BZPLC = #{naBzPlc}
 			AND DEL_YN = 0
@@ -270,7 +270,7 @@
 				</otherwise>
 			</choose> 
 			UNION ALL
-			SELECT AUC_DT ,NA_BZPLC 
+			SELECT AUC_DT ,NA_BZPLC , AUC_OBJ_DSC
 			FROM TB_LA_IS_MH_AUC_STN
 			WHERE NA_BZPLC = #{naBzPlc}
 			AND DEL_YN = 0
@@ -285,6 +285,7 @@
 				</otherwise>
 			</choose> 
 		) TEMP	
+		GROUP BY NA_BZPLC, AUC_DT
 		ORDER BY AUC_DT DESC
     </select>
     
@@ -573,7 +574,7 @@
 				   AND E.TRMN_AMNNO = A.TRMN_AMNNO
 				   AND E.LVST_AUC_PTC_MN_NO = A.LVST_AUC_PTC_MN_NO
 				   AND E.ATDR_AM = A.SRA_SBID_UPR
-				   LIMIT 1
+				   AND ROWNUM = 1
 			 ) AS ATDR_DTM					/* 응찰일시 */
 		  FROM TB_LA_IS_MH_SOG_COW A
 		  LEFT OUTER JOIN TB_LA_IS_MM_INDV B
@@ -745,6 +746,7 @@
 	<select id="selectKakaoServiceInfo" parameterType="map" resultType="map">
 		SELECT KKO_SVC_ID
 			 , KKO_SVC_KEY
+			 , KKO_SVC_CNT
 		  FROM TB_LA_IS_BM_BZLOC
 		 WHERE NA_BZPLC = #{naBzplc}
 	</select>
@@ -784,8 +786,113 @@
 			  )
 		  </if>
 		   AND TRMN_AMNNO = #{trmnAmnno}
+		   AND ROWNUM = 1
 		   ORDER BY FSRG_DTM DESC
-		   LIMIT 1
 	</select>
+	
+	<select id="selectCowInfo" parameterType="map" resultType="map">
+		SELECT A.NA_BZPLC					/* 조합 구분 코드 */
+			 , A.OSLP_NO					/* 출품번호 */
+			 , (SELECT C.QCN
+			 	  FROM TB_LA_IS_MH_AUC_QCN C
+			 	 WHERE C.NA_BZPLC = A.NA_BZPLC
+			 	   AND C.AUC_DT = A.AUC_DT
+			 	   AND C.AUC_OBJ_DSC = A.AUC_OBJ_DSC) AS QCN
+			 , A.AUC_PRG_SQ					/* 경매순번 */
+			 , A.AUC_OBJ_DSC				/* 경매대상구분코드 */
+			 , A.SRA_INDV_AMNNO				/* 축산개체관리번호 */
+			 , A.SRA_SRS_DSC				/* 축상축종구분코드 */
+			 , B.FHS_ID_NO 					/* 농가식별번호 */
+			 , B.FARM_AMNNO 				/* 농장관리번호 */
+			 , (SELECT C.FTSNM
+				  FROM TB_LA_IS_MM_FHS C
+				 WHERE C.NA_BZPLC = B.NA_BZPLC
+				   AND C.FHS_ID_NO = B.FHS_ID_NO
+				   AND C.FARM_AMNNO = B.FARM_AMNNO
+			 ) AS FTSNM						/* 농가명 */
+			 , A.BRANDNM					/* 브랜드명 */
+			 , B.BIRTH						/* 생년월일 */
+			 , RTRIM(LTRIM(B.KPN_NO)) AS KPN_NO	/* KPN번호 */
+			 , B.INDV_SEX_C					/* 개체성별코드 */
+			 , CASE WHEN B.INDV_SEX_C = '0' THEN '없음' WHEN B.INDV_SEX_C = '1' THEN '암'
+			 		WHEN B.INDV_SEX_C = '2' THEN '수' WHEN B.INDV_SEX_C = '3' THEN '거세'
+			 		WHEN B.INDV_SEX_C = '4' THEN '미경산' WHEN B.INDV_SEX_C = '5' THEN '비거세'
+			 		WHEN B.INDV_SEX_C = '6' THEN '프리마틴' WHEN B.INDV_SEX_C = '9' THEN '공통'
+			 		ELSE '-'
+			 	END AS INDV_SEX_NAME		/* 개체성별코드명 */
+			 , B.MCOW_DSC 					/* 어미소구분코드*/
+			 , B.MCOW_SRA_INDV_AMNNO 		/* 어미축산개체관리번호 */
+			 , CASE WHEN B.MCOW_DSC = '01' THEN '기초'
+			 		WHEN B.MCOW_DSC = '02' THEN '혈통'
+			 		WHEN B.MCOW_DSC = '03' THEN '고등'
+			 		WHEN B.MCOW_DSC = '09' THEN '미등록우'
+			 		ELSE ''
+			 	END AS MCOW_DSC_NM
+			 , ROUND(B.MATIME) AS MATIME		/* 산차 */
+			 , ROUND(A.PRNY_MTCN) AS PRNY_MTCN	/* 임신개월수 */
+			 , B.SRA_INDV_PASG_QCN 			/* 계대 */
+			 , B.INDV_ID_NO 				/* 계체식벌번호 */
+			 , B.SRA_INDV_BRDSRA_RG_NO 		/* 축산개체종축등록번호 */
+			 , B.RG_DSC 					/* 등록구분번호 */
+			 , CASE WHEN B.RG_DSC = '01' THEN '기초'
+			 		WHEN B.RG_DSC = '02' THEN '혈통'
+			 		WHEN B.RG_DSC = '03' THEN '고등'
+			 		WHEN B.RG_DSC = '09' THEN '미등록우'
+			 		ELSE ''
+			 	END AS RG_DSC_NM
+			 , A.SRA_PDMNM
+			 , A.SRA_PD_RGNNM 				/* 축산생산지역 */
+			 , A.DNA_YN						/* 친자검사결과여부 */
+			 , B.ANW_YN 					/* 신규여부 */
+			 , ROUND(A.COW_SOG_WT) AS COW_SOG_WT	/* 우출하중량 */
+			 , ROUND(A.FIR_LOWS_SBID_LMT_AM / 10000) AS FIR_LOWS_SBID_LMT_AM		/* 최초최저낙찰한도금액 */
+			 , ROUND(A.LOWS_SBID_LMT_AM / 10000) AS LOWS_SBID_LMT_AM			/* 최저낙찰한도금액 */
+			 , A.RMK_CNTN					/* 비고내용 */
+			 , A.SEL_STS_DSC 				/* 낙유찰결과 */
+			 , A.LVST_AUC_PTC_MN_NO			/* 낙찰자 참가 번호 */
+			 , A.TRMN_AMNNO					/* 낙찰자 중도매인 번호 */
+			 , A.SRA_SBID_UPR				/* 낙찰금액 */
+			 , ROUND(A.SRA_SBID_AM / 10000) AS SRA_SBID_AM		/* 낙찰금액 */
+			 , CONCAT(SUBSTRING(A.SRA_INDV_AMNNO,LENGTH(A.SRA_INDV_AMNNO)-4,4), '-', SUBSTRING(A.SRA_INDV_AMNNO, LENGTH(A.SRA_INDV_AMNNO), 1)) AS SRA_INDV_AMNNO_FORMAT
+		  FROM TB_LA_IS_MH_SOG_COW A
+		  LEFT OUTER JOIN TB_LA_IS_MM_INDV B
+			ON (
+				A.NA_BZPLC = B.NA_BZPLC
+				AND
+				A.SRA_INDV_AMNNO = B.SRA_INDV_AMNNO 
+				AND
+				A.SRA_SRS_DSC = B.SRA_SRS_DSC 
+			 )
+		 WHERE A.NA_BZPLC = #{naBzplc}
+		   AND A.AUC_DT = #{aucDt}
+		   AND A.AUC_OBJ_DSC = #{aucObjDsc}
+		   AND A.OSLP_NO = #{oslpNo}
+		   AND A.LED_SQNO = #{ledSqno}
+	</select>
+	
+	<update id="updateCowInfo" parameterType="map">
+		<if test="regType != null and regType != ''">
+			UPDATE TB_LA_IS_MH_SOG_COW
+			   SET LSCHG_DTM = SYSDATE
+				 , LS_CMENO = #{regUserId}
+			
+			<choose>
+			<when test="regType == 'W'.toString()">
+				 , COW_SOG_WT = #{cowSogWt}
+			</when>
+			<when test="regType == 'N'.toString()">
+			</when>
+			<when test="regType == 'L'.toString()">
+				 , FIR_LOWS_SBID_LMT_AM = #{firLowsSbidLmtAm} * 10000
+				 , LOWS_SBID_LMT_AM = #{firLowsSbidLmtAm} * 10000
+			</when>
+			</choose>
+			 WHERE NA_BZPLC = #{naBzplc}
+			   AND AUC_DT = #{aucDt}
+			   AND AUC_OBJ_DSC = #{aucObjDsc}
+			   AND OSLP_NO = #{oslpNo}
+			   AND LED_SQNO = #{ledSqno}
+		</if>
+	</update>
 	
 </mapper>

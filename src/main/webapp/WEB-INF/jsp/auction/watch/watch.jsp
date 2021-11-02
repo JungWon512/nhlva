@@ -179,9 +179,11 @@
 									</ul>
 								</div>	
 							</li>
-							<c:forEach begin="1" end="1" varStatus="st">
+							
+							<c:forEach begin="1" end="${johapData.KKO_SVC_CNT}" varStatus="st">
+<%-- 							<c:forEach begin="1" end="4" varStatus="st"> --%>
 								<li class="video_item" style="width: 100%;height: auto;">
-									<video id="remoteVideo${st.index }" style="width: 100%;background: black;height: 100%;" poster="/static/images/assets/no_video_18980.png" muted="muted"  playsinline webkit-playsinline>
+									<video id="remoteVideo${st.index }" style="width: 100%;background: black;height: 100%;" poster="/static/images/assets/no_video_18980.png" muted="muted" autoplay playsinline webkit-playsinline>
 										Your browser does not support HTML5 video.
 									</video>
 								</li>

@@ -8,6 +8,7 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import com.ishift.auction.configuration.security.token.AdminUserAuthenticationToken;
 import com.ishift.auction.service.auction.AuctionService;
@@ -20,6 +21,9 @@ import com.ishift.auction.vo.JwtTokenVo;
 import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
 
+import org.json.simple.JSONArray;
+import org.json.simple.JSONObject;
+import org.json.simple.parser.JSONParser;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.MediaType;
@@ -182,7 +186,8 @@ public class ApiController {
 					  .append(this.getStringValue(vo.get("SRA_PDMNM")).replace("|", ",")).append('|')
 //					  .append(this.getStringValue(vo.get("FTSNM")).replace("|", ",")).append('|')
 					  .append(this.getStringValue(vo.get("BRANDNM")).replace("|", ",")).append('|')
-					  .append(this.getConvertBirthDay(this.getStringValue(vo.get("BIRTH")).replace("|", ","))).append('|')
+//					  .append(this.getConvertBirthDay(this.getStringValue(vo.get("BIRTH")).replace("|", ","))).append('|')
+					  .append(this.getStringValue(vo.get("BIRTH_DATE")).replace("|", ",")).append('|')
 					  .append(this.getStringValue(vo.get("KPN_NO")).replace("|", ",")).append('|')
 					  .append(this.getStringValue(vo.get("INDV_SEX_NAME")).replace("|", ",")).append('|')
 					  .append(this.getStringValue(vo.get("MCOW_DSC_NM")).replace("|", ",")).append('|')
@@ -820,7 +825,7 @@ public class ApiController {
 		try {
 			String stnYn = params.get("stnYn") == null? "" :(String)params.get("stnYn");
 			if("Y".equals(stnYn)) {
-				Map<String, Object> map = auctionService.selectAuctStn(params);
+				Map<String, Object> map = auctionService.selectAuctStn((Map<String, Object>) params);
 				if (map == null) {
 					result.put("success", false);
 					result.put("message", "일괄경매회차정보가 없습니다.");
@@ -829,7 +834,7 @@ public class ApiController {
 				params.put("stAucNo", map.get("ST_AUC_NO"));
 				params.put("edAucNo", map.get("ED_AUC_NO"));
 			}
-			List<Map<String, Object>> list = auctionService.selectAuctCowList(params);
+			List<Map<String, Object>> list = auctionService.selectAuctCowList((Map<String, Object>) params);
 			
 			if (list != null && list.size() > 0) {
 				result.put("success", true);
@@ -861,10 +866,27 @@ public class ApiController {
 			, consumes = MediaType.APPLICATION_FORM_URLENCODED_VALUE
 				, produces = MediaType.APPLICATION_JSON_VALUE)
 	public Map<String, Object> updateLowSbidAmt(@PathVariable(name = "version") String version
-			, @RequestParam final Map<String, Object> params) {
+			, @RequestParam Map<String,Object> params) {
 		final Map<String, Object> result = new HashMap<String, Object>();
-
 		try {
+			//int cnt = 0;
+			if(params.get("list") == null) {
+				result.put("success", false);
+				result.put("message", "필수 인자가 없습니다.");				
+			}
+			JSONParser parser = new JSONParser();
+			JSONArray array = (JSONArray) parser.parse((String) (params.get("list")));
+			List<Map<String,Object>> temp = new ArrayList<>();
+			for(int i=0;i<array.size();i++) {
+				JSONObject json = (JSONObject) array.get(i);
+				Map<String,Object> map = new HashMap<String, Object>();
+				Set<String> jsonKeys = json.keySet();
+				for(String jsonKey : jsonKeys) {
+					map.put(jsonKey, json.get(jsonKey));
+				}
+				temp.add(map);
+			}
+			params.put("list", temp);
 			int cnt = auctionService.updateLowSbidAmt(params);
 			
 			if (cnt > 0) {
@@ -1151,6 +1173,23 @@ public class ApiController {
 		final Map<String, Object> result = new HashMap<String, Object>();
 
 		try {
+			if(params.get("list") == null) {
+				result.put("success", false);
+				result.put("message", "필수 인자가 없습니다.");				
+			}
+			JSONParser parser = new JSONParser();
+			JSONArray array = (JSONArray) parser.parse((String) (params.get("list")));
+			List<Map<String,Object>> temp = new ArrayList<>();
+			for(int i=0;i<array.size();i++) {
+				JSONObject json = (JSONObject) array.get(i);
+				Map<String,Object> map = new HashMap<String, Object>();
+				Set<String> jsonKeys = json.keySet();
+				for(String jsonKey : jsonKeys) {
+					map.put(jsonKey, json.get(jsonKey));
+				}
+				temp.add(map);
+			}
+			params.put("list", temp);
 			int cnt = auctionService.insertFeeLog(params);
 			
 			if ( cnt > 0) {

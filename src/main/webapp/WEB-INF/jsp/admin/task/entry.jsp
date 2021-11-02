@@ -1,5 +1,13 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
 <%@ include file="/WEB-INF/__system/taglibs.jsp" %>
+<style type="text/css">
+	.modal-wrap.pop_exit_cow .modal-content table td {
+		text-align:left !important;
+	}
+	input.pd5 {
+		padding:5px;
+	}
+</style>
 <!--begin::Container-->
 <div class="container">
 	<form name="frm" action="" method="post">

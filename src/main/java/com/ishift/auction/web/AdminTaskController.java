@@ -158,7 +158,18 @@ public class AdminTaskController {
 	public Map<String, Object> saveCowInfo(@RequestBody final Map<String, Object> params) {
 		final Map<String, Object> result = new HashMap<String, Object>();
 		try {
-
+			final AdminUserDetails userVo = (AdminUserDetails)sessionUtill.getUserVo();
+			params.put("regUserId", userVo.getEno());
+			
+			final int cnt = auctionService.updateCowInfo(params);
+			if (cnt > 0) {
+				result.put("success", true);
+				result.put("message", "수정되었습니다.");
+			}
+			else {
+				result.put("success", false);
+				result.put("message", "출장우 정보가 없습니다.");
+			}
 		}
 		catch (Exception e) {
 			result.put("success", false);
