@@ -37,9 +37,6 @@
 			<attribute name="m2e-apt" value="true"/>
 		</attributes>
 	</classpathentry>
-	<classpathentry kind="lib" path="src/main/resources/static/libs/jasper-el.jar"/>
-	<classpathentry kind="lib" path="src/main/resources/static/libs/sqljdbc42.jar"/>
-	<classpathentry kind="lib" path="src/main/resources/static/libs/tibero6-jdbc.jar"/>
 	<classpathentry kind="src" output="target/test-classes" path="target/generated-test-sources/test-annotations">
 		<attributes>
 			<attribute name="optional" value="true"/>

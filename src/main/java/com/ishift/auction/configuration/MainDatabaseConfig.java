@@ -18,14 +18,13 @@ import javax.sql.DataSource;
  * 홈페이지 메인 Database Config
  * @author Yuchan
  */
-@Configuration
+//@Configuration
 public class MainDatabaseConfig {
 	@Bean(name = "dataSource")
 	@ConfigurationProperties(prefix="spring.datasource")
 	public DataSource dataSource() {
 		return DataSourceBuilder.create().build();
 	}
-
     /**
      * sessionfactory
      */

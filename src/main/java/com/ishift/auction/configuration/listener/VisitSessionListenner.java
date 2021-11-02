@@ -56,8 +56,8 @@ public class VisitSessionListenner implements HttpSessionListener{
 	        vo.put("visit_refer", req.getHeader("referer"));
 	        vo.put("visit_agent", req.getHeader("User-Agent"));
 	        //System.out.println(vo);
-	        SqlSessionTemplate sqlSession = getSessionService(http);
-	        sqlSession.insert("LoginMapper.insertVisitor",vo);
+	        //SqlSessionTemplate sqlSession = getSessionService(http);
+	        //sqlSession.insert("LoginMapper.insertVisitor",vo);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

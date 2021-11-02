@@ -8,30 +8,30 @@
     <version>1.0.0</version>
     <packaging>war</packaging>
 
-<!--     <repositories> -->
-<!--         <repository> -->
-<!--             <id>maven1</id> -->
-<!--             <name>Spring Snapshot Repository</name> -->
-<!--             <url>https://repo1.maven.org/maven2/</url> -->
-<!--             <snapshots> -->
-<!--                 <enabled>true</enabled> -->
-<!--             </snapshots> -->
-<!--             <releases> -->
-<!--                 <enabled>false</enabled> -->
-<!--             </releases> -->
-<!--         </repository> -->
-<!--         <repository> -->
-<!--             <id>maven2</id> -->
-<!--             <name>Spring Snapshot Repository</name> -->
-<!--             <url>https://repo.maven.apache.org/maven2/</url> -->
-<!--             <snapshots> -->
-<!--                 <enabled>true</enabled> -->
-<!--             </snapshots> -->
-<!--             <releases> -->
-<!--                 <enabled>false</enabled> -->
-<!--             </releases> -->
-<!--         </repository> -->
-<!--     </repositories> -->
+    <repositories>
+        <repository>
+            <id>maven1</id>
+            <name>Spring Snapshot Repository</name>
+            <url>https://repo1.maven.org/maven2/</url>
+            <snapshots>
+                <enabled>true</enabled>
+            </snapshots>
+            <releases>
+                <enabled>false</enabled>
+            </releases>
+        </repository>
+        <repository>
+            <id>maven2</id>
+            <name>Spring Snapshot Repository</name>
+            <url>https://repo.maven.apache.org/maven2/</url>
+            <snapshots>
+                <enabled>true</enabled>
+            </snapshots>
+            <releases>
+                <enabled>false</enabled>
+            </releases>
+        </repository>
+    </repositories>
     <properties>
         <java-version>1.8</java-version>
         <finalName>${project.artifactId}</finalName>
@@ -172,21 +172,22 @@
             <artifactId>jdbc</artifactId>
             <version>4.2</version>
             <scope>system</scope>
-            <systemPath>${project.basedir}/src/main/webapp/WEB-INF/libs/sqljdbc42.jar</systemPath>
+            <systemPath>${project.basedir}/src/main/resources/static/libs/sqljdbc42.jar</systemPath>
         </dependency>
-        <dependency>
-            <groupId>com.tmax.tibero</groupId>
-            <artifactId>tibero6-jdbc</artifactId>
-            <version>6.0</version>
-            <scope>system</scope>
-            <systemPath>${project.basedir}/src/main/webapp/WEB-INF/libs/tibero6-jdbc.jar</systemPath>
-        </dependency>
+     	<dependency>
+			<groupId>tibero6</groupId>
+			<artifactId>tibero6-custom</artifactId>
+			<version>1.0.0</version>
+			<scope>system</scope>
+			<systemPath>${project.basedir}/src/main/resources/static/libs/tibero6-jdbc.jar</systemPath>
+			
+		</dependency>
         <dependency>
             <groupId>org.apache.tomcat</groupId>
             <artifactId>tomcat-jasper-el</artifactId>
             <version>10.1.0-M6</version>
             <scope>system</scope>
-            <systemPath>${project.basedir}/src/main/webapp/WEB-INF/libs/jasper-el.jar</systemPath>
+            <systemPath>${project.basedir}/src/main/resources/static/libs/jasper-el.jar</systemPath>
         </dependency>
         <dependency>
             <groupId>org.apache.tiles</groupId>
