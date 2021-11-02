@@ -179,12 +179,12 @@
 			else if (params.regType == 'N') {
 				sHtml.push('				<tr>');
 				sHtml.push('					<th>현 계류대</th>');
-				sHtml.push('					<td>' + cowInfo.AUC_PRG_SQ + '</td>');
+				sHtml.push('					<td>' + cowInfo.MODL_NO + '</td>');
 				sHtml.push('				</tr>');
 				sHtml.push('				<tr>');
 				sHtml.push('					<th>변경</th>');
 				sHtml.push('					<td>');
-				sHtml.push('						<input type="text" name="temp" class="pd5 required" value="' + cowInfo.AUC_PRG_SQ + '" maxlength="4" pattern="\d*" inputmode="numeric" style="width:80%;" />');
+				sHtml.push('						<input type="text" name="modlNo" class="pd5 required" value="' + cowInfo.MODL_NO + '" maxlength="4" pattern="\d*" inputmode="numeric" style="width:80%;" />');
 				sHtml.push('					</td>');
 				sHtml.push('				</tr>');
 			}

@@ -190,8 +190,7 @@ public class AuctionDAO {
 	 * @return
 	 * @throws Exception
 	 */
-	public Map<String, Object> sealectAuctQcn(Map<String, Object> params) throws Exception {
-		// TODO Auto-generated method stub
+	public Map<String, Object> sealectAuctQcn(Map<String, Object> params) throws Exception {		
 		return mainDao.selectOne("ApiMapper.sealectAuctQcn", params);		
 	}
 	/**
@@ -200,8 +199,7 @@ public class AuctionDAO {
 	 * @return
 	 * @throws Exception
 	 */
-	public int sealectAuctCowCnt(Map<String, Object> params) throws Exception {
-		// TODO Auto-generated method stub
+	public int sealectAuctCowCnt(Map<String, Object> params) throws Exception {		
 		return mainDao.count("ApiMapper.sealectAuctCowCnt", params);		
 	}
 
@@ -211,8 +209,7 @@ public class AuctionDAO {
 	 * @return
 	 * @throws Exception
 	 */
-	public List<Map<String, Object>> selectAuctCowList(Map<String, Object> params) throws Exception {
-		// TODO Auto-generated method stub
+	public List<Map<String, Object>> selectAuctCowList(Map<String, Object> params) throws Exception {		
 		return mainDao.selectList("ApiMapper.selectAuctCowList", params);
 	}
 
@@ -222,8 +219,7 @@ public class AuctionDAO {
 	 * @return
 	 * @throws Exception
 	 */
-	public int updateLowSbidAmt(Map<String, Object> params) throws Exception {
-		// TODO Auto-generated method stub
+	public int updateLowSbidAmt(Map<String, Object> params) throws Exception {		
 		return mainDao.update("ApiMapper.updateLowSbidAmt", params);
 	}
 
@@ -233,8 +229,7 @@ public class AuctionDAO {
 	 * @return
 	 * @throws Exception
 	 */
-	public int updateAuctCowSt(Map<String, Object> params) throws Exception {
-		// TODO Auto-generated method stub
+	public int updateAuctCowSt(Map<String, Object> params) throws Exception {		
 		return mainDao.update("ApiMapper.updateAuctCowSt", params);
 	}
 
@@ -244,8 +239,7 @@ public class AuctionDAO {
 	 * @return
 	 * @throws Exception
 	 */
-	public int updateAuctCowResult(Map<String, Object> params) throws Exception {
-		// TODO Auto-generated method stub
+	public int updateAuctCowResult(Map<String, Object> params) throws Exception {		
 		return mainDao.update("ApiMapper.updateAuctCowResult", params);
 	}
 
@@ -255,8 +249,7 @@ public class AuctionDAO {
 	 * @return
 	 * @throws Exception
 	 */
-	public int selectBidLogCnt(Map<String, Object> params) throws Exception {
-		// TODO Auto-generated method stub
+	public int selectBidLogCnt(Map<String, Object> params) throws Exception {		
 		return mainDao.count("ApiMapper.selectBidLogCnt", params);
 	}
 
@@ -266,8 +259,7 @@ public class AuctionDAO {
 	 * @return
 	 * @throws Exception
 	 */
-	public Map<String, Object> selectNextBidNum(Map<String, Object> params) throws Exception {
-		// TODO Auto-generated method stub
+	public Map<String, Object> selectNextBidNum(Map<String, Object> params) throws Exception {		
 		return mainDao.selectOne("ApiMapper.selectNextBidNum", params);
 	}
 
@@ -277,8 +269,7 @@ public class AuctionDAO {
 	 * @return
 	 * @throws Exception
 	 */
-	public int insertBidLog(Map<String, Object> params) throws Exception {
-		// TODO Auto-generated method stub
+	public int insertBidLog(Map<String, Object> params) throws Exception {		
 		return mainDao.insert("ApiMapper.insertBidLog", params);
 	}
 
@@ -288,8 +279,7 @@ public class AuctionDAO {
 	 * @return
 	 * @throws Exception
 	 */
-	public List<Map<String, Object>> selectFeeInfo(Map<String, Object> params) throws Exception {
-		// TODO Auto-generated method stub
+	public List<Map<String, Object>> selectFeeInfo(Map<String, Object> params) throws Exception {		
 		return mainDao.selectList("ApiMapper.selectFeeInfo", params);
 	}
 
@@ -299,8 +289,7 @@ public class AuctionDAO {
 	 * @return
 	 * @throws Exception
 	 */
-	public int deleteFeeInfo(Map<String, Object> params) throws Exception {
-		// TODO Auto-generated method stub
+	public int deleteFeeInfo(Map<String, Object> params) throws Exception {		
 		return mainDao.delete("ApiMapper.deleteFeeInfo", params);
 	}
 
@@ -310,8 +299,7 @@ public class AuctionDAO {
 	 * @return
 	 * @throws Exception
 	 */
-	public int insertFeeLog(Map<String, Object> params) throws Exception {
-		// TODO Auto-generated method stub
+	public int insertFeeLog(Map<String, Object> params) throws Exception {		
 		return mainDao.insert("ApiMapper.insertFeeLog", params);
 	}
 
@@ -321,13 +309,11 @@ public class AuctionDAO {
 	 * @return
 	 * @throws Exception
 	 */
-	public Map<String, Object> selectAuctBidNum(Map<String, Object> params) throws Exception {
-		// TODO Auto-generated method stub
+	public Map<String, Object> selectAuctBidNum(Map<String, Object> params) throws Exception {		
 		return mainDao.selectOne("ApiMapper.selectAuctBidNum", params);
 	}
 
-	public Map<String, Object> selectAuctStn(Map<String, Object> params) throws Exception {
-		// TODO Auto-generated method stub
+	public Map<String, Object> selectAuctStn(Map<String, Object> params) throws Exception {		
 		return mainDao.selectOne("ApiMapper.selectAuctStn", params);
 	}
 

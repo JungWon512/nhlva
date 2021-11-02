@@ -187,7 +187,7 @@ public class ApiController {
 //					  .append(this.getStringValue(vo.get("FTSNM")).replace("|", ",")).append('|')
 					  .append(this.getStringValue(vo.get("BRANDNM")).replace("|", ",")).append('|')
 //					  .append(this.getConvertBirthDay(this.getStringValue(vo.get("BIRTH")).replace("|", ","))).append('|')
-					  .append(this.getStringValue(vo.get("BIRTH_DATE")).replace("|", ",")).append('|')
+					  .append(this.getStringValue(vo.get("BIRTH_FMT")).replace("|", ",")).append('|')
 					  .append(this.getStringValue(vo.get("KPN_NO")).replace("|", ",")).append('|')
 					  .append(this.getStringValue(vo.get("INDV_SEX_NAME")).replace("|", ",")).append('|')
 					  .append(this.getStringValue(vo.get("MCOW_DSC_NM")).replace("|", ",")).append('|')
@@ -825,7 +825,7 @@ public class ApiController {
 		try {
 			String stnYn = params.get("stnYn") == null? "" :(String)params.get("stnYn");
 			if("Y".equals(stnYn)) {
-				Map<String, Object> map = auctionService.selectAuctStn((Map<String, Object>) params);
+				Map<String, Object> map = auctionService.selectAuctStn(params);
 				if (map == null) {
 					result.put("success", false);
 					result.put("message", "일괄경매회차정보가 없습니다.");
@@ -834,7 +834,7 @@ public class ApiController {
 				params.put("stAucNo", map.get("ST_AUC_NO"));
 				params.put("edAucNo", map.get("ED_AUC_NO"));
 			}
-			List<Map<String, Object>> list = auctionService.selectAuctCowList((Map<String, Object>) params);
+			List<Map<String, Object>> list = auctionService.selectAuctCowList(params);
 			
 			if (list != null && list.size() > 0) {
 				result.put("success", true);
@@ -1007,6 +1007,42 @@ public class ApiController {
 		}
 		catch (Exception e) {
 			log.error("error - selectBidLogCnt : {}", e.getMessage());
+			result.put("success", false);
+			result.put("message", e.getMessage());
+			return result;
+		}
+		return result;
+	}
+	
+	/**
+	 * 응찰 내역 리스트
+	 * @param version
+	 * @param params
+	 * @return
+	 */
+	@ResponseBody
+	@PostMapping(value = "/api/{version}/auction/select/bidlog"
+			, consumes = MediaType.APPLICATION_FORM_URLENCODED_VALUE
+				, produces = MediaType.APPLICATION_JSON_VALUE)
+	public Map<String, Object> selectBidLog(@PathVariable(name = "version") String version
+			, @RequestParam final Map<String, Object> params) {
+		final Map<String, Object> result = new HashMap<String, Object>();
+
+		try {
+			int cnt = auctionService.selectBidLogCnt(params);
+			
+			if (cnt > 0) {
+				result.put("success", true);
+				result.put("data", cnt);
+				result.put("message", "정상적으로 조회되었습니다.");
+			}
+			else {
+				result.put("success", false);
+				result.put("message", "조회된 정보가 없습니다.");
+			}
+		}
+		catch (Exception e) {
+			log.error("error - selectBidLog : {}", e.getMessage());
 			result.put("success", false);
 			result.put("message", e.getMessage());
 			return result;
