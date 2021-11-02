@@ -77,7 +77,7 @@ var messageHandler = function(data) {
 //				}
 				
 				$('table.tblBoard tbody tr.title td p.auctionNum').text(dataArr[2]);	//경매번호
-				$('table.tblBoard tbody tr.val td p.ftsnm').text(nameEnc(dataArr[9])); //출하주
+				$('table.tblBoard tbody tr.val td p.ftsnm').text(nameEnc(dataArr[9],"●")); //출하주
 				$('table.tblBoard tbody tr.val td p.cowSogWt').text(dataArr[25]); //중량
 				$('table.tblBoard tbody tr.val td p.lowsSbidLmtAm').text(Math.round(parseInt(dataArr[27]))); //최저가
 				// $('table.tblBoard tbody tr.val td p.prnyMtcn').text(Math.round(parseInt(dataArr[17]))); //임신

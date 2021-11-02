@@ -23,12 +23,14 @@ $(function() {
 				$(this).get(0).muted = true;
 				if(!$(this).get(0).paused) $(this).get(0).pause();
 			});
-			
-			var video =$('#remoteVideo'+currentSlide).get(0);
-			if($('#remoteVideo1').get(0) && currentSlide == 1 && !$('.m_sound').hasClass('off')){
-				$('#remoteVideo1').get(0).muted = false;
+			var callback = function(currentSlide){
+				var video =$('#remoteVideo'+currentSlide).get(0);
+				if($('#remoteVideo1').get(0) && currentSlide == 1 && !$('.m_sound').hasClass('off')){
+					$('#remoteVideo1').get(0).muted = false;
+				}
+				if(video && video.paused) video.play();
 			}
-			if(video && video.paused) video.play();
+			setRemonJoinRemote(currentSlide,callback);
 		});
 	};
 
@@ -861,7 +863,7 @@ var listener = {
 //remon관련 실행 로직
 function setRemon(){	
 	dummyRemon = new Remon({ config, listener });	
-    //setLoopJoinEvent();
+    setLoopJoinEvent();
 //    setTimeout(setLoopJoinEvent,1000)
     // loop = setInterval(setLoopJoinEvent,1000*60);
 }
@@ -873,8 +875,32 @@ var setLoopJoinEvent = async function () {
 	await dummyRemon.fetchCasts().then(function(data){
 		setLoopChDraw(data);
 	});
+}
+
+var setRemonJoinRemote =async function (index,callback) {  
+	dummyRemon.config.credential.serviceId = serviceId;
+    dummyRemon.config.credential.key = serviceKey;
+	await dummyRemon.fetchCasts().then(function(data){
+		console.log(data);		
+		var castList = data.filter(function(cast){if(cast.name.indexOf($('#naBzPlc').val()+'_remoteVideo'+index)>=0) return this;})
+			.sort(function(castPre,castNext){
+			var pre = castPre.name.split('_')[1].replace('remoteVideo','');
+			var next = castNext.name.split('_')[1].replace('remoteVideo','');			
+			return pre-next;
+		});
+		var height = $('div.seeBox_slick ul.slider .boarder').closest('.slick-slide').height();
+		console.log(height);
+		$('div.seeBox_slick ul.slider li.video_item').height(height-1);
 	
-	//setLoopChDraw(castLists);
+		if(castList.length > 0){
+			if($('#kkoSvcCnt').val() < index) return;
+			 $('#remoteVideo'+(index)).attr('castName',castList[0].name);
+			 setLoopChJoinInIn(castList[0],index);
+		
+			var castName = $('#remoteVideo1').attr('castName');
+		}
+		if(callback)callback();
+	});
 }
 var setLoopChDraw = function(castList){
 	var sortingCastList = castList.filter(function(cast){if(cast.name.indexOf($('#naBzPlc').val()+'_remoteVideo')>=0) return this;})
@@ -884,24 +910,25 @@ var setLoopChDraw = function(castList){
 		return pre-next;
 	});
 	
-	var height = $('div.seeBox_slick div.slick-list').height();
+	//var height = $('div.seeBox_slick div.slick-list').height();
+	var height = $('div.seeBox_slick ul.slider .boarder').closest('.slick-slide').height();
+	console.log(height);
+	$('div.seeBox_slick ul.slider li.video_item').height(height-1);
+	
 	if(sortingCastList.length>0){
 		for(var i=0;i<sortingCastList.length;i++){
-			$('div.seeBox_slick ul.slider').slick('slickAdd','<div><div><li class="video_item" style="width: 100%;height: '+(height?height:350)+'px;">'
-			//+'<video id="remoteVideo'+(i+1)+'" castName = "'+sortingCastList[i].name+'" style="width: 100%;height: 100%;" poster="/static/images/assets/no_video_18980.png" playsinline webkit-playsinline></video>'
-			//+'<video id="remoteVideo'+(i+1)+'" castName = "'+sortingCastList[i].name+'" style="width: 100%;background: black;height: 100%;" poster="/static/images/assets/no_video_18980.png" playsinline webkit-playsinline autoplay '+(i !=0?'muted':'')+'>Your browser does not support HTML5 video.</video>'
-			+'<video id="remoteVideo'+(i+1)+'" castName = "'+sortingCastList[i].name+'" style="width: 100%;background: black;height: 100%;" poster="/static/images/assets/no_video_18980.png" playsinline webkit-playsinline muted>Your browser does not support HTML5 video.</video>'
-			+'</li></div></div>');			//autoplay controls playsinline
-			 setLoopChJoinInIn(sortingCastList[i],i+1);
+			//$('div.seeBox_slick ul.slider').slick('slickAdd','<div><div><li class="video_item" style="width: 100%;height: '+(height?height:350)+'px;">'
+			//+'<video id="remoteVideo'+(i+1)+'" castName = "'+sortingCastList[i].name+'" style="width: 100%;background: black;height: 100%;" poster="/static/images/assets/no_video_18980.png" playsinline webkit-playsinline muted>Your browser does not support HTML5 video.</video>'
+			//+'</li></div></div>');			//autoplay controls playsinline
+			
+			if($('#kkoSvcCnt').val() <= i) return;
+			 $('#remoteVideo'+(i+1)).attr('castName',sortingCastList[i].name);
+			 //setLoopChJoinInIn(sortingCastList[i],i+1);
 	 	};	
 		var castName = $('#remoteVideo1').attr('castName');
 		if(castName && castName.indexOf('remote') >= 0){
 			if(sortingCastList.length > 0) $('div.seeBox_slick ul.slider').slick('goTo', 0);
 		}		
-	}else{
-			$('div.seeBox_slick ul.slider').slick('slickAdd','<div><li class="video_item" style="width: 100%;height: '+(height?height:350)+'px;">'
-			+'<video id="remoteVideo_Blank" style="width: 100%;background: black;height: 100%;" poster="/static/images/assets/no_video_18980.png" playsinline webkit-playsinline autoplay muted>Your browser does not support HTML5 video.</video>'
-			+'</li></div>');
 	}
 };
 

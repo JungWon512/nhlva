@@ -165,14 +165,16 @@ var deleteCookie = function(name) {
 var getTodayStr = function(gubun) {
 	var date = new Date();
 	var gubun = gubun?gubun:'-';
-	var month = (date.getMonth()+1)>9?date.getMonth()+1:('0'+(date.getMonth()+1))
-	return date.getFullYear()+gubun+month+gubun+date.getDate();
+	var month = (date.getMonth() + 1).toString().padStart("2", "0");
+	var day = date.getDate().toString().padStart("2", "0")
+	return date.getFullYear()+gubun+month+gubun+day;
 };
 
 var getDateStr = function(date,gubun) {
 	var gubun = gubun?gubun:'-';
-	var month = (date.getMonth()+1)>9?date.getMonth()+1:('0'+(date.getMonth()+1))
-	return date.getFullYear()+gubun+month+gubun+date.getDate();
+	var month = (date.getMonth() + 1).toString().padStart("2", "0");
+	var day = date.getDate().toString().padStart("2", "0")
+	return date.getFullYear()+gubun+month+gubun+day;
 };
 
 var convertStrDate = function(str,gubun) {	
@@ -372,9 +374,9 @@ function modalPlay(succCallBack){
 	});
 }
 
-var nameEnc = function(name){	
+var nameEnc = function(name,encStr){	
 	if(name.length > 1){
-		return name.substr(0,1)+'*'+name.substr(2,name.length-2); 
+		return name.substr(0,1)+(encStr?encStr:'*')+name.substr(2,name.length-2); 
 	}else{
 		return name;
 	}

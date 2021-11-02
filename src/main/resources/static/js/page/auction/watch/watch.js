@@ -358,7 +358,7 @@ var setRemonJoinRemote =async function (index,callback) {
 		
 			var castName = $('#remoteVideo1').attr('castName');
 		}
-		callback();
+		if(callback)callback();
 	});
 }
 

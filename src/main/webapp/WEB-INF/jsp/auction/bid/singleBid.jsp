@@ -18,6 +18,7 @@
 	<input type="hidden" id="naBzPlcNo"	value="${johapData.NA_BZPLCNO}"/>
 	<input type="hidden" id="kkoSvcId" value="${johapData.KKO_SVC_ID}" />
 	<input type="hidden" id="kkoSvcKey" value="${johapData.KKO_SVC_KEY}" />
+	<input type="hidden" id="kkoSvcCnt" value="${johapData.KKO_SVC_CNT}" />
 	<input type="hidden" id="trmnAmnno" value="${trmnAmnno}" />
 	
 	<!-- //auction_area s -->
@@ -192,6 +193,14 @@
 								</ul>
 							</div>
 						</li>
+						
+						<c:forEach begin="1" end="${johapData.KKO_SVC_CNT}" varStatus="st">
+							<li class="video_item" style="width: 100%;height: auto;">
+								<video id="remoteVideo${st.index }" style="width: 100%;background: black;height: 100%;" poster="/static/images/assets/no_video_18980.png" muted="muted" autoplay playsinline webkit-playsinline>
+									Your browser does not support HTML5 video.
+								</video>
+							</li>
+						</c:forEach>
 					</ul>
 				</div>
 			</div>
