@@ -55,6 +55,41 @@ public class AdminUserDetailsServiceImpl implements AdminUserDetailsService {
 		return userVo;
 	}
 
+	public AdminUserDetails loadUserByUsername(String username, String password) throws UsernameNotFoundException{
+		log.debug("##### AdminUserDetailsServiceImpl.loadUserByUsername [s]");
+		log.debug("arguments : {}", username);
+
+		AdminUserDetails userVo = null;
+
+		try {
+			Map<String,Object> params = new HashMap<>();
+			params.put("usrid", username);
+			params.put("pw", password);
+			Map<String,Object> admin = adminloginService.selectAdminInfoWherePw(params);
+			
+			if(admin != null) {
+				userVo = AdminUserDetails.builder()
+										.naBzplc(admin.get("NA_BZPLC").toString())
+										.pw(admin.get("PW").toString())
+										.usrnm(admin.get("USRNM").toString())
+										.usrid(admin.get("USRID").toString())
+										.place(admin.get("NA_BZPLCNO").toString())
+										.eno(admin.get("ENO").toString())
+										.build();
+				}
+			else {
+				throw new UsernameNotFoundException(" 1.로그인 정보를 찾을 수 없습니다.");
+			}
+		}
+		catch (Exception e) {
+			log.error(e.getMessage());
+			throw new UsernameNotFoundException(" 로그인 정보를 찾을 수 없습니다.");
+		}
+		
+		log.debug("##### AdminUserDetailsServiceImpl.loadUserByUsername2 [e]");
+		return userVo;		
+	}
+
 //	@Override
 //	public TbLaIsMmUsr loadUserByUsername(String usrid)
 //			throws UsernameNotFoundException {

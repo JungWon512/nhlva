@@ -91,6 +91,7 @@ public class ApiController {
 	public Map<String, Object> updataAuctionResultForJson(@PathVariable(name = "version") String version
 														, @RequestBody final Map<String, Object> params) {
 		final Map<String, Object> result = new HashMap<String, Object>();
+		final List<Map<String, Object>> failList = new ArrayList<Map<String, Object>>();
 
 		try {
 			if ("v2".equals(version)) {
@@ -109,7 +110,21 @@ public class ApiController {
 				
 				for (Map<String, Object> info : list) {
 					info.put("version", version);
-					auctionService.updateAuctionResult(info);
+					try {
+						Map<String, Object> resultMap = auctionService.updateAuctionResultMap(info);
+						if (resultMap != null) {
+							failList.add(resultMap);
+						}
+					}
+					catch (Exception e) {
+						failList.add(info);
+					}
+				}
+
+				result.put("success", true);
+				result.put("message", "정상적으로 변경되었습니다.");
+				if (failList.size() > 0) {
+					result.put("failList", failList);
 				}
 			}
 			else {
@@ -146,6 +161,7 @@ public class ApiController {
 	public Map<String, Object> updataAuctionResultForForm(@PathVariable(name = "version") String version
 														, @RequestParam final Map<String, Object> params) {
 		final Map<String, Object> result = new HashMap<String, Object>();
+		final List<Map<String, Object>> failList = new ArrayList<Map<String, Object>>();
 		
 		try {
 			if ("v2".equals(version)) {
@@ -164,11 +180,23 @@ public class ApiController {
 				
 				for (Map<String, Object> info : list) {
 					info.put("version", version);
-					auctionService.updateAuctionResult(info);
+					try {
+						Map<String, Object> resultMap = auctionService.updateAuctionResultMap(info);
+						if (resultMap != null) {
+							failList.add(resultMap);
+						}
+					}
+					catch (Exception e) {
+						info.put("message", e.getMessage());
+						failList.add(info);
+					}
 				}
 				
 				result.put("success", true);
 				result.put("message", "정상적으로 변경되었습니다.");
+				if (failList.size() > 0) {
+					result.put("failList", failList);
+				}
 			}
 			else {
 				int cnt = auctionService.updateAuctionResult(params);
@@ -1038,10 +1066,13 @@ public class ApiController {
 
 		try {
 			
-			int logCnt = auctionService.selectBidLogCnt(params);
-			if(logCnt > 0 ) {
-				result.put("success", false);
-				result.put("message", "이미 등록된 데이터입니다.");				
+			if ("0".equals(params.get("rgSqno")) || "99999999".equals(params.get("rgSqno"))) {
+				int logCnt = auctionService.selectBidLogCnt(params);
+				if(logCnt > 0) {
+					result.put("success", false);
+					result.put("message", "이미 등록된 데이터입니다.");
+					return result;
+				}
 			}
 			
 			int cnt = auctionService.insertBidLog(params);
@@ -1259,8 +1290,9 @@ public class ApiController {
 			if(aucStn == null) {
 				result.put("success", false);
 				result.put("message", "경매차수가 없습니다.");
-				return result;								
+				return result;
 			}
+
 			temp.putAll(params);
 			if(!"".equals(st)) {
 				switch(st) {
@@ -1268,9 +1300,9 @@ public class ApiController {
 						if("21".equals(aucStn.get("SEL_STS_DSC"))) {
 							result.put("success", false);
 							result.put("message", "이미 진행중인 경매입니다.");
-							return result;							
+							return result;
 						}
-						temp.put("selStsDsc", "22"); // or aucStn.get("SEL_STS_DSC"
+						temp.put("selStsDsc", "22");
 						temp.put("lsCmeno", "0314시작");
 						temp.put("fsrgmnEno", "admin");
 						auctionService.insertAuctStnLog(temp);
@@ -1291,12 +1323,12 @@ public class ApiController {
 						if("23".equals(aucStn.get("SEL_STS_DSC"))) {
 							result.put("success", false);
 							result.put("message", "이미 중지된 경매입니다.");
-							return result;							
+							return result;
 						}
 						if("22".equals(aucStn.get("SEL_STS_DSC"))) {
 							result.put("success", false);
 							result.put("message", "이미 종료된 경매입니다.");
-							return result;							
+							return result;
 						}
 						temp.put("selStsDsc", "23");
 						temp.put("lsCmeno", "SYSTEM");
@@ -1313,13 +1345,14 @@ public class ApiController {
 						if("22".equals(aucStn.get("SEL_STS_DSC"))) {
 							result.put("success", false);
 							result.put("message", "이미 종료된 경매입니다.");
-							return result;							
+							return result;
 						}
 						temp.put("selStsDsc", "22");
 						temp.put("maxDdlQcn", maxDdlQcn.get("MAX_DDL_QCN")); 
 						temp.put("lsCmeno", "SYSTEM");
 						auctionService.updateAuctStn(temp);
-						temp.put("selStsDsc", "22"); // or aucStn.get("SEL_STS_DSC"
+
+						temp.put("selStsDsc", "22");
 						temp.put("lsCmeno", "0314종료");
 						temp.put("fsrgmnEno", "admin");
 						auctionService.insertAuctStnLog(temp);
@@ -1339,19 +1372,21 @@ public class ApiController {
 						temp.put("stAucNo", aucStn.get("ST_AUC_NO"));
 						temp.put("edAucNo", aucStn.get("ED_AUC_NO"));
 						auctionService.insertAuctSogCowLog(temp);
-												
+
 						temp.put("newCntAucYn", "Y");
 						temp.put("soldChkYn", "N");
 						temp.put("pdaId", "경매종료[낙찰]");
 						auctionService.insertAuctSogCowLog(temp);
-						
-						//TO-DO INSERT SOG_COW_LOG 만들기
+
 						temp.put("sraSbidAm", "0");
 						temp.put("maxDdlQcn", maxDdlQcn.get("MAX_DDL_QCN"));
 						temp.put("lsCmeno", "SYSTEM");
 						temp.put("stAucNo", aucStn.get("ST_AUC_NO"));
 						temp.put("edAucNo", aucStn.get("ED_AUC_NO"));
 						auctionService.updateAuctSogCowFinish(temp);
+						
+						// TODO :: 낙유찰처리
+						
 						
 						result.put("success", true);
 						result.put("message", "경매종료가 정상처리되었습니다.");

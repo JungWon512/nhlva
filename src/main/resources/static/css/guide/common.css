@@ -1112,21 +1112,21 @@ Base styles: contents layer
 }
 
 .chk_step1 ul.choice_area {
-	margin-left: -50px;
+    margin-left: -50px
 }
 
 .chk_step1 ul.choice_area li {
 	float: left;
 	width: calc(33.33% - 50px);
 	margin-left: 50px;
-	margin-bottom: 50px;
+    margin-bottom: 50px
 }
 
 .chk_step1 ul.choice_area li a {
 	width: 100%;
 	height: 120px;
 	padding: 0 5px;
-	background: #ffffff;
+    background: #fff;
 	display: flex;
 	border-radius: 20px;
 	justify-content: center;
@@ -1138,18 +1138,17 @@ Base styles: contents layer
 	text-align: center;
 	color: #1a1a1a;
 	position: relative;
-	box-shadow: 0px 5px 10px 3px rgba(0, 0, 0, 0.05);
-	transition: all 0.2s;
+    box-shadow: 0px 5px 10px 3px rgba(0,0,0,.05);
+    transition: all .2s
 }
 
-.chk_step1 ul.choice_area li a:hover, .chk_step1 ul.choice_area li a.act
-	{
+.chk_step1 ul.choice_area li a:hover,.chk_step1 ul.choice_area li a.act {
 	background: #007eff;
-	color: #ffffff;
-	box-shadow: inherit;
+    color: #fff;
+    box-shadow: inherit
 }
 
-.chk_step1 ul.choice_area li a span, .chk_step2 ul li a span {
+.chk_step1 ul.choice_area li a span {
 	position: absolute;
 	left: 14px;
 	top: 14px;
@@ -1161,46 +1160,46 @@ Base styles: contents layer
 	font-size: 12px;
 	letter-spacing: -0.3px;
 	text-align: center;
-	color: #ffffff;
+    color: #fff
 }
 
 .chk_step1 ul.choice_area li a span.heart-eft {
-	-webkit-animation: heart-eft 0.8s ease-in-out infinite alternate;
-	animation: heart-eft 0.8s ease-in-out infinite alternate;
+    -webkit-animation: heart-eft .8s ease-in-out infinite alternate;
+    animation: heart-eft .8s ease-in-out infinite alternate
 }
 
 @media only all and (max-width: 1024px) {
 	.chk_step1 {
 		padding: 0 24px;
-		margin-top: 21px;
+        margin-top: 21px
 	}
 	.chk_step1 h2 {
 		font-size: 20px;
-		margin-bottom: 30px;
+        margin-bottom: 30px
 	}
 	.chk_step1 ul.choice_area {
-		margin-left: -18px;
+        margin-left: -18px
 	}
 	.chk_step1 ul.choice_area li {
 		width: calc(50% - 18px);
 		margin-left: 18px;
-		margin-bottom: 18px;
+        margin-bottom: 18px
 	}
 	.chk_step1 ul.choice_area li a {
 		width: 100%;
 		height: 90px;
 		border-radius: 15px;
 		font-size: 20px;
-		letter-spacing: -1px;
+        letter-spacing: -1px
 	}
 }
 
 .chk_step2 {
-	margin-top: 30px;
+    margin-top: 30px
 }
 
 .chk_step2 .back_area {
-	margin-bottom: 70px;
+    margin-bottom: 70px
 }
 
 .chk_step2 .back_area a {
@@ -1218,32 +1217,32 @@ Base styles: contents layer
 	font-weight: 700;
 	font-size: 28px;
 	letter-spacing: -0.7px;
-	color: #ffffff;
+    color: #fff
 }
 
 .chk_step2 .back_area a img {
 	width: 58px;
 	height: 28px;
 	vertical-align: middle;
-	margin-right: 20px;
+    margin-right: 20px
 }
 
 .chk_step2 ul.choice_area {
-	margin-left: -50px;
+    margin-left: -50px
 }
 
 .chk_step2 ul.choice_area li {
 	float: left;
 	width: calc(20% - 50px);
 	margin-left: 50px;
-	margin-bottom: 50px;
+    margin-bottom: 50px
 }
 
 .chk_step2 ul.choice_area li a {
 	width: 100%;
 	height: 160px;
 	padding: 0 5px;
-	background: #ffffff;
+    background: #fff;
 	display: flex;
 	border-radius: 20px;
 	justify-content: center;
@@ -1255,24 +1254,51 @@ Base styles: contents layer
 	text-align: center;
 	color: #1a1a1a;
 	position: relative;
-	box-shadow: 0px 5px 10px 3px rgba(0, 0, 0, 0.05);
-	transition: all 0.2s;
+    box-shadow: 0px 5px 10px 3px rgba(0,0,0,.05);
+    transition: all .2s
 }
 
-.chk_step2 ul.choice_area li a:hover, .chk_step2 ul.choice_area li a.act
-	{
+.chk_step2 ul.choice_area li a:hover,.chk_step2 ul.choice_area li a.act {
 	background: #007eff;
-	color: #ffffff;
-	box-shadow: inherit;
+    color: #fff;
+    box-shadow: inherit
+}
+
+.chk_step2 ul.choice_area li a span.tag {
+    position: absolute;
+    left: 5px;
+    top: -14px;
+    border-radius: 3px;
+    -webkit-border-radius: 3px;
+    -moz-border-radius: 3px;
+    -ms-border-radius: 3px;
+    -o-border-radius: 3px;
+    font-size: 16px;
+    padding: 0 12px;
+    background: #f22800;
+    color: #fff;
+    display: block;
+    height: 26px;
+    line-height: 26px;
+    text-align: center
+}
+
+@media only all and (max-width: 1024px) {
+    .chk_step2 ul.choice_area li a span.tag {
+        font-size:14px;
+        height: 24px;
+        line-height: 24px;
+        padding: 0 8px
+    }
 }
 
 @media only all and (max-width: 1024px) {
 	.chk_step2 {
 		padding: 0 24px;
-		margin-top: 21px;
+        margin-top: 21px
 	}
 	.chk_step2 .back_area {
-		margin-bottom: 25px;
+        margin-bottom: 25px
 	}
 	.chk_step2 .back_area a {
 		max-width: 580px;
@@ -1280,20 +1306,20 @@ Base styles: contents layer
 		line-height: 50px;
 		font-size: 18px;
 		border-radius: 15px;
-		letter-spacing: -0.9px;
+        letter-spacing: -0.9px
 	}
 	.chk_step2 .back_area a img {
 		width: 29px;
 		height: 14px;
-		margin-right: 10px;
+        margin-right: 10px
 	}
 	.chk_step2 ul.choice_area {
-		margin-left: -25px;
+        margin-left: -25px
 	}
 	.chk_step2 ul.choice_area li {
 		width: calc(33.33% - 25px);
 		margin-left: 25px;
-		margin-bottom: 25px;
+        margin-bottom: 25px
 	}
 	.chk_step2 ul.choice_area li a {
 		width: 100%;
@@ -1301,7 +1327,7 @@ Base styles: contents layer
 		padding: 0 5px;
 		border-radius: 15px;
 		font-size: 20px;
-		letter-spacing: -1px;
+        letter-spacing: -1px
 	}
 }
 

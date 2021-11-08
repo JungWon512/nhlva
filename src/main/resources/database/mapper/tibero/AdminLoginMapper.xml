@@ -45,5 +45,26 @@
 		 WHERE A.NA_BZPLC = #{naBzplc}
 		   AND A.USRID = #{usrid}
 	</select>
+	<select id="selectAdminInfoWherePw" parameterType="map" resultType="map">
+		SELECT A.NA_BZPLC
+			 , B.NA_BZPLCNO 
+			 , A.USRID
+			 , A.USRNM
+			 , A.PW
+			 , A.ENO
+			 , A.MPNO
+			 , A.STRG_YN
+			 , A.PWERR_NT
+			 , A.FSRG_DTM
+			 , A.FSRGMN_ENO
+			 , A.LSCHG_DTM
+			 , A.LS_CMENO
+		  FROM TB_LA_IS_MM_USR A
+		  LEFT OUTER JOIN TB_LA_IS_BM_BZLOC B
+		    ON ( A.NA_BZPLC = B.NA_BZPLC )
+		 WHERE A.NA_BZPLC = #{naBzplc}
+		   AND A.USRID = #{usrid}
+		   AND A.PW = #{pw}
+	</select>
 	
 </mapper>

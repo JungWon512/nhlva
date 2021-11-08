@@ -217,4 +217,12 @@ public interface AuctionService {
 	Map<String, Object> selectMaxDdlQcn(Map<String, Object> params) throws Exception;
 
 	int insertAuctSogCowLog(Map<String, Object> temp) throws Exception;
+
+	/**
+	 * 경매 결과 업데이트 - 실패시 실패 정보 return
+	 * @param params
+	 * @return
+	 * @throws Exception
+	 */
+	Map<String, Object> updateAuctionResultMap(Map<String, Object> params) throws Exception;
 }

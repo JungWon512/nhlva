@@ -5,7 +5,8 @@
     <select id="selectListAucEntry" parameterType="map" resultType="map">
 		SELECT G.*
 			, CASE WHEN G.GAP_DAY = 0 THEN G.BIRTH_STR || '(' || TO_CHAR(G.GAP_MONTH ) || '개월)' 
-			ELSE G.BIRTH_STR || '(' || TO_CHAR(G.GAP_MONTH) || '개월 ' || TO_CHAR(G.GAP_DAY) || '일)' END BIRTH_MONTH  
+					ELSE G.BIRTH_STR || '(' || TO_CHAR(G.GAP_MONTH) || '개월 ' || TO_CHAR(G.GAP_DAY) || '일)'
+				END AS BIRTH_MONTH
 		FROM (
     	SELECT 
 		  	  B.NA_BZPLC               -- 사업장번호
@@ -16,6 +17,7 @@
 			, B.FHS_ID_NO              -- 농가식별번호
 			, B.FARM_AMNNO             -- 농장관리번호
 			, B.OSLP_NO                -- 원표번호 
+			, B.LED_SQNO				/* 원장일련번호 */
 			, B.AUC_PRG_SQ             -- 경매진행순서 (출품번호)	
 			, A.BIRTH                  -- 생년월일  (생년)	
 			, TO_CHAR(TO_DATE(A.BIRTH,'YYYYMMDD'),'YYYY.MM.DD') BIRTH_STR                 -- 생년월일  (생년)	
@@ -63,6 +65,7 @@
 			, B.RMK_CNTN               -- 비고내용    (비고)
 			, B.BRANDNM                -- 브랜드명    (브랜드)
 			, FUNC_DEC_NAME(B.SRA_PDMNM) SRA_PDMNM              -- 축산생산자명 (출하주명)
+			, B.SRA_PDMNM AS SRA_PDMNM_ORI	/* 출하주명 */	
 			, B.SRA_PD_RGNNM           -- 축산생산지역 (출하지역)
 			, B.SRA_SBID_AM            -- 축산낙찰금액 (낙찰단가-원단위)
 			, B.SRA_SBID_UPR           -- 축산낙찰단가 (낙찰단가-만단위)
@@ -85,6 +88,7 @@
 				, CASE WHEN MONTHS_BETWEEN(TO_DATE(B.AUC_DT,'YYYYMMDD'), TO_DATE(A.BIRTH,'YYYYMMDD')) <![CDATA[<]]> 4 THEN 0
 					  ELSE GREATEST(TO_DATE(B.AUC_DT,'YYYYMMDD') - ADD_MONTHS(TO_DATE(A.BIRTH,'YYYYMMDD'), TRUNC(MONTHS_BETWEEN(TO_DATE(B.AUC_DT,'YYYYMMDD'), TO_DATE(A.BIRTH,'YYYYMMDD')))) + 1, 0) - 1
 				END GAP_DAY
+				, NVL(B.MODL_NO, B.AUC_PRG_SQ) AS MODL_NO
 		FROM TB_LA_IS_MH_SOG_COW B
 		LEFT JOIN TB_LA_IS_MM_INDV  A ON A.NA_BZPLC = B.NA_BZPLC 
 <!-- 										AND A.FARM_AMNNO = B.FARM_AMNNO -->

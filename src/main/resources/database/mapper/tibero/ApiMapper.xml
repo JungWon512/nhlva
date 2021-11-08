@@ -186,7 +186,7 @@
 				 )
 			 WHERE A.NA_BZPLC = #{naBzplc}
 			   AND A.AUC_DT  = #{aucDt}
-			   AND A.AUC_OBJ_DSC = CASE WHEN #{aucObjDsc} = '0' THEN A.AUC_OBJ_DSC ELSE #{aucObjDsc} END	  
+			   AND A.AUC_OBJ_DSC = CASE WHEN #{aucObjDsc} = '0' THEN A.AUC_OBJ_DSC ELSE #{aucObjDsc} END
 			<if test="mAuctionResult !=null and !mAuctionResult.equals('')">
 			   AND A.SEL_STS_DSC = #{mAuctionResult}
 			</if>  
@@ -195,7 +195,7 @@
 			   AND A.AUC_PRG_SQ <![CDATA[<=]]> ${edAucNo}
 			</if>
 			) H
-		 ORDER BY AUC_PRG_SQ	
+		 ORDER BY AUC_PRG_SQ
 	</select>
 	
 	<update id="updateLowSbidAmt" parameterType="map" >
@@ -260,7 +260,16 @@
 	  AND RG_SQNO <![CDATA[>]]> '0' AND RG_SQNO <![CDATA[<]]> '99999999'
 	</select>
 	
-	<insert id="insertBidLog" parameterType="map">  
+	<insert id="insertBidLog" parameterType="map">
+		<selectKey keyProperty="bidRgSqno" resultType="int" order="BEFORE">
+			SELECT NVL(MAX(RG_SQNO)+1,1) AS NEXT_NUM
+			  FROM TB_LA_IS_MH_ATDR_LOG
+			  WHERE NA_BZPLC = #{naBzplc}
+			  AND AUC_DT = #{aucDt}
+			  AND AUC_OBJ_DSC = #{aucObjDsc}
+			  AND OSLP_NO = #{oslpNo}
+			  AND RG_SQNO <![CDATA[>]]> '0' AND RG_SQNO <![CDATA[<]]> '99999999'
+		</selectKey>
 		INSERT INTO TB_LA_IS_MH_ATDR_LOG(
 		   NA_BZPLC,
 		   AUC_OBJ_DSC,
@@ -281,12 +290,19 @@
 		   #{aucObjDsc},
 		   #{aucDt},
 		   #{oslpNo},
+		<choose>
+		<when test="rgSqno != null and rgSqno != ''">
 		   #{rgSqno},
+		</when>
+		<otherwise>
+		   #{bidRgSqno},
+		</otherwise>
+		</choose>
 		   #{trmnAmnno},
 		   #{lvstAucPtcMnNo},
 		   #{atdrAm},
 		   #{rmkCntn},
-		   #{atdrDtm},
+		   SYSDATE,
 		   #{aucPrgSq},
 		   '0',  <!-- 수기입력여부  -->
 		   '0' <!-- 전송여부  -->

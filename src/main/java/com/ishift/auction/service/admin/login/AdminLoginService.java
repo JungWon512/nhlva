@@ -20,4 +20,6 @@ public interface AdminLoginService {
 	 */
 	Map<String, Object> selectLoginAdminInfo(Map<String, Object> params) throws Exception;
 
+	Map<String, Object> selectAdminInfoWherePw(Map<String, Object> params) throws Exception;
+
 }

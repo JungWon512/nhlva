@@ -21,4 +21,9 @@ public class AdminLoginServiceImpl implements AdminLoginService {
 	public Map<String, Object> selectLoginAdminInfo(Map<String, Object> params) throws Exception {
 		return adminLoginDao.selectLoginAdminInfo(params);
 	}
+
+	@Override
+	public Map<String, Object> selectAdminInfoWherePw(Map<String, Object> params) throws Exception{
+		return adminLoginDao.selectAdminInfoWherePw(params);
+	}
 }

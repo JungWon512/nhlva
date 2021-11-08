@@ -109,7 +109,9 @@
                     	<input type="hidden" class="mcowDsc" name="mcowDsc_${st.index }" value="${item.MCOW_DSC_NAME}"/>
                     	<input type="hidden" class="matime" name="matime_${st.index }" value="${item.MATIME}"/>
                     	
-                    	<input type="hidden" class="sraPdRgnnm" name="sraPdRgnnm_${st.index }" value="${item.SRA_PD_RGNNM}"/>
+<%--                     	<input type="hidden" class="sraPdRgnnm" name="sraPdRgnnm_${st.index }" value="${item.SRA_PD_RGNNM}"/> --%>
+						<c:set var="SRA_PD_RGNNM_ARR" value="${fn:split(item.SRA_PD_RGNNM,' ')}"></c:set>
+						<input type="hidden" class="sraPdRgnnm" name="sraPdRgnnm_${st.index }" value="${SRA_PD_RGNNM_ARR[0]} ${SRA_PD_RGNNM_ARR[1]} ${SRA_PD_RGNNM_ARR[2]}"/>
                     	<input type="hidden" class="sraIndvPasgQcn" name="sraIndvPasgQcn_${st.index }" value="${item.SRA_INDV_PASG_QCN}"/>
                     	<input type="hidden" class="sraSbidUpr" name="sraSbidUpr_${st.index }" value="${fn:split(item.SRA_SBID_UPR,'.')[0]}"/>
 <%--                     	<input type="hidden" class="sraMwmnnm" name="sraMwmnnm_${st.index }" value="${item.SRA_MWMNNM}"/> --%>
@@ -193,7 +195,9 @@
                     	<input type="hidden" class="mcowDsc" name="mcowDsc_${st.index }" value="${item.MCOW_DSC_NAME}"/>
                     	<input type="hidden" class="matime" name="matime_${st.index }" value="${item.MATIME}"/>
                     	
-                    	<input type="hidden" class="sraPdRgnnm" name="sraPdRgnnm_${st.index }" value="${item.SRA_PD_RGNNM}"/>
+<%--                     	<input type="hidden" class="sraPdRgnnm" name="sraPdRgnnm_${st.index }" value="${item.SRA_PD_RGNNM}"/> --%>
+						<c:set var="SRA_PD_RGNNM_ARR" value="${fn:split(item.SRA_PD_RGNNM,' ')}"></c:set>
+						<input type="hidden" class="sraPdRgnnm" name="sraPdRgnnm_${st.index }" value="${SRA_PD_RGNNM_ARR[0]} ${SRA_PD_RGNNM_ARR[1]} ${SRA_PD_RGNNM_ARR[2]}"/>
                     	<input type="hidden" class="sraIndvPasgQcn" name="sraIndvPasgQcn_${st.index }" value="${item.SRA_INDV_PASG_QCN}"/>
 <%--                     	<input type="hidden" class="sraMwmnnm" name="sraMwmnnm_${st.index }" value="${item.SRA_MWMNNM}"/> --%>
                     	<input type="hidden" class="sraSbidUpr" name="sraSbidUpr_${st.index }" value="${fn:split(item.SRA_SBID_UPR,'.')[0]}"/>

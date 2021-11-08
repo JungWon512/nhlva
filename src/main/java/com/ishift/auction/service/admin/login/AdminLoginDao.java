@@ -31,4 +31,9 @@ public class AdminLoginDao {
 		return mainDao.selectOne("AdminLoginMapper.selectLoginAdminInfo", params);
 	}
 
+	public Map<String, Object> selectAdminInfoWherePw(Map<String, Object> params) throws Exception {
+		// TODO Auto-generated method stub
+		return mainDao.selectOne("AdminLoginMapper.selectAdminInfoWherePw", params);
+	}
+
 }
