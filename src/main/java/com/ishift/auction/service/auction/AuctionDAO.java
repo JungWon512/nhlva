@@ -101,10 +101,6 @@ public class AuctionDAO {
 	 * @throws Exception 
 	 */
 	public List<Map<String, Object>> selectAuctionEntry(Map<String, Object> params) throws Exception {
-		List<Map<String, Object>> result = null;
-		
-		// 조합코드 > 8808990657202 : 장수, 8808990661315 : 화순, 8808990656656 : 하동
-		final String naBzplc = params.get("naBzplc").toString();
 		return mainDao.selectList("auction.selectAuctionEntry", params);
 	}
 
@@ -179,8 +175,6 @@ public class AuctionDAO {
 	}
 
 	public List<Map<String, Object>> selectMyEntryList(Map<String, Object> params) throws Exception {
-		List<Map<String, Object>> result = null;
-		final String naBzplc = params.get("naBzplc").toString();
 		return mainDao.selectList("auction.selectMyEntryList", params);
 	}
 
@@ -269,38 +263,8 @@ public class AuctionDAO {
 	 * @return
 	 * @throws Exception
 	 */
-	public int insertBidLog(Map<String, Object> params) throws Exception {		
+	public int insertBidLog(Map<String, Object> params) throws Exception {
 		return mainDao.insert("ApiMapper.insertBidLog", params);
-	}
-
-	/**
-	 * 수수료 조회
-	 * @param params
-	 * @return
-	 * @throws Exception
-	 */
-	public List<Map<String, Object>> selectFeeInfo(Map<String, Object> params) throws Exception {		
-		return mainDao.selectList("ApiMapper.selectFeeInfo", params);
-	}
-
-	/**
-	 * 수수료내역 삭제
-	 * @param params
-	 * @return
-	 * @throws Exception
-	 */
-	public int deleteFeeInfo(Map<String, Object> params) throws Exception {		
-		return mainDao.delete("ApiMapper.deleteFeeInfo", params);
-	}
-
-	/**
-	 * 수수료 내역저장
-	 * @param params
-	 * @return
-	 * @throws Exception
-	 */
-	public int insertFeeLog(Map<String, Object> params) throws Exception {		
-		return mainDao.insert("ApiMapper.insertFeeLog", params);
 	}
 
 	/**
@@ -309,11 +273,11 @@ public class AuctionDAO {
 	 * @return
 	 * @throws Exception
 	 */
-	public Map<String, Object> selectAuctBidNum(Map<String, Object> params) throws Exception {		
+	public Map<String, Object> selectAuctBidNum(Map<String, Object> params) throws Exception {
 		return mainDao.selectOne("ApiMapper.selectAuctBidNum", params);
 	}
 
-	public Map<String, Object> selectAuctStn(Map<String, Object> params) throws Exception {		
+	public Map<String, Object> selectAuctStn(Map<String, Object> params) throws Exception {
 		return mainDao.selectOne("ApiMapper.selectAuctStn", params);
 	}
 
@@ -336,5 +300,88 @@ public class AuctionDAO {
 	public int updateCowInfo(Map<String, Object> params) throws Exception {
 		return mainDao.update("auction.updateCowInfo", params);
 	}
-	
+
+	/**
+	 * 응찰자 리스트
+	 * @param params
+	 * @return
+	 * @throws Exception
+	 */
+	public List<Map<String, Object>> selectBidEntryList(Map<String, Object> params) throws Exception {
+		return mainDao.selectList("ApiMapper.selectBidEntryList", params);
+	}
+
+	public int insertAuctStnLog(Map<String, Object> params) throws Exception {
+		return mainDao.insert("ApiMapper.insertAuctStnLog", params);
+	}
+
+	public int updateAuctStn(Map<String, Object> params) throws Exception {
+		return mainDao.update("ApiMapper.updateAuctStn", params);
+	}
+
+	public int updateAuctSogCow(Map<String, Object> params) throws Exception {
+		return mainDao.update("ApiMapper.updateAuctSogCow", params);
+	}
+
+	public int updateAuctSogCowFinish(Map<String, Object> params) throws Exception {
+		return mainDao.update("ApiMapper.updateAuctSogCowFinish", params);
+	}
+
+	public Map<String, Object> selectMaxDdlQcn(Map<String, Object> params) throws Exception{
+		return mainDao.selectOne("ApiMapper.selectMaxDdlQcn", params);
+	}
+
+	public int insertAuctSogCowLog(Map<String, Object> params) throws Exception {
+		return mainDao.insert("ApiMapper.insertAuctSogCowLog", params);
+	}
+
+	/**
+	 * 수수료 정산을 위한 경매 정보
+	 * @param params
+	 * @return
+	 * @throws Exception
+	 */
+	public Map<String, Object> selectAuctionInfo(Map<String, Object> params) throws Exception {
+		return mainDao.selectOne("ApiMapper.selectAuctionInfo", params);
+	}
+
+	/**
+	 * 수수료 정보 저장
+	 * @param params
+	 * @return
+	 * @throws Exception
+	 */
+	public int insertFeeInfo(Map<String, Object> params) throws Exception {
+		return mainDao.insert("ApiMapper.insertFeeInfo", params);
+	}
+
+	/**
+	 * 수수료 조회
+	 * @param params
+	 * @return
+	 * @throws Exception
+	 */
+	public List<Map<String, Object>> selectFeeInfo(Map<String, Object> params) throws Exception {
+		return mainDao.selectList("ApiMapper.selectFeeInfo", params);
+	}
+
+	/**
+	 * 수수료내역 삭제
+	 * @param params
+	 * @return
+	 * @throws Exception
+	 */
+	public int deleteFeeInfo(Map<String, Object> params) throws Exception {
+		return mainDao.delete("ApiMapper.deleteFeeInfo", params);
+	}
+
+	/**
+	 * 수수료 내역저장
+	 * @param params
+	 * @return
+	 * @throws Exception
+	 */
+	public int insertFeeLog(Map<String, Object> params) throws Exception {
+		return mainDao.insert("ApiMapper.insertFeeLog", params);
+	}
 }

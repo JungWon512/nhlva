@@ -64,7 +64,9 @@
 		    ON ( A.NA_BZPLC = B.NA_BZPLC )
 		 WHERE A.NA_BZPLC = #{naBzplc}
 		   AND A.TRMN_AMNNO = #{trmnAmnno}
-		   AND B.NA_BZPLCNO = #{naBzplcno}
+		   <if test="naBzplcno != null and naBzplcno != ''">
+		   		AND B.NA_BZPLCNO = #{naBzplcno}
+		   </if>
 		   AND A.DEL_YN = '0'
 	</select>
 	

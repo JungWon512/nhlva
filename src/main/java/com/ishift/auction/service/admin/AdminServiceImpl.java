@@ -54,7 +54,6 @@ public class AdminServiceImpl implements AdminService {
 
     @Override
     public Map<String, Object> selectOneMaxVO(Map<String,Object> map) throws Exception {
-        // TODO Auto-generated method stub
         return adminDAO.selectOneMaxVO( map);
     }
     

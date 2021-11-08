@@ -19,7 +19,6 @@
             if(param ==null || param ==undefined) {
                 paramData = null;
             }
-            console.log("requrl:"+url);
 
             $.ajax({
                 url: url,

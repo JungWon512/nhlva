@@ -46,12 +46,10 @@ public class AdminDAO {
 	}
 
 	public List<Map<String, Object>> selectListVisit(Map<String, Object> map) throws Exception {
-		// TODO Auto-generated method stub
 		return mainDao.selectList("admin.selectListVisit", map);
 	}
 
 	public int selectVisitTotalCnt(Map<String, Object> map) throws Exception {
-		// TODO Auto-generated method stub
 		return mainDao.count("admin.selectVisitTotalCnt", map);
 	}
 

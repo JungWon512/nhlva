@@ -31,9 +31,9 @@
 					}
 					else {
 						var uri = '/admin/main';
-//						if (chkOs() != 'web') {
-//							uri = '/admin/task/main'
-//						}
+						if (chkOs() != 'web') {
+							uri = '/admin/task/main'
+						}
 						pageMove(uri);
 					}
 				});

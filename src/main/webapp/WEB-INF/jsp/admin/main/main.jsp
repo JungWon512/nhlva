@@ -5,11 +5,11 @@
 	<h4 class="font-weight-light text-center text-lg-left mt-4 mb-0">Main</h4>
 	<hr class="mt-2 mb-2">  
 	<div class="card-deck">
-<!-- 		<div class="card"> -->
-<!-- 			<div class="card-body"> -->
-<!-- 				<a href="javascript:pageMove('/admin/task/main');" class="card-link">경매업무</a> -->
-<!-- 			</div> -->
-<!-- 		</div> -->
+		<div class="card">
+			<div class="card-body">
+				<a href="javascript:pageMove('/admin/task/main');" class="card-link">경매업무</a>
+			</div>
+		</div>
 		<div class="card">
 			<div class="card-body">
 				<a href="javascript:pageMove('/admin/broad/cast');" class="card-link">영상송출</a>

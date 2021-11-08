@@ -1,6 +1,5 @@
 package com.ishift.auction.web;
 
-import java.math.BigDecimal;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -177,7 +176,6 @@ public class AuctionController extends CommonController {
 			mav.addObject("paramVo",param);
 			mav.addObject("title",formatUtil.dateAddDotLenSix(yyyyMM));
 		}catch (Exception e) {
-			// TODO: handle exception
 			e.printStackTrace();
 		}
 		mav.addObject("subheaderTitle","일정안내");
@@ -228,7 +226,6 @@ public class AuctionController extends CommonController {
 	        mav.addObject("subheaderTitle","경매관전");
 	        mav.addObject("today",date.format(DateTimeFormatter.ofPattern("yyyy-MM-dd")));
 		}catch (Exception e) {
-			// TODO: handle exception
 		}
 		mav.setViewName("auction/watch/watch");
 		return mav;
@@ -277,9 +274,9 @@ public class AuctionController extends CommonController {
 
 		List<Map<String,Object>> bizList = auctionService.selectBizLocList(map);
 		mav.addObject("bizList",bizList);
-		long aucYn = bizList.size() < 1?0:Integer.parseInt((String)bizList.get(0).get("AUC_YN"));
+		long aucYn = bizList.size() < 1 ? 0 :Integer.parseInt((String)bizList.get(0).get("AUC_YN"));
 //		long aucCnt = bizList.size() < 1?0:(Long)bizList.get(0).get("AUC_CNT");
-		long aucCnt = bizList.size() < 1?0:((BigDecimal)bizList.get(0).get("AUC_CNT")).longValue();
+		long aucCnt = bizList.size() < 1 ? 0 : Long.parseLong(bizList.get(0).getOrDefault("AUC_CNT", "0").toString());
 		
 		log.debug("instanceof : {}", sessionUtill.getUserVo() instanceof BidUserDetails);
 		
@@ -460,7 +457,6 @@ public class AuctionController extends CommonController {
 			mav.addObject("inputParam", param);
 		}
 		catch (Exception e) {
-			// TODO: handle exception
 		}
 		mav.setViewName("pop/entryListApi");
 		return mav;

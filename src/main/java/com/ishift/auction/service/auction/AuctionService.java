@@ -190,7 +190,6 @@ public interface AuctionService {
 	 */
 	Map<String, Object> selectCowInfo(Map<String, Object> params) throws Exception;
 
-
 	/**
 	 * 출장우 정보 업데이트(중량, 계류대, 하한가)
 	 * @param params
@@ -198,4 +197,24 @@ public interface AuctionService {
 	 * @throws Exception
 	 */
 	int updateCowInfo(Map<String, Object> params) throws Exception;
+
+	/**
+	 * 응찰자 리스트
+	 * @param params
+	 * @return
+	 * @throws Exception
+	 */
+	List<Map<String, Object>> selectBidEntryList(Map<String, Object> params) throws Exception;
+
+	int insertAuctStnLog(Map<String, Object> temp) throws Exception;
+
+	int updateAuctStn(Map<String, Object> temp) throws Exception;
+
+	int updateAuctSogCow(Map<String, Object> temp) throws Exception;
+
+	int updateAuctSogCowFinish(Map<String, Object> temp) throws Exception;
+
+	Map<String, Object> selectMaxDdlQcn(Map<String, Object> params) throws Exception;
+
+	int insertAuctSogCowLog(Map<String, Object> temp) throws Exception;
 }

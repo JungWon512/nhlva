@@ -39,6 +39,7 @@ public class AdminUserDetailsServiceImpl implements AdminUserDetailsService {
 										.usrnm(admin.get("USRNM").toString())
 										.usrid(admin.get("USRID").toString())
 										.place(admin.get("NA_BZPLCNO").toString())
+										.eno(admin.get("ENO").toString())
 										.build();
 				}
 			else {

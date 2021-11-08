@@ -31,7 +31,6 @@ public class RequestBodyParamRequestWrapper extends HttpServletRequestWrapper{
 		body="";
 		byte[] rawData = new byte[16384];
 		this.params =  new HashMap<String,String[]>(request.getParameterMap());
-		// TODO Auto-generated constructor stub
 		String collect = "";
 		
         StringBuilder stringBuilder = new StringBuilder();
@@ -67,7 +66,6 @@ public class RequestBodyParamRequestWrapper extends HttpServletRequestWrapper{
 	}
 
 	public String getParam(String key) {
-		// TODO Auto-generated method stub
 		StringBuilder result= new StringBuilder();
 		String[] tmp = this.params.get(key);
 		if(tmp != null) {
@@ -88,19 +86,16 @@ public class RequestBodyParamRequestWrapper extends HttpServletRequestWrapper{
 
 		@Override
 		public boolean isFinished() {
-			// TODO Auto-generated method stub
 			return false;
 		}
 
 		@Override
 		public boolean isReady() {
-			// TODO Auto-generated method stub
 			return false;
 		}
 
 		@Override
 		public void setReadListener(ReadListener listener) {
-			// TODO Auto-generated method stub
 			
 		}
 	  };
@@ -134,7 +129,6 @@ public class RequestBodyParamRequestWrapper extends HttpServletRequestWrapper{
 				}	
 			}
 		} catch (ParseException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	}

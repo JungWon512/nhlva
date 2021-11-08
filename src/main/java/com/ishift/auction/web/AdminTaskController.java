@@ -7,10 +7,11 @@ import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
@@ -43,7 +44,8 @@ public class AdminTaskController {
 	 * 관리자 > 경매업무 > 메인화면
 	 * @return
 	 */
-	@GetMapping("/admin/task/main")
+//	@GetMapping(value = "/admin/task/main")
+	@RequestMapping(value = "/admin/task/main", method = {RequestMethod.GET, RequestMethod.POST})
 	public ModelAndView main() {
 		final ModelAndView mav = new ModelAndView("admin/task/main");
 
@@ -92,9 +94,12 @@ public class AdminTaskController {
 	 * @return
 	 */
 	@PostMapping("/admin/task/entry")
+	@SuppressWarnings("serial")
 	public ModelAndView entry(@RequestParam final Map<String, Object> params) {
 		final ModelAndView mav = new ModelAndView("admin/task/entry");
+		final Map<String, String> titleMap = new HashMap<String, String>() {{put("W", "중량 등록");put("L", "하한가 등록");put("N", "계류대 변경");}};
 		try {
+			
 			final AdminUserDetails userVo = (AdminUserDetails)sessionUtill.getUserVo();
 			params.put("naBzPlcNo", userVo.getPlace());
 			mav.addObject("johapData", adminService.selectOneJohap(params));
@@ -108,7 +113,7 @@ public class AdminTaskController {
 			log.error(e.getMessage());
 		}
 		mav.addObject("params", params);
-		mav.addObject("subheaderTitle", "작업선택");
+		mav.addObject("subheaderTitle", titleMap.get(params.getOrDefault("regType", "")));
 		return mav;
 	}
 	

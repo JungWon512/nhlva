@@ -1,18 +1,17 @@
 package com.ishift.auction.web;
 
-import java.text.SimpleDateFormat;
-import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import org.springframework.util.StringUtils;
 import com.ishift.auction.configuration.security.token.AdminUserAuthenticationToken;
 import com.ishift.auction.service.auction.AuctionService;
+import com.ishift.auction.service.login.LoginService;
 import com.ishift.auction.util.Constants;
+import com.ishift.auction.util.JsonUtils;
 import com.ishift.auction.util.JwtTokenUtil;
 import com.ishift.auction.util.SessionUtill;
 import com.ishift.auction.vo.AdminUserDetails;
@@ -47,10 +46,14 @@ import javax.annotation.Resource;
  */
 @Slf4j
 @RestController
+@SuppressWarnings("unchecked")
 public class ApiController {
 
 	@Resource(name = "auctionService")
 	private AuctionService auctionService;
+
+	@Autowired
+	private LoginService loginService;
 	
 	@Autowired
 	private JwtTokenUtil jwtTokenUtil;
@@ -90,15 +93,36 @@ public class ApiController {
 		final Map<String, Object> result = new HashMap<String, Object>();
 
 		try {
-			int cnt = auctionService.updateAuctionResult(params);
-			
-			if (cnt > 0) {
-				result.put("success", true);
-				result.put("message", "정상적으로 변경되었습니다.");
+			if ("v2".equals(version)) {
+				if(params.get("list") == null) {
+					result.put("success", false);
+					result.put("message", "필수 인자가 없습니다.");
+					return result;
+				}
+
+				final List<Map<String,Object>> list = JsonUtils.getListMapFromJsonString(params.get("list").toString());
+				if (list.size() < 1) {
+					result.put("success", false);
+					result.put("message", "경매 결과 정보가 없습니다.");
+					return result;
+				}
+				
+				for (Map<String, Object> info : list) {
+					info.put("version", version);
+					auctionService.updateAuctionResult(info);
+				}
 			}
 			else {
-				result.put("success", false);
-				result.put("message", "출하우 정보가 없습니다.");
+				int cnt = auctionService.updateAuctionResult(params);
+				
+				if (cnt > 0) {
+					result.put("success", true);
+					result.put("message", "정상적으로 변경되었습니다.");
+				}
+				else {
+					result.put("success", false);
+					result.put("message", "출하우 정보가 없습니다.");
+				}
 			}
 		}
 		catch (Exception e) {
@@ -124,19 +148,42 @@ public class ApiController {
 		final Map<String, Object> result = new HashMap<String, Object>();
 		
 		try {
-			int cnt = auctionService.updateAuctionResult(params);
-			
-			if (cnt > 0) {
+			if ("v2".equals(version)) {
+				if(params.get("list") == null) {
+					result.put("success", false);
+					result.put("message", "필수 인자가 없습니다.");
+					return result;
+				}
+
+				final List<Map<String,Object>> list = JsonUtils.getListMapFromJsonString(params.get("list").toString());
+				if (list.size() < 1) {
+					result.put("success", false);
+					result.put("message", "경매 결과 정보가 없습니다.");
+					return result;
+				}
+				
+				for (Map<String, Object> info : list) {
+					info.put("version", version);
+					auctionService.updateAuctionResult(info);
+				}
+				
 				result.put("success", true);
 				result.put("message", "정상적으로 변경되었습니다.");
 			}
 			else {
-				result.put("success", false);
-				result.put("message", "출하우 정보가 없습니다.");
+				int cnt = auctionService.updateAuctionResult(params);
+				
+				if (cnt > 0) {
+					result.put("success", true);
+					result.put("message", "정상적으로 변경되었습니다.");
+				}
+				else {
+					result.put("success", false);
+					result.put("message", "출하우 정보가 없습니다.");
+				}
 			}
 		}
 		catch (Exception e) {
-			log.error("error - updateAuctionStatus : {}", e.getMessage());
 			result.put("success", false);
 			result.put("message", e.getMessage());
 			return result;
@@ -522,105 +569,6 @@ public class ApiController {
 	}
 	
 	/**
-	 * 생년월일(개월 수) 변경
-	 * @param date
-	 * @return
-	 */
-	private String getConvertBirthDay(Object date) {
-		String convertBirthDay = "";
-		
-		String month = "";
-		
-		if (date == null) return "";
-
-		if (isValidString(date.toString())) {
-
-			boolean isCheck = isValidationDate(date.toString());
-
-			if (isCheck) {
-
-				try {
-					SimpleDateFormat dtFormat = new SimpleDateFormat("yyyyMMdd");
-					SimpleDateFormat newDtFormat = new SimpleDateFormat("yy.MM.dd");
-					Date formatDate = dtFormat.parse(date.toString());
-					convertBirthDay = newDtFormat.format(formatDate);
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
-				month = geDiffDateMonth(date.toString(), getTodayYYYYMMDD());
-			}else {
-				convertBirthDay = date.toString();
-				month = "";
-			}
-		}
-		
-		if(isValidString(convertBirthDay) && isValidString(convertBirthDay)) {
-			return convertBirthDay + "(" + month + "개월)";
-		}
-		else {
-			return "";
-		}
-	}
-	
-	/**
-	 * 두 날짜 사이에 개월 수 계산
-	 * 
-	 * @param fromDateStr 20200101
-	 * @param toDateStr   20210917
-	 * @return
-	 */
-	private String geDiffDateMonth(String fromDateStr, String toDateStr) {
-
-		String result = "";
-
-		if (!isValidString(toDateStr) || !isValidString(toDateStr)) {
-			return result;
-		}
-
-		int toDateVal = Integer.parseInt(toDateStr);
-		int fromDateVal = Integer.parseInt(fromDateStr);
-
-		if (fromDateVal > toDateVal) {
-			return result;
-		}
-
-		try {
-			SimpleDateFormat format = new SimpleDateFormat("yyyyMMdd");
-
-			Date toDate = format.parse(toDateStr);
-			Date fromDate = format.parse(fromDateStr);
-
-			long baseDay = 24 * 60 * 60 * 1000; // 일
-			long baseMonth = baseDay * 30; // 월
-//			long baseYear = baseMonth * 12; // 년
-
-			// from 일자와 to 일자의 시간 차이를 계산한다.
-			long calDate = toDate.getTime() - fromDate.getTime();
-
-			// from 일자와 to 일자의 시간 차 값을 하루기준으로 나눠 준다.
-//			long diffDate = calDate / baseDay;
-			long diffMonth = (calDate / baseMonth) + 1;
-//			long diffYear = calDate / baseYear;
-
-			result = Long.toString(diffMonth);
-
-		} catch (Exception e) {
-			System.out.println("[error] : " + e);
-			return result;
-		}
-
-		return result;
-	}
-	
-	private String getTodayYYYYMMDD() {
-		String today = "";
-		LocalDate now = LocalDate.now();
-		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyyMMdd");
-		today = now.format(formatter);
-		return today;
-	}
-	
-	/**
 	 * 문자열 Null, Empty, Length 유효성 확인 함수
 	 * @param str 확인 문자열
 	 * @return boolean true : 유효 문자, false : 무효 문자
@@ -636,23 +584,6 @@ public class ApiController {
 
 		return true;
 	}
-	
-	/**
-	 * 날짜 유효성 검사
-	 * @param checkDate
-	 * @return
-	 */
-	private boolean isValidationDate(String checkDate) {
-		try {
-			SimpleDateFormat dateFormat = new SimpleDateFormat("yyyyMMdd");
-			dateFormat.setLenient(false);
-			dateFormat.parse(checkDate);
-			return true;
-		} catch (Exception e) {
-			return false;
-		}
-	}
-	
 	
 	/**
 	 * 출하 지역명 가져오기
@@ -788,7 +719,7 @@ public class ApiController {
 				params.put("stAucNo", map.get("ST_AUC_NO"));
 				params.put("edAucNo", map.get("ED_AUC_NO"));
 			}
-			int cnt = auctionService.sealectAuctCowCnt(params);			
+			int cnt = auctionService.sealectAuctCowCnt(params);
 
 			if (cnt > 0) {
 				result.put("success", true);
@@ -808,6 +739,7 @@ public class ApiController {
 		}
 		return result;
 	}
+	
 	/**
 	 * 출장우 데이터 조회 (단일)
 	 * @param version
@@ -836,6 +768,10 @@ public class ApiController {
 			}
 			List<Map<String, Object>> list = auctionService.selectAuctCowList(params);
 			
+			for (Map<String, Object> info : list) {
+				info.put("SRA_PD_RGNNM_FMT", this.getRgnName(info.get("SRA_PD_RGNNM")));
+			}
+			
 			if (list != null && list.size() > 0) {
 				result.put("success", true);
 				result.put("data", list);
@@ -856,7 +792,7 @@ public class ApiController {
 	}
 
 	/**
-	 * 출장우 데이터 조회 (단일)
+	 * 최저가 변경 (단일)
 	 * @param version
 	 * @param params
 	 * @return
@@ -872,7 +808,7 @@ public class ApiController {
 			//int cnt = 0;
 			if(params.get("list") == null) {
 				result.put("success", false);
-				result.put("message", "필수 인자가 없습니다.");				
+				result.put("message", "필수 인자가 없습니다.");
 			}
 			JSONParser parser = new JSONParser();
 			JSONArray array = (JSONArray) parser.parse((String) (params.get("list")));
@@ -1015,13 +951,13 @@ public class ApiController {
 	}
 	
 	/**
-	 * 응찰 내역 리스트
+	 * 응찰자 리스트
 	 * @param version
 	 * @param params
 	 * @return
 	 */
 	@ResponseBody
-	@PostMapping(value = "/api/{version}/auction/select/bidlog"
+	@PostMapping(value = "/api/{version}/auction/select/bidentry"
 			, consumes = MediaType.APPLICATION_FORM_URLENCODED_VALUE
 				, produces = MediaType.APPLICATION_JSON_VALUE)
 	public Map<String, Object> selectBidLog(@PathVariable(name = "version") String version
@@ -1029,16 +965,16 @@ public class ApiController {
 		final Map<String, Object> result = new HashMap<String, Object>();
 
 		try {
-			int cnt = auctionService.selectBidLogCnt(params);
+			List<Map<String, Object>> list = auctionService.selectBidEntryList(params);
 			
-			if (cnt > 0) {
+			if (list.size() > 0) {
 				result.put("success", true);
-				result.put("data", cnt);
+				result.put("data", list);
 				result.put("message", "정상적으로 조회되었습니다.");
 			}
 			else {
 				result.put("success", false);
-				result.put("message", "조회된 정보가 없습니다.");
+				result.put("message", "응찰 내역이 없습니다.");
 			}
 		}
 		catch (Exception e) {
@@ -1093,7 +1029,7 @@ public class ApiController {
 	 * @return
 	 */
 	@ResponseBody
-	@PostMapping(value = "/api/{version}/auction/inset/bidlog"
+	@PostMapping(value = "/api/{version}/auction/insert/bidlog"
 			, consumes = MediaType.APPLICATION_FORM_URLENCODED_VALUE
 				, produces = MediaType.APPLICATION_JSON_VALUE)
 	public Map<String, Object> insertBidLog(@PathVariable(name = "version") String version
@@ -1101,6 +1037,13 @@ public class ApiController {
 		final Map<String, Object> result = new HashMap<String, Object>();
 
 		try {
+			
+			int logCnt = auctionService.selectBidLogCnt(params);
+			if(logCnt > 0 ) {
+				result.put("success", false);
+				result.put("message", "이미 등록된 데이터입니다.");				
+			}
+			
 			int cnt = auctionService.insertBidLog(params);
 			
 			if (cnt > 0) {
@@ -1123,6 +1066,7 @@ public class ApiController {
 	}
 
 	/**
+	 * TODO : Deprecate 예정
 	 * 수수료 조회
 	 * @param version
 	 * @param params
@@ -1159,6 +1103,7 @@ public class ApiController {
 	}
 
 	/**
+	 * TODO : Deprecate 예정
 	 * 수수료내역 삭제
 	 * @param version
 	 * @param params
@@ -1195,6 +1140,7 @@ public class ApiController {
 	}
 
 	/**
+	 * TODO : Deprecate 예정
 	 * 수수료 내역저장
 	 * @param version
 	 * @param params
@@ -1211,7 +1157,7 @@ public class ApiController {
 		try {
 			if(params.get("list") == null) {
 				result.put("success", false);
-				result.put("message", "필수 인자가 없습니다.");				
+				result.put("message", "필수 인자가 없습니다.");
 			}
 			JSONParser parser = new JSONParser();
 			JSONArray array = (JSONArray) parser.parse((String) (params.get("list")));
@@ -1276,6 +1222,188 @@ public class ApiController {
 		}
 		catch (Exception e) {
 			log.error("error - selectAuctCowInfo : {}", e.getMessage());
+			result.put("success", false);
+			result.put("message", e.getMessage());
+			return result;
+		}
+		return result;
+	}
+	
+
+	@ResponseBody
+	@PostMapping(value = "/api/{version}/auction/status"
+			, consumes = MediaType.APPLICATION_FORM_URLENCODED_VALUE
+				, produces = MediaType.APPLICATION_JSON_VALUE)
+	public Map<String, Object> auctStatus(@PathVariable(name = "version") String version
+			, @RequestParam final Map<String, Object> params) {
+		final Map<String, Object> result = new HashMap<String, Object>();
+
+		try {
+			if(StringUtils.isEmpty(params.get("naBzPlc"))
+					|| StringUtils.isEmpty(params.get("aucObjDsc"))
+					|| StringUtils.isEmpty(params.get("aucDt"))
+					|| StringUtils.isEmpty(params.get("rgSqno"))
+					|| StringUtils.isEmpty(params.get("status"))
+					) {
+				result.put("success", false);
+				result.put("message", "필수 인자값이 없습니다.");
+				return result;
+			}
+			
+			params.put("naBzplc",params.get("naBzPlc"));
+			String st = params.get("status") != null ? (String) params.get("status"):"";
+			Map<String, Object> aucStn = auctionService.selectAuctStn(params);
+			Map<String, Object> maxDdlQcn = auctionService.selectMaxDdlQcn(params);
+			
+			Map<String, Object> temp = new HashMap<String, Object>();
+			if(aucStn == null) {
+				result.put("success", false);
+				result.put("message", "경매차수가 없습니다.");
+				return result;								
+			}
+			temp.putAll(params);
+			if(!"".equals(st)) {
+				switch(st) {
+					case "start":
+						if("21".equals(aucStn.get("SEL_STS_DSC"))) {
+							result.put("success", false);
+							result.put("message", "이미 진행중인 경매입니다.");
+							return result;							
+						}
+						temp.put("selStsDsc", "22"); // or aucStn.get("SEL_STS_DSC"
+						temp.put("lsCmeno", "0314시작");
+						temp.put("fsrgmnEno", "admin");
+						auctionService.insertAuctStnLog(temp);
+						temp.put("selStsDsc", "21");
+						temp.put("lsCmeno", "SYSTEM");
+						auctionService.updateAuctStn(temp);
+						temp.put("selStsDsc", "22");
+						temp.put("aucYn", "1");
+						temp.put("stAucNo", aucStn.get("ST_AUC_NO"));
+						temp.put("edAucNo", aucStn.get("ED_AUC_NO"));
+						auctionService.updateAuctSogCow(temp);
+						
+						result.put("success", true);
+						result.put("message", "경매시작이 정상처리되었습니다.");
+						
+						break;
+					case "pause":
+						if("23".equals(aucStn.get("SEL_STS_DSC"))) {
+							result.put("success", false);
+							result.put("message", "이미 중지된 경매입니다.");
+							return result;							
+						}
+						if("22".equals(aucStn.get("SEL_STS_DSC"))) {
+							result.put("success", false);
+							result.put("message", "이미 종료된 경매입니다.");
+							return result;							
+						}
+						temp.put("selStsDsc", "23");
+						temp.put("lsCmeno", "SYSTEM");
+						auctionService.updateAuctStn(temp);
+						temp.put("aucYn", "0");
+						temp.put("stAucNo", aucStn.get("ST_AUC_NO"));
+						temp.put("edAucNo", aucStn.get("ED_AUC_NO"));
+						auctionService.updateAuctSogCow(temp);
+						
+						result.put("success", true);
+						result.put("message", "경매중지가 정상처리되었습니다.");
+						break;
+					case "finish":
+						if("22".equals(aucStn.get("SEL_STS_DSC"))) {
+							result.put("success", false);
+							result.put("message", "이미 종료된 경매입니다.");
+							return result;							
+						}
+						temp.put("selStsDsc", "22");
+						temp.put("maxDdlQcn", maxDdlQcn.get("MAX_DDL_QCN")); 
+						temp.put("lsCmeno", "SYSTEM");
+						auctionService.updateAuctStn(temp);
+						temp.put("selStsDsc", "22"); // or aucStn.get("SEL_STS_DSC"
+						temp.put("lsCmeno", "0314종료");
+						temp.put("fsrgmnEno", "admin");
+						auctionService.insertAuctStnLog(temp);
+						
+						temp.put("aucYn", "0");
+						temp.put("lsCmeno", "SYSTEM");
+						temp.put("stAucNo", aucStn.get("ST_AUC_NO"));
+						temp.put("edAucNo", aucStn.get("ED_AUC_NO"));
+						auctionService.updateAuctSogCow(temp);
+
+						temp.put("newCntAucYn", "Y");
+						temp.put("soldChkYn", "N");
+						temp.put("fsrgmnEno", "admin");
+						temp.put("lsCmeno", "[LM0314]");
+						temp.put("pdaId", "새 차수 경매 시작[성공]");
+						temp.put("maxDdlQcn", maxDdlQcn.get("MAX_DDL_QCN"));
+						temp.put("stAucNo", aucStn.get("ST_AUC_NO"));
+						temp.put("edAucNo", aucStn.get("ED_AUC_NO"));
+						auctionService.insertAuctSogCowLog(temp);
+												
+						temp.put("newCntAucYn", "Y");
+						temp.put("soldChkYn", "N");
+						temp.put("pdaId", "경매종료[낙찰]");
+						auctionService.insertAuctSogCowLog(temp);
+						
+						//TO-DO INSERT SOG_COW_LOG 만들기
+						temp.put("sraSbidAm", "0");
+						temp.put("maxDdlQcn", maxDdlQcn.get("MAX_DDL_QCN"));
+						temp.put("lsCmeno", "SYSTEM");
+						temp.put("stAucNo", aucStn.get("ST_AUC_NO"));
+						temp.put("edAucNo", aucStn.get("ED_AUC_NO"));
+						auctionService.updateAuctSogCowFinish(temp);
+						
+						result.put("success", true);
+						result.put("message", "경매종료가 정상처리되었습니다.");
+						break;
+					default:
+						result.put("success", false);
+						result.put("message", "필수 인자값이 잘못되었습니다.");
+						break;
+				}
+			}else {
+				result.put("success", false);
+				result.put("message", "필수 인자값이 없습니다.");
+			}				
+		}
+		catch (Exception e) {
+			log.error("error - auctStatus : {}", e.getMessage());
+			result.put("success", false);
+			result.put("message", e.getMessage());
+			return result;
+		}
+		return result;
+	}
+	
+	/**
+	 * 조합원/비조합원 구분
+	 * @param version
+	 * @param params
+	 * @return
+	 */
+	@ResponseBody
+	@PostMapping(value = "/api/{version}/auction/select/macoYn"
+			, consumes = MediaType.APPLICATION_FORM_URLENCODED_VALUE
+				, produces = MediaType.APPLICATION_JSON_VALUE)
+	public Map<String, Object> selectMacoYn(@PathVariable(name = "version") String version
+			, @RequestParam final Map<String, Object> params) {
+		final Map<String, Object> result = new HashMap<String, Object>();
+
+		try {
+			Map<String, Object> map = loginService.selectWholesaler(params);
+			
+			if (map != null) {
+				result.put("success", true);
+				result.put("macoYn", map.get("MACO_YN"));
+				result.put("message", "정상적으로 조회되었습니다.");
+			}
+			else {
+				result.put("success", false);
+				result.put("message", "중도매인 정보가 없습니다.");
+			}
+		}
+		catch (Exception e) {
+			log.error("error - selectBidLog : {}", e.getMessage());
 			result.put("success", false);
 			result.put("message", e.getMessage());
 			return result;

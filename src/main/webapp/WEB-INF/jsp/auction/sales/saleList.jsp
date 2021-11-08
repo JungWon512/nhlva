@@ -53,6 +53,10 @@
         </ul>
     </div>
     <!-- //list_search e -->
+    <div class="list_txt">
+        <p>*경매번호는 변경될 수 있으며 <span>경매당일</span> 확정됩니다.</p>
+    </div>
+    
     <div class="list_downs">
         <ul>
             <li><a href="javascript:;" class="btn_print"><span class="ico_print">인쇄하기</span></a></li>

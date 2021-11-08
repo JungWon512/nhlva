@@ -109,7 +109,7 @@
 			sHtml += '  				</tr>                                                                                                    ';
 			sHtml += '  				<tr>                                                                                                               ';
 			sHtml += '  					<th>최저가</th>                                                                                                ';
-			sHtml += '  					<td class="tal">'+tr.find('.lowsSbidLmtUpr').val()+'만원</td>                                                                                  ';
+			sHtml += '  					<td class="tal">'+tr.find('.lowsSbidLmtUpr').val()+' 만원</td>                                                                                  ';
 			sHtml += '  					<th>어미</th>                                                                                                  ';
 			sHtml += '  					<td class="fwb">'+tr.find('.mcowDsc').val()+'</td>                                                                                      ';
 			sHtml += '  				</tr>                                                                                                              ';
@@ -120,10 +120,15 @@
 			sHtml += '  					<td class="fwb">'+tr.find('.sraIndvPasgQcn').val()+'</td>                                                                                         ';                                                               
 			sHtml += '  				</tr>                                                                                                              ';
 			sHtml += '  				<tr>                                                                                                               ';
-//			sHtml += '  					<th>낙찰자</th>                                                                                                  ';
-//			sHtml += '  					<td class="tal">'+tr.find('.sraMwmnnm').val()+'</td>                                                                                         ';
+			sHtml += '  					<th>낙찰자</th>                                                                                                  ';
+			if (tr.find('.lvstAucPtcMnNo').val() != "") {
+				sHtml += '  					<td class="tal">'+tr.find('.lvstAucPtcMnNo').val()+' 번</td>                                                                                         ';
+			}
+			else {
+				sHtml += '  					<td class="tal">-</td>                                                                                         ';
+			}
 			sHtml += '  					<th>낙찰가</th>                                                                                                  ';
-			sHtml += '  					<td colspan="3" class="tal">'+tr.find('.sraSbidUpr').val()+'만원</td>                                                                                         ';
+			sHtml += '  					<td class="tal">'+tr.find('.sraSbidUpr').val()+' 만원</td>                                                                                         ';
 			sHtml += '  				</tr>                                                                                                              ';
 			sHtml += '  				<tr>                                                                                                               ';
 			sHtml += '  					<th class="vtt">특이사항</th>                                                                                  ';

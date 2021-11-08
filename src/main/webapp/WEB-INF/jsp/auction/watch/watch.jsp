@@ -89,7 +89,6 @@
 										<li>
 											<dl>
 												<dt>최저가</dt>
-		<%-- 										<dd class="lowsSbidLmtAm">${fn:split(watchList[0].LOWS_SBID_LMT_UPR ,'.')[0]}</dd> --%>
 												<dd class="lowsSbidLmtAm">${watchList[0].LOWS_SBID_LMT_AM <= 0 ? '0' : fn:split(watchList[0].LOWS_SBID_LMT_UPR,'.')[0]}</dd>
 											</dl>
 										</li>
@@ -162,11 +161,8 @@
 										<li class="harf-list">
 											<dl>
 												<dt>최저가</dt>
-		<%-- 										<dd class="lowsSbidLmtAm">${fn:split(watchList[0].LOWS_SBID_LMT_UPR ,'.')[0]}</dd> --%>
 												<dd class="lowsSbidLmtAm">
-<!-- 													<p class="move-txt" style="width: 150px;"> -->
 														${watchList[0].LOWS_SBID_LMT_AM <= 0 ? '0' : fn:split(watchList[0].LOWS_SBID_LMT_UPR,'.')[0]}
-<!-- 													</p>													 -->
 												</dd>
 											</dl>
 										</li>
@@ -180,7 +176,7 @@
 								</div>	
 							</li>
 							
-							<c:forEach begin="1" end="${johapData.KKO_SVC_CNT}" varStatus="st">
+							<c:forEach begin="1" end="${(johapData.KKO_SVC_CNT eq '' or johapData.KKO_SVC_CNT == null) ? johapData.KKO_SVC_CNT : '0'}" varStatus="st">
 <%-- 							<c:forEach begin="1" end="4" varStatus="st"> --%>
 								<li class="video_item" style="width: 100%;height: auto;">
 									<video id="remoteVideo${st.index }" style="width: 100%;background: black;height: 100%;" poster="/static/images/assets/no_video_18980.png" muted="muted" autoplay playsinline webkit-playsinline>
@@ -206,7 +202,6 @@
 			</div>		
 		</c:if>
 	</div>
-<!-- 	<video id="remoteVideo1" class="remote-video center w-300 h-300" poster="/static/images/assets/no_video_18980.png" playsinline style="z-index:1; width: 100%;"></video> -->
 	<!-- //auction_seeBox e -->
 	<div class="list_table auction_see tblAuction">
 		<div class="list_head" style="${johapData.AUC_DSC eq '2'?'border-radius: 0px;':'' }">

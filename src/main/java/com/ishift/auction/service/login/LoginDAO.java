@@ -3,7 +3,6 @@ package com.ishift.auction.service.login;
 import com.ishift.auction.base.dao.MainDao;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -22,8 +21,6 @@ public class LoginDAO {
 	 * @throws Exception
 	 */
 	public List<Map<String, Object>> selectWholesalerList(Map<String, Object> params) throws Exception {
-		List<Map<String, Object>> returnList = null;
-		
 		return mainDao.selectList("LoginMapper.selectWholesalerList", params);
 	}
 
@@ -34,16 +31,7 @@ public class LoginDAO {
 	 * @throws Exception
 	 */
 	public Map<String, Object> selectWholesaler(Map<String, Object> params) throws Exception {
-		Map<String, Object> returnMap = null;
-				
-		int place = Integer.parseInt(params.getOrDefault("naBzplcno", "0").toString());
-		try {
-			returnMap = mainDao.selectOne("LoginMapper.selectWholesaler", params);
-		}
-		catch (Exception e) {
-			e.printStackTrace();
-		}
-		return returnMap;
+		return mainDao.selectOne("LoginMapper.selectWholesaler", params);
 	}
 
 	/**
@@ -63,9 +51,6 @@ public class LoginDAO {
 	 * @throws Exception
 	 */
 	public List<Map<String, Object>> selectFarmUserList(Map<String, Object> params) throws Exception {
-		List<Map<String, Object>> returnList = null;
-						
-		int place = Integer.parseInt(params.getOrDefault("place", "0").toString());
 		return mainDao.selectList("LoginMapper.selectFarmUserList", params);
 	}
 
@@ -76,9 +61,6 @@ public class LoginDAO {
 	 * @throws Exception
 	 */
 	public Map<String, Object> selectFarmUser(Map<String, Object> params) throws Exception {
-		Map<String, Object> returnMap = null;
-				
-		int place = Integer.parseInt(params.getOrDefault("naBzplcno", "0").toString());
 		return mainDao.selectOne("LoginMapper.selectFarmUser", params);
 	}
 

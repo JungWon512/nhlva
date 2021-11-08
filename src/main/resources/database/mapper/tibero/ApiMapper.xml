@@ -24,6 +24,9 @@
 		WHERE A.AUC_DT = #{aucDt}
 		AND A.NA_BZPLC = #{naBzplc}
 		AND A.AUC_OBJ_DSC = #{aucObjDsc}
+		<if test="rgSqno !=null and !rgSqno.equals('')">
+			AND A.RG_SQNO = #{rgSqno}
+		</if>
 	</select>
 	
 	<select id="sealectAuctCowCnt" parameterType="map" resultType="java.lang.Integer">
@@ -60,108 +63,139 @@
 	</select>
 	
 	<select id="selectAuctCowList" parameterType="map" resultType="map">
-			SELECT G.*
-			, CASE WHEN G.GAP_DAY = 0 THEN G.BIRTH_STR || '(' || TO_CHAR(G.GAP_MONTH ) || '개월)' 
-			ELSE G.BIRTH_STR || '(' || TO_CHAR(G.GAP_MONTH) || '개월 ' || TO_CHAR(G.GAP_DAY) || '일)' END BIRTH_FMT
+		SELECT H.*
+			 , CASE WHEN H.GAP_DAY = 0 THEN H.BIRTH_STR || '(' || TO_CHAR(H.GAP_MONTH ) || '개월)' 
+					ELSE H.BIRTH_STR || '(' || TO_CHAR(H.GAP_MONTH) || '개월 ' || TO_CHAR(H.GAP_DAY) || '일)'
+				END AS BIRTH_FMT
 		  FROM (
 			SELECT
-	         A.NA_BZPLC,                    <!-- 경제통합사업장코드   -->
-		     A.AUC_PRG_SQ,                   <!-- 경매진행순서   -->
-		     A.COW_SOG_WT,                   <!-- 우출하중량    -->
-		     A.AUC_OBJ_DSC,                   <!-- 경매대상구분코드  -->
-		     A.FIR_LOWS_SBID_LMT_AM / 10000  AS FIR_LOWS_SBID_LMT_AM,        <!-- 최초최저낙찰한도금액  -->
-		     A.LOWS_SBID_LMT_AM / 10000   AS LOWS_SBID_LMT_AM,         <!-- 최저낙찰한도금액  -->
-		     A.SRA_SBID_AM / 10000    AS SRA_SBID_AM,           <!-- 축산낙찰금액   -->
-		     A.SRA_SBID_UPR,                   <!-- 낙찰 단가   -->
-		     A.RMK_CNTN,                    <!-- 비고 내용   -->
-		     A.BRANDNM,                    <!-- 브랜드명   -->
-		     A.PRNY_MTCN,                   <!-- 임신개월수   -->
-		     A.AUC_DT,                    <!-- 경매일자   -->
-		     TO_CHAR(A.LSCHG_DTM,'YYYY-MM-DD HH24:mm:ss:miss') as LSCHG_DTM, <!-- 최종변경일시   -->
-		     A.LS_CMENO,                    <!-- 최종변경자개인번호  -->
-		     A.SEL_STS_DSC,                   <!-- 판매상태구분코드  -->
-		     A.LWPR_CHG_NT,                   <!-- 최저가변경횟수  -->
-		     A.LVST_AUC_PTC_MN_NO,                 <!-- 가축경매참여자번호  -->
-		     A.DNA_YN,                    <!-- DNA    -->
-		     A.SRA_PD_RGNNM,                   <!-- 축산생산지역명  -->
-		     A.OSLP_NO,                    <!-- 원표번호   -->
-		     A.TRMN_AMNNO,                   <!-- 거래인관리번호  -->
-		     A.LED_SQNO,                    <!-- 원장일련번호   -->                   <!-- 응찰일시   -->
-		     A.TRPCS_PY_YN,                   <!-- 운송비지급여부  -->
-		     A.PPGCOW_FEE_DSC,                  <!-- 번식우수수료구분코드  -->
-		     A.AUC_PRG_SQ as STAND_POSITION,               <!-- 계류대번호   -->
-		  (SELECT E.ATDR_DTM 
-		   FROM TB_LA_IS_MH_ATDR_LOG E
-		   WHERE E.NA_BZPLC = A.NA_BZPLC
-		    AND E.AUC_OBJ_DSC = A.AUC_OBJ_DSC 
-		    AND E.AUC_DT = A.AUC_DT
-		    AND E.OSLP_NO = A.OSLP_NO
-		    AND E.TRMN_AMNNO = A.TRMN_AMNNO
-		    AND E.LVST_AUC_PTC_MN_NO = A.LVST_AUC_PTC_MN_NO
-		    AND E.ATDR_AM = A.SRA_SBID_UPR
-		    AND ROWNUM =1
-		   ) AS ATDR_DTM,   <!-- 응찰일시  -->
-		     'N' as IS_EXCESS_COW,                 <!-- 계류대번호 플래그  -->
-		     B.FTSNM,                    <!-- 농가명    -->
-		     B.MACO_YN,                    <!-- 조합원여부   -->
-		     C.SRA_INDV_AMNNO,                  <!-- 축산개체관리번호     -->
-		     C.SRA_SRS_DSC,                   <!-- 축산축종구분코드    -->
-		     C.FHS_ID_NO,                   <!--  농가식별번호     -->
-		     C.FARM_AMNNO,                   <!--  농장관리번호     -->
-		     C.BIRTH,                    <!--  생년월일     -->
-		     ltrim(rtrim(C.KPN_NO)) as KPN_NO,              <!-- KPN번호     -->
-		     C.INDV_SEX_C,                   <!-- 축산개체성별코드    -->
-		     C.MCOW_SRA_INDV_AMNNO,                 <!-- 어미소축산개체관리번호   -->
-		     C.MATIME,                    <!--  산차      -->
-		     C.SRA_INDV_PASG_QCN,                 <!--  계대      -->
-		     C.INDV_ID_NO,                   <!--  개체식별번호     -->
-		     C.SRA_INDV_BRDSRA_RG_NO,                <!-- 축산개체종축등록번호    -->
-		     C.RG_DSC,                    <!--  등록구분코드     -->
-		     C.ANW_YN,                    <!--  신규여부(데이터전환시 구데이터인지) -->
-		     CASE WHEN C.INDV_SEX_C = '0' THEN '없음' WHEN C.INDV_SEX_C = '1' THEN '암'
-		     WHEN C.INDV_SEX_C = '2' THEN '수'   WHEN C.INDV_SEX_C = '3' THEN '거세'
-		     WHEN C.INDV_SEX_C = '4' THEN '미경산'  WHEN C.INDV_SEX_C = '5' THEN '비거세'
-		     WHEN C.INDV_SEX_C = '6' THEN '프리마틴'  WHEN C.INDV_SEX_C = '9' THEN '공통' END INDV_SEX_C_NAME, <!--  성별 문자열  -->
-		     E.SIMP_C,                      <!-- 혈통코드 -->
-		     E.SIMP_CNM AS MCOW_DSC ,                  <!-- 혈통명  -->
-		     F.QCN,                       <!-- 차수 -->
-		     TO_CHAR(TO_DATE(C.BIRTH,'YYYYMMDD'),'YYYY.MM.DD') BIRTH_STR,
-			 CASE WHEN MONTHS_BETWEEN(TO_DATE(A.AUC_DT,'YYYYMMDD'), TO_DATE(C.BIRTH,'YYYYMMDD')) <![CDATA[<=]]> 4 THEN 4
-			 	  ELSE TRUNC(MONTHS_BETWEEN(TO_DATE(A.AUC_DT,'YYYYMMDD'), TO_DATE(C.BIRTH,'YYYYMMDD')))
-			 END GAP_MONTH,
-		     CASE WHEN MONTHS_BETWEEN(TO_DATE(A.AUC_DT,'YYYYMMDD'), TO_DATE(C.BIRTH,'YYYYMMDD')) <![CDATA[<]]> 4 THEN 0
-				  ELSE GREATEST(TO_DATE(A.AUC_DT,'YYYYMMDD') - ADD_MONTHS(TO_DATE(C.BIRTH,'YYYYMMDD'), TRUNC(MONTHS_BETWEEN(TO_DATE(A.AUC_DT,'YYYYMMDD'), TO_DATE(C.BIRTH,'YYYYMMDD')))) + 1, 0) - 1
-			 END GAP_DAY
-		  FROM TB_LA_IS_MH_SOG_COW A LEFT OUTER JOIN TB_LA_IS_MM_FHS B ON A.NA_BZPLC = B.NA_BZPLC
-		          AND A.FHS_ID_NO  = B.FHS_ID_NO
-		          AND A.FARM_AMNNO  = B.FARM_AMNNO
-		          LEFT OUTER JOIN TB_LA_IS_MM_INDV C ON A.NA_BZPLC = C.NA_BZPLC
-		          AND A.SRA_INDV_AMNNO = C.SRA_INDV_AMNNO
-		          AND A.SRA_SRS_DSC  = C.SRA_SRS_DSC
-		          LEFT OUTER JOIN ( SELECT SIMP_C, SIMP_CNM
-		               FROM TB_LA_IS_MH_COMN_APL
-		               WHERE SIMP_TPC = 'SRA_INDV_BRDSRA_RG_DSC') D ON C.RG_DSC = D.SIMP_C 
-		          LEFT OUTER JOIN ( SELECT SIMP_C, SIMP_CNM
-		               FROM TB_LA_IS_MH_COMN_APL
-		               WHERE SIMP_TPC = 'SRA_INDV_BRDSRA_RG_DSC') E ON C.MCOW_DSC = E.SIMP_C
-		         JOIN TB_LA_IS_MH_AUC_QCN AS F
-		                ON
-		                A.NA_BZPLC = F.NA_BZPLC AND
-		                A.AUC_DT = F.AUC_DT AND
-		                A.AUC_OBJ_DSC = F.AUC_OBJ_DSC
-		  WHERE A.NA_BZPLC = #{naBzplc}
-		  AND A.AUC_DT  = #{aucDt}
-		  AND A.AUC_OBJ_DSC = CASE WHEN #{aucObjDsc} = '0' THEN A.AUC_OBJ_DSC ELSE #{aucObjDsc} END	  
-		  <if test="mAuctionResult !=null and !mAuctionResult.equals('')">
-		   AND A.SEL_STS_DSC = #{mAuctionResult}
-		  </if>  
-			 
-		  <if test="stAucNo !=null and !stAucNo.equals('') and edAucNo !=null and !edAucNo.equals('')">
-		  	AND A.AUC_PRG_SQ <![CDATA[>=]]> ${stAucNo}
-		  	AND A.AUC_PRG_SQ <![CDATA[<=]]> ${edAucNo}
-		  </if>
-		) G
-	  ORDER BY AUC_PRG_SQ	
+				A.NA_BZPLC,                    <!-- 경제통합사업장코드   -->
+				A.AUC_PRG_SQ,                   <!-- 경매진행순서   -->
+				A.COW_SOG_WT,                   <!-- 우출하중량    -->
+				A.AUC_OBJ_DSC,                   <!-- 경매대상구분코드  -->
+				A.FIR_LOWS_SBID_LMT_AM / 10000  AS FIR_LOWS_SBID_LMT_AM,        <!-- 최초최저낙찰한도금액  -->
+				A.LOWS_SBID_LMT_AM / 10000   AS LOWS_SBID_LMT_AM,         <!-- 최저낙찰한도금액  -->
+				A.SRA_SBID_AM / 10000    AS SRA_SBID_AM,           <!-- 축산낙찰금액   -->
+				A.SRA_SBID_UPR,                   <!-- 낙찰 단가   -->
+				A.RMK_CNTN,                    <!-- 비고 내용   -->
+				A.BRANDNM,                    <!-- 브랜드명   -->
+				A.PRNY_MTCN,                   <!-- 임신개월수   -->
+				A.AUC_DT,                    <!-- 경매일자   -->
+				    TO_CHAR(A.LSCHG_DTM,'YYYY-MM-DD HH24:mm:ss:miss') as LSCHG_DTM, <!-- 최종변경일시   -->
+				A.LS_CMENO,                    <!-- 최종변경자개인번호  -->
+				A.SEL_STS_DSC,                   <!-- 판매상태구분코드  -->
+				A.LWPR_CHG_NT,                   <!-- 최저가변경횟수  -->
+				A.LVST_AUC_PTC_MN_NO,                 <!-- 가축경매참여자번호  -->
+				A.DNA_YN,                    <!-- DNA    -->
+				A.SRA_PD_RGNNM,                   <!-- 축산생산지역명  -->
+				A.OSLP_NO,                    <!-- 원표번호   -->
+				A.TRMN_AMNNO,                   <!-- 거래인관리번호  -->
+				A.LED_SQNO,                    <!-- 원장일련번호   -->                   <!-- 응찰일시   -->
+				A.TRPCS_PY_YN,                   <!-- 운송비지급여부  -->
+				A.PPGCOW_FEE_DSC,                  <!-- 번식우수수료구분코드  -->
+				A.AUC_PRG_SQ as STAND_POSITION,               <!-- 계류대번호   -->
+				'N' as IS_EXCESS_COW,                 <!-- 계류대번호 플래그  -->
+				B.FTSNM,                    <!-- 농가명    -->
+				B.MACO_YN,                    <!-- 조합원여부   -->
+				C.SRA_INDV_AMNNO,                  <!-- 축산개체관리번호     -->
+				C.SRA_SRS_DSC,                   <!-- 축산축종구분코드    -->
+				C.FHS_ID_NO,                   <!--  농가식별번호     -->
+				C.FARM_AMNNO,                   <!--  농장관리번호     -->
+				C.BIRTH,                    <!--  생년월일     -->
+				ltrim(rtrim(C.KPN_NO)) as KPN_NO,              <!-- KPN번호     -->
+				C.INDV_SEX_C,                   <!-- 축산개체성별코드    -->
+				C.MCOW_SRA_INDV_AMNNO,                 <!-- 어미소축산개체관리번호   -->
+				C.MATIME,                    <!--  산차      -->
+				C.SRA_INDV_PASG_QCN,                 <!--  계대      -->
+				C.INDV_ID_NO,                   <!--  개체식별번호     -->
+				C.SRA_INDV_BRDSRA_RG_NO,                <!-- 축산개체종축등록번호    -->
+				C.RG_DSC,                    <!--  등록구분코드     -->
+				C.ANW_YN,                    <!--  신규여부(데이터전환시 구데이터인지) -->
+				CASE WHEN C.INDV_SEX_C = '0' THEN '없음' WHEN C.INDV_SEX_C = '1' THEN '암'
+				WHEN C.INDV_SEX_C = '2' THEN '수'   WHEN C.INDV_SEX_C = '3' THEN '거세'
+				WHEN C.INDV_SEX_C = '4' THEN '미경산'  WHEN C.INDV_SEX_C = '5' THEN '비거세'
+				WHEN C.INDV_SEX_C = '6' THEN '프리마틴'  WHEN C.INDV_SEX_C = '9' THEN '공통' END INDV_SEX_C_NAME, <!--  성별 문자열  -->
+				E.SIMP_C,                      <!-- 혈통코드 -->
+				E.SIMP_CNM AS MCOW_DSC ,                  <!-- 혈통명  -->
+				F.QCN,                       <!-- 차수 -->	     
+				TO_CHAR(TO_DATE(C.BIRTH,'YYYYMMDD'),'YYYY.MM.DD') BIRTH_STR,
+				CASE WHEN MONTHS_BETWEEN(TO_DATE(A.AUC_DT,'YYYYMMDD'), TO_DATE(C.BIRTH,'YYYYMMDD')) <![CDATA[<=]]> 4 THEN 4
+					 ELSE TRUNC(MONTHS_BETWEEN(TO_DATE(A.AUC_DT,'YYYYMMDD'), TO_DATE(C.BIRTH,'YYYYMMDD')))
+				 END GAP_MONTH,
+				CASE WHEN MONTHS_BETWEEN(TO_DATE(A.AUC_DT,'YYYYMMDD'), TO_DATE(C.BIRTH,'YYYYMMDD')) <![CDATA[<]]> 4 THEN 0
+					 ELSE GREATEST(TO_DATE(A.AUC_DT,'YYYYMMDD') - ADD_MONTHS(TO_DATE(C.BIRTH,'YYYYMMDD'), TRUNC(MONTHS_BETWEEN(TO_DATE(A.AUC_DT,'YYYYMMDD'), TO_DATE(C.BIRTH,'YYYYMMDD')))) + 1, 0) - 1
+				 END GAP_DAY
+				 , NVL(G.ATDR_AM, 0) AS EXP_ATDR_AM
+				 , NVL(G.LVST_AUC_PTC_MN_NO, 0) AS EXP_LVST_AUC_PTC_MN_NO
+				 , G.ATDR_DTM
+			  FROM TB_LA_IS_MH_SOG_COW A
+			  LEFT OUTER JOIN TB_LA_IS_MM_FHS B
+				ON (
+					A.NA_BZPLC = B.NA_BZPLC
+					AND A.FHS_ID_NO  = B.FHS_ID_NO
+					AND A.FARM_AMNNO  = B.FARM_AMNNO
+				 )
+			  LEFT OUTER JOIN TB_LA_IS_MM_INDV C
+				ON (
+					A.NA_BZPLC = C.NA_BZPLC
+					AND A.SRA_INDV_AMNNO = C.SRA_INDV_AMNNO
+					AND A.SRA_SRS_DSC  = C.SRA_SRS_DSC
+				 )
+			  LEFT OUTER JOIN (
+								SELECT SIMP_C, SIMP_CNM
+								  FROM TB_LA_IS_MH_COMN_APL
+								 WHERE SIMP_TPC = 'SRA_INDV_BRDSRA_RG_DSC'
+				 ) D
+				ON C.RG_DSC = D.SIMP_C 
+			  LEFT OUTER JOIN (
+								SELECT SIMP_C, SIMP_CNM
+								  FROM TB_LA_IS_MH_COMN_APL
+								 WHERE SIMP_TPC = 'SRA_INDV_BRDSRA_RG_DSC'
+				 ) E
+				ON C.MCOW_DSC = E.SIMP_C
+			  JOIN TB_LA_IS_MH_AUC_QCN AS F
+				ON (
+					A.NA_BZPLC = F.NA_BZPLC AND
+					A.AUC_DT = F.AUC_DT AND
+					A.AUC_OBJ_DSC = F.AUC_OBJ_DSC
+				 )
+			  LEFT OUTER JOIN (
+					SELECT RANK() OVER(PARTITION BY AUC_OBJ_DSC, OSLP_NO ORDER BY ATDR_AM DESC, ATDR_DTM ASC) AS ATDR_RANK
+						 , B.*
+					  FROM (
+							SELECT ROW_NUMBER() OVER(PARTITION BY AUC_OBJ_DSC, OSLP_NO, LVST_AUC_PTC_MN_NO ORDER BY RG_SQNO DESC) AS BID_NUM
+								 , A.*
+							  FROM TB_LA_IS_MH_ATDR_LOG A
+							 WHERE NA_BZPLC = #{naBzplc}
+							   AND AUC_DT = #{aucDt}
+							   AND RG_SQNO NOT IN ('0', '99999999')
+						 ) B
+					 WHERE BID_NUM = 1
+					   AND ATDR_AM > 0
+				 ) G
+				ON (
+					G.NA_BZPLC = A.NA_BZPLC
+					AND
+					G.AUC_DT = A.AUC_DT
+					AND
+					G.AUC_OBJ_DSC = A.AUC_OBJ_DSC
+					AND
+					G.OSLP_NO = A.OSLP_NO
+					AND
+					G.ATDR_RANK = 1
+				 )
+			 WHERE A.NA_BZPLC = #{naBzplc}
+			   AND A.AUC_DT  = #{aucDt}
+			   AND A.AUC_OBJ_DSC = CASE WHEN #{aucObjDsc} = '0' THEN A.AUC_OBJ_DSC ELSE #{aucObjDsc} END	  
+			<if test="mAuctionResult !=null and !mAuctionResult.equals('')">
+			   AND A.SEL_STS_DSC = #{mAuctionResult}
+			</if>  
+			<if test="stAucNo !=null and !stAucNo.equals('') and edAucNo !=null and !edAucNo.equals('')">
+			   AND A.AUC_PRG_SQ <![CDATA[>=]]> ${stAucNo}
+			   AND A.AUC_PRG_SQ <![CDATA[<=]]> ${edAucNo}
+			</if>
+			) H
+		 ORDER BY AUC_PRG_SQ	
 	</select>
 	
 	<update id="updateLowSbidAmt" parameterType="map" >
@@ -216,8 +250,8 @@
 	  AND RG_SQNO = #{rgSqno}
 	</select>
 	
-	<select id="selectNextBidNum" parameterType="map" resultType="map">  
-	 SELECT ISNULL(MAX(RG_SQNO)+1,1)
+	<select id="selectNextBidNum" parameterType="map" resultType="map">
+	 SELECT NVL(MAX(RG_SQNO)+1,1) AS NEXT_NUM
 	  FROM TB_LA_IS_MH_ATDR_LOG
 	  WHERE NA_BZPLC = #{naBzplc}
 	  AND AUC_DT = #{aucDt}
@@ -259,31 +293,384 @@
 		  )
 	</insert>
 	
-	<select id="selectFeeInfo" parameterType="map" resultType="map"> 
-		SELECT A.* 
-		  ,B.FEE_CHK_DNA_YN_FEE 
-		  ,B.SELFEE_CHK_DNA_YN_FEE
-		FROM TB_LA_IS_MH_FEE  A LEFT JOIN TB_LA_IS_MM_ENV_EST B
-		                      ON A.NA_BZPLC = B.NA_BZPLC
-		WHERE  A.APL_DT = (SELECT MAX(APL_DT) FROM TB_LA_IS_MH_FEE
-		                   WHERE AUC_OBJ_DSC = #{aucObjDsc}
-		                     AND NA_BZPLC    = #{naBzplc}
-		                     AND DEL_YN      = '0'
-		                     AND APL_DT <![CDATA[<=]]> #{aplDt})
-		                   
+	<select id="selectMaxDdlQcn" parameterType="map" resultType="map">
+		SELECT
+        	MAX(NVL(DDL_QCN, 0)) AS MAX_DDL_QCN
+		FROM
+			TB_LA_IS_MH_AUC_STN A
+		WHERE A.NA_BZPLC = #{naBzPlc}
 		AND A.AUC_OBJ_DSC = #{aucObjDsc}
-		AND A.DEL_YN      = '0'
-		AND A.NA_BZPLC    = #{naBzplc}
+		AND A.AUC_DT = #{aucDt}
+		AND A.RG_SQNO = #{rgSqno}
+    </select>
+	
+	<select id="selectAuctBidNum" parameterType="map" resultType="map">
+		SELECT A.LVST_AUC_PTC_MN_NO
+		FROM TB_LA_IS_MH_AUC_ENTR as A
+		WHERE A.NA_BZPLC = #{auctionHouseCode}
+		  AND A.AUC_DT = #{auctionDate}
+		  AND A.AUC_OBJ_DSC = #{entryType}
+		  And A.TRMN_AMNNO = #{userMemNum}
 	</select>
 	
+	<!-- 응찰 리스트 -->
+	<select id="selectBidEntryList" parameterType="map" resultType="map">
+		SELECT RANK() OVER(ORDER BY ATDR_AM DESC, ATDR_DTM ASC) AS ATDR_RANK
+			 , B.*
+		  FROM (
+				SELECT ROW_NUMBER() OVER(PARTITION BY LVST_AUC_PTC_MN_NO ORDER BY RG_SQNO DESC) AS BID_NUM
+					 , A.*
+				  FROM TB_LA_IS_MH_ATDR_LOG A
+				 WHERE NA_BZPLC = #{naBzplc}
+				   AND AUC_DT = #{aucDt}
+				   AND AUC_OBJ_DSC = #{aucObjDsc}
+				   AND OSLP_NO = #{oslpNo}
+				   AND RG_SQNO NOT IN ('0', '99999999')
+			 ) B
+		 WHERE BID_NUM = 1
+		   AND ATDR_AM > 0
+	</select>
+		
+	<insert id="insertAuctStnLog" parameterType="map">
+		INSERT INTO TB_LA_IS_MH_AUC_STN_LOG (
+			NA_BZPLC,    
+			AUC_OBJ_DSC,                          
+			AUC_DT,                               
+			RG_SQNO,                              
+			DDL_QCN,                              
+			ST_AUC_NO,                            
+			ED_AUC_NO,                            
+			SEL_STS_DSC,                          
+			DEL_YN,                               
+			ST_DTM,                               
+			ED_DTM,                               
+			FSRG_DTM,                             
+			FSRGMN_ENO,                           
+			LSCHG_DTM,                            
+			LS_CMENO)                             
+		SELECT
+			A.NA_BZPLC,
+			A.AUC_OBJ_DSC,
+			A.AUC_DT,
+			A.RG_SQNO,
+			A.DDL_QCN,
+			A.ST_AUC_NO,
+			A.ED_AUC_NO,
+			#{selStsDsc},
+			A.DEL_YN,
+			NULL,
+			SYSDATE,
+			SYSDATE,
+			#{fsrgmnEno},
+			A.LSCHG_DTM,
+			#{lsCmeno}
+		FROM
+			TB_LA_IS_MH_AUC_STN A
+		WHERE A.NA_BZPLC = #{naBzPlc}
+		AND A.AUC_OBJ_DSC = #{aucObjDsc}
+		AND A.AUC_DT = #{aucDt}
+		AND A.RG_SQNO = #{rgSqno}
+	</insert>
+	
+	<update id="updateAuctStn" parameterType="map">
+		UPDATE TB_LA_IS_MH_AUC_STN SET 
+			SEL_STS_DSC = #{selStsDsc}
+			<if test='"finish".equals(status)'>
+				, DDL_QCN  = #{maxDdlQcn}+1
+			</if>
+			, LSCHG_DTM = SYSDATE
+			, LS_CMENO = #{lsCmeno}
+		WHERE NA_BZPLC = #{naBzPlc} 
+		AND AUC_OBJ_DSC = #{aucObjDsc} 
+		AND AUC_DT = #{aucDt}
+		AND RG_SQNO = #{rgSqno}
+	</update>
+	
+	<update id="updateAuctSogCow" parameterType="map">
+		UPDATE TB_LA_IS_MH_SOG_COW SET 
+			AUC_YN = #{aucYn}
+			, LSCHG_DTM = SYSDATE
+			, LS_CMENO = #{lsCmeno} 
+		WHERE NA_BZPLC = #{naBzPlc} 
+		AND AUC_OBJ_DSC = #{aucObjDsc} 
+		AND AUC_DT = #{aucDt} 
+		<if test='!"start".equals(status)'>
+		<![CDATA[
+			AND SEL_STS_DSC <> #{selStsDsc} 
+			AND LOWS_SBID_LMT_AM > 0
+		]]> 
+		</if>
+		<![CDATA[
+		AND AUC_PRG_SQ >= #{stAucNo} 
+		AND AUC_PRG_SQ <= #{edAucNo}			
+		]]> 
+	</update>
+	
+	<update id="updateAuctSogCowFinish" parameterType="map">
+		UPDATE TB_LA_IS_MH_SOG_COW SET 
+			SEL_STS_DSC = '23'
+			, SRA_SBID_AM  = #{sraSbidAm}			
+			, DDL_QCN  = #{maxDdlQcn}+1
+			, LSCHG_DTM = SYSDATE
+			, LS_CMENO = #{lsCmeno} 
+		WHERE NA_BZPLC = #{naBzPlc} 
+		AND AUC_OBJ_DSC = #{aucObjDsc} 
+		AND AUC_DT = #{aucDt} 
+		<![CDATA[
+		AND LOWS_SBID_LMT_AM > 0
+		AND SEL_STS_DSC <> '22'
+		AND DEL_YN = '0'
+		AND AUC_PRG_SQ >= #{stAucNo} 
+		AND AUC_PRG_SQ <= #{edAucNo}			
+		]]> 
+	</update>
+	
+	<insert id="insertAuctSogCowLog" parameterType="map">
+		INSERT INTO TB_LA_IS_MH_SOG_COW_LOG (
+			NA_BZPLC,
+			AUC_OBJ_DSC,
+			AUC_DT,
+			OSLP_NO,
+			LED_SQNO,
+			FHS_ID_NO,
+			FARM_AMNNO,
+			SOG_NA_TRPL_C,
+			VHC_SHRT_C,
+			RC_DT,
+			TRMN_AMNNO,
+			LVST_AUC_PTC_MN_NO,
+			SRA_SRS_DSC,
+			SRA_INDV_AMNNO,
+			COW_SOG_WT,
+			FIR_LOWS_SBID_LMT_AM,
+			LOWS_SBID_LMT_AM,
+			SRA_SBID_UPR,
+			SRA_SBID_AM,
+			SEL_STS_DSC,
+			BRCL_ISP_CTFW_SMT_YN,
+			BRCL_ISP_DT,
+			LWPR_CHG_NT,
+			VACN_DT,
+			LVST_MKT_TRPL_AMNNO,
+			MT12_OVR_YN,
+			PPGCOW_FEE_DSC,
+			PRNY_JUG_YN,
+			PRNY_YN,
+			NCSS_JUG_YN,
+			NCSS_YN,
+			TRPCS_PY_YN,
+			SRA_TRPCS,
+			SRA_PYIVA,
+			SRA_FED_SPY_AM,
+			TD_RC_CST,
+			MT12_OVR_FEE,
+			AFISM_MOD_DT,
+			PRNY_MTCN,
+			AFISM_MOD_CTFW_SMT_YN,
+			RMHN_YN,
+			SRA_PDMNM,
+			SRA_PD_RGNNM,
+			RMK_CNTN,
+			AUC_PRG_SQ,
+			DEL_YN,
+			TMS_YN,
+			AUC_YN,
+			SOGMN_C,
+			DDL_QCN,
+			FSRG_DTM,
+			FSRGMN_ENO,
+			LSCHG_DTM,
+			LS_CMENO,
+			FEE_CHK_YN,
+			BLOOD_AM,
+			SELFEE_CHK_YN,
+			FEE_CHK_YN_FEE,
+			SELFEE_CHK_YN_FEE,
+			DNA_YN,
+			PDA_ID
+		) SELECT
+			A.NA_BZPLC,
+			A.AUC_OBJ_DSC,
+			A.AUC_DT,
+			A.OSLP_NO,
+			A.LED_SQNO,
+			A.FHS_ID_NO,
+			A.FARM_AMNNO,
+			A.SOG_NA_TRPL_C,
+			A.VHC_SHRT_C,
+			A.RC_DT,
+			A.TRMN_AMNNO,
+			A.LVST_AUC_PTC_MN_NO,
+			A.SRA_SRS_DSC,
+			A.SRA_INDV_AMNNO,
+			A.COW_SOG_WT,
+			A.FIR_LOWS_SBID_LMT_AM,
+			A.LOWS_SBID_LMT_AM,
+			A.SRA_SBID_UPR,
+			A.SRA_SBID_AM,
+			A.SEL_STS_DSC,
+			A.BRCL_ISP_CTFW_SMT_YN,
+			A.BRCL_ISP_DT,
+			A.LWPR_CHG_NT,
+			A.VACN_DT,
+			A.LVST_MKT_TRPL_AMNNO,
+			A.MT12_OVR_YN,
+			A.PPGCOW_FEE_DSC,
+			A.PRNY_JUG_YN,
+			A.PRNY_YN,
+			A.NCSS_JUG_YN,
+			A.NCSS_YN,
+			A.TRPCS_PY_YN,
+			A.SRA_TRPCS,
+			A.SRA_PYIVA,
+			A.SRA_FED_SPY_AM,
+			A.TD_RC_CST,
+			A.MT12_OVR_FEE,
+			A.AFISM_MOD_DT,
+			A.PRNY_MTCN,
+			A.AFISM_MOD_CTFW_SMT_YN,
+			A.RMHN_YN,
+			A.SRA_PDMNM,
+			A.SRA_PD_RGNNM,
+			A.RMK_CNTN,
+			A.AUC_PRG_SQ,
+			A.DEL_YN,
+			A.TMS_YN,
+			A.AUC_YN,
+			A.SOGMN_C,
+			<choose>
+				<when test='"Y".equals(newCntAucYn)'>
+					#{maxDdlQcn} + 1,
+				</when>
+				<otherwise>
+					A.DDL_QCN,
+				</otherwise>
+			</choose>
+			SYSDATE,
+			#{fsrgmnEno},
+			SYSDATE,
+			#{lsCmeno},
+			A.FEE_CHK_YN,
+			A.BLOOD_AM,
+			A.SELFEE_CHK_YN,
+			A.FEE_CHK_YN_FEE,
+			A.SELFEE_CHK_YN_FEE,
+			A.DNA_YN,
+			#{pdaId}
+		FROM
+			TB_LA_IS_MH_SOG_COW A
+		WHERE A.AUC_DT = #{aucDt}
+		AND NA_BZPLC = #{naBzPlc} 
+		AND AUC_OBJ_DSC = #{aucObjDsc}
+		<choose>
+			<when test='"Y".equals(soldChkYn)'>
+				AND A.SEL_STS_DSC <![CDATA[=]]> #{selStsDsc}
+			</when>
+			<otherwise>
+				AND A.SEL_STS_DSC <![CDATA[<>]]> #{selStsDsc}
+			</otherwise>
+		</choose>		
+		AND A.AUC_PRG_SQ <![CDATA[>=]]> #{stAucNo}
+		AND A.AUC_PRG_SQ <![CDATA[<=]]> #{edAucNo}		
+	</insert>
+	
+	<!-- 경매 정보 조회 ( 송아지, 번식우, 비육우 여부, 중도매인, 출하주의 조합 가입 여부, 자가 운송 여부 ) -->
+	<select id="selectAuctionInfo" parameterType="map" resultType="map">
+		SELECT A.NA_BZPLC			/* 조합코드 */
+			 , A.AUC_DT				/* 경매일자 */
+			 , A.AUC_OBJ_DSC		/* 경매유형 */
+			 , A.OSLP_NO			/* 원표번호 */
+			 , A.LED_SQNO 			/* 원장일련번호 */
+			 , A.TRMN_AMNNO			/* 중도매인번호 */
+			 , A.FHS_ID_NO			/* 농가식별번호 */
+			 , A.FARM_AMNNO			/* 농가관린번호 */
+			 , A.SEL_STS_DSC		/* 경매결과 */
+			 , A.TRPCS_PY_YN 		/* 운송비지급여부 */
+			 , A.PPGCOW_FEE_DSC		/* 번식우수수료구분코드 1.임신우, 2.비임신우, 3.임신우+송아지, 4.비임신우+송아지,  5.해당없음 */
+			 , B.MACO_YN as TRMN_MACO_YN /* 중도매인 조합원여부 */
+			 , C.MACO_YN as FHS_MACO_YN /* 출하주 중도매인여부 */
+		  FROM TB_LA_IS_MH_SOG_COW A
+		  LEFT OUTER JOIN TB_LA_IS_MM_MWMN B
+		    ON ( A.NA_BZPLC = B.NA_BZPLC AND A.TRMN_AMNNO = B.TRMN_AMNNO )
+		  LEFT OUTER JOIN TB_LA_IS_MM_FHS C
+		    ON ( A.NA_BZPLC = C.NA_BZPLC AND A.FHS_ID_NO = C.FHS_ID_NO AND A.FARM_AMNNO = C.FARM_AMNNO )
+		 WHERE A.NA_BZPLC = #{naBzplc}
+		   AND A.AUC_DT = #{aucDt}
+		   AND A.AUC_OBJ_DSC = #{aucObjDsc}
+		   AND A.OSLP_NO = #{oslpNo}
+		   AND A.LED_SQNO = #{ledSqno}
+	</select>
+	
+	<!-- 기등록 수수료 정보 삭제 -->
 	<delete id="deleteFeeInfo" parameterType="map"> 
 		DELETE FROM TB_LA_IS_MH_FEE_IMPS
 		  WHERE  NA_BZPLC  = #{naBzplc}
 		   AND  AUC_DT   = #{aucDt}
 		   AND  AUC_OBJ_DSC  = #{aucObjDsc}
 		   AND  OSLP_NO   = #{oslpNo}
-		   AND  LED_SQNO  = #{ledSqNo}
-	</delete>	
+		   AND  LED_SQNO  = #{ledSqno}
+	</delete>
+	
+	<!-- 수수료 기본 정보 조회 -->
+	<select id="selectFeeInfo" parameterType="map" resultType="map"> 
+		SELECT A.* 
+			 , B.FEE_CHK_DNA_YN_FEE 
+			 , B.SELFEE_CHK_DNA_YN_FEE
+		  FROM TB_LA_IS_MH_FEE A
+		  LEFT JOIN TB_LA_IS_MM_ENV_EST B
+			ON A.NA_BZPLC = B.NA_BZPLC
+		 WHERE A.APL_DT = (
+							SELECT MAX(APL_DT) FROM TB_LA_IS_MH_FEE
+		 					 WHERE AUC_OBJ_DSC	= #{aucObjDsc}
+							   AND NA_BZPLC		= #{naBzplc}
+							   AND DEL_YN		= '0'
+		<choose>
+			<when test="aplDt != null and aplDt != ''">
+							   AND APL_DT <![CDATA[<=]]> #{aplDt})
+			</when>
+			<otherwise>
+							   AND APL_DT <![CDATA[<=]]> #{aucDt})
+			</otherwise>
+		</choose>
+		   AND A.AUC_OBJ_DSC	= #{aucObjDsc}
+		   AND A.DEL_YN			= '0'
+		   AND A.NA_BZPLC		= #{naBzplc}
+	</select>
+	
+	<!-- 수수료 정보 저장 -->
+	<insert id="insertFeeInfo" parameterType="map">  
+		<foreach collection="feeInfoList" item="item" index="index" open="" close="" separator=";">
+			INSERT INTO TB_LA_IS_MH_FEE_IMPS (
+				NA_BZPLC
+				, AUC_OBJ_DSC
+				, AUC_DT
+				, OSLP_NO
+				, LED_SQNO
+				, FEE_RG_SQNO
+				, APL_DT
+				, NA_FEE_C
+				, FEE_APL_OBJ_C
+				, ANS_DSC
+				, SBID_YN
+				, SRA_TR_FEE
+				, TMS_YN
+			) VALUES (
+				#{item.NA_BZPLC}
+				, #{item.AUC_OBJ_DSC}
+				, #{item.AUC_DT}
+				, #{item.OSLP_NO}
+				, #{item.LED_SQNO}
+				, #{item.FEE_RG_SQNO}
+				, #{item.APL_DT}
+				, #{item.NA_FEE_C}
+				, #{item.FEE_APL_OBJ_C}
+				, #{item.ANS_DSC}
+				, #{item.SBID_YN}
+				, #{item.SRA_TR_FEE}
+				, '0'
+			)
+		</foreach>
+	</insert>
 	
 	<insert id="insertFeeLog" parameterType="map">  
 		<foreach collection="list" item="item" index="index" open="" close="" separator=";">
@@ -305,14 +692,4 @@
 		  </foreach>
 	</insert>
 	
-		
-	
-	<select id="selectAuctBidNum" parameterType="map" resultType="map">
-		SELECT A.LVST_AUC_PTC_MN_NO
-		FROM TB_LA_IS_MH_AUC_ENTR as A
-		WHERE A.NA_BZPLC = #{auctionHouseCode}
-		  AND A.AUC_DT = #{auctionDate}
-		  AND A.AUC_OBJ_DSC = #{entryType}
-		  And A.TRMN_AMNNO = #{userMemNum}
-	</select>
 </mapper>

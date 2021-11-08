@@ -1,12 +1,14 @@
 package com.ishift.auction.service.auction;
 
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
 import java.util.List;
 import java.util.Map;
 
 @Service("auctionService")
+@Transactional(transactionManager = "txManager", rollbackFor = Exception.class)
 public class AuctionServiceImpl implements AuctionService {
 
 	@Resource(name = "auctionDAO")
@@ -73,8 +75,78 @@ public class AuctionServiceImpl implements AuctionService {
 	 */
 	@Override
 	public int updateAuctionResult(Map<String, Object> params) throws Exception {
-		return auctionDAO.updateAuctionResult(params);
-	} 
+		if ("v2".equals(params.get("version"))) {
+			params.put("naBzplc", params.get("naBzPlc"));
+			
+			int cnt = auctionDAO.updateAuctionResult(params);
+			if (cnt == 0) {
+				return 0;
+			}
+			
+			// 수수료 정보 저장 [s]
+			// 1. 기등록 수수료 정보 삭제
+			auctionDAO.deleteFeeInfo(params);
+			
+			// 2. 경매 정보 조회 ( 송아지, 번식우, 비육우 여부, 중도매인, 출하주의 조합 가입 여부, 자가 운송 여부 )
+			final Map<String, Object> auctionInfo = auctionDAO.selectAuctionInfo(params);
+			
+			// 3. 낙찰인 경우 수수료 정보 저장
+			if (auctionInfo != null && "22".equals(auctionInfo.getOrDefault("SEL_STS_DSC", ""))) {
+				
+				final String aucDt			= auctionInfo.get("AUC_DT").toString();
+				final String aucObjDsc		= auctionInfo.get("AUC_OBJ_DSC").toString();
+				final String oslpNo			= auctionInfo.get("OSLP_NO").toString();
+				final String ledSqno		= auctionInfo.get("LED_SQNO").toString();
+				final String trmnMacoYn		= auctionInfo.get("TRMN_MACO_YN").toString();	// 중도매인 조합원 여부 ( 0.비조합원, 1.조합원 )
+				final String fhsMacoYn		= auctionInfo.get("FHS_MACO_YN").toString();	// 출하주 조합원 여부 ( 0.비조합원, 1.조합원 )
+				final String ppgcowFeeDsc	= auctionInfo.get("PPGCOW_FEE_DSC").toString();	// 번식우 수수료 구분코드 > 1.임신우, 2.비임신우, 3.임신우+송아지, 4.비임신우+송아지,  5.해당없음
+				final String trpcsPyYn		= auctionInfo.get("TRPCS_PY_YN").toString();	// 운송비 지급 여부
+				
+				// 4. 수수료 기본 정보 조회
+				final List<Map<String, Object>> feeInfoList = auctionDAO.selectFeeInfo(params);
+				
+				// 5. 수수료 저장
+				for (Map<String, Object> feeInfo : feeInfoList) {
+					feeInfo.put("AUC_DT",		aucDt);
+					feeInfo.put("AUC_OBJ_DSC",	aucObjDsc);
+					feeInfo.put("OSLP_NO",		oslpNo);
+					feeInfo.put("LED_SQNO",		ledSqno);
+					
+					// 중도매인, 출하주의 조합원 여부
+					String macoYn = ("1".equals(feeInfo.get("FEE_APL_OBJ_C"))) ? trmnMacoYn : fhsMacoYn;
+					
+					// 낙찰인 경우만 수수료 정보를 저장하므로 SBID_YN이 0인(미낙찰) 수수료 정보의 금액은 0으로 넣어준다.
+					if ("0".equals(feeInfo.get("SBID_YN"))) {
+						feeInfo.put("SRA_TR_FEE", 0);
+					}
+					else if ("5".equals(feeInfo.get("PPGCOW_FEE_DSC"))			// 수수료 정보의 번식우 구분코드가 5(해당없음)인 경우
+					 || ppgcowFeeDsc.equals(feeInfo.get("PPGCOW_FEE_DSC"))		// 출장우 정보의 번식우 구분코드와 수수료 정보의 번식우 구분코드가 일치하는 경우 
+					) {
+						// 수수료 유형이 운송비인 경우 trpcPyYn(운송비 지급 여부)가 0일 때만 수수료를 부과한다.
+						if ("040".equals(feeInfo.get("NA_FEE_C")) && "1".equals(trpcsPyYn)) {
+							feeInfo.put("SRA_TR_FEE", 0);
+						}
+						else {
+							feeInfo.put("SRA_TR_FEE", "0".equals(macoYn) ? feeInfo.get("NMACO_FEE_UPR") : feeInfo.get("MACO_FEE_UPR"));
+						}
+					}
+					else {
+						feeInfo.put("SRA_TR_FEE", 0);
+					}
+				}
+				
+				params.put("feeInfoList", feeInfoList);
+				
+				auctionDAO.insertFeeInfo(params);
+			}
+			// 수수료 정보 저장 [e]
+
+			return cnt;
+		}
+		else {
+			return auctionDAO.updateAuctionResult(params);
+		}
+	}
 	
 	/**
 	 * 경매관전 카운트 조회
@@ -203,72 +275,69 @@ public class AuctionServiceImpl implements AuctionService {
 
 	@Override
 	public int sealectAuctCowCnt(Map<String, Object> params) throws Exception {
-		// TODO Auto-generated method stub
 		return auctionDAO.sealectAuctCowCnt(params);
 	}
 
 	@Override
 	public List<Map<String, Object>> selectAuctCowList(Map<String, Object> params) throws Exception {
-		// TODO Auto-generated method stub
 		return auctionDAO.selectAuctCowList(params);
 	}
 
 	@Override
 	public int updateLowSbidAmt(Map<String, Object> params) throws Exception {
-		// TODO Auto-generated method stub
 		return auctionDAO.updateLowSbidAmt(params);
 	}
 
 	@Override
 	public int updateAuctCowSt(Map<String, Object> params) throws Exception {
-		// TODO Auto-generated method stub
 		return auctionDAO.updateAuctCowSt(params);
 	}
 
 	@Override
 	public int updateAuctCowResult(Map<String, Object> params) throws Exception {
-		// TODO Auto-generated method stub
 		return auctionDAO.updateAuctCowResult(params);
 	}
 
 	@Override
 	public int selectBidLogCnt(Map<String, Object> params) throws Exception {
-		// TODO Auto-generated method stub
 		return auctionDAO.selectBidLogCnt(params);
 	}
 
 	@Override
 	public Map<String, Object> selectNextBidNum(Map<String, Object> params) throws Exception {
-		// TODO Auto-generated method stub
 		return auctionDAO.selectNextBidNum(params);
 	}
 
 	public int insertBidLog(Map<String, Object> params) throws Exception {
-		// TODO Auto-generated method stub
 		return auctionDAO.insertBidLog(params);
 	}
 
+	/**
+	 * 수수료 정보 조회
+	 */
 	@Override
 	public List<Map<String, Object>> selectFeeInfo(Map<String, Object> params) throws Exception {
-		// TODO Auto-generated method stub
 		return auctionDAO.selectFeeInfo(params);
 	}
 
+	/**
+	 * 수수료 정보 삭제
+	 */
 	@Override
 	public int deleteFeeInfo(Map<String, Object> params) throws Exception {
-		// TODO Auto-generated method stub
 		return auctionDAO.deleteFeeInfo(params);
 	}
 
+	/**
+	 * 수수료 정보 저장
+	 */
 	@Override
 	public int insertFeeLog(Map<String, Object> params) throws Exception {
-		// TODO Auto-generated method stub
 		return auctionDAO.insertFeeLog(params);
 	}
 
 	@Override
 	public Map<String, Object> selectAuctBidNum(Map<String, Object> params) throws Exception {
-		// TODO Auto-generated method stub
 		return auctionDAO.selectAuctBidNum(params);
 	}
 	
@@ -287,6 +356,7 @@ public class AuctionServiceImpl implements AuctionService {
 	public Map<String, Object> selectCowInfo(Map<String, Object> params) throws Exception {
 		return auctionDAO.selectCowInfo(params);
 	}
+
 	/**
 	 * 출장우 정보 업데이트(중량, 계류대, 하한가)
 	 * @param params
@@ -296,5 +366,43 @@ public class AuctionServiceImpl implements AuctionService {
 	@Override
 	public int updateCowInfo(Map<String, Object> params) throws Exception {
 		return auctionDAO.updateCowInfo(params);
+	}
+
+	/**
+	 * 응찰자 리스트
+	 * @param params
+	 * @return
+	 * @throws Exception
+	 */
+	@Override
+	public List<Map<String, Object>> selectBidEntryList(Map<String, Object> params) throws Exception {
+		return auctionDAO.selectBidEntryList(params);
+	}
+		
+	@Override
+	public int insertAuctStnLog(Map<String, Object> params) throws Exception{
+		return auctionDAO.insertAuctStnLog(params);
+	}
+	@Override
+	public int updateAuctStn(Map<String, Object> temp) throws Exception{
+		return auctionDAO.updateAuctStn(temp);
+	}
+
+	@Override
+	public int updateAuctSogCow(Map<String, Object> temp) throws Exception{
+		return auctionDAO.updateAuctSogCow(temp);
+	}
+	@Override
+	public int updateAuctSogCowFinish(Map<String, Object> temp) throws Exception{
+		return auctionDAO.updateAuctSogCowFinish(temp);
+	}
+	@Override
+	public Map<String, Object> selectMaxDdlQcn(Map<String, Object> params) throws Exception{
+		return auctionDAO.selectMaxDdlQcn(params);
+	}
+	
+	@Override
+	public int insertAuctSogCowLog(Map<String, Object> temp) throws Exception{
+		return auctionDAO.insertAuctSogCowLog(temp);
 	}
 }

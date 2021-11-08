@@ -22,9 +22,9 @@
 			</li>
 		</ul>
 		<ul class="sch_area">
-            <li class="txt">
-            	<input type="text" name="searchTxt" id="searchTxt" maxlength="4" value="${paramVo.searchTxt }" placeholder="개체" />
-           	</li>
+			<li class="txt">
+				<input type="text" name="searchTxt" id="searchTxt" maxlength="4" value="${paramVo.searchTxt }" placeholder="개체" />
+			</li>
 <!-- 			<li class="sort"> -->
 <!-- 				<select name="searchOrder" id="searchOrder"> -->
 <%-- 					<option value="" ${(paramVo.searchOrder == null || paramVo.searchOrder == '') ? 'selected':'' } >정렬</option> --%>
@@ -34,11 +34,11 @@
 <!-- 				</select> -->
 <!-- 			</li> -->
 			<li class="date">
-                <select name="searchDate" id="searchDate">
-	                <option value="" ${ dateList.size() > 0 ? '':'selected' }> 선택 </option>                
-	                <c:forEach items="${ dateList }" var="vo">
-	                	<option value="${vo.AUC_DT }" ${paramVo.searchDate == vo.AUC_DT ?'selected':'' }> ${vo.AUC_DT_STR } </option>
-	                </c:forEach>
+				<select name="searchDate" id="searchDate">
+					<option value="" ${ dateList.size() > 0 ? '':'selected' }> 선택 </option>
+					<c:forEach items="${ dateList }" var="vo"> 
+						<option value="${vo.AUC_DT }" ${paramVo.searchDate == vo.AUC_DT ?'selected':'' }> ${vo.AUC_DT_STR } </option>
+					</c:forEach>
 				</select>
 			</li>
 			<li class="btn">
@@ -83,32 +83,32 @@
 						</dl>
 					</li>
 				</c:if>
-				<c:forEach items="${ resultList }" var="item">									
+				<c:forEach items="${ resultList }" var="item">
 					<li>
-                    	<input type="hidden" class="naBzPlc" name="naBzPlc_${st.index }" value="${item.NA_BZPLC}"/>
-                    	<input type="hidden" class="aucDt" name="aucDt_${st.index }" value="${item.AUC_DT}"/>
-                    	<input type="hidden" class="aucObjDsc" name="aucObjDsc_${st.index }" value="${item.AUC_OBJ_DSC}"/>
-                    	<input type="hidden" class="oslpNo" name="oslpNo_${st.index }" value="${item.OSLP_NO}"/>
-                    	<input type="hidden" class="sbidUpr" name="sbidUpr_${st.index }" value="${fn:split(item.SBID_UPR,'.')[0]}"/>
-                    	<input type="hidden" class="aucPrgSq" name="aucPrgSq_${st.index }" value="${item.AUC_PRG_SQ}"/>
-                    	<input type="hidden" class="lowsSbidLmtUpr" name="lowsSbidLmtUpr_${st.index }" value="${item.LOWS_SBID_LMT_AM <= 0 ? '0' : fn:split(item.LOWS_SBID_LMT_UPR,'.')[0]}"/>
-                    	
-                    	
-                    	<input type="hidden" class="birth" name="birth_${st.index }" value="${item.BIRTH}"/>
-                    	<input type="hidden" class="birthMonth" name="birthMonth_${st.index }" value="${item.BIRTH_MONTH}"/>
-                    	<input type="hidden" class="sraPdmNm" name="sraPdmNm_${st.index }" value="${item.SRA_PDMNM}"/>
-                    	<input type="hidden" class="indvSexCName" name="indvSexCName_${st.index }" value="${item.INDV_SEX_C_NAME}"/>
-                    	<input type="hidden" class="sraIndvAmnno" name="sraIndvAmnno_${st.index }" value="${item.SRA_INDV_AMNNO}"/>
-                    	<input type="hidden" class="kpnNoStr" name="kpnNoStr_${st.index }" value="${item.KPN_NO_STR}"/>
-                    	<input type="hidden" class="mcowDsc" name="mcowDsc_${st.index }" value="${item.MCOW_DSC_NAME}"/>
-                    	<input type="hidden" class="matime" name="matime_${st.index }" value="${item.MATIME}"/>
-                    	
-                    	<input type="hidden" class="sraPdRgnnm" name="sraPdRgnnm_${st.index }" value="${item.SRA_PD_RGNNM}"/>
-                    	<input type="hidden" class="sraIndvPasgQcn" name="sraIndvPasgQcn_${st.index }" value="${item.SRA_INDV_PASG_QCN}"/>
-<%--                     	<input type="hidden" class="sraMwmnnm" name="sraMwmnnm_${st.index }" value="${item.SRA_MWMNNM}"/> --%>
-                    	<input type="hidden" class="sraSbidUpr" name="sraSbidUpr_${st.index }" value="${fn:split(item.SRA_SBID_UPR,'.')[0]}"/>
-                    	<input type="hidden" class="rmkCntn" name="rmkCntn_${st.index }" value="${item.RMK_CNTN}"/>
-                    	<input type="hidden" class="cowSogWt" name="cowSogWt_${st.index }" value="${fn:split(item.COW_SOG_WT,'.')[0] }"/>
+						<input type="hidden" class="naBzPlc" name="naBzPlc_${st.index }" value="${item.NA_BZPLC}"/>
+						<input type="hidden" class="aucDt" name="aucDt_${st.index }" value="${item.AUC_DT}"/>
+						<input type="hidden" class="aucObjDsc" name="aucObjDsc_${st.index }" value="${item.AUC_OBJ_DSC}"/>
+						<input type="hidden" class="oslpNo" name="oslpNo_${st.index }" value="${item.OSLP_NO}"/>
+						<input type="hidden" class="sbidUpr" name="sbidUpr_${st.index }" value="${fn:split(item.SBID_UPR,'.')[0]}"/>
+						<input type="hidden" class="aucPrgSq" name="aucPrgSq_${st.index }" value="${item.AUC_PRG_SQ}"/>
+						<input type="hidden" class="lowsSbidLmtUpr" name="lowsSbidLmtUpr_${st.index }" value="${item.LOWS_SBID_LMT_AM <= 0 ? '0' : fn:split(item.LOWS_SBID_LMT_UPR,'.')[0]}"/>
+						
+						<input type="hidden" class="birth" name="birth_${st.index }" value="${item.BIRTH}"/>
+						<input type="hidden" class="birthMonth" name="birthMonth_${st.index }" value="${item.BIRTH_MONTH}"/>
+						<input type="hidden" class="sraPdmNm" name="sraPdmNm_${st.index }" value="${item.SRA_PDMNM}"/>
+						<input type="hidden" class="indvSexCName" name="indvSexCName_${st.index }" value="${item.INDV_SEX_C_NAME}"/>
+						<input type="hidden" class="sraIndvAmnno" name="sraIndvAmnno_${st.index }" value="${item.SRA_INDV_AMNNO}"/>
+						<input type="hidden" class="kpnNoStr" name="kpnNoStr_${st.index }" value="${item.KPN_NO_STR}"/>
+						<input type="hidden" class="mcowDsc" name="mcowDsc_${st.index }" value="${item.MCOW_DSC_NAME}"/>
+						<input type="hidden" class="matime" name="matime_${st.index }" value="${item.MATIME}"/>
+						
+						<input type="hidden" class="sraPdRgnnm" name="sraPdRgnnm_${st.index }" value="${item.SRA_PD_RGNNM}"/>
+						<input type="hidden" class="sraIndvPasgQcn" name="sraIndvPasgQcn_${st.index }" value="${item.SRA_INDV_PASG_QCN}"/>
+						<input type="hidden" class="sraSbidUpr" name="sraSbidUpr_${st.index }" value="${fn:split(item.SRA_SBID_UPR,'.')[0]}"/>
+						<input type="hidden" class="rmkCntn" name="rmkCntn_${st.index }" value="${item.RMK_CNTN}"/>
+						<input type="hidden" class="cowSogWt" name="cowSogWt_${st.index }" value="${fn:split(item.COW_SOG_WT,'.')[0] }"/>
+						
+						<input type="hidden" class="lvstAucPtcMnNo" name="lvstAucPtcMnNo_${st.index}" value="${item.LVST_AUC_PTC_MN_NO}" />
 						<dl>
 							<dd class="date">${ item.AUC_DT_STR }</dd>
 							<dd class="num">${ item.AUC_PRG_SQ }</dd>
@@ -118,7 +118,6 @@
 							<dd class="pd_kg textNumber">${ (item.COW_SOG_WT == '' || item.COW_SOG_WT == null || item.COW_SOG_WT <= 0 ) ? '-' : fn:split(item.COW_SOG_WT,'.')[0] }</dd>
 							<dd class="pd_kpn">${ item.KPN_NO_STR }</dd>
 							<dd class="pd_num1">${ item.SRA_INDV_PASG_QCN }</dd>
-<%-- 							<dd class="pd_pay1">${ fn:split(item.LOWS_SBID_LMT_UPR,'.')[0] }</dd> --%>
 							<dd class="pd_pay1 textNumber">${(item.LOWS_SBID_LMT_AM == '' || item.LOWS_SBID_LMT_AM == null || item.LOWS_SBID_LMT_AM <= 0 ) ? '-' :  fn:split(item.LOWS_SBID_LMT_UPR,'.')[0]}</dd>
 							<dd class="pd_pay2 textNumber">${(item.SRA_SBID_UPR eq '' || item.SRA_SBID_UPR == null || item.SRA_SBID_UPR <= 0 ) ? '-' : fn:split(item.SRA_SBID_UPR,'.')[0] }</dd>
 							<dd class="pd_state">${ item.SEL_STS_DSC_NAME }</dd>
