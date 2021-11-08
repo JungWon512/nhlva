@@ -1,6 +1,7 @@
 <!DOCTYPE tiles-definitions PUBLIC "-//Apache Software Foundation//DTD Tiles Configuration 3.0//EN" "http://tiles.apache.org/dtds/tiles-config_3_0.dtd">
 
 <tiles-definitions>
+	<!-- 기본 레이아웃 -->
     <definition name="default" template="/WEB-INF/tiles/layouts/front/template_default.jsp">
         <put-attribute name="title" expression="AUCTION"/>
         <put-attribute name="body_footer_script" value="/WEB-INF/tiles/layouts/front/body_footer_script.jsp"/>
@@ -9,6 +10,7 @@
         <put-attribute name="wrapper_footer" value="/WEB-INF/tiles/layouts/front/wrapper_footer.jsp"/>
         <put-attribute name="wrapper_header" value="/WEB-INF/tiles/layouts/front/wrapper_header.jsp"/>
     </definition>
+    <!-- 홈페이지 레이아웃 -->
     <definition name="front-layout" template="/WEB-INF/tiles/layouts/front/layout_front.jsp">
         <put-attribute name="title" expression="AUCTION"/>
         <put-attribute name="body_footer_script" value="/WEB-INF/tiles/layouts/front/body_footer_script_base.jsp"/>
@@ -16,7 +18,8 @@
         <put-attribute name="head_footer_script" value="/WEB-INF/tiles/layouts/front/head_footer_script_base.jsp"/>
         <put-attribute name="wrapper_footer" value="/WEB-INF/tiles/layouts/front/wrapper_footer_base.jsp"/>
         <put-attribute name="wrapper_header" value="/WEB-INF/tiles/layouts/front/wrapper_header_base.jsp"/>
-    </definition> 
+    </definition>
+    <!-- 관리자 기본 레이아웃 -->
     <definition name="admin-layout" template="/WEB-INF/tiles/layouts/admin/layout_admin.jsp">
         <put-attribute name="commons_css_block" value="/WEB-INF/tiles/layouts/admin/commons_css_block.jsp"/>
         <put-attribute name="commons_js_block" value="/WEB-INF/tiles/layouts/admin/commons_js_block.jsp"/>
@@ -25,6 +28,7 @@
         <put-attribute name="body_footer_script" value="/WEB-INF/tiles/layouts/admin/body_footer_script.jsp"/>
         <put-attribute name="wrapper_header" value="/WEB-INF/tiles/layouts/admin/wrapper_header.jsp"/>
     </definition>
+    <!-- 관리자 로그인 레이아웃 -->
     <definition name="admin-login-layout" template="/WEB-INF/tiles/layouts/admin/layout_admin_login.jsp">
         <put-attribute name="commons_css_block" value="/WEB-INF/tiles/layouts/admin/commons_css_block.jsp"/>
         <put-attribute name="commons_js_block" value="/WEB-INF/tiles/layouts/admin/commons_js_block.jsp"/>
@@ -32,19 +36,28 @@
         <put-attribute name="head_footer_script" value="/WEB-INF/tiles/layouts/admin/head_footer_script.jsp"/>
         <put-attribute name="body_footer_script" value="/WEB-INF/tiles/layouts/admin/body_footer_script.jsp"/>
     </definition>
+    <!-- 관리자 전광판 레이아웃 -->
     <definition name="board-layout" template="/WEB-INF/tiles/layouts/admin/layout_board.jsp">
         <put-attribute name="content" value="/WEB-INF/tiles/layouts/admin/content.jsp"/>
         <put-attribute name="head_footer_script" value="/WEB-INF/tiles/layouts/admin/head_footer_script_board.jsp"/>
         <put-attribute name="body_footer_script" value="/WEB-INF/tiles/layouts/admin/body_footer_script_board.jsp"/>
         <put-attribute name="wrapper_header" value="/WEB-INF/tiles/layouts/admin/wrapper_header.jsp"/>
-    </definition>  
+    </definition>
+    <!-- 관리자 모니터링 레이아웃 -->
     <definition name="monster-layout" template="/WEB-INF/tiles/layouts/admin/layout_monster.jsp">
         <put-attribute name="content" value="/WEB-INF/tiles/layouts/admin/content.jsp"/>
         <put-attribute name="head_footer_script" value="/WEB-INF/tiles/layouts/admin/head_footer_script_board.jsp"/>
         <put-attribute name="body_footer_script" value="/WEB-INF/tiles/layouts/admin/body_footer_script_board.jsp"/>
         <put-attribute name="wrapper_header" value="/WEB-INF/tiles/layouts/admin/wrapper_header.jsp"/>
-    </definition>  
-    
+    </definition>
+    <!-- 관리자 경매업무 레이아웃 -->
+    <definition name="admin-task-layout" template="/WEB-INF/tiles/layouts/admin/layout_task.jsp">
+        <put-attribute name="content" value="/WEB-INF/tiles/layouts/admin/content.jsp"/>
+        <put-attribute name="head_footer_script" value="/WEB-INF/tiles/layouts/admin/head_footer_script_task.jsp"/>
+        <put-attribute name="body_footer_script" value="/WEB-INF/tiles/layouts/admin/body_footer_script_board.jsp"/>
+        <put-attribute name="wrapper_header" value="/WEB-INF/tiles/layouts/admin/wrapper_header_task.jsp"/>
+    </definition>
+    <!-- 팝업 레이아웃 -->
     <definition name="popup-layout" template="/WEB-INF/tiles/layouts/front/popup/layout_popup.jsp">
         <put-attribute name="title" expression="AUCTION"/>
         <put-attribute name="body_footer_script" value="/WEB-INF/tiles/layouts/front/body_footer_script_base.jsp"/>
@@ -52,7 +65,7 @@
         <put-attribute name="head_footer_script" value="/WEB-INF/tiles/layouts/front/head_footer_script_base.jsp"/>
         <put-attribute name="wrapper_footer" value="/WEB-INF/tiles/layouts/front/wrapper_footer_base.jsp"/>
         <put-attribute name="wrapper_header" value="/WEB-INF/tiles/layouts/front/wrapper_header_base.jsp"/>
-    </definition> 
+    </definition>
     <definition name="popup-modal-layout" template="/WEB-INF/tiles/layouts/front/popup/layout_popup_modal.jsp">
         <put-attribute name="title" expression="AUCTION"/>
         <put-attribute name="content" value="/WEB-INF/tiles/layouts/front/content.jsp"/>
@@ -84,6 +97,10 @@
     <definition name="admin/auction/monster/*" extends="monster-layout">
         <put-attribute name="content" value="/WEB-INF/jsp/admin/auction/monster/{1}.jsp"/>
         <put-attribute name="page_footer_script" value="/static/js/page/admin/auction/monster/{1}.js" />
+    </definition>
+    <definition name="admin/task/*" extends="admin-task-layout">
+        <put-attribute name="content" value="/WEB-INF/jsp/admin/task/{1}.jsp"/>
+        <put-attribute name="page_footer_script" value="/static/js/page/admin/task/{1}.js" />
     </definition>
     <definition name="admin/user/*" extends="admin-login-layout">
         <put-attribute name="content" value="/WEB-INF/jsp/admin/user/{1}.jsp"/>

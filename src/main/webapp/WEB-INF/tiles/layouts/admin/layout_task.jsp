@@ -4,10 +4,10 @@
 <html>
 <head>
 	<meta charset="utf-8"/>
-	<title>${johapData.CLNTNM } - ${subheaderTitle}</title>
-	<meta property="og:title" content="${johapData.CLNTNM } - ${subheaderTitle }">
-	<meta property="og:description" content="${johapData.CLNTNM } - ${subheaderTitle }" />
-	<meta name="description" content="${johapData.CLNTNM } - ${subheaderTitle }" />
+	<title>${johapData.CLNTNM} - ${subheaderTitle}</title>
+	<meta property="og:title" content="${johapData.CLNTNM} - ${subheaderTitle}">
+	<meta property="og:description" content="${johapData.CLNTNM} - ${subheaderTitle}" />
+	<meta name="description" content="${johapData.CLNTNM} - ${subheaderTitle}" />
 	<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge" />
 	<tiles:insertAttribute name="head_footer_script"/>

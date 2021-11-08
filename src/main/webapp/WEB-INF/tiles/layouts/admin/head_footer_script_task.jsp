@@ -5,7 +5,7 @@
 
 <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Poppins:300,400,500,600,700" />
 
-<link rel="stylesheet" type="text/css" href="/static/css/guide/common.css" />
+<link rel="stylesheet" type="text/css" href="/static/css/guide/common.css?version=20211108" />
 <link rel="stylesheet" type="text/css" href="/static/css/guide/jquery-ui.css">
 <link rel="stylesheet" type="text/css" href="/static/css/guide/popup.css">
 <link rel="stylesheet" type="text/css" href="/static/css/guide/slick.css">
