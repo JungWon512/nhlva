@@ -478,14 +478,12 @@ var messageHandler = function(data) {
 			else if(auctionConfig.asData.status == "8003") {
 				$("input[name='bidAmt']").val("");
 				fnBefore();
-//				$("div.auc-txt > div.info_board").html("<span class='txt-yellow'>경매 번호</span>를 입력하세요.");
 				auctionConfig.asData.bidYn = "N";
 				auctionConfig.enableBid = "Y";
 			}
 			else if(auctionConfig.asData.status == "8004") {
 				$("input[name='bidAmt']").val("");
 				fnBefore();
-//				$("div.auc-txt > div.info_board").html("<span class='txt-yellow'>경매 번호</span>를 입력하세요.");
 				// 출품번호, 경매대상구분코드
 				auctionConfig.enableBid = "Y";
 			}
@@ -559,6 +557,8 @@ var messageHandler = function(data) {
 				
 				fnGetFavoritePrice(dataArr[2], dataArr[4]);
 				$("div.auc-txt > div.info_board").html("<span class='txt-yellow'>응찰 금액</span>을 입력하세요.");
+				
+				auctionConfig.enableBid = "Y";
 			break;
 		case "SD" :
 			// 경매 시작/종료 카운트 다운 정보
@@ -610,7 +610,7 @@ var messageHandler = function(data) {
 			else if (responseCode == "4007") {
 				auctionConfig.seData.clearYn = "Y";
 				messageSample("<span class='txt-yellow'>응찰 취소</span>되었습니다.");
-				fnBefore
+				fnBefore();
 				$("input[name=bidAmt]").val("");
 			}
 			
@@ -679,6 +679,7 @@ var fnBefore = function() {
 	$(".aucNum").show().find("input, button").prop("disabled", false).addClass("active").val("");
 	$(".bidAmt").hide().find("input, button").prop("disabled", true).removeClass("active").val("");
 	$(".btn_before").prop("disabled", true);
+	auctionConfig.enableBid = "N";
 }
 
 // 경매 요청 전 체크
@@ -686,11 +687,6 @@ var fnCheckBidData = function() {
 	try {
 		if (auctionConfig.enableBid != "Y") {
 			messageSample("현재 응찰 가능상태가 아닙니다.");
-			return false;
-		}
-		
-		if (auctionConfig.retryYn == "Y" && auctionConfig.retryTargetYn != "Y") {
-			messageSample("재경매 대상이 아닙니다.");
 			return false;
 		}
 		
@@ -744,7 +740,7 @@ var fnBid = function() {
 var fnBidCancel = function() {
 	// 응찰 취소 요청
 	// 구분자 | 조합구분코드 | 출품번호 | 경매회원번호(거래인번호) | 응찰자경매참가번호 | 접속채널(ANDROID/IOS/WEB) | 취소요청시간(yyyyMMddHHmmssSSS)
-	if (auctionConfig.retryYn != "Y" && auctionConfig.enableBid == "Y") {
+	if (auctionConfig.enableBid == "Y") {
 		var date = new Date();
 		var cancelDate = [date.getFullYear()
 						 , (date.getMonth() + 1).toString().padStart("2", "0")
