@@ -472,18 +472,19 @@ var messageHandler = function(data) {
 			}
 			else if(auctionConfig.asData.status == "8002" || auctionConfig.asData.status == "8006") {
 				$("input[name='bidAmt']").val("");
+//				$("div.auc-txt > div.info_board").html("<span class='txt-yellow'>경매 번호</span>를 입력하세요.");
 				$("div.auc-txt > div.info_board").html("경매 <span class='txt-yellow'>대기 중</span>입니다.");
 				auctionConfig.enableBid = "N";
 			}
 			else if(auctionConfig.asData.status == "8003") {
 				$("input[name='bidAmt']").val("");
-				$("div.auc-txt > div.info_board").html("<span class='txt-yellow'>응찰</span>하시기 바랍니다.");
+				$("div.auc-txt > div.info_board").html("<span class='txt-yellow'>경매 번호</span>를 입력하세요.");
 				auctionConfig.asData.bidYn = "N";
 				auctionConfig.enableBid = "Y";
 			}
 			else if(auctionConfig.asData.status == "8004") {
 				$("input[name='bidAmt']").val("");
-				$("div.auc-txt > div.info_board").html("<span class='txt-yellow'>응찰</span>하시기 바랍니다.");
+				$("div.auc-txt > div.info_board").html("<span class='txt-yellow'>경매 번호</span>를 입력하세요.");
 				// 출품번호, 경매대상구분코드
 				auctionConfig.enableBid = "Y";
 			}
@@ -521,7 +522,7 @@ var messageHandler = function(data) {
 			}
 			break;
 		case "SC" :
-// 현재 출품정보
+			// 현재 출품정보
 			// 구분자 | 조합구분코드 | 출품번호 | 경매회차 | 경매대상구분코드(1.송아지, 2.비육우, 3.번식우) | 축산개체관리번호 | 축산축종구분코드 | 농가식별번호 | 농장관리번호 | 농가명 |
 			// 브랜드명 | 생년월일 | KPN번호 | 개체성별코드 | 어미소구분코드 | 어미소축산개체관리번호 | 산차 | 임신개월수 | 계대 | 계체식별번호 |
 			// 축산개체종축등록번호 | 등록구분번호 | 출하생산지역 | 친자검사결과여부 | 신규여부 | 우출하중량 | 최초최저낙찰한도금액 | 최저낙찰한도금액 | 비고내용 | 낙유찰결과 |
@@ -553,11 +554,10 @@ var messageHandler = function(data) {
 				tr.find('dl dd.sraSbidAm').text(dataArr[31]+'');
 				tr.find('dl dd.rmkCntn').text(dataArr[28]);
 				tr.find('dl dd.selSts').text(dataArr[29]==11?'대기':dataArr[29]==22?'낙찰':dataArr[29]==23?'유찰':'대기');
-				changeTrRow(tr);
 				convertDefaultValue(tr.find('dl dd'));
 				
 				fnGetFavoritePrice(dataArr[2], dataArr[4]);
-//			}
+				$("div.auc-txt > div.info_board").html("<span class='txt-yellow'>응찰 금액</span>을 입력하세요.");
 			break;
 		case "SD" :
 			// 경매 시작/종료 카운트 다운 정보
@@ -602,15 +602,13 @@ var messageHandler = function(data) {
 			}
 			else if (responseCode == "4006") {
 				auctionConfig.seData.clearYn = "Y";
-//				$(".btn_bid_cancel").prop("disabled", false);
-				$("div.auc-txt > div.info_board").html("<span class='txt-yellow'>응찰</span>되었습니다.");
+				messageSample("<span class='txt-yellow'>응찰</span>되었습니다.", "<span class='txt-yellow'>경매 번호</span>를 입력하세요.");
+				fnBefore();
 				$("input[name=bidAmt]").removeClass("txt-blue");
-//				messageSample("응찰 되었습니다.");
 			}
 			else if (responseCode == "4007") {
 				auctionConfig.seData.clearYn = "Y";
-//				$(".btn_bid_cancel").prop("disabled", true);
-				messageSample("<span class='txt-yellow'>응찰 취소</span>되었습니다.", "<span class='txt-yellow'>응찰</span>하시기 바랍니다.");
+				messageSample("<span class='txt-yellow'>응찰 취소</span>되었습니다.", "<span class='txt-yellow'>경매 번호</span>를 입력하세요.");
 				$("input[name=bidAmt]").val("");
 			}
 			
@@ -669,13 +667,13 @@ var fnSetAuctionInfo = function() {
 	reqData.push($("input[name='aucNum']").val());
 	socket.emit('packetData', reqData.join('|'));
 	
-	$(".aucNum").hide().find("input, button").prop("disabled", true).removeClass("active");
+	$(".aucNum").hide().find("input, button").prop("disabled", true).removeClass("active").val("");
 	$(".bidAmt").show().find("input, button").prop("disabled", false).addClass("active").val("");
 	$(".btn_before").prop("disabled", false);
 };
 
 var fnBefore = function() {
-	$(".aucNum").show().find("input, button").prop("disabled", false).addClass("active");
+	$(".aucNum").show().find("input, button").prop("disabled", false).addClass("active").val("");
 	$(".bidAmt").hide().find("input, button").prop("disabled", true).removeClass("active").val("");
 	$(".btn_before").prop("disabled", true);
 }

@@ -399,14 +399,10 @@ var messageHandler = function(data) {
 			if (retryTarget.indexOf(auctionConfig.arData.entryNum) > -1) {
 				$("div.auc-txt > div.info_board").html("<span class='txt-yellow'>재응찰</span>하시기 바랍니다.");
 				auctionConfig.retryTargetYn = "Y";
-//				$(".btn_bid").prop("disabled", false);
-//				$(".btn_bid_cancel").prop("disabled", true);
 			}
 			else {
 				$("input[name='bidAmt']").val("");
 				$("div.auc-txt > div.info_board").html("<span class='txt-yellow'>재경매</span> 진행 중입니다.");
-//				$(".btn_bid").prop("disabled", true);
-//				$(".btn_bid_cancel").prop("disabled", true);
 			}
 			break;
 		case "AP" :
@@ -426,10 +422,6 @@ var messageHandler = function(data) {
 				if (dataArr[2] == "2001") msg = "경매를 참여하실 수 없습니다.</br>경매 참여를 원하실 경우 관리자에게 문의하세요."
 				else if (dataArr[2] == "2002"){ sFlag = true;msg = "이미 접속한 사용자가 있습니다.";}
 				else {	sFlag = true;msg = "현재 참여 가능한 경매가 없습니다.</br>관리자에게 문의하세요.";}
-//				else if (dataArr[2] == "2003") msg = "경매가 종료되었습니다."
-//				else if (dataArr[2] == "2004") msg = "경매가 종료되었습니다."
-//				else if (dataArr[2] == "2005") msg = "경매가 종료되었습니다."
-//				else if (dataArr[2] == "2006") msg = "경매가 종료되었습니다."
 				modalAlert('', msg
 						 , function(){pageMove('/main', false);}
 				);
