@@ -215,9 +215,9 @@
 					<div class="message_board" style="min-height:37px;z-index: -1000;position: absolute;top: 0px;left: 0px;background: rgb(230, 239, 255);min-width:100%;"></div>
 					<a href="javascript:;" class="pop-btn btn_popup">팝업</a>
 				</div>
-				<dl class="aucNum">
+				<dl class="aucNum num-bun">
 					<dt>경매<br/>번호</dt>
-					<dd><input type="text" class="aucNum active" id="auction_num" name="aucNum" placeholder="0" readonly /></dd>
+					<dd><input type="text" class="aucNum active" id="auction_num" name="aucNum" placeholder="0" readonly /><span>번</span></dd>
 				</dl>
 				<dl class="bidAmt" style="display:none;">
 					<dt>응찰<br/>금액</dt>
@@ -245,7 +245,7 @@
 				<ul class="calculator-cell ty3">
 					<li><button class="num_cancle btn_bid_cancel" value="clear">취소</button></li>
 					<li><button class="num" value="0">0</button></li>
-					<li><button class="num_before btn_before" value="before" disabled="disabled">전화면</button></li>
+					<li><button class="num_before btn_before" value="before" disabled="disabled">전 화면</button></li>
 				</ul>
 				<ul class="calculator-cell btn-summit">
 					<li class="aucNum"><button class="num_summit btn_confirm">확인</button></li>

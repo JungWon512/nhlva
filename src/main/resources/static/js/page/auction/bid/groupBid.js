@@ -687,7 +687,7 @@ var fnBefore = function() {
 	$(".aucNum").show().find("input, button").prop("disabled", false).addClass("active").val("");
 	$(".bidAmt").hide().find("input, button").prop("disabled", true).removeClass("active").val("");
 	$(".btn_before").prop("disabled", true);
-	auctionConfig.enableBid = "N";
+	auctionConfig.enableCancel == "N";
 }
 
 // 경매 요청 전 체크
@@ -769,7 +769,7 @@ var fnBidCancel = function() {
 		socket.emit('packetData', cancelData.join("|"));
 	}
 	else {
-		messageSample("응찰 취소를 할 수 없습니다.");
+		$(".aucNum").val("");
 	}
 };
 
