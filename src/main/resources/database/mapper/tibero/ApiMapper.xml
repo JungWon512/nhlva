@@ -75,7 +75,7 @@
 				A.COW_SOG_WT,                   <!-- 우출하중량    -->
 				A.AUC_OBJ_DSC,                   <!-- 경매대상구분코드  -->
 				A.FIR_LOWS_SBID_LMT_AM / 10000  AS FIR_LOWS_SBID_LMT_AM,        <!-- 최초최저낙찰한도금액  -->
-				NVL(A.LOWS_SBID_LMT_AM, A.FIR_LOWS_SBID_LMT_AM) / 10000   AS LOWS_SBID_LMT_AM,         <!-- 최저낙찰한도금액  -->
+				DECODE(A.LOWS_SBID_LMT_AM, NULL, 0, A.LOWS_SBID_LMT_AM / 10000) AS LOWS_SBID_LMT_AM,         <!-- 최저낙찰한도금액  -->
 				A.SRA_SBID_AM / 10000    AS SRA_SBID_AM,           <!-- 축산낙찰금액   -->
 				A.SRA_SBID_UPR,                   <!-- 낙찰 단가   -->
 				A.RMK_CNTN,                    <!-- 비고 내용   -->
@@ -777,8 +777,10 @@
 		   AND A.AUC_OBJ_DSC = CASE WHEN #{aucObjDsc} = '0' THEN A.AUC_OBJ_DSC ELSE #{aucObjDsc} END
 		   AND A.SEL_STS_DSC <![CDATA[<>]]> '22'
 		   AND A.AUC_PRG_SQ BETWEEN #{stAucNo} AND #{edAucNo}
+		   AND A.LOWS_SBID_LMT_AM > 0
 		 ORDER BY A.AUC_PRG_SQ
 	</select>
+	
 	<select id="selectAuctQcnForToday" parameterType="map" resultType="map">
 		SELECT A.*
 		  FROM TB_LA_IS_MH_AUC_QCN A

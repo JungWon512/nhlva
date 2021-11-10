@@ -554,10 +554,14 @@ var messageHandler = function(data) {
 				tr.find('dl dd.rmkCntn').text(dataArr[28]);
 				tr.find('dl dd.selSts').text(dataArr[29]==11?'대기':dataArr[29]==22?'낙찰':dataArr[29]==23?'유찰':'대기');
 				convertDefaultValue(tr.find('dl dd'));
-				
+
 				fnGetFavoritePrice(dataArr[2], dataArr[4]);
 				$("div.auc-txt > div.info_board").html("<span class='txt-yellow'>응찰 금액</span>을 입력하세요.");
-				
+
+				$(".aucNum").hide().find("input, button").prop("disabled", true).removeClass("active").val("");
+				$(".bidAmt").show().find("input, button").prop("disabled", false).addClass("active").val("");
+				$(".btn_before").prop("disabled", false);
+
 				auctionConfig.enableBid = "Y";
 			break;
 		case "SD" :
@@ -593,10 +597,14 @@ var messageHandler = function(data) {
 			if(!auctionConfig.seData) auctionConfig.seData = {};
 			
 			var responseCode = dataArr[2];
-			if (responseCode == "4003") {
+			if (responseCode == "4001") {
+				modalAlert("", "출장우 정보가 없습니다.");
+				$(".aucNum").val("");
+			}
+			else if (responseCode == "4003") {
 				messageSample("응찰한 가격이 시작가보다 낮습니다.");
 			}
-			if (responseCode == "4004") {
+			else if (responseCode == "4004") {
 				modalAlert('', "진행중인 경매가 없습니다."
 						 , function(){pageMove('/main', false);}
 				);
@@ -656,6 +664,10 @@ var messageHandler = function(data) {
 
 // 경매 번호 입력
 var fnSetAuctionInfo = function() {
+	if (!(auctionConfig.asData.status == "8003" || auctionConfig.asData.status == "8004")) {
+		return;
+	}
+	
 	if ($("input[name='auctionNum']").val() == "") {
 		messageSample("경매 번호를 입력해주세요.");
 		return;
@@ -668,10 +680,6 @@ var fnSetAuctionInfo = function() {
 	reqData.push(auctionConfig.arData.trmnAmnno);
 	reqData.push($("input[name='aucNum']").val());
 	socket.emit('packetData', reqData.join('|'));
-	
-	$(".aucNum").hide().find("input, button").prop("disabled", true).removeClass("active").val("");
-	$(".bidAmt").show().find("input, button").prop("disabled", false).addClass("active").val("");
-	$(".btn_before").prop("disabled", false);
 };
 
 var fnBefore = function() {
@@ -740,7 +748,7 @@ var fnBid = function() {
 var fnBidCancel = function() {
 	// 응찰 취소 요청
 	// 구분자 | 조합구분코드 | 출품번호 | 경매회원번호(거래인번호) | 응찰자경매참가번호 | 접속채널(ANDROID/IOS/WEB) | 취소요청시간(yyyyMMddHHmmssSSS)
-	if (auctionConfig.enableBid == "Y") {
+	if (auctionConfig.enableCancel == "Y") {
 		var date = new Date();
 		var cancelDate = [date.getFullYear()
 						 , (date.getMonth() + 1).toString().padStart("2", "0")
@@ -836,9 +844,14 @@ var fnGetFavoritePrice = function(aucSeq, aucClass) {
 			if (data.success) {
 				if (data.info.ATDR_AM > 0) {
 					$("input[name=bidAmt]").removeClass("txt-blue").val(data.info.ATDR_AM);
+					auctionConfig.enableCancel = "Y";
 				}
 				else if (data.info.SBID_UPR > 0) {
 					$("input[name=bidAmt]").addClass("txt-blue").val(data.info.SBID_UPR);
+					auctionConfig.enableCancel = "N";
+				}
+				else {
+					auctionConfig.enableCancel = "N";
 				}
 			}
 			else {
