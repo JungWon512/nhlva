@@ -257,5 +257,7 @@ public interface AuctionService {
 	List<Map<String, Object>> selectAuctQcnForToday() throws SQLException;
 
 	int updateNetPort(Map<String, Object> params) throws SQLException;
+
+	Map<String, Object> selectNearAtdrAm(Map<String, Object> params) throws SQLException;
 	
 }

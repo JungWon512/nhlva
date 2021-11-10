@@ -690,4 +690,8 @@ public class AuctionServiceImpl implements AuctionService {
 	public int updateNetPort(Map<String, Object> params) throws SQLException{
 		return auctionDAO.updateNetPort(params);
 	}
+	@Override
+	public Map<String, Object> selectNearAtdrAm(Map<String, Object> params) throws SQLException{
+		return auctionDAO.selectNearAtdrAm(params);
+	}
 }

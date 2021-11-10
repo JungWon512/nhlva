@@ -793,4 +793,18 @@
 		WHERE NA_BZPLC =  #{naBzplc}
 	</update>
 	
+	<update id="selectNearAtdrAm" parameterType="map">
+		SELECT 
+			NVL(T.ATDR_AM,0) ATDR_AM
+		FROM (
+			SELECT A.ATDR_AM
+				, ROW_NUMBER () OVER(ORDER BY A.ATDR_DTM DESC) RNUM
+			FROM LALM.TB_LA_IS_MH_ATDR_LOG A
+			WHERE A.AUC_DT = TO_CHAR(SYSDATE,'YYYYMMDD')
+			AND A.LVST_AUC_PTC_MN_NO = #{lvstAucPtcMnNo}
+			AND A.NA_BZPLC = #{naBzplc}
+		) T
+		WHERE T.RNUM = 1
+	</update>
+	
 </mapper>

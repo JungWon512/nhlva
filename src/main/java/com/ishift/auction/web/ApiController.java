@@ -1615,4 +1615,30 @@ public class ApiController {
 		}
 		return result;
 	}
+
+	@ResponseBody
+	@GetMapping(value = "/api/{version}/select/nearAtdrAm")
+	public Map<String, Object> selectNearAtdrAm(@PathVariable(name = "version") String version
+			, @RequestParam final Map<String, Object> params) {
+		final Map<String, Object> result = new HashMap<String, Object>();
+
+		try {
+			Map<String,Object> map = auctionService.selectNearAtdrAm(params);
+			
+			if (map != null) {
+				result.put("success", true);
+				result.put("data", map.get("ATDR_AM"));
+				result.put("message", "정상적으로 변경되었습니다.");
+			}
+		}catch (RuntimeException re) {
+			log.debug("ApiController.selectNearAtdrAm : {} ",re);
+			result.put("success", false);
+			result.put("message", re.getMessage());
+		}catch (SQLException se) {
+			log.debug("ApiController.selectNearAtdrAm : {} ",se);
+			result.put("success", false);
+			result.put("message", se.getMessage());
+		}
+		return result;
+	}
 }

@@ -105,9 +105,9 @@ function modalPopup(target){
 				$(this).css('-webkit-overflow-scrolling','touch');
 				$(this).css('overflow-y','auto');
 				$(this).css('overflow-x','hidden');
-				var tmpDate = $(this).closest('.tab_area').get(0)?150:"watch".indexOf(location.pathname.replace('/',''))>-1?382:290;
+				var tmpDate = $(this).closest('.tab_area').get(0)?150:"watch".indexOf(location.pathname.replace('/',''))>-1?($('#aucDsc').val()==1?382:155):290;
 				var resultH= ( height-tmpDate)<=0?'450':height-tmpDate;											
-				$(this).css('height',resultH +'px');						
+				$(this).css('height',resultH+'px');						
 				$(this).closest('div.tab_area').attr("style", preCss ? preCss : "");
 			});
 		}else{
@@ -176,7 +176,8 @@ $(document).ready(function() {
 						$(this).css('-webkit-overflow-scrolling','touch');
 						$(this).css('overflow-y','auto');
 						$(this).css('overflow-x','hidden');
-						var tmpDate = $(this).closest('.tab_area').get(0)?150:"watch".indexOf(location.pathname.replace('/',''))>-1?382:290;
+						//var tmpDate = $(this).closest('.tab_area').get(0)?150:"watch".indexOf(location.pathname.replace('/',''))>-1?382:290;
+						var tmpDate = $(this).closest('.tab_area').get(0)?150:"watch".indexOf(location.pathname.replace('/',''))>-1?($('#aucDsc').val()==1?382:155):290;
 						var resultH= ( height-tmpDate)<=0?'450':height-tmpDate;											
 						$(this).css('height',resultH+'px');						
 						$(this).closest('div.tab_area').attr("style", preCss ? preCss : "");

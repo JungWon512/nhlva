@@ -405,4 +405,8 @@ public class AuctionDAO {
 		// TODO Auto-generated method stub
 		return mainDao.update("ApiMapper.updateNetPort", params);
 	}
+
+	public Map<String, Object> selectNearAtdrAm(Map<String, Object> params) throws SQLException {
+		return mainDao.selectOne("ApiMapper.selectNearAtdrAm", params);
+	}
 }
