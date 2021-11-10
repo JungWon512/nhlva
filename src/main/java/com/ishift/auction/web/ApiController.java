@@ -177,7 +177,7 @@ public class ApiController {
 														, @RequestParam final Map<String, Object> params) {
 		final Map<String, Object> result = new HashMap<String, Object>();
 		final List<Map<String, Object>> failList = new ArrayList<Map<String, Object>>();
-		
+
 		try {
 			if ("v2".equals(version)) {
 				if(params.get("list") == null) {
@@ -1382,144 +1382,124 @@ public class ApiController {
 		}
 		return result;
 	}
-	
 
+	/**
+	 * 일괄경매 상태 변경
+	 * @param version
+	 * @param params
+	 * @return
+	 */
 	@ResponseBody
+	@SuppressWarnings("serial")
 	@PostMapping(value = "/api/{version}/auction/status"
 			, consumes = MediaType.APPLICATION_FORM_URLENCODED_VALUE
 				, produces = MediaType.APPLICATION_JSON_VALUE)
 	public Map<String, Object> auctStatus(@PathVariable(name = "version") String version
 			, @RequestParam final Map<String, Object> params) {
+
 		final Map<String, Object> result = new HashMap<String, Object>();
 
 		try {
 			if(StringUtils.isEmpty(params.get("naBzPlc"))
-					|| StringUtils.isEmpty(params.get("aucObjDsc"))
-					|| StringUtils.isEmpty(params.get("aucDt"))
-					|| StringUtils.isEmpty(params.get("rgSqno"))
-					|| StringUtils.isEmpty(params.get("status"))
-					) {
+			|| StringUtils.isEmpty(params.get("aucObjDsc"))
+			|| StringUtils.isEmpty(params.get("aucDt"))
+			|| StringUtils.isEmpty(params.get("rgSqno"))
+			|| StringUtils.isEmpty(params.get("status"))
+			) {
 				result.put("success", false);
 				result.put("message", "필수 인자값이 없습니다.");
 				return result;
 			}
 			
-			params.put("naBzplc",params.get("naBzPlc"));
-			String st = params.get("status") != null ? (String) params.get("status"):"";
-			Map<String, Object> aucStn = auctionService.selectAuctStn(params);
-			Map<String, Object> maxDdlQcn = auctionService.selectMaxDdlQcn(params);
-			
-			Map<String, Object> temp = new HashMap<String, Object>();
+			params.put("naBzplc", params.get("naBzPlc"));
+			String status = params.getOrDefault("status", "").toString();
+
+			final Map<String, Object> aucStn = auctionService.selectAuctStn(params);
+
 			if(aucStn == null) {
 				result.put("success", false);
 				result.put("message", "경매차수가 없습니다.");
 				return result;
 			}
 
-			temp.putAll(params);
-			if(!"".equals(st)) {
-				switch(st) {
+			final Map<String, Object> temp = new HashMap<String, Object>() {{putAll(params);}};
+			Map<String, Object> returnMap = new HashMap<String, Object>();
+
+			// SEL_STS_DSC 상태 : 11.송장등록, 21.경매진행, 22.낙찰, 23.보류(유찰)
+			if(!"".equals(status)) {
+				switch(status) {
 					case "start":
+						// 현재 차수(TB_LA_IS_MH_AUC_STN의 RG_SQNO)가 이미 진행중인 경우 실패 RETURN
 						if("21".equals(aucStn.get("SEL_STS_DSC"))) {
 							result.put("success", false);
 							result.put("message", "이미 진행중인 경매입니다.");
 							return result;
 						}
-						temp.put("selStsDsc", "22");
-						temp.put("lsCmeno", "0314시작");
-						temp.put("fsrgmnEno", "admin");
-						auctionService.insertAuctStnLog(temp);
-						temp.put("selStsDsc", "21");
-						temp.put("lsCmeno", "SYSTEM");
-						auctionService.updateAuctStn(temp);
-						temp.put("selStsDsc", "22");
-						temp.put("aucYn", "1");
-						temp.put("stAucNo", aucStn.get("ST_AUC_NO"));
-						temp.put("edAucNo", aucStn.get("ED_AUC_NO"));
-						auctionService.updateAuctSogCow(temp);
 						
-						result.put("success", true);
-						result.put("message", "경매시작이 정상처리되었습니다.");
+						// 경매 시작
+						returnMap = auctionService.auctionStart(aucStn, temp);
+						if (returnMap != null && (Boolean)returnMap.get("success")) {
+							result.put("success", true);
+							result.put("message", "경매 시작이 정상 처리되었습니다.");
+						}
+						else {
+							result.put("success", false);
+							result.put("message", "작업 중 오류가 발생했습니다.");
+						}
 						
 						break;
 					case "pause":
+						// 현재 차수(TB_LA_IS_MH_AUC_STN의 RG_SQNO)가 이미 중지된 경우 실패 RETURN
 						if("23".equals(aucStn.get("SEL_STS_DSC"))) {
 							result.put("success", false);
 							result.put("message", "이미 중지된 경매입니다.");
 							return result;
 						}
+						// 현재 차수(TB_LA_IS_MH_AUC_STN의 RG_SQNO)가 이미 종료 경우 실패 RETURN
 						if("22".equals(aucStn.get("SEL_STS_DSC"))) {
 							result.put("success", false);
 							result.put("message", "이미 종료된 경매입니다.");
 							return result;
 						}
-						temp.put("selStsDsc", "23");
-						temp.put("lsCmeno", "SYSTEM");
-						auctionService.updateAuctStn(temp);
-						temp.put("aucYn", "0");
-						temp.put("stAucNo", aucStn.get("ST_AUC_NO"));
-						temp.put("edAucNo", aucStn.get("ED_AUC_NO"));
-						auctionService.updateAuctSogCow(temp);
 						
-						result.put("success", true);
-						result.put("message", "경매중지가 정상처리되었습니다.");
+						// 경매 중지
+						returnMap = auctionService.auctionPause(aucStn, temp);
+						if (returnMap != null && (Boolean)returnMap.get("success")) {
+							result.put("success", true);
+							result.put("message", "경매 중지가 정상 처리되었습니다.");
+						}
+						else {
+							result.put("success", false);
+							result.put("message", "작업 중 오류가 발생했습니다.");
+						}
 						break;
 					case "finish":
+						// 현재 차수(TB_LA_IS_MH_AUC_STN의 RG_SQNO)가 이미 종료 경우 실패 RETURN
 						if("22".equals(aucStn.get("SEL_STS_DSC"))) {
 							result.put("success", false);
 							result.put("message", "이미 종료된 경매입니다.");
 							return result;
 						}
-						temp.put("selStsDsc", "22");
-						temp.put("maxDdlQcn", maxDdlQcn.get("MAX_DDL_QCN")); 
-						temp.put("lsCmeno", "SYSTEM");
-						auctionService.updateAuctStn(temp);
-
-						temp.put("selStsDsc", "22");
-						temp.put("lsCmeno", "0314종료");
-						temp.put("fsrgmnEno", "admin");
-						auctionService.insertAuctStnLog(temp);
 						
-						temp.put("aucYn", "0");
-						temp.put("lsCmeno", "SYSTEM");
-						temp.put("stAucNo", aucStn.get("ST_AUC_NO"));
-						temp.put("edAucNo", aucStn.get("ED_AUC_NO"));
-						auctionService.updateAuctSogCow(temp);
+						// 경매 종료
+						returnMap = auctionService.auctionFinish(aucStn, temp);
+						if (returnMap != null && (Boolean)returnMap.get("success")) {
+							result.put("success", true);
+							result.put("message", "경매 종료가 정상 처리되었습니다.");
+						}
+						else {
+							result.put("success", false);
+							result.put("message", "작업 중 오류가 발생했습니다.");
+						}
 
-						temp.put("newCntAucYn", "Y");
-						temp.put("soldChkYn", "N");
-						temp.put("fsrgmnEno", "admin");
-						temp.put("lsCmeno", "[LM0314]");
-						temp.put("pdaId", "새 차수 경매 시작[성공]");
-						temp.put("maxDdlQcn", maxDdlQcn.get("MAX_DDL_QCN"));
-						temp.put("stAucNo", aucStn.get("ST_AUC_NO"));
-						temp.put("edAucNo", aucStn.get("ED_AUC_NO"));
-						auctionService.insertAuctSogCowLog(temp);
-
-						temp.put("newCntAucYn", "Y");
-						temp.put("soldChkYn", "N");
-						temp.put("pdaId", "경매종료[낙찰]");
-						auctionService.insertAuctSogCowLog(temp);
-
-						temp.put("sraSbidAm", "0");
-						temp.put("maxDdlQcn", maxDdlQcn.get("MAX_DDL_QCN"));
-						temp.put("lsCmeno", "SYSTEM");
-						temp.put("stAucNo", aucStn.get("ST_AUC_NO"));
-						temp.put("edAucNo", aucStn.get("ED_AUC_NO"));
-						auctionService.updateAuctSogCowFinish(temp);
-						
-						// TODO :: 낙유찰처리
-						
-						
-						result.put("success", true);
-						result.put("message", "경매종료가 정상처리되었습니다.");
 						break;
 					default:
 						result.put("success", false);
-						result.put("message", "필수 인자값이 잘못되었습니다.");
+						result.put("message", "경매 상태를 확인하세요.");
 						break;
 				}
-			}else {
+			}
+			else {
 				result.put("success", false);
 				result.put("message", "필수 인자값이 없습니다.");
 			}				

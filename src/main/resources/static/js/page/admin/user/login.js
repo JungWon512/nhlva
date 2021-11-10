@@ -34,11 +34,9 @@
 						if (chkOs() != 'web') {
 							uri = '/admin/task/main'
 						}
-						alert(uri);
 						pageMove(uri);
 					}
 				});
-			
 			});
 		};
 

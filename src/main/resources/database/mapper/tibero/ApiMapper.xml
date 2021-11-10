@@ -82,7 +82,7 @@
 				A.BRANDNM,                    <!-- 브랜드명   -->
 				A.PRNY_MTCN,                   <!-- 임신개월수   -->
 				A.AUC_DT,                    <!-- 경매일자   -->
-				    TO_CHAR(A.LSCHG_DTM,'YYYY-MM-DD HH24:mm:ss:miss') as LSCHG_DTM, <!-- 최종변경일시   -->
+				    TO_CHAR(A.LSCHG_DTM,'YYYYMMDDHH24mmss') as LSCHG_DTM, <!-- 최종변경일시   -->
 				A.LS_CMENO,                    <!-- 최종변경자개인번호  -->
 				A.SEL_STS_DSC,                   <!-- 판매상태구분코드  -->
 				A.LWPR_CHG_NT,                   <!-- 최저가변경횟수  -->
@@ -190,7 +190,7 @@
 			   AND A.AUC_OBJ_DSC = CASE WHEN #{aucObjDsc} = '0' THEN A.AUC_OBJ_DSC ELSE #{aucObjDsc} END
 			<if test="mAuctionResult !=null and !mAuctionResult.equals('')">
 			   AND A.SEL_STS_DSC = #{mAuctionResult}
-			</if>  
+			</if>
 			<if test="stAucNo !=null and !stAucNo.equals('') and edAucNo !=null and !edAucNo.equals('')">
 			   AND A.AUC_PRG_SQ <![CDATA[>=]]> #{stAucNo}
 			   AND A.AUC_PRG_SQ <![CDATA[<=]]> #{edAucNo}
@@ -347,24 +347,26 @@
 		 WHERE BID_NUM = 1
 		   AND ATDR_AM > 0
 	</select>
-		
-	<insert id="insertAuctStnLog" parameterType="map">
+	
+	<!-- 일괄 경매 변경 로그 저장 -->
+	<update id="insertAuctStnLog" parameterType="map">
 		INSERT INTO TB_LA_IS_MH_AUC_STN_LOG (
-			NA_BZPLC,    
-			AUC_OBJ_DSC,                          
-			AUC_DT,                               
-			RG_SQNO,                              
-			DDL_QCN,                              
-			ST_AUC_NO,                            
-			ED_AUC_NO,                            
-			SEL_STS_DSC,                          
-			DEL_YN,                               
-			ST_DTM,                               
-			ED_DTM,                               
-			FSRG_DTM,                             
-			FSRGMN_ENO,                           
-			LSCHG_DTM,                            
-			LS_CMENO)                             
+			NA_BZPLC,
+			AUC_OBJ_DSC,
+			AUC_DT,
+			RG_SQNO,
+			DDL_QCN,
+			ST_AUC_NO,
+			ED_AUC_NO,
+			SEL_STS_DSC,
+			DEL_YN,
+			ST_DTM,
+			ED_DTM,
+			FSRG_DTM,
+			FSRGMN_ENO,
+			LSCHG_DTM,
+			LS_CMENO
+		)
 		SELECT
 			A.NA_BZPLC,
 			A.AUC_OBJ_DSC,
@@ -384,65 +386,68 @@
 		FROM
 			TB_LA_IS_MH_AUC_STN A
 		WHERE A.NA_BZPLC = #{naBzPlc}
-		AND A.AUC_OBJ_DSC = #{aucObjDsc}
+		AND A.AUC_OBJ_DSC = CASE WHEN #{aucObjDsc} = '0' THEN A.AUC_OBJ_DSC ELSE #{aucObjDsc} END
 		AND A.AUC_DT = #{aucDt}
 		AND A.RG_SQNO = #{rgSqno}
-	</insert>
-	
-	<update id="updateAuctStn" parameterType="map">
-		UPDATE TB_LA_IS_MH_AUC_STN SET 
-			SEL_STS_DSC = #{selStsDsc}
-			<if test='"finish".equals(status)'>
-				, DDL_QCN  = #{maxDdlQcn}+1
-			</if>
-			, LSCHG_DTM = SYSDATE
-			, LS_CMENO = #{lsCmeno}
-		WHERE NA_BZPLC = #{naBzPlc} 
-		AND AUC_OBJ_DSC = #{aucObjDsc} 
-		AND AUC_DT = #{aucDt}
-		AND RG_SQNO = #{rgSqno}
 	</update>
 	
+	<!-- 일괄 경매 상태 변경 -->
+	<update id="updateAuctStn" parameterType="map">
+		UPDATE TB_LA_IS_MH_AUC_STN
+		   SET SEL_STS_DSC = #{selStsDsc}
+		<if test='"finish".equals(status)'>
+			 , DDL_QCN  = #{maxDdlQcn}+1
+		</if>
+			 , LSCHG_DTM = SYSDATE
+			 , LS_CMENO = #{lsCmeno}
+		 WHERE NA_BZPLC = #{naBzPlc}
+		   AND AUC_OBJ_DSC = CASE WHEN #{aucObjDsc} = '0' THEN AUC_OBJ_DSC ELSE #{aucObjDsc} END
+		   AND AUC_DT = #{aucDt}
+		   AND RG_SQNO = #{rgSqno}
+	</update>
+	
+	<!-- 출장우 경매 상태 변경 -->
 	<update id="updateAuctSogCow" parameterType="map">
-		UPDATE TB_LA_IS_MH_SOG_COW SET 
-			AUC_YN = #{aucYn}
-			, LSCHG_DTM = SYSDATE
-			, LS_CMENO = #{lsCmeno} 
-		WHERE NA_BZPLC = #{naBzPlc} 
-		AND AUC_OBJ_DSC = #{aucObjDsc} 
-		AND AUC_DT = #{aucDt} 
-		<if test='!"start".equals(status)'>
+		UPDATE TB_LA_IS_MH_SOG_COW
+		   SET AUC_YN = #{aucYn}
+			 , LSCHG_DTM = SYSDATE
+			 , LS_CMENO = #{lsCmeno}
+		 WHERE NA_BZPLC = #{naBzPlc}
+		   AND AUC_OBJ_DSC = CASE WHEN #{aucObjDsc} = '0' THEN AUC_OBJ_DSC ELSE #{aucObjDsc} END
+		   AND AUC_DT = #{aucDt}
+		<if test='"start".equals(status)'>
 		<![CDATA[
-			AND SEL_STS_DSC <> #{selStsDsc} 
-			AND LOWS_SBID_LMT_AM > 0
+		   AND SEL_STS_DSC <> #{selStsDsc}
+		   AND LOWS_SBID_LMT_AM > 0
 		]]> 
 		</if>
 		<![CDATA[
-		AND AUC_PRG_SQ >= #{stAucNo} 
-		AND AUC_PRG_SQ <= #{edAucNo}			
+		   AND AUC_PRG_SQ >= #{stAucNo}
+		   AND AUC_PRG_SQ <= #{edAucNo}
 		]]> 
 	</update>
 	
+	<!-- 낙찰이 아닌 출장우 유찰 처리 -->
 	<update id="updateAuctSogCowFinish" parameterType="map">
-		UPDATE TB_LA_IS_MH_SOG_COW SET 
+		UPDATE TB_LA_IS_MH_SOG_COW SET
 			SEL_STS_DSC = '23'
-			, SRA_SBID_AM  = #{sraSbidAm}			
-			, DDL_QCN  = #{maxDdlQcn}+1
+			, SRA_SBID_AM  = #{sraSbidAm}
+			, DDL_QCN = #{maxDdlQcn} + 1
 			, LSCHG_DTM = SYSDATE
-			, LS_CMENO = #{lsCmeno} 
-		WHERE NA_BZPLC = #{naBzPlc} 
-		AND AUC_OBJ_DSC = #{aucObjDsc} 
-		AND AUC_DT = #{aucDt} 
+			, LS_CMENO = #{lsCmeno}
+		WHERE NA_BZPLC = #{naBzPlc}
+		AND AUC_OBJ_DSC = #{aucObjDsc}
+		AND AUC_DT = #{aucDt}
 		<![CDATA[
 		AND LOWS_SBID_LMT_AM > 0
 		AND SEL_STS_DSC <> '22'
 		AND DEL_YN = '0'
 		AND AUC_PRG_SQ >= #{stAucNo} 
-		AND AUC_PRG_SQ <= #{edAucNo}			
+		AND AUC_PRG_SQ <= #{edAucNo}
 		]]> 
 	</update>
 	
-	<insert id="insertAuctSogCowLog" parameterType="map">
+	<update id="insertAuctSogCowLog" parameterType="map">
 		INSERT INTO TB_LA_IS_MH_SOG_COW_LOG (
 			NA_BZPLC,
 			AUC_OBJ_DSC,
@@ -588,8 +593,8 @@
 			</otherwise>
 		</choose>		
 		AND A.AUC_PRG_SQ <![CDATA[>=]]> #{stAucNo}
-		AND A.AUC_PRG_SQ <![CDATA[<=]]> #{edAucNo}		
-	</insert>
+		AND A.AUC_PRG_SQ <![CDATA[<=]]> #{edAucNo}
+	</update>
 	
 	<!-- 경매 정보 조회 ( 송아지, 번식우, 비육우 여부, 중도매인, 출하주의 조합 가입 여부, 자가 운송 여부 ) -->
 	<select id="selectAuctionInfo" parameterType="map" resultType="map">
@@ -655,9 +660,9 @@
 	</select>
 	
 	<!-- 수수료 정보 저장 -->
-	<insert id="insertFeeInfo" parameterType="map">  
-		<foreach collection="feeInfoList" item="item" index="index" open="" close="" separator=";">
-			INSERT INTO TB_LA_IS_MH_FEE_IMPS (
+	<update id="insertFeeInfo" parameterType="map">
+		<foreach collection="feeInfoList" item="item" index="index" open="INSERT ALL" close="SELECT * FROM DUAL" separator=" ">
+			INTO TB_LA_IS_MH_FEE_IMPS (
 				NA_BZPLC
 				, AUC_OBJ_DSC
 				, AUC_DT
@@ -687,7 +692,7 @@
 				, '0'
 			)
 		</foreach>
-	</insert>
+	</update>
 	
 	<insert id="insertFeeLog" parameterType="map">  
 		<foreach collection="list" item="item" index="index" open="" close="" separator=";">
@@ -708,5 +713,71 @@
 		  )
 		  </foreach>
 	</insert>
+	
+	<!-- 낙찰 처리 대상 목록 -->
+	<select id="selectBidCompleteList" parameterType="map" resultType="map">
+		SELECT A.NA_BZPLC										/* 조합코드 */
+			 , A.AUC_DT											/* 경매일자 */
+			 , A.AUC_PRG_SQ										/* 경매번호 */
+			 , A.AUC_OBJ_DSC									/* 경매유형 */
+			 , A.OSLP_NO										/* 원표번호 */
+			 , A.LED_SQNO 										/* 원장일련번호 */
+			 , A.TRPCS_PY_YN 									/* 운송비지급여부 */
+			 , A.PPGCOW_FEE_DSC									/* 번식우수수료구분코드 1.임신우, 2.비임신우, 3.임신우+송아지, 4.비임신우+송아지,  5.해당없음 */
+			 , B.MACO_YN AS FHS_MACO_YN 						/* 출하주 중도매인여부 */
+			 , D.MACO_YN AS TRMN_MACO_YN 						/* 중도매인 조합원여부 */
+			 , A.FHS_ID_NO										/* 농가식별번호 */
+			 , A.FARM_AMNNO										/* 농가관린번호 */
+			 , C.TRMN_AMNNO										/* 날찰예정 중도매인번호 */
+			 , C.ATDR_AM										/* 낙찰예정가 */
+			 , C.ATDR_AM * 10000 AS ATDR_UPR
+			 , C.LVST_AUC_PTC_MN_NO								/* 낙찰예정 참가번호 */
+			 , C.ATDR_DTM										/* 최종응찰일시 */
+		  FROM TB_LA_IS_MH_SOG_COW A
+		  LEFT OUTER JOIN TB_LA_IS_MM_FHS B
+			ON (
+				A.NA_BZPLC = B.NA_BZPLC
+				AND A.FHS_ID_NO = B.FHS_ID_NO
+				AND A.FARM_AMNNO = B.FARM_AMNNO
+			 )
+		  INNER JOIN (
+				SELECT RANK() OVER(PARTITION BY NA_BZPLC, AUC_OBJ_DSC, OSLP_NO ORDER BY ATDR_AM DESC, ATDR_DTM ASC) AS ATDR_RANK
+					 , B.*
+				  FROM (
+						SELECT ROW_NUMBER() OVER(PARTITION BY NA_BZPLC, AUC_OBJ_DSC, OSLP_NO, TRMN_AMNNO, LVST_AUC_PTC_MN_NO ORDER BY RG_SQNO DESC) AS BID_NUM
+							 , A.*
+						  FROM TB_LA_IS_MH_ATDR_LOG A
+						 WHERE NA_BZPLC = #{naBzplc}
+						   AND AUC_DT = #{aucDt}
+						   AND A.AUC_OBJ_DSC = CASE WHEN #{aucObjDsc} = '0' THEN A.AUC_OBJ_DSC ELSE #{aucObjDsc} END
+						   AND RG_SQNO NOT IN ('0', '99999999')
+					 ) B
+				 WHERE BID_NUM = 1
+				   AND ATDR_AM > 0
+			 ) C
+			ON (
+				C.NA_BZPLC = A.NA_BZPLC
+				AND
+				C.AUC_DT = A.AUC_DT
+				AND
+				C.AUC_OBJ_DSC = A.AUC_OBJ_DSC
+				AND
+				C.OSLP_NO = A.OSLP_NO
+				AND
+				C.ATDR_RANK = 1
+			 )
+		 LEFT OUTER JOIN TB_LA_IS_MM_MWMN D
+		   ON (
+		   		D.NA_BZPLC = C.NA_BZPLC
+		   		AND
+		   		D.TRMN_AMNNO = C.TRMN_AMNNO
+		   )
+		 WHERE A.NA_BZPLC = #{naBzplc}
+		   AND A.AUC_DT = #{aucDt}
+		   AND A.AUC_OBJ_DSC = CASE WHEN #{aucObjDsc} = '0' THEN A.AUC_OBJ_DSC ELSE #{aucObjDsc} END
+		   AND A.SEL_STS_DSC <![CDATA[<>]]> '22'
+		   AND A.AUC_PRG_SQ BETWEEN #{stAucNo} AND #{edAucNo}
+		 ORDER BY A.AUC_PRG_SQ
+	</select>
 	
 </mapper>

@@ -385,4 +385,14 @@ public class AuctionDAO {
 	public int insertFeeLog(Map<String, Object> params) throws SQLException {
 		return mainDao.insert("ApiMapper.insertFeeLog", params);
 	}
+
+	/**
+	 * 낙찰 처리 대상 목록
+	 * @param params
+	 * @return
+	 * @throws SQLException
+	 */
+	public List<Map<String, Object>> selectBidCompleteList(Map<String, Object> params) throws SQLException {
+		return mainDao.selectList("ApiMapper.selectBidCompleteList", params);
+	}
 }
