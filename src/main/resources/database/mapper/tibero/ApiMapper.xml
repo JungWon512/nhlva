@@ -810,7 +810,7 @@
 		WHERE T.RNUM = 1
 	</select>
 	<select id="selectMyZimPrice" parameterType="map" resultType="map">
-		SELECT A.SBID_UPR
+		SELECT NVL(A.SBID_UPR,0) SBID_UPR
 		FROM TB_LA_IS_MH_SOG_ZIM A
 		INNER JOIN TB_LA_IS_MH_AUC_ENTR B ON A.NA_BZPLC =B.NA_BZPLC 
 								AND A.AUC_DT =B.AUC_DT 

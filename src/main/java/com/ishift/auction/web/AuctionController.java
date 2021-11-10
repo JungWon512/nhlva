@@ -519,8 +519,8 @@ public class AuctionController extends CommonController {
 			Map<String,Object> map = auctionService.selectNearAtdrAm(params);			
 			Map<String,Object> zim = auctionService.selectMyZimPrice(params);
 
-			temp.put("bidPrice", map.get("ATDR_AM"));
-			temp.put("zimPrice", zim.get("SBID_UPR"));
+			temp.put("bidPrice", map != null ?map.get("ATDR_AM"):0);
+			temp.put("zimPrice", zim != null ? zim.get("SBID_UPR"):0);
 			result.put("success", true);
 			result.put("data", temp);
 			result.put("message", "정상적으로 변경되었습니다.");
