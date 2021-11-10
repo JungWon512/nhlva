@@ -793,7 +793,7 @@
 		WHERE NA_BZPLC =  #{naBzplc}
 	</update>
 	
-	<update id="selectNearAtdrAm" parameterType="map">
+	<select id="selectNearAtdrAm" parameterType="map" resultType="map">
 		SELECT 
 			NVL(T.ATDR_AM,0) ATDR_AM
 		FROM (
@@ -805,6 +805,6 @@
 			AND A.NA_BZPLC = #{naBzplc}
 		) T
 		WHERE T.RNUM = 1
-	</update>
+	</select>
 	
 </mapper>

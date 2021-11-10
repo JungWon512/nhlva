@@ -511,8 +511,7 @@ public class AuctionController extends CommonController {
 
 	@ResponseBody
 	@RequestMapping(value = "/auction/select/nearAtdrAm", method = {RequestMethod.POST, RequestMethod.GET})
-	public Map<String, Object> selectNearAtdrAm(@PathVariable(name = "version") String version
-			, @RequestParam final Map<String, Object> params) {
+	public Map<String, Object> selectNearAtdrAm(@RequestParam final Map<String, Object> params) {
 		final Map<String, Object> result = new HashMap<String, Object>();
 
 		try {
