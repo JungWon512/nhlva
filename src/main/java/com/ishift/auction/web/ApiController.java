@@ -1617,7 +1617,7 @@ public class ApiController {
 	}
 
 	@ResponseBody
-	@GetMapping(value = "/api/{version}/select/nearAtdrAm")
+	@GetMapping(value = "/api/{version}/my/select/nearAtdrAm")
 	public Map<String, Object> selectNearAtdrAm(@PathVariable(name = "version") String version
 			, @RequestParam final Map<String, Object> params) {
 		final Map<String, Object> result = new HashMap<String, Object>();
