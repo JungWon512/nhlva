@@ -523,7 +523,7 @@ public class AuctionController extends CommonController {
 			temp.put("zimPrice", zim != null ? zim.get("SBID_UPR"):0);
 			result.put("success", true);
 			result.put("data", temp);
-			result.put("message", "정상적으로 변경되었습니다.");
+			result.put("message", "정상적으로 조회되었습니다.");
 		}catch (RuntimeException re) {
 			log.debug("ApiController.selectNearAtdrAm : {} ",re);
 			result.put("success", false);
