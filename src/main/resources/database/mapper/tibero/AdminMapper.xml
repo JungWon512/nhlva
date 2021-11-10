@@ -24,6 +24,9 @@
 			, KKO_SVC_ID
 			, KKO_SVC_KEY
 			, KKO_SVC_CNT
+			, NET_HOST
+			, NET_PORT
+			, WEB_PORT
  		FROM TB_LA_IS_BM_BZLOC
  		WHERE 1=1
 		<if test="naBzPlcNo != null and naBzPlcNo != ''">

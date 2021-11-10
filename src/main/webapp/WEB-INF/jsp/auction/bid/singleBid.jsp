@@ -19,6 +19,7 @@
 	<input type="hidden" id="kkoSvcId" value="${johapData.KKO_SVC_ID}" />
 	<input type="hidden" id="kkoSvcKey" value="${johapData.KKO_SVC_KEY}" />
 	<input type="hidden" id="kkoSvcCnt" value="${johapData.KKO_SVC_CNT}" />
+	<input type="hidden" id="webPort" value="${johapData.WEB_PORT}" />
 	<input type="hidden" id="trmnAmnno" value="${trmnAmnno}" />
 	
 	<!-- //auction_area s -->

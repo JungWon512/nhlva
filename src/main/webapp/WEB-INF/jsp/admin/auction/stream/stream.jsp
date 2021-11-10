@@ -9,6 +9,7 @@
 <!--begin::Container-->
 <div class="container-fluid" style="margin-top:10px">
 	<input type="hidden" id="naBzPlc" value="${johapData.NA_BZPLC}" />
+	<input type="hidden" id="webPort" value="${johapData.WEB_PORT}" />
     <!--begin::Dashboard-->
     <!--begin::Row-->
     <div class="row">

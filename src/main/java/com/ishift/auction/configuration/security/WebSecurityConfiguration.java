@@ -135,7 +135,7 @@ public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
 			.and()
 				.authorizeRequests()
 					.antMatchers("/admin/user/loginProc").permitAll()
-					.antMatchers("/api/**/auth/**", "/api/appversion", "/api/**/biz/**", "/api/**/my/**", "/admin/auction/board").permitAll()
+					.antMatchers("/api/**/auth/**", "/api/appversion", "/api/**/biz/**", "/api/**/my/**", "/api/**/host/**", "/admin/auction/board").permitAll()
 					.antMatchers("/admin/**").hasRole(Constants.UserRole.ADMIN)
 					.antMatchers("/api/**").hasRole(Constants.UserRole.ADMIN)
 					.anyRequest().permitAll()

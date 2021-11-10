@@ -1556,4 +1556,63 @@ public class ApiController {
 		}
 		return result;
 	}
+	@ResponseBody
+	@GetMapping(value = "/api/{version}/host/select/auctQcnForToday")
+	public Map<String, Object> selectAuctQcnForToday(@PathVariable(name = "version") String version) {
+		final Map<String, Object> result = new HashMap<String, Object>();
+
+		try {
+			List<Map<String, Object>> list = auctionService.selectAuctQcnForToday();
+			
+			if (list != null && list.size() > 0) {
+				result.put("success", true);
+				result.put("data", list);
+				result.put("message", "정상적으로 조회되었습니다.");
+			}
+			else {
+				result.put("success", false);
+				result.put("message", "회차 정보가 없습니다.");
+			}
+		}catch (RuntimeException re) {
+			log.error("error - selectAuctQcnForToday : {}", re);
+			result.put("success", false);
+			result.put("message", re.getMessage());
+			return result;
+		}catch (SQLException se) {
+			log.error("error - selectAuctQcnForToday : {}", se);
+			result.put("success", false);
+			result.put("message", se.getMessage());
+			return result;
+		}
+		return result;
+	}
+	
+	@ResponseBody
+	@GetMapping(value = "/api/{version}/host/update/netPort")
+	public Map<String, Object> updateNetPort(@PathVariable(name = "version") String version
+			, @RequestParam final Map<String, Object> params) {
+		final Map<String, Object> result = new HashMap<String, Object>();
+
+		try {
+			int cnt = auctionService.updateNetPort(params);
+			
+			if (cnt > 0) {
+				result.put("success", true);
+				result.put("message", "정상적으로 변경되었습니다.");
+			}
+			else {
+				result.put("success", false);
+				result.put("message", "변경된 정보가 없습니다.");
+			}
+		}catch (RuntimeException re) {
+			log.debug("ApiController.updateNetPort : {} ",re);
+			result.put("success", false);
+			result.put("message", re.getMessage());
+		}catch (SQLException se) {
+			log.debug("ApiController.updateNetPort : {} ",se);
+			result.put("success", false);
+			result.put("message", se.getMessage());
+		}
+		return result;
+	}
 }

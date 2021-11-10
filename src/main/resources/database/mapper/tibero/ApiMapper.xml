@@ -779,5 +779,18 @@
 		   AND A.AUC_PRG_SQ BETWEEN #{stAucNo} AND #{edAucNo}
 		 ORDER BY A.AUC_PRG_SQ
 	</select>
+	<select id="selectAuctQcnForToday" parameterType="map" resultType="map">
+		SELECT A.*
+		  FROM TB_LA_IS_MH_AUC_QCN A
+		  WHERE A.AUC_DT = TO_CHAR(SYSDATE,'YYYYMMDD')
+		  AND A.DEL_YN = 0
+	</select>
+	
+	<update id="updateNetPort" parameterType="map">
+		UPDATE TB_LA_IS_BM_BZLOC SET
+			NET_PORT = #{netPort}
+			, WEB_PORT = #{webPort}
+		WHERE NA_BZPLC =  #{naBzplc}
+	</update>
 	
 </mapper>

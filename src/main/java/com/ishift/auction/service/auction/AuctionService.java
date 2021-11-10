@@ -253,5 +253,9 @@ public interface AuctionService {
 	 * @throws SQLException
 	 */
 	Map<String, Object> auctionFinish(Map<String, Object> aucStn, Map<String, Object> params) throws SQLException;
+
+	List<Map<String, Object>> selectAuctQcnForToday() throws SQLException;
+
+	int updateNetPort(Map<String, Object> params) throws SQLException;
 	
 }

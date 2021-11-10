@@ -3,6 +3,7 @@
 <!-- Page Content -->
 
 <input type="hidden" id="naBzPlc" value="${johapData.NA_BZPLC}" />
+<input type="hidden" id="webPort" value="${johapData.WEB_PORT}" />
 <input type="hidden" id="userId" value="${userId}" />
 <table class="bill-table tblBoard">
 	<colgroup>

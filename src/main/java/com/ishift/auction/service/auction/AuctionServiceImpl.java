@@ -681,4 +681,13 @@ public class AuctionServiceImpl implements AuctionService {
 		
 		return params;
 	}
+	
+	@Override
+	public List<Map<String, Object>> selectAuctQcnForToday() throws SQLException{
+		return auctionDAO.selectAuctQcnForToday();
+	}
+	@Override
+	public int updateNetPort(Map<String, Object> params) throws SQLException{
+		return auctionDAO.updateNetPort(params);
+	}
 }

@@ -15,9 +15,10 @@ var socket=null,scCnt=0,auctionConfig={};
 var setSocket = function(){        
 	if(!$('#naBzPlc').val()) return;
 	if(socket){ socket.connect(); return;}
-	var socketHost = location.hostname.indexOf("xn--o39an74b9ldx9g.kr") >-1?"cowauction.kr":location.hostname.indexOf("xn--e20bw05b.kr")>-1?"xn--e20bw05b.kr":"xn--e20bw05b.kr";
-
-	socket = io.connect('https://'+socketHost+':' + '9001' + '/6003' + '?auctionHouseCode='  + $('#naBzPlc').val(), {secure:true});
+	var socketHost = (location.hostname.indexOf("xn--o39an74b9ldx9g.kr") >-1 || location.hostname.indexOf("nhlva.nonghyup.com") >-1)?"cowauction.kr":location.hostname.indexOf("xn--e20bw05b.kr")>-1?"xn--e20bw05b.kr":"xn--e20bw05b.kr";
+	//socketHost += ':'+$('#webPort').val();
+	socketHost += ':9001';
+	socket = io.connect('https://'+socketHost+ '/6003' + '?auctionHouseCode='  + $('#naBzPlc').val(), {secure:true});
 
 	socket.on('connect_error', socketDisconnect);	
 	socket.on('connect', connectHandler);	

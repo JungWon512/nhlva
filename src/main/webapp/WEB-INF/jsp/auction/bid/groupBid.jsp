@@ -16,6 +16,7 @@
 <div class="auction_list">
 	<input type="hidden" id="naBzPlc"	value="${johapData.NA_BZPLC}" />
 	<input type="hidden" id="naBzPlcNo"	value="${johapData.NA_BZPLCNO}"/>
+	<input type="hidden" id="webPort" value="${johapData.WEB_PORT}" />
 	<input type="hidden" id="trmnAmnno" value="${trmnAmnno}" />
 	
 	<!-- //auction_area s -->

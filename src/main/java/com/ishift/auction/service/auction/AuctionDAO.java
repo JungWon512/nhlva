@@ -395,4 +395,14 @@ public class AuctionDAO {
 	public List<Map<String, Object>> selectBidCompleteList(Map<String, Object> params) throws SQLException {
 		return mainDao.selectList("ApiMapper.selectBidCompleteList", params);
 	}
+
+	public List<Map<String, Object>> selectAuctQcnForToday() throws SQLException {
+		// TODO Auto-generated method stub
+		return mainDao.selectList("ApiMapper.selectAuctQcnForToday", null);
+	}
+
+	public int updateNetPort(Map<String, Object> params) throws SQLException {
+		// TODO Auto-generated method stub
+		return mainDao.update("ApiMapper.updateNetPort", params);
+	}
 }
