@@ -25,11 +25,11 @@
 				<a href="javascript:pageMove('/admin/auction/board');" class="card-link">멀티비젼</a>
 			</div>
 		</div>
-		<div class="card">
-			<div class="card-body">
-				<a href="javascript:pageMove('/admin/auction/aucNotice');" class="card-link">공지사항</a>
-			</div>
-		</div>
+<!-- 		<div class="card"> -->
+<!-- 			<div class="card-body"> -->
+<!-- 				<a href="javascript:pageMove('/admin/auction/aucNotice');" class="card-link">공지사항</a> -->
+<!-- 			</div> -->
+<!-- 		</div> -->
 <!-- 	    <div class="card"> -->
 <!-- 	    <div class="card-body"> -->
 <!-- 	      <a href="javascript:pageMove('/admin/report/list');" class="card-link">접속현황</a> -->

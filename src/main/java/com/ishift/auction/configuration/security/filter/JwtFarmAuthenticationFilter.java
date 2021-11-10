@@ -86,9 +86,8 @@ public class JwtFarmAuthenticationFilter extends OncePerRequestFilter {
 					auth.setDetails(new WebAuthenticationDetailsSource().buildDetails(tmpRequest));
 					SecurityContextHolder.getContext().setAuthentication(auth);
 				}
-			}
-			catch(Exception e) {
-				log.error("Cannot set user authentication : {}", e.getMessage());
+			}catch (RuntimeException re) {
+				log.error("RuntimeException: JwtFarmAuthenticationFilter ",re);			
 			}
 		}
 		log.debug("#### JwtFarmAuthenticationFilter [e] #####");

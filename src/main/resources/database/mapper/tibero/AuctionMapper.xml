@@ -181,10 +181,10 @@
             DEL_YN = #{delYn} AND
         </trim>
         <if test="order != null">
-            ${order}
+            #{order}
         </if>
         <if test="pageSize != null and pageStart != null">
-            LIMIT ${pageStart} , ${pageSize}
+            LIMIT #{pageStart} , #{pageSize}
         </if>
     </select>
     
@@ -403,12 +403,12 @@
 			WHERE DEL_YN = 0
 		) A
 		 INNER JOIN TB_LA_IS_BM_BZLOC B ON A.NA_BZPLC = B.NA_BZPLC 
-		WHERE B.NA_BZPLCNO =${naBzPlcNo}
+		WHERE B.NA_BZPLCNO =#{naBzPlcNo}
 		<if test =" yyyymm != '' and yyyymm != null">
-			AND SUBSTRING(A.AUC_DT,1,6) = ${yyyymm}
+			AND SUBSTRING(A.AUC_DT,1,6) = #{yyyymm}
 		</if>
 		<if test =" searchDate != '' and searchDate != null">
-			AND A.AUC_DT = ${searchDate}
+			AND A.AUC_DT = #{searchDate}
 		</if>
 		GROUP BY A.NA_BZPLC,B.CLNTNM,A.AUC_DT
 		ORDER BY A.AUC_DT

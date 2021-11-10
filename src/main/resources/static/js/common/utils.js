@@ -64,10 +64,11 @@ var isApp = function() {
 // 경매 앱으로 이동
 var goAuctionApp = function(place) {
 	try {
-		if(place && place != 119){
-			modalAlert('','서비스 준비중입니다.');
-			return;
-		}
+		//var place = location.search.replace(/[^0-9]/g, "");
+		//if(place && place != 119){
+		//	modalAlert('','서비스 준비중입니다.');
+		//	return;
+		//}
 		// 안드로이드
 		if (window.auctionBridge) {
 			window.auctionBridge.moveAuctionBid();

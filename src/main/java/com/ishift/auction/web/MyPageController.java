@@ -1,5 +1,7 @@
+
 package com.ishift.auction.web;
 
+import java.sql.SQLException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -22,6 +24,9 @@ import com.ishift.auction.service.auction.AuctionService;
 import com.ishift.auction.util.SessionUtill;
 import com.ishift.auction.vo.FarmUserDetails;
 
+import lombok.extern.slf4j.Slf4j;
+
+@Slf4j
 @RestController
 public class MyPageController {
 	private static final Logger LOGGER = LoggerFactory.getLogger(MyPageController.class);
@@ -54,15 +59,15 @@ public class MyPageController {
 		}else {
 			map.put("searchDate",datelist.size() > 0 ? datelist.get(0).get("AUC_DT") :null);
 		}
-		param.put("searchDateBuy", map.get("searchDate"));
+		if(map.get("searchDate") != null) param.put("searchDateBuy", map.get("searchDate"));
 		
 		map.put("naBzPlcNo", place);
-		map.put("searchTxt", param.get("searchTxtBuy"));
-		map.put("searchAucObjDsc", param.get("searchAucObjDscBuy"));
-		map.put("searchTrmnAmnNo", sessionUtill.getUserId());
+		if(param.get("searchTxtBuy") != null) map.put("searchTxt", param.get("searchTxtBuy"));
+		if(param.get("searchAucObjDscBuy") != null) map.put("searchAucObjDsc", param.get("searchAucObjDscBuy"));
+		if(sessionUtill.getUserId() != null) map.put("searchTrmnAmnNo", sessionUtill.getUserId());
 		List<Map<String,Object>> list=auctionService.entrySelectList(map);
 
-		param.put("loginNo", sessionUtill.getUserId());
+		if(sessionUtill.getUserId() != null) param.put("loginNo", sessionUtill.getUserId());
 		mav.addObject("johapData", johap);
 		mav.addObject("subheaderTitle","경매예정조회");
 		mav.addObject("dateList",datelist);
@@ -103,14 +108,14 @@ public class MyPageController {
 			map.put("searchDate",datelist.size() > 0 ? datelist.get(0).get("AUC_DT") :null);
 		}
 		FarmUserDetails userVo = (FarmUserDetails)sessionUtill.getUserVo();
-		map.put("searchOrder", param.get("searchOrder"));
-		map.put("searchAucObjDsc", param.get("searchAucObjDsc"));
-		map.put("searchTxt", param.get("searchTxt"));
-		map.put("searchFhsIdNo", userVo.getFhsIdNo());
-		map.put("searchFarmAmnno", userVo.getFarmAmnno());
+		if(param.get("searchOrder") != null) map.put("searchOrder", param.get("searchOrder"));
+		if(param.get("searchAucObjDsc") != null) map.put("searchAucObjDsc", param.get("searchAucObjDsc"));
+		if(param.get("searchTxt") != null) map.put("searchTxt", param.get("searchTxt"));
+		if(userVo.getFhsIdNo() != null) map.put("searchFhsIdNo", userVo.getFhsIdNo());
+		if(userVo.getFarmAmnno() != null) map.put("searchFarmAmnno", userVo.getFarmAmnno());
 		
 		List<Map<String,Object>> list=auctionService.entrySelectList(map);
-		param.put("searchDate", map.get("searchDate"));
+		if(map.get("searchDate") != null) param.put("searchDate", map.get("searchDate"));
 		
 		mav.addObject("johapData", johap);
 		mav.addObject("paramVo", param);		
@@ -138,10 +143,15 @@ public class MyPageController {
 				result.put("message", "등록한 찜 정보가 없습니다.");
 			}
 			return result;
-		}
-		catch (Exception e) {
+		}catch (RuntimeException re) {
+			log.error("MyPageController.myFavorite : {} ",re);
 			result.put("success", false);
-			result.put("message", e.getMessage());
+			result.put("message", re.getMessage());
+			return result;
+		} catch (SQLException se) {
+			log.error("MyPageController.myFavorite : {} ",se);
+			result.put("success", false);
+			result.put("message", se.getMessage());
 			return result;
 		}
 	}

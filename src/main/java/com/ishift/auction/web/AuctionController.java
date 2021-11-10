@@ -1,5 +1,6 @@
 package com.ishift.auction.web;
 
+import java.sql.SQLException;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
@@ -70,12 +71,12 @@ public class AuctionController extends CommonController {
 		}else {
 			map.put("searchDate",datelist.size() > 0 ? datelist.get(0).get("AUC_DT") :null);
 		}
-		map.put("searchOrder", param.get("searchOrder"));
-		map.put("searchAucObjDsc", param.get("searchAucObjDsc"));
-		map.put("searchTxt", param.get("searchTxt"));
+		if(param.get("searchOrder") != null) map.put("searchOrder", param.get("searchOrder"));
+		if(param.get("searchAucObjDsc") != null) map.put("searchAucObjDsc", param.get("searchAucObjDsc"));
+		if(param.get("searchTxt") != null) map.put("searchTxt", param.get("searchTxt"));
 		
 		List<Map<String,Object>> list=auctionService.entrySelectList(map);
-		param.put("searchDate", map.get("searchDate"));
+		if(map.get("searchDate") != null) param.put("searchDate", map.get("searchDate"));
 		
 		mav.addObject("johapData", johap);
 		mav.addObject("paramVo", param);
@@ -123,11 +124,11 @@ public class AuctionController extends CommonController {
 			map.put("searchDate",datelist.size() > 0 ? datelist.get(0).get("AUC_DT") :null);
 		}
 		
-		param.put("searchDate", map.get("searchDate"));
+		if(map.get("searchDate") != null) param.put("searchDate", map.get("searchDate"));
 		map.put("naBzPlcNo", place);
-		map.put("searchOrder", param.get("searchOrder"));
-		map.put("searchTxt", param.get("searchTxt"));
-		map.put("searchAucObjDsc", param.get("searchAucObjDsc"));
+		if(param.get("searchOrder") != null) map.put("searchOrder", param.get("searchOrder"));
+		if(param.get("searchTxt") != null) map.put("searchTxt", param.get("searchTxt"));
+		if(param.get("searchAucObjDsc") != null) map.put("searchAucObjDsc", param.get("searchAucObjDsc"));
 		map.put("loginNo", sessionUtill.getUserId());
 		List<Map<String,Object>> list=auctionService.entrySelectList(map);
 
@@ -135,7 +136,7 @@ public class AuctionController extends CommonController {
 //			String birthMonth = this.getConvertBirthDay(this.getStringValue(entry.get("BIRTH")));
 //			entry.put("BIRTH_MONTH", birthMonth);
 //		}
-		param.put("loginNo", sessionUtill.getUserId());
+		if(sessionUtill.getUserId() != null) param.put("loginNo", sessionUtill.getUserId());
 		mav.addObject("johapData", johap);
 		mav.addObject("subheaderTitle","경매예정조회");
 		mav.addObject("dateList",datelist);
@@ -173,8 +174,10 @@ public class AuctionController extends CommonController {
 			param.put("today", LocalDate.now().format(DateTimeFormatter.ofPattern("yyyyMMdd")));
 			mav.addObject("paramVo",param);
 			mav.addObject("title",formatUtil.dateAddDotLenSix(yyyyMM));
-		}catch (Exception e) {
-			e.printStackTrace();
+		}catch (RuntimeException re) {
+			log.error("AuctionController.schedule : {} ",re);
+		}catch (SQLException se) {
+			log.error("AuctionController.schedule : {} ",se);
 		}
 		mav.addObject("subheaderTitle","일정안내");
 		mav.setViewName("auction/calendar/calendar");
@@ -223,7 +226,10 @@ public class AuctionController extends CommonController {
 	        mav.addObject("watchToken",token);
 	        mav.addObject("subheaderTitle","경매관전");
 	        mav.addObject("today",date.format(DateTimeFormatter.ofPattern("yyyy-MM-dd")));
-		}catch (Exception e) {
+		}catch (RuntimeException re) {
+			log.error("AuctionController.watch : {} ",re);
+		}catch (SQLException se) {
+			log.error("AuctionController.watch : {} ",se);
 		}
 		mav.setViewName("auction/watch/watch");
 		return mav;
@@ -286,7 +292,7 @@ public class AuctionController extends CommonController {
 //			params.put("aucObjDsc", (list.get(0).get("AUC_OBJ_DSC") == null ? "" : list.get(0).get("AUC_OBJ_DSC").toString()).split(","));
 			String aucObjDsc = (String)list.get(0).get("AUC_OBJ_DSC");
 			params.put("aucObjDsc", aucObjDsc.split(","));
-			params.put("trmnAmnno", loginUser.getTrmnAmnno());
+			if(loginUser.getTrmnAmnno() != null) params.put("trmnAmnno", loginUser.getTrmnAmnno());
 			mav.addObject("entryList", auctionService.selectMyEntryList(params));
 		}
 		
@@ -361,8 +367,9 @@ public class AuctionController extends CommonController {
 			mav.addObject("johapData",johap);
 			mav.addObject("trmnAmnno", sessionUtill.getUserId());
 			mav.addObject("subheaderTitle",johap.get("CLNTNM"));
-		}
-		catch (Exception e) {
+		}catch (RuntimeException re) {
+			return super.makeMessageResult(mav, params, "/main", "", "경매 서비스 준비중입니다.", "pageMove('/main');");
+		}catch (SQLException se) {
 			return super.makeMessageResult(mav, params, "/main", "", "경매 서비스 준비중입니다.", "pageMove('/main');");
 		}
 
@@ -390,9 +397,10 @@ public class AuctionController extends CommonController {
 			log.debug("params.loginNo > {}", params.get("loginNo"));
 			log.debug("sessionUtill.getUserId() > {}", sessionUtill.getUserId());
 			mav.addObject("params", params);
-		}
-		catch (Exception e) {
-			log.error(e.getMessage());
+		}catch (RuntimeException re) {
+			log.error("AuctionController.entryListPopUp : {} ",re);
+		}catch (SQLException se) {
+			log.error("AuctionController.entryListPopUp : {} ",se);
 		}
 		return mav;
 	}
@@ -408,11 +416,15 @@ public class AuctionController extends CommonController {
             	params.put("loginNo", sessionUtill.getUserId());        		
         	}
             result.put("data", auctionService.insertUpdateZim(params));
-        } catch (Exception e){
+        }catch (RuntimeException re) {
             result.put("success", false);
-            result.put("message", e.getMessage());
-            log.debug(e.getMessage());
-        }
+            result.put("message", re.getMessage());
+			log.error("AuctionController.insertUpdateZim : {} ",re);
+		}catch (SQLException se) {
+            result.put("success", false);
+            result.put("message", se.getMessage());
+			log.error("AuctionController.insertUpdateZim : {} ",se);
+		}
         return result;
     }
 
@@ -427,11 +439,15 @@ public class AuctionController extends CommonController {
             	params.put("loginNo", sessionUtill.getUserId());        		
         	}
             result.put("data", auctionService.deleteZimPrice(params));
-        } catch (Exception e){
+        }catch (RuntimeException re) {
             result.put("success", false);
-            result.put("message", e.getMessage());
-            log.debug(e.getMessage());
-        }
+            result.put("message", re.getMessage());
+			log.error("AuctionController.deleteZimPrice : {} ",re);
+		}catch (SQLException se) {
+            result.put("success", false);
+            result.put("message", se.getMessage());
+			log.error("AuctionController.deleteZimPrice : {} ",se);
+		}
         return result;
     }
 
@@ -453,9 +469,11 @@ public class AuctionController extends CommonController {
 			mav.addObject("johapData", johap);
 			mav.addObject("aucList", list);
 			mav.addObject("inputParam", param);
-		}
-		catch (Exception e) {
-		}
+		}catch (RuntimeException re) {
+			log.error("AuctionController.entryListApiPopUp : {} ",re);
+		}catch (SQLException se) {
+			log.error("AuctionController.entryListApiPopUp : {} ",se);
+		} 
 		mav.setViewName("pop/entryListApi");
 		return mav;
 	}
@@ -467,10 +485,11 @@ public class AuctionController extends CommonController {
 			List<Map<String, Object>> list = auctionService.selectMyBuyList(params);
 			mav.addObject("list", list);
 			mav.addObject("params", params);
-		}
-		catch (Exception e) {
-			e.printStackTrace();
-		}
+		}catch (RuntimeException re) {
+			log.error("AuctionController.buyStat : {} ",re);
+		}catch (SQLException se) {
+			log.error("AuctionController.buyStat : {} ",se);
+		} 
 		return mav;
 	}
 	
@@ -481,10 +500,11 @@ public class AuctionController extends CommonController {
 			List<Map<String, Object>> list = auctionService.selectMyBuyList(params);
 			mav.addObject("list", list);
 			mav.addObject("params", params);
-		}
-		catch (Exception e) {
-			e.printStackTrace();
-		}
+		}catch (RuntimeException re) {
+			log.error("AuctionController.bidStat : {} ",re);
+		}catch (SQLException se) {
+			log.error("AuctionController.bidStat : {} ",se);
+		} 
 		return mav;
 	}
 }

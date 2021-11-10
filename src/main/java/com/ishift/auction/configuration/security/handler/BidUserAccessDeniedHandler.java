@@ -27,8 +27,9 @@ public class BidUserAccessDeniedHandler implements AccessDeniedHandler {
 		log.debug("##### BidUserAccessDeniedHandler #####");
 		log.debug("place = {}", request.getParameter("place"));
 		String uri = request.getRequestURI();
-		String type = uri.startsWith("/my/entry") ? "1" : "0";
-		response.sendRedirect("/user/login?place=" + request.getParameter("place") + "&type=" + type);
+		String type = (uri.startsWith("/my/entry") ? "1" : "0").replaceAll("\r", "").replaceAll("\n", "");
+		String place = request.getParameter("place").replaceAll("\r", "").replaceAll("\n", "");
+		response.sendRedirect("/user/login?place=" + place + "&type=" + type);
 	}
 
 }

@@ -1,5 +1,6 @@
 package com.ishift.auction.web;
 
+import java.sql.SQLException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -52,16 +53,17 @@ public class AdminTaskController {
 		try {
 			final Map<String,Object> map = new HashMap<>();
 			final AdminUserDetails userVo = (AdminUserDetails)sessionUtill.getUserVo();
-			map.put("naBzPlc", userVo.getNaBzplc());
+			if(userVo.getNaBzplc() != null) map.put("naBzPlc", userVo.getNaBzplc());
 			map.put("entryType", "B");
-			map.put("naBzPlcNo", userVo.getPlace());
+			if(userVo.getPlace() != null) map.put("naBzPlcNo", userVo.getPlace());
 
 			final List<Map<String,Object>> dateList = auctionService.selectAucDateList(map);
 			mav.addObject("dateList", dateList);
 			mav.addObject("johapData", adminService.selectOneJohap(map));
-		}
-		catch (Exception e) {
-			log.error(e.getMessage());
+		}catch (RuntimeException re) {
+			log.error("AdminTaskController.main : {} ",re);
+		} catch (SQLException se) {
+			log.error("AdminTaskController.main : {} ",se);
 		}
 		mav.addObject("subheaderTitle", "경매업무");
 		return mav;
@@ -77,11 +79,12 @@ public class AdminTaskController {
 		try {
 			final Map<String,Object> map = new HashMap<>();
 			final AdminUserDetails userVo = (AdminUserDetails)sessionUtill.getUserVo();
-			map.put("naBzPlcNo", userVo.getPlace());
+			if(userVo.getPlace() != null) map.put("naBzPlcNo", userVo.getPlace());
 			mav.addObject("johapData", adminService.selectOneJohap(map));
-		}
-		catch (Exception e) {
-			log.error(e.getMessage());
+		}catch (RuntimeException re) {
+			log.error("AdminTaskController.select : {} ",re);
+		} catch (SQLException se) {
+			log.error("AdminTaskController.select : {} ",se);
 		}
 		mav.addObject("params", params);
 		mav.addObject("subheaderTitle", "작업선택");
@@ -98,19 +101,19 @@ public class AdminTaskController {
 	public ModelAndView entry(@RequestParam final Map<String, Object> params) {
 		final ModelAndView mav = new ModelAndView("admin/task/entry");
 		final Map<String, String> titleMap = new HashMap<String, String>() {{put("W", "중량 등록");put("L", "하한가 등록");put("N", "계류대 변경");}};
-		try {
-			
+		try {			
 			final AdminUserDetails userVo = (AdminUserDetails)sessionUtill.getUserVo();
-			params.put("naBzPlcNo", userVo.getPlace());
+			if(userVo.getPlace() != null) params.put("naBzPlcNo", userVo.getPlace());
 			mav.addObject("johapData", adminService.selectOneJohap(params));
 			
-			params.put("naBzplc", userVo.getNaBzplc());
-			params.put("searchDate", params.get("aucDt"));
-			params.put("searchAucObjDsc", params.get("aucObjDsc"));
+			if(userVo.getNaBzplc() != null) params.put("naBzplc", userVo.getNaBzplc());
+			if(params.get("aucDt") != null) params.put("searchDate", params.get("aucDt"));
+			if(params.get("aucObjDsc") != null) params.put("searchAucObjDsc", params.get("aucObjDsc"));
 			mav.addObject("entryList", auctionService.entrySelectList(params));
-		}
-		catch (Exception e) {
-			log.error(e.getMessage());
+		}catch (RuntimeException re) {
+			log.error("AdminTaskController.entry : {} ",re);
+		} catch (SQLException se) {
+			log.error("AdminTaskController.entry : {} ",se);
 		}
 		mav.addObject("params", params);
 		mav.addObject("subheaderTitle", titleMap.get(params.getOrDefault("regType", "")));
@@ -130,7 +133,7 @@ public class AdminTaskController {
 		final Map<String, Object> result = new HashMap<String, Object>();
 		try {
 			final AdminUserDetails userVo = (AdminUserDetails)sessionUtill.getUserVo();
-			params.put("naBzplc", userVo.getNaBzplc());
+			if(userVo.getNaBzplc() != null) params.put("naBzplc", userVo.getNaBzplc());
 			final Map<String, Object> cowInfo = auctionService.selectCowInfo(params);
 			if (cowInfo == null) {
 				result.put("success", false);
@@ -141,10 +144,15 @@ public class AdminTaskController {
 				result.put("message", "조회에 성공했습니다.");
 				result.put("cowInfo", cowInfo);
 			}
-		}
-		catch (Exception e) {
+		}catch (RuntimeException re) {
+			log.error("AdminTaskController.selectCowInfo : {} ",re);
 			result.put("success", false);
-			result.put("message", e.getMessage());
+			result.put("message", re.getMessage());
+			return result;
+		} catch (SQLException se) {
+			log.error("AdminTaskController.selectCowInfo : {} ",se);
+			result.put("success", false);
+			result.put("message", se.getMessage());
 			return result;
 		}
 		result.put("params", params);
@@ -164,7 +172,7 @@ public class AdminTaskController {
 		final Map<String, Object> result = new HashMap<String, Object>();
 		try {
 			final AdminUserDetails userVo = (AdminUserDetails)sessionUtill.getUserVo();
-			params.put("regUserId", userVo.getEno());
+			if(userVo.getEno() != null) params.put("regUserId", userVo.getEno());
 			
 			final int cnt = auctionService.updateCowInfo(params);
 			if (cnt > 0) {
@@ -175,10 +183,15 @@ public class AdminTaskController {
 				result.put("success", false);
 				result.put("message", "출장우 정보가 없습니다.");
 			}
-		}
-		catch (Exception e) {
+		}catch (RuntimeException re) {
+			log.error("AdminTaskController.saveCowInfo : {} ",re);
 			result.put("success", false);
-			result.put("message", e.getMessage());
+			result.put("message", re.getMessage());
+			return result;
+		} catch (SQLException se) {
+			log.error("AdminTaskController.saveCowInfo : {} ",se);
+			result.put("success", false);
+			result.put("message", se.getMessage());
 			return result;
 		}
 		return result;

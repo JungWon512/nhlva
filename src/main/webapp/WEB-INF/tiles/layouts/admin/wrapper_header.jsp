@@ -24,9 +24,9 @@
 		<li class="nav-item">
 			<a class="nav-link ${uri eq '/admin/auction/board' ? 'active' : ''}" href="/admin/auction/board">멀티비젼</a> 
 		</li>
-		<li class="nav-item">
-			<a class="nav-link ${uri eq '/admin/auction/aucNotice' ? 'active' : ''}" href="/admin/auction/aucNotice">공지사항</a> 
-		</li>
+<!-- 		<li class="nav-item"> -->
+<%-- 			<a class="nav-link ${uri eq '/admin/auction/aucNotice' ? 'active' : ''}" href="/admin/auction/aucNotice">공지사항</a>  --%>
+<!-- 		</li> -->
 		<sec:authorize access="!isAnonymous()"> 
 			<li class="nav-item"> 
 				<a class="nav-link" href="javascript:pageMove('/admin/user/login');">로그아웃</a> 

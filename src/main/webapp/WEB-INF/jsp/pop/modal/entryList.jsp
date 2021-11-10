@@ -3,8 +3,6 @@
 
 <div class="modal-content">
 	<button class="modal_popup_close" onclick="modalPopupClose('.pop_auction');return false;">닫기</button>
-	<div>${param.loginNo}</div>
-	<div>${loginNo}</div>
 	<div class="tab_list">
 		<ul>
 			<li style="width: 50%;"><a href="javascript:;" class="act btnTabMove" data-tab-id="schedule">예정조회</a></li>

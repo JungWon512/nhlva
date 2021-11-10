@@ -13,10 +13,6 @@ import org.springframework.scheduling.annotation.EnableScheduling;
 @ServletComponentScan
 @SpringBootApplication
 public class SpringBootWebApplication extends SpringBootServletInitializer {
-    public String getGreeting() {
-        return "Hello World!";
-    }
-
     public static void main(String[] args) {
     	SpringApplication app = new SpringApplication(SpringBootWebApplication.class);
     	app.run(args);

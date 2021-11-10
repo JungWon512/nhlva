@@ -27,6 +27,8 @@ import javax.annotation.Resource;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletResponse;
 
+import java.io.IOException;
+import java.sql.SQLException;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.Date;
@@ -84,278 +86,15 @@ public class AdminController {
 		try {
 			final Map<String,Object> map = new HashMap<>();
 			final AdminUserDetails userVo = (AdminUserDetails)sessionUtill.getUserVo();
-			map.put("naBzPlcNo", userVo.getPlace());
+			if(userVo.getPlace() != null) map.put("naBzPlcNo", userVo.getPlace());
 			mav.addObject("johapData", adminService.selectOneJohap(map));
-		}
-		catch (Exception e) {
-			log.error(e.getMessage());
+		}catch (RuntimeException re) {
+			log.error("AdminController.adminMain : {} ",re);
+		} catch (SQLException se) {
+			log.error("AdminController.adminMain : {} ",se);
 		}
 		mav.addObject("subheaderTitle", "메인");
 		return mav;
-	}
-
-	/**
-	 * 관리자 공지사항
-	 * @return
-	 * @throws Exception
-	 */
-	@PreAuthorize("hasRole('ROLE_ADMIN')")
-	@RequestMapping(value = "/admin/auction/aucNotice")
-	public ModelAndView aucNotice() throws Exception{
-		final ModelAndView mav = new ModelAndView();
-		final Map<String,Object> map = new HashMap<>();
-
-		AdminUserDetails userVo = (AdminUserDetails)sessionUtill.getUserVo();
-
-		map.put("delYn", "0");
-		map.put("naBzPlcNo", userVo.getPlace());
-		mav.addObject("johapData", adminService.selectOneJohap(map));
-
-		map.put("order", " ORDER BY SEQ_NO DESC");
-		mav.addObject("noticeData", adminService.selectListNotice(map));
-		mav.addObject("subheaderTitle", "공지사항");
-		mav.setViewName("admin/auction/notice/noticeList");
-		return mav;
-	}
-
-	/**
-	 * 관리자 공지사항 리스트
-	 * @param vo
-	 * @return
-	 * @throws Exception
-	 */
-	@ResponseBody
-	@PreAuthorize("hasRole('ROLE_ADMIN')")
-	@PostMapping(value = "/admin/auction/aucNotice.get", produces = MediaType.APPLICATION_JSON_VALUE)
-	@ApiOperation(value = "공지사항 listAPI", tags = "aucnotice")
-	public Map<String, Object> list(@RequestBody final Map<String,Object> vo) throws Exception {
-		final Map<String, Object> result = new HashMap<>();
-		try {
-			final AdminUserDetails userVo = (AdminUserDetails)sessionUtill.getUserVo();
-
-			vo.put("delYn", "0");
-			vo.put("naBzPlcNo", userVo.getPlace());
-
-			result.put("success", true);
-			result.put("data", adminService.selectListNotice(vo));
-			result.put("searchCount", adminService.countNotice(vo));
-		}
-		catch (Exception e){
-			result.put("success", false);
-			result.put("message", e.getMessage());
-			log.error(e.getMessage());
-		}
-		return result;
-	}
-
-	/**
-	 * 관리자 공지사항 등록/수정
-	 * @param naBzplc
-	 * @param seqNo
-	 * @return
-	 * @throws Exception
-	 */
-	@PreAuthorize("hasRole('ROLE_ADMIN')")
-	@RequestMapping(value = "/admin/auction/aucNotice/{naBzplc}/{seqNo}")
-	public ModelAndView viewPage(@PathVariable final String naBzplc
-								, @PathVariable final String seqNo) throws Exception{
-
-		final ModelAndView mav = new ModelAndView();
-		
-		final Map<String,Object> map = new HashMap<>();
-		map.put("naBzplc", naBzplc);
-		map.put("seqNo", seqNo);
-		map.put("delYn", "0");
-
-		final AdminUserDetails userVo = (AdminUserDetails)sessionUtill.getUserVo();
-
-		final Map<String,Object> temp = new HashMap<>();
-		temp.put("naBzPlcNo", userVo.getPlace());
-		mav.addObject("johapData", adminService.selectOneJohap(temp));
-		mav.addObject("data", adminService.selectOneNotice(map));
-		
-		final Map<String,Object> vo = new HashMap<>();
-		vo.put("naBzplc",naBzplc);
-		vo.put("seqNo", Long.parseLong(seqNo));
-		
-		mav.addObject("paramVO", vo);
-		mav.addObject("subheaderTitle","공지사항 등록/수정");
-		mav.setViewName("admin/auction/notice/noticeView");
-		return mav;
-	}
-	
-	/**
-	 * 관리자 공지사항 저장
-	 * @param aucNoticeVO
-	 * @return
-	 * @throws Exception
-	 */
-	@ResponseBody
-	@PreAuthorize("hasRole('ROLE_ADMIN')")
-	@PostMapping(value = "/admin/auction/aucNotice.json", produces = MediaType.APPLICATION_JSON_VALUE)
-	@ApiOperation(value = "공지사항 insertAPI", tags = "aucnotice")
-	public Map<String, Object> insert(@RequestBody final Map<String,Object> aucNoticeVO) throws Exception {
-		final Map<String, Object> result = new HashMap<>();
-		final Map<String,Object> paramMap = new HashMap<>();
-
-		paramMap.put("johpCd",aucNoticeVO.get("johpCd").toString());
-		final Map<String,Object> returnMap = adminService.selectOneMaxVO(paramMap);
-
-		Integer returnNextSeq =0 ;
-		if(returnMap ==null) {
-			returnNextSeq = 1;
-		}
-		else {
-			returnNextSeq =  Integer.parseInt(returnMap.get("seqNo").toString());
-		}
-		aucNoticeVO.put("seqNo",returnNextSeq);
-		
-		try {
-			result.put("success", true);
-			result.put("data", adminService.insertNotice(aucNoticeVO));
-		}
-		catch (Exception e){
-			result.put("success", false);
-			result.put("message", e.getMessage());
-			log.error(e.getMessage());
-		}
-		return result;
-	}
-	
-	/**
-	 * 관리자 공지사항 상세 api
-	 * @param johpCd
-	 * @param seqNo
-	 * @return
-	 * @throws Exception
-	 */
-	@ResponseBody
-	@PreAuthorize("hasRole('ROLE_ADMIN')")
-	@GetMapping(value = "/admin/auction/aucNotice/{johpCd}/{seqNo}.json", produces = MediaType.APPLICATION_JSON_VALUE)
-	@ApiOperation(value = "공지사항 detailAPI", tags = "aucnotice")
-	public Map<String, Object> get(@PathVariable final String johpCd
-								 , @PathVariable final String seqNo) throws Exception {
-		final Map<String, Object> result = new HashMap<>();
-		final Map<String, Object> map = new HashMap<>();
-		map.put("johpCd", johpCd);
-		map.put("seqNo", seqNo);
-
-		try {
-			result.put("success", true);
-			result.put("data", adminService.selectOneNotice(map));
-		}
-		catch (Exception e){
-			result.put("success", false);
-		}
-		return result;
-	}
-	
-	/**
-	 * 관리자 공지사항 저장
-	 * @param johpCd
-	 * @param seqNo
-	 * @param vo
-	 * @return
-	 * @throws Exception
-	 */
-	@ResponseBody
-	@PutMapping(value = "/admin/auction/aucNotice/{johpCd}/{seqNo}.json", produces = MediaType.APPLICATION_JSON_VALUE)
-	public Map<String, Object> update(@PathVariable final String johpCd
-									, @PathVariable final Long seqNo
-									, @RequestBody final Map<String,Object> vo) throws Exception {
-		final Map<String, Object> result = new HashMap<>();
-		result.put("success", true);
-		
-		try {
-			vo.put("johpCd",johpCd);
-			vo.put("seqNo",String.valueOf(seqNo));
-			result.put("noticeData", adminService.updateNotice(vo));
-		}
-		catch (Exception e){
-			result.put("success", false);
-			result.put("message", e.getMessage());
-			log.error(e.getMessage());
-		}
-		return result;
-	}
-	
-	/**
-	 * 관리자 공지사항 삭제
-	 * @param johpCd
-	 * @param seqNo
-	 * @return
-	 * @throws Exception
-	 */
-	@ResponseBody
-	@DeleteMapping(value = "/admin/auction/aucNotice/{johpCd}/{seqNo}.json", produces = MediaType.APPLICATION_JSON_VALUE)
-	@ApiOperation(value = "공지사항 deleteAPI", tags = "aucnotice")
-	public Map<String, Object> delete(@PathVariable final String johpCd
-									, @PathVariable final Long seqNo) throws Exception {
-		final Map<String, Object> result = new HashMap<>();
-
-		final Map<String, Object> map = new HashMap<>();
-		map.put("johpCd",johpCd);
-		map.put("seqNo",seqNo);
-
-		try {
-			result.put("success", true);
-			result.put("data", adminService.deleteNotice(map));
-		}
-		catch (Exception e){
-			result.put("success", false);
-			result.put("message", e.getMessage());
-			log.error(e.getMessage());
-		}
-		return result;
-	}
-	
-	/**
-	 * 관리자 공지사항 카운트
-	 * @param vo
-	 * @return
-	 * @throws Exception
-	 */
-	@ResponseBody
-	@PreAuthorize("hasRole('ROLE_ADMIN')")
-	@RequestMapping(value = "/admin/auction/aucNotice/count.json", produces = MediaType.APPLICATION_JSON_VALUE, method = {RequestMethod.POST})
-	@ApiOperation(value = "공지사항 countAPI", tags = "aucnotice")
-	public Map<String, Object> count(@RequestBody final Map<String,Object> vo) throws Exception {
-		final Map<String, Object> result = new HashMap<>();
-
-		try {
-			result.put("success", true);
-			result.put("data", adminService.countNotice(vo));
-		}
-		catch (Exception e){
-			result.put("success", false);
-			result.put("message", e.getMessage());
-			log.error(e.getMessage());
-		}
-		return result;
-	}
-	
-	/**
-	 * @param vo
-	 * @return
-	 * @throws Exception
-	 */
-	@ResponseBody
-	@PreAuthorize("hasRole('ROLE_ADMIN')")
-	@RequestMapping(value = "/admin/auction/aucNotice/exist.json", produces = MediaType.APPLICATION_JSON_VALUE, method = {RequestMethod.POST})
-	@ApiOperation(value = "공지사항 existAPI", tags = "aucnotice")
-	public Map<String, Object> exist(@RequestBody final Map<String,Object> vo) throws Exception {
-		final Map<String, Object> result = new HashMap<>();
-	
-		try {
-			result.put("success", true);
-			result.put("data", adminService.existNotice(vo));
-		}
-		catch (Exception e){
-			result.put("success", false);
-			result.put("message", e.getMessage());
-			log.error(e.getMessage());
-		}
-		return result;
 	}
 	
 	/**
@@ -370,14 +109,15 @@ public class AdminController {
 			final AdminUserDetails userVo = (AdminUserDetails)sessionUtill.getUserVo();
 
 			final Map<String, Object> params = new HashMap<>();
-			params.put("naBzPlcNo", userVo.getPlace());
+			if(userVo.getPlace() != null) params.put("naBzPlcNo", userVo.getPlace());
 
 			final Map<String, Object> bizInfo = adminService.selectOneJohap(params);
 			mav.addObject("johapData", bizInfo);
 			mav.addObject("naBzplc", bizInfo.get("NA_BZPLC"));
-		}
-		catch (Exception e) {
-			log.error(e.getMessage());
+		}catch (RuntimeException re) {
+			log.error("AdminController.adminBroadCast : {} ",re);
+		} catch (SQLException se) {
+			log.error("AdminController.adminBroadCast : {} ",se);
 		}
 		mav.addObject("subheaderTitle", "영상송출");
 		return mav;
@@ -397,22 +137,23 @@ public class AdminController {
 			final Map<String,Object> map = new HashMap<>();
 			final AdminUserDetails userVo = (AdminUserDetails)sessionUtill.getUserVo();
 			map.put("delYn", "0");
-			map.put("naBzPlcNo", userVo.getPlace());
+			if(userVo.getPlace() != null) map.put("naBzPlcNo", userVo.getPlace());
 			mav.addObject("johapData", adminService.selectOneJohap(map));
 
 			final LocalDateTime date = LocalDateTime.now();
 			final String today = date.format(DateTimeFormatter.ofPattern("yyyyMMdd"));
 			map.put("searchDate", today);
-			map.put("naBzPlcNo", userVo.getPlace());
+			if(userVo.getPlace() != null) map.put("naBzPlcNo", userVo.getPlace());
 
 			final Map<String,Object> count =auctionService.selectCountEntry(map);
+			String usrid = userVo.getUsrid();
 			mav.addObject("auctCount",count);
-			mav.addObject("userId", userVo.getUsrid());
+			mav.addObject("userId", usrid);
 			mav.addObject("today",date.format(DateTimeFormatter.ofPattern("yyyy-MM-dd")));
-
+			String naBzPlc = userVo.getNaBzplc();
 			final String tokenNm = "monster_"+(new Date()).getTime();
 			final JwtTokenVo jwtTokenVo = JwtTokenVo.builder()
-													.auctionHouseCode(userVo.getNaBzplc())
+													.auctionHouseCode(naBzPlc)
 													.userMemNum(tokenNm)
 													.userRole(Constants.UserRole.WATCHER)
 													.build();
@@ -420,9 +161,10 @@ public class AdminController {
 
 			mav.addObject("tokenNm", tokenNm);
 			mav.addObject("token", token);
-		}
-		catch (Exception e) {
-			log.error(e.getMessage());
+		}catch (RuntimeException re) {
+			log.error("AdminController.adminGhost : {} ",re);
+		} catch (SQLException se) {
+			log.error("AdminController.adminGhost : {} ",se);
 		}
 		mav.addObject("subheaderTitle", "모니터링");
 		return mav;
@@ -445,8 +187,9 @@ public class AdminController {
 			if(userVo != null || loginChk) {
 				Map<String,Object> map = new HashMap<>();
 				map.put("delYn", "0");
-				map.put("naBzPlcNo", userVo.getPlace());
-				mav.addObject("userId", userVo.getUsrid());
+				if(userVo.getPlace() != null) map.put("naBzPlcNo", userVo.getPlace());
+				String usrid = userVo.getUsrid();
+				mav.addObject("userId", usrid);
 				mav.addObject("johapData", adminService.selectOneJohap(map));
 				mav.setViewName("admin/auction/board/board");
 			}
@@ -454,8 +197,10 @@ public class AdminController {
 				mav.setViewName("redirect:/admin/main");
 				return mav;
 			}
-		} catch (Exception e) {
-			log.error(e.getMessage());
+		}catch (RuntimeException re) {
+			log.error("AdminController.adminBoard : {} ",re);
+		} catch (SQLException se) {
+			log.error("AdminController.adminBoard : {} ",se);
 		}
 		mav.addObject("subheaderTitle", "멀티비전");
 		return mav;
@@ -469,7 +214,7 @@ public class AdminController {
 		map.put("delYn", "0");
 
 		final AdminUserDetails userVo = (AdminUserDetails)sessionUtill.getUserVo();
-		map.put("naBzPlcNo", userVo.getPlace());
+		if(userVo.getPlace() != null) map.put("naBzPlcNo", userVo.getPlace());
 
 		mav.addObject("johapData", adminService.selectOneJohap(map));
 		mav.addObject("totalCnt", adminService.selectVisitTotalCnt(map));
@@ -507,9 +252,12 @@ public class AdminController {
 			result.put("recordsFiltered", totCnt);
 			result.put("inputParam", map);
 			result.put("success", true);
-		}
-		catch(Exception e){
+		}catch (RuntimeException re) {
 			result.put("success", false);
+			log.error("AdminController.adminBoard : {} ",re);
+		} catch (SQLException se) {
+			result.put("success", false);
+			log.error("AdminController.adminBoard : {} ",se);
 		}
 		return result;
 	}
@@ -522,7 +270,7 @@ public class AdminController {
 		map.put("delYn", "0");
 
 		final AdminUserDetails userVo = (AdminUserDetails)sessionUtill.getUserVo();
-		map.put("naBzPlcNo", userVo.getPlace());
+		if(userVo.getPlace() != null) map.put("naBzPlcNo", userVo.getPlace());
 
 		mav.addObject("johapData", adminService.selectOneJohap(map));
 		mav.setViewName("admin/auction/stream/stream");
@@ -546,19 +294,20 @@ public class AdminController {
 			SecurityContextHolder.getContext().setAuthentication(authentication);
 
 			AdminUserDetails adminUserDetails = (AdminUserDetails)authentication.getPrincipal();
-
+			String usrid = adminUserDetails.getUsrid();
+			String naBzPlc = adminUserDetails.getNaBzplc();
 			if (adminUserDetails != null) {
 				final JwtTokenVo jwtTokenVo = JwtTokenVo.builder()
-														.userMemNum(adminUserDetails.getUsrid())
-														.auctionHouseCode(adminUserDetails.getNaBzplc())
+														.userMemNum(usrid)
+														.auctionHouseCode(naBzPlc)
 														.userRole(Constants.UserRole.ADMIN)
 														.build();
 				token = jwtTokenUtil.generateToken(jwtTokenVo, Constants.JwtConstants.ACCESS_TOKEN);
 				final Cookie cookie = cookieUtil.createCookie(Constants.JwtConstants.ACCESS_TOKEN, token);
 				response.addCookie(cookie);
 			}
-		}
-		catch (Exception e) {
+		}catch (RuntimeException re) {
+			log.error("AdminController.adminUserLoginProc : {} ",re);
 			return false;
 		}
 		return result;

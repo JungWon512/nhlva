@@ -22,6 +22,9 @@ import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 
+import lombok.extern.slf4j.Slf4j;
+
+@Slf4j
 public class RequestBodyParamRequestWrapper extends HttpServletRequestWrapper{
 	private String body;
 	private Map<String,String[]> params;
@@ -107,8 +110,10 @@ public class RequestBodyParamRequestWrapper extends HttpServletRequestWrapper{
 		BufferedReader buffer = null;
 		try {
 			buffer = new BufferedReader(new InputStreamReader(this.getInputStream()));
-		}catch(Exception e){
-			e.printStackTrace();
+		}catch (IOException ie) {
+			log.error("IOException: RequestBodyParamRequestWrapper ",ie);			
+		}catch (RuntimeException re) {
+			log.error("RuntimeException: RequestBodyParamRequestWrapper ",re);			
 		}finally {
 			if(buffer != null) {
 				buffer.close();
@@ -129,7 +134,7 @@ public class RequestBodyParamRequestWrapper extends HttpServletRequestWrapper{
 				}	
 			}
 		} catch (ParseException e) {
-			e.printStackTrace();
+			log.error("RequestBodyParamRequestWrapper.setParam : {} ",e);
 		}
 	}
 	@Override

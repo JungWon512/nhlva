@@ -1,5 +1,6 @@
 package com.ishift.auction.web;
 
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -7,6 +8,8 @@ import java.util.Map;
 import java.util.Set;
 
 import org.springframework.util.StringUtils;
+
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.ishift.auction.configuration.security.token.AdminUserAuthenticationToken;
 import com.ishift.auction.service.auction.AuctionService;
 import com.ishift.auction.service.login.LoginService;
@@ -23,6 +26,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
+import org.json.simple.parser.ParseException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.MediaType;
@@ -115,8 +119,11 @@ public class ApiController {
 						if (resultMap != null) {
 							failList.add(resultMap);
 						}
-					}
-					catch (Exception e) {
+					}catch (RuntimeException re) {
+						log.debug("ApiController.updataAuctionResultForJson : {} ",re);
+						failList.add(info);
+					}catch (SQLException se) {
+						log.debug("ApiController.updataAuctionResultForJson : {} ",se);
 						failList.add(info);
 					}
 				}
@@ -139,11 +146,20 @@ public class ApiController {
 					result.put("message", "출하우 정보가 없습니다.");
 				}
 			}
-		}
-		catch (Exception e) {
-			log.error("error - updateAuctionStatus : {}", e.getMessage());
+		}catch (RuntimeException re) {
+			log.debug("ApiController.updataAuctionResultForJson : {} ",re);
 			result.put("success", false);
-			result.put("message", e.getMessage());
+			result.put("message", re.getMessage());
+			return result;
+		}catch (SQLException se) {
+			log.debug("ApiController.updataAuctionResultForJson : {} ",se);
+			result.put("success", false);
+			result.put("message", se.getMessage());
+			return result;
+		} catch (JsonProcessingException je) {
+			log.debug("ApiController.updataAuctionResultForJson : {} ",je);
+			result.put("success", false);
+			result.put("message", je.getMessage());
 			return result;
 		}
 		return result;
@@ -185,9 +201,13 @@ public class ApiController {
 						if (resultMap != null) {
 							failList.add(resultMap);
 						}
-					}
-					catch (Exception e) {
-						info.put("message", e.getMessage());
+					}catch (RuntimeException re) {
+						log.debug("ApiController.updataAuctionResultForForm : {} ",re);
+						info.put("message", re.getMessage());
+						failList.add(info);
+					}catch (SQLException se) {
+						log.debug("ApiController.updataAuctionResultForForm : {} ",se);
+						info.put("message", se.getMessage());
 						failList.add(info);
 					}
 				}
@@ -210,11 +230,18 @@ public class ApiController {
 					result.put("message", "출하우 정보가 없습니다.");
 				}
 			}
-		}
-		catch (Exception e) {
+		}catch (RuntimeException re) {
+			log.debug("ApiController.updataAuctionResultForForm : {} ",re);
 			result.put("success", false);
-			result.put("message", e.getMessage());
-			return result;
+			result.put("message", re.getMessage());
+		}catch (SQLException se) {
+			log.debug("ApiController.updataAuctionResultForForm : {} ",se);
+			result.put("success", false);
+			result.put("message", se.getMessage());
+		} catch (JsonProcessingException je) {
+			log.debug("ApiController.updataAuctionResultForForm : {} ",je);
+			result.put("success", false);
+			result.put("message", je.getMessage());
 		}
 		return result;
 	}
@@ -298,12 +325,16 @@ public class ApiController {
 			result.put("success", true);
 			result.put("message", "조회에 성공했습니다.");
 			result.put("entry", entryList);
-		}
-		catch (Exception e) {
-			e.printStackTrace();
+		}catch (RuntimeException re) {
+			log.error("ApiController.auctionEntry : {} ",re);
 			result.put("success", false);
 			result.put("entry", entryList);
-			result.put("message", e.getMessage());
+			result.put("message", re.getMessage());
+		}catch (SQLException se) {
+			log.error("ApiController.auctionEntry : {} ",se);
+			result.put("success", false);
+			result.put("entry", entryList);
+			result.put("message", se.getMessage());
 		}
 		return result;
 	}
@@ -355,10 +386,10 @@ public class ApiController {
 				return result;
 			}
 			
-		}
-		catch (Exception e) {
+		}catch (RuntimeException re) {
+			log.error("ApiController.auctionEntry : {} ",re);
 			result.put("success", false);
-			result.put("message", e.getMessage());
+			result.put("message", re.getMessage());
 			return result;
 		}
 	}
@@ -410,10 +441,10 @@ public class ApiController {
 				return result;
 			}
 			
-		}
-		catch (Exception e) {
+		}catch (RuntimeException re) {
+			log.debug("ApiController.authLoginForForm : {} ",re);
 			result.put("success", false);
-			result.put("message", e.getMessage());
+			result.put("message", re.getMessage());
 			return result;
 		}
 	}
@@ -456,8 +487,13 @@ public class ApiController {
 				result.put("message", "등록한 찜 정보가 없습니다.");
 			}
 			return result;
-		}
-		catch (Exception e) {
+		}catch (RuntimeException re) {
+			log.error("ApiController.myFavorite : {} ",re);
+			result.put("success", false);
+			result.put("message", "작업중 오류가 발생했습니다. 관리자에게 문의하세요.");
+			return result;
+		}catch (SQLException se) {
+			log.error("ApiController.myFavorite : {} ",se);
 			result.put("success", false);
 			result.put("message", "작업중 오류가 발생했습니다. 관리자에게 문의하세요.");
 			return result;
@@ -488,8 +524,13 @@ public class ApiController {
 				result.put("message", "조회에 실패했습니다.");
 			}
 			return result;
-		}
-		catch (Exception e) {
+		}catch (RuntimeException re) {
+			log.error("ApiController.appVersion : {} ",re);
+			result.put("success", false);
+			result.put("message", "작업중 오류가 발생했습니다. 관리자에게 문의하세요.");
+			return result;
+		}catch (SQLException se) {
+			log.error("ApiController.appVersion : {} ",se);
 			result.put("success", false);
 			result.put("message", "작업중 오류가 발생했습니다. 관리자에게 문의하세요.");
 			return result;
@@ -516,8 +557,13 @@ public class ApiController {
 				result.put("message", "조회에 성공했습니다.");
 				result.put("bizList", bizList);
 			}
-		}
-		catch (Exception e) {
+		}catch (RuntimeException re) {
+			log.error("ApiController.bizInfo : {} ",re);
+			result.put("success", false);
+			result.put("message", "작업중 오류가 발생했습니다. 관리자에게 문의하세요.");
+			return result;
+		}catch (SQLException se) {
+			log.error("ApiController.bizInfo : {} ",se);
 			result.put("success", false);
 			result.put("message", "작업중 오류가 발생했습니다. 관리자에게 문의하세요.");
 			return result;
@@ -553,9 +599,14 @@ public class ApiController {
 				result.put("message", "경매 참여 가능한 지점이 없습니다.");
 			}
 			return result;
-		}
-		catch(Exception e) {
-			log.error("error - getNearestBranchInfo : {}", e.getMessage());
+		}catch (RuntimeException re) {
+			log.error("ApiController.bizNearest : {} ",re);
+			log.error("error - getNearestBranchInfo : {}", re.getMessage());
+			result.put("success", false);
+			return result;
+		}catch (SQLException se) {
+			log.error("ApiController.bizNearest : {} ",se);
+			log.error("error - getNearestBranchInfo : {}", se.getMessage());
 			result.put("success", false);
 			return result;
 		}
@@ -587,9 +638,13 @@ public class ApiController {
 				result.put("message", "등록된 정보가 없습니다.");
 			}
 			return result;
-		}
-		catch (Exception e) {
-			log.error("error - bizServiceId : {}", e.getMessage());
+		}catch (RuntimeException re) {
+			log.error("error - bizServiceId : {}", re.getMessage());
+			result.put("success", false);
+			result.put("message", "작업중 오류가 발생했습니다. 관리자에게 문의하세요.");
+			return result;
+		}catch (SQLException se) {
+			log.error("error - bizServiceId : {}", se.getMessage());
 			result.put("success", false);
 			result.put("message", "작업중 오류가 발생했습니다. 관리자에게 문의하세요.");
 			return result;
@@ -640,8 +695,7 @@ public class ApiController {
 			else {
 				return splitAddr[0];
 			}
-		}
-		catch(Exception e) {
+		}catch (RuntimeException re) {
 			return "";
 		}
 	}
@@ -677,9 +731,13 @@ public class ApiController {
 			result.put("message", "조회에 성공했습니다.");
 			result.put("tokenList", tokenList);
 			return result;
-		}
-		catch (Exception e) {
-			log.error("error - userToken : {}", e.getMessage());
+		}catch (RuntimeException re) {
+			log.error("error - userToken : {}", re);
+			result.put("success", false);
+			result.put("message", "작업중 오류가 발생했습니다. 관리자에게 문의하세요.");
+			return result;
+		}catch (SQLException se) {
+			log.error("error - userToken : {}", se);
 			result.put("success", false);
 			result.put("message", "작업중 오류가 발생했습니다. 관리자에게 문의하세요.");
 			return result;
@@ -712,11 +770,15 @@ public class ApiController {
 				result.put("success", false);
 				result.put("message", "경매회차 정보가 없습니다.");
 			}
-		}
-		catch (Exception e) {
-			log.error("error - sealectAuctQcn : {}", e.getMessage());
+		}catch (RuntimeException re) {
+			log.error("error - sealectAuctQcn : {}", re);
 			result.put("success", false);
-			result.put("message", e.getMessage());
+			result.put("message", re.getMessage());
+			return result;
+		}catch (SQLException se) {
+			log.error("error - sealectAuctQcn : {}", se);
+			result.put("success", false);
+			result.put("message", se.getMessage());
 			return result;
 		}
 		return result;
@@ -758,11 +820,15 @@ public class ApiController {
 				result.put("success", false);
 				result.put("message", "조회된 정보가 없습니다.");
 			}
-		}
-		catch (Exception e) {
-			log.error("error - sealectAuctCowCnt : {}", e.getMessage());
+		}catch (RuntimeException re) {
+			log.error("error - sealectAuctCowCnt : {}", re);
 			result.put("success", false);
-			result.put("message", e.getMessage());
+			result.put("message", re.getMessage());
+			return result;
+		}catch (SQLException se) {
+			log.error("error - sealectAuctCowCnt : {}", se);
+			result.put("success", false);
+			result.put("message", se.getMessage());
 			return result;
 		}
 		return result;
@@ -809,11 +875,15 @@ public class ApiController {
 				result.put("success", false);
 				result.put("message", "출하우 정보가 없습니다.");
 			}
-		}
-		catch (Exception e) {
-			log.error("error - selectAuctCowList : {}", e.getMessage());
+		}catch (RuntimeException re) {
+			log.error("error - selectAuctCowList : {}", re);
 			result.put("success", false);
-			result.put("message", e.getMessage());
+			result.put("message", re.getMessage());
+			return result;
+		}catch (SQLException se) {
+			log.error("error - selectAuctCowList : {}", se);
+			result.put("success", false);
+			result.put("message", se.getMessage());
 			return result;
 		}
 		return result;
@@ -862,11 +932,20 @@ public class ApiController {
 				result.put("success", false);
 				result.put("message", "변경된 정보가 없습니다.");
 			}
-		}
-		catch (Exception e) {
-			log.error("error - updateLowSbidAmt : {}", e.getMessage());
+		}catch (RuntimeException re) {
+			log.error("error - updateLowSbidAmt : {}", re);
 			result.put("success", false);
-			result.put("message", e.getMessage());
+			result.put("message", re.getMessage());
+			return result;
+		}catch (SQLException se) {
+			log.error("error - updateLowSbidAmt : {}", se);
+			result.put("success", false);
+			result.put("message", se.getMessage());
+			return result;
+		} catch (ParseException pe) {
+			log.error("error - updateLowSbidAmt : {}", pe);
+			result.put("success", false);
+			result.put("message", pe.getMessage());
 			return result;
 		}
 		return result;
@@ -897,11 +976,15 @@ public class ApiController {
 				result.put("success", false);
 				result.put("message", "변경된 정보가 없습니다.");
 			}
-		}
-		catch (Exception e) {
-			log.error("error - updateAuctCowSt : {}", e.getMessage());
+		}catch (RuntimeException re) {
+			log.error("error - updateAuctCowSt : {}", re);
 			result.put("success", false);
-			result.put("message", e.getMessage());
+			result.put("message", re.getMessage());
+			return result;
+		}catch (SQLException se) {
+			log.error("error - updateAuctCowSt : {}", se);
+			result.put("success", false);
+			result.put("message", se.getMessage());
 			return result;
 		}
 		return result;
@@ -932,11 +1015,15 @@ public class ApiController {
 				result.put("success", false);
 				result.put("message", "변경된 정보가 없습니다.");
 			}
-		}
-		catch (Exception e) {
-			log.error("error - updateAuctCowResult : {}", e.getMessage());
+		}catch (RuntimeException re) {
+			log.error("error - updateAuctCowResult : {}", re);
 			result.put("success", false);
-			result.put("message", e.getMessage());
+			result.put("message", re.getMessage());
+			return result;
+		}catch (SQLException se) {
+			log.error("error - updateAuctCowResult : {}", se);
+			result.put("success", false);
+			result.put("message", se.getMessage());
 			return result;
 		}
 		return result;
@@ -968,11 +1055,15 @@ public class ApiController {
 				result.put("success", false);
 				result.put("message", "조회된 정보가 없습니다.");
 			}
-		}
-		catch (Exception e) {
-			log.error("error - selectBidLogCnt : {}", e.getMessage());
+		}catch (RuntimeException re) {
+			log.error("error - selectBidLogCnt : {}", re);
 			result.put("success", false);
-			result.put("message", e.getMessage());
+			result.put("message", re.getMessage());
+			return result;
+		}catch (SQLException se) {
+			log.error("error - selectBidLogCnt : {}", se);
+			result.put("success", false);
+			result.put("message", se.getMessage());
 			return result;
 		}
 		return result;
@@ -1004,11 +1095,15 @@ public class ApiController {
 				result.put("success", false);
 				result.put("message", "응찰 내역이 없습니다.");
 			}
-		}
-		catch (Exception e) {
-			log.error("error - selectBidLog : {}", e.getMessage());
+		}catch (RuntimeException re) {
+			log.error("error - selectBidLog : {}", re);
 			result.put("success", false);
-			result.put("message", e.getMessage());
+			result.put("message", re.getMessage());
+			return result;
+		}catch (SQLException se) {
+			log.error("error - selectBidLog : {}", se);
+			result.put("success", false);
+			result.put("message", se.getMessage());
 			return result;
 		}
 		return result;
@@ -1040,11 +1135,15 @@ public class ApiController {
 				result.put("success", false);
 				result.put("message", "조회된 정보가 없습니다.");
 			}
-		}
-		catch (Exception e) {
-			log.error("error - selectAuctCowInfo : {}", e.getMessage());
+		}catch (RuntimeException re) {
+			log.error("error - selectAuctCowInfo : {}", re);
 			result.put("success", false);
-			result.put("message", e.getMessage());
+			result.put("message", re.getMessage());
+			return result;
+		}catch (SQLException se) {
+			log.error("error - selectAuctCowInfo : {}", se);
+			result.put("success", false);
+			result.put("message", se.getMessage());
 			return result;
 		}
 		return result;
@@ -1086,11 +1185,15 @@ public class ApiController {
 				result.put("success", false);
 				result.put("message", "변경된 정보가 없습니다.");
 			}
-		}
-		catch (Exception e) {
-			log.error("error - selectAuctCowInfo : {}", e.getMessage());
+		}catch (RuntimeException re) {
+			log.error("error - selectAuctCowInfo : {}", re);
 			result.put("success", false);
-			result.put("message", e.getMessage());
+			result.put("message", re.getMessage());
+			return result;
+		}catch (SQLException se) {
+			log.error("error - selectAuctCowInfo : {}", se);
+			result.put("success", false);
+			result.put("message", se.getMessage());
 			return result;
 		}
 		return result;
@@ -1123,11 +1226,15 @@ public class ApiController {
 				result.put("success", false);
 				result.put("message", "조회된 정보가 없습니다.");
 			}
-		}
-		catch (Exception e) {
-			log.error("error - selectAuctCowInfo : {}", e.getMessage());
+		}catch (RuntimeException re) {
+			log.error("error - selectFeeInfo : {}", re);
 			result.put("success", false);
-			result.put("message", e.getMessage());
+			result.put("message", re.getMessage());
+			return result;
+		}catch (SQLException se) {
+			log.error("error - selectFeeInfo : {}", se);
+			result.put("success", false);
+			result.put("message", se.getMessage());
 			return result;
 		}
 		return result;
@@ -1160,11 +1267,15 @@ public class ApiController {
 				result.put("success", false);
 				result.put("message", "변경된 정보가 없습니다.");
 			}
-		}
-		catch (Exception e) {
-			log.error("error - selectAuctCowInfo : {}", e.getMessage());
+		}catch (RuntimeException re) {
+			log.error("error - deleteFeeInfo : {}", re);
 			result.put("success", false);
-			result.put("message", e.getMessage());
+			result.put("message", re.getMessage());
+			return result;
+		}catch (SQLException se) {
+			log.error("error - deleteFeeInfo : {}", se);
+			result.put("success", false);
+			result.put("message", se.getMessage());
 			return result;
 		}
 		return result;
@@ -1214,11 +1325,20 @@ public class ApiController {
 				result.put("success", false);
 				result.put("message", "변경된 정보가 없습니다.");
 			}
-		}
-		catch (Exception e) {
-			log.error("error - selectAuctCowInfo : {}", e.getMessage());
+		}catch (RuntimeException re) {
+			log.error("error - insertFeeLog : {}", re);
 			result.put("success", false);
-			result.put("message", e.getMessage());
+			result.put("message", re.getMessage());
+			return result;
+		}catch (SQLException se) {
+			log.error("error - insertFeeLog : {}", se);
+			result.put("success", false);
+			result.put("message", se.getMessage());
+			return result;
+		} catch (ParseException pe) {
+			log.error("error - insertFeeLog : {}", pe);
+			result.put("success", false);
+			result.put("message", pe.getMessage());
 			return result;
 		}
 		return result;
@@ -1250,11 +1370,15 @@ public class ApiController {
 				result.put("success", false);
 				result.put("message", "조회된 정보가 없습니다.");
 			}
-		}
-		catch (Exception e) {
-			log.error("error - selectAuctCowInfo : {}", e.getMessage());
+		}catch (RuntimeException re) {
+			log.error("error - selectAuctBidNum : {}", re);
 			result.put("success", false);
-			result.put("message", e.getMessage());
+			result.put("message", re.getMessage());
+			return result;
+		}catch (SQLException se) {
+			log.error("error - selectAuctBidNum : {}", se);
+			result.put("success", false);
+			result.put("message", se.getMessage());
 			return result;
 		}
 		return result;
@@ -1400,11 +1524,15 @@ public class ApiController {
 				result.put("success", false);
 				result.put("message", "필수 인자값이 없습니다.");
 			}				
-		}
-		catch (Exception e) {
-			log.error("error - auctStatus : {}", e.getMessage());
+		}catch (RuntimeException re) {
+			log.error("error - auctStatus : {}", re);
 			result.put("success", false);
-			result.put("message", e.getMessage());
+			result.put("message", re.getMessage());
+			return result;
+		}catch (SQLException se) {
+			log.error("error - auctStatus : {}", se);
+			result.put("success", false);
+			result.put("message", se.getMessage());
 			return result;
 		}
 		return result;
@@ -1436,11 +1564,15 @@ public class ApiController {
 				result.put("success", false);
 				result.put("message", "중도매인 정보가 없습니다.");
 			}
-		}
-		catch (Exception e) {
-			log.error("error - selectBidLog : {}", e.getMessage());
+		}catch (RuntimeException re) {
+			log.error("error - selectMacoYn : {}", re);
 			result.put("success", false);
-			result.put("message", e.getMessage());
+			result.put("message", re.getMessage());
+			return result;
+		}catch (SQLException se) {
+			log.error("error - selectMacoYn : {}", se);
+			result.put("success", false);
+			result.put("message", se.getMessage());
 			return result;
 		}
 		return result;

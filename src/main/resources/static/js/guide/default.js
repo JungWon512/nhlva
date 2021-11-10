@@ -55,7 +55,7 @@
 						if(socket && socket.connected) socket.disconnect();
 						location.reload();						
 					}catch(e){
-						//console.log(e);
+						console.log(e);
 					}
 				}
 			}

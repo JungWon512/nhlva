@@ -2,6 +2,7 @@ package com.ishift.auction.util;
 
 import java.io.BufferedReader;
 import java.io.DataOutputStream;
+import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
@@ -59,8 +60,10 @@ public class HttpUtils {
 			
 			conn.disconnect();
 			
-		} catch (Exception e) {
-			e.printStackTrace();
+		}catch (IOException ie) {
+			log.error("HttpUtils.postRequest : {} ",ie);
+		}catch (RuntimeException re) {
+			log.error("HttpUtils.postRequest : {} ",re);
 		}
 	}
 	

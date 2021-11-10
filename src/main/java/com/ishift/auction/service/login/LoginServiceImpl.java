@@ -1,5 +1,6 @@
 package com.ishift.auction.service.login;
 
+import java.sql.SQLException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -28,19 +29,19 @@ public class LoginServiceImpl implements LoginService {
 
 	/**
 	 * 로그인 중도매인 검색
-	 * @throws Exception 
+	 * @throws SQLException 
 	 */
 	@Override
-	public List<Map<String, Object>> selectWholesalerList(final Map<String, Object> params) throws Exception {
+	public List<Map<String, Object>> selectWholesalerList(final Map<String, Object> params) throws SQLException {
 		return loginDAO.selectWholesalerList(params);
 	}
 
 	/**
 	 * 조합코드(NA_BZPLC)와 거래인 관리번호(TRMN_AMNNO)로 중도매인 조회
-	 * @throws Exception
+	 * @throws SQLException
 	 */
 	@Override
-	public Map<String, Object> selectWholesaler(final Map<String, Object> params) throws Exception {
+	public Map<String, Object> selectWholesaler(final Map<String, Object> params) throws SQLException {
 		return loginDAO.selectWholesaler(params);
 	}
 
@@ -50,7 +51,7 @@ public class LoginServiceImpl implements LoginService {
 	 * @return
 	 */
 	@Override
-	public List<Map<String, Object>> selectFarmUserList(Map<String, Object> params) throws Exception {
+	public List<Map<String, Object>> selectFarmUserList(Map<String, Object> params) throws SQLException {
 		return loginDAO.selectFarmUserList(params);
 	}
 	
@@ -60,25 +61,25 @@ public class LoginServiceImpl implements LoginService {
 	 * @return
 	 */
 	@Override
-	public Map<String, Object> selectFarmUser(Map<String, Object> params) throws Exception {
+	public Map<String, Object> selectFarmUser(Map<String, Object> params) throws SQLException {
 		return loginDAO.selectFarmUser(params);
 	}
 	
 	/**
 	 * 방문로그 저장
-	 * @throws Exception
+	 * @throws SQLException
 	 */
 	@Override
-	public void insertVisitor(final Map<String, Object> vo) throws Exception{
+	public void insertVisitor(final Map<String, Object> vo) throws SQLException{
 		loginDAO.insertVisitor(vo);
 	}
 
 	/**
 	 * 중도매인 출하주 로그인 프로세스
-	 * @throws Exception
+	 * @throws SQLException
 	 */
 	@Override
-	public Map<String, Object> loginProc(final Map<String, Object> params) throws Exception {
+	public Map<String, Object> loginProc(final Map<String, Object> params) throws SQLException {
 		final Map<String, Object> returnMap = new HashMap<String, Object>();
 		String token = "";
 		
