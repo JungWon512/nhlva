@@ -75,7 +75,7 @@
 				A.COW_SOG_WT,                   <!-- 우출하중량    -->
 				A.AUC_OBJ_DSC,                   <!-- 경매대상구분코드  -->
 				A.FIR_LOWS_SBID_LMT_AM / 10000  AS FIR_LOWS_SBID_LMT_AM,        <!-- 최초최저낙찰한도금액  -->
-				A.LOWS_SBID_LMT_AM / 10000   AS LOWS_SBID_LMT_AM,         <!-- 최저낙찰한도금액  -->
+				NVL(A.LOWS_SBID_LMT_AM, A.FIR_LOWS_SBID_LMT_AM) / 10000   AS LOWS_SBID_LMT_AM,         <!-- 최저낙찰한도금액  -->
 				A.SRA_SBID_AM / 10000    AS SRA_SBID_AM,           <!-- 축산낙찰금액   -->
 				A.SRA_SBID_UPR,                   <!-- 낙찰 단가   -->
 				A.RMK_CNTN,                    <!-- 비고 내용   -->
@@ -729,8 +729,8 @@
 			 , A.FHS_ID_NO										/* 농가식별번호 */
 			 , A.FARM_AMNNO										/* 농가관린번호 */
 			 , C.TRMN_AMNNO										/* 날찰예정 중도매인번호 */
-			 , C.ATDR_AM										/* 낙찰예정가 */
-			 , C.ATDR_AM * 10000 AS ATDR_UPR
+			 , C.ATDR_AM * 10000 AS	ATDR_AM						/* 낙찰예정가 */
+			 , C.ATDR_AM AS ATDR_UPR
 			 , C.LVST_AUC_PTC_MN_NO								/* 낙찰예정 참가번호 */
 			 , C.ATDR_DTM										/* 최종응찰일시 */
 		  FROM TB_LA_IS_MH_SOG_COW A

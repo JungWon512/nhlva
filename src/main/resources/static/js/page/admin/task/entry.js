@@ -132,10 +132,10 @@
 					listHtml.push('	<dl>');
 					listHtml.push('		<dd class="col1" data-amnno="' + item.SRA_INDV_AMNNO+ '" data-auc-obj-dsc="' + item.AUC_OBJ_DSC+ '" data-oslp-no="' + item.OSLP_NO+ '" data-led-sqno="' + item.LED_SQNO+ '">' + item.AUC_PRG_SQ + '</dd>');
 					if (regType == "W") {
-						listHtml.push('<dd class="col2">' + (parseInt(item.COW_SOG_WT) == '0' || parseInt(item.COW_SOG_WT) == 'NaN' ? '-' : parseInt(item.COW_SOG_WT)) + '</dd>');
+						listHtml.push('<dd class="col2">' + (item.COW_SOG_WT == null || parseInt(item.COW_SOG_WT) == '0' || parseInt(item.COW_SOG_WT) == 'NaN' ? '-' : parseInt(item.COW_SOG_WT)) + '</dd>');
 					}
 					else if (regType == "L") {
-						listHtml.push('<dd class="col2">' + (parseInt(item.LOWS_SBID_LMT_AM) == '0' || parseInt(item.LOWS_SBID_LMT_AM) == 'NaN' ? '-' : parseInt(item.LOWS_SBID_LMT_AM)) + '</dd>');
+						listHtml.push('<dd class="col2">' + (item.LOWS_SBID_LMT_AM == null || parseInt(item.LOWS_SBID_LMT_AM) == '0' || parseInt(item.LOWS_SBID_LMT_AM) == 'NaN' ? '-' : parseInt(item.LOWS_SBID_LMT_AM/10000)) + '</dd>');
 					}
 					else {
 						listHtml.push('<dd class="col2">' + item.MODL_NO + '</dd>');
@@ -221,7 +221,7 @@
 				sHtml.push('					<tr>');
 				sHtml.push('						<th>하한가</th>');
 				sHtml.push('						<td class="input-td">');
-				sHtml.push('							<input type="text" name="firLowsSbidLmtAm" class="pd5 required" value="' + (cowInfo.LOWS_SBID_LMT_AM  == 0 ? "" : cowInfo.LOWS_SBID_LMT_AM) + '" maxlength="4" pattern="\d*" inputmode="numeric" style="width:80%;" />만 원');
+				sHtml.push('							<input type="text" name="firLowsSbidLmtAm" class="pd5 required" value="' + (cowInfo.LOWS_SBID_LMT_AM == null ? "" : cowInfo.LOWS_SBID_LMT_AM) + '" maxlength="4" pattern="\d*" inputmode="numeric" style="width:80%;" />만 원');
 				sHtml.push('						</td>');
 				sHtml.push('					</tr>');
 			}

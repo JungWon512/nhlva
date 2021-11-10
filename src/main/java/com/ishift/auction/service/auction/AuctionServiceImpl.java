@@ -591,7 +591,8 @@ public class AuctionServiceImpl implements AuctionService {
 				final String lvstAucPtcMnNo	= info.get("LVST_AUC_PTC_MN_NO").toString();
 				final String sraSbidAm		= info.get("ATDR_AM").toString();
 				final String sraSbidUpr		= info.get("ATDR_UPR").toString();
-				
+
+				info.put("naBzplc",			naBzplc);
 				info.put("naBzPlc",			naBzplc);
 				info.put("aucDt",			aucDt);
 				info.put("aucObjDsc",		aucObjDsc);

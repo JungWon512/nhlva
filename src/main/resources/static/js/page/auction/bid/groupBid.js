@@ -23,12 +23,14 @@ $(function() {
 				$(this).get(0).muted = true;
 				if(!$(this).get(0).paused) $(this).get(0).pause();
 			});
-			
+			var callback = function(currentSlide){
 			var video =$('#remoteVideo'+currentSlide).get(0);
 			if($('#remoteVideo1').get(0) && currentSlide == 1 && !$('.m_sound').hasClass('off')){
 				$('#remoteVideo1').get(0).muted = false;
 			}
 			if(video && video.paused) video.play();
+			}
+			setRemonJoinRemote(currentSlide,callback);
 		});
 	};
 	
@@ -56,12 +58,16 @@ $(function() {
 		// 숫자 입력
 		$("button.num").on(clickEvent, function(){
 			var maxLength = 4;
+			if (auctionConfig.seData && auctionConfig.seData.clearYn && auctionConfig.seData.clearYn == "Y") {
+				$("input[name='bidAmt']").val("");
+			}
 			var num = $(this).val();
 			var $target = $(".calculator_top").find("input.active");
 			var inputVal = $target.val().split(",").join("");
 			if (inputVal == "" && num == "0") return;
 			if (inputVal.length >= maxLength) return;
 			$target.val(("" + inputVal + num).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ","));
+			auctionConfig.seData.clearYn = "N";	
 		});
 		
 		// 입력 숫자 삭제
@@ -258,6 +264,7 @@ var socketStart = function(){
 	//socketHost += ':'+$('#webPort').val();
 	socketHost += ':9001';
 	socket = io.connect('https://'+socketHost + '/6003' + '?auctionHouseCode='  + $('#naBzPlc').val(), {secure:true});
+	socket = io.connect('http://192.168.0.23:9001/6003?auctionHouseCode=' + $('#naBzPlc').val());
 
 //	socket.on('connect_error', socketDisconnect);
 	
@@ -311,9 +318,13 @@ var socketStart = function(){
 	socket.on('ResponseBiddingInfo', messageHandler);
 }
 //소켓통신 disconnect Event
-var socketDisconnect = function(){
-	socket.disconnect();
-}
+//var socketDisconnect = function(){
+//	//sFlag = true;
+//	socket.disconnect();
+//	modalAlert('', "경매가 종료되었습니다."
+//			 , function(){pageMove('/main', false);}
+//	);
+//}
 
 //소켓통신 connect시 Event
 var connectHandler = function() {
@@ -490,7 +501,6 @@ var messageHandler = function(data) {
 				$("input[name='bidAmt']").val("");
 				$("div.auc-txt > div.info_board").html("<span class='txt-yellow'>응찰</span>하시기 바랍니다.");
 				// 출품번호, 경매대상구분코드
-				fnGetFavoritePrice(dataArr[2], auctionConfig.scData.aucObjDsc);
 				auctionConfig.enableBid = "Y";
 			}
 			else if(auctionConfig.asData.status == "8005") {
@@ -574,6 +584,8 @@ var messageHandler = function(data) {
 				tr.find('dl dd.selSts').text(dataArr[29]==11?'대기':dataArr[29]==22?'낙찰':dataArr[29]==23?'유찰':'대기');
 				changeTrRow(tr);
 				convertDefaultValue(tr.find('dl dd'));
+				
+				fnGetFavoritePrice(dataArr[2], dataArr[4]);
 //			}
 			break;
 		case "SD" :
@@ -679,7 +691,7 @@ var messageHandler = function(data) {
 // 경매 번호 입력
 var fnSetAuctionInfo = function() {
 	if ($("input[name='auctionNum']").val() == "") {
-		fnMessageSample("경매 번호를 입력해주세요.");
+		messageSample("경매 번호를 입력해주세요.");
 		return;
 	}
 	
@@ -688,7 +700,7 @@ var fnSetAuctionInfo = function() {
 	reqData.push("AE");
 	reqData.push(auctionConfig.arData.naBzplc);
 	reqData.push(auctionConfig.arData.trmnAmnno);
-	reqData.push($("input[name='auctionNum']").val());
+	reqData.push($("input[name='aucNum']").val());
 	socket.emit('packetData', reqData.join('|'));
 	
 	// 이전에 응찰한 가격이 있는지 요청한다.
@@ -697,16 +709,16 @@ var fnSetAuctionInfo = function() {
 	reqBidData.push(auctionConfig.arData.naBzplc);
 	reqBidData.push(auctionConfig.arData.trmnAmnno);
 	reqBidData.push(auctionConfig.arData.entryNum);
-	reqBidData.push($("input[name='auctionNum']").val());
+	reqBidData.push($("input[name='aucNum']").val());
 	socket.emit('packetData', reqBidData.join('|'));
 	
-	$(".auctionNum").hide().find("input, button").prop("disabled", true).removeClass("active");
+	$(".aucNum").hide().find("input, button").prop("disabled", true).removeClass("active");
 	$(".bidAmt").show().find("input, button").prop("disabled", false).addClass("active").val("");
 	$(".btn_before").prop("disabled", false);
 };
 
 var fnBefore = function() {
-	$(".auctionNum").show().find("input, button").prop("disabled", false).addClass("active");
+	$(".aucNum").show().find("input, button").prop("disabled", false).addClass("active");
 	$(".bidAmt").hide().find("input, button").prop("disabled", true).removeClass("active").val("");
 	$(".btn_before").prop("disabled", true);
 }
@@ -855,7 +867,6 @@ var fnGetFavoritePrice = function(aucSeq, aucClass) {
 		naBzplc : $("#naBzPlc").val(),
 		aucPrgSq : aucSeq,
 		aucObjDsc : aucClass,
-//		aucDt : "20210813",
 		trmnAmnno : $("#trmnAmnno").val()
 	};	
 	$.ajax({
@@ -877,12 +888,14 @@ var fnGetFavoritePrice = function(aucSeq, aucClass) {
 		}
 	});
 }
-// 소켓통신 connect 및 이벤트 바인딩 [e]소켓통신 connect 및 이벤트 바인딩 [e]
+// 소켓통신 connect 및 이벤트 바인딩 [e]
 
 // remon 영성 관련 로직 [s]
 let dummyRemon,loop;
-const serviceId = '37924178-ee14-4f8a-9caa-ff858defea7f';
-const serviceKey = '5f7bc510a5607072e1a648926e7bfe1df6a44dfb800e750a698bf5265469e6ce';
+//const serviceId = '37924178-ee14-4f8a-9caa-ff858defea7f';
+//const serviceKey = '5f7bc510a5607072e1a648926e7bfe1df6a44dfb800e750a698bf5265469e6ce';
+const serviceId =  $('#kkoSvcId').val();
+const serviceKey = $('#kkoSvcKey').val();
 	
 var config = {
   	credential: {
@@ -890,6 +903,8 @@ var config = {
     	, serviceId: serviceId
   	},view: {
 		remote: '#remoteVideo'
+	},  dev:{
+		logLevel: 'SILENT'
 	}
 };
 //remon Event listener
@@ -922,8 +937,30 @@ var setLoopJoinEvent = async function () {
 	await dummyRemon.fetchCasts().then(function(data){
 		setLoopChDraw(data);
 	});
+}
 	
-	//setLoopChDraw(castLists);
+var setRemonJoinRemote =async function (index,callback) {  
+	dummyRemon.config.credential.serviceId = serviceId;
+    dummyRemon.config.credential.key = serviceKey;
+	await dummyRemon.fetchCasts().then(function(data){
+		var castList = data.filter(function(cast){if(cast.name.indexOf($('#naBzPlc').val()+'_remoteVideo'+index)>=0) return this;})
+			.sort(function(castPre,castNext){
+			var pre = castPre.name.split('_')[1].replace('remoteVideo','');
+			var next = castNext.name.split('_')[1].replace('remoteVideo','');			
+			return pre-next;
+		});
+		var height = $('div.seeBox_slick ul.slider .boarder').closest('.slick-slide').height();
+		$('div.seeBox_slick ul.slider li.video_item').height(height-1);
+		
+		if(castList.length > 0){
+			if($('#kkoSvcCnt').val() < index) return;
+			 $('#remoteVideo'+(index)).attr('castName',castList[0].name);
+			 setLoopChJoinInIn(castList[0],index);
+		
+			var castName = $('#remoteVideo1').attr('castName');
+		}
+		if(callback)callback();
+	});
 }
 var setLoopChDraw = function(castList){
 	var sortingCastList = castList.filter(function(cast){if(cast.name.indexOf($('#naBzPlc').val()+'_remoteVideo')>=0) return this;})
@@ -933,24 +970,24 @@ var setLoopChDraw = function(castList){
 		return pre-next;
 	});
 	
-	var height = $('div.seeBox_slick div.slick-list').height();
+	//var height = $('div.seeBox_slick div.slick-list').height();
+	var height = $('div.seeBox_slick ul.slider .boarder').closest('.slick-slide').height();
+	$('div.seeBox_slick ul.slider li.video_item').height(height-1);
+	
 	if(sortingCastList.length>0){
 		for(var i=0;i<sortingCastList.length;i++){
-			$('div.seeBox_slick ul.slider').slick('slickAdd','<div><div><li class="video_item" style="width: 100%;height: '+(height?height:350)+'px;">'
-			//+'<video id="remoteVideo'+(i+1)+'" castName = "'+sortingCastList[i].name+'" style="width: 100%;height: 100%;" poster="/static/images/assets/no_video_18980.png" playsinline webkit-playsinline></video>'
-			//+'<video id="remoteVideo'+(i+1)+'" castName = "'+sortingCastList[i].name+'" style="width: 100%;background: black;height: 100%;" poster="/static/images/assets/no_video_18980.png" playsinline webkit-playsinline autoplay '+(i !=0?'muted':'')+'>Your browser does not support HTML5 video.</video>'
-			+'<video id="remoteVideo'+(i+1)+'" castName = "'+sortingCastList[i].name+'" style="width: 100%;background: black;height: 100%;" poster="/static/images/assets/no_video_18980.png" playsinline webkit-playsinline muted>Your browser does not support HTML5 video.</video>'
-			+'</li></div></div>');			//autoplay controls playsinline
-			 setLoopChJoinInIn(sortingCastList[i],i+1);
+			//$('div.seeBox_slick ul.slider').slick('slickAdd','<div><div><li class="video_item" style="width: 100%;height: '+(height?height:350)+'px;">'
+			//+'<video id="remoteVideo'+(i+1)+'" castName = "'+sortingCastList[i].name+'" style="width: 100%;background: black;height: 100%;" poster="/static/images/assets/no_video_18980.png" playsinline webkit-playsinline muted>Your browser does not support HTML5 video.</video>'
+			//+'</li></div></div>');			//autoplay controls playsinline
+			
+			if($('#kkoSvcCnt').val() <= i) return;
+			 $('#remoteVideo'+(i+1)).attr('castName',sortingCastList[i].name);
+			 //setLoopChJoinInIn(sortingCastList[i],i+1);
 	 	};	
 		var castName = $('#remoteVideo1').attr('castName');
 		if(castName && castName.indexOf('remote') >= 0){
 			if(sortingCastList.length > 0) $('div.seeBox_slick ul.slider').slick('goTo', 0);
 		}		
-	}else{
-			$('div.seeBox_slick ul.slider').slick('slickAdd','<div><li class="video_item" style="width: 100%;height: '+(height?height:350)+'px;">'
-			+'<video id="remoteVideo_Blank" style="width: 100%;background: black;height: 100%;" poster="/static/images/assets/no_video_18980.png" playsinline webkit-playsinline autoplay muted>Your browser does not support HTML5 video.</video>'
-			+'</li></div>');
 	}
 };
 
@@ -970,5 +1007,6 @@ var setLoopChJoinInIn = function(cast,i){
 // remon 영성 관련 로직 [e]
 
 window.addEventListener('beforeunload', function(){
+	sFlag = true;
 	if(socket.connected) socket.disconnect();
 });
