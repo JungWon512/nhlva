@@ -20,6 +20,9 @@ import org.springframework.web.servlet.ModelAndView;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+
+import java.io.IOException;
+import java.sql.SQLException;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -96,12 +99,15 @@ public class LoginController {
 				result.put("success", false);
 			}
 			return result;
-		}
-		catch(Exception e) {
-			log.error("error - getTokenInfo : {}", e.getMessage());
+		}catch (RuntimeException re) {
+			log.error("LoginController.getTokenInfo : {} ",re);
 			result.put("success", false);
 			return result;
-		}
+		}catch (SQLException se) {
+			log.error("LoginController.getTokenInfo : {} ",se);
+			result.put("success", false);
+			return result;
+		} 
 	}
 
 	/**
@@ -144,9 +150,10 @@ public class LoginController {
 		try {
 			response.addCookie(cookieUtil.deleteCookie(request, Constants.JwtConstants.ACCESS_TOKEN));
 			response.sendRedirect("/home");
-		}
-		catch(Exception e) {
-			
+		}catch (RuntimeException re) {
+			log.error("LoginController.logoutProc : {} ",re);
+		} catch (IOException ie) {
+			log.error("LoginController.logoutProc : {} ",ie);
 		}
 	}
 

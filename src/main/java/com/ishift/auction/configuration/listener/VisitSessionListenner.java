@@ -1,7 +1,5 @@
 package com.ishift.auction.configuration.listener;
 
-import java.sql.SQLException;
-import java.util.Enumeration;
 import java.util.Map;
 
 import javax.servlet.annotation.WebListener;
@@ -17,10 +15,10 @@ import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 import org.springframework.web.context.support.WebApplicationContextUtils;
 
+import java.io.IOException;
+import lombok.extern.slf4j.Slf4j;
 
-import lombok.extern.java.Log;
-
-@Log
+@Slf4j
 @WebListener
 public class VisitSessionListenner implements HttpSessionListener{	
 	@Override
@@ -56,10 +54,10 @@ public class VisitSessionListenner implements HttpSessionListener{
 	        vo.put("visit_refer", req.getHeader("referer"));
 	        vo.put("visit_agent", req.getHeader("User-Agent"));
 	        //System.out.println(vo);
-	        //SqlSessionTemplate sqlSession = getSessionService(http);
-	        //sqlSession.insert("LoginMapper.insertVisitor",vo);
-		} catch (Exception e) {
-			e.printStackTrace();
+	        SqlSessionTemplate sqlSession = getSessionService(http);
+	        sqlSession.insert("LoginMapper.insertVisitor",vo);
+		}catch (RuntimeException re) {
+			log.error("RuntimeException: VisitSessionListenner ",re);			
 		}
     }
 	@Override

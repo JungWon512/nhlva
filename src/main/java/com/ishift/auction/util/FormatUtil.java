@@ -3,6 +3,7 @@ package com.ishift.auction.util;
 
 import com.ishift.auction.vo.JwtTokenVo;
 import io.jsonwebtoken.*;
+import java.io.IOException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
@@ -39,8 +40,8 @@ public class FormatUtil {
 			} else {
 				result = input;
 			}
-		} catch(Exception ex){
-			result = input;
+		}catch (RuntimeException re) {
+			return input;
 		}
 		return result;
 	}
@@ -53,8 +54,8 @@ public class FormatUtil {
 			} else {
 				result = input;
 			}
-		} catch(Exception ex){
-			result = input;
+		}catch (RuntimeException re) {
+			return input;
 		}
 		return result;
 	}
@@ -72,8 +73,8 @@ public class FormatUtil {
 			} else {
 				result = input;
 			}
-		} catch(Exception ex){
-			result = input;
+		}catch (RuntimeException re) {
+			return input;
 		}
 		return result;
 	}

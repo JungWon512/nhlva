@@ -1,5 +1,6 @@
 package com.ishift.auction.service.admin.user;
 
+import java.sql.SQLException;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -11,6 +12,7 @@ import org.springframework.stereotype.Service;
 import com.ishift.auction.service.admin.login.AdminLoginService;
 import com.ishift.auction.vo.AdminUserDetails;
 
+import java.io.IOException;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
@@ -45,9 +47,11 @@ public class AdminUserDetailsServiceImpl implements AdminUserDetailsService {
 			else {
 				throw new UsernameNotFoundException("[" + username + "] 1.로그인 정보를 찾을 수 없습니다.");
 			}
-		}
-		catch (Exception e) {
-			log.error(e.getMessage());
+		}catch (RuntimeException re) {
+			log.error("RuntimeException: AdminUserDetailsServiceImpl ",re);			
+			throw new UsernameNotFoundException("[" + username + "] 로그인 정보를 찾을 수 없습니다.");
+		} catch (SQLException se) {
+			log.error("SQLException: AdminUserDetailsServiceImpl ",se);			
 			throw new UsernameNotFoundException("[" + username + "] 로그인 정보를 찾을 수 없습니다.");
 		}
 		
@@ -80,49 +84,15 @@ public class AdminUserDetailsServiceImpl implements AdminUserDetailsService {
 			else {
 				throw new UsernameNotFoundException(" 1.로그인 정보를 찾을 수 없습니다.");
 			}
-		}
-		catch (Exception e) {
-			log.error(e.getMessage());
+		}catch (RuntimeException re) {
+			log.error("RuntimeException: AdminUserDetailsServiceImpl ",re);			
 			throw new UsernameNotFoundException(" 로그인 정보를 찾을 수 없습니다.");
+		}catch (SQLException se) {
+			log.error("SQLException: AdminUserDetailsServiceImpl ",se);			
+			throw new UsernameNotFoundException("로그인 정보를 찾을 수 없습니다.");
 		}
 		
 		log.debug("##### AdminUserDetailsServiceImpl.loadUserByUsername2 [e]");
 		return userVo;		
 	}
-
-//	@Override
-//	public TbLaIsMmUsr loadUserByUsername(String usrid)
-//			throws UsernameNotFoundException {
-//		log.debug("##### AdminUserDetailsServiceImpl.loadUserByUsername [s]");
-//		log.debug("arguments : {}, {}", usrid, johapCd);
-//
-//		TbLaIsMmUsr userVo = null;
-//
-//		try {
-//			Map<String,Object> params = new HashMap<>();
-//			params.put("usrid", usrid);
-//			params.put("naBzplc", johapCd);
-//			Map<String,Object> wholesaler = adminloginService.selectAdminInfo(params);
-//			
-//			if(wholesaler != null) {
-//				userVo = TbLaIsMmUsr.builder()
-//									.naBzplc(wholesaler.get("NA_BZPLC").toString())
-//									.pw(wholesaler.get("PW").toString())
-//									.usrnm(wholesaler.get("USRNM").toString())
-//									.usrid(wholesaler.get("USRID").toString())
-//									.place(wholesaler.get("NA_BZPLCNO").toString())
-//									.build();
-//				}
-//			else {
-//				throw new UsernameNotFoundException("[" + usrid + "] 1.로그인 정보를 찾을 수 없습니다.");
-//			}
-//		}
-//		catch (Exception e) {
-//			throw new UsernameNotFoundException("[" + usrid + "] 로그인 정보를 찾을 수 없습니다.");
-//		}
-//		
-//		log.debug("##### BidUserDetailsService.loadUserByUsername [e]");
-//		return userVo;
-//	}
-
 }

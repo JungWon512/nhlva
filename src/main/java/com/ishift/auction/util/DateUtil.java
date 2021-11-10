@@ -3,6 +3,9 @@ package com.ishift.auction.util;
 
 import org.springframework.stereotype.Component;
 
+import java.io.IOException;
+
+import java.sql.SQLException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
@@ -47,9 +50,9 @@ public class DateUtil {
                 returnValue = YYYYYMMDD.substring(0,4)+"/"+YYYYYMMDD.substring(5,6)+"/"+YYYYYMMDD.substring(7,8);
             }
 
-        } catch(Exception ex){
+        }catch (RuntimeException re) {
             returnValue = "2020/01/01";
-        }
+		}
         return returnValue;
     }
     public static String removeSlashYYYYMMDD(String YYYYYMMDD){
@@ -61,9 +64,9 @@ public class DateUtil {
                 returnValue =  YYYYYMMDD.replace("/","");
             }
 
-        } catch(Exception ex){
+        } catch (RuntimeException re) {
             returnValue = "20200101";
-        }
+		}
         return returnValue;
     }
 }

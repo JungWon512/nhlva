@@ -6,6 +6,7 @@
 		SELECT A.*,
 		  CASE WHEN A.AUC_OBJ_DSC = '1' THEN 10000 ELSE 10000 END as divisionPrice
 		  ,B.SEL_STS_DSC
+		  ,B.RG_SQNO
 		  FROM tb_la_is_mh_auc_qcn A
 		  LEFT JOIN TB_LA_IS_MH_AUC_STN B ON A.NA_BZPLC     = B.NA_BZPLC     
 										AND A.AUC_OBJ_DSC  = B.AUC_OBJ_DSC  
@@ -57,8 +58,8 @@
 		 </if>
 		 
 		 <if test="stAucNo !=null and !stAucNo.equals('') and edAucNo !=null and !edAucNo.equals('')">
-		 	AND A.AUC_PRG_SQ <![CDATA[>=]]> ${stAucNo}
-		 	AND A.AUC_PRG_SQ <![CDATA[<=]]> ${edAucNo}
+		 	AND A.AUC_PRG_SQ <![CDATA[>=]]> #{stAucNo}
+		 	AND A.AUC_PRG_SQ <![CDATA[<=]]> #{edAucNo}
 		 </if>
 	</select>
 	
@@ -191,8 +192,8 @@
 			   AND A.SEL_STS_DSC = #{mAuctionResult}
 			</if>  
 			<if test="stAucNo !=null and !stAucNo.equals('') and edAucNo !=null and !edAucNo.equals('')">
-			   AND A.AUC_PRG_SQ <![CDATA[>=]]> ${stAucNo}
-			   AND A.AUC_PRG_SQ <![CDATA[<=]]> ${edAucNo}
+			   AND A.AUC_PRG_SQ <![CDATA[>=]]> #{stAucNo}
+			   AND A.AUC_PRG_SQ <![CDATA[<=]]> #{edAucNo}
 			</if>
 			) H
 		 ORDER BY AUC_PRG_SQ

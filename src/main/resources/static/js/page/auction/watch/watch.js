@@ -78,13 +78,13 @@ $(function() {
 			$(".m_sound").toggleClass('off');
 		});
 		
-		if($('#aucDate').val() != getTodayStr().replaceAll('-','')){
-			modalAlert('','경매일이 아닙니다.',function(){pageMove('/main', false);});
-			return;
-		}else{
-			socketStart();			
+//		if($('#aucDate').val() != getTodayStr().replaceAll('-','')){
+//			modalAlert('','경매일이 아닙니다.',function(){pageMove('/main', false);});
+//			return;
+//		}else{
+//			socketStart();			
 			if($('#aucDsc').val() != '2') setRemon();			
-		}
+//		}
 		
     };
 

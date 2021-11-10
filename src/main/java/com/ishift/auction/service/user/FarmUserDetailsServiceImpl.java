@@ -1,5 +1,6 @@
 package com.ishift.auction.service.user;
 
+import java.sql.SQLException;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -11,6 +12,7 @@ import org.springframework.stereotype.Service;
 import com.ishift.auction.service.login.LoginService;
 import com.ishift.auction.vo.FarmUserDetails;
 
+import java.io.IOException;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
@@ -47,9 +49,11 @@ public class FarmUserDetailsServiceImpl implements FarmUserDetailsService {
 			else {
 				throw new UsernameNotFoundException("[" + username + "] 1.로그인 정보를 찾을 수 없습니다.");
 			}
-		}
-		catch (Exception e) {
-			e.printStackTrace();
+		}catch (RuntimeException re) {
+			log.error("RuntimeException: FarmUserDetailsServiceImpl ",re);			
+			throw new UsernameNotFoundException("[" + username + "] 로그인 정보를 찾을 수 없습니다.");
+		} catch (SQLException se) {
+			log.error("SQLException: FarmUserDetailsServiceImpl ",se);			
 			throw new UsernameNotFoundException("[" + username + "] 로그인 정보를 찾을 수 없습니다.");
 		}
 		

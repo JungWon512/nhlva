@@ -4,7 +4,11 @@ spring.profiles: database-local
 #        jdbcUrl: "jdbc:log4jdbc:tibero:thin:@192.168.0.92:8629:tibero"
 
 spring:
-  datasource:
+  datasource: 
+#   driver-class-name: org.mariadb.jdbc.Driver
+#   url: "jdbc:mariadb://115.41.222.25:8888/auction?allowMultiQueries=true&useCursorFetch=true&fetchSize=10000&autoReconnect=true&characterEncoding=utf-8"
+#   username: ishiftTest
+#   password: ishift7150!
    driver-class-name: com.tmax.tibero.jdbc.TbDriver
    url: "jdbc:tibero:thin:@192.168.0.92:8629:tibero"
    username: lalm
@@ -14,6 +18,10 @@ spring:
    idleTimeout: 1200000 # pool 미사용 커넥션 유지 시간 (20m)
    minimumIdle: 100 # 최소 커넥션 유지 개수 (default: same as maximumPoolSize)
    maximumPoolSize: 500 # pool에 유지시킬 수 있는 최대 커넥션 수
+#   driver-class-name: com.tmax.tibero.jdbc.TbDriver
+#   url: "jdbc:tibero:thin:@192.168.0.92:8629:tibero"
+#   username: lalm
+#   password: lalm123
 
 ---
 # profile(개발 서버 환경)

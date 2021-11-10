@@ -30,8 +30,10 @@ public class JwtTokenEntryPoint implements AuthenticationEntryPoint {
 		log.error("Unauthorized Error : {}", authException.getMessage());
 		log.error("requestParam[place] : {}", request.getParameter("place"));
 		String uri = request.getRequestURI();
-		String type = uri.startsWith("/my/entry") ? "1" : "0";
-		response.sendRedirect("/user/login?place=" + request.getParameter("place") + "&type=" + type);
+		String type = (uri.startsWith("/my/entry") ? "1" : "0").replaceAll("\r", "").replaceAll("\n", "");
+		String place = request.getParameter("place").replaceAll("\r", "").replaceAll("\n", "");		
+		
+		response.sendRedirect("/user/login?place=" + place + "&type=" + type);
 	}
 
 }

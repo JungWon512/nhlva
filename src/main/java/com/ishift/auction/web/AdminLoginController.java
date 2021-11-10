@@ -1,5 +1,6 @@
 package com.ishift.auction.web;
 
+import java.sql.SQLException;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -62,8 +63,8 @@ public class AdminLoginController {
 		ModelAndView mav = new ModelAndView("admin/user/login");
 		try {
 			mav.addAllObjects(map);
-		} catch (Exception e) {
-			e.printStackTrace();
+		}catch (RuntimeException re) {
+			log.error("AdminLoginController.adminUserLogin : {} ",re);
 		}
 		return mav;
 	}
@@ -116,9 +117,9 @@ public class AdminLoginController {
 				return result;
 			}
 			
-		}
-		catch (Exception e) {
-			result.put("message", e.getMessage());
+		}catch (RuntimeException re) {
+			log.error("AdminLoginController.adminUserLogin : {} ",re);
+			result.put("message", re.getMessage());
 			result.put("error", true);
 			return result;
 		}

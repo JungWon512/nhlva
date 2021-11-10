@@ -1,9 +1,14 @@
 package com.ishift.auction.util;
 
+import java.sql.SQLException;
+
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Component;
+
+import java.io.IOException;
 
 @Component
 public class CookieUtil {
@@ -37,8 +42,7 @@ public class CookieUtil {
 					return cookie;
 				}
 			}
-		}
-		catch(Exception e) {
+		}catch (RuntimeException re) {
 			return null;
 		}
 		return null;
@@ -58,8 +62,7 @@ public class CookieUtil {
 			else {
 				return this.getCookie(req, cookieName).getValue();
 			}
-		}
-		catch(Exception e) {
+		}catch (RuntimeException re) {
 			return "";
 		}
 	}

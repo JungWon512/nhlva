@@ -175,8 +175,7 @@
 									</ul>
 								</div>	
 							</li>
-							
-							<c:forEach begin="1" end="${(johapData.KKO_SVC_CNT eq '' or johapData.KKO_SVC_CNT == null) ? johapData.KKO_SVC_CNT : '0'}" varStatus="st">
+							<c:forEach begin="1" end="${(johapData.KKO_SVC_CNT eq '' or johapData.KKO_SVC_CNT == null) ? '0' : johapData.KKO_SVC_CNT}" varStatus="st">
 <%-- 							<c:forEach begin="1" end="4" varStatus="st"> --%>
 								<li class="video_item" style="width: 100%;height: auto;">
 									<video id="remoteVideo${st.index }" style="width: 100%;background: black;height: 100%;" poster="/static/images/assets/no_video_18980.png" muted="muted" autoplay playsinline webkit-playsinline>
@@ -185,7 +184,7 @@
 								</li>
 							</c:forEach>
 					</ul>
-				</div>
+				</div> 
 				<div class="seeBox_gp">
 					<!-- 페이지 하단에 js 있음 -->
 					<div class="chart" data-percent="${watchCount.CNT == 0 ? '0' : watchCount.CNT_STAND_ELSE/ watchCount.CNT * 100 }">
