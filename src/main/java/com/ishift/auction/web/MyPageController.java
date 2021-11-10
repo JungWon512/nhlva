@@ -126,13 +126,31 @@ public class MyPageController {
 		return mav;
 	}
 	
+	/**
+	 * 1. 단일경매에서 호출시 찜 가격을 조회한다.
+	 * 2. 일괄경매에서 호출시 이전 응찰 가격과 찜 가격을 동시에 조회한다. 
+	 * @param params
+	 * @return
+	 * @throws Exception
+	 */
 	@ResponseBody
 	@PreAuthorize("hasRole('ROLE_BIDDER')")
 	@PostMapping(value = "/my/favorite", produces = MediaType.APPLICATION_JSON_VALUE)
 	public Map<String, Object> myFavorite(@RequestBody final Map<String, Object> params) throws Exception {
 		final Map<String, Object> result = new HashMap<String, Object>();
 		try {
-			final Map<String, Object> favorite = auctionService.selectMyFavoriteInfo(params);
+			String groupYn = params.getOrDefault("groupYn", "N").toString();
+			Map<String, Object> favorite = new HashMap<String, Object>();
+			if ("Y".equals(groupYn)) {
+				Map<String,Object> map = auctionService.selectNearAtdrAm(params);
+				Map<String,Object> zim = auctionService.selectMyZimPrice(params);
+				favorite.put("ATDR_AM", map != null ? map.get("ATDR_AM"):0);
+				favorite.put("SBID_UPR", zim != null ? zim.get("SBID_UPR"):0);
+			}
+			else {
+				favorite = auctionService.selectMyFavoriteInfo(params);
+			}
+			
 			if (favorite != null) {
 				result.put("success", true);
 				result.put("message", "조회에 성공했습니다.");

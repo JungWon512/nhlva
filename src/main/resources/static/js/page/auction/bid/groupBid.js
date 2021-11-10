@@ -260,10 +260,10 @@ var socketStart = function(){
 	if(!$('#naBzPlc').val()) return;
 	if(socket){ socket.connect(); return;}
 	
-	var socketHost = (location.hostname.indexOf("xn--o39an74b9ldx9g.kr") >-1 || location.hostname.indexOf("nhlva.nonghyup.com") >-1)?"cowauction.kr":location.hostname.indexOf("xn--e20bw05b.kr")>-1?"xn--e20bw05b.kr":"xn--e20bw05b.kr";
+//	var socketHost = (location.hostname.indexOf("xn--o39an74b9ldx9g.kr") >-1 || location.hostname.indexOf("nhlva.nonghyup.com") >-1)?"cowauction.kr":location.hostname.indexOf("xn--e20bw05b.kr")>-1?"xn--e20bw05b.kr":"xn--e20bw05b.kr";
 	//socketHost += ':'+$('#webPort').val();
-	socketHost += ':9001';
-	socket = io.connect('https://'+socketHost + '/6003' + '?auctionHouseCode='  + $('#naBzPlc').val(), {secure:true});
+//	socketHost += ':9001';
+//	socket = io.connect('https://'+socketHost + '/6003' + '?auctionHouseCode='  + $('#naBzPlc').val(), {secure:true});
 	socket = io.connect('http://192.168.0.23:9001/6003?auctionHouseCode=' + $('#naBzPlc').val());
 
 //	socket.on('connect_error', socketDisconnect);
@@ -416,14 +416,10 @@ var messageHandler = function(data) {
 			if (retryTarget.indexOf(auctionConfig.arData.entryNum) > -1) {
 				$("div.auc-txt > div.info_board").html("<span class='txt-yellow'>재응찰</span>하시기 바랍니다.");
 				auctionConfig.retryTargetYn = "Y";
-//				$(".btn_bid").prop("disabled", false);
-//				$(".btn_bid_cancel").prop("disabled", true);
 			}
 			else {
 				$("input[name='bidAmt']").val("");
 				$("div.auc-txt > div.info_board").html("<span class='txt-yellow'>재경매</span> 진행 중입니다.");
-//				$(".btn_bid").prop("disabled", true);
-//				$(".btn_bid_cancel").prop("disabled", true);
 			}
 			break;
 		case "AP" :
@@ -449,10 +445,6 @@ var messageHandler = function(data) {
 				if (dataArr[2] == "2001") msg = "경매를 참여하실 수 없습니다.</br>경매 참여를 원하실 경우 관리자에게 문의하세요."
 				else if (dataArr[2] == "2002"){ sFlag = true;msg = "이미 접속한 사용자가 있습니다.";}
 				else {	sFlag = true;msg = "현재 참여 가능한 경매가 없습니다.</br>관리자에게 문의하세요.";}
-//				else if (dataArr[2] == "2003") msg = "경매가 종료되었습니다."
-//				else if (dataArr[2] == "2004") msg = "경매가 종료되었습니다."
-//				else if (dataArr[2] == "2005") msg = "경매가 종료되었습니다."
-//				else if (dataArr[2] == "2006") msg = "경매가 종료되었습니다."
 				modalAlert('', msg
 						 , function(){pageMove('/main', false);}
 				);
@@ -473,46 +465,31 @@ var messageHandler = function(data) {
 			auctionConfig.asData.aucSeq = dataArr[2];
 
 			if (auctionConfig.asData.status == "8001") {
-//				$(".btn_bid").prop("disabled", true);
-//				$(".btn_bid_cancel").prop("disabled", true);
 				$("input[name='bidAmt']").val("");
 				modalAlert('', "진행중인 경매가 없습니다."
 						 , function(){pageMove('/main', false);}
 				);
 			}
 			else if(auctionConfig.asData.status == "8002" || auctionConfig.asData.status == "8006") {
-//				$(".btn_bid").prop("disabled", true);
-//				$(".btn_bid_cancel").prop("disabled", true);
 				$("input[name='bidAmt']").val("");
 				$("div.auc-txt > div.info_board").html("경매 <span class='txt-yellow'>대기 중</span>입니다.");
 				auctionConfig.enableBid = "N";
 			}
 			else if(auctionConfig.asData.status == "8003") {
-//				$(".btn_bid").prop("disabled", false);
-//				$(".btn_bid_cancel").prop("disabled", false);
 				$("input[name='bidAmt']").val("");
 				$("div.auc-txt > div.info_board").html("<span class='txt-yellow'>응찰</span>하시기 바랍니다.");
 				auctionConfig.asData.bidYn = "N";
 				auctionConfig.enableBid = "Y";
 			}
 			else if(auctionConfig.asData.status == "8004") {
-//				$(".btn_bid").prop("disabled", false);
-//				$(".btn_bid_cancel").prop("disabled", false);
 				$("input[name='bidAmt']").val("");
 				$("div.auc-txt > div.info_board").html("<span class='txt-yellow'>응찰</span>하시기 바랍니다.");
 				// 출품번호, 경매대상구분코드
 				auctionConfig.enableBid = "Y";
 			}
 			else if(auctionConfig.asData.status == "8005") {
-//				$(".btn_bid").prop("disabled", true);
-//				$(".btn_bid_cancel").prop("disabled", true);
 				auctionConfig.enableBid = "N";
 			}
-//			else if(auctionConfig.asData.status == "8006") {
-//				$(".btn_bid").prop("disabled", true);
-//				$(".btn_bid_cancel").prop("disabled", true);
-//				$("div.auc-txt > div.info_board").html("경매가 <span class='txt-yellow'>대기</span>되었습니다.");
-//			}
 			else if(auctionConfig.asData.status == "8007") {
 				modalAlert('', "<span style='color: #007eff;'>경매 종료</span>되었습니다.", function(){
 					pageMove('/main', false);
@@ -526,11 +503,8 @@ var messageHandler = function(data) {
 			if(auctionConfig.asData.aucSeq != dataArr[2]) return;
 			
 			var bidStatus = dataArr[3];
-//			auctionConfig.retryYn = "Y";
-//			auctionConfig.retryTargetYn = "N";
 			if (auctionConfig.asData
 			&& (auctionConfig.asData.status == "8003" || auctionConfig.asData.status == "8004")) {
-//				if (auctionConfig.retryYn == "Y" && auctionConfig.retryTargetYn != "Y") return;
 				if (bidStatus == "F") {
 					$("div.auc-txt > div.info_board").html("<span class='txt-yellow'>응찰</span> 종료되었습니다.");
 					auctionConfig.enableBid = "N";
@@ -553,8 +527,6 @@ var messageHandler = function(data) {
 			// 축산개체종축등록번호 | 등록구분번호 | 출하생산지역 | 친자검사결과여부 | 신규여부 | 우출하중량 | 최초최저낙찰한도금액 | 최저낙찰한도금액 | 비고내용 | 낙유찰결과 |
 			// 낙찰자 | 낙찰금액 | 응찰일시 | 마지막출품여부 | 계류대번호 | 초과출장우여부
 			if(!auctionConfig.scData) auctionConfig.scData = {};
-//			if(!auctionConfig.scData.curAucSeq) {
-//				if(auctionConfig.scData.curAucSeq) auctionConfig.scData.preAucSeq = auctionConfig.scData.curAucSeq;
 				auctionConfig.scData.curAucSeq = dataArr[2];
 				auctionConfig.scData.minBidAmt = dataArr[27];
 				auctionConfig.scData.aucObjDsc = dataArr[4];
@@ -568,7 +540,6 @@ var messageHandler = function(data) {
 				$('dd.mcowDsc', $(".seeBox_slick_inner, .mo_seeBox")).text(dataArr[14]);		// 어미
 				$('dd.sraIndvPasgQcn', $(".seeBox_slick_inner, .mo_seeBox")).text(dataArr[18]);	// 계대
 				$('dd.kpnNo', $(".seeBox_slick_inner, .mo_seeBox")).text(dataArr[11] && dataArr[12].replace('KPN',''));	// KPN번호
-//				$('dd.lowsSbidLmtAm', $(".seeBox_slick_inner, .mo_seeBox")).text(Math.round(dataArr[27]/10000)); // 최저가 > 24 :최초낙찰 ,25:최저낙찰
 				$('dd.lowsSbidLmtAm', $(".seeBox_slick_inner, .mo_seeBox")).text(dataArr[27]); // 최저가 > 24 :최초낙찰 ,25:최저낙찰
 				$('dd.rmkCntn, p.rmkCntn', $(".seeBox_slick_inner, .mo_seeBox")).text(dataArr[28]);			// 비고
 				$('dd.sraPdRgnnm, p.sraPdRgnnm', $(".seeBox_slick_inner, .mo_seeBox")).text(dataArr[22]);	// 지역명
@@ -591,7 +562,6 @@ var messageHandler = function(data) {
 		case "SD" :
 			// 경매 시작/종료 카운트 다운 정보
 			// 구분자 | 조합구분코드 | 상태구분(R : 준비 / C : 카운트다운 / F : 카운트다운 완료) | 카운트다운 시간(second)
-			
 			// 조합코드 체크
 			if (auctionConfig.arData.naBzplc != dataArr[1]) return;
 
@@ -605,9 +575,6 @@ var messageHandler = function(data) {
 				msgHtml.push("<li class='" + (parseInt(dataArr[3]) >= 1 ? "dot-red" : "") + "'>3</li>");
 				msgHtml.push("</ol>");
 				$("div.auc-txt > div.info_board").html(msgHtml.join("\n"));
-			}
-			else if (status == "F") {
-//				$("div.auc-txt > div.info_board").html("<span class='txt-yellow'>응찰</span>하시기 바랍니다.");
 			}
 			else if (status == "R") {
 				$("div.auc-txt > div.info_board").html("경매 <span class='txt-yellow'>대기 중</span>입니다.");
@@ -682,7 +649,6 @@ var messageHandler = function(data) {
 		case "ST" :
 			// 경매 응찰 참가자에게 경매 서버에서 받은 메시지를 보여준다
 			// 구분자 | 조합구분코드 | 메시지 내용
-//			$("div.auc-txt > div.info_board").html(dataArr[2]);
 			modalAlert('', dataArr[2]);
 		default:break;
 	}
@@ -702,15 +668,6 @@ var fnSetAuctionInfo = function() {
 	reqData.push(auctionConfig.arData.trmnAmnno);
 	reqData.push($("input[name='aucNum']").val());
 	socket.emit('packetData', reqData.join('|'));
-	
-	// 이전에 응찰한 가격이 있는지 요청한다.
-	var reqBidData = [];
-	reqBidData.push("AD");
-	reqBidData.push(auctionConfig.arData.naBzplc);
-	reqBidData.push(auctionConfig.arData.trmnAmnno);
-	reqBidData.push(auctionConfig.arData.entryNum);
-	reqBidData.push($("input[name='aucNum']").val());
-	socket.emit('packetData', reqBidData.join('|'));
 	
 	$(".aucNum").hide().find("input, button").prop("disabled", true).removeClass("active");
 	$(".bidAmt").show().find("input, button").prop("disabled", false).addClass("active").val("");
@@ -742,8 +699,6 @@ var fnCheckBidData = function() {
 			return false;
 		}
 		
-//		var unit = (auctionConfig.scData.aucObjDsc != undefined && auctionConfig.scData.aucObjDsc == "2") ? 1 : 10000; // 입력하는 금액 단위가 다름 > 경매대상구분코드(송아지, 비육우, 번식우)
-//		if (parseInt(auctionConfig.scData.minBidAmt) > parseInt(bidAmt) * unit) {
 		if (parseInt(auctionConfig.scData.minBidAmt) > parseInt(bidAmt)) {
 			messageSample("응찰금액을 확인 하세요.");
 			$("input[name=bidAmt]").val("");
@@ -768,7 +723,6 @@ var fnBid = function() {
 				  , date.getMinutes().toString().padStart("2", "0")
 				  , date.getSeconds().toString().padStart("2", "0")
 				  , "000"];
-//	var unit = (auctionConfig.scData.aucObjDsc != undefined && auctionConfig.scData.aucObjDsc == "2") ? 1 : 10000; // 입력하는 금액 단위가 다름 > 경매대상구분코드(송아지, 비육우, 번식우)
 	
 	var bidData = [];
 	var bidAmt = $("input[name=bidAmt]").val() == "" ? "0" : $("input[name='bidAmt']").val().split(",").join("");
@@ -867,8 +821,11 @@ var fnGetFavoritePrice = function(aucSeq, aucClass) {
 		naBzplc : $("#naBzPlc").val(),
 		aucPrgSq : aucSeq,
 		aucObjDsc : aucClass,
-		trmnAmnno : $("#trmnAmnno").val()
-	};	
+		trmnAmnno : $("#trmnAmnno").val(),
+		lvstAucPtcMnNo : auctionConfig.arData.entryNum,
+		groupYn : "Y"
+	};
+	
 	$.ajax({
 		url: "/my/favorite",
 		type : 'POST',
@@ -880,7 +837,12 @@ var fnGetFavoritePrice = function(aucSeq, aucClass) {
 		},
 		success : function(data) {
 			if (data.success) {
-				$("input[name=bidAmt]").addClass("txt-blue").val(data.info.SBID_UPR);
+				if (data.info.ATDR_AM > 0) {
+					$("input[name=bidAmt]").removeClass("txt-blue").val(data.info.ATDR_AM);
+				}
+				else if (data.info.SBID_UPR > 0) {
+					$("input[name=bidAmt]").addClass("txt-blue").val(data.info.SBID_UPR);
+				}
 			}
 			else {
 				$("input[name=bidAmt]").removeClass("txt-blue").val("");
@@ -892,8 +854,6 @@ var fnGetFavoritePrice = function(aucSeq, aucClass) {
 
 // remon 영성 관련 로직 [s]
 let dummyRemon,loop;
-//const serviceId = '37924178-ee14-4f8a-9caa-ff858defea7f';
-//const serviceKey = '5f7bc510a5607072e1a648926e7bfe1df6a44dfb800e750a698bf5265469e6ce';
 const serviceId =  $('#kkoSvcId').val();
 const serviceKey = $('#kkoSvcKey').val();
 	
@@ -926,8 +886,6 @@ var listener = {
 function setRemon(){	
 	dummyRemon = new Remon({ config, listener });	
     setLoopJoinEvent();
-//    setTimeout(setLoopJoinEvent,1000)
-    // loop = setInterval(setLoopJoinEvent,1000*60);
 }
 
 //특정주기마다 castlist 목록 불러와 html Draw
@@ -970,19 +928,13 @@ var setLoopChDraw = function(castList){
 		return pre-next;
 	});
 	
-	//var height = $('div.seeBox_slick div.slick-list').height();
 	var height = $('div.seeBox_slick ul.slider .boarder').closest('.slick-slide').height();
 	$('div.seeBox_slick ul.slider li.video_item').height(height-1);
 	
 	if(sortingCastList.length>0){
 		for(var i=0;i<sortingCastList.length;i++){
-			//$('div.seeBox_slick ul.slider').slick('slickAdd','<div><div><li class="video_item" style="width: 100%;height: '+(height?height:350)+'px;">'
-			//+'<video id="remoteVideo'+(i+1)+'" castName = "'+sortingCastList[i].name+'" style="width: 100%;background: black;height: 100%;" poster="/static/images/assets/no_video_18980.png" playsinline webkit-playsinline muted>Your browser does not support HTML5 video.</video>'
-			//+'</li></div></div>');			//autoplay controls playsinline
-			
 			if($('#kkoSvcCnt').val() <= i) return;
 			 $('#remoteVideo'+(i+1)).attr('castName',sortingCastList[i].name);
-			 //setLoopChJoinInIn(sortingCastList[i],i+1);
 	 	};	
 		var castName = $('#remoteVideo1').attr('castName');
 		if(castName && castName.indexOf('remote') >= 0){

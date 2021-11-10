@@ -1624,10 +1624,10 @@ public class ApiController {
 		final Map<String, Object> temp = new HashMap<String, Object>();
 
 		try {
-			Map<String,Object> map = auctionService.selectNearAtdrAm(params);			
+			Map<String,Object> map = auctionService.selectNearAtdrAm(params);
 			Map<String,Object> zim = auctionService.selectMyZimPrice(params);
 
-			temp.put("bidPrice", map != null ?map.get("ATDR_AM"):0);
+			temp.put("bidPrice", map != null ? map.get("ATDR_AM"):0);
 			temp.put("zimPrice", zim != null ? zim.get("SBID_UPR"):0);
 			result.put("success", true);
 			result.put("data", temp);
