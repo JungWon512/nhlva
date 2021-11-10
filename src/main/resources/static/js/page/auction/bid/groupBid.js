@@ -477,13 +477,15 @@ var messageHandler = function(data) {
 			}
 			else if(auctionConfig.asData.status == "8003") {
 				$("input[name='bidAmt']").val("");
-				$("div.auc-txt > div.info_board").html("<span class='txt-yellow'>경매 번호</span>를 입력하세요.");
+				fnBefore();
+//				$("div.auc-txt > div.info_board").html("<span class='txt-yellow'>경매 번호</span>를 입력하세요.");
 				auctionConfig.asData.bidYn = "N";
 				auctionConfig.enableBid = "Y";
 			}
 			else if(auctionConfig.asData.status == "8004") {
 				$("input[name='bidAmt']").val("");
-				$("div.auc-txt > div.info_board").html("<span class='txt-yellow'>경매 번호</span>를 입력하세요.");
+				fnBefore();
+//				$("div.auc-txt > div.info_board").html("<span class='txt-yellow'>경매 번호</span>를 입력하세요.");
 				// 출품번호, 경매대상구분코드
 				auctionConfig.enableBid = "Y";
 			}
@@ -607,7 +609,8 @@ var messageHandler = function(data) {
 			}
 			else if (responseCode == "4007") {
 				auctionConfig.seData.clearYn = "Y";
-				messageSample("<span class='txt-yellow'>응찰 취소</span>되었습니다.", "<span class='txt-yellow'>경매 번호</span>를 입력하세요.");
+				messageSample("<span class='txt-yellow'>응찰 취소</span>되었습니다.");
+				fnBefore
 				$("input[name=bidAmt]").val("");
 			}
 			
@@ -902,7 +905,7 @@ var setRemonJoinRemote =async function (index,callback) {
 		var castList = data.filter(function(cast){if(cast.name.indexOf($('#naBzPlc').val()+'_remoteVideo'+index)>=0) return this;})
 			.sort(function(castPre,castNext){
 			var pre = castPre.name.split('_')[1].replace('remoteVideo','');
-			var next = castNext.name.split('_')[1].replace('remoteVideo','');			
+			var next = castNext.name.split('_')[1].replace('remoteVideo','');
 			return pre-next;
 		});
 		var height = $('div.seeBox_slick ul.slider .boarder').closest('.slick-slide').height();
