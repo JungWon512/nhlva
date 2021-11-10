@@ -25,7 +25,16 @@ $(function() {
 			setRemonJoinRemote(currentSlide,callback);
 		});
 		
+		$('.chart').easyPieChart({
+			barColor: '#007eff',
+			trackColor: '#dbdbdb',
+			lineCap: 'round',
+			lineWidth: 18,
+			size: 344,
+			animate: 1000,
+		});		
 		if($('#aucDsc').val() == '2'){
+			calcPiePercent();
 			var index = 0;
 			setInterval(function(){
 				if(isApp() || chkOs() != 'web'){
@@ -53,17 +62,9 @@ $(function() {
 						$(".tblAuction .list_body ul li:eq("+(index)+")").addClass('act');					
 					},300)		
 				}	
-				
+				calcPiePercent();
 			},1000*5);
 		}
-		$('.chart').easyPieChart({
-			barColor: '#007eff',
-			trackColor: '#dbdbdb',
-			lineCap: 'round',
-			lineWidth: 18,
-			size: 344,
-			animate: 1000,
-		});		
     };
 
     var setBinding = function() {
