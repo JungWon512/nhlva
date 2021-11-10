@@ -513,15 +513,17 @@ public class AuctionController extends CommonController {
 	@RequestMapping(value = "/auction/select/nearAtdrAm", method = {RequestMethod.POST, RequestMethod.GET})
 	public Map<String, Object> selectNearAtdrAm(@RequestParam final Map<String, Object> params) {
 		final Map<String, Object> result = new HashMap<String, Object>();
+		final Map<String, Object> temp = new HashMap<String, Object>();
 
 		try {
-			Map<String,Object> map = auctionService.selectNearAtdrAm(params);
-			
-			if (map != null) {
-				result.put("success", true);
-				result.put("data", map.get("ATDR_AM"));
-				result.put("message", "정상적으로 변경되었습니다.");
-			}
+			Map<String,Object> map = auctionService.selectNearAtdrAm(params);			
+			Map<String,Object> zim = auctionService.selectMyZimPrice(params);
+
+			temp.put("bidPrice", map.get("ATDR_AM"));
+			temp.put("zimPrice", zim.get("SBID_UPR"));
+			result.put("success", true);
+			result.put("data", temp);
+			result.put("message", "정상적으로 변경되었습니다.");
 		}catch (RuntimeException re) {
 			log.debug("ApiController.selectNearAtdrAm : {} ",re);
 			result.put("success", false);

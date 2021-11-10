@@ -409,4 +409,8 @@ public class AuctionDAO {
 	public Map<String, Object> selectNearAtdrAm(Map<String, Object> params) throws SQLException {
 		return mainDao.selectOne("ApiMapper.selectNearAtdrAm", params);
 	}
+
+	public Map<String, Object> selectMyZimPrice(Map<String, Object> params) throws SQLException {
+		return mainDao.selectOne("ApiMapper.selectMyZimPrice", params);
+	}
 }

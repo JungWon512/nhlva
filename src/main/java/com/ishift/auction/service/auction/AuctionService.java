@@ -259,5 +259,7 @@ public interface AuctionService {
 	int updateNetPort(Map<String, Object> params) throws SQLException;
 
 	Map<String, Object> selectNearAtdrAm(Map<String, Object> params) throws SQLException;
+
+	Map<String, Object> selectMyZimPrice(Map<String, Object> params) throws SQLException;
 	
 }
