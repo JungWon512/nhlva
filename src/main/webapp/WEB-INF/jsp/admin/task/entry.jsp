@@ -63,7 +63,7 @@
 						</li>
 					</c:if>
 					<c:forEach items="${entryList}" var="item" varStatus="st">
-						<li>
+						<li id="${item.AUC_PRG_SQ}">
 							<dl>
 								<dd class="col1" data-amnno="${item.SRA_INDV_AMNNO}" data-auc-obj-dsc="${item.AUC_OBJ_DSC}" data-oslp-no="${item.OSLP_NO}" data-led-sqno="${item.LED_SQNO}">${item.AUC_PRG_SQ}</dd>
 							<c:choose>

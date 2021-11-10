@@ -18,7 +18,7 @@
 			});
 			
 			// 리스트 선택
-			$(".list_body > ul > li").on(clickEvent, function(){
+			$(document).on(clickEvent, ".list_body > ul > li", function(){
 				$(".list_body > ul > li").siblings().not(this).removeClass("act");
 				$(this).toggleClass("act");
 			});
@@ -108,7 +108,7 @@
 					}
 				}).done(function (body) {
 					var message = body.message;
-					modalAlert("", message, fnReload);
+					modalAlert("", message, fnReload(body));
 					return;
 				});
 			});
@@ -118,8 +118,41 @@
 			});
 		};
 		
-		var fnReload = function() {
-			$("form[name='frm']").attr("action", "/admin/task/entry").submit();
+		var fnReload = function(data) {
+			modalPopupClose('.pop_mod_weight');
+			var entryList = data.entryList;
+			var regType = data.params.regType;
+			var aucPrgSq = data.params.aucPrgSq;
+			
+			var listHtml = [];
+			if (entryList != undefined) {
+				for (var i = 0; i < entryList.length; i++) {
+					var item  = entryList[i];
+					listHtml.push('<li id="' + item.AUC_PRG_SQ + '">');
+					listHtml.push('	<dl>');
+					listHtml.push('		<dd class="col1" data-amnno="' + item.SRA_INDV_AMNNO+ '" data-auc-obj-dsc="' + item.AUC_OBJ_DSC+ '" data-oslp-no="' + item.OSLP_NO+ '" data-led-sqno="' + item.LED_SQNO+ '">' + item.AUC_PRG_SQ + '</dd>');
+					if (regType == "W") {
+						listHtml.push('<dd class="col2">' + (parseInt(item.COW_SOG_WT) == '0' || parseInt(item.COW_SOG_WT) == 'NaN' ? '-' : parseInt(item.COW_SOG_WT)) + '</dd>');
+					}
+					else if (regType == "L") {
+						listHtml.push('<dd class="col2">' + (parseInt(item.LOWS_SBID_LMT_AM) == '0' || parseInt(item.LOWS_SBID_LMT_AM) == 'NaN' ? '-' : parseInt(item.LOWS_SBID_LMT_AM)) + '</dd>');
+					}
+					else {
+						listHtml.push('<dd class="col2">' + item.MODL_NO + '</dd>');
+					}
+					listHtml.push('		<dd class="col3">' + item.SRA_INDV_AMNNO_FORMAT + '</dd>');
+					listHtml.push('		<dd class="col3">' + item.SRA_PDMNM_ORI + '</dd>');
+					listHtml.push('	</dl>');
+					listHtml.push('</li>');
+				}
+				
+				$(".admin_weight_list").find(".list_body > ul").html(listHtml.join(""));
+			}
+			var li = $(".list_body > ul").find("li#" + aucPrgSq).next() == undefined ? $(".list_body > ul").find("li#" + aucPrgSq) : $(".list_body > ul").find("li#" + aucPrgSq).next();
+			$(".list_body > ul").animate({
+				scrollTop : ($(".list_body > ul > li").index(li) - 1) * 41
+			}, 500);
+			li.addClass("act");
 		};
 		
 		var fnLayerPop = function(params, cowInfo) {
@@ -137,6 +170,7 @@
 			sHtml.push('			<input type="hidden" name="aucObjDsc" value="' + params.aucObjDsc + '" />');
 			sHtml.push('			<input type="hidden" name="oslpNo" value="' + params.oslpNo + '" />');
 			sHtml.push('			<input type="hidden" name="ledSqno" value="' + params.ledSqno + '" />');
+			sHtml.push('			<input type="hidden" name="aucPrgSq" value="' + cowInfo.AUC_PRG_SQ + '" />');
 			
 			sHtml.push('			<div class="modal-head">');
 			sHtml.push('				<h3>' + title + '</h3>');
@@ -233,7 +267,8 @@
 			var $modalContentH = $(target).find($('.modal-content')).outerHeight();
 			var $conPos = ($winH / 2) - ($modalContentH / 2);
 			if( $winH > $modalContentH ){
-				$modalContent.css({marginTop: $conPos});
+//				$modalContent.css({marginTop: $conPos});
+				$modalContent.css({marginTop: 20});
 			} else {
 				$modalContent.css({marginTop: 0});
 			}

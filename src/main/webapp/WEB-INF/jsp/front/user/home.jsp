@@ -27,7 +27,7 @@
 			</ul>
 		</div>
 	</c:if>
-	<h2><span>지역</span>을 <span>선택</span>해 주세요.<img class="gps_fix" src="/static/images/guide/gps_fixed.svg" alt=""></h2>
+	<h2><span>지역</span>을 <span>선택</span>해 주세요.<!-- img class="gps_fix" src="/static/images/guide/gps_fixed.svg" alt=""--></h2>
 	<ul class="choice_area">
 		<c:forEach items="${ bizList }" var="vo" varStatus="st">		
 			<li class="${vo.NA_BZPLCLOC }">

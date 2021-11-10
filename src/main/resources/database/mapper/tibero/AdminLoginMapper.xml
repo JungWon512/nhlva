@@ -62,7 +62,7 @@
 		  FROM TB_LA_IS_MM_USR A
 		  LEFT OUTER JOIN TB_LA_IS_BM_BZLOC B
 		    ON ( A.NA_BZPLC = B.NA_BZPLC )
-		 WHERE A.NA_BZPLC = #{naBzplc}
+		 WHERE 1=1 
 		   AND A.USRID = #{usrid}
 		   AND A.PW = #{pw}
 	</select>
