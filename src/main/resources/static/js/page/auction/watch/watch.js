@@ -55,16 +55,15 @@ $(function() {
 				}	
 				
 			},1000*5);
-		}else{
-			$('.chart').easyPieChart({
-				barColor: '#007eff',
-				trackColor: '#dbdbdb',
-				lineCap: 'round',
-				lineWidth: 18,
-				size: 344,
-				animate: 1000,
-			});		
 		}
+		$('.chart').easyPieChart({
+			barColor: '#007eff',
+			trackColor: '#dbdbdb',
+			lineCap: 'round',
+			lineWidth: 18,
+			size: 344,
+			animate: 1000,
+		});		
     };
 
     var setBinding = function() {
@@ -82,8 +81,8 @@ $(function() {
 			modalAlert('','경매일이 아닙니다.',function(){pageMove('/main', false);});
 			return;
 		}else{
-			socketStart();			
-			if($('#aucDsc').val() != '2') setRemon();			
+			socketStart();
+			setRemon();			
 		}
 		
     };

@@ -127,7 +127,7 @@
 			<c:if test="${requestPath eq '/bid'}">
 				<p class="join-box">참가번호:<b class="join-num"><span></span>번</b></p>
 			</c:if>
-			<c:if test="${(requestPath eq '/watch' or requestPath eq '/bid') && johapData.AUC_DSC eq '1'}">
+			<c:if test="${(requestPath eq '/watch' or requestPath eq '/bid')}">
 				<a href="javascript:;" class="m_sound fix_right off">소리</a>
 			</c:if>
 		</c:otherwise>

@@ -21,7 +21,8 @@
 	
 	<input type="hidden" id="aucDate" value="${dateVo.AUC_DT}" />
 
-	<div class="auction_seeBox" style="${johapData.AUC_DSC eq '2'?'margin-bottom: 0px;':'' }">
+<%-- 	<div class="auction_seeBox" style="${johapData.AUC_DSC eq '2'?'margin-bottom: 0px;':'' }"> --%>
+	<div class="auction_seeBox">
 		<div class="seeBox_top">
 			<dl>
 				<dt>${johapData.CLNTNM}</dt>
@@ -37,154 +38,153 @@
 		</div>
 		<!-- //seeBox_top e -->
 		
-		<c:if test="${johapData.AUC_DSC eq '1' }">
-			<div class="seeBox_bottom vidioSlide">
-				<div class="seeBox_slick">
-					<ul class="slider">
-							<li class="boarder">
-								<div class="seeBox_slick_inner">
-									<ul class="seeBox-cell">
-										<li>
-											<dl>
-												<dt>번호</dt>
-												<dd class="auctionNum">${watchList[0].AUC_PRG_SQ }</dd>
-											</dl>
-										</li>
-										<li>
-											<dl>
-												<dt>출하주</dt>
-												<dd class="ftsnm">${watchList[0].SRA_PDMNM }</dd>
-											</dl>
-										</li>
-										<li>
-											<dl>
-												<dt>성별</dt>
-												<dd class="sex">${watchList[0].INDV_SEX_C_NAME }</dd>
-											</dl>
-										</li>
-										<li>
-											<dl>
-												<dt>중량(Kg)</dt>
-												<dd class="cowSogWt">${fn:split(watchList[0].COW_SOG_WT,'.')[0] }</dd>
-											</dl>
-										</li>
-									</ul>
-									<ul class="seeBox-cell">
-										<li>
-											<dl>
-												<dt>산차</dt>
-												<dd class="matime">${watchList[0].MATIME }</dd>
-											</dl>
-										</li>
-										<li>
-											<dl>
-												<dt>계대</dt>
-												<dd class="sraIndvPasgQcn">${watchList[0].SRA_INDV_PASG_QCN }</dd>
-											</dl>
-										</li>
-										<li>
-											<dl>
-												<dt>어미</dt>
-												<dd class="mcowDsc">${watchList[0].MCOW_DSC_NAME }</dd>
-											</dl>
-										</li>
-										<li>
-											<dl>
-												<dt>최저가</dt>
-												<dd class="lowsSbidLmtAm">${watchList[0].LOWS_SBID_LMT_AM <= 0 ? '0' : fn:split(watchList[0].LOWS_SBID_LMT_UPR,'.')[0]}</dd>
-											</dl>
-										</li>
-									</ul>
-									<ul class="seeBox-cell">
-										<li>
-											<dl>
-												<dt>KPN</dt>
-												<dd class="kpnNo">${watchList[0].KPN_NO_STR }</dd>
-											</dl>
-										</li>
-										<li class="cell_3">
-											<dl>
-												<dt>비고</dt>
-												<dd class="rmkCntn"><p class="move-txt">${watchList[0].RMK_CNTN }</p></dd>
-											</dl>
-										</li>
-									</ul>
-								</div>
-								<div class="mo_seeBox">
-									<ul>
-										<li>
-											<dl>
-												<dt><span style="color:#1a1a1a;">경</span>번호</dt>
-												<dd class="auctionNum">${watchList[0].AUC_PRG_SQ }</dd>
-											</dl>
-										</li>
-										<li>
-											<dl>
-												<dt>성별</dt>
-												<dd class="sex">${watchList[0].INDV_SEX_C_NAME }</dd>
-											</dl>
-										</li>
-										<li>
-											<dl>
-												<dt>출하주</dt>
-												<dd class="ftsnm">${watchList[0].SRA_PDMNM }</dd>
-											</dl>
-										</li>
-										<li>
-											<dl>
-												<dt>중량</dt>
-												<dd class="cowSogWt">${fn:split(watchList[0].COW_SOG_WT,'.')[0] }</dd>
-											</dl>
-										</li>
-										<li>
-											<dl>
-												<dt><span style="color:#1a1a1a;">경</span>산차</dt>
-												<dd class="matime">${watchList[0].MATIME }</dd>
-											</dl>
-										</li>
-										<li>
-											<dl>
-												<dt>어미</dt>
-												<dd class="mcowDsc">${watchList[0].MCOW_DSC_NAME }</dd>
-											</dl>
-										</li>
-										<li>
-											<dl>
-												<dt><span style="color:#1a1a1a;">경</span>계대</dt>
-												<dd class="sraIndvPasgQcn">${watchList[0].SRA_INDV_PASG_QCN }</dd>
-											</dl>
-										</li>
-										<li>
-											<dl>
-												<dt>KPN</dt>
-												<dd class="kpnNo">${watchList[0].KPN_NO_STR }</dd>
-											</dl>
-										</li>
-										<li class="harf-list">
-											<dl>
-												<dt>최저가</dt>
-												<dd class="lowsSbidLmtAm">
-														${watchList[0].LOWS_SBID_LMT_AM <= 0 ? '0' : fn:split(watchList[0].LOWS_SBID_LMT_UPR,'.')[0]}
-												</dd>
-											</dl>
-										</li>
-										<li class="harf-list">
-											<dl>
-												<dt>비고</dt>
-												<dd class="rmkCntn"><p class="move-txt" style="width: 150px;">${watchList[0].RMK_CNTN }</p></dd>
-											</dl>
-										</li>
-									</ul>
-								</div>	
-							</li>
-							<c:forEach begin="1" end="${(johapData.KKO_SVC_CNT eq '' or johapData.KKO_SVC_CNT == null) ? '0' : johapData.KKO_SVC_CNT}" varStatus="st">
+		<div class="seeBox_bottom vidioSlide">
+			<div class="seeBox_slick">
+				<ul class="slider">
+						<li class="boarder">
+							<div class="seeBox_slick_inner">
+								<ul class="seeBox-cell">
+									<li>
+										<dl>
+											<dt>번호</dt>
+											<dd class="auctionNum">${watchList[0].AUC_PRG_SQ }</dd>
+										</dl>
+									</li>
+									<li>
+										<dl>
+											<dt>출하주</dt>
+											<dd class="ftsnm">${watchList[0].SRA_PDMNM }</dd>
+										</dl>
+									</li>
+									<li>
+										<dl>
+											<dt>성별</dt>
+											<dd class="sex">${watchList[0].INDV_SEX_C_NAME }</dd>
+										</dl>
+									</li>
+									<li>
+										<dl>
+											<dt>중량(Kg)</dt>
+											<dd class="cowSogWt">${fn:split(watchList[0].COW_SOG_WT,'.')[0] }</dd>
+										</dl>
+									</li>
+								</ul>
+								<ul class="seeBox-cell">
+									<li>
+										<dl>
+											<dt>산차</dt>
+											<dd class="matime">${watchList[0].MATIME }</dd>
+										</dl>
+									</li>
+									<li>
+										<dl>
+											<dt>계대</dt>
+											<dd class="sraIndvPasgQcn">${watchList[0].SRA_INDV_PASG_QCN }</dd>
+										</dl>
+									</li>
+									<li>
+										<dl>
+											<dt>어미</dt>
+											<dd class="mcowDsc">${watchList[0].MCOW_DSC_NAME }</dd>
+										</dl>
+									</li>
+									<li>
+										<dl>
+											<dt>최저가</dt>
+											<dd class="lowsSbidLmtAm">${watchList[0].LOWS_SBID_LMT_AM <= 0 ? '0' : fn:split(watchList[0].LOWS_SBID_LMT_UPR,'.')[0]}</dd>
+										</dl>
+									</li>
+								</ul>
+								<ul class="seeBox-cell">
+									<li>
+										<dl>
+											<dt>KPN</dt>
+											<dd class="kpnNo">${watchList[0].KPN_NO_STR }</dd>
+										</dl>
+									</li>
+									<li class="cell_3">
+										<dl>
+											<dt>비고</dt>
+											<dd class="rmkCntn"><p class="move-txt">${watchList[0].RMK_CNTN }</p></dd>
+										</dl>
+									</li>
+								</ul>
+							</div>
+							<div class="mo_seeBox">
+								<ul>
+									<li>
+										<dl>
+											<dt><span style="color:#1a1a1a;">경</span>번호</dt>
+											<dd class="auctionNum">${watchList[0].AUC_PRG_SQ }</dd>
+										</dl>
+									</li>
+									<li>
+										<dl>
+											<dt>성별</dt>
+											<dd class="sex">${watchList[0].INDV_SEX_C_NAME }</dd>
+										</dl>
+									</li>
+									<li>
+										<dl>
+											<dt>출하주</dt>
+											<dd class="ftsnm">${watchList[0].SRA_PDMNM }</dd>
+										</dl>
+									</li>
+									<li>
+										<dl>
+											<dt>중량</dt>
+											<dd class="cowSogWt">${fn:split(watchList[0].COW_SOG_WT,'.')[0] }</dd>
+										</dl>
+									</li>
+									<li>
+										<dl>
+											<dt><span style="color:#1a1a1a;">경</span>산차</dt>
+											<dd class="matime">${watchList[0].MATIME }</dd>
+										</dl>
+									</li>
+									<li>
+										<dl>
+											<dt>어미</dt>
+											<dd class="mcowDsc">${watchList[0].MCOW_DSC_NAME }</dd>
+										</dl>
+									</li>
+									<li>
+										<dl>
+											<dt><span style="color:#1a1a1a;">경</span>계대</dt>
+											<dd class="sraIndvPasgQcn">${watchList[0].SRA_INDV_PASG_QCN }</dd>
+										</dl>
+									</li>
+									<li>
+										<dl>
+											<dt>KPN</dt>
+											<dd class="kpnNo">${watchList[0].KPN_NO_STR }</dd>
+										</dl>
+									</li>
+									<li class="harf-list">
+										<dl>
+											<dt>최저가</dt>
+											<dd class="lowsSbidLmtAm">
+													${watchList[0].LOWS_SBID_LMT_AM <= 0 ? '0' : fn:split(watchList[0].LOWS_SBID_LMT_UPR,'.')[0]}
+											</dd>
+										</dl>
+									</li>
+									<li class="harf-list">
+										<dl>
+											<dt>비고</dt>
+											<dd class="rmkCntn"><p class="move-txt" style="width: 150px;">${watchList[0].RMK_CNTN }</p></dd>
+										</dl>
+									</li>
+								</ul>
+							</div>	
+						</li>
+						<c:forEach begin="1" end="${(johapData.KKO_SVC_CNT eq '' or johapData.KKO_SVC_CNT == null) ? '0' : johapData.KKO_SVC_CNT}" varStatus="st">
 <%-- 							<c:forEach begin="1" end="4" varStatus="st"> --%>
-								<li class="video_item" style="width: 100%;height: auto;">
-									<video id="remoteVideo${st.index }" style="width: 100%;background: black;height: 100%;" poster="/static/images/assets/no_video_18980.png" muted="muted" autoplay playsinline webkit-playsinline>
-										Your browser does not support HTML5 video.
-									</video>
-								</li>
-							</c:forEach>
+							<li class="video_item" style="width: 100%;height: auto;">
+								<video id="remoteVideo${st.index }" style="width: 100%;background: black;height: 100%;" poster="/static/images/assets/no_video_18980.png" muted="muted" autoplay playsinline webkit-playsinline>
+									Your browser does not support HTML5 video.
+								</video>
+							</li>
+						</c:forEach>
 					</ul>
 				</div> 
 				<div class="seeBox_gp">
@@ -201,7 +201,6 @@
 					</div>
 				</div>
 			</div>		
-		</c:if>
 	</div>
 	<!-- //auction_seeBox e -->
 	<div class="list_table auction_see tblAuction">
