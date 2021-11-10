@@ -801,8 +801,11 @@
 				, ROW_NUMBER () OVER(ORDER BY A.ATDR_DTM DESC) RNUM
 			FROM LALM.TB_LA_IS_MH_ATDR_LOG A
 			WHERE A.AUC_DT = TO_CHAR(SYSDATE,'YYYYMMDD')
-			AND A.LVST_AUC_PTC_MN_NO = #{lvstAucPtcMnNo}
 			AND A.NA_BZPLC = #{naBzplc}
+			AND A.AUC_OBJ_DSC = #{aucObjDsc}
+			AND A.AUC_PRG_SQ = #{aucPrgSq}
+			AND A.LVST_AUC_PTC_MN_NO = #{lvstAucPtcMnNo}
+			
 		) T
 		WHERE T.RNUM = 1
 	</select>
