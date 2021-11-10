@@ -36,7 +36,6 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -89,7 +88,7 @@ public class ApiController {
 	 * @return 업데이트 결과
 	 */
 	@ApiOperation(value = "경매 결과 업데이트 API", tags = "result")
-	@PutMapping(value = "/api/{version}/auction/result"
+	@PostMapping(value = "/api/{version}/auction/result"
 				, consumes = MediaType.APPLICATION_JSON_VALUE
 				, produces = MediaType.APPLICATION_JSON_VALUE)
 	public Map<String, Object> updataAuctionResultForJson(@PathVariable(name = "version") String version
@@ -171,7 +170,7 @@ public class ApiController {
 	 * @return 업데이트 결과
 	 */
 	@ApiOperation(value = "경매 결과 업데이트 API", tags = "result")
-	@PutMapping(value = "/api/{version}/auction/result"
+	@PostMapping(value = "/api/{version}/auction/result"
 				, consumes = MediaType.APPLICATION_FORM_URLENCODED_VALUE
 				, produces = MediaType.APPLICATION_JSON_VALUE)
 	public Map<String, Object> updataAuctionResultForForm(@PathVariable(name = "version") String version

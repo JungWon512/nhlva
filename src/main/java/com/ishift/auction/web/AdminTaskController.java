@@ -173,11 +173,8 @@ public class AdminTaskController {
 		try {
 			final AdminUserDetails userVo = (AdminUserDetails)sessionUtill.getUserVo();
 			if(userVo.getEno() != null) params.put("regUserId", userVo.getEno());
-<<<<<<< HEAD
-			params.put("searchDate", params.get("aucDt"));
-			params.put("searchAucObjDsc", params.get("aucObjDsc"));
-=======
->>>>>>> branch 'master' of https://github.com/yuchansong410/nhlva.git
+			if(params.get("aucDt") != null) params.put("searchDate", params.get("aucDt"));
+			if(params.get("aucObjDsc") != null) params.put("searchAucObjDsc", params.get("aucObjDsc"));
 			
 			final int cnt = auctionService.updateCowInfo(params);
 			if (cnt > 0) {
