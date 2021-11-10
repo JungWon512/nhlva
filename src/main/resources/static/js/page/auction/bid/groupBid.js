@@ -472,7 +472,6 @@ var messageHandler = function(data) {
 			}
 			else if(auctionConfig.asData.status == "8002" || auctionConfig.asData.status == "8006") {
 				$("input[name='bidAmt']").val("");
-//				$("div.auc-txt > div.info_board").html("<span class='txt-yellow'>경매 번호</span>를 입력하세요.");
 				$("div.auc-txt > div.info_board").html("경매 <span class='txt-yellow'>대기 중</span>입니다.");
 				auctionConfig.enableBid = "N";
 			}
@@ -602,7 +601,7 @@ var messageHandler = function(data) {
 			}
 			else if (responseCode == "4006") {
 				auctionConfig.seData.clearYn = "Y";
-				messageSample("<span class='txt-yellow'>응찰</span>되었습니다.", "<span class='txt-yellow'>경매 번호</span>를 입력하세요.");
+				messageSample("<span class='txt-yellow'>응찰</span>되었습니다.");
 				fnBefore();
 				$("input[name=bidAmt]").removeClass("txt-blue");
 			}
@@ -673,6 +672,7 @@ var fnSetAuctionInfo = function() {
 };
 
 var fnBefore = function() {
+	$("div.auc-txt > div.info_board").html("<span class='txt-yellow'>경매 번호</span>를 입력하세요.");
 	$(".aucNum").show().find("input, button").prop("disabled", false).addClass("active").val("");
 	$(".bidAmt").hide().find("input, button").prop("disabled", true).removeClass("active").val("");
 	$(".btn_before").prop("disabled", true);
