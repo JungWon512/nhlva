@@ -94,9 +94,9 @@
 				}
 				
 				$.ajax({
-					url : '/admin/task/cowInfo',
+					url : '/admin/task/saveCowInfo',
 					data : JSON.stringify($("form[name='frm_cow']").serializeObject()),
-					type : 'PUT',
+					type : 'POST',
 					dataType : 'json',
 					beforeSend: function (xhr) {
 						xhr.setRequestHeader("Accept", "application/json");

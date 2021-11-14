@@ -3,20 +3,52 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="ApiMapper">
 	<select id="sealectAuctQcn" parameterType="map" resultType="map">
-		SELECT A.*,
-		  CASE WHEN A.AUC_OBJ_DSC = '1' THEN 10000 ELSE 10000 END as divisionPrice
-		  ,B.SEL_STS_DSC
-		  ,B.RG_SQNO
-		  FROM tb_la_is_mh_auc_qcn A
-		  LEFT JOIN TB_LA_IS_MH_AUC_STN B ON A.NA_BZPLC     = B.NA_BZPLC     
-										AND A.AUC_OBJ_DSC  = B.AUC_OBJ_DSC  
-										AND A.AUC_DT       = B.AUC_DT
-		  WHERE A.AUC_DT = #{aucDt}
-		  AND A.NA_BZPLC = #{naBzplc}
+		SELECT A.NA_BZPLC
+			 , A.AUC_OBJ_DSC
+			 , B.AUC_OBJ_DSC AS STN_OBJ_DSC
+			 , A.AUC_DT
+			 , A.QCN
+			 , A.SGNO_PRC_DSC
+			 , A.CUT_AM
+			 , A.DDL_YN
+			 , A.TMS_YN
+			 , A.DEL_YN
+			 , A.MALE_KG
+			 , A.FEMALE_KG
+			 , A.TT_SCR
+			 , A.FSRG_DTM
+			 , A.FSRGMN_ENO
+			 , A.LSCHG_DTM
+			 , A.LS_CMENO
+			 , CASE WHEN NVL(B.AUC_OBJ_DSC, A.AUC_OBJ_DSC) = '1' THEN A.BASE_LMT_AM / NVL(C.CALF_AUC_ATDR_UNT_AM, 10000)
+					WHEN NVL(B.AUC_OBJ_DSC, A.AUC_OBJ_DSC) = '2' THEN A.BASE_LMT_AM / NVL(C.NBFCT_AUC_ATDR_UNT_AM, 1)
+					WHEN NVL(B.AUC_OBJ_DSC, A.AUC_OBJ_DSC) = '3' THEN A.BASE_LMT_AM / NVL(C.PPGCOW_AUC_ATDR_UNT_AM, 10000)
+					ELSE 9999
+				END AS BASE_LMT_AM
+			 , CASE WHEN NVL(B.AUC_OBJ_DSC, A.AUC_OBJ_DSC) = '1' THEN C.CALF_AUC_ATDR_UNT_AM
+					WHEN NVL(B.AUC_OBJ_DSC, A.AUC_OBJ_DSC) = '2' THEN C.NBFCT_AUC_ATDR_UNT_AM 
+					WHEN NVL(B.AUC_OBJ_DSC, A.AUC_OBJ_DSC) = '3' THEN C.PPGCOW_AUC_ATDR_UNT_AM
+					ELSE 10000
+				END AS DIVISION_PRICE
+			 , B.SEL_STS_DSC
+			 , B.RG_SQNO
+		  FROM TB_LA_IS_MH_AUC_QCN A
+		  LEFT JOIN TB_LA_IS_MH_AUC_STN B
+			ON (
+				A.NA_BZPLC = B.NA_BZPLC
+				AND A.AUC_DT = B.AUC_DT
+				AND A.AUC_OBJ_DSC = B.AUC_OBJ_DSC
+			 )
+		  LEFT OUTER JOIN TB_LA_IS_MM_ENV_EST C
+			ON (
+				A.NA_BZPLC = C.NA_BZPLC
+			 )
+		 WHERE A.AUC_DT = #{aucDt}
+		   AND A.NA_BZPLC = #{naBzplc}
 		<if test="aucObjDsc !=null and !aucObjDsc.equals('')">
-		  AND A.AUC_OBJ_DSC = #{aucObjDsc}
+		   AND NVL(B.AUC_OBJ_DSC, A.AUC_OBJ_DSC) = #{aucObjDsc}
 		</if>
-		ORDER BY A.AUC_OBJ_DSC ASC
+		 ORDER BY NVL(B.RG_SQNO, 0) ASC
 	</select>
 	
 	<select id="selectAuctStn" parameterType="map" resultType="map">
@@ -88,6 +120,7 @@
 				A.LWPR_CHG_NT,                   <!-- 최저가변경횟수  -->
 				A.LVST_AUC_PTC_MN_NO,                 <!-- 가축경매참여자번호  -->
 				A.DNA_YN,                    <!-- DNA    -->
+				A.SRA_PDMNM,
 				A.SRA_PD_RGNNM,                   <!-- 축산생산지역명  -->
 				A.OSLP_NO,                    <!-- 원표번호   -->
 				A.TRMN_AMNNO,                   <!-- 거래인관리번호  -->
@@ -372,7 +405,7 @@
 			A.AUC_OBJ_DSC,
 			A.AUC_DT,
 			A.RG_SQNO,
-			A.DDL_QCN,
+			NVL(A.DDL_QCN, 0) AS DDL_QCN,
 			A.ST_AUC_NO,
 			A.ED_AUC_NO,
 			#{selStsDsc},
@@ -729,10 +762,21 @@
 			 , A.FHS_ID_NO										/* 농가식별번호 */
 			 , A.FARM_AMNNO										/* 농가관린번호 */
 			 , C.TRMN_AMNNO										/* 날찰예정 중도매인번호 */
-			 , C.ATDR_AM * 10000 AS	ATDR_AM						/* 낙찰예정가 */
-			 , C.ATDR_AM AS ATDR_UPR
+			 , C.ATDR_AM										/* 낙찰예정가 */
 			 , C.LVST_AUC_PTC_MN_NO								/* 낙찰예정 참가번호 */
 			 , C.ATDR_DTM										/* 최종응찰일시 */
+			 , A.COW_SOG_WT										/* 중량 */
+			 , A.FEE_CHK_YN										/* 출하자 수수료 기적용 여부 */
+			 , A.FEE_CHK_YN_FEE									/* 출하자 수수료 기적용 금액 */
+			 , A.MT12_OVR_YN									/* 12개월 이상 수수료 적용 여부 */
+			 , A.MT12_OVR_FEE									/* 12개월 이상 수수료 적용 금액 */
+			 , A.SELFEE_CHK_YN									/* 판매자 수수료 기적용 여부 */
+			 , A.SELFEE_CHK_YN_FEE								/* 판매자 수수료 기적용 금액 */
+			 , A.DNA_YN											/* 친자일치 검사 여부 */
+			 , A.DNA_YN_CHK										/* 친자일차 여부 */
+			 , A.PRNY_JUG_YN									/* 임신감정여부 */
+			 , A.NCSS_JUG_YN									/* 괴사감정여부 */
+			 , A.RMHN_YN										/* 제각여부 */
 		  FROM TB_LA_IS_MH_SOG_COW A
 		  LEFT OUTER JOIN TB_LA_IS_MM_FHS B
 			ON (
@@ -781,6 +825,7 @@
 		 ORDER BY A.AUC_PRG_SQ
 	</select>
 	
+	<!-- 금일 진행 경매 리스트 -->
 	<select id="selectAuctQcnForToday" parameterType="map" resultType="map">
 		SELECT A.*
 		  FROM TB_LA_IS_MH_AUC_QCN A
@@ -788,6 +833,7 @@
 		  AND A.DEL_YN = 0
 	</select>
 	
+	<!-- 응찰 서버에서 조합 별로 할당한 port 정보 저장 -->
 	<update id="updateNetPort" parameterType="map">
 		UPDATE TB_LA_IS_BM_BZLOC SET
 			NET_PORT = #{netPort}
@@ -795,6 +841,7 @@
 		WHERE NA_BZPLC =  #{naBzplc}
 	</update>
 	
+	<!-- 응찰 금액 조회 -->
 	<select id="selectNearAtdrAm" parameterType="map" resultType="map">
 		SELECT 
 			NVL(T.ATDR_AM,0) ATDR_AM
@@ -811,6 +858,8 @@
 		) T
 		WHERE T.RNUM = 1
 	</select>
+	
+	<!-- 찜 가격 조회 -->
 	<select id="selectMyZimPrice" parameterType="map" resultType="map">
 		SELECT NVL(A.SBID_UPR,0) SBID_UPR
 		FROM TB_LA_IS_MH_SOG_ZIM A
@@ -823,6 +872,68 @@
 		AND A.AUC_PRG_SQ = #{aucPrgSq}
 		AND B.LVST_AUC_PTC_MN_NO = #{lvstAucPtcMnNo}
 		AND A.DEL_YN = '0'
+	</select>
+	
+	<!-- 조합별 경매 정보(수수료, 응찰 금액 단위 등) -->
+	<select id="selectBizAuctionInfo" parameterType="map" resultType="map">
+		 SELECT A.NA_BZPLC
+			 , A.NBFCT_AUC_UPR_DSC
+			 , A.PHN_AUC_YN
+			 , A.TD_RC_CST
+			 , A.AUC_ATDR_UNT_AM
+			 , A.MT12_OVR_FEE
+			 , A.KPN_CIP
+			 , A.EBBO_IP_ADDR1
+			 , A.EBBO_PORT_NO1
+			 , A.EBBO_IP_ADDR2
+			 , A.EBBO_PORT_NO2
+			 , A.EBBO_IP_ADDR3
+			 , A.EBBO_PORT_NO3
+			 , A.EBBO_IP_ADDR4
+			 , A.EBBO_PORT_NO4
+			 , A.CALF_AUC_ATDR_UNT_AM
+			 , A.NBFCT_AUC_ATDR_UNT_AM
+			 , A.PPGCOW_AUC_ATDR_UNT_AM
+			 , A.CNNT_OBJ_SYS_DSC
+			 , A.URL_NM
+			 , A.MULTI_AUCNO
+			 , A.MULTI_FTSNM
+			 , A.MULTI_WEIGHT
+			 , A.MULTI_SEX
+			 , A.MULTI_QCN
+			 , A.MULTI_MATIME
+			 , A.MULTI_SBID_LMT_AM
+			 , A.MULTI_SBID_UPR
+			 , A.MULTI_MWMNNM
+			 , A.PDP_AUCNO
+			 , A.PDP_FTSNM
+			 , A.PDP_WEIGHT
+			 , A.PDP_SEX
+			 , A.PDP_QCN
+			 , A.PDP_MATIME
+			 , A.PDP_SBID_LMT_AM
+			 , A.PDP_SBID_UPR
+			 , A.PDP_MWMNNM
+			 , A.FSRG_DTM
+			 , A.FSRGMN_ENO
+			 , A.LSCHG_DTM
+			 , A.LS_CMENO
+			 , A.SRA_FED_SPY_YN_FEE
+			 , A.BRKR_NAME_HOST
+			 , A.VERSION
+			 , A.FEE_CHK_DNA_YN_FEE
+			 , A.SELFEE_CHK_DNA_YN_FEE
+			 , B.BASE_LMT_AM
+			 , B.CUT_AM
+			 , B.SGNO_PRC_DSC
+			 , B.MALE_KG
+			 , B.FEMALE_KG 
+		  FROM TB_LA_IS_MM_ENV_EST A
+		  LEFT OUTER JOIN TB_LA_IS_MH_AUC_QCN B
+		    ON ( A.NA_BZPLC = B.NA_BZPLC )
+		 WHERE A.NA_BZPLC = #{naBzplc}
+		   AND B.AUC_DT = #{aucDt}
+		   AND AUC_OBJ_DSC = #{aucObjDsc}
 	</select>
 	
 </mapper>

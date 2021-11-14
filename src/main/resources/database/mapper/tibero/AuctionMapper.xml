@@ -489,7 +489,6 @@
 			 , LVST_AUC_PTC_MN_NO = #{lvstAucPtcMnNo}	/* 경매 참가자 번호 */
 			 , SRA_SBID_AM = #{sraSbidAm}				/* 낙찰 금액 */
 			 , SRA_SBID_UPR = #{sraSbidUpr}				/* 낙찰 단가 */
-			 , LOWS_SBID_LMT_AM = #{lowsSbidLmtAm}		/* 수정 최저가 */
 			 , SEL_STS_DSC = #{selStsDsc}				/* 판매상태 구분 코드 */
 			 , AMNNO = #{trmnAmnno}						/* 정산자 중도매인 번호 */
 		<choose>

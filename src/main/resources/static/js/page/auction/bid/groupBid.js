@@ -602,12 +602,13 @@ var messageHandler = function(data) {
 				$(".aucNum").val("");
 			}
 			else if (responseCode == "4003") {
-				messageSample("응찰한 가격이 시작가보다 낮습니다.");
+				messageSample("<span class='txt-red'>응찰 금액을 확인하세요.</span>");
 			}
 			else if (responseCode == "4004") {
-				modalAlert('', "진행중인 경매가 없습니다."
-						 , function(){pageMove('/main', false);}
-				);
+				modalAlert("", "현재 응찰 가능상태가 아닙니다.");
+//				modalAlert('', "진행중인 경매가 없습니다."
+//						 , function(){pageMove('/main', false);}
+//				);
 			}
 			else if (responseCode == "4006") {
 				auctionConfig.seData.clearYn = "Y";

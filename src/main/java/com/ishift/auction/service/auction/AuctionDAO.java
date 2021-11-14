@@ -397,12 +397,10 @@ public class AuctionDAO {
 	}
 
 	public List<Map<String, Object>> selectAuctQcnForToday() throws SQLException {
-		// TODO Auto-generated method stub
 		return mainDao.selectList("ApiMapper.selectAuctQcnForToday", null);
 	}
 
 	public int updateNetPort(Map<String, Object> params) throws SQLException {
-		// TODO Auto-generated method stub
 		return mainDao.update("ApiMapper.updateNetPort", params);
 	}
 
@@ -412,5 +410,16 @@ public class AuctionDAO {
 
 	public Map<String, Object> selectMyZimPrice(Map<String, Object> params) throws SQLException {
 		return mainDao.selectOne("ApiMapper.selectMyZimPrice", params);
+	}
+	
+
+	/**
+	 * 조합 경매 기본 정보 조회
+	 * @param params
+	 * @return
+	 * @throws SQLException
+	 */
+	public Map<String, Object> selectBizAuctionInfo(Map<String, Object> params) throws SQLException {
+		return mainDao.selectOne("ApiMapper.selectBizAuctionInfo", params);
 	}
 }

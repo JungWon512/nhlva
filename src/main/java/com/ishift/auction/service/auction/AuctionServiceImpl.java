@@ -3,12 +3,15 @@ package com.ishift.auction.service.auction;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import lombok.extern.slf4j.Slf4j;
+
 import javax.annotation.Resource;
 
 import java.sql.SQLException;
 import java.util.List;
 import java.util.Map;
 
+@Slf4j
 @Service("auctionService")
 @Transactional(transactionManager = "txManager", rollbackFor = SQLException.class)
 public class AuctionServiceImpl implements AuctionService {
@@ -574,23 +577,30 @@ public class AuctionServiceImpl implements AuctionService {
 		params.put("edAucNo", aucStn.get("ED_AUC_NO"));
 		auctionDAO.updateAuctSogCow(params);
 
-		// 4. 응찰 완료(낙찰 처리 대상) 리스트 조회
+		// 4. 조합 경매 기본 정보 조회
+		final Map<String, Object> bizAuctionInfo = auctionDAO.selectBizAuctionInfo(params);
+		
+		// 5. 응찰 완료(낙찰 처리 대상) 리스트 조회
 		final List<Map<String, Object>> list = auctionDAO.selectBidCompleteList(params);
 		if (list.size() > 0) {
+			
 			for (Map<String, Object> info : list) {
 				final String naBzplc		= info.get("NA_BZPLC").toString();
 				final String aucDt			= info.get("AUC_DT").toString();
 				final String aucObjDsc		= info.get("AUC_OBJ_DSC").toString();
 				final String oslpNo			= info.get("OSLP_NO").toString();
 				final String ledSqno		= info.get("LED_SQNO").toString();
-				final String trmnMacoYn		= info.get("TRMN_MACO_YN").toString();		// 중도매인 조합원 여부 ( 0.비조합원, 1.조합원 )
-				final String fhsMacoYn		= info.get("FHS_MACO_YN").toString();		// 출하주 조합원 여부 ( 0.비조합원, 1.조합원 )
-				final String ppgcowFeeDsc	= info.get("PPGCOW_FEE_DSC").toString();	// 번식우 수수료 구분코드 > 1.임신우, 2.비임신우, 3.임신우+송아지, 4.비임신우+송아지,  5.해당없음
-				final String trpcsPyYn		= info.get("TRPCS_PY_YN").toString();		// 운송비 지급 여부
-				final String trmnAmnno		= info.get("TRMN_AMNNO").toString();
-				final String lvstAucPtcMnNo	= info.get("LVST_AUC_PTC_MN_NO").toString();
-				final String sraSbidAm		= info.get("ATDR_AM").toString();
-				final String sraSbidUpr		= info.get("ATDR_UPR").toString();
+				final String trmnMacoYn		= info.get("TRMN_MACO_YN").toString();				// 중도매인 조합원 여부 ( 0.비조합원, 1.조합원 )
+				final String fhsMacoYn		= info.get("FHS_MACO_YN").toString();				// 출하주 조합원 여부 ( 0.비조합원, 1.조합원 )
+				final String ppgcowFeeDsc	= info.get("PPGCOW_FEE_DSC").toString();			// 번식우 수수료 구분코드 > 1.임신우, 2.비임신우, 3.임신우+송아지, 4.비임신우+송아지,  5.해당없음
+				final String trmnAmnno		= info.get("TRMN_AMNNO").toString();				// 중도매인 번호
+				final String lvstAucPtcMnNo	= info.get("LVST_AUC_PTC_MN_NO").toString();		// 경매참가번호
+				final String cowSogWt		= info.getOrDefault("COW_SOG_WT", "0").toString();
+				final String aucUprDsc		= bizAuctionInfo.getOrDefault("NBFCT_AUC_UPR_DSC", "1").toString();			// 비육우 경매단가 구분 코드 ( 1. kg 단위, 2. 두 단위 )
+				final String sgNoPrcDsc		= bizAuctionInfo.getOrDefault("SGNO_PRC_DSC", "1").toString();				// 절사구분 ( 1.소수점 이하 버림, 2. 소수점 이상 절상, 3. 반올림 )
+				final int cutAm				= Integer.parseInt(bizAuctionInfo.getOrDefault("CUT_AM", "1").toString());	// 절사금액
+				long sraSbidUpr				= Long.parseLong(info.get("ATDR_AM").toString());							// 응찰금액
+				long sraSbidAm				= 0L;
 
 				info.put("naBzplc",			naBzplc);
 				info.put("naBzPlc",			naBzplc);
@@ -600,24 +610,61 @@ public class AuctionServiceImpl implements AuctionService {
 				info.put("ledSqno",			ledSqno);
 				info.put("trmnAmnno",		trmnAmnno);
 				info.put("lvstAucPtcMnNo",	lvstAucPtcMnNo);
-				info.put("sraSbidAm",		sraSbidAm);
-				info.put("sraSbidUpr",		sraSbidUpr);
 				info.put("selStsDsc",		"22");
 				info.put("lsCmeno",			"SYSTEM");
+				info.put("sraSbidUpr",		sraSbidUpr);
 
-				// 5. 낙찰 정보 업데이트
+				// 낙찰 금액 계산 [s]
+				// 경매 금액 단위 > 보통 10000원이지만 비육우인 경우 kg단위로 계산한다.
+				int aucAtdrUntAm			= 10000;
+				// 비육우 & 경매 단가가 kg인 경우
+				if ("2".equals(aucObjDsc) && "1".equals(aucUprDsc)) {
+					// 중량 정보가 없으면 낙찰가를 0으로 넣어준다.
+					if ("0".equals(cowSogWt)) {
+						info.put("sraSbidAm", 0);
+					}
+					else {
+						double bidAmt = Double.parseDouble(cowSogWt) * sraSbidUpr / cutAm;
+						if ("1".equals(sgNoPrcDsc)) {
+							sraSbidAm = (long)Math.floor(bidAmt) * cutAm;
+						}
+						else if ("2".equals(sgNoPrcDsc)) {
+							sraSbidAm = (long)Math.ceil(bidAmt) * cutAm;
+						}
+						else if ("3".equals(sgNoPrcDsc)) {
+							sraSbidAm = (long)Math.round(bidAmt) * cutAm;
+						}
+						info.put("sraSbidAm", sraSbidAm);
+					}
+				}
+				else {
+					if ("1".equals(aucObjDsc)) {
+						aucAtdrUntAm = Integer.parseInt(bizAuctionInfo.getOrDefault("CALF_AUC_ATDR_UNT_AM", "10000").toString());	// 송아지 경매 금액 단위
+					}
+					else if ("2".equals(aucObjDsc)) {
+						aucAtdrUntAm = Integer.parseInt(bizAuctionInfo.getOrDefault("NBFCT_AUC_ATDR_UNT_AM", "10000").toString());	// 비육우 경매 금액 단위
+					}
+					else if ("3".equals(aucObjDsc)) {
+						aucAtdrUntAm = Integer.parseInt(bizAuctionInfo.getOrDefault("PPGCOW_AUC_ATDR_UNT_AM", "10000").toString());	// 번식우 경매 금액 단위
+					}
+					sraSbidAm = sraSbidUpr * aucAtdrUntAm;
+					info.put("sraSbidAm", sraSbidAm);
+				}
+				// 낙찰 금액 계산 [e]
+
+				// 6. 낙찰 정보 업데이트
 				int cnt = auctionDAO.updateAuctionResult(info);
 				if (cnt == 0) {
 					continue;
 				}
 				
-				// 5. 기등록 수수료 정보 삭제
+				// 7. 기등록 수수료 정보 삭제
 				auctionDAO.deleteFeeInfo(info);
 				
-				// 6. 수수료 기본 정보 조회
-				final List<Map<String, Object>> feeInfoList = auctionDAO.selectFeeInfo(params);
+				// 8. 수수료 기본 정보 조회
+				final List<Map<String, Object>> feeInfoList = auctionDAO.selectFeeInfo(info);
 				
-				// 7. 수수료 저장
+				// 9. 수수료 저장
 				for (Map<String, Object> feeInfo : feeInfoList) {
 					feeInfo.put("AUC_DT",		aucDt);
 					feeInfo.put("AUC_OBJ_DSC",	aucObjDsc);
@@ -626,25 +673,74 @@ public class AuctionServiceImpl implements AuctionService {
 					
 					// 중도매인, 출하주의 조합원 여부
 					String macoYn = ("1".equals(feeInfo.get("FEE_APL_OBJ_C"))) ? trmnMacoYn : fhsMacoYn;
+					long feeAmt = 0L;
 					
 					// 낙찰인 경우만 수수료 정보를 저장하므로 SBID_YN이 0인(미낙찰) 수수료 정보의 금액은 0으로 넣어준다.
 					if ("0".equals(feeInfo.get("SBID_YN"))) {
-						feeInfo.put("SRA_TR_FEE", 0);
+						feeInfo.put("SRA_TR_FEE", feeAmt);
 					}
 					else if ("5".equals(feeInfo.get("PPGCOW_FEE_DSC"))			// 수수료 정보의 번식우 구분코드가 5(해당없음)인 경우
 					 || ppgcowFeeDsc.equals(feeInfo.get("PPGCOW_FEE_DSC"))		// 출장우 정보의 번식우 구분코드와 수수료 정보의 번식우 구분코드가 일치하는 경우 
 					) {
-						// 수수료 유형이 운송비인 경우 trpcPyYn(운송비 지급 여부)가 0일 때만 수수료를 부과한다.
-						if ("040".equals(feeInfo.get("NA_FEE_C")) && "1".equals(trpcsPyYn)) {
-							feeInfo.put("SRA_TR_FEE", 0);
+						
+						// 수수료가 비율인 경우 TB_LA_IS_MH_FEE의 절사구분(SGNO_PRC_DSC)을 참조하여 처리한다.
+						// 1.소수점 이하 버림, 2. 소수점 이상 절상, 3. 반올림
+						if ("2".equals(feeInfo.get("AM_RTO_DSC"))) {
+							double feeUpr = "0".equals(macoYn) ? Double.parseDouble(feeInfo.getOrDefault("NMACO_FEE_UPR", "0").toString())
+															   : Double.parseDouble(feeInfo.getOrDefault("MACO_FEE_UPR", "0").toString());
+							if ("1".equals(feeInfo.get("SGNO_PRC_DSC"))) {
+								feeAmt = (long)Math.floor(feeUpr / 100 * sraSbidAm);
+							}
+							else if ("2".equals(feeInfo.get("SGNO_PRC_DSC"))) {
+								feeAmt = (long)Math.ceil(feeUpr / 100 * sraSbidAm);
+							}
+							else if ("3".equals(feeInfo.get("SGNO_PRC_DSC"))) {
+								feeAmt = (long)Math.round(feeUpr / 100 * sraSbidAm);
+							}
 						}
 						else {
-							feeInfo.put("SRA_TR_FEE", "0".equals(macoYn) ? feeInfo.get("NMACO_FEE_UPR") : feeInfo.get("MACO_FEE_UPR"));
+						// 수수료가 금액인 경우
+							feeAmt = "0".equals(macoYn) ? Long.parseLong(feeInfo.getOrDefault("NMACO_FEE_UPR", "0").toString())
+														: Long.parseLong(feeInfo.getOrDefault("MACO_FEE_UPR", "0").toString());
+							// 친자 확인 수수료
+							if ("1".equals(info.get("DNA_YN_CHK"))) {
+								// 출하자
+								if ("010".equals(feeInfo.get("NA_FEE_C"))) {
+									// TODO :: 합천인 경우에는 농가 정보 테이블에서 축산사료여부 사용 여부(SRA_FED_SPY_YN) 체크 후 미사용시(0) 친자 확인 수수료를 부과한다.
+									feeAmt += Long.parseLong(bizAuctionInfo.getOrDefault("FEE_CHK_DNA_YN_FEE", "0").toString());
+								}
+								// 낙찰자
+								else if ("011".equals(feeInfo.get("NA_FEE_C"))) {
+									// TODO :: 합천인 경우 출장우 정보 테이블의 친자 일치 여부(DNA_YN) 체크 후 일치 할 시(1) 친자 확인 수수료를 부과한다.
+									feeAmt += Long.parseLong(bizAuctionInfo.getOrDefault("SELFEE_CHK_DNA_YN_FEE", "0").toString());
+								}
+							}
+
+						}
+						
+						// 운송비인 경우 TRPCS_PY_YN(운송비 지급 여부)가 1일 때는 수수를 부과하지 않는다.
+						if ("040".equals(feeInfo.get("NA_FEE_C")) && "1".equals(info.get("TRPCS_PY_YN"))) {
+							feeAmt = 0L;
+						}
+						
+						// 임신감정 수수료인 경우 PRNY_JUG_YN(임신감정여부)가 0일 때는 수수료를 부과하지 않는다
+						if ("060".equals(feeInfo.get("NA_FEE_C")) && "0".equals(info.get("PRNY_JUG_YN"))) {
+							feeAmt = 0L;
+						}
+						// 괴사감정 수수료인 경우 NCSS_JUG_YN(괴사감정여부)가 0일 때는 수수료를 부과하지 않는다
+						if ("040".equals(feeInfo.get("NA_FEE_C")) && "1".equals(info.get("NCSS_JUG_YN"))) {
+							feeAmt = 0L;
+						}
+						// 제각수수료인 경우 경우 RMHN_YN(제각여부)가 0일 때는 수수료를 부과하지 않는다
+						if ("040".equals(feeInfo.get("NA_FEE_C")) && "1".equals(info.get("TRPCS_PY_YN"))) {
+							feeAmt = 0L;
 						}
 					}
 					else {
 						feeInfo.put("SRA_TR_FEE", 0);
 					}
+					
+					feeInfo.put("SRA_TR_FEE", feeAmt);
 				}
 				
 				params.put("feeInfoList", feeInfoList);
@@ -653,7 +749,7 @@ public class AuctionServiceImpl implements AuctionService {
 			}
 		}
 		
-		// 8. 낙찰 상태가 아닌 출장우 로그 저장
+		// 10. 낙찰 상태가 아닌 출장우 로그 저장
 		params.put("newCntAucYn", "Y");
 		params.put("soldChkYn", "N");
 		params.put("fsrgmnEno", "admin");
@@ -661,18 +757,18 @@ public class AuctionServiceImpl implements AuctionService {
 		params.put("pdaId", "새 차수 경매 시작[성공]");
 		auctionDAO.insertAuctSogCowLog(params);
 
-		// 9. 낙찰 상태 출장우 로그 저장
+		// 11. 낙찰 상태 출장우 로그 저장
 		params.put("newCntAucYn", "N");
 		params.put("soldChkYn", "Y");
 		params.put("pdaId", "경매종료[낙찰]");
 		auctionDAO.insertAuctSogCowLog(params);
 
-		// 10. 유찰 처리
+		// 12. 유찰 처리 ( 최저가가 등록되지 않은 출장우 중 SEL_STS_DSC가 '22'가 아닌 것 )
 		params.put("sraSbidAm", "0");
 		params.put("lsCmeno", "SYSTEM");
 		auctionDAO.updateAuctSogCowFinish(params);
 		
-		// 11. 유찰 상태 출장우 로그 저장
+		// 13. 유찰 상태 출장우 로그 저장
 		params.put("newCntAucYn", "N");
 		params.put("soldChkYn", "N");
 		params.put("pdaId", "경매종료[불낙]");
