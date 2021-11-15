@@ -799,5 +799,9 @@ public class AuctionServiceImpl implements AuctionService {
 	public List<Map<String, Object>> selectBidLogList(Map<String, Object> params) throws SQLException{
 		return auctionDAO.selectBidLogList(params);
 	}
+	@Override
+	public Map<String, Object> selectBidLogListCnt(Map<String, Object> params)  throws SQLException{
+		return auctionDAO.selectBidLogListCnt(params);
+	}
 	
 }

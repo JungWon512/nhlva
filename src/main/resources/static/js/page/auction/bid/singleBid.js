@@ -250,7 +250,7 @@ var socketStart = function(){
 	//socketHost += ':'+$('#webPort').val();
 	socketHost += ':9001';
 	socket = io.connect('https://'+socketHost + '/6003' + '?auctionHouseCode='  + $('#naBzPlc').val(), {secure:true});
-
+	//socket = io.connect('http://192.168.0.23:9001/6003?auctionHouseCode=' + $('#naBzPlc').val());
 	socket.on('connect', connectHandler);
 
 	socket.on('disconnect', disconnectHandler);

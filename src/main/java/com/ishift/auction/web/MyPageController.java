@@ -72,6 +72,7 @@ public class MyPageController {
 		mav.addObject("dateList",datelist);
 		mav.addObject("buyList",list);
 		mav.addObject("bidList",bidList);
+		mav.addObject("bidCnt", auctionService.selectBidLogListCnt(map));
 		mav.addObject("inputParam", param);
 		mav.addObject("subheaderTitle","나의 구매내역");
 		mav.setViewName("mypage/buy/buy");
@@ -110,6 +111,7 @@ public class MyPageController {
         	if(params.get("loginNo") != null) params.put("searchTrmnAmnNo", params.get("loginNo"));
         	List<Map<String,Object>> list=auctionService.selectBidLogList(params);
             result.put("data", list);
+            result.put("count", auctionService.selectBidLogListCnt(params));
         }catch (RuntimeException re) {
             result.put("success", false);
             result.put("message", re.getMessage());

@@ -998,4 +998,51 @@
 		AND C.ATDR_AM != 0
 	</select>
 	
+
+	<select id="selectBidLogListCnt" parameterType="map" resultType="map">
+		SELECT 
+			COUNT(B.INDV_SEX_C) TOT_CNT
+			, COUNT(DECODE(B.INDV_SEX_C,1,1,NULL)) W_CNT
+			, COUNT(DECODE(B.INDV_SEX_C,2,1,NULL)) M_CNT
+			, COUNT(DECODE(B.INDV_SEX_C,3,1,NULL)) NEUTER_CNT
+			, COUNT(DECODE(B.INDV_SEX_C,4,1,NULL)) NOT_BIRTH_CNT
+			, COUNT(DECODE(B.INDV_SEX_C,5,1,NULL)) NOT_NEUTER_CNT
+			, COUNT(DECODE(B.INDV_SEX_C,6,1,NULL)) FREEMARTIN_CNT
+			, COUNT(DECODE(B.INDV_SEX_C,9,1,NULL)) COMMON_CNT
+		FROM (
+			SELECT
+				A.NA_BZPLC
+				, A.AUC_OBJ_DSC
+				, A.AUC_DT
+				, A.OSLP_NO
+				, A.TRMN_AMNNO
+				, A.LVST_AUC_PTC_MN_NO
+				, A.AUC_PRG_SQ
+				, A.ATDR_AM
+				, A.ATDR_DTM
+				, ROW_NUMBER() OVER(PARTITION BY A.NA_BZPLC,A.AUC_OBJ_DSC,A.AUC_DT,A.OSLP_NO,A.AUC_PRG_SQ,A.TRMN_AMNNO ORDER BY A.ATDR_DTM DESC) RNUM
+			FROM TB_LA_IS_MH_ATDR_LOG A
+			INNER JOIN TB_LA_IS_BM_BZLOC B ON A.NA_BZPLC = B.NA_BZPLC
+			WHERE RG_SQNO NOT IN (0,99999999)
+	        <if test="naBzPlcNo != null and naBzPlcNo != ''">
+				AND B.NA_BZPLCNO = #{naBzPlcNo}
+			</if>
+	        <if test="naBzplc != null and naBzplc != ''">
+				AND A.NA_BZPLC = #{naBzplc}
+			</if>
+			AND AUC_DT = #{searchDate}
+			AND TRMN_AMNNO = #{searchTrmnAmnNo}
+		) C
+		INNER JOIN TB_LA_IS_MH_SOG_COW A ON A.NA_BZPLC = C.NA_BZPLC
+										AND A.AUC_OBJ_DSC = C.AUC_OBJ_DSC
+										AND A.AUC_DT = C.AUC_DT
+										AND A.OSLP_NO = C.OSLP_NO
+										AND A.AUC_PRG_SQ = C.AUC_PRG_SQ
+		INNER JOIN TB_LA_IS_MM_INDV B ON A.NA_BZPLC = B.NA_BZPLC 
+										AND A.SRA_SRS_DSC  = B.SRA_SRS_DSC
+										AND A.SRA_INDV_AMNNO = B.SRA_INDV_AMNNO
+		WHERE C.RNUM = 1
+		AND C.ATDR_AM != 0
+	</select>
+	
 </mapper>

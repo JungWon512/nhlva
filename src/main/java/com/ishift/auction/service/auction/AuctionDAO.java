@@ -427,4 +427,8 @@ public class AuctionDAO {
 		// TODO Auto-generated method stub
 		return mainDao.selectList("auction.selectBidLogList", params);
 	}
+
+	public Map<String, Object> selectBidLogListCnt(Map<String, Object> params) throws SQLException {
+		return mainDao.selectOne("auction.selectBidLogListCnt", params);
+	}
 }

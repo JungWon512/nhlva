@@ -399,10 +399,11 @@ public class AuctionController extends CommonController {
 			list = auctionService.entrySelectList(params);
 			if(sessionUtill.getUserId() != null) params.put("searchTrmnAmnNo", sessionUtill.getUserId());
 			List<Map<String,Object>> soldList = auctionService.entrySelectList(params);
-			List<Map<String,Object>> bidList = auctionService.selectBidLogList(params);
+			List<Map<String,Object>> bidList = auctionService.selectBidLogList(params);			
 			mav.addObject("aucList", list);
 			mav.addObject("soldList", soldList);
 			mav.addObject("bidList", bidList);
+			mav.addObject("bidCnt", auctionService.selectBidLogListCnt(params));
 			mav.addObject("params", params);
 		}catch (RuntimeException re) {
 			log.error("AuctionController.entryListPopUp : {} ",re);
@@ -482,6 +483,7 @@ public class AuctionController extends CommonController {
 			mav.addObject("aucList", list);
 			mav.addObject("soldList", soldList);
 			mav.addObject("bidList", bidList);
+			mav.addObject("bidCnt", auctionService.selectBidLogListCnt(map));
 			mav.addObject("inputParam", param);
 		}catch (RuntimeException re) {
 			log.error("AuctionController.entryListApiPopUp : {} ",re);
