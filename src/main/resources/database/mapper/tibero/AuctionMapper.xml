@@ -929,5 +929,73 @@
 			   AND LED_SQNO = #{ledSqno}
 		</if>
 	</update>
+
+	<select id="selectBidLogList" parameterType="map" resultType="map">
+		SELECT 
+			A.AUC_PRG_SQ 
+			,A.AUC_DT 
+			, TO_CHAR(TO_DATE(A.AUC_DT,'YYYYMMDD'),'YYYY.MM.DD') AUC_DT_STR
+			,B.INDV_SEX_C 
+			, A.SRA_INDV_AMNNO         
+			, SUBSTRING(A.SRA_INDV_AMNNO,LENGTH(A.SRA_INDV_AMNNO)-4,5) SRA_INDV_AMNNO_STR
+			, SUBSTRING(A.SRA_INDV_AMNNO,LENGTH(A.SRA_INDV_AMNNO)-4,4) || '-' || SUBSTRING(A.SRA_INDV_AMNNO, LENGTH(A.SRA_INDV_AMNNO), 1) AS SRA_INDV_AMNNO_FORMAT
+			, CASE
+				WHEN B.INDV_SEX_C = 0 THEN '없음'		
+				WHEN B.INDV_SEX_C = 1 THEN '암'		
+				WHEN B.INDV_SEX_C = 2 THEN '수'		
+				WHEN B.INDV_SEX_C = 3 THEN '거세'		
+				WHEN B.INDV_SEX_C = 4 THEN '미경산'		
+				WHEN B.INDV_SEX_C = 5 THEN '비거세'		
+				WHEN B.INDV_SEX_C = 6 THEN '프리마틴'		
+				WHEN B.INDV_SEX_C = 9 THEN '공통'
+				ELSE '없음'
+			END INDV_SEX_C_NAME
+			,A.LOWS_SBID_LMT_AM 
+			,A.LVST_AUC_PTC_MN_NO 
+			,C.TRMN_AMNNO
+			,C.ATDR_AM 
+			, C.ATDR_AM/10000 ATDR_UPR
+			,C.ATDR_DTM 
+			, A.LOWS_SBID_LMT_AM
+			, A.LOWS_SBID_LMT_AM/10000 LOWS_SBID_LMT_UPR	
+			, A.SRA_SBID_AM            
+			, A.SRA_SBID_UPR           
+			, A.COW_SOG_WT
+			, DECODE(#{searchTrmnAmnNo},A.TRMN_AMNNO,'본인낙찰','-') SEL_STS_DSC_NAME
+		FROM (
+			SELECT
+				A.NA_BZPLC
+				, A.AUC_OBJ_DSC
+				, A.AUC_DT
+				, A.OSLP_NO
+				, A.TRMN_AMNNO
+				, A.LVST_AUC_PTC_MN_NO
+				, A.AUC_PRG_SQ
+				, A.ATDR_AM
+				, A.ATDR_DTM
+				, ROW_NUMBER() OVER(PARTITION BY A.NA_BZPLC,A.AUC_OBJ_DSC,A.AUC_DT,A.OSLP_NO,A.AUC_PRG_SQ,A.TRMN_AMNNO ORDER BY A.ATDR_DTM DESC) RNUM
+			FROM TB_LA_IS_MH_ATDR_LOG A
+			INNER JOIN TB_LA_IS_BM_BZLOC B ON A.NA_BZPLC = B.NA_BZPLC
+			WHERE RG_SQNO NOT IN (0,99999999)
+	        <if test="naBzPlcNo != null and naBzPlcNo != ''">
+				AND B.NA_BZPLCNO = #{naBzPlcNo}
+			</if>
+	        <if test="naBzplc != null and naBzplc != ''">
+				AND A.NA_BZPLC = #{naBzplc}
+			</if>
+			AND AUC_DT = #{searchDate}
+			AND TRMN_AMNNO = #{searchTrmnAmnNo}
+		) C
+		INNER JOIN TB_LA_IS_MH_SOG_COW A ON A.NA_BZPLC = C.NA_BZPLC
+										AND A.AUC_OBJ_DSC = C.AUC_OBJ_DSC
+										AND A.AUC_DT = C.AUC_DT
+										AND A.OSLP_NO = C.OSLP_NO
+										AND A.AUC_PRG_SQ = C.AUC_PRG_SQ
+		INNER JOIN TB_LA_IS_MM_INDV B ON A.NA_BZPLC = B.NA_BZPLC 
+										AND A.SRA_SRS_DSC  = B.SRA_SRS_DSC
+										AND A.SRA_INDV_AMNNO = B.SRA_INDV_AMNNO
+		WHERE C.RNUM = 1
+		AND C.ATDR_AM != 0
+	</select>
 	
 </mapper>

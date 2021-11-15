@@ -5,13 +5,20 @@
 	<button class="modal_popup_close" onclick="modalPopupClose('.pop_auction');return false;">닫기</button>
 	<div class="tab_list">
 		<ul>
-			<li style="width: 50%;"><a href="javascript:;" class="act btnTabMove" data-tab-id="schedule">예정조회</a></li>
-			<li style="width: 50%;"><a href="javascript:;" class="btnTabMove" data-tab-id="result">결과조회</a></li>
+			<c:choose>
+				<c:when test="${johapData.AUC_DSC eq '1' }">
+					<li style="width: 50%;"><a href="javascript:;" class="act btnTabMove" data-tab-id="result">낙찰내역</a></li>
+				</c:when>
+				<c:otherwise>
+					<li style="width: 50%;"><a href="javascript:;" class="act btnTabMove" data-tab-id="bid">응찰내역</a></li>
+				</c:otherwise>				
+			</c:choose>
+			<li style="width: 50%;"><a href="javascript:;" class="btnTabMove" data-tab-id="schedule">예정조회</a></li>			
 <!-- 			<li><a href="javascript:;" class="btnTabMove" data-tab-id="bid">응찰내역</a></li> -->
 		</ul>
 	</div>
 	<!-- //tab_list e -->
-	<div class="tab_area auction_list schedule_area">
+	<div class="tab_area auction_list schedule_area" style="display:none;">
 		<!-- //list_search e -->
 		<div class="list_table schedule_tb_mo pop_style">
 			<div class="list_head pop_style">
@@ -93,14 +100,14 @@
 			</div>
 			<div class="list_body pop_style">
 				<ul class="pop_TermsBox mCustomScrollBox">
-					<c:if test="${aucList.size() <= 0}">
+					<c:if test="${soldList.size() <= 0}">
 						<li>
 							<dl>
 								<dd>경매 결과가 등록되지 않았습니다.</dd>
 							</dl>
 						</li>
 					</c:if>
-					<c:forEach items="${aucList}" var="vo" varStatus="st">
+					<c:forEach items="${soldList}" var="vo" varStatus="st">
 						<li>
 							<dl>
 								<dd class="num">${vo.AUC_PRG_SQ }</dd>
@@ -132,22 +139,22 @@
 			</div>
 			<div class="list_body pop_style">
 				<ul class="pop_TermsBox mCustomScrollBox">
-					<c:if test="${aucList.size() <= 0}">
+					<c:if test="${bidList.size() <= 0}">
 						<li>
 							<dl>
 								<dd>경매 응찰 내역이 없습니다.</dd>
 							</dl>
 						</li>
 					</c:if>
-	                <c:forEach items="${ aucList }" var="vo" varStatus="st">
+	                <c:forEach items="${ bidList }" var="bvo" varStatus="st">
 						<li>
 							<dl>
-								<dd class="num">${vo.AUC_PRG_SQ }</dd>
-								<dd class="pd_ea">${vo.SRA_INDV_AMNNO_FORMAT }</dd>
-								<dd class="pd_sex">${vo.INDV_SEX_C_NAME }</dd>
-								<dd class="pd_pay1">${vo.LOWS_SBID_LMT_AM <= 0 ? '0' : fn:split(vo.LOWS_SBID_LMT_UPR,'.')[0]}</dd>
-								<dd class="pd_pay2">${ fn:split(vo.SRA_SBID_UPR,'.')[0] }</dd>
-								<dd class="pd_pay3">${ fn:split(vo.SRA_SBID_UPR,'.')[0] }</dd>
+								<dd class="num">${bvo.AUC_PRG_SQ }</dd>
+								<dd class="pd_ea">${bvo.SRA_INDV_AMNNO_FORMAT }</dd>
+								<dd class="pd_sex">${bvo.INDV_SEX_C_NAME }</dd>
+								<dd class="pd_pay1">${bvo.LOWS_SBID_LMT_AM <= 0 ? '0' : fn:split(bvo.LOWS_SBID_LMT_UPR,'.')[0]}</dd>
+								<dd class="pd_pay2">${ fn:split(bvo.SRA_SBID_UPR,'.')[0] }</dd>
+								<dd class="pd_pay3">${ fn:split(bvo.ATDR_UPR,'.')[0] }</dd>
 							</dl>
 						</li>
 	                </c:forEach>				
@@ -159,3 +166,13 @@
 	<!-- //tab_area e -->
 </div>
 <!-- //modal-content e -->
+<script>
+var tabId = $('div.tab_list li a.act').attr('data-tab-id');
+console.log(tabId);
+switch(tabId){
+	case 'schedule' : $('div.schedule_area').show(); break;
+	case 'result': $('div.result_area').show(); break;
+	case 'bid': $('div.bid_area').show(); break;
+	default:modalPopupClose('.pop_auction'); break;
+}
+</script>

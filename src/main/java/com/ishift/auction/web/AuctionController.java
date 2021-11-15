@@ -390,13 +390,19 @@ public class AuctionController extends CommonController {
 		try {
 			LocalDateTime date = LocalDateTime.now();
 			String today = date.format(DateTimeFormatter.ofPattern("yyyyMMdd"));
-//			params.put("searchDate", "20210813");
+			//params.put("searchDate", "20211111");
 			params.put("searchDate", today);
-			params.put("loginNo", sessionUtill.getUserId());
+			
+	        if(params.get("naBzplc") != null) params.put("naBzplc", params.get("naBzPlc"));
+			if(sessionUtill.getUserId() != null) params.put("loginNo", sessionUtill.getUserId());
+			
 			list = auctionService.entrySelectList(params);
+			if(sessionUtill.getUserId() != null) params.put("searchTrmnAmnNo", sessionUtill.getUserId());
+			List<Map<String,Object>> soldList = auctionService.entrySelectList(params);
+			List<Map<String,Object>> bidList = auctionService.selectBidLogList(params);
 			mav.addObject("aucList", list);
-			log.debug("params.loginNo > {}", params.get("loginNo"));
-			log.debug("sessionUtill.getUserId() > {}", sessionUtill.getUserId());
+			mav.addObject("soldList", soldList);
+			mav.addObject("bidList", bidList);
 			mav.addObject("params", params);
 		}catch (RuntimeException re) {
 			log.error("AuctionController.entryListPopUp : {} ",re);
@@ -461,14 +467,21 @@ public class AuctionController extends CommonController {
 			LocalDateTime date = LocalDateTime.now();
 			String today = date.format(DateTimeFormatter.ofPattern("yyyyMMdd"));
 	        Map<String,Object> map = new HashMap<String,Object>();
-			map.put("naBzplc", param.get("naBzplc"));
-			map.put("loginNo", param.get("loginNo"));
-			map.put("searchDate", today);		
+	        if(param.get("naBzplc") != null) map.put("naBzplc", param.get("naBzplc"));
+			if(param.get("loginNo") != null)map.put("loginNo", param.get("loginNo"));
+			
+			map.put("searchDate", today);
+			//map.put("searchDate", param.get("date"));
 			Map<String,Object> johap=adminService.selectOneJohap(map);
-			//map.put("loginNo", sessionUtill.getUserId());
 			List<Map<String,Object>> list=auctionService.entrySelectList(map);
+			if(param.get("loginNo") != null) map.put("searchTrmnAmnNo", param.get("loginNo"));
+			List<Map<String,Object>> soldList = auctionService.entrySelectList(map);
+			List<Map<String,Object>> bidList = auctionService.selectBidLogList(map);
+			
 			mav.addObject("johapData", johap);
 			mav.addObject("aucList", list);
+			mav.addObject("soldList", soldList);
+			mav.addObject("bidList", bidList);
 			mav.addObject("inputParam", param);
 		}catch (RuntimeException re) {
 			log.error("AuctionController.entryListApiPopUp : {} ",re);

@@ -261,5 +261,7 @@ public interface AuctionService {
 	Map<String, Object> selectNearAtdrAm(Map<String, Object> params) throws SQLException;
 
 	Map<String, Object> selectMyZimPrice(Map<String, Object> params) throws SQLException;
+
+	List<Map<String, Object>> selectBidLogList(Map<String, Object> params) throws SQLException;
 	
 }

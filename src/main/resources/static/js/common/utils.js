@@ -106,6 +106,7 @@ var logoutProc = function() {
 };
 
 var getStringValue = function(str, defaultStr) {
+	str = new String(str);
 	defaultStr = (defaultStr == undefined) ? "-" : defaultStr;
 	return (str == undefined || str == null || str.trim() == "" ||  str.trim().toLowerCase() == "null") ? defaultStr : str;
 };

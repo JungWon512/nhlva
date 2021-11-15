@@ -3,11 +3,17 @@
     var COMMONS = win.auction["commons"];
     
     var setLayout = function() {
+		var tabId = $('div.tab_list li a.act').attr('data-tab-id');
+		$('div.tab_area.'+tabId).show();	
     };
 
     
 
     var setBinding = function() {
+        $(document).on("click",".tab_list ul > li", function(){
+			var tabId = $(this).find('a.act').attr('data-tab-id');
+			$('div.tab_area.'+tabId).show();	
+		});
 
         $(document).on("click",".pd_pav a", function(){
 			$('.popup .modal-wrap.pop_jjim_input.zim').remove();

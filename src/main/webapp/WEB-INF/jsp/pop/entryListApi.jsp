@@ -3,16 +3,24 @@
 
 <input type="hidden" name="loginNo" value="${inputParam.loginNo}"/>
 <input type="hidden" id="johpCdVal" value="${johapData.NA_BZPLCNO}"/>
+
 <div id="" class="pop_auction">
 	<div class="tab_list">
 		<ul class="tab_2">
-			<li><a href="javascript:;" class="act">예정조회</a></li>
-			<li><a href="javascript:;">결과조회</a></li>
-<!-- 			<li><a href="javascript:;">응찰내역</a></li> -->
+			<c:choose>
+				<c:when test="${johapData.AUC_DSC eq '1' }">
+					<li><a href="javascript:;" class="act sold" data-tab-id='sold'>낙찰내역</a></li>
+				</c:when>
+				<c:otherwise>
+					<li><a href="javascript:;" class="act bid" data-tab-id='bid'>응찰내역</a></li>
+				</c:otherwise>				
+			</c:choose>
+			<li><a href="javascript:;" class="auc" data-tab-id='auc'>예정조회</a></li>
+			
 		</ul>
 	</div>
 		<!-- //tab_list e -->
-	<div class="tab_area auction_list">
+	<div class="tab_area auction_list auc" style="display:none;">
 		<!-- //list_search e -->
 		<div class="list_table schedule_tb_mo pop_style">
 			<div class="list_head pop_style">
@@ -96,7 +104,7 @@
 			</div>
 		</div>
 	</div>
-	<div class="tab_area auction_list" style="display:none;">
+	<div class="tab_area auction_list sold" style="display:none;">
 		<!-- //list_search e -->
 		<div class="list_table auction_result">
 			<div class="list_head pop_style">
@@ -111,7 +119,7 @@
 			</div>
 			<div class="list_body pop_style">
 				<ul class="mCustomScrollBox">
-					<c:if test="${aucList.size() <= 0}">
+					<c:if test="${soldList.size() <= 0}">
 						<li>
 							<dl>
 								<dd>
@@ -120,7 +128,7 @@
 							</dl>
 						</li>
 					</c:if>
-	                <c:forEach items="${ aucList }" var="vo" varStatus="st">
+	                <c:forEach items="${ soldList }" var="vo" varStatus="st">
 						<li>
 							<dl>
 								<dd class="num">${vo.AUC_PRG_SQ }</dd>
@@ -137,7 +145,7 @@
 		</div>
 	</div>
 		<!-- // -->
-	<div class="tab_area auction_list" style="display:none;">
+	<div class="tab_area auction_list bid" style="display:none;">
 		
 		<!-- //list_search e -->
 		<div class="list_table auction_bid">
@@ -153,7 +161,7 @@
 			</div>
 			<div class="list_body pop_style">
 				<ul class="mCustomScrollBox">
-					<c:if test="${aucList.size() <= 0}">
+					<c:if test="${bidList.size() <= 0}">
 						<li>
 							<dl>
 								<dd>
@@ -162,7 +170,7 @@
 							</dl>
 						</li>
 					</c:if>
-	                <c:forEach items="${ aucList }" var="vo" varStatus="st">
+	                <c:forEach items="${ bidList }" var="vo" varStatus="st">
 						<li>
 							<dl>
 								<dd class="num">${vo.AUC_PRG_SQ }</dd>
@@ -170,7 +178,7 @@
 								<dd class="pd_sex">${vo.INDV_SEX_C_NAME }</dd>
 								<dd class="pd_pay1">${vo.LOWS_SBID_LMT_AM <= 0 ? '0' : fn:split(vo.LOWS_SBID_LMT_UPR,'.')[0]}</dd>
 								<dd class="pd_pay2">${ fn:split(vo.SRA_SBID_UPR,'.')[0] }</dd>
-								<dd class="pd_pay3">${ fn:split(vo.SRA_SBID_UPR,'.')[0] }</dd>
+								<dd class="pd_pay3">${ fn:split(vo.ATDR_UPR,'.')[0] }</dd>
 							</dl>
 						</li>
 	                </c:forEach>				

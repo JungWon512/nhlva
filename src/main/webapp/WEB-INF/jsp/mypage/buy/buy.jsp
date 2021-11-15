@@ -1,15 +1,19 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
 <%@ include file="/WEB-INF/__system/taglibs.jsp" %>
+
+<input type="hidden" id="loginNo" name="loginNo" value="${inputParam.loginNo}"/>
+<input type="hidden" id="naBzPlcNo" value="${johapData.NA_BZPLCNO}"/>
+<input type="hidden" id="johpCd" value="${johapData.NA_BZPLC}"/>
 <div class="auction_list">
 	<h3>구매내역</h3>
 	<div class="tab_list">
 		<ul>
-			<li><a href="javascript:;" class="act">구매내역</a></li>
-			<li><a href="javascript:;">응찰내역</a></li>
+			<li><a href="javascript:;" class="act" data-tab-id="buy">구매내역</a></li>
+			<li><a href="javascript:;" data-tab-id="bid">응찰내역</a></li>
 		</ul>
 	</div>
 	<!-- //tab_list e -->
-	<div class="tab_area auction_list buy_list">
+	<div class="tab_area auction_list buy_list buy" style="display:none;">
 		<div class="list_search">
 			<ul class="radio_group">
 	            <li>
@@ -42,10 +46,10 @@
 	           	</li>
 				<li class="date">
 	                <select name="searchDateBuy" id="searchDateBuy">
-		                <option value="" ${inputParam.searchGubun eq 'buy' && (inputParam.searchDateBuy == null || inputParam.searchDateBuy == '')? 'selected' : ''}> 선택 </option>                
+		                <option value=""> 선택 </option>                
 		                <c:forEach items="${ dateList }" var="vo">
-		                	<option value="${vo.AUC_DT }" ${inputParam.searchDateBuy eq vo.AUC_DT ? 'selected' : ''}> ${vo.AUC_DT_STR } </option>
-		                </c:forEach>	                    
+		                	<option value="${vo.AUC_DT }" ${inputParam.searchDate eq vo.AUC_DT ? 'selected' : ''}> ${vo.AUC_DT_STR } </option>
+		                </c:forEach>
 	                </select>
 				</li>
 				<li class="btn">
@@ -124,7 +128,7 @@
 		<!-- //auction_buy e -->
 	</div>
 	<!-- //tab_area e -->
-	<div class="tab_area" style="display:none;">
+	<div class="tab_area bid" style="display:none;">
 		<div class="list_search">
 			<ul class="radio_group">
 	            <li>
@@ -148,7 +152,7 @@
 			</ul>
 			<ul class="sch_area">
 	            <li class="txt">
-	            	<input type="text" name="searchTxtBuy" id="searchTxtBuy" maxlength="4" placeholder="개체" value="${inputParam.searchTxtBuy}"/>
+	            	<input type="text" name="searchTxtBid" id="searchTxtBid" maxlength="4" placeholder="개체" value="${inputParam.searchTxtBid}"/>
 	           	</li>
 				<li class="date">
 	                <select name="searchDateBid" id="searchDateBid">
@@ -160,7 +164,7 @@
 	                </select>
 				</li>
 				<li class="btn">
-					<a href="javascript:;" class="list_sch">검색</a>
+					<a href="javascript:;" class="list_sch sch_bid">검색</a>
 				</li>
 			</ul>
 		</div>
@@ -207,8 +211,8 @@
 								<dd class="pd_kg">${ fn:split(item.COW_SOG_WT,'.')[0] }</dd>
 								<dd class="pd_pay1">${item.LOWS_SBID_LMT_AM <= 0 ? '0' : fn:split(item.LOWS_SBID_LMT_UPR,'.')[0]}</dd>
 								<dd class="pd_pay2">${ fn:split(item.SRA_SBID_UPR,'.')[0] }</dd>
-								<dd class="pd_pay3">1440</dd>
-								<dd class="pd_state">본인낙찰</dd>
+								<dd class="pd_pay3">${ fn:split(item.ATDR_UPR,'.')[0] }</dd>
+								<dd class="pd_state">${item.SEL_STS_DSC_NAME }</dd>
 							</dl>
 						</li>
 					</c:forEach>

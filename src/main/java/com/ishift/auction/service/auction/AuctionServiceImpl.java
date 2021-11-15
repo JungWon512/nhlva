@@ -795,4 +795,9 @@ public class AuctionServiceImpl implements AuctionService {
 	public Map<String, Object> selectMyZimPrice(Map<String, Object> params) throws SQLException{
 		return auctionDAO.selectMyZimPrice(params);
 	}
+	@Override
+	public List<Map<String, Object>> selectBidLogList(Map<String, Object> params) throws SQLException{
+		return auctionDAO.selectBidLogList(params);
+	}
+	
 }

@@ -422,4 +422,9 @@ public class AuctionDAO {
 	public Map<String, Object> selectBizAuctionInfo(Map<String, Object> params) throws SQLException {
 		return mainDao.selectOne("ApiMapper.selectBizAuctionInfo", params);
 	}
+
+	public List<Map<String, Object>> selectBidLogList(Map<String, Object> params) throws SQLException {
+		// TODO Auto-generated method stub
+		return mainDao.selectList("auction.selectBidLogList", params);
+	}
 }

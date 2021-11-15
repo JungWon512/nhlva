@@ -54,29 +54,73 @@ public class MyPageController {
 		map.put("naBzPlc", johap.get("NA_BZPLC"));
 		map.put("entryType", "A");
 		List<Map<String,Object>> datelist=auctionService.selectAucDateList(map);
-		if(param != null && param.get("searchDateBuy") != null) {
+		if(param != null && param.get("searchDate") != null) {
 			map.put("searchDate", param.get("searchDateBuy"));			
 		}else {
 			map.put("searchDate",datelist.size() > 0 ? datelist.get(0).get("AUC_DT") :null);
 		}
-		if(map.get("searchDate") != null) param.put("searchDateBuy", map.get("searchDate"));
+		if(map.get("searchDate") != null) param.put("searchDate", map.get("searchDate"));
 		
 		map.put("naBzPlcNo", place);
-		if(param.get("searchTxtBuy") != null) map.put("searchTxt", param.get("searchTxtBuy"));
-		if(param.get("searchAucObjDscBuy") != null) map.put("searchAucObjDsc", param.get("searchAucObjDscBuy"));
 		if(sessionUtill.getUserId() != null) map.put("searchTrmnAmnNo", sessionUtill.getUserId());
 		List<Map<String,Object>> list=auctionService.entrySelectList(map);
+		List<Map<String,Object>> bidList = auctionService.selectBidLogList(map);
 
 		if(sessionUtill.getUserId() != null) param.put("loginNo", sessionUtill.getUserId());
 		mav.addObject("johapData", johap);
 		mav.addObject("subheaderTitle","경매예정조회");
 		mav.addObject("dateList",datelist);
 		mav.addObject("buyList",list);
+		mav.addObject("bidList",bidList);
 		mav.addObject("inputParam", param);
 		mav.addObject("subheaderTitle","나의 구매내역");
 		mav.setViewName("mypage/buy/buy");
 		return mav;
 	}
+
+	@ResponseBody
+	@PostMapping(path = "/auction/api/select/myBuyList", produces = MediaType.APPLICATION_JSON_VALUE)
+    Map<String, Object> selectMyBuyList(@RequestBody Map<String,Object> params) {
+        Map<String, Object> result = new HashMap<>();
+        // params.put("loginNo", sessionUtill.getUserId());
+        result.put("success", true);
+        try {        	
+        	if(params.get("loginNo") != null) params.put("searchTrmnAmnNo", params.get("loginNo"));
+        	List<Map<String,Object>> list=auctionService.entrySelectList(params);
+            result.put("data", list);
+        }catch (RuntimeException re) {
+            result.put("success", false);
+            result.put("message", re.getMessage());
+			log.error("MyPageController.selectMyBuyList : {} ",re);
+		}catch (SQLException se) {
+            result.put("success", false);
+            result.put("message", se.getMessage());
+			log.error("MyPageController.selectMyBuyList : {} ",se);
+		}
+        return result;
+    }
+
+	@ResponseBody
+	@PostMapping(path = "/auction/api/select/myBidList", produces = MediaType.APPLICATION_JSON_VALUE)
+    Map<String, Object> selectBidLogList(@RequestBody Map<String,Object> params) {
+        Map<String, Object> result = new HashMap<>();
+        // params.put("loginNo", sessionUtill.getUserId());
+        result.put("success", true);
+        try {        	
+        	if(params.get("loginNo") != null) params.put("searchTrmnAmnNo", params.get("loginNo"));
+        	List<Map<String,Object>> list=auctionService.selectBidLogList(params);
+            result.put("data", list);
+        }catch (RuntimeException re) {
+            result.put("success", false);
+            result.put("message", re.getMessage());
+			log.error("MyPageController.selectMyBuyList : {} ",re);
+		}catch (SQLException se) {
+            result.put("success", false);
+            result.put("message", se.getMessage());
+			log.error("MyPageController.selectMyBuyList : {} ",se);
+		}
+        return result;
+    }
 
 	@PreAuthorize("hasRole('ROLE_BIDDER')")
 	@RequestMapping(value = "/my/bid")

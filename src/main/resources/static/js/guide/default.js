@@ -247,7 +247,7 @@ $(document).ready(function() {
 				var idx = $(this).index();
 				$(".tab_list li a").removeClass('act');
 				$(".tab_area").hide();
-				$(".tab_area:eq("+idx+")").show();
+				//$(".tab_area:eq("+idx+")").show();
 				$(this).find('a').addClass('act');
 			});
 		}
