@@ -200,12 +200,13 @@
 							SELECT ROW_NUMBER() OVER(PARTITION BY AUC_OBJ_DSC, OSLP_NO, LVST_AUC_PTC_MN_NO ORDER BY RG_SQNO DESC) AS BID_NUM
 								 , A.*
 							  FROM TB_LA_IS_MH_ATDR_LOG A
-							 WHERE NA_BZPLC = #{naBzplc}
-							   AND AUC_DT = #{aucDt}
-							   AND RG_SQNO NOT IN ('0', '99999999')
+							 WHERE A.NA_BZPLC = #{naBzplc}
+							   AND A.AUC_DT = #{aucDt}
+							   AND A.AUC_OBJ_DSC = CASE WHEN #{aucObjDsc} = '0' THEN A.AUC_OBJ_DSC ELSE #{aucObjDsc} END
+							   AND A.RG_SQNO NOT IN ('0', '99999999')
 						 ) B
-					 WHERE BID_NUM = 1
-					   AND ATDR_AM > 0
+					 WHERE B.BID_NUM = 1
+					   AND B.ATDR_AM > 0
 				 ) G
 				ON (
 					G.NA_BZPLC = A.NA_BZPLC
@@ -371,14 +372,14 @@
 				SELECT ROW_NUMBER() OVER(PARTITION BY LVST_AUC_PTC_MN_NO ORDER BY RG_SQNO DESC) AS BID_NUM
 					 , A.*
 				  FROM TB_LA_IS_MH_ATDR_LOG A
-				 WHERE NA_BZPLC = #{naBzplc}
-				   AND AUC_DT = #{aucDt}
-				   AND AUC_OBJ_DSC = #{aucObjDsc}
-				   AND OSLP_NO = #{oslpNo}
-				   AND RG_SQNO NOT IN ('0', '99999999')
+				 WHERE A.NA_BZPLC = #{naBzplc}
+				   AND A.AUC_DT = #{aucDt}
+				   AND A.AUC_OBJ_DSC = CASE WHEN #{aucObjDsc} = '0' THEN A.AUC_OBJ_DSC ELSE #{aucObjDsc} END
+				   AND A.OSLP_NO = #{oslpNo}
+				   AND A.RG_SQNO NOT IN ('0', '99999999')
 			 ) B
-		 WHERE BID_NUM = 1
-		   AND ATDR_AM > 0
+		 WHERE B.BID_NUM = 1
+		   AND B.ATDR_AM > 0
 	</select>
 	
 	<!-- 일괄 경매 변경 로그 저장 -->
@@ -480,6 +481,7 @@
 		]]> 
 	</update>
 	
+	<!-- 출장우 로그 저장 -->
 	<update id="insertAuctSogCowLog" parameterType="map">
 		INSERT INTO TB_LA_IS_MH_SOG_COW_LOG (
 			NA_BZPLC,
@@ -651,7 +653,7 @@
 		    ON ( A.NA_BZPLC = C.NA_BZPLC AND A.FHS_ID_NO = C.FHS_ID_NO AND A.FARM_AMNNO = C.FARM_AMNNO )
 		 WHERE A.NA_BZPLC = #{naBzplc}
 		   AND A.AUC_DT = #{aucDt}
-		   AND A.AUC_OBJ_DSC = #{aucObjDsc}
+		   AND A.AUC_OBJ_DSC = CASE WHEN #{aucObjDsc} = '0' THEN A.AUC_OBJ_DSC ELSE #{aucObjDsc} END
 		   AND A.OSLP_NO = #{oslpNo}
 		   AND A.LED_SQNO = #{ledSqno}
 	</select>
