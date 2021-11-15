@@ -1,0 +1,1726 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+	<meta charset="UTF-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<title></title>
+	<meta name="viewport" content="width=device-width,initial-scale=1.0,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no">
+	<link rel="stylesheet" type="text/css" href="../css/common.css">
+	<link rel="stylesheet" type="text/css" href="../css/jquery-ui.css">
+	<link rel="stylesheet" type="text/css" href="../css/popup.css">
+	<link rel="stylesheet" type="text/css" href="../css/slick.css">
+	<link rel="stylesheet" type="text/css" href="../css/jquery.mmenu.all.css">
+	<link rel="stylesheet" type="text/css" href="../css/jquery.mCustomScrollbar.css">
+	<link rel="stylesheet" type="text/css" href="../css/selectric.css">
+	<link rel="shortcut icon" href="../favicon.ico">
+	<link rel="apple-touch-icon" sizes="64x64" href="../favicon64.png">
+	<link rel="icon" type="image/png" sizes="16x16" href="../favicon.ico">
+	<link rel="icon" type="image/png" sizes="32x32" href="../favicon32.png">
+	<link rel="icon" type="image/png" sizes="128x128" href="../favicon128.png">
+</head>
+<body>
+	<div id="wrap">
+		<section class="header">
+			<div class="w_header_inner">
+				<div class="w_header">
+					<a href="javascript:;" class="logo">
+						<h1>
+							<span>온라인 스마트 경매</span>
+							가축시장.kr
+						</h1>
+					</a>
+					<div class="side_menu">
+						<ul>
+							<li><a href="javascript:;">홈으로</a></li>
+							<li><a href="javascript:;">로그인</a></li>
+							<li><a href="javascript:;">공지사항</a></li>
+							<li><a href="javascript:;">이용안내</a></li>
+						</ul>
+					</div>
+					<!-- //side_menu e -->
+					<nav id="nav">
+						<ul>
+							<li>
+								<a href="javascript:;">경매관전</a>
+							</li>
+							<li>
+								<a href="javascript:;">실시간경매</a>
+							</li>
+							<li>
+								<a href="javascript:;">경매예정</a>
+							</li>
+							<li>
+								<a href="javascript:;">경매결과</a>
+							</li>
+							<li>
+								<a href="javascript:;">구매내역</a>
+							</li>
+							<li>
+								<a href="javascript:;">나의출장우</a>
+							</li>
+							<li>
+								<a href="javascript:;">일정안내</a>
+							</li>
+						</ul>
+					</nav>
+					<!-- //nav e -->
+				</div>
+				<!-- //w_header e -->
+			</div>
+			<!-- //w_header_inner e -->
+			<div class="m_header">
+				<h1 class="m_logo">
+					<span>온라인 스마트 경매</span>
+					가축시장.kr
+				</h1>
+				<a href="#menu-lnb" class="m_menu">메뉴</a>
+			</div>
+			<!-- //m_header e -->
+			<nav id="menu-lnb">
+				<ul>
+					<li class="lnb_box">
+						<div class="lnb_base">
+							<a href="javascript:;" class="nav_close">close</a>
+						</div>
+						<h3>
+							서비스 이용을 위해<br>로그인 해주세요.							
+						</h3>
+						<!-- <h3>
+							홍길동 님,<br>안녕하세요.
+						</h3> -->
+						<dl class="lnb_info">
+							<dd><a href="javascript:;" class="ico_home">홈으로</a></dd>
+							<dd><a href="javascript:;" class="ico_login">로그인</a></dd>
+							<dd><a href="javascript:;" class="ico_noti">공지사항</a></dd>
+						</dl>
+						<dl class="lnb_menu">
+							<dd><a href="javascript:;">경매관전</a></dd>
+							<dd><a href="javascript:;">실시간경매</a></dd>
+							<dd><a href="javascript:;">경매예정</a></dd>
+							<dd><a href="javascript:;">경매결과</a></dd>
+							<dd><a href="javascript:;">구매내역</a></dd>
+							<dd><a href="javascript:;">나의출장우</a></dd>
+							<dd><a href="javascript:;">일정안내</a></dd>
+							<dd><a href="javascript:;">이용안내</a></dd>
+						</dl>
+					</li>
+				</ul>
+			</nav>
+			<!-- //menu-lnb e -->
+		</section>
+		<!-- //header e -->
+		<section class="contents">
+			<style>
+				h4.layer_h4{font-size:36px;margin-bottom:70px;}
+				.guide li{margin-bottom:30px;}
+				.guide li a{font-size:24px;}
+			</style>
+			<h4 class="layer_h4">레이어 팝업 모음</h4>
+			<ul class="guide">
+				<li><a href="javascript:;" onclick="modalPopup('.pop_Terms')">이용약관</a></li>
+				<li><a href="javascript:;" onclick="modalPopup('.pop_jjim')">찜가격</a></li>
+				<li><a href="javascript:;" onclick="modalPopup('.pop_jjim_input')">찜가격 입력</a></li>
+				<li><a href="javascript:;" onclick="modalPopup('.pop_app')">가축시장 앱으로 보기</a></li>
+				<li><a href="javascript:;" onclick="modalPopup('.pop_auction')">경매응찰 레이어팝업</a></li>
+				<li><a href="javascript:;" onclick="modalPopup('.pop_net')">네트워크 연결 상태</a></li>
+				<li><a href="javascript:;" onclick="modalPopup('.pop_logout')">로그아웃</a></li>
+				<li><a href="javascript:;" onclick="modalPopup('.pop_auction_only')">응찰내역(경매응찰전용)</a></li>
+				<li><a href="javascript:;" onclick="modalPopup('.pop_exit_cow')">출장우 상세</a></li>
+				<li><a href="javascript:;" onclick="modalPopup('.pop_ship_status')">출하현황상세</a></li>
+				<li><a href="javascript:;" onclick="modalPopup('.pop_schedule_auction')">경매예정상세</a></li>
+			</ul>
+			
+			<div id="" class="modal-wrap pop_Terms">
+				<div class="modal-content">
+					<button class="modal_popup_close" onclick="modalPopupClose('.pop_Terms');return false;">닫기</button>
+					<h3>이용약관</h3>
+					<div class="pop_TermsBox mCustomScrollBox">
+						<p>
+							인터넷 쇼핑몰 『주식회사 어센드 사이버 몰』회원 약관<br><br>
+
+							제1조(목적)<br>
+							이 약관은 주식회사 어센드 회사(전자상거래 사업자)가 운영하는 주식회사 어센드 사이버 몰(이하 “몰”이라 한다)에서 제공하는 인터넷 관련 서비스(이하 “서비스”라 한다)를 이용함에 있어 사이버 몰과 이용자의 권리·의무 및 책임사항을 규정함을 목적으로 합니다.<br><br>
+							※「PC통신, 무선 등을 이용하는 전자상거래에 대해서도 그 성질에 반하지 않는 한 이 약관을 준용합니다.」<br><br>
+							제2조(정의)<br>
+							① “몰”이란 주식회사 어센드 회사가 재화 또는 용역(이하 “재화 등”이라 함)을 이용자에게 제공하기 위하여 컴퓨터 등 정보통신설비를 이용하여 재화 등을 거래할 수 있도록 설정한 가상의 영업장을 말하며, 아울러 사이버몰을 운영하는 사업자의 의미로도 사용합니다.<br><br>
+							② “이용자”란 “몰”에 접속하여 이 약관에 따라 “몰”이 제공하는 서비스를 받는 회원 및 비회원을 말합니다.<br><br>
+							③ ‘회원’이라 함은 “몰”에 회원등록을 한 자로서, 계속적으로 “몰”이 제공하는 서비스를 이용할 수 있는 자를 말합니다.<br><br>
+							④ ‘비회원’이라 함은 회원에 가입하지 않고 “몰”이 제공하는 서비스를 이용하는 자를 말합니다.<br><br>
+							제3조 (약관 등의 명시와 설명 및 개정)<br><br>
+							① “몰”은 이 약관의 내용과 상호 및 대표자 성명, 영업소 소재지 주소(소비자의 불만을 처리할 수 있는 곳의 주소를 포함), 전화번호·모사전송번호·전자우편주소, 사업자등록번호, 통신판매업 신고번호, 개인정보보호책임자 등을 이용자가 쉽게 알 수 있도록 주식회사 어센드 사이버몰의 초기 서비스화면(전면)에 게시합니다. 다만, 약관의 내용은 이용자가 연결화면을 통하여 볼 수 있도록 할 수 있습니다.<br><br>
+							② “몰은 이용자가 약관에 동의하기에 앞서 약관에 정하여져 있는 내용 중 청약철회·배송책임·환불조건 등과 같은 중요한 내용을 이용자가 이해할 수 있도록 별도의 연결화면 또는 팝업화면 등을 제공하여 이용자의 확인을 구하여야 합니다.<br><br>
+							③ “몰”은 「전자상거래 등에서의 소비자보호에 관한 법률」, 「약관의 규제에 관한 법률」, 「전자문서 및 전자거래기본법」, 「전자금융거래법」, 「전자서명법」, 「정보통신망 이용촉진 및 정보보호 등에 관한 법률」, 「방문판매 등에 관한 법률」, 「소비자기본법」 등 관련 법을 위배하지 않는 범위에서 이 약관을 개정할 수 있습니다.<br><br>
+							④ “몰”이 약관을 개정할 경우에는 적용일자 및 개정사유를 명시하여 현행약관과 함께 몰의 초기화면에 그 적용일자 7일 이전부터 적용일자 전일까지 공지합니다. 다만, 이용자에게 불리하게 약관내용을 변경하는 경우에는 최소한 30일 이상의 사전 유예기간을 두고 공지합니다. 이 경우 "몰“은 개정 전 내용과 개정 후 내용을 명확하게 비교하여 이용자가 알기 쉽도록 표시합니다.<br><br>
+							⑤ “몰”이 약관을 개정할 경우에는 그 개정약관은 그 적용일자 이후에 체결되는 계약에만 적용되고 그 이전에 이미 체결된 계약에 대해서는 개정 전의 약관조항이 그대로 적용됩니다. 다만 이미 계약을 체결한 이용자가 개정약관 조항의 적용을 받기를 원하는 뜻을 제3항에 의한 개정약관의 공지기간 내에 “몰”에 송신하여 “몰”의 동의를 받은 경우에는 개정약관 조항이 적용됩니다.<br><br>
+							⑥ 이 약관에서 정하지 아니한 사항과 이 약관의 해석에 관하여는 전자상거래 등에서의 소비자보호에 관한 법률, 약관의 규제 등에 관한 법률, 공정거래위원회가 정하는 「전자상거래 등에서의 소비자 보호지침」 및 관계법령 또는 상관례에 따릅니다.<br><br>
+						</p>
+					</div>
+				</div>
+				<!-- //modal-content e -->
+			</div>
+			<!-- //pop_Terms e -->
+
+			<div id="" class="modal-wrap pop_jjim">
+				<div class="modal-content">
+					<button class="modal_popup_close" onclick="modalPopupClose('.pop_app');return false;">닫기</button>
+					<h3>찜가격</h3>
+					<p>1,550<span>만원</span></p>
+					<div class="btn_area">
+						<button class="btn_cancel" onclick="modalPopupClose('.pop_jjim');return false;">닫기</button>
+						<button class="btn_ok">확인</button>
+					</div>
+				</div>
+				<!-- //modal-content e -->
+			</div>
+			<!-- //pop_jjim e -->
+
+			<div id="" class="modal-wrap pop_jjim_input">
+				<div class="modal-content">
+					<h3>찜가격</h3>
+					<dl class="jjim_dl">
+						<dt>
+							<p>경매번호: 101번 <span>|</span> 최저가: 550만 </p>
+						</dt>
+						<dd>
+							<input type="text" placeholder="찜가격 입력 (금액 만 원)">
+						</dd>
+					</dl>
+					<div class="btn_area">
+						<button class="btn_cancel" onclick="modalPopupClose('.pop_jjim_input');return false;">취소</button>
+						<button class="btn_ok">확인</button>
+					</div>
+				</div>
+				<!-- //modal-content e -->
+			</div>
+			<!-- //pop_jjim_input e -->
+
+			<div id="" class="modal-wrap pop_app">
+				<div class="modal-content">
+					<button class="modal_popup_close" onclick="modalPopupClose('.pop_app');return false;">닫기</button>
+					<h4>지역선택 없이<br>바로 응찰 할 수 있어요.</h4>
+					<a href="javascript:;" class="btn_app">가축시장 앱으로 보기</a>
+					<a href="javascript:;" class="no_app" onclick="modalPopupClose('.pop_app');return false;">괜찮습니다. 모바일웹으로 볼게요.</a>
+				</div>
+				<!-- //modal-content e -->
+			</div>
+			<!-- //pop_app e -->
+
+			<div id="" class="modal-wrap pop_auction">
+				<div class="modal-content">
+					<button class="modal_popup_close" onclick="modalPopupClose('.pop_auction');return false;">닫기</button>
+					<div class="tab_list">
+						<ul>
+							<li><a href="javascript:;" class="act">예정조회</a></li>
+							<li><a href="javascript:;">결과조회</a></li>
+							<li><a href="javascript:;">응찰내역</a></li>
+						</ul>
+					</div>
+					<!-- //tab_list e -->
+					<div class="tab_area auction_list">
+						<div class="list_search pop_style">
+							<ul class="radio_group">
+								<li>
+									<input type="radio" name="radioG1" checked id="ra1_1"><label for="ra1_1">혈통우</label>
+								</li>
+								<li>
+									<input type="radio" name="radioG1" id="ra1_2"><label for="ra1_2">일반우</label>
+								</li>
+								<li>
+									<input type="radio" name="radioG1" id="ra1_3"><label for="ra1_3">큰소</label>
+								</li>
+								<li>
+									<input type="radio" name="radioG1" id="ra1_4"><label for="ra1_4">송아지</label>
+								</li>
+							</ul>
+							<ul class="sch_area">
+								<li class="sort">
+									<select name="" id="">
+										<option value="">정렬</option>
+									</select>
+								</li>
+								<li class="date">
+									<select name="" id="">
+										<option value="">21.08.15</option>
+									</select>
+								</li>
+								<li class="btn">
+									<a href="javascript:;" class="list_sch">검색</a>
+								</li>
+							</ul>
+						</div>
+						<!-- //list_search e -->
+						<div class="list_table schedule_tb_mo pop_style">
+							<div class="list_head pop_style">
+								<dl>
+									<dd class="num">번호</dd>
+									<dd class="pd_ea">개체</dd>
+									<dd class="pd_date">생년월</dd>
+									<dd class="pd_sex">성별</dd>
+									<dd class="pd_kpn">KPN</dd>
+									<dd class="pd_pay">예정가</dd>
+								</dl>
+							</div>
+							<div class="list_body pop_style">
+								<ul>
+									<li>
+										<dl>
+											<dd class="num">99</dd>
+											<dd class="pd_ea">
+												<a href="javascript:;">1600049092</a>
+											</dd>
+											<dd class="pd_date">20.12</dd>
+											<dd class="pd_sex">암</dd>
+											<dd class="pd_kpn">1124</dd>
+											<dd class="pd_pay">1,999만</dd>
+										</dl>
+										<div class="pd_etc">
+											<p>친자일치친자일치친자일치친자일치친자일치친자일치</p>
+										</div>
+										<div class="pd_pav">
+											<a href="javascript:;"><span class="ico_pav">1,550만</span></a>
+										</div>
+									</li>
+									<li>
+										<dl>
+											<dd class="num">99</dd>
+											<dd class="pd_ea">
+												<a href="javascript:;">1600049092</a>
+											</dd>
+											<dd class="pd_date">20.12</dd>
+											<dd class="pd_sex">암</dd>
+											<dd class="pd_kpn">1124</dd>
+											<dd class="pd_pay">1,999만</dd>
+										</dl>
+										<div class="pd_etc">
+											<p>친자일치</p>
+										</div>
+										<div class="pd_pav">
+											<a href="javascript:;"><span class="ico_pav">1,550만</span></a>
+										</div>
+									</li>
+									<li>
+										<dl>
+											<dd class="num">99</dd>
+											<dd class="pd_ea">
+												<a href="javascript:;">1600049092</a>
+											</dd>
+											<dd class="pd_date">20.12</dd>
+											<dd class="pd_sex">암</dd>
+											<dd class="pd_kpn">1124</dd>
+											<dd class="pd_pay">1,999만</dd>
+										</dl>
+										<div class="pd_etc">
+											<p>친자일치</p>
+										</div>
+										<div class="pd_pav">
+											<a href="javascript:;"><span class="ico_pav">1,550만</span></a>
+										</div>
+									</li>
+									<li>
+										<dl>
+											<dd class="num">99</dd>
+											<dd class="pd_ea">
+												<a href="javascript:;">1600049092</a>
+											</dd>
+											<dd class="pd_date">20.12</dd>
+											<dd class="pd_sex">암</dd>
+											<dd class="pd_kpn">1124</dd>
+											<dd class="pd_pay">1,999만</dd>
+										</dl>
+										<div class="pd_etc">
+											<p>친자일치</p>
+										</div>
+										<div class="pd_pav">
+											<a href="javascript:;"><span class="ico_pav">1,550만</span></a>
+										</div>
+									</li>
+									<li>
+										<dl>
+											<dd class="num">99</dd>
+											<dd class="pd_ea">
+												<a href="javascript:;">1600049092</a>
+											</dd>
+											<dd class="pd_date">20.12</dd>
+											<dd class="pd_sex">암</dd>
+											<dd class="pd_kpn">1124</dd>
+											<dd class="pd_pay">1,999만</dd>
+										</dl>
+										<div class="pd_etc">
+											<p>친자일치</p>
+										</div>
+										<div class="pd_pav">
+											<a href="javascript:;"><span class="ico_pav">1,550만</span></a>
+										</div>
+									</li>
+									<li>
+										<dl>
+											<dd class="num">99</dd>
+											<dd class="pd_ea">
+												<a href="javascript:;">1600049092</a>
+											</dd>
+											<dd class="pd_date">20.12</dd>
+											<dd class="pd_sex">암</dd>
+											<dd class="pd_kpn">1124</dd>
+											<dd class="pd_pay">1,999만</dd>
+										</dl>
+										<div class="pd_etc">
+											<p>친자일치</p>
+										</div>
+										<div class="pd_pav">
+											<a href="javascript:;"><span class="ico_pav">1,550만</span></a>
+										</div>
+									</li>
+								</ul>
+							</div>
+						</div>
+					</div>
+					<div class="tab_area auction_list" style="display:none;">
+						<div class="list_search pop_style">
+							<ul class="radio_group">
+								<li>
+									<input type="radio" name="radioG2" checked id="ra2_1"><label for="ra2_1">혈통우</label>
+								</li>
+								<li>
+									<input type="radio" name="radioG2" id="ra2_2"><label for="ra2_2">일반우</label>
+								</li>
+								<li>
+									<input type="radio" name="radioG2" id="ra2_3"><label for="ra2_3">큰소</label>
+								</li>
+								<li>
+									<input type="radio" name="radioG2" id="ra2_4"><label for="ra2_4">송아지</label>
+								</li>
+							</ul>
+							<ul class="sch_area">
+								<li class="sort">
+									<select name="" id="">
+										<option value="">정렬</option>
+									</select>
+								</li>
+								<li class="date">
+									<select name="" id="">
+										<option value="">21.08.15</option>
+									</select>
+								</li>
+								<li class="btn">
+									<a href="javascript:;" class="list_sch">검색</a>
+								</li>
+							</ul>
+						</div>
+						<!-- //list_search e -->
+						<div class="list_table auction_result">
+							<div class="list_head pop_style">
+								<dl>
+									<dd class="num"><span class="w_view_in">경매</span>번호</dd>
+									<dd class="name">출하주</dd>
+									<dd class="pd_sex">성별</dd>
+									<dd class="pd_kg">중량<span class="w_view_in">(kg)</span></dd>
+									<dd class="pd_pay1">최저가</dd>
+									<dd class="pd_pay2">낙찰가</dd>
+								</dl>
+							</div>
+							<div class="list_body pop_style">
+								<ul class="mCustomScrollBox">
+									<li>
+										<dl>
+											<dd class="num">99</dd>
+											<dd class="name">홍*동</dd>
+											<dd class="pd_sex">암</dd>
+											<dd class="pd_kg">280</dd>
+											<dd class="pd_pay1">1,440만</dd>
+											<dd class="pd_pay2">1,440만</dd>
+										</dl>
+									</li>
+									<li>
+										<dl>
+											<dd class="num">99</dd>
+											<dd class="name">홍*동</dd>
+											<dd class="pd_sex">암</dd>
+											<dd class="pd_kg">280</dd>
+											<dd class="pd_pay1">1,440만</dd>
+											<dd class="pd_pay2">1,440만</dd>
+										</dl>
+									</li>
+									<li>
+										<dl>
+											<dd class="num">99</dd>
+											<dd class="name">홍*동</dd>
+											<dd class="pd_sex">암</dd>
+											<dd class="pd_kg">280</dd>
+											<dd class="pd_pay1">1,440만</dd>
+											<dd class="pd_pay2">1,440만</dd>
+										</dl>
+									</li>
+									<li>
+										<dl>
+											<dd class="num">99</dd>
+											<dd class="name">홍*동</dd>
+											<dd class="pd_sex">암</dd>
+											<dd class="pd_kg">280</dd>
+											<dd class="pd_pay1">1,440만</dd>
+											<dd class="pd_pay2">1,440만</dd>
+										</dl>
+									</li>
+									<li>
+										<dl>
+											<dd class="num">99</dd>
+											<dd class="name">홍*동</dd>
+											<dd class="pd_sex">암</dd>
+											<dd class="pd_kg">280</dd>
+											<dd class="pd_pay1">1,440만</dd>
+											<dd class="pd_pay2">1,440만</dd>
+										</dl>
+									</li>
+									<li>
+										<dl>
+											<dd class="num">99</dd>
+											<dd class="name">홍*동</dd>
+											<dd class="pd_sex">암</dd>
+											<dd class="pd_kg">280</dd>
+											<dd class="pd_pay1">1,440만</dd>
+											<dd class="pd_pay2">1,440만</dd>
+										</dl>
+									</li>
+									<li>
+										<dl>
+											<dd class="num">99</dd>
+											<dd class="name">홍*동</dd>
+											<dd class="pd_sex">암</dd>
+											<dd class="pd_kg">280</dd>
+											<dd class="pd_pay1">1,440만</dd>
+											<dd class="pd_pay2">1,440만</dd>
+										</dl>
+									</li>
+									<li>
+										<dl>
+											<dd class="num">99</dd>
+											<dd class="name">홍*동</dd>
+											<dd class="pd_sex">암</dd>
+											<dd class="pd_kg">280</dd>
+											<dd class="pd_pay1">1,440만</dd>
+											<dd class="pd_pay2">1,440만</dd>
+										</dl>
+									</li>
+									<li>
+										<dl>
+											<dd class="num">99</dd>
+											<dd class="name">홍*동</dd>
+											<dd class="pd_sex">암</dd>
+											<dd class="pd_kg">280</dd>
+											<dd class="pd_pay1">1,440만</dd>
+											<dd class="pd_pay2">1,440만</dd>
+										</dl>
+									</li>
+									<li>
+										<dl>
+											<dd class="num">99</dd>
+											<dd class="name">홍*동</dd>
+											<dd class="pd_sex">암</dd>
+											<dd class="pd_kg">280</dd>
+											<dd class="pd_pay1">1,440만</dd>
+											<dd class="pd_pay2">1,440만</dd>
+										</dl>
+									</li>
+								</ul>
+							</div>
+						</div>
+					</div>
+					<!-- // -->
+					<div class="tab_area auction_list" style="display:none;">
+						<div class="list_search pop_style">
+							<ul class="radio_group">
+								<li>
+									<input type="radio" name="radioG3" checked id="ra3_1"><label for="ra3_1">혈통우</label>
+								</li>
+								<li>
+									<input type="radio" name="radioG3" id="ra3_2"><label for="ra3_2">일반우</label>
+								</li>
+								<li>
+									<input type="radio" name="radioG3" id="ra3_3"><label for="ra3_3">큰소</label>
+								</li>
+								<li>
+									<input type="radio" name="radioG3" id="ra3_4"><label for="ra3_4">송아지</label>
+								</li>
+							</ul>
+							<ul class="sch_area">
+								<li class="sort">
+									<select name="" id="">
+										<option value="">정렬</option>
+									</select>
+								</li>
+								<li class="date">
+									<select name="" id="">
+										<option value="">21.08.15</option>
+									</select>
+								</li>
+								<li class="btn">
+									<a href="javascript:;" class="list_sch">검색</a>
+								</li>
+							</ul>
+						</div>
+						<!-- //list_search e -->
+						<div class="list_table auction_bid">
+							<div class="list_head pop_style">
+								<dl>
+									<dd class="num"><span class="w_view_in">경매</span>번호</dd>
+									<dd class="pd_ea">개체<span class="w_view_in">번호</span></dd>
+									<dd class="pd_sex">성별</dd>
+									<dd class="pd_pay1">예정가</dd>
+									<dd class="pd_pay2">낙찰가</dd>
+									<dd class="pd_pay3">응찰가</dd>
+								</dl>
+							</div>
+							<div class="list_body pop_style">
+								<ul class="mCustomScrollBox">
+									<li>
+										<dl>
+											<dd class="num">99</dd>
+											<dd class="pd_ea">1600049092</dd>
+											<dd class="pd_sex">프리마틴</dd>
+											<dd class="pd_pay1">1440만</dd>
+											<dd class="pd_pay2">1440만</dd>
+											<dd class="pd_pay3">1440만</dd>
+										</dl>
+									</li>
+									<li>
+										<dl>
+											<dd class="num">99</dd>
+											<dd class="pd_ea">1600049092</dd>
+											<dd class="pd_sex">프리마틴</dd>
+											<dd class="pd_pay1">1440만</dd>
+											<dd class="pd_pay2">1440만</dd>
+											<dd class="pd_pay3">1440만</dd>
+										</dl>
+									</li>
+									<li>
+										<dl>
+											<dd class="num">99</dd>
+											<dd class="pd_ea">1600049092</dd>
+											<dd class="pd_sex">프리마틴</dd>
+											<dd class="pd_pay1">1440만</dd>
+											<dd class="pd_pay2">1440만</dd>
+											<dd class="pd_pay3">1440만</dd>
+										</dl>
+									</li>
+									<li>
+										<dl>
+											<dd class="num">99</dd>
+											<dd class="pd_ea">1600049092</dd>
+											<dd class="pd_sex">프리마틴</dd>
+											<dd class="pd_pay1">1440만</dd>
+											<dd class="pd_pay2">1440만</dd>
+											<dd class="pd_pay3">1440만</dd>
+										</dl>
+									</li>
+									<li>
+										<dl>
+											<dd class="num">99</dd>
+											<dd class="pd_ea">1600049092</dd>
+											<dd class="pd_sex">프리마틴</dd>
+											<dd class="pd_pay1">1440만</dd>
+											<dd class="pd_pay2">1440만</dd>
+											<dd class="pd_pay3">1440만</dd>
+										</dl>
+									</li>
+									<li>
+										<dl>
+											<dd class="num">99</dd>
+											<dd class="pd_ea">1600049092</dd>
+											<dd class="pd_sex">프리마틴</dd>
+											<dd class="pd_pay1">1440만</dd>
+											<dd class="pd_pay2">1440만</dd>
+											<dd class="pd_pay3">1440만</dd>
+										</dl>
+									</li>
+									<li>
+										<dl>
+											<dd class="num">99</dd>
+											<dd class="pd_ea">1600049092</dd>
+											<dd class="pd_sex">프리마틴</dd>
+											<dd class="pd_pay1">1440만</dd>
+											<dd class="pd_pay2">1440만</dd>
+											<dd class="pd_pay3">1440만</dd>
+										</dl>
+									</li>
+									<li>
+										<dl>
+											<dd class="num">99</dd>
+											<dd class="pd_ea">1600049092</dd>
+											<dd class="pd_sex">프리마틴</dd>
+											<dd class="pd_pay1">1440만</dd>
+											<dd class="pd_pay2">1440만</dd>
+											<dd class="pd_pay3">1440만</dd>
+										</dl>
+									</li>
+									<li>
+										<dl>
+											<dd class="num">99</dd>
+											<dd class="pd_ea">1600049092</dd>
+											<dd class="pd_sex">프리마틴</dd>
+											<dd class="pd_pay1">1440만</dd>
+											<dd class="pd_pay2">1440만</dd>
+											<dd class="pd_pay3">1440만</dd>
+										</dl>
+									</li>
+									<li>
+										<dl>
+											<dd class="num">99</dd>
+											<dd class="pd_ea">1600049092</dd>
+											<dd class="pd_sex">프리마틴</dd>
+											<dd class="pd_pay1">1440만</dd>
+											<dd class="pd_pay2">1440만</dd>
+											<dd class="pd_pay3">1440만</dd>
+										</dl>
+									</li>
+									<li>
+										<dl>
+											<dd class="num">99</dd>
+											<dd class="pd_ea">1600049092</dd>
+											<dd class="pd_sex">프리마틴</dd>
+											<dd class="pd_pay1">1440만</dd>
+											<dd class="pd_pay2">1440만</dd>
+											<dd class="pd_pay3">1440만</dd>
+										</dl>
+									</li>
+									<li>
+										<dl>
+											<dd class="num">99</dd>
+											<dd class="pd_ea">1600049092</dd>
+											<dd class="pd_sex">프리마틴</dd>
+											<dd class="pd_pay1">1440만</dd>
+											<dd class="pd_pay2">1440만</dd>
+											<dd class="pd_pay3">1440만</dd>
+										</dl>
+									</li>
+									<li>
+										<dl>
+											<dd class="num">99</dd>
+											<dd class="pd_ea">1600049092</dd>
+											<dd class="pd_sex">프리마틴</dd>
+											<dd class="pd_pay1">1440만</dd>
+											<dd class="pd_pay2">1440만</dd>
+											<dd class="pd_pay3">1440만</dd>
+										</dl>
+									</li>
+								</ul>
+							</div>
+						</div>
+						<!-- //응찰내역 e -->
+					</div>
+					<!-- //tab_area e -->
+				</div>
+				<!-- //modal-content e -->
+			</div>
+			<!-- //pop_auction e -->
+
+			<div id="" class="modal-wrap pop_net">
+				<div class="modal-content">
+					<p class="pop-txt">네트워크 연결 상태가 불안정합니다. <br>
+						네트워크 상태를 확인해주세요.</p>
+					<div class="btn_area">
+						<button class="btn_ok" onclick="modalPopupClose('.pop_net');return false;">확인</button>
+					</div>
+				</div>
+				<!-- //modal-content e -->
+			</div>
+			<!-- //pop_net e -->
+
+			<div id="" class="modal-wrap pop_logout">
+				<div class="modal-content">
+					<p class="pop-txt logout">로그아웃하시겠습니까?</p>
+					<div class="btn_area">
+						<button class="btn_cancel" onclick="modalPopupClose('.pop_logout');return false;">취소</button>
+						<button class="btn_ok" onclick="modalPopupClose('.pop_logout');return false;">확인</button>
+					</div>
+				</div>
+				<!-- //modal-content e -->
+			</div>
+			<!-- //pop_logout e -->
+
+			<div id="" class="modal-wrap pop_auction_only">
+				<div class="modal-content">
+					<button class="modal_popup_close" onclick="modalPopupClose('.pop_auction_only');return false;">닫기</button>
+					<h3>응찰내역</h3>
+					<p class="dayAndJoin">2021.07.13<span>|</span>응찰 건수: 6</p>
+					<div class="list_table auction_bid">
+						<div class="list_head pop_style">
+							<dl>
+								<dd class="num"><span class="w_view_in">경매</span>번호</dd>
+								<dd class="pd_ea">개체<span class="w_view_in">번호</span></dd>
+								<dd class="pd_sex">성별</dd>
+								<dd class="pd_pay4">최저</dd>
+								<dd class="pd_pay3">응찰가</dd>
+							</dl>
+						</div>
+						<div class="list_body pop_style">
+							<ul class="mCustomScrollBox">
+								<li>
+									<dl>
+										<dd class="num">99</dd>
+										<dd class="pd_ea">1600049092</dd>
+										<dd class="pd_sex">프리마틴</dd>
+										<dd class="pd_pay4">1440만</dd>
+										<dd class="pd_pay3">1440만</dd>
+									</dl>
+								</li>
+								<li>
+									<dl>
+										<dd class="num">99</dd>
+										<dd class="pd_ea">1600049092</dd>
+										<dd class="pd_sex">프리마틴</dd>
+										<dd class="pd_pay4">1440만</dd>
+										<dd class="pd_pay3">1440만</dd>
+									</dl>
+								</li>
+								<li>
+									<dl>
+										<dd class="num">99</dd>
+										<dd class="pd_ea">1600049092</dd>
+										<dd class="pd_sex">프리마틴</dd>
+										<dd class="pd_pay4">1440만</dd>
+										<dd class="pd_pay3">1440만</dd>
+									</dl>
+								</li>
+								<li>
+									<dl>
+										<dd class="num">99</dd>
+										<dd class="pd_ea">1600049092</dd>
+										<dd class="pd_sex">프리마틴</dd>
+										<dd class="pd_pay4">1440만</dd>
+										<dd class="pd_pay3">1440만</dd>
+									</dl>
+								</li>
+								<li>
+									<dl>
+										<dd class="num">99</dd>
+										<dd class="pd_ea">1600049092</dd>
+										<dd class="pd_sex">프리마틴</dd>
+										<dd class="pd_pay4">1440만</dd>
+										<dd class="pd_pay3">1440만</dd>
+									</dl>
+								</li>
+								<li>
+									<dl>
+										<dd class="num">99</dd>
+										<dd class="pd_ea">1600049092</dd>
+										<dd class="pd_sex">프리마틴</dd>
+										<dd class="pd_pay4">1440만</dd>
+										<dd class="pd_pay3">1440만</dd>
+									</dl>
+								</li>
+								<li>
+									<dl>
+										<dd class="num">99</dd>
+										<dd class="pd_ea">1600049092</dd>
+										<dd class="pd_sex">프리마틴</dd>
+										<dd class="pd_pay4">1440만</dd>
+										<dd class="pd_pay3">1440만</dd>
+									</dl>
+								</li>
+								<li>
+									<dl>
+										<dd class="num">99</dd>
+										<dd class="pd_ea">1600049092</dd>
+										<dd class="pd_sex">프리마틴</dd>
+										<dd class="pd_pay4">1440만</dd>
+										<dd class="pd_pay3">1440만</dd>
+									</dl>
+								</li>
+								<li>
+									<dl>
+										<dd class="num">99</dd>
+										<dd class="pd_ea">1600049092</dd>
+										<dd class="pd_sex">프리마틴</dd>
+										<dd class="pd_pay4">1440만</dd>
+										<dd class="pd_pay3">1440만</dd>
+									</dl>
+								</li>
+								<li>
+									<dl>
+										<dd class="num">99</dd>
+										<dd class="pd_ea">1600049092</dd>
+										<dd class="pd_sex">프리마틴</dd>
+										<dd class="pd_pay4">1440만</dd>
+										<dd class="pd_pay3">1440만</dd>
+									</dl>
+								</li>
+								<li>
+									<dl>
+										<dd class="num">99</dd>
+										<dd class="pd_ea">1600049092</dd>
+										<dd class="pd_sex">프리마틴</dd>
+										<dd class="pd_pay4">1440만</dd>
+										<dd class="pd_pay3">1440만</dd>
+									</dl>
+								</li>
+								<li>
+									<dl>
+										<dd class="num">99</dd>
+										<dd class="pd_ea">1600049092</dd>
+										<dd class="pd_sex">프리마틴</dd>
+										<dd class="pd_pay4">1440만</dd>
+										<dd class="pd_pay3">1440만</dd>
+									</dl>
+								</li>
+								<li>
+									<dl>
+										<dd class="num">99</dd>
+										<dd class="pd_ea">1600049092</dd>
+										<dd class="pd_sex">프리마틴</dd>
+										<dd class="pd_pay4">1440만</dd>
+										<dd class="pd_pay3">1440만</dd>
+									</dl>
+								</li>
+							</ul>
+						</div>
+					</div>
+					<!-- //응찰내역 e -->
+				</div>
+				<!-- //modal-content e -->
+			</div>
+			<!-- //pop_auction_only e -->
+
+			<div id="" class="modal-wrap pop_exit_cow">
+				<div class="modal-content">
+					<button class="modal_popup_close" onclick="modalPopupClose('.pop_exit_cow');return false;">닫기</button>
+					<h3>출장우 상세</h3>
+					<div class="cow-table">
+						<table>
+							<colgroup>
+								<col width="20%">
+								<col width="30%">
+								<col width="20%">
+								<col width="*">
+							</colgroup>
+							<tr>
+								<th>경매<br>번호</th>
+								<td class="auc-num">520</td>
+								<th>출하</th>
+								<td class="name">홍길동</td>
+							</tr>
+							<tr>
+								<th>지역</th>
+								<td colspan="3" class="tal">서울시 OOO OO OOO</td>
+							</tr>
+							<tr>
+								<th>생년월일</th>
+								<td colspan="3" class="tal">2222-11-11 (11개월)</td>
+							</tr>
+							<tr>
+								<th>개체번호</th>
+								<td class="num tal">1571 <span>7777</span> 3</td>
+								<th>성별</th>
+								<td class="sex">수</td>
+							</tr>
+							<tr>
+								<th>중량</th>
+								<td class="tal">155kg</td>
+								<th>KPN</th>
+								<td class="fwb">1231</td>
+							</tr>
+							<tr>
+								<th>최저가</th>
+								<td class="tal">530 만원</td>
+								<th>어미</th>
+								<td class="fwb">혈통</td>
+							</tr>
+							<tr>
+								<th>낙찰가</th>
+								<td class="tal">530 만원</td>
+								<th>산차</th>
+								<td class="fwb">9</td>
+							</tr>
+							<tr>
+								<th>낙찰자</th>
+								<td class="tal">13번</td>
+								<th>계대</th>
+								<td class="fwb">9</td>
+							</tr>
+							<tr>
+								<th class="vtt">특이사항</th>
+								<td colspan="3" class="tal vtt">친자일치, 글자가 길면 라인 수 늘어남친자일치, 글자가 길면 라인 수 늘어남친자일치, 글자가 길면 라인 수 늘어남친자일치, 글자가 길면 라인 수 늘어남친자일치, 글자가 길면 라인 수 늘어남</td>
+							</tr>
+						</table>
+					</div>
+				</div>
+				<!-- //modal-content e -->
+			</div>
+			<!-- //pop_exit_cow e -->
+
+			<div id="" class="modal-wrap pop_ship_status">
+				<div class="modal-content">
+					<button class="modal_popup_close" onclick="modalPopupClose('.pop_ship_status');return false;">닫기</button>
+					<h3>출하현황상세</h3>
+					<div class="ship_status_top">
+						<div class="blue_board">
+							<div class="tit_box">
+								낙찰현황
+							</div>
+							<div class="date_box">
+								2021.08.01 ~ 2021.08.30
+							</div>
+						</div>
+						<!-- //blue_board e -->
+						<div class="list_board">
+							<table>
+								<colgroup>
+									<col width="33%" />
+									<col width="33%" />
+									<col width="33%" />
+								</colgroup>
+								<thead>
+									<tr>
+										<th>낙찰두수</th>
+										<th>총금액</th>
+										<th>수수료</th>
+									</tr>
+								</thead>
+								<tbody>
+									<tr>
+										<td>12두</td>
+										<td>25,800만</td>
+										<td>120만</td>
+									</tr>
+								</tbody>
+							</table>
+						</div>
+						<p class="more_ea">세부내역(3)</p>
+					</div>
+					<!-- //ship_status_top e -->
+					<div class="ship_status_list">
+						<ol>
+							<li class="act">
+								<a href="javascript:;" class="btn_aco">
+									<div class="blue_board">
+										<div class="tit_box">
+											하동축협
+										</div>
+										<div class="date_box">
+											2021.08.11
+										</div>
+									</div>
+								</a>
+								<!-- //blue_board e -->
+								<div class="list_board">
+									<table>
+										<colgroup>
+											<col width="33%" />
+											<col width="33%" />
+											<col width="33%" />
+										</colgroup>
+										<thead>
+											<tr>
+												<th>낙찰두수</th>
+												<th>총금액</th>
+												<th>수수료</th>
+											</tr>
+										</thead>
+										<tbody>
+											<tr>
+												<td>12두</td>
+												<td>25,800만</td>
+												<td>120만</td>
+											</tr>
+										</tbody>
+									</table>
+								</div>
+							</li>
+							<li>
+								<a href="javascript:;" class="btn_aco">
+									<div class="blue_board">
+										<div class="tit_box">
+											장수축협
+										</div>
+										<div class="date_box">
+											2021.08.11
+										</div>
+									</div>
+								</a>
+								<!-- //blue_board e -->
+								<div class="list_board">
+									<table>
+										<colgroup>
+											<col width="33%" />
+											<col width="33%" />
+											<col width="33%" />
+										</colgroup>
+										<thead>
+											<tr>
+												<th>낙찰두수</th>
+												<th>총금액</th>
+												<th>수수료</th>
+											</tr>
+										</thead>
+										<tbody>
+											<tr>
+												<td>12두</td>
+												<td>25,800만</td>
+												<td>120만</td>
+											</tr>
+										</tbody>
+									</table>
+								</div>
+							</li>
+							<li>
+								<a href="javascript:;" class="btn_aco">
+									<div class="blue_board">
+										<div class="tit_box">
+											장수축협
+										</div>
+										<div class="date_box">
+											2021.08.11
+										</div>
+									</div>
+								</a>
+								<!-- //blue_board e -->
+								<div class="list_board">
+									<table>
+										<colgroup>
+											<col width="33%" />
+											<col width="33%" />
+											<col width="33%" />
+										</colgroup>
+										<thead>
+											<tr>
+												<th>낙찰두수</th>
+												<th>총금액</th>
+												<th>수수료</th>
+											</tr>
+										</thead>
+										<tbody>
+											<tr>
+												<td>12두</td>
+												<td>25,800만</td>
+												<td>120만</td>
+											</tr>
+										</tbody>
+									</table>
+								</div>
+							</li>
+						</ol>
+					</div>
+				</div>
+				<!-- //modal-content e -->
+			</div>
+			<!-- //pop_ship_status e -->
+
+			<div id="" class="modal-wrap pop_schedule_auction">
+				<div class="modal-content">
+					<button class="modal_popup_close" onclick="modalPopupClose('.pop_schedule_auction');return false;">닫기</button>
+					<div class="tab_list">
+						<ul>
+							<li><a href="javascript:;" class="act">혈통조회</a></li>
+							<li><a href="javascript:;">후대정보</a></li>
+							<li><a href="javascript:;">형매정보</a></li>
+						</ul>
+					</div>
+					<!-- //tab_list e -->
+					<div class="tab_area">
+						<dl class="top_info">
+							<dt>송아지</dt>
+							<dd>제공: 한국종축개량협회</dd>
+						</dl>
+						<dl class="top_info">
+							<dt>큰소</dt>
+							<dd>제공: 한국종축개량협회</dd>
+						</dl>
+						<div class="tb_round">
+							<table>
+								<colgroup>
+									<col width="15%" />
+									<col width="28%" />
+									<col width="15%" />
+									<col width="20%" />
+									<col width="22%" />
+								</colgroup>
+								<tr>
+									<th rowspan="2" class="row_gray">큰소</th>
+									<th class="bg_blue">개체</th>
+									<th class="bg_blue">축주</th>
+									<th class="bg_blue">등록</th>
+									<th class="bg_blue">산차</th>
+								</tr>
+								<tr>
+									<td class="h_45">1600049092</td>
+									<td class="h_45">홍*동</td>
+									<td class="h_45">고등</td>
+									<td class="h_45">8</td>
+								</tr>
+							</table>
+						</div>
+						<div class="tb_round">
+							<table>
+								<colgroup>
+									<col width="15%" />
+									<col width="28%" />
+									<col width="15%" />
+									<col width="20%" />
+									<col width="22%" />
+								</colgroup>
+								<tr>
+									<th rowspan="2" class="row_gray">임신</th>
+									<th class="bg_blue">수정일자</th>
+									<th class="bg_blue">KPN</th>
+									<th class="bg_blue">임신월령</th>
+									<th class="bg_blue">비고</th>
+								</tr>
+								<tr>
+									<td class="h_45">2020.02.02</td>
+									<td class="h_45">1111</td>
+									<td class="h_45">4</td>
+									<td class="h_45">인공수정</td>
+								</tr>
+							</table>
+						</div>
+						<div class="tb_round">
+							<table>
+								<colgroup>
+									<col width="15%" />
+									<col width="28%" />
+									<col width="15%" />
+									<col width="20%" />
+									<col width="22%" />
+								</colgroup>
+								<tr>
+									<th rowspan="2" class="row_gray">송아지</th>
+									<th class="bg_blue">이표</th>
+									<th class="bg_blue">성별</th>
+									<th class="bg_blue">생년월일</th>
+									<th class="bg_blue">KPN</th>
+								</tr>
+								<tr>
+									<td class="h_45"></td>
+									<td class="h_45">암</td>
+									<td class="h_45">20.12.12</td>
+									<td class="h_45">1111</td>
+								</tr>
+							</table>
+						</div>
+						<div class="tb_round">
+							<table>
+								<colgroup>
+									<col width="35%" />
+									<col width="25%" />
+									<col width="15%" />
+									<col width="25%" />
+								</colgroup>
+								<tr>
+									<th class="bg_blue">개체</th>
+									<th class="bg_blue">축주</th>
+									<th class="bg_blue">계대</th>
+									<th class="bg_blue">산차</th>
+								</tr>
+								<tr>
+									<td class="h_45">1600049092</td>
+									<td class="h_45">홍*동</td>
+									<td class="h_45">4</td>
+									<td class="h_45">8</td>
+								</tr>
+							</table>
+						</div>
+						<div class="tb_round">
+							<table>
+								<colgroup>
+									<col width="35%" />
+									<col width="25%" />
+									<col width="15%" />
+									<col width="25%" />
+								</colgroup>
+								<tr>
+									<th class="bg_blue">등록</th>
+									<th class="bg_blue">어미이표</th>
+									<th class="bg_blue">성별</th>
+									<th class="bg_blue">생년월일</th>
+								</tr>
+								<tr>
+									<td class="h_45">혈통</td>
+									<td class="h_45">17379963</td>
+									<td class="h_45">수</td>
+									<td class="h_45">20.10.24</td>
+								</tr>
+							</table>
+						</div>
+						<div class="tb_round">
+							<table>
+								<colgroup>
+									<col width="35%" />
+									<col width="25%" />
+									<col width="40%" />
+								</colgroup>
+								<tr>
+									<th class="bg_blue">친자</th>
+									<th class="bg_blue">제각</th>
+									<th class="bg_blue">비고</th>
+								</tr>
+								<tr>
+									<td class="h_45">확인</td>
+									<td class="h_45">-</td>
+									<td class="h_45"></td>
+								</tr>
+							</table>
+						</div>
+						<div class="tb_round">
+							<table>
+								<colgroup>
+									<col width="20%" />
+									<col width="20%" />
+									<col width="60%" />
+								</colgroup>
+								<tr>
+									<td>번식자</td>
+									<td>박노*</td>
+									<td>경남 합천군 봉산면***</td>
+								</tr>
+								<tr>
+									<td>번식자</td>
+									<td>박노*</td>
+									<td>경남 합천군 봉산면***</td>
+								</tr>
+							</table>
+						</div>
+						<div class="tb_round">
+							<table>
+								<colgroup>
+									<col width="25%" />
+									<col width="25%" />
+									<col width="25%" />
+									<col width="25%" />
+								</colgroup>
+								<tr>
+									<th class="bg_blue">냉도체중</th>
+									<th class="bg_blue">배최장근체중</th>
+									<th class="bg_blue">등지방두께</th>
+									<th class="bg_blue">근내지방도</th>
+								</tr>
+								<tr>
+									<td>14.48</td>
+									<td>2.325</td>
+									<td>0.129</td>
+									<td>0.15</td>
+								</tr>
+								<tr>
+									<td class="bg_gray">B</td>
+									<td class="bg_gray">C</td>
+									<td class="bg_gray">D</td>
+									<td class="bg_gray">D</td>
+								</tr>
+							</table>
+						</div>
+						<p class="tb_txt">개체유전능력은 절대값이 아니므로 참고용으로 사용하시기 바랍니다.</p>
+						<div class="tb_round">
+							<table>
+								<colgroup>
+									<col width="22%" />
+									<col width="37%" />
+									<col width="13%" />
+									<col width="28%" />
+								</colgroup>
+								<tr>
+									<th class="bg_blue">구분</th>
+									<th class="bg_blue">KPN<br>개체식별번호</th>
+									<th class="bg_blue">구분</th>
+									<th class="bg_blue">생년월일</th>
+								</tr>
+								<tr>
+									<td class="bg_gray"><div class="pos-r"><span>┌</span>조부</div></td>
+									<td>KPN642<br>000177173484</td>
+									<td>고등</td>
+									<td>2003.09.07</td>
+								</tr>
+								<tr>
+									<td class="bg_gray">부</td>
+									<td>KPN642<br>000177173484</td>
+									<td>고등</td>
+									<td>2003.09.07</td>
+								</tr>
+								<tr>
+									<td class="bg_gray"><div class="pos-r"><span>└</span>조모</div></td>
+									<td>KPN642<br>000177173484</td>
+									<td>고등</td>
+									<td>2003.09.07</td>
+								</tr>
+								<tr>
+									<td class="bg_gray"><div class="pos-r"><span>┌</span>외조부</div></td>
+									<td>KPN642<br>000177173484</td>
+									<td>고등</td>
+									<td>2003.09.07</td>
+								</tr>
+								<tr>
+									<td class="bg_gray">모</td>
+									<td>KPN642<br>000177173484</td>
+									<td>고등</td>
+									<td>2003.09.07</td>
+								</tr>
+								<tr>
+									<td class="bg_gray"><div class="pos-r"><span>└</span>외조모</div></td>
+									<td>KPN642<br>000177173484</td>
+									<td>고등</td>
+									<td>2003.09.07</td>
+								</tr>
+							</table>
+						</div>
+					</div>
+					<div class="tab_area" style="display:none;">
+						<div class="tb_info_round">
+							<table>
+								<tr>
+									<td colspan="5" class="bg_gray">모</td>
+								</tr>
+								<tr>
+									<td class="bg_blue fz_14">개체식별번호<br>등록번호</td>
+									<td class="bg_blue">구분</td>
+									<td class="bg_blue">성별</td>
+									<td class="bg_blue">계대</td>
+									<td class="bg_blue">생년월일</td>
+								</tr>
+								<tr>
+									<td class="fz_15">158405118<br>(231768505)</td>
+									<td>고등</td>
+									<td>수</td>
+									<td>4</td>
+									<td>20201024</td>
+								</tr>
+							</table>
+						</div>
+						<div class="tb_list_round">
+							<table>
+								<colgroup>
+									<col width="15%">
+									<col width="*">
+									<col width="12*">
+									<col width="12*">
+									<col width="25%">
+								</colgroup>
+								<tr>
+									<td class="bg_blue">산차</td>
+									<td class="bg_blue fz_14">개체식별번호<br>등록번호</td>
+									<td class="bg_blue">구분</td>
+									<td class="bg_blue">성별</td>
+									<td class="bg_blue">생년월일</td>
+								</tr>
+								<tr>
+									<td class="bg_blue">도체중</td>
+									<td class="bg_blue">능력검정</td>
+									<td class="bg_blue"></td>
+									<td class="bg_blue">등급</td>
+									<td class="bg_blue">도축일</td>
+								</tr>
+							</table>
+						</div>
+						<div class="tb_list">
+							<table>
+								<colgroup>
+									<col width="15%">
+									<col width="*">
+									<col width="12*">
+									<col width="12*">
+									<col width="25%">
+								</colgroup>
+								<tr>
+									<td>1</td>
+									<td class="fz_15">158405118<br>(231768505)</td>
+									<td>혈통</td>
+									<td>거세</td>
+									<td>16.06.25</td>
+								</tr>
+								<tr>
+									<td>999</td>
+									<td></td>
+									<td></td>
+									<td>1+</td>
+									<td>19.06.25</td>
+								</tr>
+								<tr>
+									<td>1</td>
+									<td class="fz_15">158405118<br>(231768505)</td>
+									<td>혈통</td>
+									<td>거세</td>
+									<td>16.06.25</td>
+								</tr>
+								<tr>
+									<td>999</td>
+									<td></td>
+									<td></td>
+									<td>1+</td>
+									<td>19.06.25</td>
+								</tr>
+								<tr>
+									<td>1</td>
+									<td class="fz_15">158405118<br>(231768505)</td>
+									<td>혈통</td>
+									<td>거세</td>
+									<td>16.06.25</td>
+								</tr>
+								<tr>
+									<td>999</td>
+									<td></td>
+									<td></td>
+									<td>1+</td>
+									<td>19.06.25</td>
+								</tr>
+								<tr>
+									<td>1</td>
+									<td class="fz_15">158405118<br>(231768505)</td>
+									<td>혈통</td>
+									<td>거세</td>
+									<td>16.06.25</td>
+								</tr>
+								<tr>
+									<td>999</td>
+									<td></td>
+									<td></td>
+									<td>1+</td>
+									<td>19.06.25</td>
+								</tr>
+								<tr>
+									<td>1</td>
+									<td class="fz_15">158405118<br>(231768505)</td>
+									<td>혈통</td>
+									<td>거세</td>
+									<td>16.06.25</td>
+								</tr>
+								<tr>
+									<td>999</td>
+									<td></td>
+									<td></td>
+									<td>1+</td>
+									<td>19.06.25</td>
+								</tr>
+								<tr>
+									<td>1</td>
+									<td class="fz_15">158405118<br>(231768505)</td>
+									<td>혈통</td>
+									<td>거세</td>
+									<td>16.06.25</td>
+								</tr>
+								<tr>
+									<td>999</td>
+									<td></td>
+									<td></td>
+									<td>1+</td>
+									<td>19.06.25</td>
+								</tr>
+								<tr>
+									<td>1</td>
+									<td class="fz_15">158405118<br>(231768505)</td>
+									<td>혈통</td>
+									<td>거세</td>
+									<td>16.06.25</td>
+								</tr>
+								<tr>
+									<td>999</td>
+									<td></td>
+									<td></td>
+									<td>1+</td>
+									<td>19.06.25</td>
+								</tr>
+								<tr>
+									<td>1</td>
+									<td class="fz_15">158405118<br>(231768505)</td>
+									<td>혈통</td>
+									<td>거세</td>
+									<td>16.06.25</td>
+								</tr>
+								<tr>
+									<td>999</td>
+									<td></td>
+									<td></td>
+									<td>1+</td>
+									<td>19.06.25</td>
+								</tr>
+							</table>
+						</div>
+					</div>
+					<div class="tab_area" style="display:none;">
+						<div class="tb_list_round">
+							<table>
+								<colgroup>
+									<col width="15%">
+									<col width="*">
+									<col width="12*">
+									<col width="12*">
+									<col width="25%">
+								</colgroup>
+								<tr>
+									<td class="bg_blue">산차</td>
+									<td class="bg_blue fz_14">개체식별번호<br>등록번호</td>
+									<td class="bg_blue">구분</td>
+									<td class="bg_blue">성별</td>
+									<td class="bg_blue">생년월일</td>
+								</tr>
+								<tr>
+									<td class="bg_blue">도체중</td>
+									<td class="bg_blue">능력검정</td>
+									<td class="bg_blue"></td>
+									<td class="bg_blue">등급</td>
+									<td class="bg_blue">도축일</td>
+								</tr>
+							</table>
+						</div>
+						<div class="tb_list">
+							<table>
+								<colgroup>
+									<col width="15%">
+									<col width="*">
+									<col width="12*">
+									<col width="12*">
+									<col width="25%">
+								</colgroup>
+								<tr>
+									<td>1</td>
+									<td class="fz_15">158405118<br>(231768505)</td>
+									<td>혈통</td>
+									<td>거세</td>
+									<td>16.06.25</td>
+								</tr>
+								<tr>
+									<td>999</td>
+									<td></td>
+									<td></td>
+									<td>1+</td>
+									<td>19.06.25</td>
+								</tr>
+								<tr>
+									<td>1</td>
+									<td class="fz_15">158405118<br>(231768505)</td>
+									<td>혈통</td>
+									<td>거세</td>
+									<td>16.06.25</td>
+								</tr>
+								<tr>
+									<td>999</td>
+									<td></td>
+									<td></td>
+									<td>1+</td>
+									<td>19.06.25</td>
+								</tr>
+								<tr>
+									<td>1</td>
+									<td class="fz_15">158405118<br>(231768505)</td>
+									<td>혈통</td>
+									<td>거세</td>
+									<td>16.06.25</td>
+								</tr>
+								<tr>
+									<td>999</td>
+									<td></td>
+									<td></td>
+									<td>1+</td>
+									<td>19.06.25</td>
+								</tr>
+								<tr>
+									<td>1</td>
+									<td class="fz_15">158405118<br>(231768505)</td>
+									<td>혈통</td>
+									<td>거세</td>
+									<td>16.06.25</td>
+								</tr>
+								<tr>
+									<td>999</td>
+									<td></td>
+									<td></td>
+									<td>1+</td>
+									<td>19.06.25</td>
+								</tr>
+								<tr>
+									<td>1</td>
+									<td class="fz_15">158405118<br>(231768505)</td>
+									<td>혈통</td>
+									<td>거세</td>
+									<td>16.06.25</td>
+								</tr>
+								<tr>
+									<td>999</td>
+									<td></td>
+									<td></td>
+									<td>1+</td>
+									<td>19.06.25</td>
+								</tr>
+								<tr>
+									<td>1</td>
+									<td class="fz_15">158405118<br>(231768505)</td>
+									<td>혈통</td>
+									<td>거세</td>
+									<td>16.06.25</td>
+								</tr>
+								<tr>
+									<td>999</td>
+									<td></td>
+									<td></td>
+									<td>1+</td>
+									<td>19.06.25</td>
+								</tr>
+								<tr>
+									<td>1</td>
+									<td class="fz_15">158405118<br>(231768505)</td>
+									<td>혈통</td>
+									<td>거세</td>
+									<td>16.06.25</td>
+								</tr>
+								<tr>
+									<td>999</td>
+									<td></td>
+									<td></td>
+									<td>1+</td>
+									<td>19.06.25</td>
+								</tr>
+								<tr>
+									<td>1</td>
+									<td class="fz_15">158405118<br>(231768505)</td>
+									<td>혈통</td>
+									<td>거세</td>
+									<td>16.06.25</td>
+								</tr>
+								<tr>
+									<td>999</td>
+									<td></td>
+									<td></td>
+									<td>1+</td>
+									<td>19.06.25</td>
+								</tr>
+							</table>
+						</div>
+					</div>
+				</div>
+				<!-- //modal-content e -->
+			</div>
+			<!-- //pop_schedule_auction e -->
+		</section>
+		<!-- //content e -->
+		<section class="footer">
+			<ul>
+				<li>
+					<a href="">이용약관</a>
+				</li>
+				<li>
+					<a href=""><span>개인정보 처리 방침</span></a>
+				</li>
+				<li>
+					<a href="">ⓒ가축시장.kr</a>
+				</li>
+			</ul>
+		</section>
+		<!-- //footer e -->
+	</div>
+	<!-- //wrap e -->
+</body>
+<script type="text/javascript" src="../js/jquery-1.12.4.js"></script>
+<script type="text/javascript" src="../js/jquery-migrate-1.2.1.min.js"></script>
+<script type="text/javascript" src="../js/jquery.easing.1.3.min.js"></script>
+<script type="text/javascript" src="../js/jquery-ui.js"></script>
+<script type="text/javascript" src="../js/jquery.mmenu.min.all.js"></script>
+<script type="text/javascript" src="../js/slick.js"></script>
+<script type="text/javascript" src="../js/jquery.placeholder.ls.js"></script>
+<script type="text/javascript" src="../js/jquery.mCustomScrollbar.js"></script>
+<script type="text/javascript" src="../js/jquery.selectric.min.js"></script>
+<script type="text/javascript" src="../js/default.js"></script>
+<script>
+	modalPopup('.pop_schedule_auction')
+</script>
+<!--[if lte IE 9]>
+	<script>
+		$(function(){
+			$('input, textarea').placeholder();
+		});
+	</script>
+<![endif]-->
+</html>

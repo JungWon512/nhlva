@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="48" height="40" viewBox="0 0 48 40">
+    <defs>
+        <style>
+            .cls-1{fill:#191919}
+        </style>
+    </defs>
+    <g id="햄버거메뉴" transform="translate(12008 -15817)">
+        <path id="사각형_23693" d="M0 0H48V4H0z" class="cls-1" transform="translate(-12008 15853)"/>
+        <path id="사각형_23694" d="M0 0H48V4H0z" class="cls-1" transform="translate(-12008 15835)"/>
+        <path id="사각형_23865" d="M0 0H48V4H0z" class="cls-1" transform="translate(-12008 15817)"/>
+    </g>
+</svg>
