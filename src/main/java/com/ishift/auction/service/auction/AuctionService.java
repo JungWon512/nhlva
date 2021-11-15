@@ -155,7 +155,6 @@ public interface AuctionService {
 	List<Map<String, Object>> selectMyEntryList(Map<String, Object> params) throws SQLException;
 
 	Map<String, Object> sealectAuctQcn(Map<String, Object> params) throws SQLException;
-	
 
 	int sealectAuctCowCnt(Map<String, Object> params) throws SQLException ;
 
@@ -254,12 +253,35 @@ public interface AuctionService {
 	 */
 	Map<String, Object> auctionFinish(Map<String, Object> aucStn, Map<String, Object> params) throws SQLException;
 
+	/**
+	 * 금일 경매차수 조회
+	 * @return
+	 * @throws SQLException
+	 */
 	List<Map<String, Object>> selectAuctQcnForToday() throws SQLException;
 
+	/**
+	 * 응찰서버 정보 업데이트
+	 * @param params
+	 * @return
+	 * @throws SQLException
+	 */
 	int updateNetPort(Map<String, Object> params) throws SQLException;
 
+	/**
+	 * 최근 응찰 금액 
+	 * @param params
+	 * @return
+	 * @throws SQLException
+	 */
 	Map<String, Object> selectNearAtdrAm(Map<String, Object> params) throws SQLException;
 
+	/**
+	 * 찜 가격 조회
+	 * @param params
+	 * @return
+	 * @throws SQLException
+	 */
 	Map<String, Object> selectMyZimPrice(Map<String, Object> params) throws SQLException;
 	
 }

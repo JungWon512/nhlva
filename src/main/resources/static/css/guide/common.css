@@ -240,9 +240,9 @@ input[type=text]:focus, input[type=tel]:focus, input[type=password]:focus,
 
 input[type=text]:focus, input[type=password]:focus, input[type=tel]:focus
 	{
-	color: black;
-	border-bottom: 2px solid #000;
-	background: #fff;
+	color: #000;
+	border: 1px solid #000;
+	background: #fff
 }
 
 /* err */
@@ -334,16 +334,76 @@ input::-ms-clear {
 	display: none !important;
 }
 
-.admin_chocie ul.choice_area,.admin_auc_main .main_search .sch_area,.admin_auc_main .main_search .radio_group,.admin_auc_main .main_search,.admin_area .sub_search .sch_area,.admin_area .sub_search,.monitoring-view .table-inner .table-info ul,.auction_calculator .calculator_bottom .calculator-cell,.auction_seeBox .seeBox_bottom .seeBox_slick .mo_seeBox ul,.auction_seeBox .seeBox_bottom .seeBox_slick .seeBox_slick_inner .seeBox-cell,.auction_seeBox .seeBox_bottom,.auction_seeBox .seeBox_top dl dd ul,.auction_seeBox.calculator_type,.tab_list ul,.auction_date .date_bottom li dl,.list_downs ul,.auction_list .calculator_head_pc dl,.auction_list .list_search .sch_area,.auction_list .list_search .radio_group,.auction_list .list_search,.auction_list .auction_area,.auction_info .board_bottom .date_bottom ul li dl,.auction_info dl.board_top dd ul,.chk_step2 ul.choice_area,.chk_step1 ul.choice_area,.move-btn ul,#menu-lnb .lnb_info,.header .w_header_inner .w_header #nav ul,.header .w_header_inner .w_header .side_menu ul {
-    *zoom:1}
-
-.admin_chocie ul.choice_area:before,.admin_auc_main .main_search .sch_area:before,.admin_auc_main .main_search .radio_group:before,.admin_auc_main .main_search:before,.admin_area .sub_search .sch_area:before,.admin_area .sub_search:before,.monitoring-view .table-inner .table-info ul:before,.auction_calculator .calculator_bottom .calculator-cell:before,.auction_seeBox .seeBox_bottom .seeBox_slick .mo_seeBox ul:before,.auction_seeBox .seeBox_bottom .seeBox_slick .seeBox_slick_inner .seeBox-cell:before,.auction_seeBox .seeBox_bottom:before,.auction_seeBox .seeBox_top dl dd ul:before,.auction_seeBox.calculator_type:before,.tab_list ul:before,.auction_date .date_bottom li dl:before,.list_downs ul:before,.auction_list .calculator_head_pc dl:before,.auction_list .list_search .sch_area:before,.auction_list .list_search .radio_group:before,.auction_list .list_search:before,.auction_list .auction_area:before,.auction_info .board_bottom .date_bottom ul li dl:before,.auction_info dl.board_top dd ul:before,.chk_step2 ul.choice_area:before,.chk_step1 ul.choice_area:before,.move-btn ul:before,#menu-lnb .lnb_info:before,.header .w_header_inner .w_header #nav ul:before,.header .w_header_inner .w_header .side_menu ul:before,.admin_chocie ul.choice_area:after,.admin_auc_main .main_search .sch_area:after,.admin_auc_main .main_search .radio_group:after,.admin_auc_main .main_search:after,.admin_area .sub_search .sch_area:after,.admin_area .sub_search:after,.monitoring-view .table-inner .table-info ul:after,.auction_calculator .calculator_bottom .calculator-cell:after,.auction_seeBox .seeBox_bottom .seeBox_slick .mo_seeBox ul:after,.auction_seeBox .seeBox_bottom .seeBox_slick .seeBox_slick_inner .seeBox-cell:after,.auction_seeBox .seeBox_bottom:after,.auction_seeBox .seeBox_top dl dd ul:after,.auction_seeBox.calculator_type:after,.tab_list ul:after,.auction_date .date_bottom li dl:after,.list_downs ul:after,.auction_list .calculator_head_pc dl:after,.auction_list .list_search .sch_area:after,.auction_list .list_search .radio_group:after,.auction_list .list_search:after,.auction_list .auction_area:after,.auction_info .board_bottom .date_bottom ul li dl:after,.auction_info dl.board_top dd ul:after,.chk_step2 ul.choice_area:after,.chk_step1 ul.choice_area:after,.move-btn ul:after,#menu-lnb .lnb_info:after,.header .w_header_inner .w_header #nav ul:after,.header .w_header_inner .w_header .side_menu ul:after {
-    content: " ";
-    display: table
+.admin_chocie ul.choice_area, .admin_auc_main .main_search .sch_area,
+	.admin_auc_main .main_search .radio_group, .admin_auc_main .main_search,
+	.admin_area .sub_search .sch_area, .admin_area .sub_search,
+	.monitoring-view .table-inner .table-info ul, .auction_calculator .calculator_bottom .calculator-cell,
+	.auction_seeBox .seeBox_bottom .seeBox_slick .mo_seeBox ul,
+	.auction_seeBox .seeBox_bottom .seeBox_slick .seeBox_slick_inner .seeBox-cell,
+	.auction_seeBox .seeBox_bottom, .auction_seeBox .seeBox_top dl dd ul,
+	.auction_seeBox.calculator_type, .tab_list ul, .auction_date .date_bottom li dl,
+	.list_downs ul, .auction_list .calculator_head_pc dl, .auction_list .list_search .sch_area,
+	.auction_list .list_search .radio_group, .auction_list .list_search,
+	.auction_list .auction_area, .auction_info .board_bottom .date_bottom ul li dl,
+	.auction_info dl.board_top dd ul, .chk_step2 ul.choice_area, .chk_step1 ul.choice_area,
+	.move-btn ul, #menu-lnb .lnb_info, .header .w_header_inner .w_header #nav ul,
+	.header .w_header_inner .w_header .side_menu ul {
+	*zoom: 1
 }
 
-.admin_chocie ul.choice_area:after,.admin_auc_main .main_search .sch_area:after,.admin_auc_main .main_search .radio_group:after,.admin_auc_main .main_search:after,.admin_area .sub_search .sch_area:after,.admin_area .sub_search:after,.monitoring-view .table-inner .table-info ul:after,.auction_calculator .calculator_bottom .calculator-cell:after,.auction_seeBox .seeBox_bottom .seeBox_slick .mo_seeBox ul:after,.auction_seeBox .seeBox_bottom .seeBox_slick .seeBox_slick_inner .seeBox-cell:after,.auction_seeBox .seeBox_bottom:after,.auction_seeBox .seeBox_top dl dd ul:after,.auction_seeBox.calculator_type:after,.tab_list ul:after,.auction_date .date_bottom li dl:after,.list_downs ul:after,.auction_list .calculator_head_pc dl:after,.auction_list .list_search .sch_area:after,.auction_list .list_search .radio_group:after,.auction_list .list_search:after,.auction_list .auction_area:after,.auction_info .board_bottom .date_bottom ul li dl:after,.auction_info dl.board_top dd ul:after,.chk_step2 ul.choice_area:after,.chk_step1 ul.choice_area:after,.move-btn ul:after,#menu-lnb .lnb_info:after,.header .w_header_inner .w_header #nav ul:after,.header .w_header_inner .w_header .side_menu ul:after {
-    clear: both
+.admin_chocie ul.choice_area:before, .admin_auc_main .main_search .sch_area:before,
+	.admin_auc_main .main_search .radio_group:before, .admin_auc_main .main_search:before,
+	.admin_area .sub_search .sch_area:before, .admin_area .sub_search:before,
+	.monitoring-view .table-inner .table-info ul:before,
+	.auction_calculator .calculator_bottom .calculator-cell:before,
+	.auction_seeBox .seeBox_bottom .seeBox_slick .mo_seeBox ul:before,
+	.auction_seeBox .seeBox_bottom .seeBox_slick .seeBox_slick_inner .seeBox-cell:before,
+	.auction_seeBox .seeBox_bottom:before, .auction_seeBox .seeBox_top dl dd ul:before,
+	.auction_seeBox.calculator_type:before, .tab_list ul:before,
+	.auction_date .date_bottom li dl:before, .list_downs ul:before,
+	.auction_list .calculator_head_pc dl:before, .auction_list .list_search .sch_area:before,
+	.auction_list .list_search .radio_group:before, .auction_list .list_search:before,
+	.auction_list .auction_area:before, .auction_info .board_bottom .date_bottom ul li dl:before,
+	.auction_info dl.board_top dd ul:before, .chk_step2 ul.choice_area:before,
+	.chk_step1 ul.choice_area:before, .move-btn ul:before, #menu-lnb .lnb_info:before,
+	.header .w_header_inner .w_header #nav ul:before, .header .w_header_inner .w_header .side_menu ul:before,
+	.admin_chocie ul.choice_area:after, .admin_auc_main .main_search .sch_area:after,
+	.admin_auc_main .main_search .radio_group:after, .admin_auc_main .main_search:after,
+	.admin_area .sub_search .sch_area:after, .admin_area .sub_search:after,
+	.monitoring-view .table-inner .table-info ul:after, .auction_calculator .calculator_bottom .calculator-cell:after,
+	.auction_seeBox .seeBox_bottom .seeBox_slick .mo_seeBox ul:after,
+	.auction_seeBox .seeBox_bottom .seeBox_slick .seeBox_slick_inner .seeBox-cell:after,
+	.auction_seeBox .seeBox_bottom:after, .auction_seeBox .seeBox_top dl dd ul:after,
+	.auction_seeBox.calculator_type:after, .tab_list ul:after,
+	.auction_date .date_bottom li dl:after, .list_downs ul:after,
+	.auction_list .calculator_head_pc dl:after, .auction_list .list_search .sch_area:after,
+	.auction_list .list_search .radio_group:after, .auction_list .list_search:after,
+	.auction_list .auction_area:after, .auction_info .board_bottom .date_bottom ul li dl:after,
+	.auction_info dl.board_top dd ul:after, .chk_step2 ul.choice_area:after,
+	.chk_step1 ul.choice_area:after, .move-btn ul:after, #menu-lnb .lnb_info:after,
+	.header .w_header_inner .w_header #nav ul:after, .header .w_header_inner .w_header .side_menu ul:after
+	{
+	content: " ";
+	display: table
+}
+
+.admin_chocie ul.choice_area:after, .admin_auc_main .main_search .sch_area:after,
+	.admin_auc_main .main_search .radio_group:after, .admin_auc_main .main_search:after,
+	.admin_area .sub_search .sch_area:after, .admin_area .sub_search:after,
+	.monitoring-view .table-inner .table-info ul:after, .auction_calculator .calculator_bottom .calculator-cell:after,
+	.auction_seeBox .seeBox_bottom .seeBox_slick .mo_seeBox ul:after,
+	.auction_seeBox .seeBox_bottom .seeBox_slick .seeBox_slick_inner .seeBox-cell:after,
+	.auction_seeBox .seeBox_bottom:after, .auction_seeBox .seeBox_top dl dd ul:after,
+	.auction_seeBox.calculator_type:after, .tab_list ul:after,
+	.auction_date .date_bottom li dl:after, .list_downs ul:after,
+	.auction_list .calculator_head_pc dl:after, .auction_list .list_search .sch_area:after,
+	.auction_list .list_search .radio_group:after, .auction_list .list_search:after,
+	.auction_list .auction_area:after, .auction_info .board_bottom .date_bottom ul li dl:after,
+	.auction_info dl.board_top dd ul:after, .chk_step2 ul.choice_area:after,
+	.chk_step1 ul.choice_area:after, .move-btn ul:after, #menu-lnb .lnb_info:after,
+	.header .w_header_inner .w_header #nav ul:after, .header .w_header_inner .w_header .side_menu ul:after
+	{
+	clear: both
 }
 
 /****************************** font setting ******************************/
@@ -387,7 +447,7 @@ input[type=checkbox]+label {
 	font-size: 18px;
 	color: #1a1a1a;
 	padding-left: 32px;
-	padding-top: 2px;
+	padding-top: 0;
 	position: relative;
 	word-break: break-all;
 	display: inline-block;
@@ -1112,233 +1172,225 @@ Base styles: contents layer
 }
 
 .chk_step1 ul.choice_area {
-    margin-left: -50px
+	margin-left: -50px
 }
 
 .chk_step1 ul.choice_area li {
-    float: left;
-    width: calc(33.33% - 50px);
-    margin-left: 50px;
-    margin-bottom: 50px
+	float: left;
+	width: calc(33.33% - 50px);
+	margin-left: 50px;
+	margin-bottom: 50px
 }
 
 .chk_step1 ul.choice_area li a {
-    width: 100%;
-    height: 120px;
-    padding: 0 5px;
-    background: #fff;
-    display: flex;
-    border-radius: 20px;
-    justify-content: center;
-    align-items: center;
-    font-size: 28px;
-    font-family: "Noto Sans KR","Roboto","AppleGothic","sans-serif";
-    font-weight: 700;
-    letter-spacing: -0.7px;
-    text-align: center;
-    color: #1a1a1a;
-    position: relative;
-    box-shadow: 0px 5px 10px 3px rgba(0,0,0,.05);
-    transition: all .2s
+	width: 100%;
+	height: 120px;
+	padding: 0 5px;
+	background: #fff;
+	display: flex;
+	border-radius: 20px;
+	justify-content: center;
+	align-items: center;
+	font-size: 28px;
+	font-family: "Noto Sans KR", "Roboto", "AppleGothic", "sans-serif";
+	font-weight: 700;
+	letter-spacing: -0.7px;
+	text-align: center;
+	color: #1a1a1a;
+	position: relative;
+	box-shadow: 0px 5px 10px 3px rgba(0, 0, 0, .05);
+	transition: all .2s
 }
 
-.chk_step1 ul.choice_area li a:hover,.chk_step1 ul.choice_area li a.act {
-    background: #007eff;
-    color: #fff;
-    box-shadow: inherit
+.chk_step1 ul.choice_area li a:hover, .chk_step1 ul.choice_area li a.act
+	{
+	background: #007eff;
+	color: #fff;
+	box-shadow: inherit
 }
 
 .chk_step1 ul.choice_area li a span {
-    position: absolute;
-    left: 14px;
-    top: 14px;
-    background: #f22800;
-    padding: 0 8px;
-    border-radius: 30px;
-    height: 20px;
-    line-height: 20px;
-    font-size: 12px;
-    letter-spacing: -0.3px;
-    text-align: center;
-    color: #fff
+	position: absolute;
+	left: 14px;
+	top: 14px;
+	background: #f22800;
+	padding: 0 8px;
+	border-radius: 30px;
+	height: 20px;
+	line-height: 20px;
+	font-size: 12px;
+	letter-spacing: -0.3px;
+	text-align: center;
+	color: #fff
 }
 
 .chk_step1 ul.choice_area li a span.heart-eft {
-    -webkit-animation: heart-eft .8s ease-in-out infinite alternate;
-    animation: heart-eft .8s ease-in-out infinite alternate
+	-webkit-animation: heart-eft .8s ease-in-out infinite alternate;
+	animation: heart-eft .8s ease-in-out infinite alternate
 }
 
 @media only all and (max-width: 1024px) {
-    .chk_step1 {
-        padding:0 24px;
-        margin-top: 21px
-    }
-
-    .chk_step1 h2 {
-        font-size: 20px;
-        margin-bottom: 30px
-    }
-
-    .chk_step1 ul.choice_area {
-        margin-left: -18px
-    }
-
-    .chk_step1 ul.choice_area li {
-        width: calc(50% - 18px);
-        margin-left: 18px;
-        margin-bottom: 18px
-    }
-
-    .chk_step1 ul.choice_area li a {
-        width: 100%;
-        height: 90px;
-        border-radius: 15px;
-        font-size: 20px;
-        letter-spacing: -1px
-    }
+	.chk_step1 {
+		padding: 0 24px;
+		margin-top: 21px
+	}
+	.chk_step1 h2 {
+		font-size: 20px;
+		margin-bottom: 30px
+	}
+	.chk_step1 ul.choice_area {
+		margin-left: -18px
+	}
+	.chk_step1 ul.choice_area li {
+		width: calc(50% - 18px);
+		margin-left: 18px;
+		margin-bottom: 18px
+	}
+	.chk_step1 ul.choice_area li a {
+		width: 100%;
+		height: 90px;
+		border-radius: 15px;
+		font-size: 20px;
+		letter-spacing: -1px
+	}
 }
 
 .chk_step2 {
-    margin-top: 30px
+	margin-top: 30px
 }
 
 .chk_step2 .back_area {
-    margin-bottom: 70px
+	margin-bottom: 70px
 }
 
 .chk_step2 .back_area a {
-    max-width: 580px;
-    text-align: center;
-    width: 100%;
-    height: 80px;
-    display: block;
-    line-height: 80px;
-    padding: 0 10px;
-    border-radius: 20px;
-    background: #007eff;
-    margin: 0 auto;
-    font-family: "Noto Sans KR","Roboto","AppleGothic","sans-serif";
-    font-weight: 700;
-    font-size: 28px;
-    letter-spacing: -0.7px;
-    color: #fff
+	max-width: 580px;
+	text-align: center;
+	width: 100%;
+	height: 80px;
+	display: block;
+	line-height: 80px;
+	padding: 0 10px;
+	border-radius: 20px;
+	background: #007eff;
+	margin: 0 auto;
+	font-family: "Noto Sans KR", "Roboto", "AppleGothic", "sans-serif";
+	font-weight: 700;
+	font-size: 28px;
+	letter-spacing: -0.7px;
+	color: #fff
 }
 
 .chk_step2 .back_area a img {
-    width: 58px;
-    height: 28px;
-    vertical-align: middle;
-    margin-right: 20px
+	width: 58px;
+	height: 28px;
+	vertical-align: middle;
+	margin-right: 20px
 }
 
 .chk_step2 ul.choice_area {
-    margin-left: -50px
+	margin-left: -50px
 }
 
 .chk_step2 ul.choice_area li {
-    float: left;
-    width: calc(20% - 50px);
-    margin-left: 50px;
-    margin-bottom: 50px
+	float: left;
+	width: calc(20% - 50px);
+	margin-left: 50px;
+	margin-bottom: 50px
 }
 
 .chk_step2 ul.choice_area li a {
-    width: 100%;
-    height: 160px;
-    padding: 0 5px;
-    background: #fff;
-    display: flex;
-    border-radius: 20px;
-    justify-content: center;
-    align-items: center;
-    font-size: 28px;
-    font-family: "Noto Sans KR","Roboto","AppleGothic","sans-serif";
-    font-weight: 700;
-    letter-spacing: -0.7px;
-    text-align: center;
-    color: #1a1a1a;
-    position: relative;
-    box-shadow: 0px 5px 10px 3px rgba(0,0,0,.05);
-    transition: all .2s
+	width: 100%;
+	height: 160px;
+	padding: 0 5px;
+	background: #fff;
+	display: flex;
+	border-radius: 20px;
+	justify-content: center;
+	align-items: center;
+	font-size: 28px;
+	font-family: "Noto Sans KR", "Roboto", "AppleGothic", "sans-serif";
+	font-weight: 700;
+	letter-spacing: -0.7px;
+	text-align: center;
+	color: #1a1a1a;
+	position: relative;
+	box-shadow: 0px 5px 10px 3px rgba(0, 0, 0, .05);
+	transition: all .2s
 }
 
-.chk_step2 ul.choice_area li a:hover,.chk_step2 ul.choice_area li a.act {
-    background: #007eff;
-    color: #fff;
-    box-shadow: inherit
+.chk_step2 ul.choice_area li a:hover, .chk_step2 ul.choice_area li a.act
+	{
+	background: #007eff;
+	color: #fff;
+	box-shadow: inherit
 }
 
 .chk_step2 ul.choice_area li a span.tag {
-    position: absolute;
-    left: 5px;
-    top: -14px;
-    border-radius: 3px;
-    -webkit-border-radius: 3px;
-    -moz-border-radius: 3px;
-    -ms-border-radius: 3px;
-    -o-border-radius: 3px;
-    font-size: 16px;
-    padding: 0 12px;
-    background: #f22800;
-    color: #fff;
-    display: block;
-    height: 26px;
-    line-height: 26px;
-    text-align: center
+	position: absolute;
+	left: 5px;
+	top: -14px;
+	border-radius: 3px;
+	-webkit-border-radius: 3px;
+	-moz-border-radius: 3px;
+	-ms-border-radius: 3px;
+	-o-border-radius: 3px;
+	font-size: 16px;
+	padding: 0 12px;
+	background: #f22800;
+	color: #fff;
+	display: block;
+	height: 26px;
+	line-height: 26px;
+	text-align: center
 }
 
 @media only all and (max-width: 1024px) {
-    .chk_step2 ul.choice_area li a span.tag {
-        font-size:14px;
-        height: 24px;
-        line-height: 24px;
-        padding: 0 8px
-    }
+	.chk_step2 ul.choice_area li a span.tag {
+		font-size: 14px;
+		height: 24px;
+		line-height: 24px;
+		padding: 0 8px
+	}
 }
 
 @media only all and (max-width: 1024px) {
-    .chk_step2 {
-        padding:0 24px;
-        margin-top: 21px
-    }
-
-    .chk_step2 .back_area {
-        margin-bottom: 25px
-    }
-
-    .chk_step2 .back_area a {
-        max-width: 580px;
-        height: 50px;
-        line-height: 50px;
-        font-size: 18px;
-        border-radius: 15px;
-        letter-spacing: -0.9px
-    }
-
-    .chk_step2 .back_area a img {
-        width: 29px;
-        height: 14px;
-        margin-right: 10px
-    }
-
-    .chk_step2 ul.choice_area {
-        margin-left: -25px
-    }
-
-    .chk_step2 ul.choice_area li {
-        width: calc(33.33% - 25px);
-        margin-left: 25px;
-        margin-bottom: 25px
-    }
-
-    .chk_step2 ul.choice_area li a {
-        width: 100%;
-        height: 105px;
-        padding: 0 5px;
-        border-radius: 15px;
-        font-size: 20px;
-        letter-spacing: -1px
-    }
+	.chk_step2 {
+		padding: 0 24px;
+		margin-top: 21px
+	}
+	.chk_step2 .back_area {
+		margin-bottom: 25px
+	}
+	.chk_step2 .back_area a {
+		max-width: 580px;
+		height: 50px;
+		line-height: 50px;
+		font-size: 18px;
+		border-radius: 15px;
+		letter-spacing: -0.9px
+	}
+	.chk_step2 .back_area a img {
+		width: 29px;
+		height: 14px;
+		margin-right: 10px
+	}
+	.chk_step2 ul.choice_area {
+		margin-left: -25px
+	}
+	.chk_step2 ul.choice_area li {
+		width: calc(33.33% - 25px);
+		margin-left: 25px;
+		margin-bottom: 25px
+	}
+	.chk_step2 ul.choice_area li a {
+		width: 100%;
+		height: 105px;
+		padding: 0 5px;
+		border-radius: 15px;
+		font-size: 20px;
+		letter-spacing: -1px
+	}
 }
 
 .btn_more {
@@ -1629,7 +1681,7 @@ Base styles: contents layer
 .auction_choice dl dd.link a {
 	width: 160px;
 	height: 50px;
-	line-height: 50px;
+	line-height: 46px;
 	display: block;
 	text-align: center;
 	padding: 0 15px;
@@ -1679,7 +1731,7 @@ Base styles: contents layer
 	.auction_choice dl dd.link a {
 		width: 105px;
 		height: 40px;
-		line-height: 39px;
+		line-height: 36px;
 		padding: 0 5px;
 		border-radius: 25px;
 		font-size: 16px;
@@ -2422,7 +2474,7 @@ Base styles: contents layer
 }
 
 .auction_list .list_search .radio_group li {
-	margin: 4px 0 4px 12px;
+	margin: 4px 0 4px 8px;
 	float: left;
 }
 
@@ -2443,6 +2495,23 @@ Base styles: contents layer
 	width: 430px;
 	position: relative;
 	padding-right: 130px;
+}
+
+@media only all and (max-width: 1024px) {
+	.auction_list .list_search .sch_area.and_dates {
+		padding-right: 0
+	}
+	.auction_list .list_search .sch_area.and_dates>li.btn {
+		position: relative;
+		top: auto;
+		right: auto;
+		margin-top: 15px;
+		float: 0;
+		width: 100%
+	}
+	.auction_list .list_search .sch_area.and_dates>li.btn a.list_sch {
+		width: 100%
+	}
 }
 
 .auction_list .list_search .sch_area>li {
@@ -2486,6 +2555,25 @@ Base styles: contents layer
 	font-size: 18px;
 	font-family: "Noto Sans KR", "Roboto", "AppleGothic", "sans-serif";
 	font-weight: 700;
+}
+
+.auction_list .list_search .sch_area>li.before-date {
+	width: 45%
+}
+
+.auction_list .list_search .sch_area>li.after-date {
+	width: 45%
+}
+
+.auction_list .list_search .sch_area>li.and-date {
+	width: 10%;
+	text-align: center;
+	line-height: 52px;
+	font-size: 20px
+}
+
+.auction_list .list_search .sch_area>li select {
+	width: 100%
 }
 
 .auction_list .list_search .sch_area>li a.list_sch {
@@ -2680,17 +2768,20 @@ Base styles: contents layer
 	background: url(/static/images/guide/ico_excel.png) no-repeat 0 0;
 	background-size: 25px 25px;
 }
+
 .list_txt {
 	margin: 36px 20px 17px;
 	text-align: right;
-	float : left;
+	float: left;
 }
+
 .list_txt p {
 	font-size: 17px;
-    font-weight: 500;
+	font-weight: 500;
 }
-.list_txt p span{
-	color : #ff0000;
+
+.list_txt p span {
+	color: #ff0000;
 }
 
 @media only all and (max-width: 1024px) {
@@ -2698,7 +2789,7 @@ Base styles: contents layer
 		display: none;
 	}
 	.list_txt {
-		margin : 5px 0 5px 10px;
+		margin: 5px 0 5px 10px;
 	}
 	.list_txt p {
 		font-size: 15px;
@@ -2747,9 +2838,9 @@ Base styles: contents layer
 		border-radius: 0;
 		border-bottom: 1px solid #dbdbdb;
 	}
-/* 	.list_table .list_body ul{ */
-/* 		height : 0px; */
-/* 	} */
+	/* 	.list_table .list_body ul{ */
+	/* 		height : 0px; */
+	/* 	} */
 	.list_table .list_head dl dd {
 		color: #767676;
 		font-size: 16px;
@@ -2856,7 +2947,8 @@ Base styles: contents layer
 	width: 32px;
 	height: 32px;
 	display: inline-block;
-	background: url(/static/images/guide/fav_off.svg) no-repeat center center;
+	background: url(/static/images/guide/fav_off.svg) no-repeat center
+		center;
 	background-size: 32px 32px;
 	position: absolute;
 	right: 0;
@@ -2893,40 +2985,49 @@ Base styles: contents layer
 	width: 6%;
 }
 
-.schedule_tb .list_head dl dd.pd_ea, .schedule_tb .list_body dl dd.pd_ea{
+.schedule_tb .list_head dl dd.pd_ea, .schedule_tb .list_body dl dd.pd_ea
+	{
 	width: 12.5%;
 	text-align: center;
 }
 
-.schedule_tb .list_head dl dd.pd_sex, .schedule_tb .list_body dl dd.pd_sex{
+.schedule_tb .list_head dl dd.pd_sex, .schedule_tb .list_body dl dd.pd_sex
+	{
 	width: 5%;
 }
 
-.schedule_tb .list_head dl dd.pd_date, .schedule_tb .list_body dl dd.pd_date{
+.schedule_tb .list_head dl dd.pd_date, .schedule_tb .list_body dl dd.pd_date
+	{
 	width: 10%;
 }
 
-.schedule_tb .list_head dl dd.pd_kpn, .schedule_tb .list_body dl dd.pd_kpn{
+.schedule_tb .list_head dl dd.pd_kpn, .schedule_tb .list_body dl dd.pd_kpn
+	{
 	width: 7%;
 }
 
-.schedule_tb .list_head dl dd.pd_num1, .schedule_tb .list_body dl dd.pd_num1{
+.schedule_tb .list_head dl dd.pd_num1, .schedule_tb .list_body dl dd.pd_num1
+	{
 	width: 4%;
 }
 
-.schedule_tb .list_head dl dd.pd_num2, .schedule_tb .list_body dl dd.pd_num2{
+.schedule_tb .list_head dl dd.pd_num2, .schedule_tb .list_body dl dd.pd_num2
+	{
 	width: 4%;
 }
 
-.schedule_tb .list_head dl dd.pd_info, .schedule_tb .list_body dl dd.pd_info{
+.schedule_tb .list_head dl dd.pd_info, .schedule_tb .list_body dl dd.pd_info
+	{
 	width: 15%;
 }
 
-.schedule_tb .list_head dl dd.pd_pay, .schedule_tb .list_body dl dd.pd_pay{
+.schedule_tb .list_head dl dd.pd_pay, .schedule_tb .list_body dl dd.pd_pay
+	{
 	width: 8.5%;
 }
 
-.schedule_tb .list_head dl dd.pd_pav, .schedule_tb .list_body dl dd.pd_pav{
+.schedule_tb .list_head dl dd.pd_pav, .schedule_tb .list_body dl dd.pd_pav
+	{
 	width: 11%;
 }
 
@@ -2944,50 +3045,61 @@ Base styles: contents layer
 	display: block;
 }
 
-.schedule_tb_mo.pop_style .list_head dl, .schedule_tb_mo.pop_style .list_body dl{
+.schedule_tb_mo.pop_style .list_head dl, .schedule_tb_mo.pop_style .list_body dl
+	{
 	position: relative;
 }
 
-.schedule_tb_mo.pop_style .list_head .num, .schedule_tb_mo.pop_style .list_body .num{
+.schedule_tb_mo.pop_style .list_head .num, .schedule_tb_mo.pop_style .list_body .num
+	{
 	width: 9%;
 }
 
-.schedule_tb_mo.pop_style .list_head .pd_ea, .schedule_tb_mo.pop_style .list_body .pd_ea{
+.schedule_tb_mo.pop_style .list_head .pd_ea, .schedule_tb_mo.pop_style .list_body .pd_ea
+	{
 	width: 23%;
 }
 
-.schedule_tb_mo.pop_style .list_head .pd_ea a, .schedule_tb_mo.pop_style .list_body .pd_ea a{
+.schedule_tb_mo.pop_style .list_head .pd_ea a, .schedule_tb_mo.pop_style .list_body .pd_ea a
+	{
 	padding-right: 0 !important;
 }
 
-.schedule_tb_mo.pop_style .list_head .pd_ea p, .schedule_tb_mo.pop_style .list_body .pd_ea p{
+.schedule_tb_mo.pop_style .list_head .pd_ea p, .schedule_tb_mo.pop_style .list_body .pd_ea p
+	{
 	text-align: left;
 	margin-top: 10px;
 }
 
-.schedule_tb_mo.pop_style .list_head .pd_date, .schedule_tb_mo.pop_style .list_body .pd_date{
+.schedule_tb_mo.pop_style .list_head .pd_date, .schedule_tb_mo.pop_style .list_body .pd_date
+	{
 	width: 16%;
 }
 
-.schedule_tb_mo.pop_style .list_head .pd_sex, .schedule_tb_mo.pop_style .list_body .pd_sex{
+.schedule_tb_mo.pop_style .list_head .pd_sex, .schedule_tb_mo.pop_style .list_body .pd_sex
+	{
 	width: 14%;
 }
 
-.schedule_tb_mo.pop_style .list_head .pd_kpn, .schedule_tb_mo.pop_style .list_body .pd_kpn{
+.schedule_tb_mo.pop_style .list_head .pd_kpn, .schedule_tb_mo.pop_style .list_body .pd_kpn
+	{
 	width: 17%;
 }
 
-.schedule_tb_mo.pop_style .list_head .pd_pay, .schedule_tb_mo.pop_style .list_body .pd_pay{
+.schedule_tb_mo.pop_style .list_head .pd_pay, .schedule_tb_mo.pop_style .list_body .pd_pay
+	{
 	width: 21%;
 }
 
-.schedule_tb_mo.pop_style .list_head .pd_pav, .schedule_tb_mo.pop_style .list_body .pd_pav{
+.schedule_tb_mo.pop_style .list_head .pd_pav, .schedule_tb_mo.pop_style .list_body .pd_pav
+	{
 	position: absolute;
 	right: 15px;
 	bottom: 8px;
 }
 
-.schedule_tb_mo.pop_style .list_head .pd_pav a, .schedule_tb_mo.pop_style .list_body .pd_pav a{
+.schedule_tb_mo.pop_style .list_head .pd_pav a, .schedule_tb_mo.pop_style .list_body .pd_pav a
+	{
 	padding-right: 36px;
 	position: relative;
 	display: block;
@@ -3004,7 +3116,8 @@ Base styles: contents layer
 	width: 30px;
 	height: 30px;
 	display: inline-block;
-	background: url(/static/images/guide/fav_off.svg) no-repeat center center;
+	background: url(/static/images/guide/fav_off.svg) no-repeat center
+		center;
 	background-size: 30px 30px;
 	position: absolute;
 	right: 0;
@@ -3020,13 +3133,15 @@ Base styles: contents layer
 	background-size: 30px 30px;
 }
 
-.schedule_tb_mo.pop_style .list_head .pd_etc, .schedule_tb_mo.pop_style .list_body .pd_etc{
+.schedule_tb_mo.pop_style .list_head .pd_etc, .schedule_tb_mo.pop_style .list_body .pd_etc
+	{
 	padding-left: 9%;
 	padding-bottom: 10px;
 	width: calc(100% - 125px);
 }
 
-.schedule_tb_mo.pop_style .list_head .pd_etc p, .schedule_tb_mo.pop_style .list_body .pd_etc p{
+.schedule_tb_mo.pop_style .list_head .pd_etc p, .schedule_tb_mo.pop_style .list_body .pd_etc p
+	{
 	text-align: left;
 	margin-top: 10px;
 	color: #1a1a1a;
@@ -3060,16 +3175,16 @@ Base styles: contents layer
 		text-align: center !important;
 	}
 	.schedule_tb_mo .list_head .pd_ea a, .schedule_tb_mo .list_body .pd_ea a
-	{
+		{
 		padding-right: 0 !important;
 	}
 	.schedule_tb_mo .list_head .pd_ea p, .schedule_tb_mo .list_body .pd_ea p
-	{
+		{
 		text-align: left;
 		margin-top: 10px;
 	}
 	.schedule_tb_mo .list_head .pd_date, .schedule_tb_mo .list_body .pd_date
-	{
+		{
 		width: 16%;
 	}
 	.schedule_tb_mo .list_head .pd_sex, .schedule_tb_mo .list_body .pd_sex {
@@ -3087,7 +3202,7 @@ Base styles: contents layer
 		bottom: 10px;
 	}
 	.schedule_tb_mo .list_head .pd_pav a, .schedule_tb_mo .list_body .pd_pav a
-	{
+		{
 		padding-right: 36px;
 		position: relative;
 		display: block;
@@ -3098,7 +3213,7 @@ Base styles: contents layer
 		font-weight: 700;
 	}
 	.schedule_tb_mo .list_head .pd_pav a .ico_pav:after, .schedule_tb_mo .list_body .pd_pav a .ico_pav:after
-	{
+		{
 		content: "";
 		width: 30px;
 		height: 30px;
@@ -3112,7 +3227,7 @@ Base styles: contents layer
 		margin-top: -15px;
 	}
 	.schedule_tb_mo .list_head .pd_pav a.act .ico_pav:after, .schedule_tb_mo .list_body .pd_pav a.act .ico_pav:after
-	{
+		{
 		background: url(/static/images/guide/fav_on.svg) no-repeat center center;
 		-webkit-animation: fav 0.5s;
 		animation: fav 0.5s;
@@ -3124,7 +3239,7 @@ Base styles: contents layer
 		width: calc(100% - 125px);
 	}
 	.schedule_tb_mo .list_head .pd_etc p, .schedule_tb_mo .list_body .pd_etc p
-	{
+		{
 		text-align: left;
 		margin-top: 10px;
 		color: #1a1a1a;
@@ -3274,7 +3389,8 @@ Base styles: contents layer
 	overflow: hidden;
 }
 
-.auction_date .date_bottom li dl.dis_day dt *, .auction_date .date_bottom li dl.dis_day dd *{
+.auction_date .date_bottom li dl.dis_day dt *, .auction_date .date_bottom li dl.dis_day dd *
+	{
 	color: #dbdbdb !important;
 }
 
@@ -3576,90 +3692,114 @@ Base styles: contents layer
 	}
 }
 
-.auction_result .list_head dl dd.date, .auction_result .list_body dl dd.date{
+.auction_result .list_head dl dd.date, .auction_result .list_body dl dd.date
+	{
 	width: 10%;
 }
 
-.auction_result .list_head dl dd.num, .auction_result .list_body dl dd.num{
+.auction_result .list_head dl dd.num, .auction_result .list_body dl dd.num
+	{
 	width: 10%;
 }
 
-.auction_result .list_head dl dd.name, .auction_result .list_body dl dd.name{
+.auction_result .list_head dl dd.name, .auction_result .list_body dl dd.name
+	{
 	width: 6%;
 }
 
-.auction_result .list_head dl dd.pd_ea, .auction_result .list_body dl dd.pd_ea{
+.auction_result .list_head dl dd.pd_ea, .auction_result .list_body dl dd.pd_ea
+	{
 	width: 12.5%;
 	text-align: center;
 }
 
-.auction_result .list_head dl dd.pd_sex, .auction_result .list_body dl dd.pd_sex{
+.auction_result .list_head dl dd.pd_sex, .auction_result .list_body dl dd.pd_sex
+	{
 	width: 5%;
 }
 
-.auction_result .list_head dl dd.pd_kg, .auction_result .list_body dl dd.pd_kg{
+.auction_result .list_head dl dd.pd_kg, .auction_result .list_body dl dd.pd_kg
+	{
 	width: 7%;
 }
 
-.auction_result .list_head dl dd.pd_kpn, .auction_result .list_body dl dd.pd_kpn{
+.auction_result .list_head dl dd.pd_kpn, .auction_result .list_body dl dd.pd_kpn
+	{
 	width: 7%;
 }
 
-.auction_result .list_head dl dd.pd_num1, .auction_result .list_body dl dd.pd_num1{
+.auction_result .list_head dl dd.pd_num1, .auction_result .list_body dl dd.pd_num1
+	{
 	width: 4%;
 }
 
-.auction_result .list_head dl dd.pd_pay1, .auction_result .list_body dl dd.pd_pay1{
+.auction_result .list_head dl dd.pd_pay1, .auction_result .list_body dl dd.pd_pay1
+	{
 	width: 8%;
 }
 
-.auction_result .list_head dl dd.pd_pay2, .auction_result .list_body dl dd.pd_pay2{
+.auction_result .list_head dl dd.pd_pay2, .auction_result .list_body dl dd.pd_pay2
+	{
 	width: 8%;
 }
 
-.auction_result .list_head dl dd.pd_state, .auction_result .list_body dl dd.pd_state{
+.auction_result .list_head dl dd.pd_state, .auction_result .list_body dl dd.pd_state
+	{
 	width: 9%;
 }
 
-.auction_result .list_head dl dd.pd_etc, .auction_result .list_body dl dd.pd_etc{
+.auction_result .list_head dl dd.pd_etc, .auction_result .list_body dl dd.pd_etc
+	{
 	width: 13.5%;
 }
 
 @media only all and (max-width: 1024px) {
-	.auction_result .list_head dl dd.date, .auction_result .list_body dl dd.date{
+	.auction_result .list_head dl dd.date, .auction_result .list_body dl dd.date
+		{
 		display: none;
 	}
-	.auction_result .list_head dl dd.num, .auction_result .list_body dl dd.num{
+	.auction_result .list_head dl dd.num, .auction_result .list_body dl dd.num
+		{
 		width: 9%;
 	}
-	.auction_result .list_head dl dd.name, .auction_result .list_body dl dd.name{
+	.auction_result .list_head dl dd.name, .auction_result .list_body dl dd.name
+		{
 		display: none;
 	}
-	.auction_result .list_head dl dd.pd_ea, .auction_result .list_body dl dd.pd_ea{
+	.auction_result .list_head dl dd.pd_ea, .auction_result .list_body dl dd.pd_ea
+		{
 		width: 29%;
 	}
-	.auction_result .list_head dl dd.pd_sex, .auction_result .list_body dl dd.pd_sex{
+	.auction_result .list_head dl dd.pd_sex, .auction_result .list_body dl dd.pd_sex
+		{
 		width: 10%;
 	}
-	.auction_result .list_head dl dd.pd_kg, .auction_result .list_body dl dd.pd_kg{
+	.auction_result .list_head dl dd.pd_kg, .auction_result .list_body dl dd.pd_kg
+		{
 		width: 14%;
 	}
-	.auction_result .list_head dl dd.pd_kpn, .auction_result .list_body dl dd.pd_kpn{
+	.auction_result .list_head dl dd.pd_kpn, .auction_result .list_body dl dd.pd_kpn
+		{
 		display: none;
 	}
-	.auction_result .list_head dl dd.pd_num1, .auction_result .list_body dl dd.pd_num1{
+	.auction_result .list_head dl dd.pd_num1, .auction_result .list_body dl dd.pd_num1
+		{
 		display: none;
 	}
-	.auction_result .list_head dl dd.pd_pay1, .auction_result .list_body dl dd.pd_pay1{
+	.auction_result .list_head dl dd.pd_pay1, .auction_result .list_body dl dd.pd_pay1
+		{
 		width: 17%;
 	}
-	.auction_result .list_head dl dd.pd_pay2, .auction_result .list_body dl dd.pd_pay2{
+	.auction_result .list_head dl dd.pd_pay2, .auction_result .list_body dl dd.pd_pay2
+		{
 		width: 21%;
 	}
-	.auction_result .list_head dl dd.pd_state, .auction_result .list_body dl dd.pd_state{
+	.auction_result .list_head dl dd.pd_state, .auction_result .list_body dl dd.pd_state
+		{
 		display: none;
 	}
-	.auction_result .list_head dl dd.pd_etc, .auction_result .list_body dl dd.pd_etc{
+	.auction_result .list_head dl dd.pd_etc, .auction_result .list_body dl dd.pd_etc
+		{
 		display: none;
 	}
 	.auction_result .list_body li:nth-child(even) {
@@ -3683,24 +3823,29 @@ Base styles: contents layer
 	width: 15%;
 }
 
-.auction_buy .list_head dl dd.pd_total, .auction_buy .list_body dl dd.pd_total{
+.auction_buy .list_head dl dd.pd_total, .auction_buy .list_body dl dd.pd_total
+	{
 	width: 18%;
 }
 
-.auction_buy .list_head dl dd.pd_ea, .auction_buy .list_body dl dd.pd_ea{
+.auction_buy .list_head dl dd.pd_ea, .auction_buy .list_body dl dd.pd_ea
+	{
 	width: 13%;
 	text-align: center;
 }
 
-.auction_buy .list_head dl dd.pd_pay, .auction_buy .list_body dl dd.pd_pay{
+.auction_buy .list_head dl dd.pd_pay, .auction_buy .list_body dl dd.pd_pay
+	{
 	width: 16%;
 }
 
-.auction_buy .list_head dl dd.pd_view, .auction_buy .list_body dl dd.pd_view{
+.auction_buy .list_head dl dd.pd_view, .auction_buy .list_body dl dd.pd_view
+	{
 	width: 20%;
 }
 
-.auction_buy .list_head dl dd.pd_view a, .auction_buy .list_body dl dd.pd_view a{
+.auction_buy .list_head dl dd.pd_view a, .auction_buy .list_body dl dd.pd_view a
+	{
 	font-family: "Noto Sans KR", "Roboto", "AppleGothic", "sans-serif";
 	font-weight: 700;
 	color: #007eff;
@@ -3713,16 +3858,20 @@ Base styles: contents layer
 	.auction_buy .list_head dl dd.num, .auction_buy .list_body dl dd.num {
 		width: 9%;
 	}
-	.auction_buy .list_head dl dd.pd_total, .auction_buy .list_body dl dd.pd_total	{
+	.auction_buy .list_head dl dd.pd_total, .auction_buy .list_body dl dd.pd_total
+		{
 		width: 20%;
 	}
-	.auction_buy .list_head dl dd.pd_ea, .auction_buy .list_body dl dd.pd_ea{
+	.auction_buy .list_head dl dd.pd_ea, .auction_buy .list_body dl dd.pd_ea
+		{
 		width: 10%;
 	}
-	.auction_buy .list_head dl dd.pd_pay, .auction_buy .list_body dl dd.pd_pay	{
+	.auction_buy .list_head dl dd.pd_pay, .auction_buy .list_body dl dd.pd_pay
+		{
 		width: 17%;
 	}
-	.auction_buy .list_head dl dd.pd_view, .auction_buy .list_body dl dd.pd_view{
+	.auction_buy .list_head dl dd.pd_view, .auction_buy .list_body dl dd.pd_view
+		{
 		width: 12%;
 	}
 	.auction_buy .list_body li:nth-child(even) {
@@ -3738,32 +3887,39 @@ Base styles: contents layer
 	width: 8%;
 }
 
-.auction_bid .list_head dl dd.pd_ea, .auction_bid .list_body dl dd.pd_ea{
+.auction_bid .list_head dl dd.pd_ea, .auction_bid .list_body dl dd.pd_ea
+	{
 	width: 12%;
 	text-align: center;
 }
 
-.auction_bid .list_head dl dd.pd_sex, .auction_bid .list_body dl dd.pd_sex{
+.auction_bid .list_head dl dd.pd_sex, .auction_bid .list_body dl dd.pd_sex
+	{
 	width: 10%;
 }
 
-.auction_bid .list_head dl dd.pd_kg, .auction_bid .list_body dl dd.pd_kg{
+.auction_bid .list_head dl dd.pd_kg, .auction_bid .list_body dl dd.pd_kg
+	{
 	width: 12%;
 }
 
-.auction_bid .list_head dl dd.pd_pay1, .auction_bid .list_body dl dd.pd_pay1{
+.auction_bid .list_head dl dd.pd_pay1, .auction_bid .list_body dl dd.pd_pay1
+	{
 	width: 12%;
 }
 
-.auction_bid .list_head dl dd.pd_pay2, .auction_bid .list_body dl dd.pd_pay2{
+.auction_bid .list_head dl dd.pd_pay2, .auction_bid .list_body dl dd.pd_pay2
+	{
 	width: 12%;
 }
 
-.auction_bid .list_head dl dd.pd_pay3, .auction_bid .list_body dl dd.pd_pay3{
+.auction_bid .list_head dl dd.pd_pay3, .auction_bid .list_body dl dd.pd_pay3
+	{
 	width: 12%;
 }
 
-.auction_bid .list_head dl dd.pd_state, .auction_bid .list_body dl dd.pd_state{
+.auction_bid .list_head dl dd.pd_state, .auction_bid .list_body dl dd.pd_state
+	{
 	width: 12%;
 }
 
@@ -3774,29 +3930,36 @@ Base styles: contents layer
 	.auction_bid .list_head dl dd.num, .auction_bid .list_body dl dd.num {
 		width: 10%;
 	}
-	.auction_bid .list_head dl dd.pd_ea, .auction_bid .list_body dl dd.pd_ea{
+	.auction_bid .list_head dl dd.pd_ea, .auction_bid .list_body dl dd.pd_ea
+		{
 		width: 29%;
 		text-align: center;
 	}
-	.auction_bid .list_head dl dd.pd_sex, .auction_bid .list_body dl dd.pd_sex{
+	.auction_bid .list_head dl dd.pd_sex, .auction_bid .list_body dl dd.pd_sex
+		{
 		width: 10%;
 		text-overflow: ellipsis;
 		overflow: hidden;
 		white-space: nowrap;
 	}
-	.auction_bid .list_head dl dd.pd_kg, .auction_bid .list_body dl dd.pd_kg{
+	.auction_bid .list_head dl dd.pd_kg, .auction_bid .list_body dl dd.pd_kg
+		{
 		display: none;
 	}
-	.auction_bid .list_head dl dd.pd_pay1, .auction_bid .list_body dl dd.pd_pay1{
+	.auction_bid .list_head dl dd.pd_pay1, .auction_bid .list_body dl dd.pd_pay1
+		{
 		width: 17%;
 	}
-	.auction_bid .list_head dl dd.pd_pay2, .auction_bid .list_body dl dd.pd_pay2{
+	.auction_bid .list_head dl dd.pd_pay2, .auction_bid .list_body dl dd.pd_pay2
+		{
 		width: 17%;
 	}
-	.auction_bid .list_head dl dd.pd_pay3, .auction_bid .list_body dl dd.pd_pay3{
+	.auction_bid .list_head dl dd.pd_pay3, .auction_bid .list_body dl dd.pd_pay3
+		{
 		width: 17%;
 	}
-	.auction_bid .list_head dl dd.pd_state, .auction_bid .list_body dl dd.pd_state{
+	.auction_bid .list_head dl dd.pd_state, .auction_bid .list_body dl dd.pd_state
+		{
 		display: none;
 	}
 	.auction_bid .list_body li:nth-child(even) {
@@ -3827,40 +3990,49 @@ Base styles: contents layer
 	width: 6%;
 }
 
-.auction_see .list_head dl dd.pd_ea, .auction_see .list_body dl dd.pd_ea{
+.auction_see .list_head dl dd.pd_ea, .auction_see .list_body dl dd.pd_ea
+	{
 	width: 12.5%;
 	text-align: center;
 }
 
-.auction_see .list_head dl dd.pd_sex, .auction_see .list_body dl dd.pd_sex{
+.auction_see .list_head dl dd.pd_sex, .auction_see .list_body dl dd.pd_sex
+	{
 	width: 5%;
 }
 
-.auction_see .list_head dl dd.pd_kg, .auction_see .list_body dl dd.pd_kg{
+.auction_see .list_head dl dd.pd_kg, .auction_see .list_body dl dd.pd_kg
+	{
 	width: 7%;
 }
 
-.auction_see .list_head dl dd.pd_kpn, .auction_see .list_body dl dd.pd_kpn{
+.auction_see .list_head dl dd.pd_kpn, .auction_see .list_body dl dd.pd_kpn
+	{
 	width: 7%;
 }
 
-.auction_see .list_head dl dd.pd_num1, .auction_see .list_body dl dd.pd_num1{
+.auction_see .list_head dl dd.pd_num1, .auction_see .list_body dl dd.pd_num1
+	{
 	width: 4%;
 }
 
-.auction_see .list_head dl dd.pd_pay1, .auction_see .list_body dl dd.pd_pay1{
+.auction_see .list_head dl dd.pd_pay1, .auction_see .list_body dl dd.pd_pay1
+	{
 	width: 8%;
 }
 
-.auction_see .list_head dl dd.pd_pay2, .auction_see .list_body dl dd.pd_pay2{
+.auction_see .list_head dl dd.pd_pay2, .auction_see .list_body dl dd.pd_pay2
+	{
 	width: 8%;
 }
 
-.auction_see .list_head dl dd.pd_state, .auction_see .list_body dl dd.pd_state{
+.auction_see .list_head dl dd.pd_state, .auction_see .list_body dl dd.pd_state
+	{
 	width: 9%;
 }
 
-.auction_see .list_head dl dd.pd_etc, .auction_see .list_body dl dd.pd_etc{
+.auction_see .list_head dl dd.pd_etc, .auction_see .list_body dl dd.pd_etc
+	{
 	width: 13.5%;
 }
 
@@ -3874,31 +4046,40 @@ Base styles: contents layer
 	.auction_see .list_head dl dd.name, .auction_see .list_body dl dd.name {
 		width: 15%;
 	}
-	.auction_see .list_head dl dd.pd_ea, .auction_see .list_body dl dd.pd_ea{
+	.auction_see .list_head dl dd.pd_ea, .auction_see .list_body dl dd.pd_ea
+		{
 		display: none;
 	}
-	.auction_see .list_head dl dd.pd_sex, .auction_see .list_body dl dd.pd_sex	{
+	.auction_see .list_head dl dd.pd_sex, .auction_see .list_body dl dd.pd_sex
+		{
 		width: 16%;
 	}
-	.auction_see .list_head dl dd.pd_kg, .auction_see .list_body dl dd.pd_kg{
+	.auction_see .list_head dl dd.pd_kg, .auction_see .list_body dl dd.pd_kg
+		{
 		width: 20%;
 	}
-	.auction_see .list_head dl dd.pd_kpn, .auction_see .list_body dl dd.pd_kpn{
+	.auction_see .list_head dl dd.pd_kpn, .auction_see .list_body dl dd.pd_kpn
+		{
 		display: none;
 	}
-	.auction_see .list_head dl dd.pd_num1, .auction_see .list_body dl dd.pd_num1{
+	.auction_see .list_head dl dd.pd_num1, .auction_see .list_body dl dd.pd_num1
+		{
 		display: none;
 	}
-	.auction_see .list_head dl dd.pd_pay1, .auction_see .list_body dl dd.pd_pay1{
+	.auction_see .list_head dl dd.pd_pay1, .auction_see .list_body dl dd.pd_pay1
+		{
 		width: 20%;
 	}
-	.auction_see .list_head dl dd.pd_pay2, .auction_see .list_body dl dd.pd_pay2{
+	.auction_see .list_head dl dd.pd_pay2, .auction_see .list_body dl dd.pd_pay2
+		{
 		width: 20%;
 	}
-	.auction_see .list_head dl dd.pd_state, .auction_see .list_body dl dd.pd_state{
+	.auction_see .list_head dl dd.pd_state, .auction_see .list_body dl dd.pd_state
+		{
 		display: none;
 	}
-	.auction_see .list_head dl dd.pd_etc, .auction_see .list_body dl dd.pd_etc{
+	.auction_see .list_head dl dd.pd_etc, .auction_see .list_body dl dd.pd_etc
+		{
 		display: none;
 	}
 	.auction_see .list_body li:nth-child(even) {
@@ -4015,7 +4196,8 @@ Base styles: contents layer
 	background: #e6efff;
 }
 
-.auction_seeBox.calculator_type .seeBox_bottom .seeBox_slick .count-layer{
+.auction_seeBox.calculator_type .seeBox_bottom .seeBox_slick .count-layer
+	{
 	position: absolute;
 	left: 0;
 	right: 0;
@@ -4025,7 +4207,8 @@ Base styles: contents layer
 	z-index: 5;
 }
 
-.auction_seeBox.calculator_type .seeBox_bottom .seeBox_slick .count-layer p{
+.auction_seeBox.calculator_type .seeBox_bottom .seeBox_slick .count-layer p
+	{
 	color: #81c4ff;
 	font-size: 240px;
 	font-family: "Noto Sans KR", "Roboto", "AppleGothic", "sans-serif";
@@ -4037,7 +4220,8 @@ Base styles: contents layer
 }
 
 @media only all and (max-width: 640px) {
-	.auction_seeBox.calculator_type .seeBox_bottom .seeBox_slick .count-layer p	{
+	.auction_seeBox.calculator_type .seeBox_bottom .seeBox_slick .count-layer p
+		{
 		font-size: 150px;
 		margin-top: -95px;
 	}
@@ -4048,10 +4232,12 @@ Base styles: contents layer
 		padding: 0 0 0;
 		border-radius: 4px;
 	}
-	.auction_seeBox.calculator_type .seeBox_bottom .seeBox_slick .seeBox_slick_inner {
+	.auction_seeBox.calculator_type .seeBox_bottom .seeBox_slick .seeBox_slick_inner
+		{
 		padding: 0 4px 4px;
 	}
-	.auction_seeBox.calculator_type .seeBox_bottom .seeBox_slick .slick-dots {
+	.auction_seeBox.calculator_type .seeBox_bottom .seeBox_slick .slick-dots
+		{
 		bottom: 5px;
 	}
 }
@@ -4192,12 +4378,14 @@ Base styles: contents layer
 	width: 100%;
 }
 
-.auction_seeBox .seeBox_bottom .seeBox_slick:only-child .seeBox_slick_inner {
+.auction_seeBox .seeBox_bottom .seeBox_slick:only-child .seeBox_slick_inner
+	{
 	padding: 4px 50px 34px;
 }
 
 @media only all and (min-width: 1023px) {
-	.auction_seeBox .seeBox_bottom .seeBox_slick:only-child .seeBox_slick_inner {
+	.auction_seeBox .seeBox_bottom .seeBox_slick:only-child .seeBox_slick_inner
+		{
 		padding: 4px 4px 25px;
 	}
 }
@@ -4218,7 +4406,8 @@ Base styles: contents layer
 	bottom: 0;
 }
 
-.auction_seeBox .seeBox_bottom .seeBox_slick li.video_item .video_ready {
+.auction_seeBox .seeBox_bottom .seeBox_slick li.video_item .video_ready
+	{
 	position: absolute;
 	left: 0;
 	right: 0;
@@ -4232,7 +4421,8 @@ Base styles: contents layer
 	color: #fff;
 }
 
-.auction_seeBox .seeBox_bottom .seeBox_slick li.video_item .video_ready p {
+.auction_seeBox .seeBox_bottom .seeBox_slick li.video_item .video_ready p
+	{
 	font-size: 30px;
 	font-family: "Noto Sans KR", "Roboto", "AppleGothic", "sans-serif";
 	font-weight: 700;
@@ -4240,7 +4430,8 @@ Base styles: contents layer
 	text-align: center;
 }
 
-.auction_seeBox .seeBox_bottom .seeBox_slick li.video_item .video_ready p span {
+.auction_seeBox .seeBox_bottom .seeBox_slick li.video_item .video_ready p span
+	{
 	color: #76baff;
 }
 
@@ -4257,25 +4448,29 @@ Base styles: contents layer
 	border-radius: 4px;
 }
 
-.auction_seeBox .seeBox_bottom .seeBox_slick .seeBox_slick_inner .seeBox-cell {
+.auction_seeBox .seeBox_bottom .seeBox_slick .seeBox_slick_inner .seeBox-cell
+	{
 	margin-left: -4px;
 	margin-bottom: 4px;
 }
 
-.auction_seeBox .seeBox_bottom .seeBox_slick .seeBox_slick_inner .seeBox-cell li {
+.auction_seeBox .seeBox_bottom .seeBox_slick .seeBox_slick_inner .seeBox-cell li
+	{
 	float: left;
 	width: 25%;
 	padding-left: 4px;
 }
 
-.auction_seeBox .seeBox_bottom .seeBox_slick .seeBox_slick_inner .seeBox-cell li dl	{
+.auction_seeBox .seeBox_bottom .seeBox_slick .seeBox_slick_inner .seeBox-cell li dl
+	{
 	background: #ffffff;
 	padding: 2px 2px;
 	height: 98px;
 	border-radius: 4px;
 }
 
-.auction_seeBox .seeBox_bottom .seeBox_slick .seeBox_slick_inner .seeBox-cell li dl dt{
+.auction_seeBox .seeBox_bottom .seeBox_slick .seeBox_slick_inner .seeBox-cell li dl dt
+	{
 	font-family: "Noto Sans KR", "Roboto", "AppleGothic", "sans-serif";
 	font-weight: 700;
 	font-size: 18px;
@@ -4288,7 +4483,8 @@ Base styles: contents layer
 	white-space: nowrap;
 }
 
-.auction_seeBox .seeBox_bottom .seeBox_slick .seeBox_slick_inner .seeBox-cell li dl dd{
+.auction_seeBox .seeBox_bottom .seeBox_slick .seeBox_slick_inner .seeBox-cell li dl dd
+	{
 	font-family: "Noto Sans KR", "Roboto", "AppleGothic", "sans-serif";
 	font-weight: 800;
 	font-size: 24px;
@@ -4302,7 +4498,8 @@ Base styles: contents layer
 	white-space: nowrap;
 }
 
-.auction_seeBox .seeBox_bottom .seeBox_slick .seeBox_slick_inner .seeBox-cell li.cell_3{
+.auction_seeBox .seeBox_bottom .seeBox_slick .seeBox_slick_inner .seeBox-cell li.cell_3
+	{
 	width: 75% !important;
 }
 
@@ -4330,7 +4527,8 @@ Base styles: contents layer
 	}
 }
 
-@media only screen and (min-device-width: 360px) and (max-device-height:740px) and (orientation: portrait) {
+@media only screen and (min-device-width: 360px) and
+	(max-device-height:740px) and (orientation: portrait) {
 	.auction_seeBox .seeBox_bottom .seeBox_slick .mo_seeBox {
 		padding: 5px 30px 20px;
 	}
@@ -4366,7 +4564,8 @@ Base styles: contents layer
 	padding: 2px 0;
 }
 
-.auction_seeBox .seeBox_bottom .seeBox_slick .mo_seeBox ul li.harf-list dd{
+.auction_seeBox .seeBox_bottom .seeBox_slick .mo_seeBox ul li.harf-list dd
+	{
 	width: calc(100% - 80px);
 	white-space: nowrap;
 	overflow: hidden;
@@ -4376,7 +4575,8 @@ Base styles: contents layer
 	width: 100%;
 }
 
-.auction_seeBox .seeBox_bottom .seeBox_slick .mo_seeBox ul li.full-li dd{
+.auction_seeBox .seeBox_bottom .seeBox_slick .mo_seeBox ul li.full-li dd
+	{
 	width: calc(100% - 80px);
 	white-space: nowrap;
 	overflow: hidden;
@@ -4492,15 +4692,13 @@ Base styles: contents layer
 
 .slider .slick-arrow.slick-prev {
 	left: 0;
-	background: url(/static/images/guide/slider_prev.svg) no-repeat center
-		center;
+	background: url(/static/images/guide/slider_prev.svg) no-repeat center center;
 	background-size: 22px 36px !important;
 }
 
 .slider .slick-arrow.slick-next {
 	right: 0;
-	background: url(/static/images/guide/slider_next.svg) no-repeat center
-		center;
+	background: url(/static/images/guide/slider_next.svg) no-repeat center center;
 	background-size: 22px 36px !important;
 }
 
@@ -4559,7 +4757,8 @@ Base styles: contents layer
 	}
 }
 
-@media only screen and (min-device-width: 360px) and (max-device-height:740px) and (orientation: portrait) {
+@media only screen and (min-device-width: 360px) and
+	(max-device-height:740px) and (orientation: portrait) {
 	.slider .slick-dots {
 		bottom: 5px !important;
 	}
@@ -4570,7 +4769,8 @@ Base styles: contents layer
 	background: #e6efff;
 }
 
-@media only screen and (min-device-width: 360px) and (max-device-height:740px) and (orientation: portrait) {
+@media only screen and (min-device-width: 360px) and
+	(max-device-height:740px) and (orientation: portrait) {
 	.auction_calculator {
 		padding: 7px 10px 15px;
 	}
@@ -4599,7 +4799,8 @@ Base styles: contents layer
 	color: #007eff;
 }
 
-@media only screen and (min-device-width: 360px) and (max-device-height:740px) and (orientation: portrait) {
+@media only screen and (min-device-width: 360px) and
+	(max-device-height:740px) and (orientation: portrait) {
 	.auction_calculator .calculator_top p {
 		margin-bottom: 7px;
 	}
@@ -4671,7 +4872,8 @@ Base styles: contents layer
 	background-size: 37px 37px;
 }
 
-@media only screen and (min-device-width: 360px) and (max-device-height:740px) and (orientation: portrait) {
+@media only screen and (min-device-width: 360px) and
+	(max-device-height:740px) and (orientation: portrait) {
 	.auction_calculator .calculator_top .auc-txt {
 		margin-bottom: 7px;
 	}
@@ -4742,7 +4944,8 @@ Base styles: contents layer
 	font-weight: 800;
 }
 
-@media only screen and (min-device-width: 360px) and (max-device-height:740px) and (orientation: portrait) {
+@media only screen and (min-device-width: 360px) and
+	(max-device-height:740px) and (orientation: portrait) {
 	.auction_calculator .calculator_top dl {
 		height: 60px;
 	}
@@ -4779,7 +4982,8 @@ Base styles: contents layer
 	position: relative;
 }
 
-@media only screen and (min-device-width: 360px) and (max-device-height:740px) and (orientation: portrait) {
+@media only screen and (min-device-width: 360px) and
+	(max-device-height:740px) and (orientation: portrait) {
 	.auction_calculator .calculator_bottom {
 		margin-top: 7px;
 	}
@@ -4815,30 +5019,36 @@ Base styles: contents layer
 	color: #ffffff;
 }
 
-.auction_calculator .calculator_bottom .calculator-cell li button.num_summit{
+.auction_calculator .calculator_bottom .calculator-cell li button.num_summit
+	{
 	background: #007eff;
 }
 
-.auction_calculator .calculator_bottom .calculator-cell li button.num_back{
+.auction_calculator .calculator_bottom .calculator-cell li button.num_back
+	{
 	text-indent: -9999px;
 	background: #76baff url(/static/images/guide/btn_back.svg) no-repeat
 		center center;
 	background-size: 40px 40px;
 }
 
-.auction_calculator .calculator_bottom .calculator-cell li button.num_cancle{
+.auction_calculator .calculator_bottom .calculator-cell li button.num_cancle
+	{
 	background: #f22800;
 }
 
-.auction_calculator .calculator_bottom .calculator-cell li button:active{
+.auction_calculator .calculator_bottom .calculator-cell li button:active
+	{
 	background: #007eff;
 }
 
-.auction_calculator .calculator_bottom .calculator-cell li button.before_btn{
+.auction_calculator .calculator_bottom .calculator-cell li button.before_btn
+	{
 	background: #ffaf00;
 }
 
-@media only screen and (min-device-width: 360px) and (max-device-height:740px) and (orientation: portrait) {
+@media only screen and (min-device-width: 360px) and
+	(max-device-height:740px) and (orientation: portrait) {
 	.auction_calculator .calculator_bottom .calculator-cell li button {
 		height: 42px;
 		font-size: 26px;
@@ -4852,7 +5062,8 @@ Base styles: contents layer
 	}
 }
 
-.auction_calculator .calculator_bottom .calculator-cell.ty2 li:nth-child(2){
+.auction_calculator .calculator_bottom .calculator-cell.ty2 li:nth-child(2)
+	{
 	width: 50%;
 }
 
@@ -4872,11 +5083,13 @@ Base styles: contents layer
 	height: 100%;
 }
 
-.auction_calculator .calculator_bottom .calculator-cell.btn-summit li button{
+.auction_calculator .calculator_bottom .calculator-cell.btn-summit li button
+	{
 	height: 100%;
 }
 
-@media only screen and (min-device-width: 360px) and (max-device-height:740px) and (orientation: portrait) {
+@media only screen and (min-device-width: 360px) and
+	(max-device-height:740px) and (orientation: portrait) {
 	.auction_calculator .calculator_bottom .calculator-cell.btn-summit {
 		top: 47px;
 	}
@@ -4928,1071 +5141,1329 @@ Base styles: contents layer
 }
 
 .billboard-view {
-    background: #000;
-    width: 100%;
-    height: 100%
+	background: #000;
+	width: 100%;
+	height: 100%
 }
 
 .billboard-view table {
-    table-layout: fixed;
-    width: 100%;
-    height: 100%;
-    border: 5px solid #000
+	table-layout: fixed;
+	width: 100%;
+	height: 100%;
+	border: 5px solid #000
 }
 
 .billboard-view table td {
-    height: 33.33%;
-    background: #1b1b1b;
-    border: 5px solid #000;
-    overflow: hidden
+	height: 33.33%;
+	background: #1b1b1b;
+	border: 5px solid #000;
+	overflow: hidden
 }
 
 .billboard-view table td.bg-blue {
-    background: #008fff
+	background: #008fff
 }
 
 .billboard-view table td.bg-blue p {
-    font-family: "Noto Sans KR","Roboto","AppleGothic","sans-serif";
-    font-weight: 400;
-    letter-spacing: -14.4px
+	font-family: "Noto Sans KR", "Roboto", "AppleGothic", "sans-serif";
+	font-weight: 400;
+	letter-spacing: -14.4px
 }
 
 @media only all and (max-width: 1600px) {
-    .billboard-view table td.bg-blue p {
-        letter-spacing:-2.8px
-    }
+	.billboard-view table td.bg-blue p {
+		letter-spacing: -2.8px
+	}
 }
 
 .billboard-view table td p {
-    text-align: center;
-    color: #fff;
-    font-family: "Noto Sans KR","Roboto","AppleGothic","sans-serif";
-    font-weight: 700;
-    letter-spacing: -8px
+	text-align: center;
+	color: #fff;
+	font-family: "Noto Sans KR", "Roboto", "AppleGothic", "sans-serif";
+	font-weight: 700;
+	letter-spacing: -8px
 }
 
 .billboard-view table td p.txt-green {
-    color: #2fff00;
-    letter-spacing: -2.8px
+	color: #2fff00;
+	letter-spacing: -2.8px
 }
 
 .billboard-view table td p.fz60 {
-    font-size: 60px
+	font-size: 60px
 }
 
 .billboard-view table td p.fz80 {
-    font-size: 80px
+	font-size: 80px
 }
 
 .billboard-view table td p.fz100 {
-    font-size: 100px
+	font-size: 100px
 }
 
 .billboard-view table td p.fz150 {
-    font-size: 150px
+	font-size: 150px
 }
 
 .billboard-view table td p.fz180 {
-    font-size: 180px
+	font-size: 180px
 }
 
 .billboard-view table td p.txt-count {
-    font-size: 180px;
-    color: #2fff00;
-    letter-spacing: -2.8px;
-    font-family: "Noto Sans KR","Roboto","AppleGothic","sans-serif";
-    font-weight: 400
+	font-size: 180px;
+	color: #2fff00;
+	letter-spacing: -2.8px;
+	font-family: "Noto Sans KR", "Roboto", "AppleGothic", "sans-serif";
+	font-weight: 400
 }
 
 .billboard-view table td p.txt-count b {
-    color: #f22800
+	color: #f22800
 }
 
 @media only all and (max-width: 1600px) {
-    .billboard-view table td p {
-        letter-spacing:-2.8px
-    }
-
-    .billboard-view table td p.txt-green {
-        letter-spacing: -1px
-    }
-
-    .billboard-view table td p.fz60 {
-        font-size: 30px
-    }
-
-    .billboard-view table td p.fz80 {
-        font-size: 40px
-    }
-
-    .billboard-view table td p.fz100 {
-        font-size: 50px
-    }
-
-    .billboard-view table td p.fz150 {
-        font-size: 75px
-    }
-
-    .billboard-view table td p.fz180 {
-        font-size: 90px
-    }
-
-    .billboard-view table td p.txt-count {
-        font-size: 90px;
-        letter-spacing: -1px
-    }
+	.billboard-view table td p {
+		letter-spacing: -2.8px
+	}
+	.billboard-view table td p.txt-green {
+		letter-spacing: -1px
+	}
+	.billboard-view table td p.fz60 {
+		font-size: 30px
+	}
+	.billboard-view table td p.fz80 {
+		font-size: 40px
+	}
+	.billboard-view table td p.fz100 {
+		font-size: 50px
+	}
+	.billboard-view table td p.fz150 {
+		font-size: 75px
+	}
+	.billboard-view table td p.fz180 {
+		font-size: 90px
+	}
+	.billboard-view table td p.txt-count {
+		font-size: 90px;
+		letter-spacing: -1px
+	}
 }
 
 .monitoring-view {
-    background: #0a1931;
-    width: 100%;
-    height: 100%
+	background: #0a1931;
+	width: 100%;
+	height: 100%
 }
 
 .monitoring-view .monitoring-head {
-    height: 70px;
-    line-height: 80px;
-    position: relative;
-    background: #0a1931
+	height: 70px;
+	line-height: 80px;
+	position: relative;
+	background: #0a1931
 }
 
 .monitoring-view .monitoring-head h2 {
-    position: absolute;
-    left: 10px;
-    font-size: 20px;
-    color: #fff
+	position: absolute;
+	left: 10px;
+	font-size: 20px;
+	color: #fff
 }
 
 @media all and (min-width: 1600px) {
-    .monitoring-view .monitoring-head h2 {
-        font-size:26px
-    }
+	.monitoring-view .monitoring-head h2 {
+		font-size: 26px
+	}
 }
 
 .monitoring-view .monitoring-head p {
-    text-align: center;
-    font-size: 20px;
-    color: #ffe135
+	text-align: center;
+	font-size: 20px;
+	color: #ffe135
 }
 
 @media all and (min-width: 1600px) {
-    .monitoring-view .monitoring-head p {
-        font-size:24px
-    }
+	.monitoring-view .monitoring-head p {
+		font-size: 24px
+	}
 }
 
 .monitoring-view .table-inner {
-    height: calc(100% - 70px)
+	height: calc(100% - 70px)
 }
 
 .monitoring-view .table-inner .table-info {
-    border: 10px solid #0a1931;
-    height: 10%;
-    min-height: 130px
+	border: 10px solid #0a1931;
+	height: 10%;
+	min-height: 130px
 }
 
 .monitoring-view .table-inner .table-info ul {
-    height: 100%
+	height: 100%
 }
 
 .monitoring-view .table-inner .table-info ul li {
-    float: left;
-    width: 61%;
-    height: 100%
+	float: left;
+	width: 61%;
+	height: 100%
 }
 
 .monitoring-view .table-inner .table-info ul li+li {
-    padding-left: 10px;
-    width: 39%
+	padding-left: 10px;
+	width: 39%
 }
 
 .monitoring-view .table-inner .table-info ul li .tb-box {
-    border-radius: 10px;
-    overflow: hidden;
-    height: 100%
+	border-radius: 10px;
+	overflow: hidden;
+	height: 100%
 }
 
 .monitoring-view .table-inner .table-info table {
-    table-layout: fixed;
-    width: 100%;
-    height: 100%
+	table-layout: fixed;
+	width: 100%;
+	height: 100%
 }
 
 .monitoring-view .table-inner .table-info table td {
-    text-align: center;
-    border: 10px solid #fff;
-    vertical-align: middle
+	text-align: center;
+	border: 10px solid #fff;
+	vertical-align: middle
 }
 
 .monitoring-view .table-inner .table-info table td.td-ico {
-    text-align: center
+	text-align: center
 }
 
 .monitoring-view .table-inner .table-info table td.td-ico .ico {
-    width: 100%;
-    height: 100%;
-    background: url(/static/images/guide/ico-mt.png) no-repeat center center;
-    background-size: contain;
-    text-indent: -99999px
+	width: 100%;
+	height: 100%;
+	background: url(/static/images/guide/ico-mt.png) no-repeat center center;
+	background-size: contain;
+	text-indent: -99999px
 }
 
 .monitoring-view .table-inner .table-info table td.bg-deep {
-    background: #0082e5;
-    color: #fff;
-    font-size: 18px;
-    font-family: "Noto Sans KR","Roboto","AppleGothic","sans-serif";
-    font-weight: 700
+	background: #0082e5;
+	color: #fff;
+	font-size: 18px;
+	font-family: "Noto Sans KR", "Roboto", "AppleGothic", "sans-serif";
+	font-weight: 700
 }
 
 @media all and (min-width: 1600px) {
-    .monitoring-view .table-inner .table-info table td.bg-deep {
-        font-size:22px
-    }
+	.monitoring-view .table-inner .table-info table td.bg-deep {
+		font-size: 22px
+	}
 }
 
 .monitoring-view .table-inner .table-info table td.bg-blue {
-    background: #e6efff;
-    color: #0a1931;
-    font-size: 18px
+	background: #e6efff;
+	color: #0a1931;
+	font-size: 18px
 }
 
 @media all and (min-width: 1600px) {
-    .monitoring-view .table-inner .table-info table td.bg-blue {
-        font-size:22px
-    }
+	.monitoring-view .table-inner .table-info table td.bg-blue {
+		font-size: 22px
+	}
 }
 
 .monitoring-view .table-inner .table-info table td.bg-dark {
-    background: #0a1931;
-    color: #0a1931;
-    font-size: 18px
+	background: #0a1931;
+	color: #0a1931;
+	font-size: 18px
 }
 
 @media all and (min-width: 1600px) {
-    .monitoring-view .table-inner .table-info table td.bg-dark {
-        font-size:22px
-    }
+	.monitoring-view .table-inner .table-info table td.bg-dark {
+		font-size: 22px
+	}
 }
 
 .monitoring-view .table-inner .table-info table td.bg-dark p {
-    font-size: 30px;
-    font-family: "Noto Sans KR","Roboto","AppleGothic","sans-serif";
-    font-weight: 700;
-    margin: 1% 0
+	font-size: 30px;
+	font-family: "Noto Sans KR", "Roboto", "AppleGothic", "sans-serif";
+	font-weight: 700;
+	margin: 1% 0
 }
 
 @media all and (min-width: 2560px) {
-    .monitoring-view .table-inner .table-info table td.bg-dark p {
-        font-size:32px
-    }
+	.monitoring-view .table-inner .table-info table td.bg-dark p {
+		font-size: 32px
+	}
 }
 
 .monitoring-view .table-inner .table-info table td.bg-dark .tit1 {
-    color: #81c4ff
+	color: #81c4ff
 }
 
 .monitoring-view .table-inner .table-info table td.bg-dark .tit2 {
-    color: #008fff
+	color: #008fff
 }
 
 .monitoring-view .table-inner .table-info table td.mt-deep {
-    background: #008fff
+	background: #008fff
 }
 
 .monitoring-view .table-inner .table-info table td.mt-deep button {
-    background: #008fff;
-    color: #fff;
-    font-size: 32px;
-    font-family: "Noto Sans KR","Roboto","AppleGothic","sans-serif";
-    font-weight: 700;
-    width: 100%;
-    height: 100%;
-    display: block;
-    cursor: pointer
+	background: #008fff;
+	color: #fff;
+	font-size: 32px;
+	font-family: "Noto Sans KR", "Roboto", "AppleGothic", "sans-serif";
+	font-weight: 700;
+	width: 100%;
+	height: 100%;
+	display: block;
+	cursor: pointer
 }
 
 @media all and (min-width: 1600px) {
-    .monitoring-view .table-inner .table-info table td.mt-deep button {
-        font-size:38px
-    }
+	.monitoring-view .table-inner .table-info table td.mt-deep button {
+		font-size: 38px
+	}
 }
 
 .monitoring-view .table-inner .table-info table td.mt-gray {
-    background: #ccc
+	background: #ccc
 }
 
 .monitoring-view .table-inner .table-info table td.mt-gray button {
-    background: #ccc;
-    color: #0a1931;
-    font-size: 32px;
-    width: 100%;
-    height: 100%;
-    display: block;
-    cursor: pointer
+	background: #ccc;
+	color: #0a1931;
+	font-size: 32px;
+	width: 100%;
+	height: 100%;
+	display: block;
+	cursor: pointer
 }
 
 @media all and (min-width: 1600px) {
-    .monitoring-view .table-inner .table-info table td.mt-gray button {
-        font-size:38px
-    }
+	.monitoring-view .table-inner .table-info table td.mt-gray button {
+		font-size: 38px
+	}
 }
 
 .monitoring-view .table-inner .table-mt {
-    border-radius: 10px;
-    height: 90%;
-    border-left: 10px solid #0a1931;
-    border-right: 10px solid #0a1931;
-    border-bottom: 10px solid #0a1931
+	border-radius: 10px;
+	height: 90%;
+	border-left: 10px solid #0a1931;
+	border-right: 10px solid #0a1931;
+	border-bottom: 10px solid #0a1931
 }
 
 @media all and (max-height: 1368px) {
-    .monitoring-view .table-inner .table-mt {
-        height:calc(100% - 130px)
-    }
+	.monitoring-view .table-inner .table-mt {
+		height: calc(100% - 130px)
+	}
 }
 
 .monitoring-view .table-inner .table-mt .mt-tb-inner {
-    height: 100%;
-    -webkit-border-radius: 10px;
-    -moz-border-radius: 10px;
-    -ms-border-radius: 10px;
-    -o-border-radius: 10px;
-    overflow: hidden
+	height: 100%;
+	-webkit-border-radius: 10px;
+	-moz-border-radius: 10px;
+	-ms-border-radius: 10px;
+	-o-border-radius: 10px;
+	overflow: hidden
 }
 
 .monitoring-view .table-inner .table-mt .mt-table {
-    table-layout: fixed;
-    width: 100%;
-    height: 100%
+	table-layout: fixed;
+	width: 100%;
+	height: 100%
 }
 
 .monitoring-view .table-inner .table-mt .mt-table td {
-    height: 10%;
-    background: #e9e9e9;
-    border: 10px solid #fff;
-    text-align: center
+	height: 10%;
+	background: #e9e9e9;
+	border: 10px solid #fff;
+	text-align: center
 }
 
 .monitoring-view .table-inner .table-mt .mt-table td p {
-    font-size: 26px;
-    color: #aaa
+	font-size: 26px;
+	color: #aaa
 }
 
 @media all and (min-width: 1400px) {
-    .monitoring-view .table-inner .table-mt .mt-table td p {
-        font-size:32px
-    }
+	.monitoring-view .table-inner .table-mt .mt-table td p {
+		font-size: 32px
+	}
 }
 
 @media all and (min-width: 1921px) {
-    .monitoring-view .table-inner .table-mt .mt-table td p {
-        font-size:42px
-    }
+	.monitoring-view .table-inner .table-mt .mt-table td p {
+		font-size: 42px
+	}
 }
 
 @media all and (min-width: 2561px) {
-    .monitoring-view .table-inner .table-mt .mt-table td p {
-        font-size:50px
-    }
+	.monitoring-view .table-inner .table-mt .mt-table td p {
+		font-size: 50px
+	}
 }
 
 .monitoring-view .table-inner .table-mt .mt-table td.connect {
-    background: #81c4ff
+	background: #81c4ff
 }
 
 .monitoring-view .table-inner .table-mt .mt-table td.connect p {
-    color: #111;
-    font-family: "Noto Sans KR","Roboto","AppleGothic","sans-serif";
-    font-weight: 700
+	color: #111;
+	font-family: "Noto Sans KR", "Roboto", "AppleGothic", "sans-serif";
+	font-weight: 700
 }
 
 .monitoring-view .table-inner .table-mt .mt-table td.connect.bid {
-    background: #0082e5
+	background: #0082e5
 }
 
 .monitoring-view .table-inner .table-mt .mt-table td.ing {
-    background: #ffe135 !important
+	background: #ffe135 !important
 }
 
 @media all and (max-width: 1280px) {
-    .monitoring-view {
-        min-width:1280px;
-        overflow: auto
-    }
+	.monitoring-view {
+		min-width: 1280px;
+		overflow: auto
+	}
 }
 
 .admin_area {
-    min-height: calc(100% - 178px);
-    max-width: 1020px;
-    padding: 0 10px 50px;
-    margin: 0 auto
+	min-height: calc(100% - 178px);
+	max-width: 1020px;
+	padding: 0 10px 50px;
+	margin: 0 auto
 }
 
 @media only all and (max-width: 1024px) {
-    .admin_area {
-        min-height:calc(100% - 106px);
-        max-width: 1020px;
-        padding: 0 0 15px
-    }
+	.admin_area {
+		min-height: calc(100% - 106px);
+		max-width: 1020px;
+		padding: 0 0 15px
+	}
 }
 
 .admin_area h3.date {
-    font-size: 28px;
-    font-family: "Noto Sans KR","Roboto","AppleGothic","sans-serif";
-    font-weight: 700;
-    color: #1a1a1a;
-    text-align: center;
-    margin: 20px auto
+	font-size: 28px;
+	font-family: "Noto Sans KR", "Roboto", "AppleGothic", "sans-serif";
+	font-weight: 700;
+	color: #1a1a1a;
+	text-align: center;
+	margin: 20px auto
 }
 
 .admin_area .sub_search {
-    margin: 20px auto;
-    min-height: 100px;
-    background: #fff;
-    padding: 25px 100px;
-    border-radius: 10px;
-    display: flex;
-    justify-content: flex-start;
-    align-items: center;
-    flex-wrap: wrap
+	margin: 20px auto;
+	min-height: 100px;
+	background: #fff;
+	padding: 25px 100px;
+	border-radius: 10px;
+	display: flex;
+	justify-content: flex-start;
+	align-items: center;
+	flex-wrap: wrap
 }
 
 @media only all and (max-width: 1024px) {
-    .admin_area .sub_search {
-        min-height:auto;
-        display: block;
-        justify-content: inherit;
-        align-items: inherit;
-        flex-wrap: inherit;
-        background: #f5f5f5;
-        padding: 15px 15px;
-        margin: 10px 10px 10px
-    }
+	.admin_area .sub_search {
+		min-height: auto;
+		display: block;
+		justify-content: inherit;
+		align-items: inherit;
+		flex-wrap: inherit;
+		background: #f5f5f5;
+		padding: 15px 15px;
+		margin: 10px 10px 10px
+	}
 }
 
 .admin_area .sub_search .sch_area {
-    width: 100%;
-    position: relative;
-    padding-right: 200px
+	width: 100%;
+	position: relative;
+	padding-right: 200px
 }
 
 .admin_area .sub_search .sch_area.only_sory>li.sort {
-    width: 100%
+	width: 100%
 }
 
 .admin_area .sub_search .sch_area>li {
-    float: left
+	float: left
 }
 
 .admin_area .sub_search .sch_area>li.sort {
-    width: 50%;
-    padding-left: 5px
+	width: 50%;
+	padding-left: 5px
 }
 
 .admin_area .sub_search .sch_area>li.barcoad {
-    width: 50%;
-    padding-left: 25px;
-    display: flex;
-    align-items: center
+	width: 50%;
+	padding-left: 25px;
+	display: flex;
+	align-items: center
 }
 
 .admin_area .sub_search .sch_area>li.barcoad p {
-    width: 70px;
-    font-size: 20px;
-    font-family: "Noto Sans KR","Roboto","AppleGothic","sans-serif";
-    font-weight: 700;
-    color: #1a1a1a
+	width: 70px;
+	font-size: 20px;
+	font-family: "Noto Sans KR", "Roboto", "AppleGothic", "sans-serif";
+	font-weight: 700;
+	color: #1a1a1a
 }
 
 .admin_area .sub_search .sch_area>li.barcoad .barcoad_input {
-    position: relative;
-    width: calc(100% - 70px)
+	position: relative;
+	width: calc(100% - 70px)
 }
 
-.admin_area .sub_search .sch_area>li.barcoad .barcoad_input input[type=text] {
-    height: 52px;
-    line-height: 1;
-    width: 100%;
-    padding-right: 50px;
-    border: 1px solid #d3d3d3;
-    background: #fff
+.admin_area .sub_search .sch_area>li.barcoad .barcoad_input input[type=text]
+	{
+	height: 52px;
+	line-height: 1;
+	width: 100%;
+	padding-right: 50px;
+	border: 1px solid #d3d3d3;
+	background: #fff
 }
 
-.admin_area .sub_search .sch_area>li.barcoad .barcoad_input input[type=text]:focus + button {
-    display: block !important
+.admin_area .sub_search .sch_area>li.barcoad .barcoad_input input[type=text]:focus+button
+	{
+	display: block !important
 }
 
 .admin_area .sub_search .sch_area>li.barcoad .barcoad_input button {
-    display: block;
-    position: absolute;
-    z-index: 5;
-    right: 0;
-    width: 40px;
-    height: 100%;
-    top: 50%;
-    font-size: 20px;
-    font-family: "Noto Sans KR","Roboto","AppleGothic","sans-serif";
-    font-weight: 700;
-    color: #1a1a1a;
-    background: url(/static/images/guide/input_reset.svg) no-repeat center center;
-    background-size: 12px 12px;
-    text-indent: -9999px;
-    transform: translateY(-50%);
-    -webkit-transform: translateY(-50%);
-    -moz-transform: translateY(-50%);
-    -ms-transform: translateY(-50%);
-    -o-transform: translateY(-50%)
+	display: block;
+	position: absolute;
+	z-index: 5;
+	right: 0;
+	width: 40px;
+	height: 100%;
+	top: 50%;
+	font-size: 20px;
+	font-family: "Noto Sans KR", "Roboto", "AppleGothic", "sans-serif";
+	font-weight: 700;
+	color: #1a1a1a;
+	background: url(/static/images/guide/input_reset.svg) no-repeat center center;
+	background-size: 12px 12px;
+	text-indent: -9999px;
+	transform: translateY(-50%);
+	-webkit-transform: translateY(-50%);
+	-moz-transform: translateY(-50%);
+	-ms-transform: translateY(-50%);
+	-o-transform: translateY(-50%)
 }
 
 .admin_area .sub_search .sch_area>li.btn {
-    position: absolute;
-    right: 0;
-    top: 1px
+	position: absolute;
+	right: 0;
+	top: 1px
 }
 
 .admin_area .sub_search .sch_area>li select {
-    width: 100%
+	width: 100%
 }
 
 .admin_area .sub_search .sch_area>li a {
-    width: 190px;
-    height: 50px;
-    line-height: 50px;
-    text-align: center;
-    display: inline-block;
-    border-radius: 8px;
-    padding: 0 5px;
-    background: #007eff;
-    color: #fff;
-    font-size: 18px;
-    font-family: "Noto Sans KR","Roboto","AppleGothic","sans-serif";
-    font-weight: 700;
-    letter-spacing: -0.45px
+	width: 190px;
+	height: 50px;
+	line-height: 50px;
+	text-align: center;
+	display: inline-block;
+	border-radius: 8px;
+	padding: 0 5px;
+	background: #007eff;
+	color: #fff;
+	font-size: 18px;
+	font-family: "Noto Sans KR", "Roboto", "AppleGothic", "sans-serif";
+	font-weight: 700;
+	letter-spacing: -0.45px
 }
 
 @media only all and (max-width: 768px) {
-    .admin_area .sub_search .sch_area {
-        padding-right:112px
-    }
-
-    .admin_area .sub_search .sch_area>li {
-        float: none
-    }
-
-    .admin_area .sub_search .sch_area>li.sort {
-        padding-left: 0;
-        width: 100% !important
-    }
-
-    .admin_area .sub_search .sch_area>li.barcoad {
-        padding-left: 0;
-        margin-top: 12px;
-        width: 100% !important
-    }
-
-    .admin_area .sub_search .sch_area>li.btn {
-        width: 100px;
-        top: 0;
-        right: 0;
-        bottom: 0;
-        margin-top: 0;
-        align-items: center
-    }
-
-    .admin_area .sub_search .sch_area>li a {
-        width: 100%;
-        height: 100%;
-        border-radius: 5px;
-        padding: 0 5px;
-        font-size: 18px;
-        letter-spacing: -0.9px;
-        display: inline-flex;
-        align-items: center;
-        justify-content: center
-    }
+	.admin_area .sub_search .sch_area {
+		padding-right: 112px
+	}
+	.admin_area .sub_search .sch_area>li {
+		float: none
+	}
+	.admin_area .sub_search .sch_area>li.sort {
+		padding-left: 0;
+		width: 100% !important
+	}
+	.admin_area .sub_search .sch_area>li.barcoad {
+		padding-left: 0;
+		margin-top: 12px;
+		width: 100% !important
+	}
+	.admin_area .sub_search .sch_area>li.btn {
+		width: 100px;
+		top: 0;
+		right: 0;
+		bottom: 0;
+		margin-top: 0;
+		align-items: center
+	}
+	.admin_area .sub_search .sch_area>li a {
+		width: 100%;
+		height: 100%;
+		border-radius: 5px;
+		padding: 0 5px;
+		font-size: 18px;
+		letter-spacing: -0.9px;
+		display: inline-flex;
+		align-items: center;
+		justify-content: center
+	}
 }
 
-.admin_area .list_head dl dd,.admin_area .list_body dl dd {
-    height: 62px
+.admin_area .list_head dl dd, .admin_area .list_body dl dd {
+	height: 62px
 }
 
-.admin_area .list_head dl dd.col1,.admin_area .list_body dl dd.col1 {
-    width: 15%
+.admin_area .list_head dl dd.col1, .admin_area .list_body dl dd.col1 {
+	width: 15%
 }
 
-.admin_area .list_head dl dd.col2,.admin_area .list_body dl dd.col2 {
-    width: 25%
+.admin_area .list_head dl dd.col2, .admin_area .list_body dl dd.col2 {
+	width: 25%
 }
 
-.admin_area .list_head dl dd.col3,.admin_area .list_body dl dd.col3 {
-    width: 25%
+.admin_area .list_head dl dd.col3, .admin_area .list_body dl dd.col3 {
+	width: 25%
 }
 
-.admin_area .list_head dl dd.col4,.admin_area .list_body dl dd.col4 {
-    width: 25%
+.admin_area .list_head dl dd.col4, .admin_area .list_body dl dd.col4 {
+	width: 25%
 }
 
 @media only all and (max-width: 1024px) {
-    .admin_area .list_head dl dd,.admin_area .list_body dl dd {
-        height:40px
-    }
+	.admin_area .list_head dl dd, .admin_area .list_body dl dd {
+		height: 40px
+	}
 }
 
 @media only all and (min-width: 1025px) {
-    .admin_area .list_body li:hover {
-        background:#e6efff
-    }
-
-    .admin_area .list_body li:hover dd {
-        color: #007eff
-    }
+	.admin_area .list_body li:hover {
+		background: #e6efff
+	}
+	.admin_area .list_body li:hover dd {
+		color: #007eff
+	}
 }
 
 .admin_area .list_body li.act {
-    background: #e6efff
+	background: #e6efff
 }
 
 .admin_area .list_body li.act dd {
-    color: #007eff
+	color: #007eff
 }
 
 @media only all and (max-width: 640px) {
-    .admin_area .mCustomScrollBox {
-        max-height:310px
-    }
+	.admin_area .mCustomScrollBox {
+		max-height: 310px
+	}
 }
 
 @media only all and (max-width: 360px) {
-    .admin_area .mCustomScrollBox {
-        max-height:280px
-    }
+	.admin_area .mCustomScrollBox {
+		max-height: 280px
+	}
 }
 
 @media only all and (max-width: 320px) {
-    .admin_area .mCustomScrollBox {
-        max-height:220px
-    }
+	.admin_area .mCustomScrollBox {
+		max-height: 220px
+	}
 }
 
 .admin_area .btn_area {
-    max-width: 600px;
-    width: 100%;
-    margin: 30px auto 0;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    padding: 0 5px
+	max-width: 600px;
+	width: 100%;
+	margin: 30px auto 0;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	padding: 0 5px
 }
 
 .admin_area .btn_area a {
-    display: inline-block;
-    width: 50%;
-    text-align: center;
-    height: 50px;
-    line-height: 50px;
-    margin: 0 5px;
-    padding: 0 5px;
-    background: #007eff;
-    color: #fff;
-    font-size: 18px;
-    font-family: "Noto Sans KR","Roboto","AppleGothic","sans-serif";
-    font-weight: 700;
-    letter-spacing: -0.45px;
-    border-radius: 5px;
-    -webkit-border-radius: 5px;
-    -moz-border-radius: 5px;
-    -ms-border-radius: 5px;
-    -o-border-radius: 5px
+	display: inline-block;
+	width: 50%;
+	text-align: center;
+	height: 50px;
+	line-height: 50px;
+	margin: 0 5px;
+	padding: 0 5px;
+	background: #007eff;
+	color: #fff;
+	font-size: 18px;
+	font-family: "Noto Sans KR", "Roboto", "AppleGothic", "sans-serif";
+	font-weight: 700;
+	letter-spacing: -0.45px;
+	border-radius: 5px;
+	-webkit-border-radius: 5px;
+	-moz-border-radius: 5px;
+	-ms-border-radius: 5px;
+	-o-border-radius: 5px
 }
 
 .admin_head {
-    background: #181c32;
-    height: 48px;
-    width: 100%;
-    padding: 0 20px
+	background: #181c32;
+	height: 48px;
+	width: 100%;
+	padding: 0 20px
 }
 
 .admin_head a {
-    font-size: 20px;
-    font-family: "Noto Sans KR","Roboto","AppleGothic","sans-serif";
-    font-weight: 700;
-    color: #fff;
-    display: block;
-    width: 100%;
-    line-height: 46px;
-    padding-left: 34px;
-    background: url(/static/images/guide/ico_back.svg) no-repeat left center;
-    background-size: 24px
+	font-size: 20px;
+	font-family: "Noto Sans KR", "Roboto", "AppleGothic", "sans-serif";
+	font-weight: 700;
+	color: #fff;
+	display: block;
+	width: 100%;
+	line-height: 46px;
+	padding-left: 34px;
+	background: url(/static/images/guide/ico_back.svg) no-repeat left center;
+	background-size: 24px
 }
 
 .admin_auc_main h3 {
-    font-size: 28px;
-    text-align: center;
-    font-family: "Noto Sans KR","Roboto","AppleGothic","sans-serif";
-    font-weight: 700;
-    margin: 20px auto;
-    color: #1a1a1a
+	font-size: 28px;
+	text-align: center;
+	font-family: "Noto Sans KR", "Roboto", "AppleGothic", "sans-serif";
+	font-weight: 700;
+	margin: 20px auto;
+	color: #1a1a1a
 }
 
 .admin_auc_main .main_search {
-    min-height: 100px;
-    background: #fff;
-    padding: 25px 100px;
-    border-radius: 10px;
-    display: flex;
-    justify-content: flex-start;
-    align-items: center;
-    flex-wrap: wrap
+	min-height: 100px;
+	background: #fff;
+	padding: 25px 100px;
+	border-radius: 10px;
+	display: flex;
+	justify-content: flex-start;
+	align-items: center;
+	flex-wrap: wrap
 }
 
 @media only all and (max-width: 1024px) {
-    .admin_auc_main .main_search {
-        display:block;
-        justify-content: inherit;
-        align-items: inherit;
-        flex-wrap: inherit;
-        background: #f5f5f5;
-        padding: 8px 15px;
-        margin: 0 10px 10px
-    }
+	.admin_auc_main .main_search {
+		display: block;
+		justify-content: inherit;
+		align-items: inherit;
+		flex-wrap: inherit;
+		background: #f5f5f5;
+		padding: 8px 15px;
+		margin: 0 10px 10px
+	}
 }
 
 .admin_auc_main .main_search ul {
-    margin: 5px 0
+	margin: 5px 0
 }
 
 @media only all and (max-width: 1024px) {
-    .admin_auc_main .main_search ul {
-        margin:12px 0
-    }
+	.admin_auc_main .main_search ul {
+		margin: 12px 0
+	}
 }
 
 .admin_auc_main .main_search .radio_group {
-    float: left;
-    margin-left: -12px;
-    margin-right: 20px;
-    width: 385px
+	float: left;
+	margin-left: -12px;
+	margin-right: 20px;
+	width: 385px
 }
 
 .admin_auc_main .main_search .radio_group li {
-    margin: 4px 0 4px 12px;
-    float: left
+	margin: 4px 0 4px 12px;
+	float: left
 }
 
 @media only all and (max-width: 1024px) {
-    .admin_auc_main .main_search .radio_group {
-        margin-right:0;
-        float: none;
-        width: auto;
-        margin-left: -9px
-    }
-
-    .admin_auc_main .main_search .radio_group li {
-        margin: 4px 0 4px 9px
-    }
+	.admin_auc_main .main_search .radio_group {
+		margin-right: 0;
+		float: none;
+		width: auto;
+		margin-left: -9px
+	}
+	.admin_auc_main .main_search .radio_group li {
+		margin: 4px 0 4px 9px
+	}
 }
 
 .admin_auc_main .main_search .sch_area {
-    float: left;
-    width: 400px;
-    position: relative;
-    padding-right: 252px
+	float: left;
+	width: 400px;
+	position: relative;
+	padding-right: 252px
 }
 
 .admin_auc_main .main_search .sch_area>li {
-    float: left
+	float: left
 }
 
 .admin_auc_main .main_search .sch_area>li.date {
-    width: 100%;
-    padding-left: 5px
+	width: 100%;
+	padding-left: 5px
 }
 
 .admin_auc_main .main_search .sch_area>li.btn {
-    position: absolute;
-    right: 0;
-    top: 1px
+	position: absolute;
+	right: 0;
+	top: 1px
 }
 
 .admin_auc_main .main_search .sch_area>li select {
-    width: 100%
+	width: 100%
 }
 
 .admin_auc_main .main_search .sch_area>li a {
-    width: 120px;
-    height: 50px;
-    line-height: 50px;
-    text-align: center;
-    display: inline-block;
-    border-radius: 8px;
-    padding: 0 5px;
-    background: #007eff;
-    color: #fff;
-    font-size: 18px;
-    font-family: "Noto Sans KR","Roboto","AppleGothic","sans-serif";
-    font-weight: 700;
-    letter-spacing: -0.45px
+	width: 120px;
+	height: 50px;
+	line-height: 50px;
+	text-align: center;
+	display: inline-block;
+	border-radius: 8px;
+	padding: 0 5px;
+	background: #007eff;
+	color: #fff;
+	font-size: 18px;
+	font-family: "Noto Sans KR", "Roboto", "AppleGothic", "sans-serif";
+	font-weight: 700;
+	letter-spacing: -0.45px
 }
 
 @media only all and (max-width: 1024px) {
-    .admin_auc_main .main_search .sch_area {
-        float:none;
-        width: 100%
-    }
-
-    .admin_auc_main .main_search .sch_area li.date {
-        padding-left: 4px
-    }
-
-    .admin_auc_main .main_search .sch_area li a {
-        border-radius: 5px;
-        padding: 0 5px;
-        font-size: 18px;
-        letter-spacing: -0.9px
-    }
+	.admin_auc_main .main_search .sch_area {
+		float: none;
+		width: 100%
+	}
+	.admin_auc_main .main_search .sch_area li.date {
+		padding-left: 4px
+	}
+	.admin_auc_main .main_search .sch_area li a {
+		border-radius: 5px;
+		padding: 0 5px;
+		font-size: 18px;
+		letter-spacing: -0.9px
+	}
 }
 
 @media only all and (max-width: 768px) {
-    .admin_auc_main .main_search .sch_area {
-        width:100%;
-        padding-right: 0
-    }
-
-    .admin_auc_main .main_search .sch_area li.date {
-        padding-left: 0
-    }
-
-    .admin_auc_main .main_search .sch_area li.btn {
-        position: relative;
-        right: auto;
-        top: auto;
-        margin-top: 15px;
-        width: 100%;
-        display: flex;
-        justify-content: space-between
-    }
-
-    .admin_auc_main .main_search .sch_area li a {
-        width: calc(50% - 6px);
-        border-radius: 5px;
-        padding: 0 5px;
-        font-size: 18px;
-        letter-spacing: -0.9px
-    }
+	.admin_auc_main .main_search .sch_area {
+		width: 100%;
+		padding-right: 0
+	}
+	.admin_auc_main .main_search .sch_area li.date {
+		padding-left: 0
+	}
+	.admin_auc_main .main_search .sch_area li.btn {
+		position: relative;
+		right: auto;
+		top: auto;
+		margin-top: 15px;
+		width: 100%;
+		display: flex;
+		justify-content: space-between
+	}
+	.admin_auc_main .main_search .sch_area li a {
+		width: calc(50% - 6px);
+		border-radius: 5px;
+		padding: 0 5px;
+		font-size: 18px;
+		letter-spacing: -0.9px
+	}
 }
 
 @media only all and (max-width: 1024px) {
-    .admin_chocie {
-        padding:0 24px
-    }
+	.admin_chocie {
+		padding: 0 24px
+	}
 }
 
 .admin_chocie h3 {
-    font-size: 28px;
-    text-align: center;
-    font-family: "Noto Sans KR","Roboto","AppleGothic","sans-serif";
-    font-weight: 700;
-    margin: 20px auto 10px;
-    color: #1a1a1a
+	font-size: 28px;
+	text-align: center;
+	font-family: "Noto Sans KR", "Roboto", "AppleGothic", "sans-serif";
+	font-weight: 700;
+	margin: 20px auto 10px;
+	color: #1a1a1a
 }
 
 .admin_chocie p {
-    color: #767676;
-    font-size: 20px;
-    text-align: center;
-    font-family: "Noto Sans KR","Roboto","AppleGothic","sans-serif";
-    font-weight: 700;
-    margin-bottom: 50px
+	color: #767676;
+	font-size: 20px;
+	text-align: center;
+	font-family: "Noto Sans KR", "Roboto", "AppleGothic", "sans-serif";
+	font-weight: 700;
+	margin-bottom: 50px
 }
 
 .admin_chocie ul.choice_area {
-    margin-left: -50px
+	margin-left: -50px
 }
 
 .admin_chocie ul.choice_area li {
-    float: left;
-    width: calc(33.33% - 50px);
-    margin-left: 50px;
-    margin-bottom: 50px
+	float: left;
+	width: calc(33.33% - 50px);
+	margin-left: 50px;
+	margin-bottom: 50px
 }
 
 .admin_chocie ul.choice_area li a {
-    width: 100%;
-    height: 120px;
-    padding: 0 5px;
-    background: #fff;
-    display: flex;
-    border-radius: 20px;
-    justify-content: center;
-    align-items: center;
-    font-size: 28px;
-    font-family: "Noto Sans KR","Roboto","AppleGothic","sans-serif";
-    font-weight: 700;
-    letter-spacing: -0.7px;
-    text-align: center;
-    color: #1a1a1a;
-    position: relative;
-    box-shadow: 0px 5px 10px 3px rgba(0,0,0,.05);
-    transition: all .2s
+	width: 100%;
+	height: 120px;
+	padding: 0 5px;
+	background: #fff;
+	display: flex;
+	border-radius: 20px;
+	justify-content: center;
+	align-items: center;
+	font-size: 28px;
+	font-family: "Noto Sans KR", "Roboto", "AppleGothic", "sans-serif";
+	font-weight: 700;
+	letter-spacing: -0.7px;
+	text-align: center;
+	color: #1a1a1a;
+	position: relative;
+	box-shadow: 0px 5px 10px 3px rgba(0, 0, 0, .05);
+	transition: all .2s
 }
 
-.admin_chocie ul.choice_area li a:hover,.admin_chocie ul.choice_area li a.act {
-    background: #007eff;
-    color: #fff;
-    box-shadow: inherit
+.admin_chocie ul.choice_area li a:hover, .admin_chocie ul.choice_area li a.act
+	{
+	background: #007eff;
+	color: #fff;
+	box-shadow: inherit
 }
 
 .admin_chocie ul.choice_area li a span {
-    position: absolute;
-    left: 14px;
-    top: 14px;
-    background: #f22800;
-    padding: 0 8px;
-    border-radius: 30px;
-    height: 20px;
-    line-height: 20px;
-    font-size: 12px;
-    letter-spacing: -0.3px;
-    text-align: center;
-    color: #fff
+	position: absolute;
+	left: 14px;
+	top: 14px;
+	background: #f22800;
+	padding: 0 8px;
+	border-radius: 30px;
+	height: 20px;
+	line-height: 20px;
+	font-size: 12px;
+	letter-spacing: -0.3px;
+	text-align: center;
+	color: #fff
 }
 
 .admin_chocie ul.choice_area li a span.heart-eft {
-    -webkit-animation: heart-eft .8s ease-in-out infinite alternate;
-    animation: heart-eft .8s ease-in-out infinite alternate
+	-webkit-animation: heart-eft .8s ease-in-out infinite alternate;
+	animation: heart-eft .8s ease-in-out infinite alternate
 }
 
 @media only all and (max-width: 1024px) {
-    .admin_chocie p {
-        margin-bottom:20px
-    }
-
-    .admin_chocie ul.choice_area {
-        margin-left: -18px
-    }
-
-    .admin_chocie ul.choice_area li {
-        width: calc(50% - 18px);
-        margin-left: 18px;
-        margin-bottom: 18px
-    }
-
-    .admin_chocie ul.choice_area li a {
-        width: 100%;
-        height: 90px;
-        border-radius: 15px;
-        font-size: 20px;
-        letter-spacing: -1px
-    }
+	.admin_chocie p {
+		margin-bottom: 20px
+	}
+	.admin_chocie ul.choice_area {
+		margin-left: -18px
+	}
+	.admin_chocie ul.choice_area li {
+		width: calc(50% - 18px);
+		margin-left: 18px;
+		margin-bottom: 18px
+	}
+	.admin_chocie ul.choice_area li a {
+		width: 100%;
+		height: 90px;
+		border-radius: 15px;
+		font-size: 20px;
+		letter-spacing: -1px
+	}
 }
 
+.ai_graph {
+	border: 1px solid #e4e4e4;
+	background: #fff;
+	margin: 20px 0 20px;
+	border-radius: 15px;
+	-webkit-border-radius: 15px;
+	-moz-border-radius: 15px;
+	-ms-border-radius: 15px;
+	-o-border-radius: 15px;
+	padding: 15px 15px
+}
+
+@media only all and (max-width: 1024px) {
+	.ai_graph {
+		margin: 20px 10px 15px;
+		border-radius: 10px;
+		-webkit-border-radius: 10px;
+		-moz-border-radius: 10px;
+		-ms-border-radius: 10px;
+		-o-border-radius: 10px
+	}
+}
+
+.jido_area {
+	position: relative;
+	border: 1px solid #e4e4e4;
+	background: #fff;
+	padding: 15px 15px;
+	border-radius: 15px;
+	-webkit-border-radius: 15px;
+	-moz-border-radius: 15px;
+	-ms-border-radius: 15px;
+	-o-border-radius: 15px;
+	margin: 20px 0 20px;
+	overflow: auto
+}
+
+.jido_area .all_view {
+	position: absolute;
+	top: 15px;
+	right: 15px;
+	padding: 0 20px;
+	font-size: 20px;
+	font-family: "NanumSquare", "Roboto", "AppleGothic", "sans-serif";
+	font-weight: 700;
+	color: #1a1a1a;
+	box-shadow: 0 1.5px 5px 0 rgba(0, 0, 0, .16);
+	border: 1px solid #dbdbdb;
+	height: 40px;
+	border-radius: 10px;
+	-webkit-border-radius: 10px;
+	-moz-border-radius: 10px;
+	-ms-border-radius: 10px;
+	-o-border-radius: 10px
+}
+
+@media only all and (max-width: 1024px) {
+	.jido_area {
+		margin: 20px 10px 20px
+	}
+}
+
+.jang-title {
+	max-width: 420px;
+	margin: 20px auto;
+	height: 50px;
+	line-height: 50px;
+	border: 1px solid #dbdbdb;
+	background: #fff;
+	border-radius: 10px;
+	-webkit-border-radius: 10px;
+	-moz-border-radius: 10px;
+	-ms-border-radius: 10px;
+	-o-border-radius: 10px;
+	text-align: center;
+	font-size: 20px;
+	font-family: "NanumSquare", "Roboto", "AppleGothic", "sans-serif";
+	font-weight: 700;
+	color: #1a1a1a;
+	box-shadow: 0 1.5px 5px 0 rgba(0, 0, 0, .16)
+}
+
+.ai_report .list_head dl dd.date, .ai_report .list_body dl dd.date {
+	width: 10%
+}
+
+.ai_report .list_head dl dd.sort, .ai_report .list_body dl dd.sort {
+	width: 10%
+}
+
+.ai_report .list_head dl dd.pd_sex, .ai_report .list_body dl dd.pd_sex {
+	width: 6%
+}
+
+.ai_report .list_head dl dd.pd_pay, .ai_report .list_body dl dd.pd_pay {
+	width: 12.5%
+}
+
+.ai_report .list_head dl dd.pd_average, .ai_report .list_body dl dd.pd_average
+	{
+	width: 5%
+}
+
+.ai_report .list_head dl dd.pd_average span.arrow_t:before, .ai_report .list_body dl dd.pd_average span.arrow_t:before
+	{
+	content: "";
+	width: 10px;
+	height: 8px;
+	display: inline-block;
+	background: url(../image/arrow_up.svg) no-repeat center center;
+	background-size: 10px 8px;
+	vertical-align: middle;
+	margin-right: 5px
+}
+
+.ai_report .list_head dl dd.pd_average span.arrow_d:before, .ai_report .list_body dl dd.pd_average span.arrow_d:before
+	{
+	content: "";
+	width: 10px;
+	height: 8px;
+	display: inline-block;
+	background: url(../image/arrow_down.svg) no-repeat center center;
+	background-size: 10px 8px;
+	vertical-align: middle;
+	margin-right: 5px;
+	transform: rotateZ(180deg);
+	-webkit-transform: rotateZ(180deg);
+	-moz-transform: rotateZ(180deg);
+	-ms-transform: rotateZ(180deg);
+	-o-transform: rotateZ(180deg)
+}
+
+@media only all and (max-width: 1024px) {
+	.ai_report .list_head dl dd.date, .ai_report .list_body dl dd.date {
+		width: 20%
+	}
+	.ai_report .list_head dl dd.sort, .ai_report .list_body dl dd.sort {
+		width: 20%
+	}
+	.ai_report .list_head dl dd.pd_sex, .ai_report .list_body dl dd.pd_sex {
+		width: 20%
+	}
+	.ai_report .list_head dl dd.pd_pay, .ai_report .list_body dl dd.pd_pay {
+		width: 20%
+	}
+	.ai_report .list_head dl dd.pd_average, .ai_report .list_body dl dd.pd_average
+		{
+		width: 20%
+	}
+	.ai_report .list_body li:nth-child(even) {
+		background: #f5f5f5
+	}
+}
+
+@media only all and (min-width: 1025px) {
+	.ai_report .list_body li:hover {
+		background: #e6efff
+	}
+	.ai_report .list_body li:hover dd {
+		color: #007eff
+	}
+}
+
+.ai_report .list_body li.act {
+	background: #e6efff
+}
+
+.ai_report .list_body li.act dd {
+	color: #007eff
+}
+
+@media only all and (max-width: 1024px) {
+	.ai_report .list_body li.act {
+		background: #007eff
+	}
+	.ai_report .list_body li.act dd {
+		color: #fff
+	}
+}
+
+.error {
+	position: fixed;
+	left: 0;
+	right: 0;
+	top: 0;
+	bottom: 0;
+	text-align: center
+}
+
+.error .inner {
+	width: 100%;
+	text-align: center;
+	position: absolute;
+	top: 50%;
+	transform: translateY(-50%);
+	-webkit-transform: translateY(-50%);
+	-moz-transform: translateY(-50%);
+	-ms-transform: translateY(-50%);
+	-o-transform: translateY(-50%)
+}
+
+@media only all and (max-width: 1024px) {
+	.error .inner {
+		padding: 0 5%
+	}
+}
+
+.error .ico-error {
+	margin-bottom: 30px
+}
+
+.error .ico-error img {
+	width: 136px
+}
+
+@media only all and (max-width: 1024px) {
+	.error .ico-error {
+		margin-bottom: 15px
+	}
+	.error .ico-error img {
+		width: 85px
+	}
+}
+
+.error h2 {
+	font-size: 159px;
+	font-family: "NanumSquare", "Roboto", "AppleGothic", "sans-serif";
+	font-weight: 800;
+	color: #007eff;
+	line-height: 1
+}
+
+.error h2 span {
+	color: #76baff
+}
+
+@media only all and (max-width: 1024px) {
+	.error h2 {
+		font-size: 100px;
+		padding: 0 30px;
+		display: inline-block;
+		padding-bottom: 10px;
+		border-bottom: 1px solid #007eff;
+		margin-bottom: 15px
+	}
+}
+
+.error p {
+	padding: 0;
+	margin: 0
+}
+
+.error p.txt1 {
+	margin-top: 20px;
+	font-size: 32px;
+	font-family: "NanumSquare", "Roboto", "AppleGothic", "sans-serif";
+	font-weight: 700;
+	color: #007eff
+}
+
+.error p.txt2 {
+	margin-top: 20px;
+	font-size: 26px;
+	font-family: "NanumSquare", "Roboto", "AppleGothic", "sans-serif";
+	font-weight: 700;
+	color: #767676
+}
+
+.error p.txt2 br {
+	display: none
+}
+
+@media only all and (max-width: 1024px) {
+	.error p.txt1 {
+		margin-top: 10px;
+		font-size: 20px
+	}
+	.error p.txt2 {
+		margin-top: 10px;
+		font-size: 16px;
+		line-height: 1.6
+	}
+	.error p.txt2 br {
+		display: block
+	}
+}
+
+.error a {
+	min-width: 270px;
+	height: 80px;
+	line-height: 80px;
+	margin: 40px auto 0;
+	display: inline-block;
+	padding: 0 70px;
+	background-color: #007eff;
+	font-size: 28px;
+	font-family: "NanumSquare", "Roboto", "AppleGothic", "sans-serif";
+	font-weight: 700;
+	color: #fff;
+	border-radius: 10px;
+	-webkit-border-radius: 10px;
+	-moz-border-radius: 10px;
+	-ms-border-radius: 10px;
+	-o-border-radius: 10px
+}
+
+@media only all and (max-width: 1024px) {
+	.error a {
+		min-width: 170px;
+		height: 50px;
+		line-height: 50px;
+		margin: 25px auto 0;
+		font-size: 18px;
+		border-radius: 5px;
+		-webkit-border-radius: 5px;
+		-moz-border-radius: 5px;
+		-ms-border-radius: 5px;
+		-o-border-radius: 5px
+	}
+}
 .move-txt {
-    -webkit-animation: text-scroll 10s linear infinite;
-    animation: text-scroll 10s linear infinite
+	-webkit-animation: text-scroll 10s linear infinite;
+	animation: text-scroll 10s linear infinite
 }
 
-@-webkit-keyframes heart-eft {
-    0% {
-        opacity: .2
-    }
-
-    100% {
-        opacity: 1
-    }
+@-webkit-keyframes heart-eft { 
+	0% { opacity: .2 }
+	100% { opacity : 1 }
 }
-
 @keyframes heart-eft {
-    0% {
-        opacity: .2
-    }
-
-    100% {
-        opacity: 1
-    }
+	0% { opacity: .2 }
+	100% {opacity: 1 }
 }
-
 @-webkit-keyframes fav {
-    0% {
-        background-size: 80%
-    }
-
-    100% {
-        opacity: 100%
-    }
+	0% { background-size: 80%}
+	100% {opacity: 100%}
 }
-
 @keyframes fav {
-    0% {
-        background-size: 80%
-    }
-
-    100% {
-        opacity: 100%
-    }
+	0% {background-size: 80%}
+	100% {opacity: 100%}
 }
-
 @-webkit-keyframes dotcount {
-    0% {
-        background: #ccc
-    }
-
-    50% {
-        background: #f22800
-    }
-
-    100% {
-        background: #ccc
-    }
+	0% {background: #ccc}
+	50% {background: #f22800}
+	100%{background: #ccc}
 }
-
 @keyframes dotcount {
-    0% {
-        background: #ccc
-    }
-
-    50% {
-        background: #f22800
-    }
-
-    100% {
-        background: #ccc
-    }
+	0% {background: #ccc}
+	50%{background: #f22800}
+	100%{background: #ccc}
 }
 
 @-webkit-keyframes text-scroll {
-    from {
-        transform: translateX(100%);
-        -moz-transform: translateX(100%);
-        -webkit-transform: translateX(100%);
-        -o-transform: translateX(100%);
-        -ms-transform: translateX(100%)
-    }
-
-    to {
-        transform: translateX(-100%);
-        -moz-transform: translateX(-100%);
-        -webkit-transform: translateX(-100%);
-        -o-transform: translateX(-100%);
-        -ms-transform: translateX(-100%)
-    }
+	from {
+		transform:translateX(100%);
+		-moz-transform: translateX(100%);
+		-webkit-transform: translateX(100%);
+		-o-transform: translateX(100%);
+		-ms-transform: translateX(100%)
+	}
+	to {
+		transform: translateX(-100%);
+		-moz-transform: translateX(-100%);
+		-webkit-transform: translateX(-100%);
+		-o-transform: translateX(-100%);
+		-ms-transform: translateX(-100%)
+	}
 }
-
 @keyframes text-scroll {
-    from {
-        transform: translateX(100%);
-        -moz-transform: translateX(100%);
-        -webkit-transform: translateX(100%);
-        -o-transform: translateX(100%);
-        -ms-transform: translateX(100%)
-    }
+	from {
+		transform:translateX(100%);
+		-moz-transform: translateX(100%);
+		-webkit-transform: translateX(100%);
+		-o-transform: translateX(100%);
+		-ms-transform: translateX(100%)
+	}
 
-    to {
-        transform: translateX(-100%);
-        -moz-transform: translateX(-100%);
-        -webkit-transform: translateX(-100%);
-        -o-transform: translateX(-100%);
-        -ms-transform: translateX(-100%)
-    }
+	to {
+		transform: translateX(-100%);
+		-moz-transform: translateX(-100%);
+		-webkit-transform: translateX(-100%);
+		-o-transform: translateX(-100%);
+		-ms-transform: translateX(-100%)
+	}
 }
 .auction_calculator .calculator_bottom .calculator-cell li button.num_before
 	{
