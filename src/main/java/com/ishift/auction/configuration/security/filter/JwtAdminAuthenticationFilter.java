@@ -5,7 +5,6 @@ import com.ishift.auction.service.admin.user.AdminUserDetailsService;
 import com.ishift.auction.util.Constants;
 import com.ishift.auction.util.CookieUtil;
 import com.ishift.auction.util.JwtTokenUtil;
-import com.sun.el.parser.ParseException;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -22,7 +21,6 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.sql.SQLException;
 
 /**
  * 관리자 jwt 토큰 검증을 위한 Filter

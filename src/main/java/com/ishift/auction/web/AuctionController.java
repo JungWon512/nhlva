@@ -19,7 +19,6 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -41,13 +40,17 @@ public class AuctionController extends CommonController {
 	private static final Logger LOGGER = LoggerFactory.getLogger(AuctionController.class);
 	
 	@Autowired
-	AuctionService auctionService;
+	private AuctionService auctionService;
+	
 	@Autowired
-    private AdminService adminService;
+	private AdminService adminService;
+	
 	@Autowired
-	SessionUtill sessionUtill;
-    @Autowired
-    JwtTokenUtil jwtTokenUtil;
+	private SessionUtill sessionUtill;
+	
+	@Autowired
+	private JwtTokenUtil jwtTokenUtil;
+	
 	@Autowired
 	private FormatUtil formatUtil;
 	
@@ -531,7 +534,7 @@ public class AuctionController extends CommonController {
 		final Map<String, Object> temp = new HashMap<String, Object>();
 
 		try {
-			Map<String,Object> map = auctionService.selectNearAtdrAm(params);			
+			Map<String,Object> map = auctionService.selectNearAtdrAm(params);
 			Map<String,Object> zim = auctionService.selectMyZimPrice(params);
 
 			temp.put("bidPrice", map != null ?map.get("ATDR_AM"):0);
@@ -550,4 +553,5 @@ public class AuctionController extends CommonController {
 		}
 		return result;
 	}
+
 }

@@ -424,12 +424,31 @@ public class AuctionDAO {
 	}
 
 	public List<Map<String, Object>> selectBidLogList(Map<String, Object> params) throws SQLException {
-		// TODO Auto-generated method stub
 		return mainDao.selectList("auction.selectBidLogList", params);
 	}
 
 	public Map<String, Object> selectBidLogListCnt(Map<String, Object> params) throws SQLException {
 		return mainDao.selectOne("auction.selectBidLogListCnt", params);
+	}
+
+	/**
+	 * 공통 코드 리스트
+	 * @param params
+	 * @return
+	 * @throws SQLException
+	 */
+	public List<Map<String, Object>> selectCodeList(Map<String, Object> params) throws SQLException {
+		return mainDao.selectList("auction.selectCodeList", params);
+	}
+
+	/**
+	 * 출장우 정보 > APP에서 일괄 경매시 사용
+	 * @param params
+	 * @return
+	 * @throws SQLException
+	 */
+	public List<Map<String, Object>> selectCowList(Map<String, Object> params) throws SQLException {
+		return mainDao.selectList("ApiMapper.selectCowList", params);
 	}
 
 	public Map<String, Object> selectTotSoldPrice(Map<String, Object> params) throws SQLException {		

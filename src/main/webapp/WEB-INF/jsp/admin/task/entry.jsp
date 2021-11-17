@@ -54,7 +54,7 @@
 				</dl>
 			</div>
 			<div class="list_body">
-				<ul style="min-height:370px;overflow-y:scroll;max-height:370px !important;">
+				<ul style="overflow-y:scroll;">
 					<c:if test="${entryList.size() <= 0}">
 						<li>
 							<dl>

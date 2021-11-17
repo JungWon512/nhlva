@@ -160,7 +160,7 @@
 			modalPopupClose('.pop_mod_weight');
 			$('.pop_mod_weight').remove();
 
-			var sHtml = []; 
+			var sHtml = [];
 			sHtml.push('<div id="" class="modal-wrap pop_mod_weight">');
 			sHtml.push('	<div class="modal-content pop_ad_mod">');
 			sHtml.push('		<form name="frm_cow" method="post">');
@@ -265,9 +265,7 @@
 			$(target).css({'overflow': 'auto'}).show().addClass('open');
 			$(target).focus();
 			var $modalContentH = $(target).find($('.modal-content')).outerHeight();
-			var $conPos = ($winH / 2) - ($modalContentH / 2);
 			if( $winH > $modalContentH ){
-//				$modalContent.css({marginTop: $conPos});
 				$modalContent.css({marginTop: 20});
 			} else {
 				$modalContent.css({marginTop: 0});
@@ -279,7 +277,7 @@
 			if($(".modal-content").find('.mCustomScrollBox').length > 0){
 				$(".pop_TermsBox").mCustomScrollbar({
 					theme:"dark-thin",
-					scrollInertia: 200,
+					scrollInertia: 200
 				});
 			}
 			return false;

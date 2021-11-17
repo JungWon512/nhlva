@@ -2112,7 +2112,7 @@ Base styles: contents layer
 	.auction_info dl.board_top dd ul li a {
 		width: 100%;
 		height: 40px;
-		line-height: 40px;
+		line-height: 36px;
 		padding: 0 5px;
 		font-size: 16px;
 		letter-spacing: -0.8px;
@@ -5759,19 +5759,19 @@ Base styles: contents layer
 }
 
 @media only all and (max-width: 640px) {
-	.admin_area .mCustomScrollBox {
+	.admin_area .list_body ul {
 		max-height: 310px
 	}
 }
 
 @media only all and (max-width: 360px) {
-	.admin_area .mCustomScrollBox {
+	.admin_area .list_body ul {
 		max-height: 280px
 	}
 }
 
 @media only all and (max-width: 320px) {
-	.admin_area .mCustomScrollBox {
+	.admin_area .list_body ul {
 		max-height: 220px
 	}
 }

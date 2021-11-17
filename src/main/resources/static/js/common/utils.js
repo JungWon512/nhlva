@@ -235,7 +235,6 @@ function reportPrint(name,title,head,body,width,height){
 function reportExcel(title,head,body){
  	var data_type = 'data:application/vnd.ms-excel;charset=utf-8';
     var table_html = encodeURIComponent(makePrintHtml(head,body));
- 	
     var a = document.createElement('a');
     a.href = data_type + ',%EF%BB%BF' + table_html;
     a.download = title+'.xls';
@@ -276,7 +275,7 @@ function makePrintCss(){
 	return css;
 }
 
-function makePrintHtml(head,body,name){	
+function makePrintHtml(head,body,name){
     var sHtml='';
     sHtml += ' <table class="'+name+'" border=1>	               ';
 	sHtml += ' 	<thead>           ';
@@ -292,7 +291,7 @@ function makePrintHtml(head,body,name){
 	for(var i=0;i<body.length;i++){
 		sHtml += '         <tr>           ';
 		for(var j=0;j<body[i].length;j++){
-			sHtml += '             <td class="'+head[j].class+'" '+(tdSpan !=0?'colspan='+tdSpan:'')+'>'+body[i][j]+'</td>  ';
+			sHtml += '             <td class="'+head[j].class+'" style="' + (head[j].class == "pd_ea" ? "mso-number-format:\'@\';" : "") + '" '+(tdSpan !=0?'colspan='+tdSpan:'')+'>'+body[i][j]+'</td>  ';
 		}
 		sHtml += '         </tr>          ';
 	}
