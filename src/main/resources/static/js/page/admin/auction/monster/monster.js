@@ -56,9 +56,9 @@ var setEventListener = function(){
 			tdArr.push($(item).closest('td').get(0).outerHTML);
 		});
 		//나간 접속자 sorting 및 td 저장
-		var last =$('table.connMnTable td p:not(.add)').get(0).innerHTML;
-		for(var i=sortingList.length+1;i<last;i++){
-			tdArr.push('<td class=""><p class="not">'+i+'</p></td>');
+		var last =$('table.connMnTable').find('td:not(.connect,.ing)').find('p.add').length;		
+		for(var i=0;i<last;i++){
+			tdArr.push('<td class=""><p class="not">'+(sortingList.length+1+i)+'</p></td>');
 		}
 		
 		//남은 접속판 td 저장
