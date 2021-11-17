@@ -1556,6 +1556,11 @@ public class ApiController {
 		}
 		return result;
 	}
+	/**
+	 * 금일 경매 차수 조회
+	 * @param version
+	 * @return
+	 */
 	@ResponseBody
 	@GetMapping(value = "/api/{version}/host/select/auctQcnForToday")
 	public Map<String, Object> selectAuctQcnForToday(@PathVariable(name = "version") String version) {
@@ -1587,6 +1592,12 @@ public class ApiController {
 		return result;
 	}
 	
+	/**
+	 * 응찰 서버 PORT 번호 업데이트
+	 * @param version
+	 * @param params
+	 * @return
+	 */
 	@ResponseBody
 	@GetMapping(value = "/api/{version}/host/update/netPort")
 	public Map<String, Object> updateNetPort(@PathVariable(name = "version") String version
@@ -1616,6 +1627,12 @@ public class ApiController {
 		return result;
 	}
 
+	/**
+	 * 최근 응찰 가격, 찜 가격 조회
+	 * @param version
+	 * @param params
+	 * @return
+	 */
 	@ResponseBody
 	@GetMapping(value = "/api/{version}/my/select/nearAtdrAm")
 	public Map<String, Object> selectNearAtdrAm(@PathVariable(name = "version") String version
@@ -1643,4 +1660,57 @@ public class ApiController {
 		}
 		return result;
 	}
+	
+	
+	/**
+	 * APP 일괄 경매용 출하우 정보 API
+	 * @param version
+	 * @param params
+	 * @return
+	 */
+	@ResponseBody
+	@PostMapping(value = "/api/{version}/my/select/cowList")
+	public Map<String, Object> selectCowList(@PathVariable(name = "version") String version
+											, @RequestParam final Map<String, Object> params) {
+		
+		final Map<String, Object> result = new HashMap<String, Object>();
+		
+		try {
+			Map<String, Object> map = auctionService.selectAuctStn(params);
+			if (map == null) {
+				result.put("success", false);
+				result.put("message", "회차 정보가 없습니다.");
+				return result;
+			}
+			params.put("stAucNo", map.get("ST_AUC_NO"));
+			params.put("edAucNo", map.get("ED_AUC_NO"));
+			List<Map<String, Object>> list = auctionService.selectCowList(params);
+			
+			for (Map<String, Object> info : list) {
+				info.put("SRA_PD_RGNNM_FMT", this.getRgnName(info.get("SRA_PD_RGNNM")));
+			}
+			
+			if (list != null && list.size() > 0) {
+				result.put("success", true);
+				result.put("data", list);
+				result.put("message", "정상적으로 조회되었습니다.");
+			}
+			else {
+				result.put("success", false);
+				result.put("message", "출하우 정보가 없습니다.");
+			}
+		}
+		catch (RuntimeException re) {
+			log.debug("ApiController.selectCowList : {} ",re);
+			result.put("success", false);
+			result.put("message", re.getMessage());
+		}
+		catch (SQLException se) {
+			log.debug("ApiController.selectCowList : {} ",se);
+			result.put("success", false);
+			result.put("message", se.getMessage());
+		}
+		return result;
+	}
+	
 }

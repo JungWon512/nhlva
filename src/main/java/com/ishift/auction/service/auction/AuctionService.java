@@ -158,6 +158,12 @@ public interface AuctionService {
 
 	int sealectAuctCowCnt(Map<String, Object> params) throws SQLException ;
 
+	/**
+	 * 출하우 정보
+	 * @param params
+	 * @return
+	 * @throws SQLException
+	 */
 	List<Map<String, Object>> selectAuctCowList(Map<String, Object> params) throws SQLException ;
 
 	int updateLowSbidAmt(Map<String, Object> params) throws SQLException;
@@ -293,6 +299,14 @@ public interface AuctionService {
 	 * @param params
 	 * @return
 	 */
-	List<Map<String, Object>> selectCodeList(Map<String, Object> params) throws SQLException;;
+	List<Map<String, Object>> selectCodeList(Map<String, Object> params) throws SQLException;
+
+	/**
+	 * 출장우 정보 > APP에서 일괄 경매시 사용
+	 * @param params
+	 * @return
+	 * @throws SQLException
+	 */
+	List<Map<String, Object>> selectCowList(Map<String, Object> params) throws SQLException;;
 	
 }

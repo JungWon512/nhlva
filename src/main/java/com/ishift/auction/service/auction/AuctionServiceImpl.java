@@ -280,6 +280,12 @@ public class AuctionServiceImpl implements AuctionService {
 		return auctionDAO.sealectAuctCowCnt(params);
 	}
 
+	/**
+	 * 출하우 정보
+	 * @param params
+	 * @return
+	 * @throws SQLException
+	 */
 	@Override
 	public List<Map<String, Object>> selectAuctCowList(Map<String, Object> params) throws SQLException {
 		return auctionDAO.selectAuctCowList(params);
@@ -931,4 +937,16 @@ public class AuctionServiceImpl implements AuctionService {
 		return auctionDAO.selectCodeList(params);
 	}
 	
+	/**
+	 * 출장우 정보 > APP에서 일괄 경매시 사용
+	 * 찜가격과 응찰 가격 모두 조회
+	 * 응찰가격이 있는 경우 1순위, 찜가격이 있는 경우 2순위, 나머지 경우 3순위로 정렬
+	 * @param params
+	 * @return
+	 * @throws SQLException
+	 */
+	@Override
+	public List<Map<String, Object>> selectCowList(Map<String, Object> params) throws SQLException {
+		return auctionDAO.selectCowList(params);
+	}
 }

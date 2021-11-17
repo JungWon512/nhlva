@@ -440,4 +440,14 @@ public class AuctionDAO {
 	public List<Map<String, Object>> selectCodeList(Map<String, Object> params) throws SQLException {
 		return mainDao.selectList("auction.selectCodeList", params);
 	}
+
+	/**
+	 * 출장우 정보 > APP에서 일괄 경매시 사용
+	 * @param params
+	 * @return
+	 * @throws SQLException
+	 */
+	public List<Map<String, Object>> selectCowList(Map<String, Object> params) throws SQLException {
+		return mainDao.selectList("ApiMapper.selectCowList", params);
+	}
 }
