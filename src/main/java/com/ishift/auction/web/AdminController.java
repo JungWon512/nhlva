@@ -11,11 +11,9 @@ import com.ishift.auction.util.SessionUtill;
 import com.ishift.auction.vo.AdminUserDetails;
 import com.ishift.auction.vo.JwtTokenVo;
 
-import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.MediaType;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.core.Authentication;
@@ -27,7 +25,6 @@ import javax.annotation.Resource;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletResponse;
 
-import java.io.IOException;
 import java.sql.SQLException;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
@@ -86,7 +83,7 @@ public class AdminController {
 		try {
 			final Map<String,Object> map = new HashMap<>();
 			final AdminUserDetails userVo = (AdminUserDetails)sessionUtill.getUserVo();
-			if(userVo.getPlace() != null) map.put("naBzPlcNo", userVo.getPlace());
+			if(userVo != null) map.put("naBzPlcNo", userVo.getPlace());
 			mav.addObject("johapData", adminService.selectOneJohap(map));
 		}catch (RuntimeException re) {
 			log.error("AdminController.adminMain : {} ",re);
@@ -109,7 +106,7 @@ public class AdminController {
 			final AdminUserDetails userVo = (AdminUserDetails)sessionUtill.getUserVo();
 
 			final Map<String, Object> params = new HashMap<>();
-			if(userVo.getPlace() != null) params.put("naBzPlcNo", userVo.getPlace());
+			if(userVo != null) params.put("naBzPlcNo", userVo.getPlace());
 
 			final Map<String, Object> bizInfo = adminService.selectOneJohap(params);
 			mav.addObject("johapData", bizInfo);
@@ -137,13 +134,13 @@ public class AdminController {
 			final Map<String,Object> map = new HashMap<>();
 			final AdminUserDetails userVo = (AdminUserDetails)sessionUtill.getUserVo();
 			map.put("delYn", "0");
-			if(userVo.getPlace() != null) map.put("naBzPlcNo", userVo.getPlace());
+			if(userVo != null) map.put("naBzPlcNo", userVo.getPlace());
 			mav.addObject("johapData", adminService.selectOneJohap(map));
 
 			final LocalDateTime date = LocalDateTime.now();
 			final String today = date.format(DateTimeFormatter.ofPattern("yyyyMMdd"));
 			map.put("searchDate", today);
-			if(userVo.getPlace() != null) map.put("naBzPlcNo", userVo.getPlace());
+			if(userVo != null) map.put("naBzPlcNo", userVo.getPlace());
 
 			final Map<String,Object> count =auctionService.selectCountEntry(map);
 			String usrid = userVo.getUsrid();
@@ -214,7 +211,7 @@ public class AdminController {
 		map.put("delYn", "0");
 
 		final AdminUserDetails userVo = (AdminUserDetails)sessionUtill.getUserVo();
-		if(userVo.getPlace() != null) map.put("naBzPlcNo", userVo.getPlace());
+		if(userVo != null) map.put("naBzPlcNo", userVo.getPlace());
 
 		mav.addObject("johapData", adminService.selectOneJohap(map));
 		mav.addObject("totalCnt", adminService.selectVisitTotalCnt(map));
@@ -270,7 +267,7 @@ public class AdminController {
 		map.put("delYn", "0");
 
 		final AdminUserDetails userVo = (AdminUserDetails)sessionUtill.getUserVo();
-		if(userVo.getPlace() != null) map.put("naBzPlcNo", userVo.getPlace());
+		if(userVo != null) map.put("naBzPlcNo", userVo.getPlace());
 
 		mav.addObject("johapData", adminService.selectOneJohap(map));
 		mav.setViewName("admin/auction/stream/stream");

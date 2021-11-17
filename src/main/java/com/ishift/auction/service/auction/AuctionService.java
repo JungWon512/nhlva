@@ -286,6 +286,13 @@ public interface AuctionService {
 
 	List<Map<String, Object>> selectBidLogList(Map<String, Object> params) throws SQLException;
 
-	Map<String, Object> selectBidLogListCnt(Map<String, Object> params)  throws SQLException;
+	Map<String, Object> selectBidLogListCnt(Map<String, Object> params) throws SQLException;
+
+	/**
+	 * 공통 코드 리스트
+	 * @param params
+	 * @return
+	 */
+	List<Map<String, Object>> selectCodeList(Map<String, Object> params) throws SQLException;;
 	
 }

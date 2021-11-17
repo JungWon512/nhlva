@@ -157,8 +157,8 @@ public class MyPageController {
 		if(param.get("searchOrder") != null) map.put("searchOrder", param.get("searchOrder"));
 		if(param.get("searchAucObjDsc") != null) map.put("searchAucObjDsc", param.get("searchAucObjDsc"));
 		if(param.get("searchTxt") != null) map.put("searchTxt", param.get("searchTxt"));
-		if(userVo.getFhsIdNo() != null) map.put("searchFhsIdNo", userVo.getFhsIdNo());
-		if(userVo.getFarmAmnno() != null) map.put("searchFarmAmnno", userVo.getFarmAmnno());
+		if(userVo != null) map.put("searchFhsIdNo", userVo.getFhsIdNo());
+		if(userVo != null) map.put("searchFarmAmnno", userVo.getFarmAmnno());
 		
 		List<Map<String,Object>> list=auctionService.entrySelectList(map);
 		if(map.get("searchDate") != null) param.put("searchDate", map.get("searchDate"));

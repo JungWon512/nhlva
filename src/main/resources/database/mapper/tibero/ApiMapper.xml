@@ -345,15 +345,15 @@
 	</insert>
 	
 	<select id="selectMaxDdlQcn" parameterType="map" resultType="map">
-		SELECT
-        	MAX(NVL(DDL_QCN, 0)) AS MAX_DDL_QCN
-		FROM
-			TB_LA_IS_MH_AUC_STN A
-		WHERE A.NA_BZPLC = #{naBzPlc}
-		AND A.AUC_OBJ_DSC = #{aucObjDsc}
-		AND A.AUC_DT = #{aucDt}
-		AND A.RG_SQNO = #{rgSqno}
-    </select>
+		SELECT CASE WHEN NVL(MAX(A.DDL_QCN), 0) >= 9 THEN '0'
+					ELSE NVL(MAX(A.DDL_QCN), 0) 
+				END AS MAX_DDL_QCN
+		  FROM TB_LA_IS_MH_AUC_STN A
+		 WHERE A.NA_BZPLC = #{naBzPlc}
+		   AND A.AUC_OBJ_DSC = #{aucObjDsc}
+		   AND A.AUC_DT = #{aucDt}
+		   AND A.RG_SQNO = #{rgSqno}
+	</select>
 	
 	<select id="selectAuctBidNum" parameterType="map" resultType="map">
 		SELECT A.LVST_AUC_PTC_MN_NO
@@ -646,6 +646,18 @@
 			 , A.PPGCOW_FEE_DSC		/* 번식우수수료구분코드 1.임신우, 2.비임신우, 3.임신우+송아지, 4.비임신우+송아지,  5.해당없음 */
 			 , B.MACO_YN as TRMN_MACO_YN /* 중도매인 조합원여부 */
 			 , C.MACO_YN as FHS_MACO_YN /* 출하주 중도매인여부 */
+			 , A.COW_SOG_WT										/* 중량 */
+			 , A.FEE_CHK_YN										/* 출하자 수수료 기적용 여부 */
+			 , A.FEE_CHK_YN_FEE									/* 출하자 수수료 기적용 금액 */
+			 , A.MT12_OVR_YN									/* 12개월 이상 수수료 적용 여부 */
+			 , A.MT12_OVR_FEE									/* 12개월 이상 수수료 적용 금액 */
+			 , A.SELFEE_CHK_YN									/* 판매자 수수료 기적용 여부 */
+			 , A.SELFEE_CHK_YN_FEE								/* 판매자 수수료 기적용 금액 */
+			 , A.DNA_YN											/* 친자일치 검사 여부 */
+			 , A.DNA_YN_CHK										/* 친자일차 여부 */
+			 , A.PRNY_JUG_YN									/* 임신감정여부 */
+			 , A.NCSS_JUG_YN									/* 괴사감정여부 */
+			 , A.RMHN_YN										/* 제각여부 */
 		  FROM TB_LA_IS_MH_SOG_COW A
 		  LEFT OUTER JOIN TB_LA_IS_MM_MWMN B
 		    ON ( A.NA_BZPLC = B.NA_BZPLC AND A.TRMN_AMNNO = B.TRMN_AMNNO )
