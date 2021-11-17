@@ -3962,17 +3962,17 @@ Base styles: contents layer
 		{
 		display: none;
 	}
-	.auction_bid .list_body li:nth-child(even) {
-		background: #f5f5f5;
-	}
+/* 	.auction_bid  .list_body li:nth-child(even) { */
+/* 		background: #f5f5f5; */
+/* 	} */
 	.auction_bid .list_body li dd.pd_ea {
 		color: #007eff !important;
 	}
 }
 
-.auction_bid .list_body.pop_style li:nth-child(even) {
-	background: #f5f5f5;
-}
+/* .auction_bid .list_body.pop_style li:nth-child(even) { */
+/* 	background: #f5f5f5; */
+/* } */
 
 .auction_bid .list_body.pop_style li dd.pd_ea {
 	color: #007eff !important;
@@ -6530,4 +6530,29 @@ Base styles: contents layer
 	background: url(/static/images/guide/sound_off.svg) no-repeat center
 		center;
 	background-size: 25px 29px !important;
+}
+div.list_txts {
+    text-align: center;
+    color: #1a1a1a;
+    font-size: 17px;
+    font-family: "Noto Sans KR", "Roboto", "AppleGothic", "sans-serif";
+    font-weight: 700;
+    margin: 10px 0 10px;
+}
+.buy_list div.list_txts {
+    text-align: center;
+    color: #1a1a1a;
+    font-size: 17px;
+    font-family: "Noto Sans KR", "Roboto", "AppleGothic", "sans-serif";
+    font-weight: 700;
+    margin: 10px 0 10px;
+}
+
+@media only all and (max-width: 1024px){
+	.entryList .auction_bid .list_body li.act {
+	    background: #e6efff;
+	}
+/* 	.entryList .auction_bid  .list_body li:nth-child(even) { */
+/* 		background: #b2ebf4; */
+/* 	} */
 }

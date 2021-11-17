@@ -287,5 +287,7 @@ public interface AuctionService {
 	List<Map<String, Object>> selectBidLogList(Map<String, Object> params) throws SQLException;
 
 	Map<String, Object> selectBidLogListCnt(Map<String, Object> params)  throws SQLException;
+
+	Map<String, Object> selectTotSoldPrice(Map<String, Object> map) throws SQLException;
 	
 }

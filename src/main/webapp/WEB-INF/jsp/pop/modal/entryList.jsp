@@ -1,19 +1,19 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
 <%@ include file="/WEB-INF/__system/taglibs.jsp" %>
 
-<div class="modal-content">
+<div class="modal-content entryList">
 	<button class="modal_popup_close" onclick="modalPopupClose('.pop_auction');return false;">닫기</button>
 	<div class="tab_list">
 		<ul>
 			<c:choose>
 				<c:when test="${johapData.AUC_DSC eq '1' }">
-					<li style="width: 50%;"><a href="javascript:;" class="act btnTabMove" data-tab-id="result">낙찰내역</a></li>
+					<li style="width: 50%;"><a href="javascript:;" class="${(empty params.tabAct or params.tabAct eq 'result')?'act':'' } btnTabMove" data-tab-id="result">낙찰내역</a></li>
 				</c:when>
 				<c:otherwise>
-					<li style="width: 50%;"><a href="javascript:;" class="act btnTabMove" data-tab-id="bid">응찰내역</a></li>
+					<li style="width: 50%;"><a href="javascript:;" class="${(empty params.tabAct or params.tabAct eq 'bid')?'act':'' } btnTabMove" data-tab-id="bid">응찰내역</a></li>
 				</c:otherwise>				
 			</c:choose>
-			<li style="width: 50%;"><a href="javascript:;" class="btnTabMove" data-tab-id="schedule">예정조회</a></li>			
+			<li style="width: 50%;"><a href="javascript:;" class="btnTabMove ${(params.tabAct eq 'schedule')?'act':'' }" data-tab-id="schedule">예정조회</a></li>			
 <!-- 			<li><a href="javascript:;" class="btnTabMove" data-tab-id="bid">응찰내역</a></li> -->
 		</ul>
 	</div>
@@ -125,7 +125,7 @@
 	</div>
 	<!-- // -->
 	<div class="tab_area auction_list bid_area" style="display:none;">
-		<div class="" style="text-align: center;">
+		<div class="list_txts" style="text-align: center;">
 			응찰 ${bidCnt.TOT_CNT}건 (암 : ${bidCnt.W_CNT}건 / 수 : ${bidCnt.M_CNT}			
 			<c:if test="${bidCnt.NEUTER_CNT>0}">
 				/ 거세 : ${bidCnt.NEUTER_CNT }
@@ -166,14 +166,14 @@
 						</li>
 					</c:if>
 	                <c:forEach items="${ bidList }" var="bvo" varStatus="st">
-						<li>
+						<li class="${bvo.SEL_STS_DSC_NAME eq '본인낙찰' ?'act':''}">
 							<dl>
 								<dd class="num">${bvo.AUC_PRG_SQ }</dd>
 								<dd class="pd_ea">${bvo.SRA_INDV_AMNNO_FORMAT }</dd>
 								<dd class="pd_sex">${bvo.INDV_SEX_C_NAME }</dd>
 								<dd class="pd_pay1">${bvo.LOWS_SBID_LMT_AM <= 0 ? '0' : fn:split(bvo.LOWS_SBID_LMT_UPR,'.')[0]}</dd>
 								<dd class="pd_pay2">${ fn:split(bvo.SRA_SBID_UPR,'.')[0] }</dd>
-								<dd class="pd_pay3">${ fn:split(bvo.ATDR_UPR,'.')[0] }</dd>
+								<dd class="pd_pay3">${ fn:split(bvo.ATDR_AM,'.')[0] }</dd>
 							</dl>
 						</li>
 	                </c:forEach>				

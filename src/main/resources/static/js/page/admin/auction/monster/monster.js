@@ -32,7 +32,7 @@ var setEventListener = function(){
 		socketStart();
 	});
 	$('#btnStop').click(function(){
-		
+		$('.connMnTable tbody td').removeClass("connect").removeClass("bid");
 		$(this).prop('disabled',true);
 		$('#btnStart').prop('disabled',false);
 		$(this).closest('td').addClass('mt-deep').removeClass('mt-gray');
@@ -42,13 +42,32 @@ var setEventListener = function(){
 		} 
 	});
 	$('#btnSort').click(function(){
-		setTileInit();
-		if(socket && socket.io.connected.length > 0){ 
-			var packet = 'AK|'+$('#naBzPlc').val();
-			socket.emit('packetData', packet);	
-		}
-//		var sortingList = $('table.connMnTable td p.add').sort(function(a,b){
-//			var pre = $(a).text(),next = $(b).text(); return pre-next;});
+		//setTileInit();
+		//if(socket && socket.io.connected.length > 0){ 
+		//	var packet = 'AK|'+$('#naBzPlc').val();
+		//	socket.emit('packetData', packet);	
+		//}
+		var tdArr = [];
+		var sortingList = $('table.connMnTable td p.add').sort(function(a,b){
+			var pre = $(a).text(),next = $(b).text(); return pre-next;
+		}).each((i,item)=>{
+			tdArr.push($(item).closest('td').get(0).outerHTML);
+		});
+		$('table.connMnTable td p:not(.add)').each((i,item)=>{
+			tdArr.push($(item).closest('td').get(0).outerHTML);
+		});
+		$('.connMnTable tbody').empty();
+		
+		var sHtml ='';
+		tdArr.forEach((item,i)=>{
+			var tmpStr = new String(i);
+			var trIndex = tmpStr[tmpStr.length-1];
+			if(trIndex == 0) sHtml+= '<tr>';
+			sHtml+= item;
+			if(trIndex == 9) sHtml+= '</tr>'; 
+		});
+		$('.connMnTable tbody').append(sHtml);
+			
 	});
 	
 	$(document).on('dblclick','.connMnTable tr td.connect,.connMnTable tr td.ing',function(){

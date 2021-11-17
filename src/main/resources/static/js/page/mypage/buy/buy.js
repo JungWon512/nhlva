@@ -93,9 +93,9 @@
 			, searchDate : $("#searchDateBuy").val()
 			, searchAucObjDsc : $("input[name=searchAucObjDscBuy]:checked").val()
 		};
-		console.log(param);
 		COMMONS.callAjax("/auction/api/select/myBuyList", "post", param, 'application/json', 'json'
 		, function(data){
+			$('.buy_list div.list_txts span').text(data.totPrice ? getStringValue(data.totPrice.SRA_SBID_AM,0).replace(/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g, ",") :'0');
 			$('.auction_result div.list_body ul').empty();
 			if(data.data.length == 0){
 				$('.auction_result div.list_body ul').append("<li><dl><dd>검색결과가 없습니다.</dd></dl></li>");								
@@ -129,7 +129,6 @@
 			, searchDate : $("#searchDateBid").val()
 			, searchAucObjDsc : $("input[name=searchAucObjDscBid]:checked").val()
 		};
-		console.log(param);
 		COMMONS.callAjax("/auction/api/select/myBidList", "post", param, 'application/json', 'json'
 		, function(data){
 			$('.auction_bid div.list_body ul').empty();

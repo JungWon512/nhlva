@@ -4,18 +4,18 @@
 <input type="hidden" name="loginNo" value="${inputParam.loginNo}"/>
 <input type="hidden" id="johpCdVal" value="${johapData.NA_BZPLCNO}"/>
 
-<div id="" class="pop_auction">
+<div id="" class="entryList pop_auction">
 	<div class="tab_list">
 		<ul class="tab_2">
 			<c:choose>
 				<c:when test="${johapData.AUC_DSC eq '1' }">
-					<li><a href="javascript:;" class="act sold" data-tab-id='sold'>낙찰내역</a></li>
+					<li><a href="javascript:;" class="${(empty inputParam.tabAct or inputParam.tabAct eq 'sold')?'act':'' } sold" data-tab-id='sold'>낙찰내역</a></li>
 				</c:when>
 				<c:otherwise>
-					<li><a href="javascript:;" class="act bid" data-tab-id='bid'>응찰내역</a></li>
+					<li><a href="javascript:;" class="${(empty inputParam.tabAct or inputParam.tabAct eq 'bid')?'act':'' } bid" data-tab-id='bid'>응찰내역</a></li>
 				</c:otherwise>				
 			</c:choose>
-			<li><a href="javascript:;" class="auc" data-tab-id='auc'>예정조회</a></li>
+			<li><a href="javascript:;" class="auc ${(inputParam.tabAct eq 'auc')?'act':'' }" data-tab-id='auc'>예정조회</a></li>
 			
 		</ul>
 	</div>
@@ -146,7 +146,7 @@
 	</div>
 		<!-- // -->
 	<div class="tab_area auction_list bid" style="display:none;">
-		<div class="" style="text-align: center;">
+		<div class="list_txts" style="text-align: center;">
 			응찰 ${bidCnt.TOT_CNT}건 (암 : ${bidCnt.W_CNT}건 / 수 : ${bidCnt.M_CNT}			
 			<c:if test="${bidCnt.NEUTER_CNT>0}">
 				/ 거세 : ${bidCnt.NEUTER_CNT }
@@ -190,14 +190,14 @@
 						</li>
 					</c:if>
 	                <c:forEach items="${ bidList }" var="vo" varStatus="st">
-						<li>
+						<li class="${vo.SEL_STS_DSC_NAME eq '본인낙찰' ?'act':''}">
 							<dl>
 								<dd class="num">${vo.AUC_PRG_SQ }</dd>
 								<dd class="pd_ea">${vo.SRA_INDV_AMNNO_FORMAT }</dd>
 								<dd class="pd_sex">${vo.INDV_SEX_C_NAME }</dd>
 								<dd class="pd_pay1">${vo.LOWS_SBID_LMT_AM <= 0 ? '0' : fn:split(vo.LOWS_SBID_LMT_UPR,'.')[0]}</dd>
 								<dd class="pd_pay2">${ fn:split(vo.SRA_SBID_UPR,'.')[0] }</dd>
-								<dd class="pd_pay3">${ fn:split(vo.ATDR_UPR,'.')[0] }</dd>
+								<dd class="pd_pay3">${ fn:split(vo.ATDR_AM,'.')[0] }</dd>
 							</dl>
 						</li>
 	                </c:forEach>				

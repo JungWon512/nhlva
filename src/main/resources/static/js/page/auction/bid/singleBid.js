@@ -3,6 +3,17 @@ $(function() {
 	var COMMONS = window.auction["commons"];
 	
 	var setLayout = function() {
+		if(!isApp() && chkOs() == 'web'){
+			$('input[name=bidAmt]').attr('readonly',false);
+			$('input[name=bidAmt]').on('input',function(){
+				inputNumberVaildBidAmt(this,4);
+			});
+			$('input[name=bidAmt]').on('keyup',function(e){				
+				if (e.keyCode == 13 && checkBidData()) {
+					fnBid();
+				}				
+			});
+		}
 		$('.chart').easyPieChart({
 			barColor: '#007eff',
 			trackColor: '#dbdbdb',
@@ -63,6 +74,7 @@ $(function() {
 			}
 			var num = $(this).val();
 			var inputVal = $("input[name='bidAmt']").val().split(",").join("");
+			if(!isApp() && chkOs() == 'web') $('input[name=bidAmt]').focus();
 			if (inputVal == "" && num == "0") return;
 			if (inputVal.length >= maxLength) return;
 			$("input[name='bidAmt']").removeClass("txt-blue").val(("" + inputVal + num).replace(/\B(?=(\d{3})+(?!\d))/g, ","));
@@ -73,6 +85,7 @@ $(function() {
 		$("button.num_back").on(clickEvent, function(){
 			var inputVal = $("input[name='bidAmt']").val().split(",").join("");
 			$("input[name='bidAmt']").removeClass("txt-blue").val(inputVal.substring(0, inputVal.length-1).replace(/\B(?=(\d{3})+(?!\d))/g, ","))
+			if(!isApp() && chkOs() == 'web') $('input[name=bidAmt]').focus();
 		});
 		
 		// 경매 예정, 결과, 응찰내역 조회 팝업
@@ -153,28 +166,28 @@ $(function() {
 			var inputUpr = $(".pop_jjim_input").find("input[name=inputUpr]").val() == "" ? 0 : $(".pop_jjim_input").find("input[name=inputUpr]").val();
 			var lowsSbidLmtUpr = $(".pop_jjim_input").find("input[name=lowsSbidLmtUpr]").val() == "" ? 0 : $(".pop_jjim_input").find("input[name=lowsSbidLmtUpr]").val();
 			if(inputUpr && parseInt(lowsSbidLmtUpr) <= parseInt(inputUpr)) {
-				modalComfirm(""
-							,"찜가격을 저장하시겠습니까?"
-							, function() {
-								COMMONS.callAjax("/auction/api/inserttZimPrice"
-									, "post"
-									, $("form[name=frm_zim]").serializeObject()
-									, 'application/json'
-									, 'json'
-									, function(){
-										modalPopupClose('.popup .modal-wrap.pop_jjim_input.zim');
-										COMMONS.callAjax("/pop/entryList"
-											, "post"
-											, {naBzPlcNo : $("#naBzPlcNo").val(), place : $("#naBzPlcNo").val()}
-											, 'application/json'
-											, 'html'
-											, function(data){
-												$(".pop_auction").html("");
-												$(data).appendTo($(".pop_auction"));
-												modalPopup('.pop_auction');
-											});
-									});
+//				modalComfirm(""
+//							,"찜가격을 저장하시겠습니까?"
+//							, function() {
+//							});
+				COMMONS.callAjax("/auction/api/inserttZimPrice"
+					, "post"
+					, $("form[name=frm_zim]").serializeObject()
+					, 'application/json'
+					, 'json'
+					, function(){
+						modalPopupClose('.popup .modal-wrap.pop_jjim_input.zim');
+						COMMONS.callAjax("/pop/entryList"
+							, "post"											
+							, {naBzPlcNo : $("#naBzPlcNo").val(), place : $("#naBzPlcNo").val(), tabAct : $('div.entryList div.tab_list ul li a.act').data('tabId')}
+							, 'application/json'
+							, 'html'
+							, function(data){
+								$(".pop_auction").html("");
+								$(data).appendTo($(".pop_auction"));
+								modalPopup('.pop_auction');
 							});
+				});
 				return;
 			}
 			else {
@@ -202,8 +215,8 @@ $(function() {
 								, function(){
 									modalPopupClose('.popup .modal-wrap.pop_jjim_input.zim');
 									COMMONS.callAjax("/pop/entryList"
-										, "post"
-										, {naBzPlcNo : $("#naBzPlcNo").val(), place : $("#naBzPlcNo").val()}
+										, "post"										
+										, {naBzPlcNo : $("#naBzPlcNo").val(), place : $("#naBzPlcNo").val(), tabAct : $('div.entryList div.tab_list ul li a.act').data('tabId')}
 										, 'application/json'
 										, 'html'
 										, function(data){
@@ -221,10 +234,12 @@ $(function() {
 			if (checkBidData()) {
 				fnBid();
 			}
+			if(!isApp() && chkOs() == 'web') $('input[name=bidAmt]').focus();
 		});
 		
 		$(".btn_bid_cancel").on(clickEvent, function(){
 			fnBidCancel();
+			if(!isApp() && chkOs() == 'web') $('input[name=bidAmt]').focus();
 		});
 		
 		socketStart();
@@ -944,3 +959,11 @@ window.addEventListener('beforeunload', function(){
 	sFlag = true;
 	if(socket.connected) socket.disconnect();
 });
+
+var inputNumberVaildBidAmt = function(el,len){
+	el.value= el.value.replace(/[^0-9]/g, "");
+	if(el.value.length > len) {
+		el.value = el.value.substr(0, len);
+	}
+	el.value= el.value.replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+}

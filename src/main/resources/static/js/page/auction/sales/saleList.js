@@ -79,13 +79,15 @@
 			sHtml += ' 	<input type="hidden" name="oldJjimPrice" value="'+jjim_price+'"/> ';
 			sHtml += ' 	<div class="modal-content">';
 			sHtml += ' 		<h3>찜가격</h3>';
+			sHtml += '		<button class="modal_popup_close" onclick="modalPopupClose(\'.popup .modal-wrap.pop_jjim_input.zim\');">닫기</button>';
 			sHtml += ' 		<dl class="jjim_dl">';
 			sHtml += ' 			<dt>';
 //			sHtml += ' 				<p>경매번호: 101번 <span>|</span> 최저가: '+lowsSbidLmtUpr+'만 </p>';
 			sHtml += ' 				<p>최저가: '+lowsSbidLmtUpr+'만 </p>';
 			sHtml += ' 			</dt>';
 			sHtml += ' 			<dd>';
-			sHtml += ' 				<input type="text" placeholder="찜가격 입력 (금액 만 원)" name="inputUpr" id="inputUpr" maxlength=4 value="'+jjim_price+'">';
+			//sHtml += ' 				<input type="text" placeholder="찜가격 입력 (금액 만 원)" name="inputUpr" id="inputUpr" maxlength=4 value="'+jjim_price+'">';
+			sHtml += '					<input type="text" name="inputUpr" id="inputUpr" oninput="inputNumberVaild(this, 4)" value="'+jjim_price+'" placeholder="찜가격 입력 (금액 만 원)" pattern="\d*" inputmode="numeric" />';
 			sHtml += ' 			</dd>';
 			sHtml += ' 		</dl>';
 			sHtml += ' 		<div class="btn_area">';

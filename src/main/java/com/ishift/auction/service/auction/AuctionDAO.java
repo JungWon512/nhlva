@@ -431,4 +431,8 @@ public class AuctionDAO {
 	public Map<String, Object> selectBidLogListCnt(Map<String, Object> params) throws SQLException {
 		return mainDao.selectOne("auction.selectBidLogListCnt", params);
 	}
+
+	public Map<String, Object> selectTotSoldPrice(Map<String, Object> params) throws SQLException {		
+		return mainDao.selectOne("auction.selectTotSoldPrice", params);
+	}
 }
