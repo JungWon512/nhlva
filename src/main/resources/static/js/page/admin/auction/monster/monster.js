@@ -32,7 +32,7 @@ var setEventListener = function(){
 		socketStart();
 	});
 	$('#btnStop').click(function(){
-		$('.connMnTable tbody td').removeClass("connect").removeClass("bid");
+		$('.connMnTable tbody td').removeClass("connect").removeClass("bid").removeClass("ing");
 		$(this).prop('disabled',true);
 		$('#btnStart').prop('disabled',false);
 		$(this).closest('td').addClass('mt-deep').removeClass('mt-gray');
@@ -48,16 +48,25 @@ var setEventListener = function(){
 		//	socket.emit('packetData', packet);	
 		//}
 		var tdArr = [];
-		var sortingList = $('table.connMnTable td p.add').sort(function(a,b){
+		
+		//나가지 않은 접속자 sorting 및 td 저장
+		var sortingList = $('table.connMnTable').find('td.connect,td.ing').find('p.add').sort(function(a,b){
 			var pre = $(a).text(),next = $(b).text(); return pre-next;
 		}).each((i,item)=>{
 			tdArr.push($(item).closest('td').get(0).outerHTML);
 		});
+		//나간 접속자 sorting 및 td 저장
+		var last =$('table.connMnTable td p:not(.add)').get(0).innerHTML;
+		for(var i=sortingList.length+1;i<last;i++){
+			tdArr.push('<td class=""><p class="not">'+i+'</p></td>');
+		}
+		
+		//남은 접속판 td 저장
 		$('table.connMnTable td p:not(.add)').each((i,item)=>{
 			tdArr.push($(item).closest('td').get(0).outerHTML);
 		});
-		$('.connMnTable tbody').empty();
 		
+		$('.connMnTable tbody').empty();		
 		var sHtml ='';
 		tdArr.forEach((item,i)=>{
 			var tmpStr = new String(i);

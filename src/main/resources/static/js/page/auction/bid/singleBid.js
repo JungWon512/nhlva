@@ -13,6 +13,7 @@ $(function() {
 					fnBid();
 				}				
 			});
+			$('input[name=bidAmt]').focus();
 		}
 		$('.chart').easyPieChart({
 			barColor: '#007eff',

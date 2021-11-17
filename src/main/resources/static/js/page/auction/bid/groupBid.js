@@ -13,6 +13,16 @@ $(function() {
 					fnBid();
 				}				
 			});
+			$('input[name=aucNum]').attr('readonly',false);
+			$('input[name=aucNum]').on('input',function(){
+				inputNumberVaildBidAmt(this,4);
+			});
+			$('input[name=aucNum]').on('keyup',function(e){				
+				if (e.keyCode == 13) {
+					fnSetAuctionInfo();
+				}				
+			});
+			$('input[name=aucNum]').focus();
 		}
 		$('.chart').easyPieChart({
 			barColor: '#007eff',
@@ -984,6 +994,14 @@ var setLoopChJoinInIn = function(cast,i){
 	tmpRemon.joinCast(castName);
 };
 // remon 영성 관련 로직 [e]
+
+var inputNumberVaildBidAmt = function(el,len){
+	el.value= el.value.replace(/[^0-9]/g, "");
+	if(el.value.length > len) {
+		el.value = el.value.substr(0, len);
+	}
+	el.value= el.value.replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+}
 
 window.addEventListener('beforeunload', function(){
 	sFlag = true;
