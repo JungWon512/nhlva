@@ -936,7 +936,12 @@ public class AuctionServiceImpl implements AuctionService {
 	public List<Map<String, Object>> selectCodeList(Map<String, Object> params) throws SQLException {
 		return auctionDAO.selectCodeList(params);
 	}
-	
+	/**
+	 * 나의 구매내역 > 총 구매금액 조회
+	 * @param params
+	 * @return
+	 * @throws SQLException
+	 */
 	@Override
 	public Map<String, Object> selectTotSoldPrice(Map<String, Object> map) throws SQLException{
 		return auctionDAO.selectTotSoldPrice(map);

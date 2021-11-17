@@ -309,5 +309,12 @@ public interface AuctionService {
 	 */
 	List<Map<String, Object>> selectCowList(Map<String, Object> params) throws SQLException;;
 
+
+	/**
+	 * 나의 구매내역 > 총 구매금액 조회
+	 * @param params
+	 * @return
+	 * @throws SQLException
+	 */
 	Map<String, Object> selectTotSoldPrice(Map<String, Object> map) throws SQLException;
 }
