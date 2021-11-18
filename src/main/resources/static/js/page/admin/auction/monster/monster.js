@@ -32,7 +32,7 @@ var setEventListener = function(){
 		socketStart();
 	});
 	$('#btnStop').click(function(){
-		
+		$('.connMnTable tbody td').removeClass("connect").removeClass("bid").removeClass("ing");
 		$(this).prop('disabled',true);
 		$('#btnStart').prop('disabled',false);
 		$(this).closest('td').addClass('mt-deep').removeClass('mt-gray');
@@ -42,13 +42,41 @@ var setEventListener = function(){
 		} 
 	});
 	$('#btnSort').click(function(){
-		setTileInit();
-		if(socket && socket.io.connected.length > 0){ 
-			var packet = 'AK|'+$('#naBzPlc').val();
-			socket.emit('packetData', packet);	
+		//setTileInit();
+		//if(socket && socket.io.connected.length > 0){ 
+		//	var packet = 'AK|'+$('#naBzPlc').val();
+		//	socket.emit('packetData', packet);	
+		//}
+		var tdArr = [];
+		
+		//나가지 않은 접속자 sorting 및 td 저장
+		var sortingList = $('table.connMnTable').find('td.connect,td.ing').find('p.add').sort(function(a,b){
+			var pre = $(a).text(),next = $(b).text(); return pre-next;
+		}).each((i,item)=>{
+			tdArr.push($(item).closest('td').get(0).outerHTML);
+		});
+		//나간 접속자 sorting 및 td 저장
+		var last =$('table.connMnTable').find('td:not(.connect,.ing)').find('p.add').length;		
+		for(var i=0;i<last;i++){
+			tdArr.push('<td class=""><p class="not">'+(sortingList.length+1+i)+'</p></td>');
 		}
-//		var sortingList = $('table.connMnTable td p.add').sort(function(a,b){
-//			var pre = $(a).text(),next = $(b).text(); return pre-next;});
+		
+		//남은 접속판 td 저장
+		$('table.connMnTable td p:not(.add)').each((i,item)=>{
+			tdArr.push($(item).closest('td').get(0).outerHTML);
+		});
+		
+		$('.connMnTable tbody').empty();		
+		var sHtml ='';
+		tdArr.forEach((item,i)=>{
+			var tmpStr = new String(i);
+			var trIndex = tmpStr[tmpStr.length-1];
+			if(trIndex == 0) sHtml+= '<tr>';
+			sHtml+= item;
+			if(trIndex == 9) sHtml+= '</tr>'; 
+		});
+		$('.connMnTable tbody').append(sHtml);
+			
 	});
 	
 	$(document).on('dblclick','.connMnTable tr td.connect,.connMnTable tr td.ing',function(){

@@ -196,8 +196,8 @@ var messageHandler = function(data) {
 //			}
 		break;	
 		case "SC" : //현재 출품정보
-			if(!auctionConfig.scData) auctionConfig.scData = {};
-			if(auctionConfig.scData.curAucSeq) auctionConfig.scData.preAucSeq = auctionConfig.scData.curAucSeq
+			//if(!auctionConfig.scData) auctionConfig.scData = {};
+			//if(auctionConfig.scData.curAucSeq) auctionConfig.scData.preAucSeq = auctionConfig.scData.curAucSeq
 			auctionConfig.scData.curAucSeq = dataArr[2];
 						
 			//관전 전광판 데이터 update				
@@ -236,10 +236,10 @@ var messageHandler = function(data) {
 			var tr = getTrRow(tmpAsDAta.aucPrgSq);
 			
 			 var oSelSts =tr.find('dl dd.selSts').text();
-			if(tmpAsDAta.selSts && oSelSts != tmpAsDAta.selSts){
-				tr.find('dl dd.selSts').text(tmpAsDAta.selSts);
-				calcPiePercent();
-			}
+			//if(tmpAsDAta.selSts && oSelSts != tmpAsDAta.selSts){
+			tr.find('dl dd.selSts').text(tmpAsDAta.selSts);
+			calcPiePercent();
+			//}
 			tr.find('dl dd.sraSbidAm').text(Math.round(tmpAsDAta.sraSbidAm));
 			changeTrRow(tr);	
 		break;	

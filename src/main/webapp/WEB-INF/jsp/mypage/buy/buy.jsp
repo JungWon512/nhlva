@@ -64,6 +64,10 @@
 				<li><a href="javascript:;" class="btn_excelBuy"><span class="ico_excel">엑셀다운</span></a></li>
 			</ul>
 		</div>
+		<div class="list_txts">
+			<fmt:formatNumber value="${totPrice.SRA_SBID_AM}" type="number" var="TOT_SRA_SBID_AM"/>
+			총금액 : <span>${empty TOT_SRA_SBID_AM?'0':TOT_SRA_SBID_AM}</span> 원
+		</div>
 		<!-- //list_downs e -->
 <!-- 		<div class="list_table auction_buy"> -->
 		<div class="list_table auction_result">
@@ -211,7 +215,7 @@
 								<dd class="pd_kg">${ fn:split(item.COW_SOG_WT,'.')[0] }</dd>
 								<dd class="pd_pay1">${item.LOWS_SBID_LMT_AM <= 0 ? '0' : fn:split(item.LOWS_SBID_LMT_UPR,'.')[0]}</dd>
 								<dd class="pd_pay2">${ fn:split(item.SRA_SBID_UPR,'.')[0] }</dd>
-								<dd class="pd_pay3">${ fn:split(item.ATDR_UPR,'.')[0] }</dd>
+								<dd class="pd_pay3">${ fn:split(item.ATDR_AM,'.')[0] }</dd>
 								<dd class="pd_state">${item.SEL_STS_DSC_NAME }</dd>
 							</dl>
 						</li>

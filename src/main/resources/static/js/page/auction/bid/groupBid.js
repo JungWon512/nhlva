@@ -3,6 +3,27 @@ $(function() {
 	var COMMONS = window.auction["commons"];
 	
 	var setLayout = function() {
+		if(!isApp() && chkOs() == 'web'){
+			$('input[name=bidAmt]').attr('readonly',false);
+			$('input[name=bidAmt]').on('input',function(){
+				inputNumberVaildBidAmt(this,4);
+			});
+			$('input[name=bidAmt]').on('keyup',function(e){				
+				if (e.keyCode == 13 && fnCheckBidData()) {
+					fnBid();
+				}				
+			});
+			$('input[name=aucNum]').attr('readonly',false);
+			$('input[name=aucNum]').on('input',function(){
+				inputNumberVaildBidAmt(this,4);
+			});
+			$('input[name=aucNum]').on('keyup',function(e){				
+				if (e.keyCode == 13) {
+					fnSetAuctionInfo();
+				}				
+			});
+			$('input[name=aucNum]').focus();
+		}
 		$('.chart').easyPieChart({
 			barColor: '#007eff',
 			trackColor: '#dbdbdb',
@@ -64,6 +85,7 @@ $(function() {
 			var num = $(this).val();
 			var $target = $(".calculator_top").find("input.active");
 			var inputVal = $target.val().split(",").join("");
+			if(!isApp() && chkOs() == 'web') $('input[name=bidAmt]').focus();
 			if (inputVal == "" && num == "0") return;
 			if (inputVal.length >= maxLength) return;
 			$target.val(("" + inputVal + num).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ","));
@@ -75,6 +97,7 @@ $(function() {
 			var $target = $(".calculator_top").find("input.active");
 			var inputVal = $target.val().split(",").join("");
 			$target.val(inputVal.substring(0, inputVal.length-1).replace(/\B(?=(\d{3})+(?!\d))/g, ","))
+			if(!isApp() && chkOs() == 'web') $('input[name=bidAmt]').focus();
 		});
 		
 		// 경매 예정, 결과, 응찰내역 조회 팝업
@@ -155,28 +178,29 @@ $(function() {
 			var inputUpr = $(".pop_jjim_input").find("input[name=inputUpr]").val() == "" ? 0 : $(".pop_jjim_input").find("input[name=inputUpr]").val();
 			var lowsSbidLmtUpr = $(".pop_jjim_input").find("input[name=lowsSbidLmtUpr]").val() == "" ? 0 : $(".pop_jjim_input").find("input[name=lowsSbidLmtUpr]").val();
 			if(inputUpr && parseInt(lowsSbidLmtUpr) <= parseInt(inputUpr)) {
-				modalComfirm(""
-							,"찜가격을 저장하시겠습니까?"
-							, function() {
-								COMMONS.callAjax("/auction/api/inserttZimPrice"
-									, "post"
-									, $("form[name=frm_zim]").serializeObject()
-									, 'application/json'
-									, 'json'
-									, function(){
-										modalPopupClose('.popup .modal-wrap.pop_jjim_input.zim');
-										COMMONS.callAjax("/pop/entryList"
-											, "post"
-											, {naBzPlcNo : $("#naBzPlcNo").val(), place : $("#naBzPlcNo").val()}
-											, 'application/json'
-											, 'html'
-											, function(data){
-												$(".pop_auction").html("");
-												$(data).appendTo($(".pop_auction"));
-												modalPopup('.pop_auction');
-											});
-									});
-							});
+//				modalComfirm(""
+//							,"찜가격을 저장하시겠습니까?"
+//							, function() {
+//							});
+
+					COMMONS.callAjax("/auction/api/inserttZimPrice"
+						, "post"
+						, $("form[name=frm_zim]").serializeObject()
+						, 'application/json'
+						, 'json'
+						, function(){
+							modalPopupClose('.popup .modal-wrap.pop_jjim_input.zim');
+							COMMONS.callAjax("/pop/entryList"
+								, "post"
+								, {naBzPlcNo : $("#naBzPlcNo").val(), place : $("#naBzPlcNo").val(), tabAct : $('div.entryList div.tab_list ul li a.act').data('tabId')}
+								, 'application/json'
+								, 'html'
+								, function(data){
+									$(".pop_auction").html("");
+									$(data).appendTo($(".pop_auction"));
+									modalPopup('.pop_auction');
+								});
+						});
 				return;
 			}
 			else {
@@ -205,7 +229,7 @@ $(function() {
 									modalPopupClose('.popup .modal-wrap.pop_jjim_input.zim');
 									COMMONS.callAjax("/pop/entryList"
 										, "post"
-										, {naBzPlcNo : $("#naBzPlcNo").val(), place : $("#naBzPlcNo").val()}
+										, {naBzPlcNo : $("#naBzPlcNo").val(), place : $("#naBzPlcNo").val(), tabAct : $('div.entryList div.tab_list ul li a.act').data('tabId')}
 										, 'application/json'
 										, 'html'
 										, function(data){
@@ -233,11 +257,13 @@ $(function() {
 			if (fnCheckBidData()) {
 				fnBid();
 			}
+			if(!isApp() && chkOs() == 'web') $('input[name=bidAmt]').focus();
 		});
 		
 		// 입찰 취소
 		$(".btn_bid_cancel").on(clickEvent, function(){
 			fnBidCancel();
+			if(!isApp() && chkOs() == 'web') $('input[name=bidAmt]').focus();
 		});
 		
 		socketStart();
@@ -260,11 +286,11 @@ var socketStart = function(){
 	if(!$('#naBzPlc').val()) return;
 	if(socket){ socket.connect(); return;}
 	
-//	var socketHost = (location.hostname.indexOf("xn--o39an74b9ldx9g.kr") >-1 || location.hostname.indexOf("nhlva.nonghyup.com") >-1)?"cowauction.kr":location.hostname.indexOf("xn--e20bw05b.kr")>-1?"xn--e20bw05b.kr":"xn--e20bw05b.kr";
+	var socketHost = (location.hostname.indexOf("xn--o39an74b9ldx9g.kr") >-1 || location.hostname.indexOf("nhlva.nonghyup.com") >-1)?"cowauction.kr":location.hostname.indexOf("xn--e20bw05b.kr")>-1?"xn--e20bw05b.kr":"xn--e20bw05b.kr";
 	//socketHost += ':'+$('#webPort').val();
-//	socketHost += ':9001';
-//	socket = io.connect('https://'+socketHost + '/6003' + '?auctionHouseCode='  + $('#naBzPlc').val(), {secure:true});
-	socket = io.connect('http://192.168.0.23:9001/6003?auctionHouseCode=' + $('#naBzPlc').val());
+	socketHost += ':9001';
+	socket = io.connect('https://'+socketHost + '/6003' + '?auctionHouseCode='  + $('#naBzPlc').val(), {secure:true});
+	//socket = io.connect('http://192.168.0.23:9001/6003?auctionHouseCode=' + $('#naBzPlc').val());
 
 //	socket.on('connect_error', socketDisconnect);
 	
@@ -968,6 +994,14 @@ var setLoopChJoinInIn = function(cast,i){
 	tmpRemon.joinCast(castName);
 };
 // remon 영성 관련 로직 [e]
+
+var inputNumberVaildBidAmt = function(el,len){
+	el.value= el.value.replace(/[^0-9]/g, "");
+	if(el.value.length > len) {
+		el.value = el.value.substr(0, len);
+	}
+	el.value= el.value.replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+}
 
 window.addEventListener('beforeunload', function(){
 	sFlag = true;

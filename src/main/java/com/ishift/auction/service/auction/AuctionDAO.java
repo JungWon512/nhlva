@@ -450,4 +450,14 @@ public class AuctionDAO {
 	public List<Map<String, Object>> selectCowList(Map<String, Object> params) throws SQLException {
 		return mainDao.selectList("ApiMapper.selectCowList", params);
 	}
+
+	/**
+	 * 나의 구매내역 > 총 구매금액 조회
+	 * @param params
+	 * @return
+	 * @throws SQLException
+	 */
+	public Map<String, Object> selectTotSoldPrice(Map<String, Object> params) throws SQLException {		
+		return mainDao.selectOne("auction.selectTotSoldPrice", params);
+	}
 }

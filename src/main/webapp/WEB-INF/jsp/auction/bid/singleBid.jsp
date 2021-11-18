@@ -218,7 +218,7 @@
 				</div>
 				<dl>
 					<dt>응찰<br/>금액</dt>
-					<dd><input type="text" id="gang-calculator" name="bidAmt" placeholder="0" readonly></dd>
+					<dd><input type="text" id="gang-calculator" name="bidAmt" placeholder="0" pattern="\d*" inputmode="numeric" readonly></dd>
 				</dl>
 			</div>
 			<!-- //calculator_top e -->

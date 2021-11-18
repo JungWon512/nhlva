@@ -142,7 +142,7 @@ public class AuctionController extends CommonController {
 //		}
 		if(sessionUtill.getUserId() != null) param.put("loginNo", sessionUtill.getUserId());
 		mav.addObject("johapData", johap);
-		mav.addObject("subheaderTitle","경매예정조회");
+		mav.addObject("subheaderTitle","출장우 조회");
 		mav.addObject("dateList",datelist);
 		mav.addObject("salesList",list);
 		mav.addObject("inputParam", param);

@@ -4,7 +4,7 @@
 <div class="auction_list">
 	<input type="hidden" name="loginNo" value="${inputParam.loginNo}"/>
 	<input type="hidden" id="johpCdVal" value="${johapData.NA_BZPLCNO}"/>
-    <h3>경매예정</h3>
+    <h3>출장우 조회</h3>
     <div class="list_search">
         <ul class="radio_group">
             <li>

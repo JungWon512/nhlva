@@ -6,9 +6,7 @@
 		var tabId = $('div.tab_list li a.act').attr('data-tab-id');
 		$('div.tab_area.'+tabId).show();	
     };
-
     
-
     var setBinding = function() {
         $(document).on("click",".tab_list ul > li", function(){
 			var tabId = $(this).find('a.act').attr('data-tab-id');
@@ -75,16 +73,24 @@
 				var lowsSbidLmtUpr = $('.modal-wrap.pop_jjim_input.zim input[name=lowsSbidLmtUpr]').val();
 				var oldJjimPrice = $('.modal-wrap.pop_jjim_input.zim input[name=oldJjimPrice]').val();
 				if(!oldJjimPrice || oldJjimPrice == 0){
-					modalPopupClose('.popup .modal-wrap.pop_jjim_input.zim');					
-					location.reload();
+					modalPopupClose('.popup .modal-wrap.pop_jjim_input.zim');
+					//location.reload();
+					var searchObj = convertStrToObj(location.search);
+					searchObj.tabAct = $('.tab_list ul li a.act').data('tabId');
+					var search = convertObjToStr(searchObj);
+						location.href = location.pathname+'?'+search;
 					return;
-				}
+				}								
 				
 				params.inputUpr   = inputUpr;
 				modalComfirm('찜삭제',"찜가격을 삭제하시겠습니까?",function(){
 					 COMMONS.callAjax("/auction/api/deleteZimPrice", "post", params, 'application/json', 'json', function(data){
 						modalPopupClose('.popup .modal-wrap.pop_jjim_input.zim');					
-						location.reload();
+						//location.reload();
+						var searchObj = convertStrToObj(location.search);
+						searchObj.tabAct = $('.tab_list ul li a.act').data('tabId');
+						var search = convertObjToStr(searchObj);
+						location.href = location.pathname+'?'+search;
 					 });	
 				 });
 			});
@@ -93,11 +99,13 @@
 				var lowsSbidLmtUpr = $('.modal-wrap.pop_jjim_input.zim input[name=lowsSbidLmtUpr]').val();
 				params.inputUpr   = inputUpr;		
 				if(inputUpr && parseInt(lowsSbidLmtUpr) <= parseInt(inputUpr)) {
-					modalComfirm('찜하기',"찜가격을 저장하시겠습니까?",function(){
-						 COMMONS.callAjax("/auction/api/inserttZimPrice", "post", params, 'application/json', 'json', function(data){
-							modalPopupClose('.popup .modal-wrap.pop_jjim_input.zim');
-							location.reload();
-						 });
+					 COMMONS.callAjax("/auction/api/inserttZimPrice", "post", params, 'application/json', 'json', function(data){
+						modalPopupClose('.popup .modal-wrap.pop_jjim_input.zim');
+						//location.reload();
+						var searchObj = convertStrToObj(location.search);
+						searchObj.tabAct = $('.tab_list ul li a.act').data('tabId');
+						var search = convertObjToStr(searchObj);
+						location.href = location.pathname+'?'+search;
 					 });
 				 }else{
 					modalAlert('',"최저가 이상의 가격을 입력해주세요.");
@@ -124,3 +132,22 @@
         namespace[__COMPONENT_NAME].init();
     });
 })(jQuery, window, document);
+
+
+function convertStrToObj(str){
+	var obj = new Object();
+	str.replace('?','').split('&').forEach((item)=>{obj[item.split('=')[0]]=item.split('=')[1];})
+	return obj;
+}
+function convertObjToStr(obj){
+	var str ="";
+	Object.keys(obj).forEach((item,i) => (str += (i==0?'':'&')+item+'='+obj[item]));
+	return str;	
+}
+
+var inputNumberVaild = function(el,len){
+	el.value= el.value.replace(/\B(?=(\d{3})+(?!\d))/g, "");
+	if(el.value.length > len) {
+		el.value = el.value.substr(0, len);
+	}
+}
