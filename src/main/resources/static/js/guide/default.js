@@ -81,7 +81,7 @@ function modalPopup(target){
 	var $modalContentH = $(target).find($('.modal-content')).outerHeight();
 	var $conPos = ($winH / 2) - ($modalContentH / 2);	
 	
-	if( $winH > $modalContentH && $modalContentH != 0){
+	if( ($winH > $modalContentH && $modalContentH != 0) && target != '.pop_auction'){
 		$modalContent.css({marginTop: $conPos});
 	} else {
 		$modalContent.css({marginTop: 0});
@@ -89,7 +89,7 @@ function modalPopup(target){
 	if($('.popup .modal-wrap.open').length < 1){
 		$("<div class='overlay'></div>").appendTo('#wrap');
 		$('body').addClass('scroll_fixed');
-		$("#wrap").css('margin-top', -srlTop + 'px');
+		$("#wrap").css('margin-top', -srlTop + 'px');			
 		$("#wrap").attr('data',srlTop);
 	}
 	

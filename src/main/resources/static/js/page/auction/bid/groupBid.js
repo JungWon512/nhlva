@@ -707,6 +707,7 @@ var fnSetAuctionInfo = function() {
 	reqData.push(auctionConfig.arData.trmnAmnno);
 	reqData.push($("input[name='aucNum']").val());
 	socket.emit('packetData', reqData.join('|'));
+	if(!isApp() && chkOs() == 'web') $('input[name=bidAmt]').focus();
 };
 
 var fnBefore = function() {
@@ -714,6 +715,7 @@ var fnBefore = function() {
 	$(".aucNum").show().find("input, button").prop("disabled", false).addClass("active").val("");
 	$(".bidAmt").hide().find("input, button").prop("disabled", true).removeClass("active").val("");
 	$(".btn_before").prop("disabled", true);
+	if(!isApp() && chkOs() == 'web') $('input[name=aucNum]').focus();
 	auctionConfig.enableCancel == "N";
 }
 
@@ -769,6 +771,7 @@ var fnBid = function() {
 	bidData.push(bidDate.join(""));
 	socket.emit('packetData', bidData.join("|"));
 	auctionConfig.asData.bidYn = "Y";
+	if(!isApp() && chkOs() == 'web') $('input[name=aucNum]').focus();
 };
 
 // 응찰 취소 요청

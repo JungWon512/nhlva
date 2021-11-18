@@ -191,12 +191,15 @@ var messageHandler = function(data) {
 			
 			var tr = getTrRow(auctionConfig.asData.curAucSeq);
 			tr.find('dl dd.lowsSbidLmtAm').text(Math.round(tmpAsDAta.lowsSbidLmtAm)+'');
-			
+			if($('#aucDsc').val() != '1' && tmpAsDAta.selSts=='8006'){
+				location.reload();
+			};
 			changeTrRow(tr);	
 //			}
 		break;	
 		case "SC" : //현재 출품정보
-			//if(!auctionConfig.scData) auctionConfig.scData = {};
+			if($('#aucDsc').val() != '1') return;
+			if(!auctionConfig.scData) auctionConfig.scData = {};
 			//if(auctionConfig.scData.curAucSeq) auctionConfig.scData.preAucSeq = auctionConfig.scData.curAucSeq
 			auctionConfig.scData.curAucSeq = dataArr[2];
 						

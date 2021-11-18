@@ -570,6 +570,7 @@ var messageHandler = function(data) {
 				tr.find('dl dd.selSts').text(dataArr[29]==11?'대기':dataArr[29]==22?'낙찰':dataArr[29]==23?'유찰':'대기');
 				changeTrRow(tr);
 				convertDefaultValue(tr.find('dl dd'));
+				if(!isApp() && chkOs() == 'web') $('input[name=bidAmt]').focus();
 //			}
 			break;
 		case "SD" :
