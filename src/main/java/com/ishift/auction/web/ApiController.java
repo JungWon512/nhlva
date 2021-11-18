@@ -1713,4 +1713,83 @@ public class ApiController {
 		return result;
 	}
 	
+	@ResponseBody
+	@GetMapping(value = "/api/{version}/auction/select/absentCowList")
+	public Map<String, Object> selectAbsentCowList(@PathVariable(name = "version") String version
+											, @RequestParam final Map<String, Object> params) {
+		
+		final Map<String, Object> result = new HashMap<String, Object>();
+		final List<String> entryList = new ArrayList<String>();
+		try {			
+			Map<String, Object> map = auctionService.selectAuctStn(params);
+			if (map == null) {
+				result.put("success", false);
+				result.put("message", "회차 정보가 없습니다.");
+				return result;
+			}
+			params.put("stAucNo", map.get("ST_AUC_NO"));
+			params.put("edAucNo", map.get("ED_AUC_NO"));
+			params.put("absentYn", "Y");
+			List<Map<String, Object>> list = auctionService.selectCowList(params);
+			if (list != null) {
+				for (final Map<String, Object> vo : list) {
+					StringBuffer sb = new StringBuffer();
+					sb.append("SC").append('|')
+					  .append(this.getStringValue(vo.get("NA_BZPLC")).replace("|", ",")).append('|')
+					  .append(this.getStringValue(vo.get("AUC_PRG_SQ")).replace("|", ",")).append('|')
+					  .append(this.getStringValue(vo.get("QCN")).replace("|", ",")).append('|')
+					  .append(this.getStringValue(vo.get("AUC_OBJ_DSC")).replace("|", ",")).append('|')
+					  .append(this.getStringValue(vo.get("SRA_INDV_AMNNO")).replace("|", ",")).append('|')
+					  .append(this.getStringValue(vo.get("SRA_SRS_DSC")).replace("|", ",")).append('|')
+					  .append(this.getStringValue(vo.get("FHS_ID_NO")).replace("|", ",")).append('|')
+					  .append(this.getStringValue(vo.get("FARM_AMNNO")).replace("|", ",")).append('|')
+					  .append(this.getStringValue(vo.get("FTSNM")).replace("|", ",")).append('|')
+					  .append(this.getStringValue(vo.get("BRANDNM")).replace("|", ",")).append('|')
+					  .append(this.getStringValue(vo.get("BIRTH_FMT")).replace("|", ",")).append('|')
+					  .append(this.getStringValue(vo.get("KPN_NO")).replace("|", ",")).append('|')
+					  .append(this.getStringValue(vo.get("INDV_SEX_C_NAME")).replace("|", ",")).append('|')
+					  .append(this.getStringValue(vo.get("MCOW_DSC")).replace("|", ",")).append('|')
+					  .append(this.getStringValue(vo.get("MCOW_SRA_INDV_AMNNO")).replace("|", ",")).append('|')
+					  .append(this.getStringValue(vo.get("MATIME")).replace("|", ",")).append('|')
+					  .append(this.getStringValue(vo.get("PRNY_MTCN")).replace("|", ",")).append('|')
+					  .append(this.getStringValue(vo.get("SRA_INDV_PASG_QCN")).replace("|", ",")).append('|')
+					  .append(this.getStringValue(vo.get("INDV_ID_NO")).replace("|", ",")).append('|')
+					  .append(this.getStringValue(vo.get("SRA_INDV_BRDSRA_RG_NO")).replace("|", ",")).append('|')
+					  .append(this.getStringValue(vo.get("RG_DSC")).replace("|", ",")).append('|')
+					  .append(this.getRgnName(vo.get("SRA_PD_RGNNM")).replace("|", ",")).append('|')
+					  .append(this.getStringValue(vo.get("DNA_YN")).replace("|", ",")).append('|')
+					  .append(this.getStringValue(vo.get("ANW_YN")).replace("|", ",")).append('|')
+					  .append(this.getStringValue(vo.get("COW_SOG_WT")).replace("|", ",")).append('|')
+					  .append(this.getStringValue(vo.get("FIR_LOWS_SBID_LMT_AM")).replace("|", ",")).append('|')
+					  .append(this.getStringValue(vo.get("LOWS_SBID_LMT_AM")).replace("|", ",")).append('|')
+					  .append(this.getStringValue(vo.get("RMK_CNTN")).replace("|", ",")).append('|')
+					  .append(this.getStringValue(vo.get("SEL_STS_DSC")).replace("|", ",")).append('|')
+					  .append(this.getStringValue(vo.get("LVST_AUC_PTC_MN_NO")).replace("|", ",")).append('|')
+					  .append(this.getStringValue(vo.get("SRA_SBID_AM")).replace("|", ",")).append('|')
+					  .append(this.getStringValue(vo.get("ATDR_DTM")).replace("|", ",")).append('|')
+					  .append('N').append('|') 
+					  .append(this.getStringValue(vo.get("AUC_PRG_SQ")).replace("|", ",")).append('|')	// 계류대 번호
+					  .append("N");								// 초과 줄장우 여부 
+
+					entryList.add(sb.toString());
+				}
+			}
+			
+			result.put("success", true);
+			result.put("message", "조회에 성공했습니다.");
+			result.put("entry", entryList);
+		}catch (RuntimeException re) {
+			log.error("ApiController.selectAbsentCowList : {} ",re);
+			result.put("success", false);
+			result.put("entry", entryList);
+			result.put("message", re.getMessage());
+		}catch (SQLException se) {
+			log.error("ApiController.selectAbsentCowList : {} ",se);
+			result.put("success", false);
+			result.put("entry", entryList);
+			result.put("message", se.getMessage());
+		}
+		return result;
+	}
+	
 }
