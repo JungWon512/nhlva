@@ -9,7 +9,9 @@ spring:
 #   url: "jdbc:mariadb://115.41.222.25:8888/auction?allowMultiQueries=true&useCursorFetch=true&fetchSize=10000&autoReconnect=true&characterEncoding=utf-8"
 #   username: ishiftTest
 #   password: ishift7150!
-   driver-class-name: com.tmax.tibero.jdbc.TbDriver
+#   driver-class-name: com.tmax.tibero.jdbc.TbDriver
+#   url: "jdbc:tibero:thin:@124.198.126.34:8629:tibero"
+   driver-class-name: net.sf.log4jdbc.sql.jdbcapi.DriverSpy
    url: "jdbc:tibero:thin:@124.198.126.34:8629:tibero"
    username: lalm
    password: lalm123
