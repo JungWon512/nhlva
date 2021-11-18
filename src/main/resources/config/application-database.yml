@@ -10,7 +10,7 @@ spring:
 #   username: ishiftTest
 #   password: ishift7150!
    driver-class-name: com.tmax.tibero.jdbc.TbDriver
-   url: "jdbc:tibero:thin:@192.168.0.92:8629:tibero"
+   url: "jdbc:tibero:thin:@124.198.126.34:8629:tibero"
    username: lalm
    password: lalm123
    autoCommit: false # AOP로 트랜잭션을 제어하기 때문에 false로 사용 (default: true)
