@@ -40,11 +40,11 @@ public class MyPageController {
 	
 	@PreAuthorize("hasRole('ROLE_BIDDER')")
 	@RequestMapping(value = "/my/buy")	
-	public ModelAndView myresults(@RequestParam Map<String,Object> param) throws Exception {
+	public ModelAndView myresults(@RequestParam Map<String,Object> params) throws Exception {
 		// 나의낙찰내역
 		LOGGER.debug("start of myBuy.do");
 		ModelAndView mav = new ModelAndView();
-		String place = (String) param.get("place");
+		String place = (String) params.get("place");
 		
         Map<String,Object> map = new HashMap<>();
         map.put("naBzPlcNo", place);
@@ -54,26 +54,26 @@ public class MyPageController {
 		map.put("naBzPlc", johap.get("NA_BZPLC"));
 		map.put("entryType", "A");
 		List<Map<String,Object>> datelist=auctionService.selectAucDateList(map);
-		if(param != null && param.get("searchDate") != null) {
-			map.put("searchDate", param.get("searchDateBuy"));			
+		if(params != null && params.get("searchDate") != null) {
+			map.put("searchDate", params.get("searchDateBuy"));
 		}else {
 			map.put("searchDate",datelist.size() > 0 ? datelist.get(0).get("AUC_DT") :null);
 		}
-		if(map.get("searchDate") != null) param.put("searchDate", map.get("searchDate"));
+		if(map.get("searchDate") != null) params.put("searchDate", map.get("searchDate"));
 		
 		map.put("naBzPlcNo", place);
 		if(sessionUtill.getUserId() != null) map.put("searchTrmnAmnNo", sessionUtill.getUserId());
 		List<Map<String,Object>> list=auctionService.entrySelectList(map);
 		List<Map<String,Object>> bidList = auctionService.selectBidLogList(map);
 
-		if(sessionUtill.getUserId() != null) param.put("loginNo", sessionUtill.getUserId());
+		if(sessionUtill.getUserId() != null) params.put("loginNo", sessionUtill.getUserId());
 		mav.addObject("johapData", johap);
 		mav.addObject("subheaderTitle","경매예정조회");
 		mav.addObject("dateList",datelist);
 		mav.addObject("buyList",list);
 		mav.addObject("bidList",bidList);
 		mav.addObject("bidCnt", auctionService.selectBidLogListCnt(map));
-		mav.addObject("inputParam", param);
+		mav.addObject("inputParam", params);
 		mav.addObject("subheaderTitle","나의 구매내역");
 		mav.setViewName("mypage/buy/buy");
 		return mav;
@@ -137,34 +137,34 @@ public class MyPageController {
 	
 	@PreAuthorize("hasRole('ROLE_FARM')")
 	@RequestMapping(value = "/my/entry")
-	public ModelAndView myEntry(@RequestParam Map<String, Object> param) throws Exception {
+	public ModelAndView myEntry(@RequestParam Map<String, Object> params) throws Exception {
 		// 나의출장우내역(출하주)
 		LOGGER.debug("start of entry.do");
 		ModelAndView mav = new ModelAndView();
 		Map<String,Object> map = new HashMap<>();
-		map.put("naBzPlcNo", param.get("place"));
+		map.put("naBzPlcNo", params.get("place"));
 		Map<String, Object> johap = adminService.selectOneJohap(map);
 
 		map.put("naBzPlc", johap.get("NA_BZPLC"));
 		map.put("entryType", "A");
 		List<Map<String,Object>> datelist=auctionService.selectAucDateList(map);
-		if(param.get("searchDate") != null && param != null) {
-			map.put("searchDate", param.get("searchDate"));			
+		if(params.get("searchDate") != null && params != null) {
+			map.put("searchDate", params.get("searchDate"));			
 		}else {
 			map.put("searchDate",datelist.size() > 0 ? datelist.get(0).get("AUC_DT") :null);
 		}
 		FarmUserDetails userVo = (FarmUserDetails)sessionUtill.getUserVo();
-		if(param.get("searchOrder") != null) map.put("searchOrder", param.get("searchOrder"));
-		if(param.get("searchAucObjDsc") != null) map.put("searchAucObjDsc", param.get("searchAucObjDsc"));
-		if(param.get("searchTxt") != null) map.put("searchTxt", param.get("searchTxt"));
+		if(params.get("searchOrder") != null) map.put("searchOrder", params.get("searchOrder"));
+		if(params.get("searchAucObjDsc") != null) map.put("searchAucObjDsc", params.get("searchAucObjDsc"));
+		if(params.get("searchTxt") != null) map.put("searchTxt", params.get("searchTxt"));
 		if(userVo != null) map.put("searchFhsIdNo", userVo.getFhsIdNo());
 		if(userVo != null) map.put("searchFarmAmnno", userVo.getFarmAmnno());
 		
 		List<Map<String,Object>> list=auctionService.entrySelectList(map);
-		if(map.get("searchDate") != null) param.put("searchDate", map.get("searchDate"));
+		if(map.get("searchDate") != null) params.put("searchDate", map.get("searchDate"));
 		
 		mav.addObject("johapData", johap);
-		mav.addObject("paramVo", param);		
+		mav.addObject("paramVo", params);		
 		mav.addObject("dateList",datelist);
 		mav.addObject("myEntryList",list);
 		mav.addObject("subheaderTitle","나의 출장우");
