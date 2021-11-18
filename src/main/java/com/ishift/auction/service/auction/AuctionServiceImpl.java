@@ -428,7 +428,7 @@ public class AuctionServiceImpl implements AuctionService {
 		if (params.get("naBzPlc") == null
 		 || params.get("aucObjDsc") == null
 		 || params.get("aucDt") == null
-		 || params.get("oslpNp") == null
+		 || params.get("oslpNo") == null
 		 || params.get("ledSqno") == null
 		 || params.get("selStsDsc") == null
 		 || params.get("sraSbidUpr") == null
