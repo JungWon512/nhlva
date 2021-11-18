@@ -605,6 +605,7 @@
 				 , CASE WHEN MONTHS_BETWEEN(TO_DATE(A.AUC_DT,'YYYYMMDD'), TO_DATE(B.BIRTH,'YYYYMMDD')) <![CDATA[<]]> 4 THEN 0
 						 ELSE GREATEST(TO_DATE(A.AUC_DT,'YYYYMMDD') - ADD_MONTHS(TO_DATE(B.BIRTH,'YYYYMMDD'), TRUNC(MONTHS_BETWEEN(TO_DATE(A.AUC_DT,'YYYYMMDD'), TO_DATE(B.BIRTH,'YYYYMMDD')))) + 1, 0) - 1
 					 END GAP_DAY
+				 , A.LED_SQNO
 			  FROM TB_LA_IS_MH_SOG_COW A
 			  LEFT OUTER JOIN TB_LA_IS_MM_INDV B
 				ON (
@@ -862,7 +863,7 @@
 			 		ELSE ''
 			 	END AS MCOW_DSC_NM
 			 , ROUND(NVL(B.MATIME, 0)) AS MATIME		/* 산차 */
-			 , ROUND(A.PRNY_MTCN) AS PRNY_MTCN	/* 임신개월수 */
+			 , ROUND(NVL(A.PRNY_MTCN, 0)) AS PRNY_MTCN	/* 임신개월수 */
 			 , B.SRA_INDV_PASG_QCN 			/* 계대 */
 			 , B.INDV_ID_NO 				/* 계체식벌번호 */
 			 , B.SRA_INDV_BRDSRA_RG_NO 		/* 축산개체종축등록번호 */
@@ -908,6 +909,7 @@
 			 , D.SRA_INDV_AMNNO AS CCOW_SRA_INDV_AMNNO
 			 , D.INDV_SEX_C AS CCOW_INDV_SEX_C
 			 , TRUNC(MONTHS_BETWEEN(TO_DATE(A.AUC_DT,'YYYYMMDD'), TO_DATE(D.BIRTH,'YYYYMMDD'))) AS GAP_MONTH
+			 , A.LED_SQNO
 		  FROM TB_LA_IS_MH_SOG_COW A
 		  LEFT OUTER JOIN TB_LA_IS_MM_INDV B
 			ON (
@@ -955,8 +957,23 @@
 				 , MODL_NO = #{modlNo}
 			</when>
 			<when test="regType == 'L'.toString()">
-				 , FIR_LOWS_SBID_LMT_AM = #{firLowsSbidLmtAm} * 10000
-				 , LOWS_SBID_LMT_AM = #{firLowsSbidLmtAm} * 10000
+				 , FIR_LOWS_SBID_LMT_AM = #{firLowsSbidLmtAm} * (SELECT CASE WHEN #{aucObjDsc} = '1' THEN CALF_AUC_ATDR_UNT_AM
+																			 WHEN #{aucObjDsc} = '2' THEN NBFCT_AUC_ATDR_UNT_AM
+																			 WHEN #{aucObjDsc} = '3' THEN PPGCOW_AUC_ATDR_UNT_AM
+																			 ELSE 10000 END
+																   FROM TB_LA_IS_MM_ENV_EST
+																  WHERE NA_BZPLC = #{naBzplc})
+				 , LOWS_SBID_LMT_AM = #{firLowsSbidLmtAm} * (SELECT CASE WHEN #{aucObjDsc} = '1' THEN CALF_AUC_ATDR_UNT_AM
+																		 WHEN #{aucObjDsc} = '2' THEN NBFCT_AUC_ATDR_UNT_AM
+																		 WHEN #{aucObjDsc} = '3' THEN PPGCOW_AUC_ATDR_UNT_AM
+																		 ELSE 10000 END
+															   FROM TB_LA_IS_MM_ENV_EST
+															  WHERE NA_BZPLC = #{naBzplc})
+			</when>
+			<when test="regType == 'I'.toString()">
+				 , PPGCOW_FEE_DSC = #{ppgcowFeeDsc}
+				 , PRNY_MTCN = #{prnyMtcn}
+				 , RMK_CNTN = #{rmkCntn}
 			</when>
 			</choose>
 			 WHERE NA_BZPLC = #{naBzplc}

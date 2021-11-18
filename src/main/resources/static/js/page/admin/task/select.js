@@ -64,10 +64,10 @@
 				var ppgcowFeeDsc = $(this).val();
 				// 임신우, 임신우 + 송아지인 경우 임신개월 활성화
 				if (ppgcowFeeDsc == "1" || ppgcowFeeDsc == "3") {
-					$("select[name='matime']").prop("disabled", false);
+					$("select[name='prnyMtcn']").prop("disabled", false);
 				}
 				else {
-					$("select[name='matime']").val("").prop("disabled", true);
+					$("select[name='prnyMtcn']").val("").prop("disabled", true);
 				}
 				
 				// 임신우 + 송아지, 비임신우 + 송아지인 경우 송아지 성별, 개월 활성화
@@ -84,23 +84,31 @@
 				// 비고에 임신 정보 append
 				fnSetRmkCntn();
 			});
-			
-			// 임신 개월 선택 이벤트
-			$(document).on("change", "#matime", function() {
+
+			// 임신 개월, 송아지 구분, 송아지 개월 선택 이벤트
+			$(document).on("change", "#prnyMtcn, #ccowIndvSexC, #ccowBirthMonth", function() {
 				// 비고에 임신 정보 append
 				fnSetRmkCntn();
 			});
 			
 			// 송아지 구분 선택 이벤트
-			$(document).on("change", "#ccowIndvSexC", function() {
-				// 비고에 임신 정보 append
-				fnSetRmkCntn();
+//			$(document).on("change", "#ccowIndvSexC", function() {
+//				// 비고에 임신 정보 append
+//				fnSetRmkCntn();
+//			});
+//			
+//			// 송아지 개월 선택 이벤트
+//			$(document).on("change", "#ccowBirthMonth", function() {
+//				// 비고에 임신 정보 append
+//				fnSetRmkCntn();
+//			});
+			
+			$(document).on(clickEvent, ".btn_reset", function(){
+				fnReset();
 			});
 			
-			// 송아지 개월 선택 이벤트
-			$(document).on("change", "#ccowBirthMonth", function() {
-				// 비고에 임신 정보 append
-				fnSetRmkCntn();
+			$(document).on(clickEvent, ".btn_save", function(){
+				fnSave();
 			});
 		};
 		
@@ -112,10 +120,14 @@
 			var popHtml = [];
 			popHtml.push('<div id="" class="modal-wrap ' + className + '">');
 			popHtml.push('	<form name="frm_cow_info" method="post">');
+			popHtml.push('		<input type="hidden" name="aucObjDsc" value="" />');
+			popHtml.push('		<input type="hidden" name="regType" value="" />');
+			popHtml.push('		<input type="hidden" name="oslpNo" value="" />');
+			popHtml.push('		<input type="hidden" name="ledSqno" value="" />');
 			popHtml.push('	<div class="modal-content pop_ad_mod">');
 			popHtml.push('		<div class="modal-head">');
 			popHtml.push('			<h3>큰소 정보 입력</h3>');
-			popHtml.push('			<button class="modal_popup_close" onclick="modalPopupClose(\"' + className + '\");return false;">닫기</button>');
+			popHtml.push('			<button type="button" class="modal_popup_close" onclick="modalPopupClose(\'.' + className + '\');return false;">닫기</button>');
 			popHtml.push('		</div>');
 			popHtml.push('		<div class="modal-body">');
 			popHtml.push('			<div class="table-mod">');
@@ -128,7 +140,7 @@
 			popHtml.push('						<th>번호</th>');
 			popHtml.push('						<td class="input-td">');
 			popHtml.push('							<ul class="num_scr">');
-			popHtml.push('								<li><input type="text" name="aucPrgSq" id="aucPrgSq" maxlength="4" pattern="\d*" inputmode="numeric" value="" /></li>'); 
+			popHtml.push('								<li><input type="text" name="aucPrgSq" class="required" id="aucPrgSq" alt="경매번호" maxlength="4" pattern="\d*" inputmode="numeric" value="" /></li>'); 
 			popHtml.push('								<li><a href="javascript:;" class="btn_cow_search">조회</a></li>');
 			popHtml.push('							</ul>');
 			popHtml.push('						</td>');
@@ -136,13 +148,13 @@
 			popHtml.push('					<tr>');
 			popHtml.push('						<th>출하주</th>');
 			popHtml.push('						<td class="input-td">');
-			popHtml.push('							<input type="text" name="ftsnm" id="ftsnm" disabled="disabled" value="" />');
+			popHtml.push('							<input type="text" name="ftsnm" id="ftsnm" disabled="disabled" alt="출하주" value="" />');
 			popHtml.push('						</td>');
 			popHtml.push('					</tr>');
 			popHtml.push('					<tr>');
 			popHtml.push('						<th>큰소 구분</th>');
 			popHtml.push('						<td class="input-td">');
-			popHtml.push('							<select name="ppgcowFeeDsc" id="ppgcowFeeDsc">');
+			popHtml.push('							<select name="ppgcowFeeDsc" class="required" id="ppgcowFeeDsc" alt="큰소 구분" disabled="disabled">');
 			popHtml.push('								<option value="">선택</option>');
 			popHtml.push('							</select>');
 			popHtml.push('						</td>');
@@ -150,7 +162,7 @@
 			popHtml.push('					<tr>');
 			popHtml.push('						<th>임신 개월</th>');
 			popHtml.push('						<td class="input-td">');
-			popHtml.push('							<select name="matime" id="matime" disabled="disabled">');
+			popHtml.push('							<select name="prnyMtcn" class="required" id="prnyMtcn" alt="임신 개월" disabled="disabled">');
 			popHtml.push('								<option value="">선택</option>');
 			popHtml.push('								<option value="0">0개월</option>');
 			popHtml.push('								<option value="1">1개월</option>');
@@ -170,12 +182,12 @@
 			popHtml.push('						<td class="input-td">');
 			popHtml.push('							<ul class="harf_ul">');
 			popHtml.push('								<li>');
-			popHtml.push('									<select name="ccowIndvSexC" id="ccowIndvSexC" disabled="disabled">');
+			popHtml.push('									<select name="ccowIndvSexC" class="required" alt="송아지 성별" id="ccowIndvSexC" disabled="disabled">');
 			popHtml.push('										<option value="">선택</option>');
 			popHtml.push('									</select>');
 			popHtml.push('								</li>');
 			popHtml.push('								<li>');
-			popHtml.push('									<select name="ccowBirthMonth" id="ccowBirthMonth" disabled="disabled">');
+			popHtml.push('									<select name="ccowBirthMonth" class="required" alt="송아지 개월" id="ccowBirthMonth" disabled="disabled">');
 			popHtml.push('										<option value="">선택</option>');
 			popHtml.push('										<option value="1">1개월</option>');
 			popHtml.push('										<option value="2">2개월</option>');
@@ -194,7 +206,7 @@
 			popHtml.push('					<tr>');
 			popHtml.push('						<th>비고</th>');
 			popHtml.push('						<td class="input-td">');
-			popHtml.push('							<input type="text" name="rmkCntn" id="rmkCntn" value="" />');
+			popHtml.push('							<input type="text" name="rmkCntn" id="rmkCntn" value="" alt="비고" />');
 			popHtml.push('						</td>');
 			popHtml.push('					</tr>');
 			popHtml.push('				</table>');
@@ -202,9 +214,9 @@
 			popHtml.push('		</div>');
 			popHtml.push('		<div class="modal-foot">');
 			popHtml.push('			<div class="btn_area">');
-			popHtml.push('				<a href="javascript:;">초기화</a>');
-			popHtml.push('				<a href="javascript:;">저장</a>');
-			popHtml.push('				<a href="javascript:;">종료</a>');
+			popHtml.push('				<a href="javascript:;" class="btn_reset">초기화</a>');
+			popHtml.push('				<a href="javascript:;" class="btn_save">저장</a>');
+			popHtml.push('				<a href="javascript:modalPopupClose(\'.' + className + '\');">종료</a>');
 			popHtml.push('			</div>');
 			popHtml.push('		</div>');
 			popHtml.push('	</div>');
@@ -251,10 +263,15 @@
 			
 			$("input[name='ftsnm']").val(cowInfo.FTSNM);
 			$("input[name='rmkCntn']").val(cowInfo.RMK_CNTN);
+			$("input[name='aucObjDsc']").val(cowInfo.AUC_OBJ_DSC);
+			$("input[name='oslpNo']").val(cowInfo.OSLP_NO);
+			$("input[name='ledSqno']").val(cowInfo.LED_SQNO);
+			$("input[name='aucPrgSq']", $("form[name='frm_select']")).val(cowInfo.AUC_PRG_SQ);
 
 			// 큰소 구분
 			var $ppgcowFeeDsc = $("select[name='ppgcowFeeDsc']");
-			$ppgcowFeeDsc.find("option").not(":first").remove();
+			$ppgcowFeeDsc.prop("disabled", false);
+			$ppgcowFeeDsc.find("option").not(":first").remove()
 			for (var i in ppgcowList) {
 				if(ppgcowList[i].SIMP_C == cowInfo.PPGCOW_FEE_DSC) {
 					$ppgcowFeeDsc.append($("<option>", {value: ppgcowList[i].SIMP_C, text : ppgcowList[i].SIMP_CNM, selected : "selected"}));
@@ -265,18 +282,22 @@
 			}
 			
 			// 임신 개월 > PPGCOW_FEE_DSC가 임신우, 임신 + 송아지인 경우 
+			var $prnyMtcn = $("select[name='prnyMtcn']");
 			if (cowInfo.PPGCOW_FEE_DSC == "1" || cowInfo.PPGCOW_FEE_DSC == "3") {
-				var $matime = $("select[name='matime']");
-				$matime.prop("disabled", false);
-				$matime.find("option").each(function() {
-					if (cowInfo.MATIME == $(this).val()) $(this).prop("selected", "selected");
+				$prnyMtcn.prop("disabled", false);
+				$prnyMtcn.find("option").each(function() {
+					if (cowInfo.PRNY_MTCN == $(this).val()) $(this).prop("selected", "selected");
 				});
+			}
+			else {
+				$prnyMtcn.val("");
+				$prnyMtcn.prop("disabled", true);
 			}
 			
 			// 송아지 정보 > PPGCOW_FEE_DSC가 임신 + 송아지, 비임신 + 송아지인 경우 
+			var $ccowIndvSexC = $("select[name='ccowIndvSexC']");
+			var $ccowBirthMonth = $("select[name='ccowBirthMonth']");
 			if (cowInfo.PPGCOW_FEE_DSC == "3" || cowInfo.PPGCOW_FEE_DSC == "4") {
-				var $ccowIndvSexC = $("select[name='ccowIndvSexC']");
-				var $ccowBirthMonth = $("select[name='ccowBirthMonth']");
 				$ccowIndvSexC.prop("disabled", false);
 				$ccowBirthMonth.prop("disabled", false);
 				
@@ -296,6 +317,12 @@
 					if (cowInfo.GAP_MONTH == $(this).val()) $(this).prop("selected", "selected");
 				});
 			}
+			else {
+				$ccowIndvSexC.val("");
+				$ccowIndvSexC.prop("disabled", true);
+				$ccowBirthMonth.val("");
+				$ccowBirthMonth.prop("disabled", true);
+			}
 			
 			$("select").selectric("refresh");
 			fnSetRmkCntn();
@@ -309,13 +336,13 @@
 			var ccowPattern = /[암|수|거세|미경산|비거세|프리마틴|공통]{0,4}송아지[0-9]{1,2}개월/gi;
 			
 			var ppgcowFeeDsc = $("#ppgcowFeeDsc").val();
-			var matime = $("#matime").val() == "" ? 0 : parseInt($("#matime").val());
+			var prnyMtcn = $("#prnyMtcn").val() == "" ? 0 : parseInt($("#prnyMtcn").val());
 			var ccowIndvSexC = ($("#ccowIndvSexC").val() == "0" || $("#ccowIndvSexC").val() == "") ? "" : $("#ccowIndvSexC").find("option:selected").text();
 			var ccowBirthMonth = $("#ccowBirthMonth").val() == "" ? 0 : parseInt($("#ccowBirthMonth").val());
 			
 			var mcowText = "";
-			if ((ppgcowFeeDsc == "1" || ppgcowFeeDsc == "3") && matime > 0) {
-				mcowText = "임신 " + matime + "개월"
+			if ((ppgcowFeeDsc == "1" || ppgcowFeeDsc == "3") && prnyMtcn > 0) {
+				mcowText = "임신 " + prnyMtcn + "개월"
 			}
 			
 			var ccowText = "";
@@ -356,8 +383,65 @@
 			rmkCntn.val(uniqueArr.join(","));
 		};
 		
+		// 입력 초기화
 		var fnReset = function() {
+			$("form[name='frm_cow_info']").find("input, select").val("");
+			$("select").selectric("refresh");
+		}
+		
+		// 저장
+		var fnSave = function() {
+			if (fnValidation()) {
+				var frmCowInfo = $("form[name='frm_cow_info']");
+				var frmSelect = $("form[name='frm_select']");
+				if (frmCowInfo.find("input[name='aucDt']").length < 1) {
+					frmCowInfo.append(frmSelect.find("input[name='aucDt']").clone(false));
+				}
+				frmCowInfo.find("input[name='regType']").val("I");
+				
+				$.ajax({
+					url : '/admin/task/saveCowInfo',
+					data : JSON.stringify($("form[name='frm_cow_info']").serializeObject()),
+					type : 'POST',
+					dataType : 'json',
+					beforeSend: function (xhr) {
+						xhr.setRequestHeader("Accept", "application/json");
+						xhr.setRequestHeader("Content-Type", "application/json");
+					},
+					success : function() {
+					},
+					error: function(xhr, status, error) {
+					}
+				}).done(function (body) {
+					var message = body.message;
+					modalAlert("", message);
+					return;
+				});
+			}
+		}
+		
+		// 필수 입력값 체크
+		var fnValidation = function() {
+			if($("input[name='aucPrgSq']", $("form[name='frm_select']")).val()
+			!= $("input[name='aucPrgSq']", $("form[name='frm_cow_info']")).val()) {
+				modalAlert("", "경매번호로 조회 후 저장 가능합니다.");
+				return false;
+			}
 			
+			var chkList = $(".required").not(":disabled");
+			for (var i in chkList) {
+				if (chkList[i].value == "") {
+					if ($(chkList[i]).prop("tagName") == "INPUT") {
+						modalAlert("", $(chkList[i]).attr("alt") + "을 입력하세요.");
+					}
+					else {
+						modalAlert("", $(chkList[i]).attr("alt") + "을 선택하세요.");
+					}
+					return false;
+				}
+			}
+			
+			return true;
 		}
 		
 		return {
