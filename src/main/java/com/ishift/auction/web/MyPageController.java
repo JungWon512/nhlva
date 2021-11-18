@@ -59,7 +59,7 @@ public class MyPageController {
 		}else {
 			map.put("searchDate",datelist.size() > 0 ? datelist.get(0).get("AUC_DT") :null);
 		}
-		if(map.get("searchDate") != null) params.put("searchDate", map.get("searchDate"));
+		if(params != null && map.get("searchDate") != null) params.put("searchDate", map.get("searchDate"));
 		
 		map.put("naBzPlcNo", place);
 		if(sessionUtill.getUserId() != null) map.put("searchTrmnAmnNo", sessionUtill.getUserId());
@@ -162,7 +162,7 @@ public class MyPageController {
 		if(userVo != null) map.put("searchFarmAmnno", userVo.getFarmAmnno());
 		
 		List<Map<String,Object>> list=auctionService.entrySelectList(map);
-		if(map.get("searchDate") != null) params.put("searchDate", map.get("searchDate"));
+		if(params != null && map.get("searchDate") != null) params.put("searchDate", map.get("searchDate"));
 		
 		mav.addObject("johapData", johap);
 		mav.addObject("paramVo", params);		
