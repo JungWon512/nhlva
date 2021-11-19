@@ -12,7 +12,6 @@ import org.springframework.stereotype.Service;
 import com.ishift.auction.service.login.LoginService;
 import com.ishift.auction.vo.BidUserDetails;
 
-import java.io.IOException;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
