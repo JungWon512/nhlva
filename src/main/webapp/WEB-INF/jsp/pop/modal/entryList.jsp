@@ -187,7 +187,6 @@
 <!-- //modal-content e -->
 <script>
 var tabId = $('div.tab_list li a.act').attr('data-tab-id');
-console.log(tabId);
 switch(tabId){
 	case 'schedule' : $('div.schedule_area').show(); break;
 	case 'result': $('div.result_area').show(); break;

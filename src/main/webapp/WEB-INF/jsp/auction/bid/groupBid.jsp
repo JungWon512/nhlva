@@ -210,13 +210,13 @@
 		<div class="auction_calculator">
 			<div class="calculator_top">
 				<div class="auc-txt">
-					<div class="info_board" style="min-height:37px;"><span calss="txt-yellow">경매 번호</span>를 입력하세요.</div>
+					<div class="info_board" style="min-height:37px;"><span class="txt-yellow">경매 번호</span>를 입력하세요.</div>
 					<div class="message_board" style="min-height:37px;z-index: -1000;position: absolute;top: 0px;left: 0px;background: rgb(230, 239, 255);min-width:100%;"></div>
 					<a href="javascript:;" class="pop-btn btn_popup">팝업</a>
 				</div>
-				<dl class="aucNum num-bun">
+				<dl class="aucNum num-bun" style="background: #ffaf00;">
 					<dt>경매<br/>번호</dt>
-					<dd><input type="text" class="aucNum active" id="auction_num" name="aucNum" placeholder="0" readonly /><span>번</span></dd>
+					<dd><input type="text" class="aucNum active" id="auction_num" name="aucNum" style="background: #ffaf00;" placeholder="0" readonly /><span>번</span></dd>
 				</dl>
 				<dl class="bidAmt" style="display:none;">
 					<dt>응찰<br/>금액</dt>

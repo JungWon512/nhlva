@@ -103,7 +103,7 @@
 				pageMove(uri);
 			}
 			catch(e) {
-				console.log(e);
+				debugConsole(e);
 			}
 		};
 

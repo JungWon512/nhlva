@@ -108,7 +108,7 @@ var KTWizardDemo = function () {
     };
 
     var initSubmit = function() {
-        console.log('init submit called');
+        debugConsole('init submit called');
         // var btn = formEl.find('[data-kwizard-type="action-submit"]');
         var btn = $('[data-ktwizard-type="action-submit"]');
         // var btn = $('.btn-success');

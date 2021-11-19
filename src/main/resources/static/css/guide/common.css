@@ -6556,3 +6556,31 @@ div.list_txts {
 /* 		background: #b2ebf4; */
 /* 	} */
 }
+
+/* toast message */
+#toast {
+	position: fixed;
+/*     bottom: 30px; */
+	width:90%;
+	top: 40%;
+	left: 50%;
+	line-height: 50px;
+	padding: 15px 20px;
+	transform: translate(-50%, 10px);
+	border-radius: 5px;
+	overflow: hidden;
+	font-size: 1.8rem;
+	text-align:center;
+	opacity: 0;
+	visibility: hidden;
+	transition: opacity .5s, visibility .5s, transform .5s;
+	background: rgba(0, 0, 0, .5);
+	color: #fff;
+	z-index: 10000;
+}
+
+#toast.reveal {
+	opacity: 1;
+	visibility: visible;
+	transform: translate(-50%, 0)
+}

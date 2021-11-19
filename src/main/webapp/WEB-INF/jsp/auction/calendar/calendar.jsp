@@ -8,11 +8,9 @@
 	<div class="date_board">
 		<input type="hidden" id="searchYm" name="searchYm" value="${paramVo.searchYm }"/>
 		<dl class="date_top">
-			<dl>
-				<dt>${title }</dt>
-				<dd class="btn_prev"><a href="javascript:;">이전</a></dd>
-				<dd class="btn_next"><a href="javascript:;">다음</a></dd>
-			</dl>
+			<dt>${title }</dt>
+			<dd class="btn_prev"><a href="javascript:;">이전</a></dd>
+			<dd class="btn_next"><a href="javascript:;">다음</a></dd>
 		</dl>
 		<div class="date_bottom">
 			<ul>
