@@ -13,9 +13,9 @@
 <!--begin::Layout Themes(used by all pages)-->
 <link href="/static/assets/css/themes/layout/header/base/light.css" rel="stylesheet" type="text/css" />
 <link href="/static/assets/css/themes/layout/header/menu/light.css" rel="stylesheet" type="text/css" />
-<%--<link href="/static/assets/css/themes/layout/brand/dark.css" rel="stylesheet" type="text/css" />--%>
-<%--<link href="/static/assets/css/themes/layout/aside/dark.css" rel="stylesheet" type="text/css" />--%>
 <link href="/static/css/commons.css" rel="stylesheet" type="text/css" />
 
-<%--<link href="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.3.1/semantic.min.css" rel="stylesheet" type="text/css" />--%>
-<%--<link href="https://cdn.datatables.net/1.10.25/css/dataTables.semanticui.min.css" rel="stylesheet" type="text/css" />--%>
+<spring:eval expression="@environment.getProperty('spring.profiles.active')" var="ACTIVE" />
+<script type="text/javascript">
+	var active = "${ACTIVE}";
+</script>
