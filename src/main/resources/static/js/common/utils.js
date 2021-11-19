@@ -473,7 +473,7 @@ var debugConsole = function() {
 		for (var i in arguments) {
 			arrConsole.push(arguments[i]);
 		}
-		console.log(arrConsole.join(","));
+		console.log(arrConsole.join(" "));
 	}
 };
 
@@ -494,6 +494,6 @@ function toast(string) {
 		removeToast = setTimeout(function () {
 			document.getElementById("toast").classList.remove("reveal")
 		}, 1000)
-		toast.classList.add("reveal"),
-		toast.innerText = string
+		toast.classList.add("reveal");
+		toast.innerText = string;
 }

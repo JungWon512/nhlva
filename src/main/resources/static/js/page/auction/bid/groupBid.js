@@ -511,6 +511,7 @@ var messageHandler = function(data) {
 				auctionConfig.enableBid = "Y";
 			}
 			else if(auctionConfig.asData.status == "8004") {
+				$("div.auc-txt > div.info_board").html("<span class='txt-yellow'>경매 번호</span>를 입력하세요.");
 				$("input[name='bidAmt']").val("");
 				fnBefore();
 				// 출품번호, 경매대상구분코드
@@ -703,7 +704,7 @@ var fnSetAuctionInfo = function() {
 	}
 	
 	if ($("input[name='auctionNum']").val() == "") {
-		messageSample("경매 번호를 입력해주세요.");
+		messageSample("경매 번호를 입력하세요.");
 		return;
 	}
 	
