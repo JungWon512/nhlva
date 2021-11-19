@@ -4,13 +4,12 @@
 <script src="https://cdn.jsdelivr.net/npm/@remotemonster/sdk/remon.min.js"></script>
 <script src="/static/js/socket.io/socket.io.js"></script>
 <style type="text/css">
-@media only all and (max-width: 1024px) {
-	.draggable {min-height:243px !important; }
-}
-
-@media only all and (max-width: 768px) {
-	.draggable {min-height:243px !important; }
-}
+	@media only all and (max-width: 1024px) {
+		.draggable {min-height:243px !important; }
+	}
+	@media only all and (max-width: 768px) {
+		.draggable {min-height:243px !important; }
+	}
 </style>
 <!-- //auction_list s : 경매 응찰 본 화면 -->
 <div class="auction_list has_auction_see">

@@ -466,3 +466,13 @@ var appendFormSubmit = function(name, action, params, target) {
 	form.appendTo("body");
 	form.submit();
 };
+
+var debugConsole = function() {
+	if (active == "local" || active == "develop") {
+		var arrConsole = [];
+		for (var i in arguments) {
+			arrConsole.push(arguments[i]);
+		}
+		console.log(arrConsole.join(","));
+	}
+};

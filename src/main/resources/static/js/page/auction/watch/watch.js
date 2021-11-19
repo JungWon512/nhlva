@@ -156,7 +156,7 @@ var disconnectHandler = function() {
 	CF : 낙찰데이터 정보	
 **/
 var messageHandler = function(data) {
-	console.log(data);
+	debugConsole(data);
 	var dataArr = data.split('|');
 	var gubun = dataArr[0];
 	                  
@@ -196,8 +196,8 @@ var messageHandler = function(data) {
 //			}
 		break;	
 		case "SC" : //현재 출품정보
-			//if(!auctionConfig.scData) auctionConfig.scData = {};
 			//if(auctionConfig.scData.curAucSeq) auctionConfig.scData.preAucSeq = auctionConfig.scData.curAucSeq
+			if(!auctionConfig.scData) auctionConfig.scData = {};
 			auctionConfig.scData.curAucSeq = dataArr[2];
 						
 			//관전 전광판 데이터 update				
@@ -307,15 +307,15 @@ var config = {
 };
 //remon Event listener
 var listener = {
-    onCreate(chid) { console.log(`EVENT FIRED: onCreate: ${chid}`); },
+    onCreate(chid) { debugConsole(`EVENT FIRED: onCreate: ${chid}`); },
     onJoin(chid) { 
-		console.log(`EVENT FIRED: onJoin: ${chid}`);
+		debugConsole(`EVENT FIRED: onJoin: ${chid}`);
 	},
     onClose() { 
-		console.log('EVENT FIRED: onClose'); 
+		debugConsole('EVENT FIRED: onClose'); 
     },
     onError(error) { 
-		console.log(`EVENT FIRED: onError: ${error}`);
+		debugConsole(`EVENT FIRED: onError: ${error}`);
     }
     , onStat(result) { 
 	}
@@ -342,7 +342,7 @@ var setRemonJoinRemote =async function (index,callback) {
 	dummyRemon.config.credential.serviceId = serviceId;
     dummyRemon.config.credential.key = serviceKey;
 	await dummyRemon.fetchCasts().then(function(data){
-		console.log(data);		
+		debugConsole(data);		
 		var castList = data.filter(function(cast){if(cast.name.indexOf($('#naBzPlc').val()+'_remoteVideo'+index)>=0) return this;})
 			.sort(function(castPre,castNext){
 			var pre = castPre.name.split('_')[1].replace('remoteVideo','');
