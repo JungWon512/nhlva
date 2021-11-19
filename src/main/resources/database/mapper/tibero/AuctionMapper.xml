@@ -602,22 +602,7 @@
 						WHEN A.AUC_OBJ_DSC = '3' THEN ROUND(A.SRA_SBID_AM / NVL(J.PPGCOW_AUC_ATDR_UNT_AM, 10000))
 						ELSE ROUND(A.SRA_SBID_AM / 10000)
 					END AS SRA_SBID_AM
-				 , (
-					SELECT ATDR_DTM
-					  FROM (
-						  SELECT ROW_NUMBER() OVER(ORDER BY E.ATDR_DTM DESC) AS N_NUM
-					 	  	  , E.ATDR_DTM 
-						  FROM TB_LA_IS_MH_ATDR_LOG E
-						 WHERE E.NA_BZPLC = A.NA_BZPLC
-						   AND E.AUC_OBJ_DSC = A.AUC_OBJ_DSC 
-						   AND E.AUC_DT = A.AUC_DT
-						   AND E.OSLP_NO = A.OSLP_NO
-						   AND E.TRMN_AMNNO = A.TRMN_AMNNO
-						   AND E.LVST_AUC_PTC_MN_NO = A.LVST_AUC_PTC_MN_NO
-						   AND E.ATDR_AM = A.SRA_SBID_UPR
-						) 
-					WHERE N_NUM = 1
-				 ) AS ATDR_DTM					/* 응찰일시 */
+				 ,D.ATDR_DTM
 				 , TO_CHAR(TO_DATE(B.BIRTH,'YYYYMMDD'),'YYYY.MM.DD') BIRTH_STR
 				 , CASE WHEN MONTHS_BETWEEN(TO_DATE(A.AUC_DT,'YYYYMMDD'), TO_DATE(B.BIRTH,'YYYYMMDD')) <![CDATA[<=]]> 4 THEN 4
 						 ELSE TRUNC(MONTHS_BETWEEN(TO_DATE(A.AUC_DT,'YYYYMMDD'), TO_DATE(B.BIRTH,'YYYYMMDD')))
@@ -636,7 +621,40 @@
 					A.SRA_SRS_DSC = B.SRA_SRS_DSC 
 				 )
 			  LEFT OUTER JOIN TB_LA_IS_MM_ENV_EST J
-				ON ( A.NA_BZPLC = J.NA_BZPLC )
+				ON ( A.NA_BZPLC = J.NA_BZPLC )				
+	LEFT JOIN (
+			SELECT
+				ROW_NUMBER() OVER(PARTITION BY E.NA_BZPLC, E.AUC_OBJ_DSC , E.AUC_DT, E.OSLP_NO ,E.AUC_PRG_SQ , E.TRMN_AMNNO , E.LVST_AUC_PTC_MN_NO ORDER BY E.ATDR_DTM DESC) AS N_NUM 
+				,E.NA_BZPLC
+				,E.AUC_OBJ_DSC
+				,E.AUC_DT
+				,E.OSLP_NO
+				,E.TRMN_AMNNO
+				,E.LVST_AUC_PTC_MN_NO
+				,E.ATDR_AM
+				,E.AUC_PRG_SQ 
+				,E.ATDR_DTM
+			FROM
+				TB_LA_IS_MH_ATDR_LOG E
+			WHERE 1=1
+			AND E.NA_BZPLC = #{naBzplc}
+			<choose>
+				<when test="searchDate != null and searchDate != ''">
+				   AND E.AUC_DT = #{searchDate}
+				</when>
+				<otherwise>
+				   AND E.AUC_DT = TO_CHAR(SYSDATE,'YYYYMMDD')
+				</otherwise>
+			</choose>
+	) D ON D.NA_BZPLC = A.NA_BZPLC
+				AND D.AUC_OBJ_DSC = A.AUC_OBJ_DSC
+				AND D.AUC_DT = A.AUC_DT
+				AND D.OSLP_NO = A.OSLP_NO
+				AND D.AUC_PRG_SQ = A.AUC_PRG_SQ 
+				AND D.TRMN_AMNNO = A.TRMN_AMNNO
+				AND D.LVST_AUC_PTC_MN_NO = A.LVST_AUC_PTC_MN_NO
+				AND D.ATDR_AM = A.SRA_SBID_UPR 
+				AND D.N_NUM = 1
 			 WHERE A.NA_BZPLC = #{naBzplc}
 		<choose>
 			<when test="searchDate != null and searchDate != ''">
