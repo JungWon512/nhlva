@@ -603,8 +603,7 @@ public class AuctionServiceImpl implements AuctionService {
 			}
 			
 			params.put("feeInfoList", feeInfoList);
-			
-			auctionDAO.insertFeeInfo(params);
+			if(feeInfoList.size() >0) auctionDAO.insertFeeInfo(params);
 		}
 		// 수수료 정보 저장 [e]
 		

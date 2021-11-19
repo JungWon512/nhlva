@@ -920,17 +920,16 @@ public class ApiController {
 				temp.add(map);
 			}
 			params.put("list", temp);
-			int cnt = auctionService.updateLowSbidAmt(params);
-			
-			if (cnt > 0) {
-				result.put("success", true);
-				result.put("data", cnt);
-				result.put("message", "정상적으로 변경되었습니다.");
-			}
-			else {
+			if(temp.size() <= 0 ) {
 				result.put("success", false);
-				result.put("message", "변경된 정보가 없습니다.");
+				result.put("message", "변경된 정보가 없습니다.");				
 			}
+			int cnt = auctionService.updateLowSbidAmt(params);
+
+			result.put("success", true);
+			result.put("data", cnt);
+			result.put("message", "정상적으로 변경되었습니다.");
+			
 		}catch (RuntimeException re) {
 			log.error("error - updateLowSbidAmt : {}", re);
 			result.put("success", false);

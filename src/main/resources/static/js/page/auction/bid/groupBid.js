@@ -6,7 +6,7 @@ $(function() {
 		if(!isApp() && chkOs() == 'web'){
 			$('input[name=bidAmt]').attr('readonly',false);
 			$('input[name=bidAmt]').on('input',function(){
-				inputNumberVaildBidAmt(this,4);
+				inputNumberVaildBidAmt(this,5);
 			});
 			$('input[name=bidAmt]').on('keyup',function(e){				
 				if (e.keyCode == 13 && fnCheckBidData()) {
@@ -15,7 +15,7 @@ $(function() {
 			});
 			$('input[name=aucNum]').attr('readonly',false);
 			$('input[name=aucNum]').on('input',function(){
-				inputNumberVaildBidAmt(this,4);
+				inputNumberVaildBidAmt(this,5);
 			});
 			$('input[name=aucNum]').on('keyup',function(e){				
 				if (e.keyCode == 13) {
@@ -78,7 +78,7 @@ $(function() {
 		
 		// 숫자 입력
 		$("button.num").on(clickEvent, function(){
-			var maxLength = 4;
+			var maxLength = 5;
 			if (auctionConfig.seData && auctionConfig.seData.clearYn && auctionConfig.seData.clearYn == "Y") {
 				$("input[name='bidAmt']").val("");
 			}
@@ -158,7 +158,7 @@ $(function() {
 			sHtml += '					<p>경매번호 : ' + aucPrgSq + '번 <span>|</span>최저가 : ' + lowsSbidLmtUpr + '만</p>';
 			sHtml += '				</dt>';
 			sHtml += '				<dd>';
-			sHtml += '					<input type="text" name="inputUpr" id="inputUpr" oninput="inputNumberVaild(this, 4)" value="'+jjim_price+'" placeholder="찜가격 입력 (금액 만 원)" pattern="\d*" inputmode="numeric" />';
+			sHtml += '					<input type="text" name="inputUpr" id="inputUpr" oninput="inputNumberVaild(this, 5)" value="'+jjim_price+'" placeholder="찜가격 입력 (금액 만 원)" pattern="\d*" inputmode="numeric" />';
 			sHtml += '				</dd>';
 			sHtml += '			</dl>';
 			sHtml += '			<div class="btn_area"> ';
@@ -589,6 +589,7 @@ var messageHandler = function(data) {
 				$(".btn_before").prop("disabled", false);
 
 				auctionConfig.enableBid = "Y";
+				if(!isApp() && chkOs() == 'web') $('input[name=bidAmt]').focus();
 			break;
 		case "SD" :
 			// 경매 시작/종료 카운트 다운 정보
