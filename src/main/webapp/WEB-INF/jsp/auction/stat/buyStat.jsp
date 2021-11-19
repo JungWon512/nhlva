@@ -77,7 +77,6 @@ var bubble_map = new Datamap({
 
 var bubbles = [];
 <c:forEach items="${list}" var="vo">
-	console.log("${vo.NA_BZPLC}");
 	bubbles.push({
 		fillKey: "${vo.N_CNT > 50 ? 'MAJOR' : vo.N_CNT > 20 ? 'MEDIUM' : 'MINOR'}",
 		radius: "${vo.N_CNT > 50 ? '20' : vo.N_CNT > 20 ? '15' : '10'}",

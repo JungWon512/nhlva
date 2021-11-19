@@ -94,7 +94,7 @@ $(function() {
 
     var procCallAjax = function(reqUrl, reqMethod, params, preFunc, callback, complete) {
 
-        console.log('reqMethod=>'+reqMethod);
+        debugConsole('reqMethod=>'+reqMethod);
 
         if(reqMethod.toLowerCase()=="post" || reqMethod.toLowerCase()=="put"){
             if(typeof(params)=="object"){
@@ -117,7 +117,7 @@ $(function() {
             },
             error: function(xhr, status, error) {
                 //alert("api error message");
-                console.log("ERROR :: data :: ", error, xhr);
+                debugConsole("ERROR :: data :: ", error, xhr);
             },
             complete : function(data) {
                 // SKIP

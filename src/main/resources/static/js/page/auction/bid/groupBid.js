@@ -290,7 +290,10 @@ var socketStart = function(){
 	//socketHost += ':'+$('#webPort').val();
 	socketHost += ':9001';
 	socket = io.connect('https://'+socketHost + '/6003' + '?auctionHouseCode='  + $('#naBzPlc').val(), {secure:true});
-	//socket = io.connect('http://192.168.0.23:9001/6003?auctionHouseCode=' + $('#naBzPlc').val());
+	if (active == "local") {
+		socket = io.connect('https://xn--e20bw05b.kr:9001/6003?auctionHouseCode=' + $('#naBzPlc').val(), {secure:true});
+//		socket = io.connect('http://192.168.0.34:9001/6003?auctionHouseCode=' + $('#naBzPlc').val());
+	}
 
 //	socket.on('connect_error', socketDisconnect);
 	
@@ -380,7 +383,7 @@ var disconnectHandler = function() {
 	CF : 낙찰데이터 정보	
 **/
 var messageHandler = function(data) {
-	console.log("messageHandler : ", data);
+	debugConsole("messageHandler : ", data);
 	var dataArr = data.split('|');
 	var gubun = dataArr[0];
 
@@ -627,14 +630,17 @@ var messageHandler = function(data) {
 				modalAlert("", "출장우 정보가 없습니다.");
 				$(".aucNum").val("");
 			}
+			else if (responseCode == "4002") {
+				messageSample("현재 응찰 가능상태가 아닙니다.");
+			}
 			else if (responseCode == "4003") {
-				messageSample("<span class='txt-red'>응찰 금액을 확인하세요.</span>");
+				messageSample("<span class='txt-red'>응찰금액을 확인하세요.</span>");
 			}
 			else if (responseCode == "4004") {
 				modalAlert("", "현재 응찰 가능상태가 아닙니다.");
-//				modalAlert('', "진행중인 경매가 없습니다."
-//						 , function(){pageMove('/main', false);}
-//				);
+			}
+			else if (responseCode == "4005") {
+				modalAlert("", "현재 취소 가능상태가 아닙니다.");
 			}
 			else if (responseCode == "4006") {
 				auctionConfig.seData.clearYn = "Y";
@@ -691,7 +697,7 @@ var messageHandler = function(data) {
 
 // 경매 번호 입력
 var fnSetAuctionInfo = function() {
-	if (!(auctionConfig.asData.status == "8003" || auctionConfig.asData.status == "8004")) {
+	if (!auctionConfig.asData || !(auctionConfig.asData.status == "8003" || auctionConfig.asData.status == "8004")) {
 		return;
 	}
 	
@@ -909,15 +915,15 @@ var config = {
 };
 //remon Event listener
 var listener = {
-    onCreate(chid) { console.log(`EVENT FIRED: onCreate: ${chid}`); },
+    onCreate(chid) { debugConsole(`EVENT FIRED: onCreate: ${chid}`); },
     onJoin(chid) { 
-		console.log(`EVENT FIRED: onJoin: ${chid}`);
+		debugConsole(`EVENT FIRED: onJoin: ${chid}`);
 	},
     onClose() { 
-		console.log('EVENT FIRED: onClose'); 
+		debugConsole('EVENT FIRED: onClose'); 
     },
     onError(error) { 
-		console.log(`EVENT FIRED: onError: ${error}`);
+		debugConsole(`EVENT FIRED: onError: ${error}`);
     }, onStat(result) { 
 	}
 };
