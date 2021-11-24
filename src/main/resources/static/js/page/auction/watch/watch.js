@@ -35,35 +35,45 @@ $(function() {
 		});		
 		if($('#aucDsc').val() == '2'){
 			calcPiePercent();
-			var index = 0;
-			setInterval(function(){
-				if(isApp() || chkOs() != 'web'){
-					var len = $(".list_body ul li").length;
-					if(len<=index){
-						index = 0;
-					}else{
-						index += 5;
-					}
-					var scH = $('.tblAuction .list_body ul li').outerHeight();					
-					$('.tblAuction .list_body ul').animate({scrollTop: (scH*index)},1000);
-				}else{
-					var len = $(".list_body ul").find('.mCSB_container li').length;
-					if(len<=index){
-						index = 0;
-					}else{
-						index += 5;
-					}
-					$(".list_body ul").mCustomScrollbar('scrollTo'
-						,$(".list_body ul").find('.mCSB_container').find('li:eq('+(index)+')')
-						,{scrollInertia:0}
-					);
-					setTimeout(function(){
-						$(".tblAuction .list_body ul li").removeClass('act');				
-						$(".tblAuction .list_body ul li:eq("+(index)+")").addClass('act');					
-					},300)		
-				}	
-				calcPiePercent();
-			},1000*5);
+			$(".tblAuction .list_body ul li").removeClass('act');
+			$(".tblAuction .list_body ul li").on('click',function(){
+				$('.boarder ul li dd.auctionNum').text($(this).find('dd.aucPrgSq').text());
+				$('.boarder ul li dd.ftsnm').text($(this).find('dd.ftsnm').text());
+				$('.boarder ul li dd.sex').text($(this).find('dd.indvSexC').text());
+				$('.boarder ul li dd.cowSogWt').text($(this).find('dd.cowSogWt').text());
+				$('.boarder ul li dd.matime').text($(this).find('input.matime').val());	//산차
+				$('.boarder ul li dd.sraIndvPasgQcn').text($(this).find('dd.sraIndvPasgQcn').text());
+				$('.boarder ul li dd.mcowDsc').text($(this).find('input.mcowDsc').val());	//어미
+				$('.boarder ul li dd.lowsSbidLmtAm').text($(this).find('dd.lowsSbidLmtAm').text());
+				$('.boarder ul li dd.kpnNo').text($(this).find('dd.kpnNo').text());
+				$('.boarder ul li dd.rmkCntn').text($(this).find('dd.rmkCntn').text());
+				console.log($(this).find('dd.aucDt').text());
+			});
+//			var index = 0;
+//			setInterval(function(){
+//				if(isApp() || chkOs() != 'web'){
+//					var len = $(".list_body ul li").length;
+//					if(len<=index){
+//						index = 0;
+//					}else{
+//						index += 5;
+//					}
+//					var scH = $('.tblAuction .list_body ul li').outerHeight();					
+//					$('.tblAuction .list_body ul').animate({scrollTop: (scH*index)},1000);
+//				}else{
+//					var len = $(".list_body ul").find('.mCSB_container li').length;
+//					if(len<=index){
+//						index = 0;
+//					}else{
+//						index += 5;
+//					}
+//					$(".list_body ul").mCustomScrollbar('scrollTo'
+//						,$(".list_body ul").find('.mCSB_container').find('li:eq('+(index)+')')
+//						,{scrollInertia:0}
+//					);
+//				}	
+//				calcPiePercent();
+//			},1000*5);
 		}
     };
 

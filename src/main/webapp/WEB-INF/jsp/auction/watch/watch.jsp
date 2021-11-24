@@ -231,6 +231,8 @@
                	</c:if>
                	<c:forEach items="${ watchList }" var="vo" varStatus="st">
 					<li class="${st.index == 0?'act':'' }">
+						<input type='hidden' name="mcowDsc" class="mcowDsc" value="${ vo.MCOW_DSC_NAME }"/>
+						<input type='hidden' name="matime" class="matime" value="${ vo.MATIME }"/>
 						<dl>
 							<dd class="date aucDt">${ vo.AUC_DT_STR }</dd>
 							<dd class="num aucPrgSq">${ vo.AUC_PRG_SQ }</dd>

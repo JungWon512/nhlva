@@ -241,7 +241,7 @@ public class AdminController {
 		return mav;
 	}
 	
-	@RequestMapping(value = "/admin/getReportList")
+	@RequestMapping(value = "/admin/getReportList" ,method = { RequestMethod.GET, RequestMethod.POST })
 	public Map<String, Object> getReportList(@RequestParam Map<String,Object> param) throws Exception{
 		final Map<String,Object> map = new HashMap<>();
 		final Map<String,Object> result = new HashMap<>();
@@ -281,7 +281,7 @@ public class AdminController {
 	}
 	
 	@PreAuthorize("hasRole('ROLE_ADMIN')")
-	@RequestMapping(value = "/admin/auction/stream")
+	@RequestMapping(value = "/admin/auction/stream" ,method = { RequestMethod.GET, RequestMethod.POST })
 	public ModelAndView streamPage() throws Exception{
 		final ModelAndView mav = new ModelAndView();
 		final Map<String,Object> map = new HashMap<>();
