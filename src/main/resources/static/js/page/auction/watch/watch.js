@@ -300,7 +300,7 @@ var changeTrRow = function(tr) {
 			//var scH = tr.outerHeight();
 			//$('.tblAuction .list_body ul').animate({scrollTop: (scH*tr.index())},1000);
 			if(tr.index()< 0){$('.tblAuction .list_body ul').animate({scrollTop: 0},1000); return;}
-			var scH = $('.tblAuction .list_body ul li').eq(0).position().top-$('.tblAuction .list_body ul li:first').position().top;
+			var scH = $('.tblAuction .list_body ul li').eq(tr.index()).position().top-$('.tblAuction .list_body ul li:first').position().top;
 			$('.tblAuction .list_body ul').animate({scrollTop: scH},1000);
 		}else{
 			$(".list_body ul").mCustomScrollbar('scrollTo'
