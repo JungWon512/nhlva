@@ -44,8 +44,8 @@ public class AdminTaskController {
 	 * 관리자 > 경매업무 > 메인화면
 	 * @return
 	 */
-//	@GetMapping(value = "/admin/task/main")
-	@RequestMapping(value = "/admin/task/main", method = {RequestMethod.GET, RequestMethod.POST})
+//	@GetMapping(value = "/office/task/main")
+	@RequestMapping(value = "/office/task/main", method = {RequestMethod.GET, RequestMethod.POST})
 	public ModelAndView main() {
 		final ModelAndView mav = new ModelAndView("admin/task/main");
 
@@ -72,7 +72,7 @@ public class AdminTaskController {
 	 * 관리자 > 경매업무 > 작업선택
 	 * @return
 	 */
-	@PostMapping("/admin/task/select")
+	@PostMapping("/office/task/select")
 	public ModelAndView select(@RequestParam final Map<String, Object> params) {
 		final ModelAndView mav = new ModelAndView("admin/task/select");
 		try {
@@ -95,7 +95,7 @@ public class AdminTaskController {
 	 * @param params
 	 * @return
 	 */
-	@PostMapping("/admin/task/entry")
+	@PostMapping("/office/task/entry")
 	@SuppressWarnings("serial")
 	public ModelAndView entry(@RequestParam final Map<String, Object> params) {
 		final ModelAndView mav = new ModelAndView("admin/task/entry");
@@ -125,7 +125,7 @@ public class AdminTaskController {
 	 * @return
 	 */
 	@ResponseBody
-	@PostMapping(value = "/admin/task/cowInfo"
+	@PostMapping(value = "/office/task/cowInfo"
 				, consumes = MediaType.APPLICATION_JSON_VALUE
 				, produces = MediaType.APPLICATION_JSON_VALUE)
 	public Map<String, Object> selectCowInfo(@RequestBody final Map<String, Object> params) {
@@ -172,7 +172,7 @@ public class AdminTaskController {
 	 * @return
 	 */
 	@ResponseBody
-	@PostMapping(value = "/admin/task/saveCowInfo"
+	@PostMapping(value = "/office/task/saveCowInfo"
 				, consumes = MediaType.APPLICATION_JSON_VALUE
 				, produces = MediaType.APPLICATION_JSON_VALUE)
 	public Map<String, Object> saveCowInfo(@RequestBody final Map<String, Object> params) {

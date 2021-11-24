@@ -6,7 +6,7 @@
 	<h4>${johapData.CLNTNM} 관리자 메뉴</h4>
 	<ul class="menu_list">
 		<li class="menu_item">
-			<a href="javascript:pageMove('/admin/broad/cast');">
+			<a href="javascript:pageMove('/office/broad/cast');">
 				<span class="ico">
 					<img src="/static/images/guide/ico_admin_menu_01.svg" alt="">
 				</span>
@@ -14,7 +14,7 @@
 			</a>
 		</li>
 		<li class="menu_item">
-			<a href="javascript:pageMove('/admin/auction/monster');">
+			<a href="javascript:pageMove('/office/auction/monster');">
 				<span class="ico">
 					<img src="/static/images/guide/ico_admin_menu_02.svg" alt="">
 				</span>
@@ -22,7 +22,7 @@
 			</a>
 		</li>
 		<li class="menu_item">
-			<a href="javascript:pageMove('/admin/auction/board');">
+			<a href="javascript:pageMove('/office/auction/board');">
 				<span class="ico">
 					<img src="/static/images/guide/ico_admin_menu_03.svg" alt="">
 				</span>
@@ -30,7 +30,7 @@
 			</a>
 		</li>
 		<li class="menu_item">
-			<a href="javascript:pageMove('/admin/auction/stream');">
+			<a href="javascript:pageMove('/office/auction/stream');">
 				<span class="ico">
 					<img src="/static/images/guide/ico_admin_menu_04.svg" alt="">
 				</span>
@@ -38,7 +38,7 @@
 			</a>
 		</li>
 		<li class="menu_item">
-			<a href="javascript:pageMove('/admin/task/main');">
+			<a href="javascript:pageMove('/office/task/main');">
 				<span class="ico">
 					<img src="/static/images/guide/ico_admin_menu_05.svg" alt="">
 				</span>

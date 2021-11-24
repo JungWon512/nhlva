@@ -58,8 +58,8 @@ $(function() {
 						,{scrollInertia:0}
 					);
 					setTimeout(function(){
-						$(".tblAuction .list_body ul li").removeClass('act');				
-						$(".tblAuction .list_body ul li:eq("+(index)+")").addClass('act');					
+						$(".tblAuction .list_body ul li").removeClass('act');
+						$(".tblAuction .list_body ul li:eq("+(index)+")").addClass('act');
 					},300)		
 				}	
 				calcPiePercent();
@@ -83,7 +83,7 @@ $(function() {
 			return;
 		}else{
 			socketStart();
-			setRemon();			
+			setRemon();
 		}
 		
     };
@@ -258,7 +258,7 @@ var changeTrRow = function(tr) {
 			//var scH = tr.outerHeight();
 			//$('.tblAuction .list_body ul').animate({scrollTop: (scH*tr.index())},1000);
 			if(tr.index()< 0){$('.tblAuction .list_body ul').animate({scrollTop: 0},1000); return;}
-			var scH = $('.tblAuction .list_body ul li:nth-child('+tr.index()+')').position().top-$('.tblAuction .list_body ul li:first').position().top;
+			var scH = $('.tblAuction .list_body ul li').eq(0).position().top-$('.tblAuction .list_body ul li:first').position().top;
 			$('.tblAuction .list_body ul').animate({scrollTop: scH},1000);
 		}else{
 			$(".list_body ul").mCustomScrollbar('scrollTo'
@@ -349,7 +349,7 @@ var setRemonJoinRemote =async function (index,callback) {
 		var castList = data.filter(function(cast){if(cast.name.indexOf($('#naBzPlc').val()+'_remoteVideo'+index)>=0) return this;})
 			.sort(function(castPre,castNext){
 			var pre = castPre.name.split('_')[1].replace('remoteVideo','');
-			var next = castNext.name.split('_')[1].replace('remoteVideo','');			
+			var next = castNext.name.split('_')[1].replace('remoteVideo','');
 			return pre-next;
 		});
 		var height = $('div.seeBox_slick ul.slider .boarder').closest('.slick-slide').height();

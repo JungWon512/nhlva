@@ -30,10 +30,10 @@
 						get_msg(message);
 					}
 					else {
-						var uri = '/admin/main';
-						if (chkOs() != 'web') {
-							uri = '/admin/task/main'
-						}
+						var uri = '/office/main';
+//						if (chkOs() != 'web') {
+//							uri = '/office/task/main'
+//						}
 						if ($("#save_id").is(":checked")) {
 							setCookieLimitDay("eno", $("#usrid").val());
 						}

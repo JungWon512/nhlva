@@ -27,12 +27,12 @@
 					aucDt : $("select[name='searchDate']").val(),
 					aucObjDsc : $("input:radio[name='searchAucObjDsc']:checked").val()
 				}
-				appendFormSubmit("frm_main", "/admin/task/select", params);
+				appendFormSubmit("frm_main", "/office/task/select", params);
 			});
 			
 			// 작업 선택 페이지 이동
 			$(".btn_end").click(function(){
-				pageMove('/admin/user/login');
+				pageMove('/office/user/login');
 			});
 		};
 

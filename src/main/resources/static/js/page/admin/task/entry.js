@@ -14,7 +14,7 @@
 		var addEvent = function(){
 			// 바코드 검색
 			$(".btn_search").on(clickEvent, function(){
-				$("form[name='frm']").attr("action", "/admin/task/entry").submit();
+				$("form[name='frm']").attr("action", "/office/task/entry").submit();
 			});
 			
 			// 리스트 선택
@@ -29,7 +29,7 @@
 					aucDt : $("input[name='aucDt']").val(),
 					aucObjDsc : $("select[name='aucObjDsc']:checked").val()
 				};
-				appendFormSubmit("frm_main", "/admin/task/select", params);
+				appendFormSubmit("frm_main", "/office/task/select", params);
 			});
 			
 			// 변경 팝업
@@ -54,7 +54,7 @@
 				}
 				
 				$.ajax({
-					url: '/admin/task/cowInfo',
+					url: '/office/task/cowInfo',
 					data: JSON.stringify(params),
 					type: 'POST',
 					dataType: 'json',
@@ -94,7 +94,7 @@
 				}
 				
 				$.ajax({
-					url : '/admin/task/saveCowInfo',
+					url : '/office/task/saveCowInfo',
 					data : JSON.stringify($("form[name='frm_cow']").serializeObject()),
 					type : 'POST',
 					dataType : 'json',

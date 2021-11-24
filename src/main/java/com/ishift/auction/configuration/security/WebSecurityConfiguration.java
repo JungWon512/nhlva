@@ -123,7 +123,7 @@ public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
 			http.cors()
 			.and()
 				.requestMatchers()
-					.antMatchers("/admin/**")
+					.antMatchers("/office/**")
 					.antMatchers("/api/**")
 			.and()
 				.csrf()
@@ -134,9 +134,9 @@ public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
 				.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
 			.and()
 				.authorizeRequests()
-					.antMatchers("/admin/user/loginProc").permitAll()
-					.antMatchers("/api/**/auth/**", "/api/appversion", "/api/**/biz/**", "/api/**/my/**", "/api/**/host/**", "/admin/auction/board").permitAll()
-					.antMatchers("/admin/**").hasRole(Constants.UserRole.ADMIN)
+					.antMatchers("/office/user/loginProc").permitAll()
+					.antMatchers("/api/**/auth/**", "/api/appversion", "/api/**/biz/**", "/api/**/my/**", "/api/**/host/**", "/office/auction/board").permitAll()
+					.antMatchers("/office/**").hasRole(Constants.UserRole.ADMIN)
 					.antMatchers("/api/**").hasRole(Constants.UserRole.ADMIN)
 					.anyRequest().permitAll()
 			.and()
@@ -145,7 +145,7 @@ public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
 					.authenticationEntryPoint(jwtTokenAdminEntryPoint)
 			.and()
 				.formLogin()
-					.loginPage("/admin/user/login").permitAll();
+					.loginPage("/office/user/login").permitAll();
 
 			http.addFilterBefore(jwtAdminAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
 			

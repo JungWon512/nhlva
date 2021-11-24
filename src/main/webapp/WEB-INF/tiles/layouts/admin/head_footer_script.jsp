@@ -11,12 +11,4 @@
 <link href="/static/assets/css/style.bundle.css?v=2.1.1" rel="stylesheet" type="text/css" />
 <!--end::Global Theme Styles-->
 <!--begin::Layout Themes(used by all pages)-->
-<link href="/static/assets/css/themes/layout/header/base/light.css" rel="stylesheet" type="text/css" />
-<link href="/static/assets/css/themes/layout/header/menu/light.css" rel="stylesheet" type="text/css" />
-<%--<link href="/static/assets/css/themes/layout/brand/dark.css" rel="stylesheet" type="text/css" />--%>
-<%--<link href="/static/assets/css/themes/layout/aside/dark.css" rel="stylesheet" type="text/css" />--%>
-<link href="/static/css/commons.css" rel="stylesheet" type="text/css" />
 <link rel="stylesheet" type="text/css" href="/static/css/guide/popup.css">
-
-<%--<link href="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.3.1/semantic.min.css" rel="stylesheet" type="text/css" />--%>
-<%--<link href="https://cdn.datatables.net/1.10.25/css/dataTables.semanticui.min.css" rel="stylesheet" type="text/css" />--%>

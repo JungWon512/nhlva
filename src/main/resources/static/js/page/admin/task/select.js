@@ -15,7 +15,7 @@
 			// 메뉴 선택 이벤트
 			$(".btn_move").on(clickEvent, function() {
 				$("input[name='regType']").val($(this).data("type"));
-				$("form[name='frm_select']").attr("action", "/admin/task/entry").submit();;
+				$("form[name='frm_select']").attr("action", "/office/task/entry").submit();;
 			});
 			
 			// 유형 선택 화면으로 이동
@@ -24,8 +24,8 @@
 //					aucDt : $("input[name='aucDt']").val(),
 //					aucObjDsc : $("input[name='aucObjDsc']:checked").val()
 //				};
-//				appendFormSubmit("frm_main", "/admin/task/main", params);
-				window.location.href = "/admin/task/main";
+//				appendFormSubmit("frm_main", "/office/task/main", params);
+				window.location.href = "/office/task/main";
 			});
 			
 			// 큰소 정보 입력 팝업 
@@ -39,7 +39,7 @@
 				$("form[name='frm_select']").find("input[name='aucPrgSq']").val(aucPrgSq);
 				
 				$.ajax({
-					url: '/admin/task/cowInfo',
+					url: '/office/task/cowInfo',
 					data: JSON.stringify($("form[name='frm_select']").serializeObject()),
 					type: 'POST',
 					dataType: 'json',
@@ -400,7 +400,7 @@
 				frmCowInfo.find("input[name='regType']").val("I");
 				
 				$.ajax({
-					url : '/admin/task/saveCowInfo',
+					url : '/office/task/saveCowInfo',
 					data : JSON.stringify($("form[name='frm_cow_info']").serializeObject()),
 					type : 'POST',
 					dataType : 'json',

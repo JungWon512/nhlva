@@ -65,10 +65,10 @@ public class AdminController {
 	 * @return
 	 * @throws Exception
 	 */
-	@RequestMapping(value="/admin")
+	@RequestMapping(value="/office")
 	public ModelAndView init() throws Exception {
 		final ModelAndView mav = new ModelAndView();
-		mav.setViewName("redirect:/admin/main");
+		mav.setViewName("redirect:/office/main");
 		return mav;
 	}
 	
@@ -77,7 +77,7 @@ public class AdminController {
 	 * @return
 	 */
 	@PreAuthorize("hasRole('ROLE_ADMIN')")
-	@GetMapping("/admin/main")
+	@GetMapping("/office/main")
 	public ModelAndView adminMain() {
 		final ModelAndView mav = new ModelAndView("admin/main/main");
 		
@@ -100,7 +100,7 @@ public class AdminController {
 	 * @return
 	 */
 	@PreAuthorize("hasRole('ROLE_ADMIN')")
-	@GetMapping("/admin/broad/cast")
+	@GetMapping("/office/broad/cast")
 	public ModelAndView adminBroadCast() {
 		final ModelAndView mav = new ModelAndView("admin/broad/cast");
 		try {
@@ -126,7 +126,7 @@ public class AdminController {
 	 * @return
 	 */
 	@PreAuthorize("hasRole('ROLE_ADMIN')")
-	@GetMapping("/admin/auction/monster")
+	@GetMapping("/office/auction/monster")
 	public ModelAndView adminGhost(@RequestParam(name = "place", required = false) final String place) {
 		
 		final ModelAndView mav = new ModelAndView("admin/auction/monster/monster");
@@ -172,7 +172,7 @@ public class AdminController {
 	 * 관리자 > 멀티전광판
 	 * @return
 	 */
-	@GetMapping("/admin/auction/board")
+	@GetMapping("/office/auction/board")
 	public ModelAndView adminBoard(final HttpServletResponse response
 								 , @RequestParam final Map<String,Object> params) {
 
@@ -205,14 +205,14 @@ public class AdminController {
 					mav.addObject("list", list);
 					mav.setViewName("admin/auction/board/groupBoard");					
 				}else {
-					mav.setViewName("redirect:/admin/main");			
+					mav.setViewName("redirect:/office/main");			
 				}
 				mav.addObject("userId", usrid);
 				mav.addObject("johapData", johap);
 				
 			}
 			else {
-				mav.setViewName("redirect:/admin/main");
+				mav.setViewName("redirect:/office/main");
 				return mav;
 			}
 		}catch (RuntimeException re) {
@@ -225,7 +225,7 @@ public class AdminController {
 	}
 	
 	@PreAuthorize("hasRole('ROLE_ADMIN')")
-	@GetMapping(value = "/admin/report/list")
+	@GetMapping(value = "/office/report/list")
 	public ModelAndView reportList() throws Exception{
 		final ModelAndView mav = new ModelAndView();
 		final Map<String,Object> map = new HashMap<>();
@@ -241,7 +241,7 @@ public class AdminController {
 		return mav;
 	}
 	
-	@RequestMapping(value = "/admin/getReportList")
+	@RequestMapping(value = "/office/getReportList")
 	public Map<String, Object> getReportList(@RequestParam Map<String,Object> param) throws Exception{
 		final Map<String,Object> map = new HashMap<>();
 		final Map<String,Object> result = new HashMap<>();
@@ -281,7 +281,7 @@ public class AdminController {
 	}
 	
 	@PreAuthorize("hasRole('ROLE_ADMIN')")
-	@RequestMapping(value = "/admin/auction/stream")
+	@RequestMapping(value = "/office/auction/stream")
 	public ModelAndView streamPage() throws Exception{
 		final ModelAndView mav = new ModelAndView();
 		final Map<String,Object> map = new HashMap<>();

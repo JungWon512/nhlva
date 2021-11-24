@@ -924,7 +924,7 @@ Base styles: popup_layer css
 }
 
 .modal-wrap.pop_exit_cow .modal-content h3 {
-	font-family: NanumSquare;
+	font-family: Noto Sans KR;
 	font-size: 28px;
 	font-weight: 700;
 	letter-spacing: -0.7px;
@@ -1074,7 +1074,7 @@ Base styles: popup_layer css
 
 .modal-wrap.pop_mod_weight .pop_ad_mod .modal-head h3, .modal-wrap.pop_mod_pay .pop_ad_mod .modal-head h3,
 	.modal-wrap.pop_mod_moorage .pop_ad_mod .modal-head h3 {
-	font-family: NanumSquare;
+	font-family: Noto Sans KR;
 	font-size: 28px;
 	font-weight: 700;
 	letter-spacing: -0.7px;
@@ -1298,7 +1298,7 @@ Base styles: popup_layer css
 }
 
 .modal-wrap.pop_ship_status .modal-content h3 {
-	font-family: NanumSquare;
+	font-family: Noto Sans KR;
 	font-size: 28px;
 	font-weight: 700;
 	letter-spacing: -0.7px;
@@ -1888,7 +1888,7 @@ Base styles: popup_layer css
 }
 
 .modal-wrap.pop_cow_input .pop_ad_mod .modal-head h3 {
-	font-family: NanumSquare;
+	font-family: Noto Sans KR;
 	font-size: 28px;
 	font-weight: 700;
 	letter-spacing: -0.7px;
