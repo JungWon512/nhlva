@@ -36,17 +36,12 @@
 	            </li>
 			</ul>
 			<ul class="sch_area">
-<!-- 				<li class="sort"> -->
-<!-- 					<select name="" id=""> -->
-<!-- 						<option value="">정렬</option> -->
-<!-- 					</select> -->
-<!-- 				</li> -->	
 	            <li class="txt">
 	            	<input type="text" name="searchTxtBuy" id="searchTxtBuy" maxlength="4" placeholder="개체" value="${inputParam.searchTxtBuy}"/>
 	           	</li>
 				<li class="date">
 	                <select name="searchDateBuy" id="searchDateBuy">
-		                <option value=""> 선택 </option>                
+		                <option value=""> 선택 </option>
 		                <c:forEach items="${ dateList }" var="vo">
 		                	<option value="${vo.AUC_DT }" ${inputParam.searchDate eq vo.AUC_DT ? 'selected' : ''}> ${vo.AUC_DT_STR } </option>
 		                </c:forEach>
@@ -69,18 +64,7 @@
 			총금액 : <span>${empty TOT_SRA_SBID_AM?'0':TOT_SRA_SBID_AM}</span> 원
 		</div>
 		<!-- //list_downs e -->
-<!-- 		<div class="list_table auction_buy"> -->
 		<div class="list_table auction_result">
-<!-- 			<div class="list_head"> -->
-<!-- 				<dl> -->
-<!-- 					<dd class="date">경매일자</dd> -->
-<!-- 					<dd class="num"><span class="w_view_in">참가</span>번호</dd> -->
-<!-- 					<dd class="pd_total">총금액</dd> -->
-<!-- 					<dd class="pd_ea">두수</dd> -->
-<!-- 					<dd class="pd_pay">평균낙찰</dd> -->
-<!-- 					<dd class="pd_view">상세</dd> -->
-<!-- 				</dl> -->
-<!-- 			</div> -->
 			<div class="list_head">
 				<dl>
 					<dd class="date">경매일자</dd>
@@ -108,7 +92,7 @@
 							</dl>
 						</li>
 					</c:if>
-					<c:forEach items="${buyList }" var="item" varStatus ="st">		
+					<c:forEach items="${buyList }" var="item" varStatus ="st">
 						<li>
 							<dl>
 								<dd class="date">${ item.AUC_DT_STR }</dd>
@@ -119,8 +103,22 @@
 								<dd class="pd_kg">${ fn:split(item.COW_SOG_WT,'.')[0] }</dd>
 								<dd class="pd_kpn">${ item.KPN_NO_STR }</dd>
 								<dd class="pd_num1">${ item.SRA_INDV_PASG_QCN }</dd>
-								<dd class="pd_pay1">${item.LOWS_SBID_LMT_AM <= 0 ? '0' : fn:split(item.LOWS_SBID_LMT_UPR,'.')[0]}</dd>
-								<dd class="pd_pay2">${ fn:split(item.SRA_SBID_UPR,'.')[0] }</dd>
+								<dd class="pd_pay1">
+									<c:choose>
+										<c:when test="${empty item.LOWS_SBID_LMT_AM || item.LOWS_SBID_LMT_AM <= 0}">-</c:when>
+										<c:otherwise>
+											<fmt:formatNumber value="${fn:split(item.LOWS_SBID_LMT_UPR,'.')[0]}" type="number" />
+										</c:otherwise>
+									</c:choose>
+								</dd>
+								<dd class="pd_pay2">
+									<c:choose>
+										<c:when test="${empty item.SRA_SBID_UPR || item.SRA_SBID_UPR <= 0}">-</c:when>
+										<c:otherwise>
+											<fmt:formatNumber value="${fn:split(item.SRA_SBID_UPR,'.')[0]}" type="number" />
+										</c:otherwise>
+									</c:choose>
+								</dd>
 								<dd class="pd_state">${ item.SEL_STS_DSC_NAME }</dd>
 								<dd class="pd_etc">${ item.RMK_CNTN }</dd>
 							</dl>
@@ -189,8 +187,8 @@
 					<dd class="pd_sex">성별</dd>
 					<dd class="pd_kg">중량<span class="w_view_in">(kg)</span></dd>
 					<dd class="pd_pay1">예정가</dd>
-					<dd class="pd_pay2">낙찰가</dd>
 					<dd class="pd_pay3">응찰가</dd>
+					<dd class="pd_pay2">낙찰가</dd>
 					<dd class="pd_state">경매상태</dd>
 				</dl>
 			</div>
@@ -213,9 +211,30 @@
 								<dd class="pd_ea">${item.SRA_INDV_AMNNO_FORMAT }</dd>
 								<dd class="pd_sex">${ item.INDV_SEX_C_NAME}</dd>
 								<dd class="pd_kg">${ fn:split(item.COW_SOG_WT,'.')[0] }</dd>
-								<dd class="pd_pay1">${item.LOWS_SBID_LMT_AM <= 0 ? '0' : fn:split(item.LOWS_SBID_LMT_UPR,'.')[0]}</dd>
-								<dd class="pd_pay2">${ fn:split(item.SRA_SBID_UPR,'.')[0] }</dd>
-								<dd class="pd_pay3">${ fn:split(item.ATDR_AM,'.')[0] }</dd>
+								<dd class="pd_pay1">
+									<c:choose>
+										<c:when test="${empty item.LOWS_SBID_LMT_AM || item.LOWS_SBID_LMT_AM <= 0}">-</c:when>
+										<c:otherwise>
+											<fmt:formatNumber value="${fn:split(item.LOWS_SBID_LMT_UPR,'.')[0]}" type="number" />
+										</c:otherwise>
+									</c:choose>
+								</dd>
+								<dd class="pd_pay3">
+									<c:choose>
+										<c:when test="${empty item.ATDR_AM || item.ATDR_AM <= 0}">-</c:when>
+										<c:otherwise>
+											<fmt:formatNumber value="${fn:split(item.ATDR_AM,'.')[0]}" type="number" />
+										</c:otherwise>
+									</c:choose>
+								</dd>
+								<dd class="pd_pay2">
+									<c:choose>
+										<c:when test="${empty item.SRA_SBID_UPR || item.SRA_SBID_UPR <= 0}">-</c:when>
+										<c:otherwise>
+											<fmt:formatNumber value="${fn:split(item.SRA_SBID_UPR,'.')[0]}" type="number" />
+										</c:otherwise>
+									</c:choose>
+								</dd>
 								<dd class="pd_state">${item.SEL_STS_DSC_NAME }</dd>
 							</dl>
 						</li>

@@ -83,11 +83,11 @@
 			sHtml += ' 		<dl class="jjim_dl">';
 			sHtml += ' 			<dt>';
 //			sHtml += ' 				<p>경매번호: 101번 <span>|</span> 최저가: '+lowsSbidLmtUpr+'만 </p>';
-			sHtml += ' 				<p>최저가: '+lowsSbidLmtUpr+'만 </p>';
+			sHtml += ' 				<p>최저가: '+ fnSetComma(lowsSbidLmtUpr) + '</p>';
 			sHtml += ' 			</dt>';
 			sHtml += ' 			<dd>';
 			//sHtml += ' 				<input type="text" placeholder="찜가격 입력 (금액 만 원)" name="inputUpr" id="inputUpr" maxlength=4 value="'+jjim_price+'">';
-			sHtml += '					<input type="text" name="inputUpr" id="inputUpr" oninput="inputNumberVaild(this, 4)" value="'+jjim_price+'" placeholder="찜가격 입력 (금액 만 원)" pattern="\d*" inputmode="numeric" />';
+			sHtml += '					<input type="text" name="inputUpr" id="inputUpr" oninput="inputNumberVaild(this, 5)" value="'+jjim_price+'" placeholder="찜가격 입력" pattern="\d*" inputmode="numeric" />';
 			sHtml += ' 			</dd>';
 			sHtml += ' 		</dl>';
 			sHtml += ' 		<div class="btn_area">';
@@ -149,8 +149,8 @@
 			});
         });
                 
-        $(document).on("click",".list_body .pd_ea a", function(){			
-			var pdEa = new String($(this).find('span').attr('fullstr'));	
+        $(document).on("click",".list_body .pd_ea a", function(){
+			var pdEa = new String($(this).find('span').attr('fullstr'));
 			var tr = $(this).closest('li');
 			
 			modalPopupClose('.popup .modal-wrap.pop_exit_cow');
@@ -199,7 +199,7 @@
 			sHtml += '  				</tr>                                                                                                              ';
 			sHtml += '  				<tr>                                                                                                               ';
 			sHtml += '  					<th>최저가</th>                                                                                                ';
-			sHtml += '  					<td class="tal">'+tr.find('.lowsSbidLmtUpr').val()+'만원</td>                                                                                  ';
+			sHtml += '  					<td class="tal">'+fnSetComma(tr.find('.lowsSbidLmtUpr').val())+'</td>                                                                                  ';
 			sHtml += '  					<th>어미</th>                                                                                                  ';
 			sHtml += '  					<td class="fwb">'+tr.find('.mcowDsc').val()+'</td>                                                                                      ';
 			sHtml += '  				</tr>                                                                                                              ';

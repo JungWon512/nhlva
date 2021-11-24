@@ -479,7 +479,7 @@ var debugConsole = function() {
 
 // toast message
 let removeToast;
-function toast(string) {
+var toast = function(string) {
 	if (!document.getElementById("toast")) {
 		var div = document.createElement('div');
 		div.id = "toast";
@@ -496,4 +496,8 @@ function toast(string) {
 		}, 1000)
 		toast.classList.add("reveal");
 		toast.innerText = string;
+}
+
+var fnSetComma = function(str) {
+	return (str != undefined ? str.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") : "0");
 }

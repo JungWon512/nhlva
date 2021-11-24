@@ -14,13 +14,10 @@
 	<tiles:insertAttribute name="commons_js_block"/>
 	<tiles:insertAttribute name="head_footer_script"/>
 	<script src="<tiles:getAsString name="page_footer_script"/>" type="text/javascript"></script>
-	<link rel="stylesheet" href="/static/assets/css/plugin/datatables/datatables.css">
 </head>
-<body id="kt_body">
-<!--begin::Main-->
-
-<tiles:insertAttribute name="content"/>	
-
-<tiles:insertAttribute name="body_footer_script"/>
+<body>
+	<tiles:insertAttribute name="content"/>	
+	
+	<tiles:insertAttribute name="body_footer_script"/>
 </body>
 </html>

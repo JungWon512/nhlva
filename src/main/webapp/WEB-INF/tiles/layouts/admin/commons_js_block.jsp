@@ -12,6 +12,4 @@
 <script src="/static/js/common/utils.js"></script>
 <!-- end::util.js -->
 
-<script src="https://cdn.datatables.net/1.10.25/js/jquery.dataTables.min.js"></script>
-<script src="https://cdn.datatables.net/1.10.25/js/dataTables.bootstrap4.min.js"></script>
 <script src="/static/js/socket.io/socket.io.js" type="text/javascript"></script>

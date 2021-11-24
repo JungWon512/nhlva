@@ -1,33 +1,31 @@
-@charset "UTF-8";
 @import url("normalize.css");
-@import url("notosanskr.css");
 
-/* @import url("https://cdn.rawgit.com/moonspam/NanumSquare/master/nanumsquare.css"); */
-/* @import url(https://fonts.googleapis.com/earlyaccess/notosanskr.css); */
-/* color */
+@import
+	url("https://cdn.rawgit.com/moonspam/NanumSquare/master/nanumsquare.css")
+	;
+
 * {
 	-webkit-text-size-adjust: none;
+	-webkit-box-sizing: border-box;
 	box-sizing: border-box;
 	word-break: break-all;
 	-webkit-font-smoothing: antialiased;
-	-moz-osx-font-smoothing: auto;
-	touch-action: pan-y;
+	-moz-osx-font-smoothing: auto
 }
 
-/* 뷰표트 변환시 폰트크기 자동확대 방지 */
 .m_layer * {
-	outline: none !important;
+	outline: none !important
 }
 
 html {
 	margin: 0;
 	padding: 0;
-	font-family: "Noto Sans KR", "Roboto", "AppleGothic", "sans-serif";
-	font-weight: 400;
+	font-family: 'NanumSquare', 'Roboto', 'AppleGothic', 'sans-serif';
+	font-weight: 400
 }
 
 html, body {
-	height: 100%;
+	height: 100%
 }
 
 select, textarea, button, input {
@@ -35,11 +33,11 @@ select, textarea, button, input {
 	-webkit-appearance: none;
 	-moz-appearance: none;
 	appearance: none;
-	border-radius: 0;
+	border-radius: 0
 }
 
 select::-ms-expand {
-	display: none;
+	display: none
 }
 
 body {
@@ -49,39 +47,39 @@ body {
 	padding: 0;
 	font-size: 14px;
 	line-height: 1.3;
-	color: #464646;
+	color: #464646
 }
 
 div, h1, h2, h3, h4, h5, h6, ul, li, dl, dt, dd, p, form, fieldset,
 	input, table, tr, th, td, button, textarea, select {
 	margin: 0;
-	padding: 0;
+	padding: 0
 }
 
 h1, h2, h3, h4, h5, h6 {
 	font-size: 100%;
-	font-weight: normal;
+	font-weight: normal
 }
 
 img {
 	border: 0;
-	vertical-align: top;
+	vertical-align: top
 }
 
 hr {
-	display: none;
+	display: none
 }
 
 ul, ol, dl, dt, dd, li {
 	list-style: none;
 	padding: 0;
-	margin: 0;
+	margin: 0
 }
 
 table, th, td {
 	border-collapse: collapse;
 	border-spacing: 0;
-	font-weight: normal;
+	font-weight: normal
 }
 
 caption {
@@ -90,29 +88,29 @@ caption {
 	overflow: hidden;
 	height: 0;
 	font-size: 0;
-	line-height: 0;
+	line-height: 0
 }
 
 fieldset, blockquote, iframe, button {
-	border: none;
+	border: none
 }
 
 i, em, u, cite {
-	font-style: normal;
+	font-style: normal
 }
 
 p {
-	vertical-align: middle;
+	vertical-align: middle
 }
 
 strong, em, b {
-	font-weight: normal;
+	font-weight: normal
 }
 
 a {
 	color: #464646;
 	text-decoration: none;
-	cursor: pointer;
+	cursor: pointer
 }
 
 button {
@@ -123,96 +121,97 @@ button {
 	padding: 0;
 	border: none;
 	border-image-width: 0;
-	vertical-align: top;
+	vertical-align: top
 }
 
 button:focus {
 	outline: #000 dotted 1px;
-	outline: none;
+	outline: none
 }
 
-button, input[type=submit], input[type=button], input[type=reset] {
+button, input[type="submit"], input[type="button"], input[type="reset"]
+	{
 	cursor: pointer;
-	-webkit-appearance: none;
+	-webkit-appearance: none
 }
 
 section, nav, article, aside, header, footer, main {
-	display: block;
+	display: block
 }
 
-input[type=date]::-webkit-calendar-picker-indicator, input[type=date]::-webkit-inner-spin-button
+input[type="date"]::-webkit-calendar-picker-indicator, input[type="date"]::-webkit-inner-spin-button
 	{
-	display: none;
+	display: none
 }
 
-input[type=date], input[type=text], input[type=search], input[type=tel],
-	input[type=number], input[type=password] {
+input[type="date"], input[type="text"], input[type="search"], input[type="tel"],
+	input[type="number"], input[type="password"] {
 	font-size: 14px;
 	color: #464646;
 	-webkit-appearance: none;
-	border-radius: 0;
+	border-radius: 0
 }
 
-input[type=text]::-webkit-input-placeholder, input[type=tel]::-webkit-input-placeholder,
-	input[type=password]::-webkit-input-placeholder {
-	color: #969696;
+input[type="text"]::-webkit-input-placeholder, input[type="tel"]::-webkit-input-placeholder,
+	input[type="password"]::-webkit-input-placeholder {
+	color: #969696
 }
 
-input[type=text]::-moz-placeholder, input[type=tel]::-moz-placeholder,
-	input[type=password]::-moz-placeholder {
-	color: #969696;
+input[type="text"]::-moz-placeholder, input[type="tel"]::-moz-placeholder,
+	input[type="password"]::-moz-placeholder {
+	color: #969696
 }
 
-input[type=text]:-moz-placeholder, input[type=tel]:-moz-placeholder,
-	input[type=password]:-moz-placeholder {
-	color: #969696;
+input[type="text"]:-moz-placeholder, input[type="tel"]:-moz-placeholder,
+	input[type="password"]:-moz-placeholder {
+	color: #969696
 }
 
-input[type=text]:-ms-input-placeholder, input[type=tel]:-ms-input-placeholder,
-	input[type=password]:-ms-input-placeholder {
-	color: #969696;
+input[type="text"]:-ms-input-placeholder, input[type="tel"]:-ms-input-placeholder,
+	input[type="password"]:-ms-input-placeholder {
+	color: #969696
 }
 
 textarea::-webkit-input-placeholder {
-	color: #969696;
+	color: #969696
 }
 
 textarea::-moz-placeholder {
-	color: #969696;
+	color: #969696
 }
 
 textarea:-moz-placeholder {
-	color: #969696;
+	color: #969696
 }
 
 textarea:-ms-input-placeholder {
-	color: #969696;
+	color: #969696
 }
 
 ::-ms-clear, ::-ms-reveal {
-	display: none;
+	display: none
 }
 
-button::-moz-focus-inner, input[type=reset]::-moz-focus-inner, input[type=button]::-moz-focus-inner,
-	input[type=submit]::-moz-focus-inner, input[type=file]>input[type=button]::-moz-focus-inner
+button::-moz-focus-inner, input[type="reset"]::-moz-focus-inner, input[type="button"]::-moz-focus-inner,
+	input[type="submit"]::-moz-focus-inner, input[type="file"]>input[type="button"]::-moz-focus-inner
 	{
 	border: 0;
 	padding: 0;
-	margin: 0;
+	margin: 0
 }
 
 input[disabled] {
-	cursor: not-allowed;
+	cursor: not-allowed
 }
 
-input[type=text], input[type=tel], input[type=password], input[type=date],
-	input[type=number] {
+input[type="text"], input[type="tel"], input[type="password"], input[type="date"]
+	{
 	padding-left: 8px;
 	width: 100%;
 	border: 0;
 	border: 1px solid #ddd;
 	background-color: inherit;
-	vertical-align: middle;
+	vertical-align: middle
 }
 
 textarea {
@@ -223,66 +222,63 @@ textarea {
 	line-height: 1.5em;
 	border: 0;
 	resize: none;
-	-webkit-overflow-scrolling: touch;
+	-webkit-overflow-scrolling: touch
 }
 
-input[type=text], input[type=search] {
+input[type="text"], input[type="search"] {
 	-webkit-appearance: none;
-	border-radius: 0;
+	border-radius: 0
 }
 
-input[type=text]:focus, input[type=tel]:focus, input[type=password]:focus,
+input[type="text"]:focus, input[type="tel"]:focus, input[type="password"]:focus,
 	textarea:focus, select:focus {
 	position: relative;
 	z-index: 1;
-	outline: none;
+	outline: none
 }
 
-input[type=text]:focus, input[type=password]:focus, input[type=tel]:focus
+input[type="text"]:focus, input[type="password"]:focus, input[type="tel"]:focus
 	{
 	color: #000;
 	border: 1px solid #000;
 	background: #fff
 }
 
-/* err */
-input[type=text].err, input[type=tel].err, input[type=password].err,
+input[type="text"].err, input[type="tel"].err, input[type="password"].err,
 	select.err, .err {
-	border: 1px solid #e00001 !important;
+	border: 1px solid #e00001 !important
 }
 
 .onlyNumber {
-	ime-mode: disabled !important;
+	ime-mode: disabled !important
 }
 
 input[type=text]::-ms-clear {
-	display: none;
+	display: none
 }
 
 input::-ms-clear {
-	display: none;
+	display: none
 }
 
-.safari input[type=text], .safari input[type=tel], .safari input[type=password],
-	.safari input[type=date] {
+.safari input[type="text"], .safari input[type="tel"], .safari input[type="password"],
+	.safari input[type="date"] {
 	line-height: normal !important;
-	vertical-align: middle !important;
+	vertical-align: middle !important
 }
 
-.safari input[type=text]::-moz-placeholder, .safari input[type=tel]::-moz-placeholder,
-.safari input[type=password]::-moz-placeholder.safari input[type=date]::-moz-placeholder,
 .safari input[type="text"]::-webkit-input-placeholder, .safari input[type="tel"]::-webkit-input-placeholder,
-.safari input[type="password"]::-webkit-input-placeholder.safari input[type="date"]::-webkit-input-placeholder
+	.safari input[type="password"]::-webkit-input-placeholder.safari input[type="date"]::-webkit-input-placeholder
 	{
 	line-height: normal;
-	vertical-align: middle !important;
+	vertical-align: middle !important
 }
 
-.safari input[type=text]:-ms-input-placeholder, .safari input[type=tel]:-ms-input-placeholder,
-	.safari input[type=password]:-ms-input-placeholder.safari input[type=date]:-ms-input-placeholder
+.safari input[type="text"]:-ms-input-placeholder, .safari input[type="tel"]:-ms-input-placeholder,
+	.safari input[type="password"]:-ms-input-placeholder.safari input[type="date"]:-ms-input-placeholder
 	{
 	line-height: normal;
-	vertical-align: middle !important;
+	vertical-align: middle !important
 }
 
 .safari input[type="text"]::-ms-input-placeholder, .safari input[type="tel"]::-ms-input-placeholder,
@@ -300,47 +296,47 @@ input::-ms-clear {
 }
 
 .m_view {
-	display: none;
+	display: none
 }
 
 @media only all and (max-width: 768px) {
 	.m_view {
-		display: block;
+		display: block
 	}
 }
 
 .w_view {
-	display: block;
+	display: block
 }
 
 @media only all and (max-width: 768px) {
 	.w_view {
-		display: none;
+		display: none
 	}
 }
 
 .m_view_in {
-	display: none;
+	display: none
 }
 
 @media only all and (max-width: 768px) {
 	.m_view_in {
-		display: inline-block;
+		display: inline-block
 	}
 }
 
 .w_view_in {
-	display: inline-block;
+	display: inline-block
 }
 
 @media only all and (max-width: 768px) {
 	.w_view_in {
-		display: none;
+		display: none
 	}
 }
 
 .hidden {
-	display: none !important;
+	display: none !important
 }
 
 .header .w_header_inner .w_header .side_menu ul, .header .w_header_inner .w_header #nav ul,
@@ -416,17 +412,16 @@ input::-ms-clear {
 	clear: both
 }
 
-/****************************** font setting ******************************/
 .vis_show {
 	visibility: visible;
 	height: auto;
-	overflow: visible;
+	overflow: visible
 }
 
 .vis_hide {
 	visibility: hidden;
 	height: 0;
-	overflow: hidden;
+	overflow: hidden
 }
 
 .ellips {
@@ -435,7 +430,7 @@ input::-ms-clear {
 	display: -webkit-box;
 	-webkit-line-clamp: 1;
 	-webkit-box-orient: vertical;
-	word-wrap: break-word;
+	word-wrap: break-word
 }
 
 .ellips2 {
@@ -444,16 +439,74 @@ input::-ms-clear {
 	display: -webkit-box;
 	-webkit-line-clamp: 2;
 	-webkit-box-orient: vertical;
-	word-wrap: break-word;
+	word-wrap: break-word
 }
 
-input[type=checkbox] {
+input[type="checkbox"] {
 	width: 0;
 	height: 0;
-	opacity: 0;
+	opacity: 0
 }
 
-input[type=checkbox]+label {
+input[type="checkbox"]+label {
+	font-size: 18px;
+	color: #1a1a1a;
+	padding-left: 32px;
+	padding-top: 0;
+	position: relative;
+	word-break: break-all;
+	display: inline-block;
+	min-height: 25px;
+	cursor: pointer;
+	line-height: 1.3
+}
+
+input[type="checkbox"]+label:after {
+	content: '';
+	width: 25px;
+	height: 25px;
+	display: block;
+	position: absolute;
+	left: 0;
+	top: 0;
+	background: url(../image/check_off.svg) no-repeat 0 0;
+	background-size: 25px 25px
+}
+
+input[type="checkbox"]:checked+label:after {
+	background: url(../image/check_on.svg) no-repeat 0 0;
+	background-size: 25px 25px
+}
+
+input[type="checkbox"]:disabled+label:after, input[type="checkbox"] input[type="radio"]:disabled+label:after
+	{
+	background: #000;
+	opacity: 0.1
+}
+
+@media only all and (max-width: 768px) {
+	input[type="checkbox"]+label {
+		font-size: 16px;
+		padding-left: 26px;
+		min-height: 20px
+	}
+	input[type="checkbox"]+label:after {
+		width: 20px;
+		height: 20px;
+		background-size: 20px 20px
+	}
+	input[type="checkbox"]:checked+label:after {
+		background-size: 20px 20px
+	}
+}
+
+input[type="radio"] {
+	width: 0;
+	height: 0;
+	opacity: 0
+}
+
+input[type="radio"]+label {
 	font-size: 18px;
 	color: #1a1a1a;
 	padding-left: 32px;
@@ -464,107 +517,46 @@ input[type=checkbox]+label {
 	min-height: 25px;
 	cursor: pointer;
 	line-height: 1.3;
+	font-family: 'NanumSquare', 'Roboto', 'AppleGothic', 'sans-serif';
+	font-weight: 700
 }
 
-input[type=checkbox]+label:after {
-	content: "";
+input[type="radio"]+label:after {
+	content: '';
 	width: 25px;
 	height: 25px;
 	display: block;
 	position: absolute;
 	left: 0;
 	top: 0;
-	/*   background: url(/static/images/guide/check_off.svg) no-repeat 0 0; */
-	background: url(/static/images/assets/check_off.svg) no-repeat 0 0;
-	background-size: 25px 25px;
+	background: url(../image/radio_off.svg) no-repeat 0 0;
+	background-size: 25px 25px
 }
 
-input[type=checkbox]:checked+label:after {
-	background: url(/static/images/guide/check_on.svg) no-repeat 0 0;
-	background-size: 25px 25px;
+input[type="radio"]:checked+label:after {
+	background: url(../image/radio_on.svg) no-repeat 0 0;
+	background-size: 25px 25px
 }
 
-input[type=checkbox]:disabled+label:after, input[type=checkbox] input[type=radio]:disabled+label:after
+input[type="radio"]:disabled+label:after, input[type="radio"] input[type="radio"]:disabled+label:after
 	{
 	background: #000;
-	opacity: 0.1;
+	opacity: 0.1
 }
 
 @media only all and (max-width: 768px) {
-	input[type=checkbox]+label {
+	input[type="radio"]+label {
 		font-size: 16px;
 		padding-left: 26px;
-		min-height: 20px;
-		padding-top: 1px;
+		min-height: 20px
 	}
-	input[type=checkbox]+label:after {
+	input[type="radio"]+label:after {
 		width: 20px;
 		height: 20px;
-		background-size: 20px 20px;
+		background-size: 20px 20px
 	}
-	input[type=checkbox]:checked+label:after {
-		background-size: 20px 20px;
-	}
-}
-
-input[type=radio] {
-	width: 0;
-	height: 0;
-	opacity: 0;
-}
-
-input[type=radio]+label {
-	font-size: 18px;
-	color: #1a1a1a;
-	padding-left: 32px;
-	padding-top: 2px;
-	position: relative;
-	word-break: break-all;
-	display: inline-block;
-	min-height: 25px;
-	cursor: pointer;
-	line-height: 1.3;
-	font-family: "Noto Sans KR", "Roboto", "AppleGothic", "sans-serif";
-	font-weight: 700;
-}
-
-input[type=radio]+label:after {
-	content: "";
-	width: 25px;
-	height: 25px;
-	display: block;
-	position: absolute;
-	left: 0;
-	top: 0;
-	background: url(/static/images/guide/radio_off.svg) no-repeat 0 0;
-	background-size: 25px 25px;
-}
-
-input[type=radio]:checked+label:after {
-	background: url(/static/images/guide/radio_on.svg) no-repeat 0 0;
-	background-size: 25px 25px;
-}
-
-input[type=radio]:disabled+label:after, input[type=radio] input[type=radio]:disabled+label:after
-	{
-	background: #000;
-	opacity: 0.1;
-}
-
-@media only all and (max-width: 768px) {
-	input[type=radio]+label {
-		font-size: 16px;
-		padding-left: 26px;
-		min-height: 20px;
-		padding-top: 1px;
-	}
-	input[type=radio]+label:after {
-		width: 20px;
-		height: 20px;
-		background-size: 20px 20px;
-	}
-	input[type=radio]:checked+label:after {
-		background-size: 20px 20px;
+	input[type="radio"]:checked+label:after {
+		background-size: 20px 20px
 	}
 }
 
@@ -573,20 +565,20 @@ select {
 	height: 50px;
 	width: 100%;
 	border: solid 1px #d3d3d3;
-	font-family: "Noto Sans KR", "Roboto", "AppleGothic", "sans-serif";
+	font-family: 'NanumSquare', 'Roboto', 'AppleGothic', 'sans-serif';
 	font-weight: 700;
 	font-size: 18px;
 	-webkit-appearance: none;
 	-moz-appearance: none;
 	appearance: none;
-	background: #ffffff url(/static/images/guide/ico_select.svg) no-repeat
-		right 12px center;
-	background-size: 14px 10px;
+	background: #fff url(../image/ico_select.svg) no-repeat right 12px
+		center;
+	background-size: 14px 10px
 }
 
 @media only all and (max-width: 768px) {
 	select {
-		font-size: 16px;
+		font-size: 16px
 	}
 }
 
@@ -598,39 +590,36 @@ textarea {
 	max-width: 100%;
 	width: 100%;
 	height: 100px;
-	color: #333;
+	color: #333
 }
 
 textarea:focus {
 	background: #fff;
-	border: 1px solid #000;
+	border: 1px solid #000
 }
 
-/* ==========================================================================
-Base styles: base layer
-========================================================================== */
 body {
-	background: #fff;
+	background: #fff
 }
 
 @media only all and (min-width: 1025px) {
 	body {
-		background: #efefef;
+		background: #efefef
 	}
 }
 
 body.bg-gray {
-	background: #efefef !important;
+	background: #efefef !important
 }
 
 body #wrap {
-	height: 100%;
+	height: 100%
 }
 
 .header .w_header_inner {
 	width: 100%;
 	background: #fff;
-	min-height: 120px;
+	min-height: 120px
 }
 
 .header .w_header_inner .w_header {
@@ -638,24 +627,25 @@ body #wrap {
 	max-width: 1020px;
 	padding: 30px 10px 20px 160px;
 	position: relative;
-	margin: 0 auto;
+	margin: 0 auto
 }
 
 .header .w_header_inner .w_header .logo {
 	width: 150px;
 	position: absolute;
 	left: 10px;
-	top: 34px;
+	top: 34px
 }
 
 .header .w_header_inner .w_header .logo h1 {
+	font-family: NanumSquare;
 	font-size: 30px;
 	line-height: 1;
 	letter-spacing: -0.75px;
 	text-align: left;
 	color: #1a1a1a;
-	font-family: "Noto Sans KR", "Roboto", "AppleGothic", "sans-serif";
-	font-weight: 800;
+	font-family: 'NanumSquare', 'Roboto', 'AppleGothic', 'sans-serif';
+	font-weight: 800
 }
 
 .header .w_header_inner .w_header .logo h1 span {
@@ -663,66 +653,66 @@ body #wrap {
 	font-size: 17px;
 	color: #767676;
 	margin-bottom: 10px;
-	font-family: "Noto Sans KR", "Roboto", "AppleGothic", "sans-serif";
-	font-weight: 700;
+	font-family: 'NanumSquare', 'Roboto', 'AppleGothic', 'sans-serif';
+	font-weight: 700
 }
 
 .header .w_header_inner .w_header .side_menu {
 	position: absolute;
 	right: 10px;
-	top: 24px;
+	top: 24px
 }
 
 .header .w_header_inner .w_header .side_menu ul li {
 	float: left;
-	margin-left: 20px;
+	margin-left: 20px
 }
 
 .header .w_header_inner .w_header .side_menu ul li a {
 	font-size: 14px;
-	font-family: "Noto Sans KR", "Roboto", "AppleGothic", "sans-serif";
+	font-family: 'NanumSquare', 'Roboto', 'AppleGothic', 'sans-serif';
 	font-weight: 700;
 	letter-spacing: -0.35px;
 	text-align: left;
 	color: #767676;
-	transition: all 0.2s;
+	-webkit-transition: all 0.2s;
+	transition: all 0.2s
 }
 
 .header .w_header_inner .w_header .side_menu ul li a:hover {
-	color: #007eff;
+	color: #007eff
 }
 
 .header .w_header_inner .w_header #nav {
 	margin-top: 36px;
-	text-align: right;
+	text-align: right
 }
 
 .header .w_header_inner .w_header #nav ul {
-	display: inline-block;
+	display: inline-block
 }
 
 .header .w_header_inner .w_header #nav ul li {
 	float: left;
-	/*   margin-left: 37px; */
-	margin-left: 32px;
+	margin-left: 37px
 }
 
 .header .w_header_inner .w_header #nav ul li a {
 	font-size: 20px;
-	font-family: "Noto Sans KR", "Roboto", "AppleGothic", "sans-serif";
+	font-family: 'NanumSquare', 'Roboto', 'AppleGothic', 'sans-serif';
 	font-weight: 700;
 	letter-spacing: -0.5px;
 	text-align: left;
-	color: #1a1a1a;
+	color: #1a1a1a
 }
 
 .header .w_header_inner .w_header #nav ul li a:hover {
-	color: #007eff;
+	color: #007eff
 }
 
 @media only all and (max-width: 1024px) {
 	.header .w_header_inner {
-		display: none;
+		display: none
 	}
 }
 
@@ -731,12 +721,12 @@ body #wrap {
 	z-index: 10;
 	display: none;
 	padding: 0 24px;
-	min-height: 48px;
+	min-height: 48px
 }
 
 @media only all and (max-width: 1024px) {
 	.header .m_header {
-		display: block;
+		display: block
 	}
 }
 
@@ -744,13 +734,14 @@ body #wrap {
 	position: absolute;
 	left: 24px;
 	top: 14px;
+	font-family: NanumSquare;
 	font-size: 24px;
 	line-height: 1;
 	letter-spacing: -1.2px;
 	text-align: left;
 	color: #1a1a1a;
-	font-family: "Noto Sans KR", "Roboto", "AppleGothic", "sans-serif";
-	font-weight: 800;
+	font-family: 'NanumSquare', 'Roboto', 'AppleGothic', 'sans-serif';
+	font-weight: 800
 }
 
 .header .m_header .m_logo span {
@@ -758,8 +749,8 @@ body #wrap {
 	font-size: 18px;
 	color: #767676;
 	margin-bottom: 8px;
-	font-family: "Noto Sans KR", "Roboto", "AppleGothic", "sans-serif";
-	font-weight: 700;
+	font-family: 'NanumSquare', 'Roboto', 'AppleGothic', 'sans-serif';
+	font-weight: 700
 }
 
 .header .m_header .m_back {
@@ -768,14 +759,14 @@ body #wrap {
 	top: 16px;
 	width: 24px;
 	height: 16px;
-	background: url(/static/images/guide/ico_mback.svg) no-repeat 0 0;
+	background: url(../image/ico_mback.svg) no-repeat 0 0;
 	background-size: cover;
 	text-indent: -9999px;
-	display: block;
+	display: block
 }
 
 .header .m_header .join-box {
-	font-family: "Noto Sans KR", "Roboto", "AppleGothic", "sans-serif";
+	font-family: 'NanumSquare', 'Roboto', 'AppleGothic', 'sans-serif';
 	font-weight: 700;
 	font-size: 20px;
 	text-align: left;
@@ -788,13 +779,13 @@ body #wrap {
 	line-height: 48px;
 	text-overflow: ellipsis;
 	white-space: nowrap;
-	overflow: hidden;
+	overflow: hidden
 }
 
 .header .m_header .join-box .join-num span {
 	color: #007eff;
-	font-family: "Noto Sans KR", "Roboto", "AppleGothic", "sans-serif";
-	font-weight: 700;
+	font-family: 'NanumSquare', 'Roboto', 'AppleGothic', 'sans-serif';
+	font-weight: 700
 }
 
 .header .m_header .m_sound {
@@ -803,21 +794,21 @@ body #wrap {
 	top: 14px;
 	width: 20px;
 	height: 20px;
-	background: url(/static/images/guide/m_sound_on.svg) no-repeat 0 0;
+	background: url(../image/m_sound_on.svg) no-repeat 0 0;
 	background-size: cover !important;
 	text-indent: -9999px;
-	display: block;
+	display: block
 }
 
 .header .m_header .m_sound.off {
 	width: 20px;
 	height: 25px;
 	top: 11px;
-	background: url(/static/images/guide/m_sound_off.svg) no-repeat 0 0;
+	background: url(../image/m_sound_off.svg) no-repeat 0 0
 }
 
 .header .m_header .m_sound.fix_right {
-	right: 20px;
+	right: 20px
 }
 
 .header .m_header .m_menu {
@@ -826,14 +817,14 @@ body #wrap {
 	top: 14px;
 	width: 24px;
 	height: 20px;
-	background: url(/static/images/guide/ico_mmenu.svg) no-repeat 0 0;
+	background: url(../image/ico_mmenu.svg) no-repeat 0 0;
 	background-size: cover;
 	text-indent: -9999px;
-	display: block;
+	display: block
 }
 
 .header .m_header .m_tit {
-	font-family: "Noto Sans KR", "Roboto", "AppleGothic", "sans-serif";
+	font-family: 'NanumSquare', 'Roboto', 'AppleGothic', 'sans-serif';
 	font-weight: 700;
 	font-size: 20px;
 	text-align: left;
@@ -846,32 +837,32 @@ body #wrap {
 	line-height: 48px;
 	text-overflow: ellipsis;
 	white-space: nowrap;
-	overflow: hidden;
+	overflow: hidden
 }
 
 #menu-lnb {
 	opacity: 0;
-	background: #ffffff;
-	display: none;
+	background: #fff;
+	display: none
 }
 
 #menu-lnb.mm-opened {
 	opacity: 1;
-	display: block;
+	display: block
 }
 
 #menu-lnb .lnb_box {
-	padding: 10px 20px;
+	padding: 10px 20px
 }
 
 #menu-lnb .lnb_box h3 {
 	font-size: 24px;
-	font-family: "Noto Sans KR", "Roboto", "AppleGothic", "sans-serif";
+	font-family: 'NanumSquare', 'Roboto', 'AppleGothic', 'sans-serif';
 	font-weight: 800;
 	letter-spacing: -1.2px;
 	text-align: left;
 	color: #1a1a1a;
-	line-height: 1.38;
+	line-height: 1.38
 }
 
 #menu-lnb .nav_close {
@@ -881,77 +872,71 @@ body #wrap {
 	display: block;
 	width: 20px;
 	height: 20px;
-	background: url(/static/images/guide/ico_navclose.svg) no-repeat 0 0;
+	background: url(../image/ico_navclose.svg) no-repeat 0 0;
 	background-size: 20px 20px;
 	z-index: 5;
-	text-indent: -99999px;
+	text-indent: -99999px
 }
 
 #menu-lnb .lnb_base {
 	position: relative;
-	display: block !important;
+	display: block !important
 }
 
 #menu-lnb .lnbReset.mm-panel>.mm-list {
 	display: block !important;
 	margin-left: 0;
-	margin-right: 0;
+	margin-right: 0
 }
 
 #menu-lnb .lnb_info {
 	max-width: 300px;
-	margin: 35px auto 0;
+	margin: 35px auto 0
 }
 
 #menu-lnb .lnb_info dd {
 	float: left;
 	width: 33.33%;
-	text-align: center;
+	text-align: center
 }
 
 #menu-lnb .lnb_info dd a {
 	font-size: 14px;
-	font-weight: 600;
 	letter-spacing: -0.7px;
 	color: #767676;
 	padding-top: 35px;
 	display: block;
 	background-position: center top !important;
-	background-repeat: no-repeat !important;
+	background-repeat: no-repeat !important
 }
 
 #menu-lnb .lnb_info dd a.ico_home {
-	background-image: url(/static/images/guide/ico_home.svg);
-	background-size: 23px 24px;
+	background-image: url(../image/ico_home.svg);
+	background-size: 23px 24px
 }
 
 #menu-lnb .lnb_info dd a.ico_login {
-	background-image: url(/static/images/guide/ico_login.svg);
-	background-size: 22px 28px;
-}
-
-#menu-lnb .lnb_info dd a.ico_logout {
-	background-image: url(/static/images/guide/ico_logout.svg);
-	background-size: 22px 28px;
+	background-image: url(../image/ico_login.svg);
+	background-size: 22px 28px
 }
 
 #menu-lnb .lnb_info dd a.ico_noti {
-	background-image: url(/static/images/guide/ico_noti.svg);
-	background-size: 22px 27px;
+	background-image: url(../image/ico_noti.svg);
+	background-size: 22px 27px
 }
 
 #menu-lnb .lnb_menu {
 	margin-top: 20px;
 	padding-top: 30px;
-	border-top: 1px solid #eee;
+	border-top: 1px solid #eee
 }
 
 #menu-lnb .lnb_menu dd {
-	margin-top: 20px;
+	margin-top: 20px
 }
 
 #menu-lnb .lnb_menu dd:first-child {
-	margin-top: 0;
+	margin-top: 0
 }
 
 #menu-lnb .lnb_menu dd a {
@@ -959,72 +944,72 @@ body #wrap {
 	font-size: 20px;
 	text-align: left;
 	color: #1a1a1a;
-	font-family: "Noto Sans KR", "Roboto", "AppleGothic", "sans-serif";
-	font-weight: 700;
+	font-family: 'NanumSquare', 'Roboto', 'AppleGothic', 'sans-serif';
+	font-weight: 700
 }
 
 html.mm-opening .m_header {
-	z-index: -1;
+	z-index: -1
 }
 
 html.mm-opening .fixed_btn {
-	display: none;
+	display: none
 }
 
 .mm-menu.mm-vertical .mm-list .mm-panel.lnbReset {
 	display: block;
 	margin-left: 0;
-	margin-right: 0;
+	margin-right: 0
 }
 
 .footer {
 	padding: 20px 0;
-	text-align: center;
+	text-align: center
 }
 
 .footer ul {
 	display: inline-block;
-	vertical-align: top;
+	vertical-align: top
 }
 
 .footer ul li {
 	display: inline-block;
 	margin: 0 10px;
-	position: relative;
+	position: relative
 }
 
 .footer ul li:before {
-	content: "";
+	content: '';
 	display: block;
 	width: 1px;
 	height: 12px;
 	position: absolute;
 	left: -10px;
 	top: 3px;
-	background: #dbdbdb;
+	background: #dbdbdb
 }
 
 .footer ul li:first-child:before {
-	content: none !important;
+	content: none !important
 }
 
 .footer ul li a {
 	font-size: 14px;
-	font-family: "Noto Sans KR", "Roboto", "AppleGothic", "sans-serif";
+	font-family: 'NanumSquare', 'Roboto', 'AppleGothic', 'sans-serif';
 	font-weight: 700;
 	letter-spacing: -0.35px;
 	text-align: center;
-	color: #767676;
+	color: #767676
 }
 
 .footer ul li a span {
-	font-family: "Noto Sans KR", "Roboto", "AppleGothic", "sans-serif";
-	font-weight: 800;
+	font-family: 'NanumSquare', 'Roboto', 'AppleGothic', 'sans-serif';
+	font-weight: 800
 }
 
 @media only all and (max-width: 1024px) {
 	.footer ul li a {
-		letter-spacing: -0.7px;
+		letter-spacing: -0.7px
 	}
 }
 
@@ -1032,42 +1017,39 @@ html.mm-opening .fixed_btn {
 	min-height: calc(100% - 178px);
 	max-width: 1020px;
 	padding: 40px 10px;
-	margin: 0 auto;
+	margin: 0 auto
 }
 
 @media only all and (max-width: 1024px) {
 	.contents {
 		min-height: calc(100% - 106px);
 		max-width: 1020px;
-		padding: 20px 0;
+		padding: 20px 0
 	}
 }
 
-/* ==========================================================================
-Base styles: contents layer
-========================================================================== */
 .banner_box {
-	margin: 0 0 50px;
+	margin: 0 0 50px
 }
 
 .banner_box .pc_banner {
-	width: 100%;
+	width: 100%
 }
 
 .banner_box .mo_banner {
 	display: none;
-	width: 100%;
+	width: 100%
 }
 
 @media only all and (max-width: 768px) {
 	.banner_box {
-		margin: 0 -24px 25px;
+		margin: 0 -24px 25px
 	}
 	.banner_box .pc_banner {
-		display: none;
+		display: none
 	}
 	.banner_box .mo_banner {
-		display: block;
+		display: block
 	}
 }
 
@@ -1076,12 +1058,12 @@ Base styles: contents layer
 	left: 0;
 	right: 0;
 	bottom: 10px;
-	text-align: center;
+	text-align: center
 }
 
 .banner_box .slick-dots li {
 	display: inline-block;
-	margin: 0 3px;
+	margin: 0 3px
 }
 
 .banner_box .slick-dots li button {
@@ -1090,26 +1072,26 @@ Base styles: contents layer
 	text-indent: -99999px;
 	display: block;
 	background: #dbdbdb;
-	border-radius: 50%;
+	border-radius: 50%
 }
 
 .banner_box .slick-dots li.slick-active button {
-	background: #007eff !important;
+	background: #007eff !important
 }
 
 .move-btn {
-	margin-bottom: 35px;
+	margin-bottom: 35px
 }
 
 .move-btn ul {
-	margin-left: -17px;
+	margin-left: -17px
 }
 
 .move-btn ul li {
 	float: left;
 	width: 50%;
 	text-align: center;
-	padding-left: 17px;
+	padding-left: 17px
 }
 
 .move-btn ul li a {
@@ -1120,19 +1102,19 @@ Base styles: contents layer
 	border-radius: 15px;
 	line-height: 60px;
 	font-size: 20px;
-	font-family: "Noto Sans KR", "Roboto", "AppleGothic", "sans-serif";
+	font-family: 'NanumSquare', 'Roboto', 'AppleGothic', 'sans-serif';
 	font-weight: 700;
 	letter-spacing: -1px;
-	color: #ffffff;
+	color: #fff
 }
 
 .move-btn ul li a span {
 	position: relative;
-	padding-right: 20px;
+	padding-right: 20px
 }
 
 .move-btn ul li a span:after {
-	content: "";
+	content: '';
 	position: absolute;
 	top: 50%;
 	margin-top: -5px;
@@ -1140,44 +1122,44 @@ Base styles: contents layer
 	width: 6.5px;
 	height: 10px;
 	display: block;
-	background: url(/static/images/guide/btn-arrow.svg) no-repeat 0 0;
-	background-size: 6.5px 10px;
+	background: url(../image/btn-arrow.svg) no-repeat 0 0;
+	background-size: 6.5px 10px
 }
 
 @media only all and (min-width: 1024px) {
 	.move-btn {
-		display: none;
+		display: none
 	}
 }
 
 .chk_step1 {
-	margin-top: 40px;
+	margin-top: 40px
 }
 
 .chk_step1 h2 {
 	font-size: 36px;
 	text-align: center;
 	color: #1a1a1a;
-	margin-bottom: 70px;
+	margin-bottom: 70px
 }
 
 .chk_step1 h2 span {
-	font-family: "Noto Sans KR", "Roboto", "AppleGothic", "sans-serif";
+	font-family: 'NanumSquare', 'Roboto', 'AppleGothic', 'sans-serif';
 	font-weight: 700;
-	color: #ff7f00;
+	color: #ff7f00
 }
 
 .chk_step1 h2 .gps_fix {
 	width: 42px;
 	height: 42px;
-	margin-top: 2px;
+	margin-top: 2px
 }
 
 @media only all and (max-width: 1024px) {
 	.chk_step1 h2 .gps_fix {
 		width: 21px;
 		height: 21px;
-		margin-top: 2px;
+		margin-top: 2px
 	}
 }
 
@@ -1208,7 +1190,7 @@ Base styles: contents layer
 	-ms-flex-align: center;
 	align-items: center;
 	font-size: 28px;
-	font-family: "Noto Sans KR", "Roboto", "AppleGothic", "sans-serif";
+	font-family: 'NanumSquare', 'Roboto', 'AppleGothic', 'sans-serif';
 	font-weight: 700;
 	letter-spacing: -0.7px;
 	text-align: center;
@@ -1224,6 +1206,7 @@ Base styles: contents layer
 	{
 	background: #007eff;
 	color: #fff;
+	-webkit-box-shadow: inherit;
 	box-shadow: inherit
 }
 
@@ -1243,8 +1226,8 @@ Base styles: contents layer
 }
 
 .chk_step1 ul.choice_area li a span.heart-eft {
-	-webkit-animation: heart-eft .8s ease-in-out infinite alternate;
-	animation: heart-eft .8s ease-in-out infinite alternate
+	-webkit-animation: heart-eft 0.8s ease-in-out infinite alternate;
+	animation: heart-eft 0.8s ease-in-out infinite alternate
 }
 
 @media only all and (max-width: 1024px) {
@@ -1292,7 +1275,7 @@ Base styles: contents layer
 	border-radius: 20px;
 	background: #007eff;
 	margin: 0 auto;
-	font-family: "Noto Sans KR", "Roboto", "AppleGothic", "sans-serif";
+	font-family: 'NanumSquare', 'Roboto', 'AppleGothic', 'sans-serif';
 	font-weight: 700;
 	font-size: 28px;
 	letter-spacing: -0.7px;
@@ -1333,7 +1316,7 @@ Base styles: contents layer
 	-ms-flex-align: center;
 	align-items: center;
 	font-size: 28px;
-	font-family: "Noto Sans KR", "Roboto", "AppleGothic", "sans-serif";
+	font-family: 'NanumSquare', 'Roboto', 'AppleGothic', 'sans-serif';
 	font-weight: 700;
 	letter-spacing: -0.7px;
 	text-align: center;
@@ -1422,23 +1405,23 @@ Base styles: contents layer
 
 .btn_more {
 	text-align: center;
-	margin-top: 35px;
+	margin-top: 35px
 }
 
 .btn_more a {
 	display: inline-block;
 	vertical-align: top;
 	font-size: 28px;
-	font-family: "Noto Sans KR", "Roboto", "AppleGothic", "sans-serif";
+	font-family: 'NanumSquare', 'Roboto', 'AppleGothic', 'sans-serif';
 	font-weight: 700;
 	letter-spacing: -0.7px;
 	color: #1a1a1a;
 	position: relative;
-	padding-right: 30px;
+	padding-right: 30px
 }
 
 .btn_more a:after {
-	content: "";
+	content: '';
 	width: 10px;
 	height: 10px;
 	border-top: 2px solid #1a1a1a;
@@ -1448,99 +1431,98 @@ Base styles: contents layer
 	transform: rotate(135deg);
 	position: absolute;
 	top: 7px;
-	right: 0;
+	right: 0
 }
 
 @media only all and (max-width: 1024px) {
 	.btn_more a {
 		font-size: 18px;
 		letter-spacing: -0.9px;
-		padding-right: 20px;
+		padding-right: 20px
 	}
 	.btn_more a:after {
 		width: 8px;
 		height: 8px;
-		top: 3px;
+		top: 3px
 	}
 }
 
 .login_area {
 	max-width: 400px;
 	width: 100%;
-	margin: 45px auto;
+	margin: 45px auto
 }
 
 @media only all and (max-width: 1024px) {
 	.login_area {
 		margin: 0 auto;
-		padding: 0 24px;
+		padding: 0 24px
 	}
 }
 
 .login_area h3 {
 	font-size: 28px;
-	font-family: "Noto Sans KR", "Roboto", "AppleGothic", "sans-serif";
+	font-family: 'NanumSquare', 'Roboto', 'AppleGothic', 'sans-serif';
 	font-weight: 700;
 	letter-spacing: -0.7px;
 	text-align: left;
 	color: #1a1a1a;
-	margin-bottom: 20px;
+	margin-bottom: 20px
 }
 
 @media only all and (max-width: 1024px) {
 	.login_area h3 {
-		margin-bottom: 25px;
+		margin-bottom: 25px
 	}
 }
 
-.login_area input[type=text], .login_area input[type=password],
-	.login_area input[type=number] {
+.login_area input[type="text"] {
 	border: 1px solid #d3d3d3;
-	background: #ffffff;
+	background: #fff;
 	padding: 0 15px;
 	height: 50px;
 	line-height: 1;
 	border-radius: 5px;
 	font-size: 18px;
 	color: #1a1a1a;
-	font-family: "Noto Sans KR", "Roboto", "AppleGothic", "sans-serif";
-	font-weight: 700;
+	font-family: 'NanumSquare', 'Roboto', 'AppleGothic', 'sans-serif';
+	font-weight: 700
 }
 
 .login_area dl {
-	margin-bottom: 30px;
+	margin-bottom: 30px
 }
 
 .login_area dl dd {
-	margin-top: 10px;
+	margin-top: 10px
 }
 
 .login_area dl dd:first-child {
-	margin-top: 0 !important;
+	margin-top: 0 !important
 }
 
 @media only all and (max-width: 1024px) {
 	.login_area dl {
-		margin-bottom: 25px;
+		margin-bottom: 25px
 	}
 	.login_area dl dd {
-		margin-top: 12px;
+		margin-top: 12px
 	}
 }
 
 .login_area .agree_list li {
 	margin-top: 14px;
 	padding-right: 30px;
-	position: relative;
+	position: relative
 }
 
 .login_area .agree_list li:first-child {
-	margin-top: 0 !important;
+	margin-top: 0 !important
 }
 
 .login_area .agree_list li label {
-	font-family: "Noto Sans KR", "Roboto", "AppleGothic", "sans-serif";
-	font-weight: 700;
+	font-family: 'NanumSquare', 'Roboto', 'AppleGothic', 'sans-serif';
+	font-weight: 700
 }
 
 .login_area .agree_list li .agree_info {
@@ -1550,22 +1532,22 @@ Base styles: contents layer
 	width: 25px;
 	height: 25px;
 	text-indent: -9999px;
-	background: url(/static/images/guide/ico_move.svg) no-repeat 0 0;
-	background-size: 25px 25px;
+	background: url(../image/ico_move.svg) no-repeat 0 0;
+	background-size: 25px 25px
 }
 
 @media only all and (max-width: 1024px) {
 	.login_area .agree_list li {
-		margin-top: 15px;
+		margin-top: 15px
 	}
 	.login_area .agree_list li label {
-		font-size: 16px;
+		font-size: 16px
 	}
 	.login_area .agree_list li .agree_info {
 		top: 2px;
 		width: 20px;
 		height: 20px;
-		background-size: 20px 20px;
+		background-size: 20px 20px
 	}
 }
 
@@ -1577,11 +1559,11 @@ Base styles: contents layer
 	background: #007eff;
 	border-radius: 5px;
 	text-align: center;
-	color: #ffffff;
-	font-family: "Noto Sans KR", "Roboto", "AppleGothic", "sans-serif";
+	color: #fff;
+	font-family: 'NanumSquare', 'Roboto', 'AppleGothic', 'sans-serif';
 	font-weight: 700;
 	font-size: 18px;
-	margin: 30px auto 20px;
+	margin: 30px auto 20px
 }
 
 @media only all and (max-width: 1024px) {
@@ -1590,120 +1572,120 @@ Base styles: contents layer
 		line-height: 50px;
 		border-radius: 5px;
 		font-size: 18px;
-		margin: 25px auto 20px;
+		margin: 25px auto 20px
 	}
 }
 
 .login_area .login_bottom {
-	margin-top: 70px;
+	margin-top: 70px
 }
 
 .login_area .login_bottom .login_info {
 	font-size: 18px;
-	font-family: "Noto Sans KR", "Roboto", "AppleGothic", "sans-serif";
+	font-family: 'NanumSquare', 'Roboto', 'AppleGothic', 'sans-serif';
 	font-weight: 700;
 	letter-spacing: -0.45px;
 	text-align: center;
 	color: #1a1a1a;
-	margin-bottom: 5px;
+	margin-bottom: 5px
 }
 
 .login_area .login_bottom .cs_phone {
 	font-size: 18px;
-	font-family: "Noto Sans KR", "Roboto", "AppleGothic", "sans-serif";
+	font-family: 'NanumSquare', 'Roboto', 'AppleGothic', 'sans-serif';
 	font-weight: 700;
 	letter-spacing: -0.45px;
 	text-align: center;
 	color: #1a1a1a;
-	margin-bottom: 5px;
+	margin-bottom: 5px
 }
 
 .login_area .login_bottom .cs_clock {
 	font-size: 16px;
-	font-family: "Noto Sans KR", "Roboto", "AppleGothic", "sans-serif";
+	font-family: 'NanumSquare', 'Roboto', 'AppleGothic', 'sans-serif';
 	font-weight: 700;
 	letter-spacing: -0.4px;
 	text-align: center;
-	color: #767676;
+	color: #767676
 }
 
 @media only all and (max-width: 1024px) {
 	.login_area .login_bottom {
-		margin-top: 70px;
+		margin-top: 70px
 	}
 	.login_area .login_bottom .login_info {
 		letter-spacing: -0.9px;
-		margin-bottom: 7px;
+		margin-bottom: 7px
 	}
 	.login_area .login_bottom .cs_phone {
 		letter-spacing: -0.9px;
-		margin-bottom: 7px;
+		margin-bottom: 7px
 	}
 	.login_area .login_bottom .cs_clock {
 		letter-spacing: -0.8px;
-		color: #767676;
+		color: #767676
 	}
 }
 
 .auction_choice {
 	max-width: 412px;
 	width: 100%;
-	margin: 0 auto;
+	margin: 0 auto
 }
 
 @media only all and (max-width: 1024px) {
 	.auction_choice {
-		padding: 0 24px;
+		padding: 0 24px
 	}
 }
 
 .auction_choice h3 {
 	font-size: 28px;
-	font-family: "Noto Sans KR", "Roboto", "AppleGothic", "sans-serif";
+	font-family: 'NanumSquare', 'Roboto', 'AppleGothic', 'sans-serif';
 	font-weight: 700;
 	letter-spacing: -0.7px;
 	text-align: center;
 	color: #1a1a1a;
-	margin-bottom: 40px;
+	margin-bottom: 40px
 }
 
 @media only all and (max-width: 1024px) {
 	.auction_choice h3 {
-		display: none;
+		display: none
 	}
 }
 
 .auction_choice dl {
 	position: relative;
-	margin-bottom: 50px;
+	margin-bottom: 50px
 }
 
 .auction_choice dl dt {
 	font-size: 36px;
-	font-family: "Noto Sans KR", "Roboto", "AppleGothic", "sans-serif";
+	font-family: 'NanumSquare', 'Roboto', 'AppleGothic', 'sans-serif';
 	font-weight: 700;
 	letter-spacing: -0.9px;
 	text-align: left;
 	color: #1a1a1a;
-	margin-bottom: 15px;
+	margin-bottom: 15px
 }
 
 .auction_choice dl dt span {
-	font-family: "Noto Sans KR", "Roboto", "AppleGothic", "sans-serif";
-	font-weight: 800;
+	font-family: 'NanumSquare', 'Roboto', 'AppleGothic', 'sans-serif';
+	font-weight: 800
 }
 
 .auction_choice dl dd {
 	font-size: 26px;
 	letter-spacing: -0.65px;
 	text-align: left;
-	color: #767676;
+	color: #767676
 }
 
 .auction_choice dl dd.link {
 	position: absolute;
 	right: 0;
-	top: -2px;
+	top: -2px
 }
 
 .auction_choice dl dd.link a {
@@ -1715,46 +1697,46 @@ Base styles: contents layer
 	padding: 0 15px;
 	border-radius: 50px;
 	border: 2px solid #007eff;
-	background: #ffffff;
+	background: #fff;
 	font-size: 20px;
-	font-family: "Noto Sans KR", "Roboto", "AppleGothic", "sans-serif";
+	font-family: 'NanumSquare', 'Roboto', 'AppleGothic', 'sans-serif';
 	font-weight: 700;
 	letter-spacing: -0.5px;
-	color: #007eff;
+	color: #007eff
 }
 
 .auction_choice dl dd.link a span.ico_arrowblue {
 	position: relative;
-	padding-right: 20px;
+	padding-right: 20px
 }
 
 .auction_choice dl dd.link a span.ico_arrowblue:after {
-	content: "";
+	content: '';
 	width: 10px;
 	height: 14px;
 	display: block;
-	background: url(/static/images/guide/ico_arrowblue.svg) no-repeat 0 0;
+	background: url(../image/ico_arrowblue.svg) no-repeat 0 0;
 	background-size: 10px 14px;
 	position: absolute;
 	right: 0;
 	top: 50%;
-	margin-top: -7px;
+	margin-top: -7px
 }
 
 @media only all and (max-width: 1024px) {
 	.auction_choice dl dt {
 		font-size: 28px;
 		letter-spacing: -1.4px;
-		margin-bottom: 10px;
+		margin-bottom: 10px
 	}
 	.auction_choice dl dd {
 		font-size: 18px;
-		letter-spacing: -0.9px;
+		letter-spacing: -0.9px
 	}
 	.auction_choice dl dd.link {
 		position: absolute;
 		right: 0;
-		top: -2px;
+		top: -2px
 	}
 	.auction_choice dl dd.link a {
 		width: 105px;
@@ -1764,29 +1746,29 @@ Base styles: contents layer
 		border-radius: 25px;
 		font-size: 16px;
 		letter-spacing: -0.8px;
-		color: #007eff;
+		color: #007eff
 	}
 	.auction_choice dl dd.link a span.ico_arrowblue {
-		padding-right: 13px;
+		padding-right: 13px
 	}
 	.auction_choice dl dd.link a span.ico_arrowblue:after {
 		width: 6.5px;
 		height: 10px;
 		background-size: 6.5px 10px;
-		margin-top: -6px;
+		margin-top: -6px
 	}
 }
 
 .auction_choice .auction_btn {
-	margin-bottom: 60px;
+	margin-bottom: 60px
 }
 
 .auction_choice .auction_btn li {
-	margin-top: 30px;
+	margin-top: 30px
 }
 
 .auction_choice .auction_btn li:first-child {
-	margin-top: 0 !important;
+	margin-top: 0 !important
 }
 
 .auction_choice .auction_btn .auction_join {
@@ -1797,9 +1779,9 @@ Base styles: contents layer
 	border-radius: 20px;
 	background: #f22800;
 	line-height: 120px;
-	color: #ffffff;
+	color: #fff;
 	font-size: 36px;
-	font-family: "Noto Sans KR", "Roboto", "AppleGothic", "sans-serif";
+	font-family: 'NanumSquare', 'Roboto', 'AppleGothic', 'sans-serif';
 	font-weight: 700;
 	letter-spacing: -0.9px;
 	-webkit-box-shadow: 0px 0 20px 5px rgba(0, 0, 0, 0.25);
@@ -1814,9 +1796,9 @@ Base styles: contents layer
 	border-radius: 20px;
 	background: #007eff;
 	line-height: 120px;
-	color: #ffffff;
+	color: #fff;
 	font-size: 36px;
-	font-family: "Noto Sans KR", "Roboto", "AppleGothic", "sans-serif";
+	font-family: 'NanumSquare', 'Roboto', 'AppleGothic', 'sans-serif';
 	font-weight: 700;
 	letter-spacing: -0.9px;
 	-webkit-box-shadow: 0px 0 20px 5px rgba(0, 0, 0, 0.25);
@@ -1825,24 +1807,24 @@ Base styles: contents layer
 
 @media only all and (max-width: 1024px) {
 	.auction_choice .auction_btn {
-		margin-bottom: 55px;
+		margin-bottom: 55px
 	}
 	.auction_choice .auction_btn li {
-		margin-top: 20px;
+		margin-top: 20px
 	}
 	.auction_choice .auction_btn .auction_join {
 		height: 80px;
 		border-radius: 10px;
 		line-height: 80px;
 		font-size: 24px;
-		letter-spacing: -1.2px;
+		letter-spacing: -1.2px
 	}
 	.auction_choice .auction_btn .auction_see {
 		height: 80px;
 		border-radius: 10px;
 		line-height: 80px;
 		font-size: 24px;
-		letter-spacing: -1.2px;
+		letter-spacing: -1.2px
 	}
 }
 
@@ -1875,12 +1857,12 @@ Base styles: contents layer
 	padding: 0 20px;
 	border-radius: 20px;
 	border: 2px solid #dbdbdb;
-	background: #ffffff;
+	background: #fff;
 	color: #1a1a1a;
 	font-size: 18px;
-	font-family: "Noto Sans KR", "Roboto", "AppleGothic", "sans-serif";
+	font-family: 'NanumSquare', 'Roboto', 'AppleGothic', 'sans-serif';
 	font-weight: 700;
-	letter-spacing: -0.45px;
+	letter-spacing: -0.45px
 }
 
 .auction_choice .app_down a.full-btn {
@@ -1895,16 +1877,16 @@ Base styles: contents layer
 	-moz-border-radius: 20px;
 	-ms-border-radius: 20px;
 	-o-border-radius: 20px;
-	height: 70px;
+	height: 70px
 }
 
 .auction_choice .app_down a span {
 	position: relative;
-	padding-left: 32px;
+	padding-left: 32px
 }
 
 .auction_choice .app_down a span.ico_aos:before {
-	content: "";
+	content: '';
 	width: 22px;
 	height: 24.4px;
 	display: block;
@@ -1912,12 +1894,12 @@ Base styles: contents layer
 	left: 0;
 	top: 50%;
 	margin-top: -12.2px;
-	background: url(/static/images/guide/ico_aos.svg) no-repeat 0 0;
-	background-size: 22px 24.4px;
+	background: url(../image/ico_aos.svg) no-repeat 0 0;
+	background-size: 22px 24.4px
 }
 
 .auction_choice .app_down a span.ico_ios:before {
-	content: "";
+	content: '';
 	width: 22px;
 	height: 25.8px;
 	display: block;
@@ -1925,13 +1907,13 @@ Base styles: contents layer
 	left: 0;
 	top: 50%;
 	margin-top: -12.95px;
-	background: url(/static/images/guide/ico_ios.svg) no-repeat 0 0;
-	background-size: 22px 25.8px;
+	background: url(../image/ico_ios.svg) no-repeat 0 0;
+	background-size: 22px 25.8px
 }
 
 .auction_choice .app_down a span.ico_arrow {
 	padding-left: 0;
-	padding-right: 20px;
+	padding-right: 20px
 }
 
 .auction_choice .app_down a span.ico_arrow:before {
@@ -1943,8 +1925,8 @@ Base styles: contents layer
 	width: 6.5px;
 	height: 10px;
 	display: block;
-	background: url(/static/images/guide/btn-arrow-gray.svg) no-repeat 0 0;
-	background-size: 6.5px 10px;
+	background: url(../image/btn-arrow-gray.svg) no-repeat 0 0;
+	background-size: 6.5px 10px
 }
 
 @media only all and (max-width: 1024px) {
@@ -1954,7 +1936,7 @@ Base styles: contents layer
 		padding: 0 10px;
 		font-size: 16px;
 		letter-spacing: -0.8px;
-		border-radius: 10px;
+		border-radius: 10px
 	}
 	.auction_choice .app_down a.full-btn {
 		max-width: 230px;
@@ -1964,57 +1946,57 @@ Base styles: contents layer
 		-webkit-border-radius: 10px;
 		-moz-border-radius: 10px;
 		-ms-border-radius: 10px;
-		-o-border-radius: 10px;
+		-o-border-radius: 10px
 	}
 	.auction_choice .app_down a span {
-		padding-left: 30px;
+		padding-left: 30px
 	}
 	.auction_choice .app_down a span.ico_aos:before {
 		width: 21px;
 		height: 24px;
 		margin-top: -12px;
-		background-size: 21px 24px;
+		background-size: 21px 24px
 	}
 	.auction_choice .app_down a span.ico_ios:before {
 		width: 21px;
 		height: 25px;
 		margin-top: -12.5px;
-		background-size: 21px 25px;
+		background-size: 21px 25px
 	}
 }
 
 .auction_info {
 	max-width: 1000px;
 	width: 100%;
-	margin: 0 auto;
+	margin: 0 auto
 }
 
 @media only all and (max-width: 1024px) {
 	.auction_info {
-		padding: 0 24px;
+		padding: 0 24px
 	}
 }
 
 .auction_info h3 {
 	font-size: 28px;
-	font-family: "Noto Sans KR", "Roboto", "AppleGothic", "sans-serif";
+	font-family: 'NanumSquare', 'Roboto', 'AppleGothic', 'sans-serif';
 	font-weight: 700;
 	letter-spacing: -0.7px;
 	text-align: center;
 	color: #1a1a1a;
-	margin-bottom: 40px;
+	margin-bottom: 40px
 }
 
 @media only all and (max-width: 1024px) {
 	.auction_info h3 {
-		display: none;
+		display: none
 	}
 }
 
 .auction_info dl.board_top {
 	position: relative;
 	margin-bottom: 75px;
-	padding-right: 345px;
+	padding-right: 345px
 }
 
 .auction_info dl.board_top dt {
@@ -2043,27 +2025,27 @@ Base styles: contents layer
 }
 
 .auction_info dl.board_top dt h4 {
-	color: #ffffff;
+	color: #fff;
 	font-size: 36px;
-	letter-spacing: -0.9px;
+	letter-spacing: -0.9px
 }
 
 .auction_info dl.board_top dt h4 span {
-	font-family: "Noto Sans KR", "Roboto", "AppleGothic", "sans-serif";
-	font-weight: 700;
+	font-family: 'NanumSquare', 'Roboto', 'AppleGothic', 'sans-serif';
+	font-weight: 700
 }
 
 .auction_info dl.board_top dt p {
-	color: #ffffff;
+	color: #fff;
 	font-size: 28px;
 	letter-spacing: -0.7px;
-	font-family: "Noto Sans KR", "Roboto", "AppleGothic", "sans-serif";
+	font-family: 'NanumSquare', 'Roboto', 'AppleGothic', 'sans-serif';
 	font-weight: 700;
-	margin-top: 15px;
+	margin-top: 15px
 }
 
 .auction_info dl.board_top dt p span {
-	color: #ffaf00;
+	color: #ffaf00
 }
 
 .auction_info dl.board_top dd {
@@ -2088,69 +2070,69 @@ Base styles: contents layer
 }
 
 .auction_info dl.board_top dd ul li {
-	margin-top: 15px;
+	margin-top: 15px
 }
 
 .auction_info dl.board_top dd ul li:first-child {
-	margin-top: 0 !important;
+	margin-top: 0 !important
 }
 
 .auction_info dl.board_top dd ul li a {
 	width: 260px;
 	height: 50px;
-	line-height: 46px;
+	line-height: 50px;
 	display: block;
 	padding: 0 10px;
 	border-radius: 50px;
 	border: 2px solid #007eff;
-	background-color: #ffffff;
+	background-color: #fff;
 	font-size: 20px;
-	font-family: "Noto Sans KR", "Roboto", "AppleGothic", "sans-serif";
+	font-family: 'NanumSquare', 'Roboto', 'AppleGothic', 'sans-serif';
 	font-weight: 700;
 	letter-spacing: -0.5px;
 	text-align: center;
-	color: #007eff;
+	color: #007eff
 }
 
 .auction_info dl.board_top dd ul li a span.ico_arrowblue {
 	position: relative;
-	padding-right: 20px;
+	padding-right: 20px
 }
 
 .auction_info dl.board_top dd ul li a span.ico_arrowblue:after {
-	content: "";
+	content: '';
 	width: 10px;
 	height: 14px;
 	display: block;
-	background: url(/static/images/guide/ico_arrowblue.svg) no-repeat 0 0;
+	background: url(../image/ico_arrowblue.svg) no-repeat 0 0;
 	background-size: 10px 14px;
 	position: absolute;
 	right: 0;
 	top: 50%;
-	margin-top: -7px;
+	margin-top: -7px
 }
 
 @media only all and (max-width: 1024px) {
 	.auction_info dl.board_top {
 		margin-bottom: 25px;
 		padding-top: 65px;
-		padding-right: 0;
+		padding-right: 0
 	}
 	.auction_info dl.board_top dt {
 		border-radius: 40px;
 		padding: 20px 25px;
 		min-height: 160px;
 		max-width: 100%;
-		border-radius: 20px;
+		border-radius: 20px
 	}
 	.auction_info dl.board_top dt h4 {
 		font-size: 28px;
-		letter-spacing: -1.4px;
+		letter-spacing: -1.4px
 	}
 	.auction_info dl.board_top dt p {
 		font-size: 24px;
 		letter-spacing: -1.2px;
-		margin-top: 5px;
+		margin-top: 5px
 	}
 	.auction_info dl.board_top dd {
 		position: absolute;
@@ -2167,73 +2149,73 @@ Base styles: contents layer
 		-webkit-box-direction: normal;
 		-ms-flex-flow: inherit;
 		flex-flow: inherit;
-		min-height: auto;
+		min-height: auto
 	}
 	.auction_info dl.board_top dd ul {
-		margin-left: -15px;
+		margin-left: -15px
 	}
 	.auction_info dl.board_top dd ul li {
 		margin-top: 0;
 		width: calc(50% - 15px);
 		margin-left: 15px;
-		float: left;
+		float: left
 	}
 	.auction_info dl.board_top dd ul li a {
 		width: 100%;
 		height: 40px;
-		line-height: 36px;
+		line-height: 40px;
 		padding: 0 5px;
 		font-size: 16px;
 		letter-spacing: -0.8px;
-		border-radius: 25px;
+		border-radius: 25px
 	}
 	.auction_info dl.board_top dd ul li a span.ico_arrowblue {
 		position: relative;
-		padding-right: 11px;
+		padding-right: 11px
 	}
 	.auction_info dl.board_top dd ul li a span.ico_arrowblue:after {
 		width: 6.5px;
 		height: 10px;
 		background-size: 6.5px 10px;
-		margin-top: -6px;
+		margin-top: -6px
 	}
 }
 
 .auction_info .board_bottom dl.info_dl>dt {
 	font-size: 36px;
-	font-family: "Noto Sans KR", "Roboto", "AppleGothic", "sans-serif";
+	font-family: 'NanumSquare', 'Roboto', 'AppleGothic', 'sans-serif';
 	font-weight: 700;
 	letter-spacing: -0.9px;
 	text-align: left;
 	color: #007eff;
-	margin-bottom: 30px;
+	margin-bottom: 30px
 }
 
 .auction_info .board_bottom dl.info_dl>dd {
 	font-size: 24px;
-	font-family: "Noto Sans KR", "Roboto", "AppleGothic", "sans-serif";
+	font-family: 'NanumSquare', 'Roboto', 'AppleGothic', 'sans-serif';
 	font-weight: 700;
 	letter-spacing: -0.6px;
 	text-align: left;
 	color: #767676;
 	margin-top: 35px;
-	line-height: 1.5;
+	line-height: 1.5
 }
 
 .auction_info .board_bottom dl.info_dl>dd:first-child {
-	margin-top: 0 !important;
+	margin-top: 0 !important
 }
 
 .auction_info .board_bottom dl.info_dl>dd.time {
 	color: #767676;
-	font-family: "Noto Sans KR", "Roboto", "AppleGothic", "sans-serif";
-	font-weight: 400;
+	font-family: 'NanumSquare', 'Roboto', 'AppleGothic', 'sans-serif';
+	font-weight: 400
 }
 
 .auction_info .board_bottom dl.info_dl>dd.time span {
-	font-family: "Noto Sans KR", "Roboto", "AppleGothic", "sans-serif";
+	font-family: 'NanumSquare', 'Roboto', 'AppleGothic', 'sans-serif';
 	font-weight: 700;
-	color: #1a1a1a;
+	color: #1a1a1a
 }
 
 .auction_info .board_bottom .date_bottom ul {
@@ -2248,19 +2230,19 @@ Base styles: contents layer
 	align-items: start;
 	-ms-flex-flow: wrap;
 	flex-flow: wrap;
-	margin-left: -20px;
+	margin-left: -20px
 }
 
 .auction_info .board_bottom .date_bottom ul li {
 	margin-top: 20px;
 	width: 50%;
-	padding-left: 20px;
+	padding-left: 20px
 }
 
 @media only all and (max-width: 1024px) {
 	.auction_info .board_bottom .date_bottom ul li {
 		margin-top: 10px;
-		width: 100%;
+		width: 100%
 	}
 }
 
@@ -2278,16 +2260,16 @@ Base styles: contents layer
 	box-shadow: 0 3px 10px 0 rgba(0, 0, 0, 0.16);
 	background-color: #fff;
 	padding: 14.5px 18px;
-	overflow: hidden;
+	overflow: hidden
 }
 
 .auction_info .board_bottom .date_bottom ul li dl.dis_day dt *,
 	.auction_info .board_bottom .date_bottom ul li dl.dis_day dd * {
-	color: #dbdbdb !important;
+	color: #dbdbdb !important
 }
 
 .auction_info .board_bottom .date_bottom ul li dl.dis_day:before {
-	background: #dbdbdb !important;
+	background: #dbdbdb !important
 }
 
 .auction_info .board_bottom .date_bottom ul li dl.no_date {
@@ -2297,22 +2279,22 @@ Base styles: contents layer
 }
 
 .auction_info .board_bottom .date_bottom ul li dl.no_date:before {
-	content: none !important;
+	content: none !important
 }
 
 .auction_info .board_bottom .date_bottom ul li dl.no_date h4 {
-	font-family: "Noto Sans KR", "Roboto", "AppleGothic", "sans-serif";
+	font-family: 'NanumSquare', 'Roboto', 'AppleGothic', 'sans-serif';
 	font-weight: 700;
 	font-size: 24px;
 	line-height: 1.6;
 	letter-spacing: -0.6px;
 	text-align: left;
 	color: #1a1a1a;
-	padding-left: 12px;
+	padding-left: 12px
 }
 
 .auction_info .board_bottom .date_bottom ul li dl:before {
-	content: "";
+	content: '';
 	width: 18px;
 	position: absolute;
 	left: 0;
@@ -2320,7 +2302,7 @@ Base styles: contents layer
 	top: -1px;
 	bottom: -1px;
 	background: #007eff;
-	border-radius: 10px 0 0 10px;
+	border-radius: 10px 0 0 10px
 }
 
 .auction_info .board_bottom .date_bottom ul li dl dt {
@@ -2340,18 +2322,18 @@ Base styles: contents layer
 	-webkit-box-direction: normal;
 	-ms-flex-flow: column;
 	flex-flow: column;
-	position: relative;
+	position: relative
 }
 
 .auction_info .board_bottom .date_bottom ul li dl dt:after {
-	content: "";
+	content: '';
 	width: 1px;
 	position: absolute;
 	right: 0;
 	top: 0;
 	bottom: 0px;
 	display: block;
-	background: #dbdbdb;
+	background: #dbdbdb
 }
 
 .auction_info .board_bottom .date_bottom ul li dl dt p {
@@ -2360,17 +2342,17 @@ Base styles: contents layer
 	font-weight: bold;
 	color: #1a1a1a;
 	line-height: 1;
-	margin-top: 8px;
+	margin-top: 8px
 }
 
 .auction_info .board_bottom .date_bottom ul li dl dt span {
 	display: block;
 	font-size: 20px;
-	font-family: "Noto Sans KR", "Roboto", "AppleGothic", "sans-serif";
+	font-family: 'NanumSquare', 'Roboto', 'AppleGothic', 'sans-serif';
 	font-weight: 700;
 	letter-spacing: -0.5px;
 	color: #999;
-	margin-top: 8px;
+	margin-top: 8px
 }
 
 .auction_info .board_bottom .date_bottom ul li dl dd {
@@ -2387,11 +2369,11 @@ Base styles: contents layer
 	-webkit-box-direction: normal;
 	-ms-flex-flow: column;
 	flex-flow: column;
-	padding: 6px 0 0 40px;
+	padding: 6px 0 0 40px
 }
 
 .auction_info .board_bottom .date_bottom ul li dl dd p.date_tit {
-	font-family: "Noto Sans KR", "Roboto", "AppleGothic", "sans-serif";
+	font-family: 'NanumSquare', 'Roboto', 'AppleGothic', 'sans-serif';
 	font-weight: 700;
 	font-size: 24px;
 	line-height: 1.3;
@@ -2399,55 +2381,55 @@ Base styles: contents layer
 	color: #1a1a1a;
 	overflow: hidden;
 	text-overflow: ellipsis;
-	white-space: nowrap;
+	white-space: nowrap
 }
 
 .auction_info .board_bottom .date_bottom ul li dl dd p.date_time {
-	font-family: "Noto Sans KR", "Roboto", "AppleGothic", "sans-serif";
+	font-family: 'NanumSquare', 'Roboto', 'AppleGothic', 'sans-serif';
 	font-weight: 700;
 	font-size: 20px;
 	letter-spacing: -0.5px;
 	color: #999;
-	margin-top: 10px;
+	margin-top: 10px
 }
 
 @media only all and (max-width: 1024px) {
 	.auction_info .board_bottom .date_bottom ul li dl {
 		min-height: 82px;
-		padding: 10.5px 9px;
+		padding: 10.5px 9px
 	}
 	.auction_info .board_bottom .date_bottom ul li dl.no_date h4 {
-		font-size: 18px;
+		font-size: 18px
 	}
 	.auction_info .board_bottom .date_bottom ul li dl:before {
-		width: 9px;
+		width: 9px
 	}
 	.auction_info .board_bottom .date_bottom ul li dl dt {
 		width: 68px;
-		padding: 4px 0;
+		padding: 4px 0
 	}
 	.auction_info .board_bottom .date_bottom ul li dl dt p {
 		font-size: 24px;
-		margin-top: 4px;
+		margin-top: 4px
 	}
 	.auction_info .board_bottom .date_bottom ul li dl dt span {
 		font-size: 14px;
 		letter-spacing: -0.7px;
-		margin-top: 4px;
+		margin-top: 4px
 	}
 	.auction_info .board_bottom .date_bottom ul li dl dd {
 		width: calc(100% - 68px);
-		padding: 10px 0 0 18px;
+		padding: 10px 0 0 18px
 	}
 	.auction_info .board_bottom .date_bottom ul li dl dd p.date_tit {
 		font-size: 18px;
 		line-height: 1.3;
-		letter-spacing: -0.9px;
+		letter-spacing: -0.9px
 	}
 	.auction_info .board_bottom .date_bottom ul li dl dd p.date_time {
 		font-size: 14px;
 		letter-spacing: -0.7px;
-		margin-top: 4px;
+		margin-top: 4px
 	}
 }
 
@@ -2455,41 +2437,41 @@ Base styles: contents layer
 	.auction_info .board_bottom dl.info_dl>dt {
 		font-size: 32px;
 		letter-spacing: -1.6px;
-		margin-bottom: 15px;
+		margin-bottom: 15px
 	}
 	.auction_info .board_bottom dl.info_dl>dd {
 		font-size: 20px;
 		letter-spacing: -1px;
 		margin-top: 20px;
-		line-height: 1.5;
+		line-height: 1.5
 	}
 }
 
 .auction_list {
 	max-width: 1000px;
 	width: 100%;
-	margin: 0 auto;
+	margin: 0 auto
 }
 
 .auction_list h3 {
 	font-size: 28px;
-	font-family: "Noto Sans KR", "Roboto", "AppleGothic", "sans-serif";
+	font-family: 'NanumSquare', 'Roboto', 'AppleGothic', 'sans-serif';
 	font-weight: 700;
 	letter-spacing: -0.7px;
 	text-align: center;
 	color: #1a1a1a;
-	margin-bottom: 40px;
+	margin-bottom: 40px
 }
 
 @media only all and (max-width: 1024px) {
 	.auction_list h3 {
-		display: none;
+		display: none
 	}
 }
 
 .auction_list .list_search {
 	min-height: 100px;
-	background: #ffffff;
+	background: #fff;
 	padding: 25px 100px;
 	border-radius: 10px;
 	display: -webkit-box;
@@ -2518,7 +2500,7 @@ Base styles: contents layer
 		flex-wrap: inherit;
 		background: #f5f5f5;
 		padding: 8px 15px;
-		margin: 0 10px 10px;
+		margin: 0 10px 10px
 	}
 }
 
@@ -2534,34 +2516,34 @@ Base styles: contents layer
 	flex-wrap: inherit;
 	background: #f5f5f5;
 	padding: 8px 15px;
-	margin: 0 0 10px;
+	margin: 0 0 10px
 }
 
 @media only all and (max-width: 1024px) {
 	.auction_list .list_search.pop_style {
-		margin: 0 10px 10px;
+		margin: 0 10px 10px
 	}
 }
 
 .auction_list .list_search.pop_style .radio_group {
 	float: none;
-	width: 100%;
+	width: 100%
 }
 
 .auction_list .list_search.pop_style .sch_area {
 	float: none;
 	width: 100%;
-	padding-right: 108px;
+	padding-right: 108px
 }
 
 .auction_list .list_search.pop_style .sch_area li.sort {
 	width: 50%;
-	padding-right: 4px;
+	padding-right: 4px
 }
 
 .auction_list .list_search.pop_style .sch_area li.date {
 	width: 50%;
-	padding-left: 4px;
+	padding-left: 4px
 }
 
 .auction_list .list_search.pop_style .sch_area li a.list_sch {
@@ -2569,16 +2551,16 @@ Base styles: contents layer
 	border-radius: 5px;
 	padding: 0 5px;
 	font-size: 18px;
-	letter-spacing: -0.9px;
+	letter-spacing: -0.9px
 }
 
 .auction_list .list_search ul {
-	margin: 5px 0;
+	margin: 5px 0
 }
 
 @media only all and (max-width: 1024px) {
 	.auction_list .list_search ul {
-		margin: 12px 0;
+		margin: 12px 0
 	}
 }
 
@@ -2586,12 +2568,12 @@ Base styles: contents layer
 	float: left;
 	margin-left: -12px;
 	margin-right: 20px;
-	width: 360px;
+	width: 360px
 }
 
 .auction_list .list_search .radio_group li {
 	margin: 4px 0 4px 8px;
-	float: left;
+	float: left
 }
 
 @media only all and (max-width: 1024px) {
@@ -2599,10 +2581,10 @@ Base styles: contents layer
 		margin-right: 0;
 		float: none;
 		width: auto;
-		margin-left: -9px;
+		margin-left: -9px
 	}
 	.auction_list .list_search .radio_group li {
-		margin: 4px 0 4px 9px;
+		margin: 4px 0 4px 9px
 	}
 }
 
@@ -2610,7 +2592,7 @@ Base styles: contents layer
 	float: left;
 	width: 430px;
 	position: relative;
-	padding-right: 130px;
+	padding-right: 130px
 }
 
 @media only all and (max-width: 1024px) {
@@ -2631,46 +2613,23 @@ Base styles: contents layer
 }
 
 .auction_list .list_search .sch_area>li {
-	float: left;
+	float: left
 }
 
 .auction_list .list_search .sch_area>li.sort {
 	width: 50%;
-	padding-right: 5px;
-}
-
-.auction_list .list_search .sch_area>li.txt {
-	width: 50%;
-	padding-right: 5px;
+	padding-right: 5px
 }
 
 .auction_list .list_search .sch_area>li.date {
 	width: 50%;
-	padding-left: 5px;
+	padding-left: 5px
 }
 
 .auction_list .list_search .sch_area>li.btn {
 	position: absolute;
 	right: 0;
-	top: 0;
-}
-
-.auction_list .list_search .sch_area>li select {
-	width: 100%;
-}
-
-.auction_list .list_search .sch_area>li input[type=text] {
-	width: 100%;
-	height: 50px;
-	font-family: "Noto Sans KR", "Roboto", "AppleGothic", "sans-serif";
-	background-color: #fff;
-}
-
-.auction_list .list_search .sch_area>li input[type=text]::-webkit-input-placeholder
-	{
-	font-size: 18px;
-	font-family: "Noto Sans KR", "Roboto", "AppleGothic", "sans-serif";
-	font-weight: 700;
+	top: 0
 }
 
 .auction_list .list_search .sch_area>li.before-date {
@@ -2701,52 +2660,49 @@ Base styles: contents layer
 	border-radius: 8px;
 	padding: 0 5px;
 	background: #007eff;
-	color: #ffffff;
+	color: #fff;
 	font-size: 18px;
-	font-family: "Noto Sans KR", "Roboto", "AppleGothic", "sans-serif";
+	font-family: 'NanumSquare', 'Roboto', 'AppleGothic', 'sans-serif';
 	font-weight: 700;
-	letter-spacing: -0.45px;
+	letter-spacing: -0.45px
 }
 
 @media only all and (max-width: 1024px) {
 	.auction_list .list_search .sch_area {
 		float: none;
 		width: 100%;
-		padding-right: 108px;
+		padding-right: 108px
 	}
 	.auction_list .list_search .sch_area li.sort {
 		width: 50%;
-		padding-right: 4px;
+		padding-right: 4px
 	}
 	.auction_list .list_search .sch_area li.date {
 		width: 50%;
-		padding-left: 4px;
+		padding-left: 4px
 	}
 	.auction_list .list_search .sch_area li a.list_sch {
 		width: 100px;
 		border-radius: 5px;
 		padding: 0 5px;
 		font-size: 18px;
-		letter-spacing: -0.9px;
+		letter-spacing: -0.9px
 	}
 }
 
 @media only all and (max-width: 768px) {
 	.auction_list .list_search .sch_area li.sort {
-		width: 40%;
-	}
-	.auction_list .list_search .sch_area li.txt {
-		width: 40%;
+		width: 40%
 	}
 	.auction_list .list_search .sch_area li.date {
-		width: 60%;
+		width: 60%
 	}
 	.auction_list .list_search .sch_area li a.list_sch {
 		width: 100px;
 		border-radius: 5px;
 		padding: 0 5px;
 		font-size: 18px;
-		letter-spacing: -0.9px;
+		letter-spacing: -0.9px
 	}
 }
 
@@ -2754,8 +2710,8 @@ Base styles: contents layer
 	background: #007eff;
 	height: 60px;
 	line-height: 60px;
-	color: #ffffff;
-	border-radius: 10px 10px 0 0;
+	color: #fff;
+	border-radius: 10px 10px 0 0
 }
 
 .auction_list .calculator_head_pc dl dt, .auction_list .calculator_head_pc dl dd
@@ -2763,34 +2719,34 @@ Base styles: contents layer
 	width: 50%;
 	float: left;
 	text-align: center;
-	font-family: "Noto Sans KR", "Roboto", "AppleGothic", "sans-serif";
+	font-family: 'NanumSquare', 'Roboto', 'AppleGothic', 'sans-serif';
 	font-weight: 700;
-	font-size: 26px;
+	font-size: 26px
 }
 
 .auction_list .calculator_head_pc dl dt span {
-	font-family: "Noto Sans KR", "Roboto", "AppleGothic", "sans-serif";
+	font-family: 'NanumSquare', 'Roboto', 'AppleGothic', 'sans-serif';
 	font-weight: 300;
-	margin: 0 15px;
+	margin: 0 15px
 }
 
 @media only all and (max-width: 1024px) {
 	.auction_list .calculator_head_pc {
-		display: none;
+		display: none
 	}
 }
 
 .auction_list .calculator_head_pc .txt-yellow {
-	color: #ffaf00;
+	color: #ffaf00
 }
 
 .auction_list .calculator_head_pc .txt-green {
-	color: #2fff00;
+	color: #2fff00
 }
 
 .auction_list .calculator_head_pc .dot-count {
 	display: inline-block;
-	margin-left: 5px;
+	margin-left: 5px
 }
 
 .auction_list .calculator_head_pc .dot-count li {
@@ -2803,64 +2759,64 @@ Base styles: contents layer
 	vertical-align: middle;
 	margin-top: -1px;
 	background: #cccccc;
-	margin-left: 7px;
+	margin-left: 7px
 }
 
-.auction_list .calculator_head_pc .dot-count li.dot-red {
-	background: #f22800;
+.auction_list .calculator_head_pc .dot-count li:nth-child(1) {
+	-webkit-animation: dotcount 1s 1.3s ease-in-out infinite alternate;
+	animation: dotcount 1s 1.3s ease-in-out infinite alternate
 }
-/* .auction_list .calculator_head_pc .dot-count li:nth-child(1) { */
-/*   -webkit-animation: dotcount 1s 1.3s ease-in-out infinite alternate; */
-/*           animation: dotcount 1s 1.3s ease-in-out infinite alternate; */
-/* } */
-/* .auction_list .calculator_head_pc .dot-count li:nth-child(2) { */
-/*   -webkit-animation: dotcount 1s 1.5s ease-in-out infinite alternate; */
-/*           animation: dotcount 1s 1.5s ease-in-out infinite alternate; */
-/* } */
-/* .auction_list .calculator_head_pc .dot-count li:nth-child(3) { */
-/*   -webkit-animation: dotcount 1s 1.7s ease-in-out infinite alternate; */
-/*           animation: dotcount 1s 1.7s ease-in-out infinite alternate; */
-/* } */
+
+.auction_list .calculator_head_pc .dot-count li:nth-child(2) {
+	-webkit-animation: dotcount 1s 1.5s ease-in-out infinite alternate;
+	animation: dotcount 1s 1.5s ease-in-out infinite alternate
+}
+
+.auction_list .calculator_head_pc .dot-count li:nth-child(3) {
+	-webkit-animation: dotcount 1s 1.7s ease-in-out infinite alternate;
+	animation: dotcount 1s 1.7s ease-in-out infinite alternate
+}
+
 .auction_list.has_auction_see .auction_see {
-	margin-top: 20px;
+	margin-top: 20px
 }
 
 @media only all and (max-width: 1024px) {
 	.auction_list.has_auction_see .auction_see {
-		display: none;
+		display: none
 	}
 }
 
 .list_downs {
 	margin: 30px 0 17px;
-	text-align: right;
+	text-align: right
 }
 
 .list_downs ul {
 	display: inline-block;
-	vertical-align: top;
+	vertical-align: top
 }
 
 .list_downs ul li {
 	float: left;
 	display: blcok;
-	margin-left: 34px;
+	margin-left: 34px
 }
 
 .list_downs ul li a {
 	font-size: 16px;
 	line-height: 2.4;
-	font-family: "Noto Sans KR", "Roboto", "AppleGothic", "sans-serif";
+	font-family: 'NanumSquare', 'Roboto', 'AppleGothic', 'sans-serif';
 	font-weight: 700;
 	letter-spacing: -0.4px;
 	text-align: left;
 	color: #1a1a1a;
 	position: relative;
-	padding-left: 32px;
+	padding-left: 32px
 }
 
 .list_downs ul li a .ico_print:before {
-	content: "";
+	content: '';
 	width: 25px;
 	height: 25px;
 	display: block;
@@ -2868,12 +2824,12 @@ Base styles: contents layer
 	left: 0;
 	top: 50%;
 	margin-top: -12.5px;
-	background: url(/static/images/guide/ico_print.svg) no-repeat 0 0;
-	background-size: 25px 25px;
+	background: url(../image/ico_print.svg) no-repeat 0 0;
+	background-size: 25px 25px
 }
 
 .list_downs ul li a .ico_excel:before {
-	content: "";
+	content: '';
 	width: 25px;
 	height: 25px;
 	display: block;
@@ -2881,67 +2837,46 @@ Base styles: contents layer
 	left: 0;
 	top: 50%;
 	margin-top: -12.5px;
-	background: url(/static/images/guide/ico_excel.png) no-repeat 0 0;
-	background-size: 25px 25px;
-}
-
-.list_txt {
-	margin: 36px 20px 17px;
-	text-align: right;
-	float: left;
-}
-
-.list_txt p {
-	font-size: 17px;
-	font-weight: 500;
-}
-
-.list_txt p span {
-	color: #ff0000;
+	background: url(../image/ico_excel.png) no-repeat 0 0;
+	background-size: 25px 25px
 }
 
 @media only all and (max-width: 1024px) {
 	.list_downs {
-		display: none;
-	}
-	.list_txt {
-		margin: 5px 0 5px 10px;
-	}
-	.list_txt p {
-		font-size: 15px;
+		display: none
 	}
 }
 
 .list_table .mCustomScrollBox {
-	max-height: 600px;
+	max-height: 600px
 }
 
 @media only all and (max-width: 1024px) {
 	.list_table {
-		padding: 0 10px;
+		padding: 0 10px
 	}
 }
 
 .list_table .list_head {
 	background: #007eff;
-	border-radius: 5px;
+	border-radius: 5px
 }
 
 .list_table .list_head dl {
 	display: table;
 	width: 100%;
-	table-layout: fixed;
+	table-layout: fixed
 }
 
 .list_table .list_head dl dd {
-	color: #ffffff;
+	color: #fff;
 	font-size: 18px;
-	font-family: "Noto Sans KR", "Roboto", "AppleGothic", "sans-serif";
+	font-family: 'NanumSquare', 'Roboto', 'AppleGothic', 'sans-serif';
 	font-weight: 700;
 	letter-spacing: -0.45px;
 	display: table-cell;
 	padding: 20px 1px;
-	text-align: center;
+	text-align: center
 }
 
 .list_table .list_head dl dd span.txt_org {
@@ -2950,73 +2885,70 @@ Base styles: contents layer
 
 @media only all and (max-width: 1024px) {
 	.list_table .list_head {
-		background: #ffffff;
+		background: #fff;
 		border-radius: 0;
-		border-bottom: 1px solid #dbdbdb;
+		border-bottom: 1px solid #dbdbdb
 	}
-	/* 	.list_table .list_body ul{ */
-	/* 		height : 0px; */
-	/* 	} */
 	.list_table .list_head dl dd {
 		color: #767676;
 		font-size: 16px;
-		font-family: "Noto Sans KR", "Roboto", "AppleGothic", "sans-serif";
+		font-family: 'NanumSquare', 'Roboto', 'AppleGothic', 'sans-serif';
 		font-weight: 700;
 		letter-spacing: -0.8px;
-		padding: 10px 0px;
+		padding: 10px 0px
 	}
 }
 
 .list_table .list_head.pop_style {
-	background: #ffffff;
+	background: #fff;
 	border-radius: 0;
-	border-bottom: 1px solid #dbdbdb;
+	border-bottom: 1px solid #dbdbdb
 }
 
 .list_table .list_head.pop_style dl dd {
 	color: #767676;
 	font-size: 16px;
-	font-family: "Noto Sans KR", "Roboto", "AppleGothic", "sans-serif";
+	font-family: 'NanumSquare', 'Roboto', 'AppleGothic', 'sans-serif';
 	font-weight: 700;
 	letter-spacing: -0.8px;
-	padding: 10px 0px;
+	padding: 10px 0px
 }
 
 .list_table .list_body {
-	border-radius: 5px;
+	border-radius: 5px
 }
 
 .list_table .list_body li {
 	border-bottom: 1px solid #dbdbdb;
-	position: relative;
+	position: relative
 }
 
 .list_table .list_body dl {
 	display: table;
 	width: 100%;
-	table-layout: fixed;
+	table-layout: fixed
 }
 
 .list_table .list_body dl dd {
 	color: #1a1a1a;
 	font-size: 17px;
-	font-family: "Noto Sans KR", "Roboto", "AppleGothic", "sans-serif";
+	font-family: 'NanumSquare', 'Roboto', 'AppleGothic', 'sans-serif';
 	font-weight: 700;
 	letter-spacing: -0.45px;
 	display: table-cell;
 	padding: 20px 1px;
-	text-align: center;
+	text-align: center
 }
 
 @media only all and (max-width: 1024px) {
 	.list_table .list_body dl dd {
 		font-size: 16px;
-		padding: 10px 0;
+		padding: 10px 0
 	}
 }
 
 .list_table .list_body dl dd.pd_ea {
-	text-align: left;
+	text-align: left
 }
 
 .list_table .list_body dl dd.pd_ea a {
@@ -3024,29 +2956,29 @@ Base styles: contents layer
 	position: relative;
 	display: block;
 	color: #007eff;
-	font-size: 16px;
+	font-size: 16px
 }
 
 .list_table .list_body dl dd.pd_ea a .ico_move:after {
-	content: "";
+	content: '';
 	width: 25px;
 	height: 25px;
 	display: inline-block;
-	background: url(/static/images/guide/ico_move.svg) no-repeat 0 0;
+	background: url(../image/ico_move.svg) no-repeat 0 0;
 	background-size: 25px 25px;
 	position: absolute;
 	right: 0;
-	top: -2px;
+	top: -2px
 }
 
 @media only all and (max-width: 740px) {
 	.list_table .list_body dl dd.pd_ea {
-		text-align: center;
+		text-align: center
 	}
 }
 
 .list_table .list_body dl dd.pd_pav {
-	text-align: left;
+	text-align: left
 }
 
 .list_table .list_body dl dd.pd_pav a {
@@ -3055,162 +2987,161 @@ Base styles: contents layer
 	display: block;
 	color: #007eff;
 	font-size: 18px;
-	text-align: right;
+	text-align: right
 }
 
 .list_table .list_body dl dd.pd_pav a .ico_pav:after {
-	content: "";
+	content: '';
 	width: 32px;
 	height: 32px;
 	display: inline-block;
-	background: url(/static/images/guide/fav_off.svg) no-repeat center center;
+	background: url(../image/fav_off.svg) no-repeat center center;
 	background-size: 32px 32px;
 	position: absolute;
 	right: 0;
 	top: 50%;
-	margin-top: -17px;
+	margin-top: -17px
 }
 
 @media only all and (min-width: 1025px) {
 	.list_table .list_body dl dd.pd_pav a:hover .ico_pav:after {
-		background: url(/static/images/guide/fav_on.svg) no-repeat center center;
+		background: url(../image/fav_on.svg) no-repeat center center
 	}
 }
 
 .list_table .list_body dl dd.pd_pav a.act .ico_pav:after {
-	background: url(/static/images/guide/fav_on.svg) no-repeat center center;
+	background: url(../image/fav_on.svg) no-repeat center center;
 	-webkit-animation: fav 0.5s;
-	animation: fav 0.5s;
+	animation: fav 0.5s
 }
 
 .list_table .list_body.pop_style dl dd {
 	font-size: 16px;
-	padding: 10px 0;
+	padding: 10px 0
 }
 
 .schedule_tb .list_head dl dd.date, .schedule_tb .list_body dl dd.date {
-	width: 10%;
+	width: 10%
 }
 
 .schedule_tb .list_head dl dd.num, .schedule_tb .list_body dl dd.num {
-	width: 7%;
+	width: 7%
 }
 
 .schedule_tb .list_head dl dd.name, .schedule_tb .list_body dl dd.name {
-	width: 6%;
+	width: 6%
 }
 
 .schedule_tb .list_head dl dd.pd_ea, .schedule_tb .list_body dl dd.pd_ea
 	{
-	width: 12.5%;
-	text-align: center;
+	width: 12.5%
 }
 
 .schedule_tb .list_head dl dd.pd_sex, .schedule_tb .list_body dl dd.pd_sex
 	{
-	width: 5%;
+	width: 5%
 }
 
 .schedule_tb .list_head dl dd.pd_date, .schedule_tb .list_body dl dd.pd_date
 	{
-	width: 10%;
+	width: 10%
 }
 
 .schedule_tb .list_head dl dd.pd_kpn, .schedule_tb .list_body dl dd.pd_kpn
 	{
-	width: 7%;
+	width: 7%
 }
 
 .schedule_tb .list_head dl dd.pd_num1, .schedule_tb .list_body dl dd.pd_num1
 	{
-	width: 4%;
+	width: 4%
 }
 
 .schedule_tb .list_head dl dd.pd_num2, .schedule_tb .list_body dl dd.pd_num2
 	{
-	width: 4%;
+	width: 4%
 }
 
 .schedule_tb .list_head dl dd.pd_info, .schedule_tb .list_body dl dd.pd_info
 	{
-	width: 15%;
+	width: 15%
 }
 
 .schedule_tb .list_head dl dd.pd_pay, .schedule_tb .list_body dl dd.pd_pay
 	{
-	width: 8.5%;
+	width: 8.5%
 }
 
 .schedule_tb .list_head dl dd.pd_pav, .schedule_tb .list_body dl dd.pd_pav
 	{
-	width: 11%;
+	width: 11%
 }
 
 @media only all and (max-width: 1024px) {
 	.schedule_tb {
-		display: none;
+		display: none
 	}
 }
 
 .schedule_tb_mo {
-	display: none;
+	display: none
 }
 
 .schedule_tb_mo.pop_style {
-	display: block;
+	display: block
 }
 
 .schedule_tb_mo.pop_style .list_head dl, .schedule_tb_mo.pop_style .list_body dl
 	{
-	position: relative;
+	position: relative
 }
 
 .schedule_tb_mo.pop_style .list_head .num, .schedule_tb_mo.pop_style .list_body .num
 	{
-	width: 9%;
+	width: 9%
 }
 
 .schedule_tb_mo.pop_style .list_head .pd_ea, .schedule_tb_mo.pop_style .list_body .pd_ea
 	{
-	width: 23%;
+	width: 29%
 }
 
 .schedule_tb_mo.pop_style .list_head .pd_ea a, .schedule_tb_mo.pop_style .list_body .pd_ea a
 	{
-	padding-right: 0 !important;
+	padding-right: 0 !important
 }
 
 .schedule_tb_mo.pop_style .list_head .pd_ea p, .schedule_tb_mo.pop_style .list_body .pd_ea p
 	{
 	text-align: left;
-	margin-top: 10px;
+	margin-top: 10px
 }
 
 .schedule_tb_mo.pop_style .list_head .pd_date, .schedule_tb_mo.pop_style .list_body .pd_date
 	{
-	width: 16%;
+	width: 14%
 }
 
 .schedule_tb_mo.pop_style .list_head .pd_sex, .schedule_tb_mo.pop_style .list_body .pd_sex
 	{
-	width: 14%;
+	width: 10%
 }
 
 .schedule_tb_mo.pop_style .list_head .pd_kpn, .schedule_tb_mo.pop_style .list_body .pd_kpn
 	{
-	width: 17%;
+	width: 17%
 }
 
 .schedule_tb_mo.pop_style .list_head .pd_pay, .schedule_tb_mo.pop_style .list_body .pd_pay
 	{
-	width: 21%;
+	width: 21%
 }
 
 .schedule_tb_mo.pop_style .list_head .pd_pav, .schedule_tb_mo.pop_style .list_body .pd_pav
 	{
 	position: absolute;
 	right: 15px;
-	bottom: 8px;
+	bottom: 8px
 }
 
 .schedule_tb_mo.pop_style .list_head .pd_pav a, .schedule_tb_mo.pop_style .list_body .pd_pav a
@@ -3221,37 +3152,37 @@ Base styles: contents layer
 	color: #007eff;
 	font-size: 17px;
 	text-align: right;
-	font-family: "Noto Sans KR", "Roboto", "AppleGothic", "sans-serif";
-	font-weight: 700;
+	font-family: 'NanumSquare', 'Roboto', 'AppleGothic', 'sans-serif';
+	font-weight: 700
 }
 
 .schedule_tb_mo.pop_style .list_head .pd_pav a .ico_pav:after,
 	.schedule_tb_mo.pop_style .list_body .pd_pav a .ico_pav:after {
-	content: "";
+	content: '';
 	width: 30px;
 	height: 30px;
 	display: inline-block;
-	background: url(/static/images/guide/fav_off.svg) no-repeat center center;
+	background: url(../image/fav_off.svg) no-repeat center center;
 	background-size: 30px 30px;
 	position: absolute;
 	right: 0;
 	top: 50%;
-	margin-top: -15px;
+	margin-top: -15px
 }
 
 .schedule_tb_mo.pop_style .list_head .pd_pav a.act .ico_pav:after,
 	.schedule_tb_mo.pop_style .list_body .pd_pav a.act .ico_pav:after {
-	background: url(/static/images/guide/fav_on.svg) no-repeat center center;
+	background: url(../image/fav_on.svg) no-repeat center center;
 	-webkit-animation: fav 0.5s;
 	animation: fav 0.5s;
-	background-size: 30px 30px;
+	background-size: 30px 30px
 }
 
 .schedule_tb_mo.pop_style .list_head .pd_etc, .schedule_tb_mo.pop_style .list_body .pd_etc
 	{
 	padding-left: 9%;
 	padding-bottom: 10px;
-	width: calc(100% - 125px);
+	width: calc(100% - 125px)
 }
 
 .schedule_tb_mo.pop_style .list_head .pd_etc p, .schedule_tb_mo.pop_style .list_body .pd_etc p
@@ -3260,60 +3191,59 @@ Base styles: contents layer
 	margin-top: 10px;
 	color: #1a1a1a;
 	font-size: 17px;
-	font-family: "Noto Sans KR", "Roboto", "AppleGothic", "sans-serif";
+	font-family: 'NanumSquare', 'Roboto', 'AppleGothic', 'sans-serif';
 	font-weight: 700;
 	letter-spacing: -0.45px;
-	display: table-cell;
+	display: table-cell
 }
 
 .schedule_tb_mo.pop_style .list_body dl {
-	position: relative;
+	position: relative
 }
 
 .schedule_tb_mo.pop_style .list_body li:nth-child(even) {
-	background: #f5f5f5;
+	background: #f5f5f5
 }
 
 @media only all and (max-width: 1024px) {
 	.schedule_tb_mo {
-		display: block;
+		display: block
 	}
 	.schedule_tb_mo .list_head dl, .schedule_tb_mo .list_body dl {
-		position: relative;
+		position: relative
 	}
 	.schedule_tb_mo .list_head .num, .schedule_tb_mo .list_body .num {
-		width: 9%;
+		width: 9%
 	}
 	.schedule_tb_mo .list_head .pd_ea, .schedule_tb_mo .list_body .pd_ea {
-		width: 23%;
-		text-align: center !important;
+		width: 29%
 	}
 	.schedule_tb_mo .list_head .pd_ea a, .schedule_tb_mo .list_body .pd_ea a
 		{
-		padding-right: 0 !important;
+		padding-right: 0 !important
 	}
 	.schedule_tb_mo .list_head .pd_ea p, .schedule_tb_mo .list_body .pd_ea p
 		{
 		text-align: left;
-		margin-top: 10px;
+		margin-top: 10px
 	}
 	.schedule_tb_mo .list_head .pd_date, .schedule_tb_mo .list_body .pd_date
 		{
-		width: 16%;
+		width: 14%
 	}
 	.schedule_tb_mo .list_head .pd_sex, .schedule_tb_mo .list_body .pd_sex {
-		width: 14%;
+		width: 10%
 	}
 	.schedule_tb_mo .list_head .pd_kpn, .schedule_tb_mo .list_body .pd_kpn {
-		width: 17%;
+		width: 17%
 	}
 	.schedule_tb_mo .list_head .pd_pay, .schedule_tb_mo .list_body .pd_pay {
-		width: 21%;
+		width: 21%
 	}
 	.schedule_tb_mo .list_head .pd_pav, .schedule_tb_mo .list_body .pd_pav {
 		position: absolute;
 		right: 15px;
-		bottom: 10px;
+		bottom: 10px
 	}
 	.schedule_tb_mo .list_head .pd_pav a, .schedule_tb_mo .list_body .pd_pav a
 		{
@@ -3323,112 +3253,96 @@ Base styles: contents layer
 		color: #007eff;
 		font-size: 17px;
 		text-align: right;
-		font-family: "Noto Sans KR", "Roboto", "AppleGothic", "sans-serif";
-		font-weight: 700;
+		font-family: 'NanumSquare', 'Roboto', 'AppleGothic', 'sans-serif';
+		font-weight: 700
 	}
 	.schedule_tb_mo .list_head .pd_pav a .ico_pav:after, .schedule_tb_mo .list_body .pd_pav a .ico_pav:after
 		{
-		content: "";
+		content: '';
 		width: 30px;
 		height: 30px;
 		display: inline-block;
-		background: url(/static/images/guide/fav_off.svg) no-repeat center center;
+		background: url(../image/fav_off.svg) no-repeat center center;
 		background-size: 30px 30px;
 		position: absolute;
 		right: 0;
 		top: 50%;
-		margin-top: -15px;
+		margin-top: -15px
 	}
 	.schedule_tb_mo .list_head .pd_pav a.act .ico_pav:after, .schedule_tb_mo .list_body .pd_pav a.act .ico_pav:after
 		{
-		background: url(/static/images/guide/fav_on.svg) no-repeat center center;
+		background: url(../image/fav_on.svg) no-repeat center center;
 		-webkit-animation: fav 0.5s;
 		animation: fav 0.5s;
-		background-size: 30px 30px;
+		background-size: 30px 30px
 	}
 	.schedule_tb_mo .list_head .pd_etc, .schedule_tb_mo .list_body .pd_etc {
 		padding-left: 9%;
 		padding-bottom: 10px;
-		width: calc(100% - 125px);
+		width: calc(100% - 125px)
 	}
 	.schedule_tb_mo .list_head .pd_etc p, .schedule_tb_mo .list_body .pd_etc p
 		{
 		text-align: left;
 		margin-top: 10px;
 		color: #1a1a1a;
-		font-size: 16px;
-		font-family: "Noto Sans KR", "Roboto", "AppleGothic", "sans-serif";
+		font-size: 17px;
+		font-family: 'NanumSquare', 'Roboto', 'AppleGothic', 'sans-serif';
 		font-weight: 700;
 		letter-spacing: -0.45px;
-		display: table-cell;
+		display: table-cell
 	}
 	.schedule_tb_mo .list_body li {
-		min-height: 74px;
+		min-height: 74px
 	}
 	.schedule_tb_mo .list_body dl {
-		position: relative;
+		position: relative
 	}
 }
 
 .auction_date {
 	max-width: 1000px;
 	width: 100%;
-	margin: 0 auto;
+	margin: 0 auto
 }
 
 .auction_date h3 {
 	font-size: 28px;
-	font-family: "Noto Sans KR", "Roboto", "AppleGothic", "sans-serif";
+	font-family: 'NanumSquare', 'Roboto', 'AppleGothic', 'sans-serif';
 	font-weight: 700;
 	letter-spacing: -0.7px;
 	text-align: center;
 	color: #1a1a1a;
-	margin-bottom: 25px;
+	margin-bottom: 25px
 }
 
 @media only all and (max-width: 1024px) {
 	.auction_date h3 {
-		display: none;
+		display: none
 	}
 }
 
 .auction_date .date_board {
 	max-width: 560px;
 	width: 100%;
-	margin: 0 auto;
+	margin: 0 auto
 }
 
 @media only all and (max-width: 1024px) {
 	.auction_date .date_board {
-		padding: 0 20px;
+		padding: 0 20px
 	}
-}
-
-.auction_date .date_top dl dd.btn_prev {
-	left: 0;
-}
-
-.auction_date .date_top dl dd.btn_prev a {
-	background-image: url(/static/images/guide/btn_prev.svg);
-}
-
-.auction_date .date_top dl dd.btn_next {
-	right: 0;
-}
-
-.auction_date .date_top dl dd.btn_next a {
-	background-image: url(/static/images/guide/btn_next.svg);
 }
 
 .auction_date .date_top {
 	text-align: center;
-	margin-bottom: 30px;
+	margin-bottom: 30px
 }
 
 .auction_date .date_top dl {
 	position: relative;
 	display: inline-block;
-	padding: 0 55px;
+	padding: 0 55px
 }
 
 .auction_date .date_top dl dt {
@@ -3436,14 +3350,14 @@ Base styles: contents layer
 	font-family: Roboto;
 	font-weight: bold;
 	color: #1a1a1a;
-	text-align: center;
+	text-align: center
 }
 
 .auction_date .date_top dl dd {
 	position: absolute;
 	top: 50%;
 	margin-top: -8px;
-	z-index: 5;
+	z-index: 5
 }
 
 .auction_date .date_top dl dd a {
@@ -3452,42 +3366,58 @@ Base styles: contents layer
 	display: block;
 	background-repeat: no-repeat !important;
 	background-size: 14px 20px !important;
-	text-indent: -9999px;
+	text-indent: -9999px
+}
+
+.auction_date .date_top dl dd.btn_prev {
+	left: 0
+}
+
+.auction_date .date_top dl dd.btn_prev a {
+	background-image: url(../image/btn_prev.svg)
+}
+
+.auction_date .date_top dl dd.btn_next {
+	right: 0
+}
+
+.auction_date .date_top dl dd.btn_next a {
+	background-image: url(../image/btn_next.svg)
 }
 
 @media only all and (max-width: 768px) {
 	.auction_date .date_top {
-		margin-bottom: 25px;
+		margin-bottom: 25px
 	}
 	.auction_date .date_top dl {
 		padding: 0 20px;
-		width: 100%;
+		width: 100%
 	}
 	.auction_date .date_top dl dt {
-		font-size: 24px;
+		font-size: 24px
 	}
 	.auction_date .date_top dl dd {
-		margin-top: -5px;
+		margin-top: -5px
 	}
 	.auction_date .date_top dl dd a {
 		width: 10px;
 		height: 15px;
-		background-size: 10px 15px !important;
+		background-size: 10px 15px !important
 	}
 }
 
 .auction_date .date_bottom li {
-	margin-top: 20px;
+	margin-top: 20px
 }
 
 @media only all and (max-width: 768px) {
 	.auction_date .date_bottom li {
-		margin-top: 10px;
+		margin-top: 10px
 	}
 }
 
 .auction_date .date_bottom li:first-child {
-	margin-top: 0 !important;
+	margin-top: 0 !important
 }
 
 .auction_date .date_bottom li dl {
@@ -3502,18 +3432,18 @@ Base styles: contents layer
 	border-radius: 10px;
 	-webkit-box-shadow: 0 3px 10px 0 rgba(0, 0, 0, 0.16);
 	box-shadow: 0 3px 10px 0 rgba(0, 0, 0, 0.16);
-	background-color: #ffffff;
+	background-color: #fff;
 	padding: 14.5px 18px;
-	overflow: hidden;
+	overflow: hidden
 }
 
 .auction_date .date_bottom li dl.dis_day dt *, .auction_date .date_bottom li dl.dis_day dd *
 	{
-	color: #dbdbdb !important;
+	color: #dbdbdb !important
 }
 
 .auction_date .date_bottom li dl.dis_day:before {
-	background: #dbdbdb !important;
+	background: #dbdbdb !important
 }
 
 .auction_date .date_bottom li dl.no_date {
@@ -3523,22 +3453,22 @@ Base styles: contents layer
 }
 
 .auction_date .date_bottom li dl.no_date:before {
-	content: none !important;
+	content: none !important
 }
 
 .auction_date .date_bottom li dl.no_date h4 {
-	font-family: "Noto Sans KR", "Roboto", "AppleGothic", "sans-serif";
+	font-family: 'NanumSquare', 'Roboto', 'AppleGothic', 'sans-serif';
 	font-weight: 700;
 	font-size: 24px;
 	line-height: 1.6;
 	letter-spacing: -0.6px;
 	text-align: left;
 	color: #1a1a1a;
-	padding-left: 12px;
+	padding-left: 12px
 }
 
 .auction_date .date_bottom li dl:before {
-	content: "";
+	content: '';
 	width: 18px;
 	position: absolute;
 	left: 0;
@@ -3546,7 +3476,7 @@ Base styles: contents layer
 	top: -1px;
 	bottom: -1px;
 	background: #007eff;
-	border-radius: 10px 0 0 10px;
+	border-radius: 10px 0 0 10px
 }
 
 .auction_date .date_bottom li dl dt {
@@ -3566,18 +3496,18 @@ Base styles: contents layer
 	-webkit-box-direction: normal;
 	-ms-flex-flow: column;
 	flex-flow: column;
-	position: relative;
+	position: relative
 }
 
 .auction_date .date_bottom li dl dt:after {
-	content: "";
+	content: '';
 	width: 1px;
 	position: absolute;
 	right: 0;
 	top: 0;
 	bottom: 0px;
 	display: block;
-	background: #dbdbdb;
+	background: #dbdbdb
 }
 
 .auction_date .date_bottom li dl dt p {
@@ -3586,17 +3516,17 @@ Base styles: contents layer
 	font-weight: bold;
 	color: #1a1a1a;
 	line-height: 1;
-	margin-top: 8px;
+	margin-top: 8px
 }
 
 .auction_date .date_bottom li dl dt span {
 	display: block;
 	font-size: 20px;
-	font-family: "Noto Sans KR", "Roboto", "AppleGothic", "sans-serif";
+	font-family: 'NanumSquare', 'Roboto', 'AppleGothic', 'sans-serif';
 	font-weight: 700;
 	letter-spacing: -0.5px;
 	color: #999;
-	margin-top: 8px;
+	margin-top: 8px
 }
 
 .auction_date .date_bottom li dl dd {
@@ -3613,92 +3543,92 @@ Base styles: contents layer
 	-webkit-box-direction: normal;
 	-ms-flex-flow: column;
 	flex-flow: column;
-	padding: 6px 0 0 40px;
+	padding: 6px 0 0 40px
 }
 
 .auction_date .date_bottom li dl dd p.date_tit {
-	font-family: "Noto Sans KR", "Roboto", "AppleGothic", "sans-serif";
+	font-family: 'NanumSquare', 'Roboto', 'AppleGothic', 'sans-serif';
 	font-weight: 700;
 	font-size: 24px;
 	line-height: 1.3;
 	letter-spacing: -0.6px;
-	color: #1a1a1a;
+	color: #1a1a1a
 }
 
 .auction_date .date_bottom li dl dd p.date_time {
-	font-family: "Noto Sans KR", "Roboto", "AppleGothic", "sans-serif";
+	font-family: 'NanumSquare', 'Roboto', 'AppleGothic', 'sans-serif';
 	font-weight: 700;
 	font-size: 20px;
 	letter-spacing: -0.5px;
 	color: #999;
-	margin-top: 10px;
+	margin-top: 10px
 }
 
 @media only all and (max-width: 768px) {
 	.auction_date .date_bottom li dl {
 		min-height: 82px;
-		padding: 10.5px 9px;
+		padding: 10.5px 9px
 	}
 	.auction_date .date_bottom li dl.no_date h4 {
-		font-size: 18px;
+		font-size: 18px
 	}
 	.auction_date .date_bottom li dl:before {
-		width: 9px;
+		width: 9px
 	}
 	.auction_date .date_bottom li dl dt {
 		width: 68px;
-		padding: 4px 0;
+		padding: 4px 0
 	}
 	.auction_date .date_bottom li dl dt p {
 		font-size: 24px;
-		margin-top: 4px;
+		margin-top: 4px
 	}
 	.auction_date .date_bottom li dl dt span {
 		font-size: 14px;
 		letter-spacing: -0.7px;
-		margin-top: 4px;
+		margin-top: 4px
 	}
 	.auction_date .date_bottom li dl dd {
 		width: calc(100% - 68px);
-		padding: 10px 0 0 18px;
+		padding: 10px 0 0 18px
 	}
 	.auction_date .date_bottom li dl dd p.date_tit {
 		font-size: 18px;
 		line-height: 1.3;
-		letter-spacing: -0.9px;
+		letter-spacing: -0.9px
 	}
 	.auction_date .date_bottom li dl dd p.date_time {
 		font-size: 14px;
 		letter-spacing: -0.7px;
-		margin-top: 4px;
+		margin-top: 4px
 	}
 }
 
 .notice_area {
 	max-width: 1000px;
 	width: 100%;
-	margin: 0 auto;
+	margin: 0 auto
 }
 
 @media only all and (max-width: 1024px) {
 	.notice_area {
-		margin-top: 8px;
+		margin-top: 8px
 	}
 }
 
 .notice_area h3 {
 	font-size: 28px;
-	font-family: "Noto Sans KR", "Roboto", "AppleGothic", "sans-serif";
+	font-family: 'NanumSquare', 'Roboto', 'AppleGothic', 'sans-serif';
 	font-weight: 700;
 	letter-spacing: -0.7px;
 	text-align: center;
 	color: #1a1a1a;
-	margin-bottom: 25px;
+	margin-bottom: 25px
 }
 
 @media only all and (max-width: 1024px) {
 	.notice_area h3 {
-		display: none;
+		display: none
 	}
 }
 
@@ -3707,7 +3637,7 @@ Base styles: contents layer
 	letter-spacing: -0.45px;
 	text-align: left;
 	color: #007eff;
-	margin-bottom: 17px;
+	margin-bottom: 17px
 }
 
 @media only all and (max-width: 1024px) {
@@ -3715,33 +3645,32 @@ Base styles: contents layer
 		font-size: 16px;
 		letter-spacing: -0.8px;
 		margin-bottom: 15px;
-		padding-left: 20px;
+		padding-left: 20px
 	}
 }
 
 .notice_area .notice_list {
-	border-top: 1px solid #dbdbdb;
+	border-top: 1px solid #dbdbdb
 }
 
 .notice_area .notice_list>ul>li {
-	border-bottom: 1px solid #dbdbdb;
+	border-bottom: 1px solid #dbdbdb
 }
 
 .notice_area .notice_list>ul>li .notice_btn a {
 	display: block;
-	position: relative;
+	position: relative
 }
 
 .notice_area .notice_list>ul>li .notice_btn a:after {
-	content: "";
+	content: '';
 	width: 20px;
 	height: 12px;
 	display: block;
 	position: absolute;
 	right: 30px;
 	top: 26px;
-	background: url(/static/images/guide/aco_btn.svg) no-repeat center
-		center;
+	background: url(../image/aco_btn.svg) no-repeat center center;
 	background-size: 20px 12px;
 	-webkit-transition: all 0.3s;
 	transition: all 0.3s;
@@ -3756,16 +3685,16 @@ Base styles: contents layer
 
 .notice_area .notice_list>ul>li .notice_btn a dl {
 	position: relative;
-	padding: 20px 70px 20px 0;
+	padding: 20px 70px 20px 0
 }
 
 .notice_area .notice_list>ul>li .notice_btn a dl dt {
 	font-size: 18px;
-	font-family: "Noto Sans KR", "Roboto", "AppleGothic", "sans-serif";
+	font-family: 'NanumSquare', 'Roboto', 'AppleGothic', 'sans-serif';
 	font-weight: 700;
 	letter-spacing: -0.45px;
 	text-align: left;
-	color: #1a1a1a;
+	color: #1a1a1a
 }
 
 .notice_area .notice_list>ul>li .notice_btn a dl dd {
@@ -3773,17 +3702,17 @@ Base styles: contents layer
 	right: 70px;
 	top: 21px;
 	font-size: 18px;
-	font-family: "Noto Sans KR", "Roboto", "AppleGothic", "sans-serif";
+	font-family: 'NanumSquare', 'Roboto', 'AppleGothic', 'sans-serif';
 	font-weight: 700;
 	letter-spacing: -0.45px;
 	text-align: left;
-	color: #999;
+	color: #999
 }
 
 .notice_area .notice_list>ul>li .notice_view {
-	background: #ffffff;
+	background: #fff;
 	padding: 28px 32px;
-	display: none;
+	display: none
 }
 
 .notice_area .notice_list>ul>li .notice_view p {
@@ -3791,27 +3720,27 @@ Base styles: contents layer
 	line-height: 1.44;
 	letter-spacing: -0.45px;
 	text-align: left;
-	color: #1a1a1a;
+	color: #1a1a1a
 }
 
 @media only all and (max-width: 1024px) {
 	.notice_area .notice_list {
-		border-top: 1px solid #dbdbdb;
+		border-top: 1px solid #dbdbdb
 	}
 	.notice_area .notice_list>ul>li .notice_btn a:after {
-		content: "";
+		content: '';
 		width: 18px;
 		height: 11px;
 		right: 20px;
 		top: 26px;
-		background-size: 18px 11px;
+		background-size: 18px 11px
 	}
 	.notice_area .notice_list>ul>li .notice_btn a dl {
-		padding: 10px 50px 10px 20px;
+		padding: 10px 50px 10px 20px
 	}
 	.notice_area .notice_list>ul>li .notice_btn a dl dt {
 		font-size: 18px;
-		letter-spacing: -0.9px;
+		letter-spacing: -0.9px
 	}
 	.notice_area .notice_list>ul>li .notice_btn a dl dd {
 		position: static;
@@ -3819,467 +3748,454 @@ Base styles: contents layer
 		top: auto;
 		font-size: 16px;
 		letter-spacing: -0.8px;
-		margin-top: 7px;
+		margin-top: 7px
 	}
 	.notice_area .notice_list>ul>li .notice_view {
 		background: #f5f5f5;
-		padding: 25px 20px;
+		padding: 25px 20px
 	}
 	.notice_area .notice_list>ul>li .notice_view p {
 		font-size: 16px;
-		text-align: left;
+		text-align: left
 	}
 }
 
 .auction_result .list_head dl dd.date, .auction_result .list_body dl dd.date
 	{
-	width: 10%;
+	width: 10%
 }
 
 .auction_result .list_head dl dd.num, .auction_result .list_body dl dd.num
 	{
-	width: 10%;
+	width: 10%
 }
 
 .auction_result .list_head dl dd.name, .auction_result .list_body dl dd.name
 	{
-	width: 6%;
+	width: 6%
 }
 
 .auction_result .list_head dl dd.pd_ea, .auction_result .list_body dl dd.pd_ea
 	{
 	width: 12.5%;
-	text-align: center;
+	text-align: center
 }
 
 .auction_result .list_head dl dd.pd_sex, .auction_result .list_body dl dd.pd_sex
 	{
-	width: 5%;
+	width: 5%
 }
 
 .auction_result .list_head dl dd.pd_kg, .auction_result .list_body dl dd.pd_kg
 	{
-	width: 7%;
+	width: 7%
 }
 
 .auction_result .list_head dl dd.pd_kpn, .auction_result .list_body dl dd.pd_kpn
 	{
-	width: 7%;
+	width: 7%
 }
 
 .auction_result .list_head dl dd.pd_num1, .auction_result .list_body dl dd.pd_num1
 	{
-	width: 4%;
+	width: 4%
 }
 
 .auction_result .list_head dl dd.pd_pay1, .auction_result .list_body dl dd.pd_pay1
 	{
-	width: 8%;
+	width: 8%
 }
 
 .auction_result .list_head dl dd.pd_pay2, .auction_result .list_body dl dd.pd_pay2
 	{
-	width: 8%;
+	width: 8%
 }
 
 .auction_result .list_head dl dd.pd_state, .auction_result .list_body dl dd.pd_state
 	{
-	width: 9%;
+	width: 9%
 }
 
 .auction_result .list_head dl dd.pd_etc, .auction_result .list_body dl dd.pd_etc
 	{
-	width: 13.5%;
+	width: 13.5%
 }
 
 @media only all and (max-width: 1024px) {
 	.auction_result .list_head dl dd.date, .auction_result .list_body dl dd.date
 		{
-		display: none;
+		display: none
 	}
 	.auction_result .list_head dl dd.num, .auction_result .list_body dl dd.num
 		{
-		width: 9%;
+		width: 9%
 	}
 	.auction_result .list_head dl dd.name, .auction_result .list_body dl dd.name
 		{
-		display: none;
+		width: 15%
 	}
 	.auction_result .list_head dl dd.pd_ea, .auction_result .list_body dl dd.pd_ea
 		{
-		width: 25%;
+		display: none
 	}
 	.auction_result .list_head dl dd.pd_sex, .auction_result .list_body dl dd.pd_sex
 		{
-		width: 10%;
+		width: 16%
 	}
 	.auction_result .list_head dl dd.pd_kg, .auction_result .list_body dl dd.pd_kg
 		{
-		width: 14%;
+		width: 20%
 	}
 	.auction_result .list_head dl dd.pd_kpn, .auction_result .list_body dl dd.pd_kpn
 		{
-		display: none;
+		display: none
 	}
 	.auction_result .list_head dl dd.pd_num1, .auction_result .list_body dl dd.pd_num1
 		{
-		display: none;
+		display: none
 	}
 	.auction_result .list_head dl dd.pd_pay1, .auction_result .list_body dl dd.pd_pay1
 		{
-		width: 21%;
+		width: 20%
 	}
 	.auction_result .list_head dl dd.pd_pay2, .auction_result .list_body dl dd.pd_pay2
 		{
-		width: 21%;
+		width: 20%
 	}
 	.auction_result .list_head dl dd.pd_state, .auction_result .list_body dl dd.pd_state
 		{
-		display: none;
+		display: none
 	}
 	.auction_result .list_head dl dd.pd_etc, .auction_result .list_body dl dd.pd_etc
 		{
-		display: none;
+		display: none
 	}
 	.auction_result .list_body li:nth-child(even) {
-		background: #f5f5f5;
+		background: #f5f5f5
 	}
 }
 
 .auction_result .list_body.pop_style li:nth-child(even) {
-	background: #f5f5f5;
+	background: #f5f5f5
 }
 
 .auction_result .list_body.pop_style li dd.pd_ea {
-	color: #007eff !important;
+	color: #007eff !important
 }
 
 .auction_buy .list_head dl dd.date, .auction_buy .list_body dl dd.date {
-	width: 18%;
+	width: 18%
 }
 
 .auction_buy .list_head dl dd.num, .auction_buy .list_body dl dd.num {
-	width: 15%;
+	width: 15%
 }
 
 .auction_buy .list_head dl dd.pd_total, .auction_buy .list_body dl dd.pd_total
 	{
-	width: 18%;
+	width: 18%
 }
 
 .auction_buy .list_head dl dd.pd_ea, .auction_buy .list_body dl dd.pd_ea
 	{
 	width: 13%;
-	text-align: center;
+	text-align: center
 }
 
 .auction_buy .list_head dl dd.pd_pay, .auction_buy .list_body dl dd.pd_pay
 	{
-	width: 16%;
+	width: 16%
 }
 
 .auction_buy .list_head dl dd.pd_view, .auction_buy .list_body dl dd.pd_view
 	{
-	width: 20%;
+	width: 20%
 }
 
 .auction_buy .list_head dl dd.pd_view a, .auction_buy .list_body dl dd.pd_view a
 	{
-	font-family: "Noto Sans KR", "Roboto", "AppleGothic", "sans-serif";
+	font-family: 'NanumSquare', 'Roboto', 'AppleGothic', 'sans-serif';
 	font-weight: 700;
-	color: #007eff;
+	color: #007eff
 }
 
 @media only all and (max-width: 1024px) {
 	.auction_buy .list_head dl dd.date, .auction_buy .list_body dl dd.date {
-		width: 28%;
+		width: 28%
 	}
 	.auction_buy .list_head dl dd.num, .auction_buy .list_body dl dd.num {
-		width: 9%;
+		width: 9%
 	}
 	.auction_buy .list_head dl dd.pd_total, .auction_buy .list_body dl dd.pd_total
 		{
-		width: 20%;
+		width: 20%
 	}
 	.auction_buy .list_head dl dd.pd_ea, .auction_buy .list_body dl dd.pd_ea
 		{
-		width: 10%;
+		width: 10%
 	}
 	.auction_buy .list_head dl dd.pd_pay, .auction_buy .list_body dl dd.pd_pay
 		{
-		width: 17%;
+		width: 17%
 	}
 	.auction_buy .list_head dl dd.pd_view, .auction_buy .list_body dl dd.pd_view
 		{
-		width: 12%;
+		width: 12%
 	}
 	.auction_buy .list_body li:nth-child(even) {
-		background: #f5f5f5;
+		background: #f5f5f5
 	}
 }
 
 .auction_bid .list_head dl dd.date, .auction_bid .list_body dl dd.date {
-	width: 10%;
+	width: 10%
 }
 
 .auction_bid .list_head dl dd.num, .auction_bid .list_body dl dd.num {
-	width: 8%;
+	width: 8%
 }
 
 .auction_bid .list_head dl dd.pd_ea, .auction_bid .list_body dl dd.pd_ea
 	{
 	width: 12%;
-	text-align: center;
+	text-align: center
 }
 
 .auction_bid .list_head dl dd.pd_sex, .auction_bid .list_body dl dd.pd_sex
 	{
-	width: 10%;
+	width: 10%
 }
 
 .auction_bid .list_head dl dd.pd_kg, .auction_bid .list_body dl dd.pd_kg
 	{
-	width: 12%;
+	width: 12%
 }
 
 .auction_bid .list_head dl dd.pd_pay1, .auction_bid .list_body dl dd.pd_pay1
 	{
-	width: 12%;
+	width: 12%
 }
 
 .auction_bid .list_head dl dd.pd_pay2, .auction_bid .list_body dl dd.pd_pay2
 	{
-	width: 12%;
+	width: 12%
 }
 
 .auction_bid .list_head dl dd.pd_pay3, .auction_bid .list_body dl dd.pd_pay3
 	{
-	width: 12%;
+	width: 12%
 }
 
 .auction_bid .list_head dl dd.pd_state, .auction_bid .list_body dl dd.pd_state
 	{
-	width: 12%;
+	width: 12%
 }
 
 @media only all and (max-width: 1024px) {
 	.auction_bid .list_head dl dd.date, .auction_bid .list_body dl dd.date {
-		display: none;
+		display: none
 	}
 	.auction_bid .list_head dl dd.num, .auction_bid .list_body dl dd.num {
-		width: 10%;
+		width: 10%
 	}
 	.auction_bid .list_head dl dd.pd_ea, .auction_bid .list_body dl dd.pd_ea
 		{
-		width: 23%;
-		text-align: center;
+		width: 29%;
+		text-align: center
 	}
 	.auction_bid .list_head dl dd.pd_sex, .auction_bid .list_body dl dd.pd_sex
 		{
 		width: 10%;
 		text-overflow: ellipsis;
 		overflow: hidden;
-		white-space: nowrap;
+		white-space: nowrap
 	}
 	.auction_bid .list_head dl dd.pd_kg, .auction_bid .list_body dl dd.pd_kg
 		{
-		display: none;
+		display: none
 	}
 	.auction_bid .list_head dl dd.pd_pay1, .auction_bid .list_body dl dd.pd_pay1
 		{
-		width: 19%;
+		width: 17%
 	}
 	.auction_bid .list_head dl dd.pd_pay2, .auction_bid .list_body dl dd.pd_pay2
 		{
-		width: 19%;
+		width: 17%
 	}
 	.auction_bid .list_head dl dd.pd_pay3, .auction_bid .list_body dl dd.pd_pay3
 		{
-		width: 19%;
+		width: 17%
 	}
 	.auction_bid .list_head dl dd.pd_state, .auction_bid .list_body dl dd.pd_state
 		{
-		display: none;
+		display: none
 	}
-/* 	.auction_bid  .list_body li:nth-child(even) { */
-/* 		background: #f5f5f5; */
-/* 	} */
+	.auction_bid .list_body li:nth-child(even) {
+		background: #f5f5f5
+	}
 	.auction_bid .list_body li dd.pd_ea {
-		color: #007eff !important;
+		color: #007eff !important
 	}
 }
 
-/* .auction_bid .list_body.pop_style li:nth-child(even) { */
-/* 	background: #f5f5f5; */
-/* } */
+.auction_bid .list_body.pop_style li:nth-child(even) {
+	background: #f5f5f5
+}
 
 .auction_bid .list_body.pop_style li dd.pd_ea {
-	color: #007eff !important;
+	color: #007eff !important
 }
 
 .auction_see .list_head dl dd.date, .auction_see .list_body dl dd.date {
-	width: 10%;
+	width: 10%
 }
 
 .auction_see .list_head dl dd.num, .auction_see .list_body dl dd.num {
-	width: 10%;
+	width: 10%
 }
 
 .auction_see .list_head dl dd.name, .auction_see .list_body dl dd.name {
-	width: 6%;
+	width: 6%
 }
 
 .auction_see .list_head dl dd.pd_ea, .auction_see .list_body dl dd.pd_ea
 	{
 	width: 12.5%;
-	text-align: center;
+	text-align: center
 }
 
 .auction_see .list_head dl dd.pd_sex, .auction_see .list_body dl dd.pd_sex
 	{
-	width: 5%;
+	width: 5%
 }
 
 .auction_see .list_head dl dd.pd_kg, .auction_see .list_body dl dd.pd_kg
 	{
-	width: 7%;
+	width: 7%
 }
 
 .auction_see .list_head dl dd.pd_kpn, .auction_see .list_body dl dd.pd_kpn
 	{
-	width: 7%;
+	width: 7%
 }
 
 .auction_see .list_head dl dd.pd_num1, .auction_see .list_body dl dd.pd_num1
 	{
-	width: 4%;
+	width: 4%
 }
 
 .auction_see .list_head dl dd.pd_pay1, .auction_see .list_body dl dd.pd_pay1
 	{
-	width: 8%;
+	width: 8%
 }
 
 .auction_see .list_head dl dd.pd_pay2, .auction_see .list_body dl dd.pd_pay2
 	{
-	width: 8%;
+	width: 8%
 }
 
 .auction_see .list_head dl dd.pd_state, .auction_see .list_body dl dd.pd_state
 	{
-	width: 9%;
+	width: 9%
 }
 
 .auction_see .list_head dl dd.pd_etc, .auction_see .list_body dl dd.pd_etc
 	{
-	width: 13.5%;
+	width: 13.5%
 }
 
 @media only all and (max-width: 1024px) {
 	.auction_see .list_head dl dd.date, .auction_see .list_body dl dd.date {
-		display: none;
+		display: none
 	}
 	.auction_see .list_head dl dd.num, .auction_see .list_body dl dd.num {
-		width: 9%;
+		width: 9%
 	}
 	.auction_see .list_head dl dd.name, .auction_see .list_body dl dd.name {
-		width: 15%;
+		width: 15%
 	}
 	.auction_see .list_head dl dd.pd_ea, .auction_see .list_body dl dd.pd_ea
 		{
-		display: none;
+		display: none
 	}
 	.auction_see .list_head dl dd.pd_sex, .auction_see .list_body dl dd.pd_sex
 		{
-		width: 16%;
+		width: 16%
 	}
 	.auction_see .list_head dl dd.pd_kg, .auction_see .list_body dl dd.pd_kg
 		{
-		width: 20%;
+		width: 20%
 	}
 	.auction_see .list_head dl dd.pd_kpn, .auction_see .list_body dl dd.pd_kpn
 		{
-		display: none;
+		display: none
 	}
 	.auction_see .list_head dl dd.pd_num1, .auction_see .list_body dl dd.pd_num1
 		{
-		display: none;
+		display: none
 	}
 	.auction_see .list_head dl dd.pd_pay1, .auction_see .list_body dl dd.pd_pay1
 		{
-		width: 20%;
+		width: 20%
 	}
 	.auction_see .list_head dl dd.pd_pay2, .auction_see .list_body dl dd.pd_pay2
 		{
-		width: 20%;
+		width: 20%
 	}
 	.auction_see .list_head dl dd.pd_state, .auction_see .list_body dl dd.pd_state
 		{
-		display: none;
+		display: none
 	}
 	.auction_see .list_head dl dd.pd_etc, .auction_see .list_body dl dd.pd_etc
 		{
-		display: none;
+		display: none
 	}
 	.auction_see .list_body li:nth-child(even) {
-		background: #f5f5f5;
+		background: #f5f5f5
 	}
 }
 
 @media only all and (min-width: 1025px) {
 	.auction_see .list_body li:hover {
-		background: #e6efff;
+		background: #e6efff
 	}
 	.auction_see .list_body li:hover dd {
-		color: #007eff;
+		color: #007eff
 	}
 }
 
 .auction_see .list_body li.act {
-	background: #e6efff;
+	background: #e6efff
 }
 
 .auction_see .list_body li.act dd {
-	color: #007eff;
+	color: #007eff
 }
 
 @media only all and (max-width: 1024px) {
 	.auction_see .list_body li.act {
-		background: #007eff;
+		background: #007eff
 	}
 	.auction_see .list_body li.act dd {
-		color: #ffffff;
+		color: #fff
 	}
 }
 
 .auction_see .list_body.pop_style li:nth-child(even) {
-	background: #f5f5f5;
+	background: #f5f5f5
 }
 
 .auction_see .list_body.pop_style li dd.pd_ea {
-	color: #007eff !important;
+	color: #007eff !important
 }
 
 .tab_list {
-	margin-bottom: 27px;
+	margin-bottom: 27px
 }
 
 .tab_list ul li {
 	float: left;
-	width: 50%;
-}
-
-.tab_list ul li {
-	float: left;
-	width: 50%;
-}
-
-.tab_list ul.tab_2 li {
-	width: 50% !important;
-}
-
-.tab_list ul.tab_3 li {
-	width: 33.33% !important;
+	width: 50%
 }
 
 .tab_list ul li a {
@@ -4290,25 +4206,26 @@ Base styles: contents layer
 	font-size: 18px;
 	letter-spacing: -0.45px;
 	color: #999;
-	border-bottom: 2px solid #dbdbdb;
+	border-bottom: 2px solid #dbdbdb
 }
 
 .tab_list ul li a.act {
-	font-family: "Noto Sans KR", "Roboto", "AppleGothic", "sans-serif";
+	font-family: 'NanumSquare', 'Roboto', 'AppleGothic', 'sans-serif';
 	font-weight: 700;
 	font-size: 18px;
 	color: #007eff;
-	border-bottom: 2px solid #007eff;
+	border-bottom: 2px solid #007eff
 }
 
 .auction_seeBox {
 	margin-bottom: 50px;
-	box-shadow: 0px 5px 10px 3px rgba(0, 0, 0, 0.05);
+	-webkit-box-shadow: 0px 5px 10px 3px rgba(0, 0, 0, 0.05);
+	box-shadow: 0px 5px 10px 3px rgba(0, 0, 0, 0.05)
 }
 
 @media only all and (max-width: 1024px) {
 	.auction_seeBox {
-		margin-bottom: 0;
+		margin-bottom: 0
 	}
 }
 
@@ -4320,7 +4237,7 @@ Base styles: contents layer
 
 @media only all and (max-width: 640px) {
 	.auction_seeBox.calculator_type {
-		margin-top: -10px;
+		margin-top: -10px
 	}
 }
 
@@ -4328,12 +4245,12 @@ Base styles: contents layer
 	margin-bottom: 0 !important;
 	padding-bottom: 0 !important;
 	border-radius: 0;
-	position: relative;
+	position: relative
 }
 
 .auction_seeBox.calculator_type .seeBox_bottom .seeBox_slick {
 	padding: 30px 0 0 0;
-	background: #e6efff;
+	background: #e6efff
 }
 
 .auction_seeBox.calculator_type .seeBox_bottom .seeBox_slick .count-layer
@@ -4344,104 +4261,93 @@ Base styles: contents layer
 	top: 0;
 	bottom: 0;
 	background: rgba(0, 0, 0, 0.5);
-	z-index: 5;
+	z-index: 5
 }
 
 .auction_seeBox.calculator_type .seeBox_bottom .seeBox_slick .count-layer p
 	{
 	color: #81c4ff;
 	font-size: 240px;
-	font-family: "Noto Sans KR", "Roboto", "AppleGothic", "sans-serif";
+	font-family: 'NanumSquare', 'Roboto', 'AppleGothic', 'sans-serif';
 	font-weight: 700;
 	text-align: center;
 	position: relative;
 	top: 50%;
-	margin-top: -150px;
+	margin-top: -150px
 }
 
 @media only all and (max-width: 640px) {
 	.auction_seeBox.calculator_type .seeBox_bottom .seeBox_slick .count-layer p
 		{
 		font-size: 150px;
-		margin-top: -95px;
+		margin-top: -95px
 	}
 }
 
 @media only all and (min-width: 1023px) {
 	.auction_seeBox.calculator_type .seeBox_bottom .seeBox_slick {
 		padding: 0 0 0;
-		border-radius: 4px;
+		border-radius: 4px
 	}
 	.auction_seeBox.calculator_type .seeBox_bottom .seeBox_slick .seeBox_slick_inner
 		{
-		padding: 0 4px 4px;
+		padding: 0 4px 4px
 	}
 	.auction_seeBox.calculator_type .seeBox_bottom .seeBox_slick .slick-dots
 		{
-		bottom: 5px;
+		bottom: 5px
 	}
 }
 
 @media only all and (max-width: 640px) {
 	.auction_seeBox.calculator_type .seeBox_bottom .seeBox_slick {
 		padding: 0 0 0 0;
-		background: #1a1a1a;
+		background: #1a1a1a
 	}
 }
 
 .auction_seeBox.calculator_type .slider .slick-arrow.slick-prev {
-	left: 10px;
+	left: 10px
 }
 
 .auction_seeBox.calculator_type .slider .slick-arrow.slick-next {
-	right: 10px;
+	right: 10px
 }
 
 @media only all and (min-width: 1023px) {
 	.auction_seeBox.calculator_type {
 		width: 520px;
-		float: left;
+		float: left
 	}
 	.auction_seeBox.calculator_type .seeBox_bottom {
 		background: #fff;
-		padding: 30px 30px 30px !important;
+		padding: 30px 30px 30px !important
 	}
 }
 
 .auction_seeBox .seeBox_top dl {
 	position: relative;
 	background: #007eff;
-	color: #ffffff;
+	color: #fff;
 	border-radius: 10px 10px 0 0;
-	padding: 13px 0px 15px 118px;
-	height: 60px;
-	width: 1000px;
-	/*   padding: 33px 420px 33px 0px; */
-	padding-right: 420px;
+	padding: 33px 420px 33px 0px;
+	padding-right: 420px
 }
 
 .auction_seeBox .seeBox_top dl dt {
 	text-align: center;
 	width: 520px;
-	font-family: "Noto Sans KR", "Roboto", "AppleGothic", "sans-serif";
-	/*   font-weight: 700; */
-	/*    font-size: 28px;  */
-	/*    line-height: 1.36;  */
-	/*    letter-spacing: -0.7px;  */
-	margin: 0 20px 0 0;
-	font-size: 26px;
-	font-weight: bold;
-	font-stretch: normal;
-	font-style: normal;
-	line-height: 1.46;
-	letter-spacing: -0.65px;
+	font-family: 'NanumSquare', 'Roboto', 'AppleGothic', 'sans-serif';
+	font-weight: 700;
+	font-size: 28px;
+	line-height: 1.36;
+	letter-spacing: -0.7px
 }
 
 .auction_seeBox .seeBox_top dl dd {
 	position: absolute;
 	right: 80px;
-	/*   top: 42px; */
-	top: 22px;
+	top: 42px
 }
 
 .auction_seeBox .seeBox_top dl dd ul li {
@@ -4449,27 +4355,27 @@ Base styles: contents layer
 	position: relative;
 	margin-left: 20px;
 	padding-left: 20px;
-	font-family: "Noto Sans KR", "Roboto", "AppleGothic", "sans-serif";
+	font-family: 'NanumSquare', 'Roboto', 'AppleGothic', 'sans-serif';
 	font-weight: 700;
 	font-size: 20px;
 	letter-spacing: -0.5px;
-	line-height: 20px;
+	line-height: 20px
 }
 
 .auction_seeBox .seeBox_top dl dd ul li:first-child:before {
-	content: none !important;
+	content: none !important
 }
 
 .auction_seeBox .seeBox_top dl dd ul li:before {
-	content: "";
+	content: '';
 	width: 1px;
 	height: 18px;
 	display: block;
-	background: #ffffff;
+	background: #fff;
 	position: absolute;
 	left: 0;
 	top: 50%;
-	margin-top: -9px;
+	margin-top: -9px
 }
 
 .auction_seeBox .seeBox_top dl dd ul li a {
@@ -4477,16 +4383,16 @@ Base styles: contents layer
 	height: 20px;
 	display: block;
 	text-indent: -99999px;
-	background: url(/static/images/guide/sound_on.svg) no-repeat center center;
+	background: url(../image/sound_on.svg) no-repeat center center;
 	background-size: 20px 20px !important;
-	position: relative;
+	position: relative
 }
 
 .auction_seeBox .seeBox_top dl dd ul li a.off:after {
-	content: "";
+	content: '';
 	width: 2px;
 	height: 28px;
-	background: #ffffff;
+	background: #fff;
 	display: block;
 	position: absolute;
 	left: 9px;
@@ -4497,45 +4403,45 @@ Base styles: contents layer
 
 @media only all and (max-width: 1024px) {
 	.auction_seeBox .seeBox_top {
-		display: none;
+		display: none
 	}
 }
 
 .auction_seeBox .seeBox_bottom {
 	background: #e6efff;
 	border-radius: 0 0 10px 10px;
-	overflow: hidden;
+	overflow: hidden
 }
 
 .auction_seeBox .seeBox_bottom .seeBox_slick {
-	background: #ffffff;
+	background: #fff;
 	width: 520px;
 	padding: 30px 30px 30px;
-	float: left;
+	float: left
 }
 
 .auction_seeBox .seeBox_bottom .seeBox_slick:only-child {
-	width: 100%;
+	width: 100%
 }
 
 .auction_seeBox .seeBox_bottom .seeBox_slick:only-child .seeBox_slick_inner
 	{
-	padding: 4px 50px 34px;
+	padding: 4px 50px 34px
 }
 
 @media only all and (min-width: 1023px) {
 	.auction_seeBox .seeBox_bottom .seeBox_slick:only-child .seeBox_slick_inner
 		{
-		padding: 4px 4px 25px;
+		padding: 4px 4px 25px
 	}
 }
 
 .auction_seeBox .seeBox_bottom .seeBox_slick li.video_item {
-	position: relative;
+	position: relative
 }
 
 .auction_seeBox .seeBox_bottom .seeBox_slick li.video_item img {
-	width: 100%;
+	width: 100%
 }
 
 .auction_seeBox .seeBox_bottom .seeBox_slick li.video_item video {
@@ -4543,7 +4449,7 @@ Base styles: contents layer
 	left: 0;
 	right: 0;
 	top: 0;
-	bottom: 0;
+	bottom: 0
 }
 
 .auction_seeBox .seeBox_bottom .seeBox_slick li.video_item .video_ready
@@ -4564,60 +4470,60 @@ Base styles: contents layer
 	-ms-flex-pack: center;
 	justify-content: center;
 	text-align: center;
-	color: #fff;
+	color: #fff
 }
 
 .auction_seeBox .seeBox_bottom .seeBox_slick li.video_item .video_ready p
 	{
 	font-size: 30px;
-	font-family: "Noto Sans KR", "Roboto", "AppleGothic", "sans-serif";
+	font-family: 'NanumSquare', 'Roboto', 'AppleGothic', 'sans-serif';
 	font-weight: 700;
-	color: #ffffff;
-	text-align: center;
+	color: #fff;
+	text-align: center
 }
 
 .auction_seeBox .seeBox_bottom .seeBox_slick li.video_item .video_ready p span
 	{
-	color: #76baff;
+	color: #76baff
 }
 
 @media only all and (max-width: 1024px) {
 	.auction_seeBox .seeBox_bottom .seeBox_slick {
 		width: 100%;
-		padding: 0 0 10px;
+		padding: 0 0 10px
 	}
 }
 
 .auction_seeBox .seeBox_bottom .seeBox_slick .seeBox_slick_inner {
 	background: #e6efff;
 	padding: 4px 4px 34px;
-	border-radius: 4px;
+	border-radius: 4px
 }
 
 .auction_seeBox .seeBox_bottom .seeBox_slick .seeBox_slick_inner .seeBox-cell
 	{
 	margin-left: -4px;
-	margin-bottom: 4px;
+	margin-bottom: 4px
 }
 
 .auction_seeBox .seeBox_bottom .seeBox_slick .seeBox_slick_inner .seeBox-cell li
 	{
 	float: left;
 	width: 25%;
-	padding-left: 4px;
+	padding-left: 4px
 }
 
 .auction_seeBox .seeBox_bottom .seeBox_slick .seeBox_slick_inner .seeBox-cell li dl
 	{
-	background: #ffffff;
+	background: #fff;
 	padding: 2px 2px;
 	height: 98px;
-	border-radius: 4px;
+	border-radius: 4px
 }
 
 .auction_seeBox .seeBox_bottom .seeBox_slick .seeBox_slick_inner .seeBox-cell li dl dt
 	{
-	font-family: "Noto Sans KR", "Roboto", "AppleGothic", "sans-serif";
+	font-family: 'NanumSquare', 'Roboto', 'AppleGothic', 'sans-serif';
 	font-weight: 700;
 	font-size: 18px;
 	letter-spacing: -0.45px;
@@ -4626,12 +4532,12 @@ Base styles: contents layer
 	margin-top: 18px;
 	overflow: hidden;
 	text-overflow: ellipsis;
-	white-space: nowrap;
+	white-space: nowrap
 }
 
 .auction_seeBox .seeBox_bottom .seeBox_slick .seeBox_slick_inner .seeBox-cell li dl dd
 	{
-	font-family: "Noto Sans KR", "Roboto", "AppleGothic", "sans-serif";
+	font-family: 'NanumSquare', 'Roboto', 'AppleGothic', 'sans-serif';
 	font-weight: 800;
 	font-size: 24px;
 	letter-spacing: -0.6px;
@@ -4641,113 +4547,113 @@ Base styles: contents layer
 	margin-top: 5px;
 	overflow: hidden;
 	text-overflow: ellipsis;
-	white-space: nowrap;
+	white-space: nowrap
 }
 
 .auction_seeBox .seeBox_bottom .seeBox_slick .seeBox_slick_inner .seeBox-cell li.cell_3
 	{
-	width: 75% !important;
+	width: 75% !important
 }
 
 @media only all and (max-width: 1000px) {
 	.auction_seeBox .seeBox_bottom .seeBox_slick .seeBox_slick_inner {
-		padding: 4px 50px 34px;
+		padding: 4px 50px 34px
 	}
 }
 
 @media only all and (max-width: 640px) {
 	.auction_seeBox .seeBox_bottom .seeBox_slick .seeBox_slick_inner {
-		display: none;
+		display: none
 	}
 }
 
 .auction_seeBox .seeBox_bottom .seeBox_slick .mo_seeBox {
 	display: none;
 	background: #1a1a1a;
-	padding: 15px 30px 30px;
+	padding: 25px 30px 45px
 }
 
 @media only all and (max-width: 640px) {
 	.auction_seeBox .seeBox_bottom .seeBox_slick .mo_seeBox {
-		display: block;
+		display: block
 	}
 }
 
-@media only screen and (min-device-width: 360px) and
-	(max-device-height:740px) and (orientation: portrait) {
+@media only screen and (min-device-width: 360px) and (max-device-height:
+	740px) and (orientation: portrait) {
 	.auction_seeBox .seeBox_bottom .seeBox_slick .mo_seeBox {
-		padding: 5px 30px 20px;
+		padding: 10px 30px 20px
 	}
 }
 
 .auction_seeBox .seeBox_bottom .seeBox_slick .mo_seeBox ul li {
 	width: 50%;
-	float: left;
+	float: left
 }
 
 .auction_seeBox .seeBox_bottom .seeBox_slick .mo_seeBox ul li dl {
-	padding: 3px 0;
+	padding: 3px 0
 }
 
 .auction_seeBox .seeBox_bottom .seeBox_slick .mo_seeBox ul li dl dt {
 	color: #7dbdff;
-	font-family: "Noto Sans KR", "Roboto", "AppleGothic", "sans-serif";
+	font-family: 'NanumSquare', 'Roboto', 'AppleGothic', 'sans-serif';
 	font-weight: 700;
 	font-size: 23px;
 	display: inline-block;
 	margin-right: 10px;
 	vertical-align: top;
-	padding: 2px 0;
+	padding: 2px 0
 }
 
 .auction_seeBox .seeBox_bottom .seeBox_slick .mo_seeBox ul li dl dd {
-	color: #ffffff;
-	font-family: "Noto Sans KR", "Roboto", "AppleGothic", "sans-serif";
+	color: #fff;
+	font-family: 'NanumSquare', 'Roboto', 'AppleGothic', 'sans-serif';
 	font-weight: 700;
 	font-size: 23px;
 	display: inline-block;
 	vertical-align: top;
-	padding: 2px 0;
+	padding: 2px 0
 }
 
 .auction_seeBox .seeBox_bottom .seeBox_slick .mo_seeBox ul li.harf-list dd
 	{
 	width: calc(100% - 80px);
 	white-space: nowrap;
-	overflow: hidden;
+	overflow: hidden
 }
 
 .auction_seeBox .seeBox_bottom .seeBox_slick .mo_seeBox ul li.full-li {
-	width: 100%;
+	width: 100%
 }
 
 .auction_seeBox .seeBox_bottom .seeBox_slick .mo_seeBox ul li.full-li dd
 	{
 	width: calc(100% - 80px);
 	white-space: nowrap;
-	overflow: hidden;
+	overflow: hidden
 }
 
 .auction_seeBox .seeBox_bottom .seeBox_gp {
 	float: left;
 	width: calc(100% - 520px);
 	text-align: center;
-	padding-top: 30px;
+	padding-top: 30px
 }
 
 @media only all and (max-width: 1024px) {
 	.auction_seeBox .seeBox_bottom .seeBox_gp {
-		display: none;
+		display: none
 	}
 }
 
 .auction_seeBox .seeBox_bottom .seeBox_gp .chart {
-	position: relative;
+	position: relative
 }
 
 .auction_seeBox .seeBox_bottom .seeBox_gp .chart:before {
-	content: "";
-	background: #ffffff;
+	content: '';
+	background: #fff;
 	width: 310px;
 	height: 310px;
 	position: absolute;
@@ -4756,12 +4662,12 @@ Base styles: contents layer
 	margin-left: -155px;
 	margin-top: -160px;
 	border-radius: 50%;
-	z-index: 1;
+	z-index: 1
 }
 
 .auction_seeBox .seeBox_bottom .seeBox_gp .chart canvas {
 	position: relative;
-	z-index: 5;
+	z-index: 5
 }
 
 .auction_seeBox .seeBox_bottom .seeBox_gp dl {
@@ -4769,7 +4675,7 @@ Base styles: contents layer
 	z-index: 6;
 	left: 0;
 	right: 0;
-	top: 90px;
+	top: 90px
 }
 
 .auction_seeBox .seeBox_bottom .seeBox_gp dl dt {
@@ -4778,7 +4684,7 @@ Base styles: contents layer
 	font-weight: bold;
 	line-height: 1;
 	color: #007eff;
-	margin-bottom: 30px;
+	margin-bottom: 30px
 }
 
 .auction_seeBox .seeBox_bottom .seeBox_gp dl dd {
@@ -4788,7 +4694,7 @@ Base styles: contents layer
 	padding-left: 34px;
 	margin-top: 12px;
 	font-size: 18px;
-	font-family: "Noto Sans KR", "Roboto", "AppleGothic", "sans-serif";
+	font-family: 'NanumSquare', 'Roboto', 'AppleGothic', 'sans-serif';
 	font-weight: 700;
 	letter-spacing: -0.45px;
 	color: #1a1a1a;
@@ -4796,34 +4702,34 @@ Base styles: contents layer
 	line-height: 25px;
 	overflow: hidden;
 	text-overflow: ellipsis;
-	white-space: nowrap;
+	white-space: nowrap
 }
 
 .auction_seeBox .seeBox_bottom .seeBox_gp dl dd:before {
-	content: "";
+	content: '';
 	width: 25px;
 	height: 25px;
 	display: block;
 	position: absolute;
 	left: 0;
 	top: 0;
-	background: #dbdbdb;
+	background: #dbdbdb
 }
 
 .auction_seeBox .seeBox_bottom .seeBox_gp dl dd.gp_tit2:before {
-	background: #007eff !important;
+	background: #007eff !important
 }
 
 .auction_seeBox .slider .slick-arrow.slick-prev {
-	left: 5px;
+	left: 5px
 }
 
 .auction_seeBox .slider .slick-arrow.slick-next {
-	right: 5px;
+	right: 5px
 }
 
 .slider {
-	position: relative;
+	position: relative
 }
 
 .slider .slick-arrow {
@@ -4833,19 +4739,19 @@ Base styles: contents layer
 	height: 36px;
 	text-indent: -9999px;
 	margin-top: -18px;
-	z-index: 5;
+	z-index: 5
 }
 
 .slider .slick-arrow.slick-prev {
 	left: 0;
-	background: url(/static/images/guide/slider_prev.svg) no-repeat center center;
-	background-size: 22px 36px !important;
+	background: url(../image/slider_prev.svg) no-repeat center center;
+	background-size: 22px 36px !important
 }
 
 .slider .slick-arrow.slick-next {
 	right: 0;
-	background: url(/static/images/guide/slider_next.svg) no-repeat center center;
-	background-size: 22px 36px !important;
+	background: url(../image/slider_next.svg) no-repeat center center;
+	background-size: 22px 36px !important
 }
 
 .slider .slick-dots {
@@ -4853,12 +4759,12 @@ Base styles: contents layer
 	left: 0;
 	right: 0;
 	bottom: 10px;
-	text-align: center;
+	text-align: center
 }
 
 .slider .slick-dots li {
 	display: inline-block;
-	margin: 0 3px;
+	margin: 0 3px
 }
 
 .slider .slick-dots li button {
@@ -4867,93 +4773,89 @@ Base styles: contents layer
 	text-indent: -99999px;
 	display: block;
 	background: #dbdbdb;
-	border-radius: 50%;
+	border-radius: 50%
 }
 
 .slider .slick-dots li.slick-active button {
-	background: #007eff !important;
+	background: #007eff !important
 }
 
 @media only all and (max-width: 1000px) {
 	.slider .slick-arrow.slick-prev {
 		left: 15px !important;
-		background: url(/static/images/guide/slider_prev.svg) no-repeat center
-			center;
+		background: url(../image/slider_prev.svg) no-repeat center center
 	}
 	.slider .slick-arrow.slick-next {
 		right: 15px !important;
-		background: url(/static/images/guide/slider_next.svg) no-repeat center
-			center;
+		background: url(../image/slider_next.svg) no-repeat center center
 	}
 }
 
 @media only all and (max-width: 640px) {
 	.slider .slick-arrow.slick-prev {
 		left: 3px !important;
-		background: url(/static/images/guide/slider_prev2.svg) no-repeat center
-			center;
+		background: url(../image/slider_prev2.svg) no-repeat center center
 	}
 	.slider .slick-arrow.slick-next {
 		right: 3px !important;
-		background: url(/static/images/guide/slider_next2.svg) no-repeat center
-			center;
+		background: url(../image/slider_next2.svg) no-repeat center center
 	}
 	.slider .slick-dots {
-		bottom: 10px !important;
+		bottom: 20px !important
 	}
 }
 
-@media only screen and (min-device-width: 360px) and
-	(max-device-height:740px) and (orientation: portrait) {
+@media only screen and (min-device-width: 360px) and (max-device-height:
+	740px) and (orientation: portrait) {
 	.slider .slick-dots {
-		bottom: 5px !important;
+		bottom: 5px !important
 	}
 }
 
 .auction_calculator {
 	padding: 10px 10px 26px;
-	background: #e6efff;
+	background: #e6efff
 }
 
-@media only screen and (min-device-width: 360px) and
-	(max-device-height:740px) and (orientation: portrait) {
+@media only screen and (min-device-width: 360px) and (max-device-height:
+	740px) and (orientation: portrait) {
 	.auction_calculator {
-		padding: 7px 10px 15px;
+		padding: 7px 10px 15px
 	}
 }
 
 @media only all and (min-width: 1023px) {
 	.auction_calculator {
-		padding: 28px 30px 26px;
+		padding: 28px 30px 26px
 	}
 }
 
 .auction_calculator .calculator_top p {
-	font-family: "Noto Sans KR", "Roboto", "AppleGothic", "sans-serif";
+	font-family: 'NanumSquare', 'Roboto', 'AppleGothic', 'sans-serif';
 	font-weight: 700;
 	font-size: 24px;
 	line-height: 37px;
 	text-align: center;
 	color: #1a1a1a;
 	margin-bottom: 10px;
-	background: url(/static/images/guide/ico_ing.svg) no-repeat right center;
+	background: url(../image/ico_ing.svg) no-repeat right center;
 	background-size: 37px 37px;
-	padding: 0 40px;
+	padding: 0 40px
 }
 
 .auction_calculator .calculator_top p span {
-	color: #007eff;
+	color: #007eff
 }
 
-@media only screen and (min-device-width: 360px) and
-	(max-device-height:740px) and (orientation: portrait) {
+@media only screen and (min-device-width: 360px) and (max-device-height:
+	740px) and (orientation: portrait) {
 	.auction_calculator .calculator_top p {
-		margin-bottom: 7px;
+		margin-bottom: 7px
 	}
 }
 
 .auction_calculator .calculator_top .auc-txt {
-	font-family: "Noto Sans KR", "Roboto", "AppleGothic", "sans-serif";
+	font-family: 'NanumSquare', 'Roboto', 'AppleGothic', 'sans-serif';
 	font-weight: 700;
 	font-size: 24px;
 	line-height: 37px;
@@ -4961,20 +4863,20 @@ Base styles: contents layer
 	color: #1a1a1a;
 	margin-bottom: 10px;
 	padding: 0 40px;
-	position: relative;
+	position: relative
 }
 
 .auction_calculator .calculator_top .auc-txt span {
-	color: #007eff;
+	color: #007eff
 }
 
 .auction_calculator .calculator_top .auc-txt span.txt-red {
-	color: #f22800;
+	color: #f22800
 }
 
 .auction_calculator .calculator_top .auc-txt .dot-count {
 	display: inline-block;
-	margin-left: 0;
+	margin-left: 0
 }
 
 .auction_calculator .calculator_top .auc-txt .dot-count li {
@@ -4987,24 +4889,27 @@ Base styles: contents layer
 	vertical-align: baseline;
 	margin-top: -1px;
 	background: #cccccc;
-	margin-left: 0;
+	margin-left: 0
 }
 
-.auction_calculator .calculator_top .auc-txt .dot-count li.dot-red {
-	background: #f22800;
+.auction_calculator .calculator_top .auc-txt .dot-count li:nth-child(1)
+	{
+	-webkit-animation: dotcount 1s 1.3s ease-in-out infinite alternate;
+	animation: dotcount 1s 1.3s ease-in-out infinite alternate
 }
-/* .auction_calculator .calculator_top .auc-txt .dot-count li:nth-child(1) { */
-/*   -webkit-animation: dotcount 1s 1.3s ease-in-out infinite alternate; */
-/*           animation: dotcount 1s 1.3s ease-in-out infinite alternate; */
-/* } */
-/* .auction_calculator .calculator_top .auc-txt .dot-count li:nth-child(2) { */
-/*   -webkit-animation: dotcount 1s 1.5s ease-in-out infinite alternate; */
-/*           animation: dotcount 1s 1.5s ease-in-out infinite alternate; */
-/* } */
-/* .auction_calculator .calculator_top .auc-txt .dot-count li:nth-child(3) { */
-/*   -webkit-animation: dotcount 1s 1.7s ease-in-out infinite alternate; */
-/*           animation: dotcount 1s 1.7s ease-in-out infinite alternate; */
-/* } */
+
+.auction_calculator .calculator_top .auc-txt .dot-count li:nth-child(2)
+	{
+	-webkit-animation: dotcount 1s 1.5s ease-in-out infinite alternate;
+	animation: dotcount 1s 1.5s ease-in-out infinite alternate
+}
+
+.auction_calculator .calculator_top .auc-txt .dot-count li:nth-child(3)
+	{
+	-webkit-animation: dotcount 1s 1.7s ease-in-out infinite alternate;
+	animation: dotcount 1s 1.7s ease-in-out infinite alternate
+}
+
 .auction_calculator .calculator_top .auc-txt a.pop-btn {
 	width: 37px;
 	height: 37px;
@@ -5014,26 +4919,26 @@ Base styles: contents layer
 	right: 0;
 	top: 0;
 	text-indent: -9999px;
-	background: url(/static/images/guide/ico_ing.svg) no-repeat right center;
-	background-size: 37px 37px;
+	background: url(../image/ico_ing.svg) no-repeat right center;
+	background-size: 37px 37px
 }
 
-@media only screen and (min-device-width: 360px) and
-	(max-device-height:740px) and (orientation: portrait) {
+@media only screen and (min-device-width: 360px) and (max-device-height:
+	740px) and (orientation: portrait) {
 	.auction_calculator .calculator_top .auc-txt {
-		margin-bottom: 7px;
+		margin-bottom: 7px
 	}
 }
 
 @media only all and (min-width: 1023px) {
 	.auction_calculator .calculator_top .auc-txt {
-		display: none;
+		display: none
 	}
 }
 
 .auction_calculator .calculator_top .heart-eft {
 	-webkit-animation: heart-eft 0.8s ease-in-out infinite alternate;
-	animation: heart-eft 0.8s ease-in-out infinite alternate;
+	animation: heart-eft 0.8s ease-in-out infinite alternate
 }
 
 .auction_calculator .calculator_top dl {
@@ -5041,13 +4946,13 @@ Base styles: contents layer
 	border-radius: 10px;
 	overflow: hidden;
 	border: 2px solid #76baff;
-	background: #ffffff;
+	background: #fff;
 	padding: 0 20px 0 80px;
-	height: 77px;
+	height: 77px
 }
 
 .auction_calculator .calculator_top dl dt {
-	font-family: "Noto Sans KR", "Roboto", "AppleGothic", "sans-serif";
+	font-family: 'NanumSquare', 'Roboto', 'AppleGothic', 'sans-serif';
 	font-weight: 800;
 	font-size: 25px;
 	line-height: 1.1;
@@ -5055,30 +4960,30 @@ Base styles: contents layer
 	position: absolute;
 	left: 20px;
 	top: 50%;
-	margin-top: -27px;
+	margin-top: -27px
 }
 
 .auction_calculator .calculator_top dl dd {
-	padding: 1.5px 0;
+	padding: 1.5px 0
 }
 
-.auction_calculator .calculator_top dl dd input[type=text] {
+.auction_calculator .calculator_top dl dd input[type="text"] {
 	border: none !important;
-	background: #ffffff;
+	background: #fff;
 	height: 70px;
 	text-align: right;
-	font-family: "Noto Sans KR", "Roboto", "AppleGothic", "sans-serif";
+	font-family: 'NanumSquare', 'Roboto', 'AppleGothic', 'sans-serif';
 	font-weight: 800;
 	font-size: 45px;
-	color: #1a1a1a;
+	color: #1a1a1a
 }
 
-.auction_calculator .calculator_top dl dd input[type=text].txt-blue {
-	color: #007eff;
+.auction_calculator .calculator_top dl dd input[type="text"].txt-blue {
+	color: #007eff
 }
 
 .auction_calculator .calculator_top dl.num-bun {
-	padding: 0 45px 0 80px;
+	padding: 0 45px 0 80px
 }
 
 .auction_calculator .calculator_top dl.num-bun dd span {
@@ -5086,21 +4991,21 @@ Base styles: contents layer
 	right: 20px;
 	bottom: 15px;
 	font-size: 26px;
-	font-family: "Noto Sans KR", "Roboto", "AppleGothic", "sans-serif";
-	font-weight: 800;
+	font-family: 'NanumSquare', 'Roboto', 'AppleGothic', 'sans-serif';
+	font-weight: 800
 }
 
-@media only screen and (min-device-width: 360px) and
-	(max-device-height:740px) and (orientation: portrait) {
+@media only screen and (min-device-width: 360px) and (max-device-height:
+	740px) and (orientation: portrait) {
 	.auction_calculator .calculator_top dl {
-		height: 60px;
+		height: 60px
 	}
 	.auction_calculator .calculator_top dl dt {
 		font-size: 23px;
-		margin-top: -24px;
+		margin-top: -24px
 	}
-	.auction_calculator .calculator_top dl dd input[type=text] {
-		height: 58px;
+	.auction_calculator .calculator_top dl dd input[type="text"] {
+		height: 58px
 	}
 }
 
@@ -5108,48 +5013,48 @@ Base styles: contents layer
 	.auction_calculator .calculator_top dl {
 		border-radius: 4px;
 		padding: 0 20px 0 80px;
-		height: 80px;
+		height: 80px
 	}
 	.auction_calculator .calculator_top dl dt {
 		font-size: 26px;
-		margin-top: -27px;
+		margin-top: -27px
 	}
 	.auction_calculator .calculator_top dl dd {
-		padding: 1.5px 0;
+		padding: 1.5px 0
 	}
-	.auction_calculator .calculator_top dl dd input[type=text] {
+	.auction_calculator .calculator_top dl dd input[type="text"] {
 		height: 74px;
-		font-size: 50px;
+		font-size: 50px
 	}
 }
 
 .auction_calculator .calculator_bottom {
 	margin-top: 10px;
-	position: relative;
+	position: relative
 }
 
-@media only screen and (min-device-width: 360px) and
-	(max-device-height:740px) and (orientation: portrait) {
+@media only screen and (min-device-width: 360px) and (max-device-height:
+	740px) and (orientation: portrait) {
 	.auction_calculator .calculator_bottom {
-		margin-top: 7px;
+		margin-top: 7px
 	}
 }
 
 .auction_calculator .calculator_bottom .calculator-cell {
-	margin-left: -5px;
+	margin-left: -5px
 }
 
 .auction_calculator .calculator_bottom .calculator-cell li {
 	width: 25%;
 	padding-left: 5px;
 	padding-bottom: 5px;
-	float: left;
+	float: left
 }
 
 @media only all and (min-width: 1023px) {
 	.auction_calculator .calculator_bottom .calculator-cell li {
 		padding-left: 4px;
-		padding-bottom: 4px;
+		padding-bottom: 4px
 	}
 }
 
@@ -5159,58 +5064,57 @@ Base styles: contents layer
 	display: block;
 	background: #76baff;
 	border-radius: 5px;
-	font-family: "Noto Sans KR", "Roboto", "AppleGothic", "sans-serif";
+	font-family: 'NanumSquare', 'Roboto', 'AppleGothic', 'sans-serif';
 	font-weight: 700;
 	font-size: 30px;
-	color: #ffffff;
+	color: #fff
 }
 
 .auction_calculator .calculator_bottom .calculator-cell li button.num_summit
 	{
-	background: #007eff;
+	background: #007eff
 }
 
 .auction_calculator .calculator_bottom .calculator-cell li button.num_back
 	{
 	text-indent: -9999px;
-	background: #76baff url(/static/images/guide/btn_back.svg) no-repeat
-		center center;
-	background-size: 40px 40px;
+	background: #76baff url(../image/btn_back.svg) no-repeat center center;
+	background-size: 40px 40px
 }
 
 .auction_calculator .calculator_bottom .calculator-cell li button.num_cancle
 	{
-	background: #f22800;
+	background: #f22800
 }
 
 .auction_calculator .calculator_bottom .calculator-cell li button:active
 	{
-	background: #007eff;
+	background: #007eff
 }
 
 .auction_calculator .calculator_bottom .calculator-cell li button.before_btn
 	{
-	background: #ffaf00;
+	background: #ffaf00
 }
 
-@media only screen and (min-device-width: 360px) and
-	(max-device-height:740px) and (orientation: portrait) {
+@media only screen and (min-device-width: 360px) and (max-device-height:
+	740px) and (orientation: portrait) {
 	.auction_calculator .calculator_bottom .calculator-cell li button {
 		height: 42px;
-		font-size: 26px;
+		font-size: 26px
 	}
 }
 
 @media only all and (min-width: 1023px) {
 	.auction_calculator .calculator_bottom .calculator-cell li button {
 		height: 60px;
-		border-radius: 4px;
+		border-radius: 4px
 	}
 }
 
 .auction_calculator .calculator_bottom .calculator-cell.ty2 li:nth-child(2)
 	{
-	width: 50%;
+	width: 50%
 }
 
 .auction_calculator .calculator_bottom .calculator-cell.btn-summit {
@@ -5219,39 +5123,39 @@ Base styles: contents layer
 	left: 75%;
 	top: 68px;
 	bottom: 0;
-	margin-left: 0;
+	margin-left: 0
 }
 
 .auction_calculator .calculator_bottom .calculator-cell.btn-summit li {
 	width: 100%;
 	float: none;
 	padding-left: 3.75px;
-	height: 100%;
+	height: 100%
 }
 
 .auction_calculator .calculator_bottom .calculator-cell.btn-summit li button
 	{
-	height: 100%;
+	height: 100%
 }
 
-@media only screen and (min-device-width: 360px) and
-	(max-device-height:740px) and (orientation: portrait) {
+@media only screen and (min-device-width: 360px) and (max-device-height:
+	740px) and (orientation: portrait) {
 	.auction_calculator .calculator_bottom .calculator-cell.btn-summit {
-		top: 47px;
+		top: 47px
 	}
 }
 
 @media only all and (min-width: 1023px) {
 	.auction_calculator .calculator_bottom .calculator-cell.btn-summit {
 		top: 64px;
-		left: 74.73%;
+		left: 74.73%
 	}
 }
 
 @media only all and (min-width: 1023px) {
 	.auction_calculator {
 		width: 480px;
-		float: left;
+		float: left
 	}
 }
 
@@ -5280,19 +5184,19 @@ Base styles: contents layer
 
 .splash .ico-splash img {
 	width: 175px;
-	margin-top: 185px;
+	margin-top: 185px
 }
 
 .splash p {
 	font-family: NotoSansCJKKR;
 	font-size: 18px;
-	font-family: "Noto Sans KR", "Roboto", "AppleGothic", "sans-serif";
+	font-family: 'NanumSquare', 'Roboto', 'AppleGothic', 'sans-serif';
 	font-weight: 700;
 	line-height: 1.28;
 	letter-spacing: -0.9px;
 	text-align: center;
 	color: #fff;
-	padding-bottom: 50px;
+	padding-bottom: 50px
 }
 
 .billboard-view {
@@ -5320,7 +5224,7 @@ Base styles: contents layer
 }
 
 .billboard-view table td.bg-blue p {
-	font-family: "Noto Sans KR", "Roboto", "AppleGothic", "sans-serif";
+	font-family: 'NanumSquare', 'Roboto', 'AppleGothic', 'sans-serif';
 	font-weight: 400;
 	letter-spacing: -14.4px
 }
@@ -5334,7 +5238,7 @@ Base styles: contents layer
 .billboard-view table td p {
 	text-align: center;
 	color: #fff;
-	font-family: "Noto Sans KR", "Roboto", "AppleGothic", "sans-serif";
+	font-family: 'NanumSquare', 'Roboto', 'AppleGothic', 'sans-serif';
 	font-weight: 700;
 	letter-spacing: -8px
 }
@@ -5368,7 +5272,7 @@ Base styles: contents layer
 	font-size: 180px;
 	color: #2fff00;
 	letter-spacing: -2.8px;
-	font-family: "Noto Sans KR", "Roboto", "AppleGothic", "sans-serif";
+	font-family: 'NanumSquare', 'Roboto', 'AppleGothic', 'sans-serif';
 	font-weight: 400
 }
 
@@ -5492,7 +5396,7 @@ Base styles: contents layer
 .monitoring-view .table-inner .table-info table td.td-ico .ico {
 	width: 100%;
 	height: 100%;
-	background: url(/static/images/guide/ico-mt.png) no-repeat center center;
+	background: url(../image/ico-mt.png) no-repeat center center;
 	background-size: contain;
 	text-indent: -99999px
 }
@@ -5501,7 +5405,7 @@ Base styles: contents layer
 	background: #0082e5;
 	color: #fff;
 	font-size: 18px;
-	font-family: "Noto Sans KR", "Roboto", "AppleGothic", "sans-serif";
+	font-family: 'NanumSquare', 'Roboto', 'AppleGothic', 'sans-serif';
 	font-weight: 700
 }
 
@@ -5537,7 +5441,7 @@ Base styles: contents layer
 
 .monitoring-view .table-inner .table-info table td.bg-dark p {
 	font-size: 30px;
-	font-family: "Noto Sans KR", "Roboto", "AppleGothic", "sans-serif";
+	font-family: 'NanumSquare', 'Roboto', 'AppleGothic', 'sans-serif';
 	font-weight: 700;
 	margin: 1% 0
 }
@@ -5564,7 +5468,7 @@ Base styles: contents layer
 	background: #008fff;
 	color: #fff;
 	font-size: 32px;
-	font-family: "Noto Sans KR", "Roboto", "AppleGothic", "sans-serif";
+	font-family: 'NanumSquare', 'Roboto', 'AppleGothic', 'sans-serif';
 	font-weight: 700;
 	width: 100%;
 	height: 100%;
@@ -5636,7 +5540,7 @@ Base styles: contents layer
 
 .monitoring-view .table-inner .table-mt .mt-table td p {
 	font-size: 26px;
-	color: #aaa
+	color: #aaaaaa
 }
 
 @media all and (min-width: 1400px) {
@@ -5663,7 +5567,7 @@ Base styles: contents layer
 
 .monitoring-view .table-inner .table-mt .mt-table td.connect p {
 	color: #111;
-	font-family: "Noto Sans KR", "Roboto", "AppleGothic", "sans-serif";
+	font-family: 'NanumSquare', 'Roboto', 'AppleGothic', 'sans-serif';
 	font-weight: 700
 }
 
@@ -5699,7 +5603,7 @@ Base styles: contents layer
 
 .admin_area h3.date {
 	font-size: 28px;
-	font-family: "Noto Sans KR", "Roboto", "AppleGothic", "sans-serif";
+	font-family: 'NanumSquare', 'Roboto', 'AppleGothic', 'sans-serif';
 	font-weight: 700;
 	color: #1a1a1a;
 	text-align: center;
@@ -5776,7 +5680,7 @@ Base styles: contents layer
 .admin_area .sub_search .sch_area>li.barcoad p {
 	width: 70px;
 	font-size: 20px;
-	font-family: "Noto Sans KR", "Roboto", "AppleGothic", "sans-serif";
+	font-family: 'NanumSquare', 'Roboto', 'AppleGothic', 'sans-serif';
 	font-weight: 700;
 	color: #1a1a1a
 }
@@ -5802,7 +5706,7 @@ Base styles: contents layer
 }
 
 .admin_area .sub_search .sch_area>li.barcoad .barcoad_input button {
-	display: block;
+	display: none;
 	position: absolute;
 	z-index: 5;
 	right: 0;
@@ -5810,10 +5714,10 @@ Base styles: contents layer
 	height: 100%;
 	top: 50%;
 	font-size: 20px;
-	font-family: "Noto Sans KR", "Roboto", "AppleGothic", "sans-serif";
+	font-family: 'NanumSquare', 'Roboto', 'AppleGothic', 'sans-serif';
 	font-weight: 700;
 	color: #1a1a1a;
-	background: url(/static/images/guide/input_reset.svg) no-repeat center center;
+	background: url(../image/input_reset.svg) no-repeat center center;
 	background-size: 12px 12px;
 	text-indent: -9999px;
 	transform: translateY(-50%);
@@ -5844,7 +5748,7 @@ Base styles: contents layer
 	background: #007eff;
 	color: #fff;
 	font-size: 18px;
-	font-family: "Noto Sans KR", "Roboto", "AppleGothic", "sans-serif";
+	font-family: 'NanumSquare', 'Roboto', 'AppleGothic', 'sans-serif';
 	font-weight: 700;
 	letter-spacing: -0.45px
 }
@@ -5938,19 +5842,19 @@ Base styles: contents layer
 }
 
 @media only all and (max-width: 640px) {
-	.admin_area .list_body ul {
+	.admin_area .mCustomScrollBox {
 		max-height: 310px
 	}
 }
 
 @media only all and (max-width: 360px) {
-	.admin_area .list_body ul {
+	.admin_area .mCustomScrollBox {
 		max-height: 280px
 	}
 }
 
 @media only all and (max-width: 320px) {
-	.admin_area .list_body ul {
+	.admin_area .mCustomScrollBox {
 		max-height: 220px
 	}
 }
@@ -5982,7 +5886,7 @@ Base styles: contents layer
 	background: #007eff;
 	color: #fff;
 	font-size: 18px;
-	font-family: "Noto Sans KR", "Roboto", "AppleGothic", "sans-serif";
+	font-family: 'NanumSquare', 'Roboto', 'AppleGothic', 'sans-serif';
 	font-weight: 700;
 	letter-spacing: -0.45px;
 	border-radius: 5px;
@@ -6002,12 +5906,12 @@ Base styles: contents layer
 
 .admin_head a {
 	font-size: 20px;
-	font-family: "Noto Sans KR", "Roboto", "AppleGothic", "sans-serif";
+	font-family: 'NanumSquare', 'Roboto', 'AppleGothic', 'sans-serif';
 	font-weight: 700;
 	color: #fff;
 	line-height: 46px;
 	padding-left: 34px;
-	background: url(/static/images/guide/ico_back.svg) no-repeat left center;
+	background: url(../image/ico_back.svg) no-repeat left center;
 	background-size: 24px
 }
 
@@ -6022,7 +5926,7 @@ Base styles: contents layer
 	top: 0;
 	font-size: 18px;
 	height: 48px;
-	font-family: "Noto Sans KR", "Roboto", "AppleGothic", "sans-serif";
+	font-family: 'NanumSquare', 'Roboto', 'AppleGothic', 'sans-serif';
 	font-weight: 700;
 	color: #fff
 }
@@ -6030,7 +5934,7 @@ Base styles: contents layer
 .admin_auc_main h3 {
 	font-size: 28px;
 	text-align: center;
-	font-family: "Noto Sans KR", "Roboto", "AppleGothic", "sans-serif";
+	font-family: 'NanumSquare', 'Roboto', 'AppleGothic', 'sans-serif';
 	font-weight: 700;
 	margin: 20px auto;
 	color: #1a1a1a
@@ -6142,7 +6046,7 @@ Base styles: contents layer
 	background: #007eff;
 	color: #fff;
 	font-size: 18px;
-	font-family: "Noto Sans KR", "Roboto", "AppleGothic", "sans-serif";
+	font-family: 'NanumSquare', 'Roboto', 'AppleGothic', 'sans-serif';
 	font-weight: 700;
 	letter-spacing: -0.45px
 }
@@ -6202,7 +6106,7 @@ Base styles: contents layer
 .admin_chocie h3 {
 	font-size: 28px;
 	text-align: center;
-	font-family: "Noto Sans KR", "Roboto", "AppleGothic", "sans-serif";
+	font-family: 'NanumSquare', 'Roboto', 'AppleGothic', 'sans-serif';
 	font-weight: 700;
 	margin: 20px auto 10px;
 	color: #1a1a1a
@@ -6212,7 +6116,7 @@ Base styles: contents layer
 	color: #767676;
 	font-size: 20px;
 	text-align: center;
-	font-family: "Noto Sans KR", "Roboto", "AppleGothic", "sans-serif";
+	font-family: 'NanumSquare', 'Roboto', 'AppleGothic', 'sans-serif';
 	font-weight: 700;
 	margin-bottom: 50px
 }
@@ -6244,7 +6148,7 @@ Base styles: contents layer
 	-ms-flex-align: center;
 	align-items: center;
 	font-size: 28px;
-	font-family: "Noto Sans KR", "Roboto", "AppleGothic", "sans-serif";
+	font-family: 'NanumSquare', 'Roboto', 'AppleGothic', 'sans-serif';
 	font-weight: 700;
 	letter-spacing: -0.7px;
 	text-align: center;
@@ -6260,6 +6164,7 @@ Base styles: contents layer
 	{
 	background: #007eff;
 	color: #fff;
+	-webkit-box-shadow: inherit;
 	box-shadow: inherit
 }
 
@@ -6279,8 +6184,8 @@ Base styles: contents layer
 }
 
 .admin_chocie ul.choice_area li a span.heart-eft {
-	-webkit-animation: heart-eft .8s ease-in-out infinite alternate;
-	animation: heart-eft .8s ease-in-out infinite alternate
+	-webkit-animation: heart-eft 0.8s ease-in-out infinite alternate;
+	animation: heart-eft 0.8s ease-in-out infinite alternate
 }
 
 @media only all and (max-width: 1024px) {
@@ -6347,7 +6252,7 @@ Base styles: contents layer
 	right: 15px;
 	padding: 0 20px;
 	font-size: 20px;
-	font-family: "Noto Sans KR", "Roboto", "AppleGothic", "sans-serif";
+	font-family: 'NanumSquare', 'Roboto', 'AppleGothic', 'sans-serif';
 	font-weight: 700;
 	color: #1a1a1a;
 	-webkit-box-shadow: 0 1.5px 5px 0 rgba(0, 0, 0, 0.16);
@@ -6381,7 +6286,7 @@ Base styles: contents layer
 	-o-border-radius: 10px;
 	text-align: center;
 	font-size: 20px;
-	font-family: "Noto Sans KR", "Roboto", "AppleGothic", "sans-serif";
+	font-family: 'NanumSquare', 'Roboto', 'AppleGothic', 'sans-serif';
 	font-weight: 700;
 	color: #1a1a1a;
 	-webkit-box-shadow: 0 1.5px 5px 0 rgba(0, 0, 0, 0.16);
@@ -6415,7 +6320,7 @@ Base styles: contents layer
 	width: 10px;
 	height: 8px;
 	display: inline-block;
-	background: url(/static/images/guide/arrow_up.svg) no-repeat center center;
+	background: url(../image/arrow_up.svg) no-repeat center center;
 	background-size: 10px 8px;
 	vertical-align: middle;
 	margin-right: 5px
@@ -6427,7 +6332,7 @@ Base styles: contents layer
 	width: 10px;
 	height: 8px;
 	display: inline-block;
-	background: url(/static/images/guide/arrow_down.svg) no-repeat center center;
+	background: url(../image/arrow_down.svg) no-repeat center center;
 	background-size: 10px 8px;
 	vertical-align: middle;
 	margin-right: 5px;
@@ -6532,7 +6437,7 @@ Base styles: contents layer
 
 .error h2 {
 	font-size: 159px;
-	font-family: "Noto Sans KR", "Roboto", "AppleGothic", "sans-serif";
+	font-family: 'NanumSquare', 'Roboto', 'AppleGothic', 'sans-serif';
 	font-weight: 800;
 	color: #007eff;
 	line-height: 1
@@ -6561,7 +6466,7 @@ Base styles: contents layer
 .error p.txt1 {
 	margin-top: 20px;
 	font-size: 32px;
-	font-family: "Noto Sans KR", "Roboto", "AppleGothic", "sans-serif";
+	font-family: 'NanumSquare', 'Roboto', 'AppleGothic', 'sans-serif';
 	font-weight: 700;
 	color: #007eff
 }
@@ -6569,7 +6474,7 @@ Base styles: contents layer
 .error p.txt2 {
 	margin-top: 20px;
 	font-size: 26px;
-	font-family: "Noto Sans KR", "Roboto", "AppleGothic", "sans-serif";
+	font-family: 'NanumSquare', 'Roboto', 'AppleGothic', 'sans-serif';
 	font-weight: 700;
 	color: #767676
 }
@@ -6602,7 +6507,7 @@ Base styles: contents layer
 	padding: 0 70px;
 	background-color: #007eff;
 	font-size: 28px;
-	font-family: "Noto Sans KR", "Roboto", "AppleGothic", "sans-serif";
+	font-family: 'NanumSquare', 'Roboto', 'AppleGothic', 'sans-serif';
 	font-weight: 700;
 	color: #fff;
 	border-radius: 10px;
@@ -6626,72 +6531,124 @@ Base styles: contents layer
 		-o-border-radius: 5px
 	}
 }
+
 .move-txt {
 	-webkit-animation: text-scroll 10s linear infinite;
 	animation: text-scroll 10s linear infinite
 }
 
-@-webkit-keyframes heart-eft { 
-	0% { opacity: .2 }
-	100% { opacity : 1 }
-}
-@keyframes heart-eft {
-	0% { opacity: .2 }
-	100% {opacity: 1 }
-}
-@-webkit-keyframes fav {
-	0% { background-size: 80%}
-	100% {opacity: 100%}
-}
-@keyframes fav {
-	0% {background-size: 80%}
-	100% {opacity: 100%}
-}
-@-webkit-keyframes dotcount {
-	0% {background: #ccc}
-	50% {background: #f22800}
-	100%{background: #ccc}
-}
-@keyframes dotcount {
-	0% {background: #ccc}
-	50%{background: #f22800}
-	100%{background: #ccc}
+@-webkit-keyframes heart-eft { 0%{
+	opacity: 0.2
 }
 
+100%
+{
+opacity
+:
+1
+}
+}
+@keyframes heart-eft { 0%{
+	opacity: 0.2
+}
+
+100%
+{
+opacity
+:
+1
+}
+}
+@-webkit-keyframes fav { 0%{
+	background-size: 80%
+}
+
+100%
+{
+opacity
+:
+100%
+}
+}
+@keyframes fav { 0%{
+	background-size: 80%
+}
+
+100%
+{
+opacity
+:
+100%
+}
+}
+@-webkit-keyframes dotcount { 0%{
+	background: #ccc
+}
+
+50%
+{
+background
+:
+#f22800
+}
+100%
+{
+background
+:
+#ccc
+}
+}
+@keyframes dotcount { 0%{
+	background: #ccc
+}
+
+50%
+{
+background
+:
+#f22800
+}
+100%
+{
+background
+:
+#ccc
+}
+}
 @-webkit-keyframes text-scroll {
-	from {
-		transform:translateX(100%);
-		-moz-transform: translateX(100%);
-		-webkit-transform: translateX(100%);
-		-o-transform: translateX(100%);
-		-ms-transform: translateX(100%)
-	}
-	to {
-		transform: translateX(-100%);
-		-moz-transform: translateX(-100%);
-		-webkit-transform: translateX(-100%);
-		-o-transform: translateX(-100%);
-		-ms-transform: translateX(-100%)
-	}
+	from {transform: translateX(100%);
+	-moz-transform: translateX(100%);
+	-webkit-transform: translateX(100%);
+	-o-transform: translateX(100%);
+	-ms-transform: translateX(100%)
+}
+
+to {
+	transform: translateX(-100%);
+	-moz-transform: translateX(-100%);
+	-webkit-transform: translateX(-100%);
+	-o-transform: translateX(-100%);
+	-ms-transform: translateX(-100%)
+}
+
 }
 @keyframes text-scroll {
-	from {
-		transform:translateX(100%);
-		-moz-transform: translateX(100%);
-		-webkit-transform: translateX(100%);
-		-o-transform: translateX(100%);
-		-ms-transform: translateX(100%)
-	}
-
-	to {
-		transform: translateX(-100%);
-		-moz-transform: translateX(-100%);
-		-webkit-transform: translateX(-100%);
-		-o-transform: translateX(-100%);
-		-ms-transform: translateX(-100%)
-	}
+	from {transform: translateX(100%);
+	-moz-transform: translateX(100%);
+	-webkit-transform: translateX(100%);
+	-o-transform: translateX(100%);
+	-ms-transform: translateX(100%)
 }
 
+to {
+	transform: translateX(-100%);
+	-moz-transform: translateX(-100%);
+	-webkit-transform: translateX(-100%);
+	-o-transform: translateX(-100%);
+	-ms-transform: translateX(-100%)
+}
+
+}
 .login_section {
 	display: -webkit-box;
 	display: -ms-flexbox;
@@ -6767,35 +6724,35 @@ Base styles: contents layer
 
 .login_section .login_box .inp::-webkit-input-placeholder {
 	color: #acacac;
-	font-family: "Noto Sans KR", "Roboto", "AppleGothic", "sans-serif";
+	font-family: 'NanumSquare', 'Roboto', 'AppleGothic', 'sans-serif';
 	font-weight: 400
 }
 
 .login_section .login_box .inp:-ms-input-placeholder {
 	color: #acacac;
-	font-family: "Noto Sans KR", "Roboto", "AppleGothic", "sans-serif";
+	font-family: 'NanumSquare', 'Roboto', 'AppleGothic', 'sans-serif';
 	font-weight: 400
 }
 
 .login_section .login_box .inp::-ms-input-placeholder {
 	color: #acacac;
-	font-family: "Noto Sans KR", "Roboto", "AppleGothic", "sans-serif";
+	font-family: 'NanumSquare', 'Roboto', 'AppleGothic', 'sans-serif';
 	font-weight: 400
 }
 
 .login_section .login_box .inp::placeholder {
 	color: #acacac;
-	font-family: "Noto Sans KR", "Roboto", "AppleGothic", "sans-serif";
+	font-family: 'NanumSquare', 'Roboto', 'AppleGothic', 'sans-serif';
 	font-weight: 400
 }
 
 .login_section .login_box .inp_id {
-	background: url(/static/images/guide/ico_id.svg) no-repeat 0 50%
+	background: url(../image/ico_id.svg) no-repeat 0 50%
 }
 
 .login_section .login_box .inp_pw {
 	font-family: initial;
-	background: url(/static/images/guide/ico_pw.svg) no-repeat 0 50%
+	background: url(../image/ico_pw.svg) no-repeat 0 50%
 }
 
 .login_section .login_box #save_id {
@@ -6876,7 +6833,7 @@ Base styles: contents layer
 .youtube-view table td p {
 	text-align: center;
 	color: #fff;
-	font-family: "Noto Sans KR", "Roboto", "AppleGothic", "sans-serif";
+	font-family: 'NanumSquare', 'Roboto', 'AppleGothic', 'sans-serif';
 	font-weight: 700;
 	letter-spacing: -4px
 }
@@ -6910,7 +6867,7 @@ Base styles: contents layer
 	font-size: 100px;
 	color: #2fff00;
 	letter-spacing: -2.8px;
-	font-family: "Noto Sans KR", "Roboto", "AppleGothic", "sans-serif";
+	font-family: 'NanumSquare', 'Roboto', 'AppleGothic', 'sans-serif';
 	font-weight: 400
 }
 
@@ -7017,7 +6974,7 @@ Base styles: contents layer
 	position: relative;
 	padding-left: 60px;
 	font-size: 30px;
-	font-family: "Noto Sans KR", "Roboto", "AppleGothic", "sans-serif";
+	font-family: 'NanumSquare', 'Roboto', 'AppleGothic', 'sans-serif';
 	font-weight: 700;
 	letter-spacing: -0.45px;
 	color: #fff;
@@ -7063,7 +7020,7 @@ Base styles: contents layer
 .youtube-view .bg_yotube {
 	width: 100%;
 	height: 100%;
-	background: url(/static/images/guide/bg_youtube.jpg) no-repeat 50% 50%;
+	background: url(../image/bg_youtube.jpg) no-repeat 50% 50%;
 	background-size: cover
 }
 
@@ -7076,7 +7033,7 @@ Base styles: contents layer
 .video_transmission h3 {
 	padding: 16px 20px;
 	font-size: 20px;
-	font-family: "Noto Sans KR", "Roboto", "AppleGothic", "sans-serif";
+	font-family: 'NanumSquare', 'Roboto', 'AppleGothic', 'sans-serif';
 	font-weight: 700;
 	color: #222831;
 	border-bottom: 1px solid #dbdbdb
@@ -7176,7 +7133,7 @@ Base styles: contents layer
 	font-weight: 500;
 	font-size: 18px;
 	color: #1a1a1a;
-	min-width: 55px
+	min-width: 50px
 }
 
 .video_transmission .video_list .item .select_area {
@@ -7249,7 +7206,7 @@ Base styles: contents layer
 .admin_main h3 {
 	padding: 16px 20px;
 	font-size: 20px;
-	font-family: "Noto Sans KR", "Roboto", "AppleGothic", "sans-serif";
+	font-family: 'NanumSquare', 'Roboto', 'AppleGothic', 'sans-serif';
 	font-weight: 700;
 	color: #222831;
 	border-bottom: 1px solid #dbdbdb
@@ -7275,7 +7232,7 @@ Base styles: contents layer
 		font-size: 28px;
 		border-bottom: 0;
 		text-align: center;
-		font-family: "Noto Sans KR", "Roboto", "AppleGothic", "sans-serif";
+		font-family: 'NanumSquare', 'Roboto', 'AppleGothic', 'sans-serif';
 		font-weight: 700
 	}
 }
@@ -7340,7 +7297,7 @@ Base styles: contents layer
 	padding-top: 110px;
 	height: 100%;
 	font-size: 18px;
-	font-family: "Noto Sans KR", "Roboto", "AppleGothic", "sans-serif";
+	font-family: 'NanumSquare', 'Roboto', 'AppleGothic', 'sans-serif';
 	font-weight: 700;
 	color: #1a1a1a;
 	background-color: #e9e9e9;
@@ -7384,14 +7341,13 @@ Base styles: contents layer
 		width: 40px;
 		height: 40px;
 		border-radius: 50%;
-/* 		background-color: #007eff */
+		background-color: #007eff
 	}
 }
 
 @media only all and (max-width: 768px) {
 	.admin_main .menu_list .menu_item a .ico img {
-/* 		display: none */
-		width: 100%;
+		display: none
 	}
 }
 
@@ -7402,7 +7358,7 @@ Base styles: contents layer
 	padding: 22px 0;
 	width: 100%;
 	font-size: 14px;
-	font-family: "Noto Sans KR", "Roboto", "AppleGothic", "sans-serif";
+	font-family: 'NanumSquare', 'Roboto', 'AppleGothic', 'sans-serif';
 	font-weight: 700;
 	color: #767676;
 	text-align: center;
@@ -7440,7 +7396,7 @@ Base styles: contents layer
 .auction_list_full .list_table_full .list_head dl dd {
 	color: #fff;
 	font-size: 18px;
-	font-family: "Noto Sans KR", "Roboto", "AppleGothic", "sans-serif";
+	font-family: 'NanumSquare', 'Roboto', 'AppleGothic', 'sans-serif';
 	font-weight: 700;
 	letter-spacing: -0.45px;
 	display: table-cell;
@@ -7497,7 +7453,7 @@ Base styles: contents layer
 .auction_list_full .list_table_full .list_body dl dd {
 	color: #1a1a1a;
 	font-size: 17px;
-	font-family: "Noto Sans KR", "Roboto", "AppleGothic", "sans-serif";
+	font-family: 'NanumSquare', 'Roboto', 'AppleGothic', 'sans-serif';
 	font-weight: 700;
 	letter-spacing: -0.45px;
 	display: table-cell;
@@ -7510,124 +7466,4 @@ Base styles: contents layer
 	.auction_list_full .list_table_full .list_body dl dd.pd_pay1,
 	.auction_list_full .list_table_full .list_body dl dd.pd_pay2 {
 	color: #007eff
-}
-
-.auction_calculator .calculator_bottom .calculator-cell li button.num_before
-	{
-	background: #ffaf00;
-}
-
-.auction_list .list_search .sch_area>li input[type=text].calendar {
-	background:
-		url(https://jqueryui.com/resources/demos/datepicker/images/calendar.gif)
-		no-repeat 120px;
-	cursor: pointer;
-}
-
-.gps_fix {
-	display: none;
-}
-
-.chk_step2 .list_none {
-	margin-bottom: 10px;
-}
-
-.chk_step2 .list_none span {
-	max-width: 580px;
-	text-align: center;
-	width: 100%;
-	height: 80px;
-	display: block;
-	line-height: 80px;
-	padding: 0 10px;
-	border-radius: 20px;
-	margin: 0 auto;
-	font-family: "Noto Sans KR", "Roboto", "AppleGothic", "sans-serif";
-	font-weight: 500;
-	font-size: 18px;
-	letter-spacing: -0.7px;
-	background: #fff;
-	color: #1a1a1a;
-}
-
-.list_body li:not(.act) dl dd.textNumber {
-	text-align: right !important;
-	color: #007eff !important;
-	padding-right: 5px !important;
-}
-
-.list_body li.act dl dd.textNumber {
-	text-align: right !important;
-	padding-right: 5px !important;
-}
-
-.auction_list .calculator_head_pc dt a.m_sound {
-	width: 22px;
-	height: 22px;
-	display: inline-table;
-	text-indent: -99999px;
-	background: url(/static/images/guide/sound_on.svg) no-repeat center
-		center;
-	background-size: 22px 22px !important;
-	position: relative;
-	top: 2px;
-}
-
-.auction_list .calculator_head_pc dt a.m_sound.off {
-	background: url(/static/images/guide/sound_off.svg) no-repeat center
-		center;
-	background-size: 25px 29px !important;
-}
-div.list_txts {
-    text-align: center;
-    color: #1a1a1a;
-    font-size: 17px;
-    font-family: "Noto Sans KR", "Roboto", "AppleGothic", "sans-serif";
-    font-weight: 700;
-    margin: 10px 0 10px;
-}
-.buy_list div.list_txts {
-    text-align: center;
-    color: #1a1a1a;
-    font-size: 17px;
-    font-family: "Noto Sans KR", "Roboto", "AppleGothic", "sans-serif";
-    font-weight: 700;
-    margin: 10px 0 10px;
-}
-
-@media only all and (max-width: 1024px){
-	.entryList .auction_bid .list_body li.act {
-	    background: #e6efff;
-	}
-/* 	.entryList .auction_bid  .list_body li:nth-child(even) { */
-/* 		background: #b2ebf4; */
-/* 	} */
-}
-
-/* toast message */
-#toast {
-	position: fixed;
-/*     bottom: 30px; */
-	width:90%;
-	top: 40%;
-	left: 50%;
-	line-height: 50px;
-	padding: 15px 20px;
-	transform: translate(-50%, 10px);
-	border-radius: 5px;
-	overflow: hidden;
-	font-size: 1.8rem;
-	text-align:center;
-	opacity: 0;
-	visibility: hidden;
-	transition: opacity .5s, visibility .5s, transform .5s;
-	background: rgba(0, 0, 0, .5);
-	color: #fff;
-	z-index: 10000;
-}
-
-#toast.reveal {
-	opacity: 1;
-	visibility: visible;
-	transform: translate(-50%, 0)
 }

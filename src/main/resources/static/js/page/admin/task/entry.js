@@ -135,7 +135,7 @@
 						listHtml.push('<dd class="col2">' + (item.COW_SOG_WT == null || parseInt(item.COW_SOG_WT) == '0' || parseInt(item.COW_SOG_WT) == 'NaN' ? '-' : parseInt(item.COW_SOG_WT)) + '</dd>');
 					}
 					else if (regType == "L") {
-						listHtml.push('<dd class="col2">' + (item.LOWS_SBID_LMT_AM == null || parseInt(item.LOWS_SBID_LMT_AM) == '0' || parseInt(item.LOWS_SBID_LMT_AM) == 'NaN' ? '-' : parseInt(item.LOWS_SBID_LMT_AM/10000)) + '</dd>');
+						listHtml.push('<dd class="col2">' + (item.LOWS_SBID_LMT_UPR == null || parseInt(item.LOWS_SBID_LMT_UPR) == '0' || parseInt(item.LOWS_SBID_LMT_UPR) == 'NaN' ? '-' : fnSetComma(item.LOWS_SBID_LMT_UPR)) + '</dd>');
 					}
 					else {
 						listHtml.push('<dd class="col2">' + item.MODL_NO + '</dd>');
@@ -205,7 +205,7 @@
 				sHtml.push('					<tr>');
 				sHtml.push('						<th>중량</th>');
 				sHtml.push('						<td class="input-td">');
-				sHtml.push('							<input type="text" name="cowSogWt" class="pd5 required" value="' + (cowInfo.COW_SOG_WT == 0 ? "" : cowInfo.COW_SOG_WT) + '" maxlength="4" pattern="\d*" inputmode="numeric" style="width:80%;" /> kg');
+				sHtml.push('							<input type="text" name="cowSogWt" class="pd5 required" value="' + (cowInfo.COW_SOG_WT == 0 ? "" : cowInfo.COW_SOG_WT) + '" maxlength="4" pattern="\d*" inputmode="numeric" style="width:70%;" /> kg');
 				sHtml.push('						</td>');
 				sHtml.push('					</tr>');
 			}
@@ -221,7 +221,7 @@
 				sHtml.push('					<tr>');
 				sHtml.push('						<th>하한가</th>');
 				sHtml.push('						<td class="input-td">');
-				sHtml.push('							<input type="text" name="firLowsSbidLmtAm" class="pd5 required" value="' + (cowInfo.LOWS_SBID_LMT_AM == null ? "" : cowInfo.LOWS_SBID_LMT_AM) + '" maxlength="4" pattern="\d*" inputmode="numeric" style="width:80%;" />만 원');
+				sHtml.push('							<input type="text" name="firLowsSbidLmtAm" class="pd5 required" value="' + ((cowInfo.LOWS_SBID_LMT_AM == null || cowInfo.LOWS_SBID_LMT_AM == "0")? "" : cowInfo.LOWS_SBID_LMT_AM) + '" maxlength="4" pattern="\d*" inputmode="numeric" style="width:70%;" />만 원');
 				sHtml.push('						</td>');
 				sHtml.push('					</tr>');
 			}
@@ -233,7 +233,7 @@
 				sHtml.push('					<tr>');
 				sHtml.push('						<th>변경</th>');
 				sHtml.push('						<td class="input-td">');
-				sHtml.push('							<input type="text" name="modlNo" class="pd5 required" value="' + cowInfo.MODL_NO + '" maxlength="4" pattern="\d*" inputmode="numeric" style="width:80%;" />');
+				sHtml.push('							<input type="text" name="modlNo" class="pd5 required" value="' + cowInfo.MODL_NO + '" maxlength="4" pattern="\d*" inputmode="numeric" style="width:70%;" />');
 				sHtml.push('						</td>');
 				sHtml.push('					</tr>');
 			}

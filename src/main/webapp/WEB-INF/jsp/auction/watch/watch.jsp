@@ -164,7 +164,7 @@
 										<dl>
 											<dt>최저가</dt>
 											<dd class="lowsSbidLmtAm">
-													${watchList[0].LOWS_SBID_LMT_AM <= 0 ? '0' : fn:split(watchList[0].LOWS_SBID_LMT_UPR,'.')[0]}
+												${watchList[0].LOWS_SBID_LMT_AM <= 0 ? '0' : fn:split(watchList[0].LOWS_SBID_LMT_UPR,'.')[0]}
 											</dd>
 										</dl>
 									</li>
@@ -240,8 +240,12 @@
 							<dd class="pd_kg cowSogWt textNumber">${(vo.COW_SOG_WT eq '' || vo.COW_SOG_WT == null || vo.COW_SOG_WT <= 0 ) ? '0' : fn:split(vo.COW_SOG_WT,'.')[0]}</dd>
 							<dd class="pd_kpn kpnNo">${ vo.KPN_NO_STR }</dd>
 							<dd class="pd_num1 sraIndvPasgQcn">${ vo.SRA_INDV_PASG_QCN }</dd>
-							<dd class="pd_pay1 lowsSbidLmtAm textNumber"> ${(vo.LOWS_SBID_LMT_AM eq '' || vo.LOWS_SBID_LMT_AM == null || vo.LOWS_SBID_LMT_AM <= 0 ) ? '-' : vo.LOWS_SBID_LMT_AM <= 0 ? '0' : fn:split(vo.LOWS_SBID_LMT_UPR,'.')[0]}</dd>
-							<dd class="pd_pay2 sraSbidAm textNumber">${(vo.SRA_SBID_UPR eq '' || vo.SRA_SBID_UPR == null || vo.SRA_SBID_UPR <= 0 ) ? '-' : fn:split(vo.SRA_SBID_UPR,'.')[0]}</dd>
+							<dd class="pd_pay1 lowsSbidLmtAm textNumber">
+								${(vo.LOWS_SBID_LMT_AM eq '' || vo.LOWS_SBID_LMT_AM == null || vo.LOWS_SBID_LMT_AM <= 0 ) ? '-' : vo.LOWS_SBID_LMT_AM <= 0 ? '0' : fn:split(vo.LOWS_SBID_LMT_UPR,'.')[0]}
+							</dd>
+							<dd class="pd_pay2 sraSbidAm textNumber">
+								${(vo.SRA_SBID_UPR eq '' || vo.SRA_SBID_UPR == null || vo.SRA_SBID_UPR <= 0 ) ? '-' : fn:split(vo.SRA_SBID_UPR,'.')[0]}
+							</dd>
 							<dd class="pd_state selSts">${vo.SEL_STS_DSC_NAME }</dd>
 							<dd class="pd_etc rmkCntn">${ fn:replace(vo.RMK_CNTN,'|',',') }</dd>
 						</dl>

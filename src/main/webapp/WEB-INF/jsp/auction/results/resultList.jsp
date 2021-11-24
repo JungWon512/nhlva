@@ -25,14 +25,6 @@
 			<li class="txt">
 				<input type="text" name="searchTxt" id="searchTxt" maxlength="4" value="${paramVo.searchTxt }" placeholder="개체" />
 			</li>
-<!-- 			<li class="sort"> -->
-<!-- 				<select name="searchOrder" id="searchOrder"> -->
-<%-- 					<option value="" ${(paramVo.searchOrder == null || paramVo.searchOrder == '') ? 'selected':'' } >정렬</option> --%>
-<%--                     <option value="AUC_PRG_SQ" ${paramVo.searchOrder == 'AUC_PRG_SQ' ?'selected':'' }>경매번호</option> --%>
-<%--                     <option value="SRA_PDMNM" ${paramVo.searchOrder == 'SRA_PDMNM' ?'selected':'' }>출하주</option> --%>
-<%--                     <option value="KPN_NO" ${paramVo.searchOrder == 'KPN_NO' ?'selected':'' }>KPN</option> --%>
-<!-- 				</select> -->
-<!-- 			</li> -->
 			<li class="date">
 				<select name="searchDate" id="searchDate">
 					<option value="" ${ dateList.size() > 0 ? '':'selected' }> 선택 </option>
@@ -119,8 +111,22 @@
 							<dd class="pd_kg textNumber">${ (item.COW_SOG_WT == '' || item.COW_SOG_WT == null || item.COW_SOG_WT <= 0 ) ? '-' : fn:split(item.COW_SOG_WT,'.')[0] }</dd>
 							<dd class="pd_kpn">${ item.KPN_NO_STR }</dd>
 							<dd class="pd_num1">${ item.SRA_INDV_PASG_QCN }</dd>
-							<dd class="pd_pay1 textNumber">${(item.LOWS_SBID_LMT_AM == '' || item.LOWS_SBID_LMT_AM == null || item.LOWS_SBID_LMT_AM <= 0 ) ? '-' :  fn:split(item.LOWS_SBID_LMT_UPR,'.')[0]}</dd>
-							<dd class="pd_pay2 textNumber">${(item.SRA_SBID_UPR eq '' || item.SRA_SBID_UPR == null || item.SRA_SBID_UPR <= 0 ) ? '-' : fn:split(item.SRA_SBID_UPR,'.')[0] }</dd>
+							<dd class="pd_pay1 textNumber">
+								<c:choose>
+									<c:when test="${item.LOWS_SBID_LMT_AM eq '' || item.LOWS_SBID_LMT_AM == null || item.LOWS_SBID_LMT_AM <= 0}">-</c:when>
+									<c:otherwise>
+										<fmt:formatNumber value="${fn:split(item.LOWS_SBID_LMT_UPR,'.')[0]}" type="number" />
+									</c:otherwise>
+								</c:choose>
+							</dd>
+							<dd class="pd_pay2 textNumber">
+								<c:choose>
+									<c:when test="${item.SRA_SBID_UPR eq '' || item.SRA_SBID_UPR == null || item.SRA_SBID_UPR <= 0}">-</c:when>
+									<c:otherwise>
+										<fmt:formatNumber value="${fn:split(item.SRA_SBID_UPR,'.')[0]}" type="number" />
+									</c:otherwise>
+								</c:choose>
+							</dd>
 							<dd class="pd_state">${ item.SEL_STS_DSC_NAME }</dd>
 							<dd class="pd_etc">${ item.RMK_CNTN }</dd>
 						</dl>

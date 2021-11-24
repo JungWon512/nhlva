@@ -109,7 +109,7 @@
 			sHtml += '  				</tr>                                                                                                    ';
 			sHtml += '  				<tr>                                                                                                               ';
 			sHtml += '  					<th>최저가</th>                                                                                                ';
-			sHtml += '  					<td class="tal">'+tr.find('.lowsSbidLmtUpr').val()+' 만원</td>                                                                                  ';
+			sHtml += '  					<td class="tal">'+fnSetComma(tr.find('.lowsSbidLmtUpr').val())+'</td>                                                                                  ';
 			sHtml += '  					<th>어미</th>                                                                                                  ';
 			sHtml += '  					<td class="fwb">'+tr.find('.mcowDsc').val()+'</td>                                                                                      ';
 			sHtml += '  				</tr>                                                                                                              ';
@@ -128,7 +128,7 @@
 				sHtml += '  					<td class="tal">-</td>                                                                                         ';
 			}
 			sHtml += '  					<th>낙찰가</th>                                                                                                  ';
-			sHtml += '  					<td class="tal">'+tr.find('.sraSbidUpr').val()+' 만원</td>                                                                                         ';
+			sHtml += '  					<td class="tal">'+fnSetComma(tr.find('.sraSbidUpr').val())+'</td>                                                                                         ';
 			sHtml += '  				</tr>                                                                                                              ';
 			sHtml += '  				<tr>                                                                                                               ';
 			sHtml += '  					<th class="vtt">특이사항</th>                                                                                  ';

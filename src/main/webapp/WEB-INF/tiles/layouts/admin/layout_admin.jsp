@@ -3,35 +3,37 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <meta charset="utf-8"/>
-    <title>${johapData.CLNTNM } - ${subheaderTitle }</title>
-    <meta property="og:title" content="${johapData.CLNTNM } - ${subheaderTitle }">
-    <meta property="og:description" content="${johapData.CLNTNM } - ${subheaderTitle }" />
-    <meta name="description" content="${johapData.CLNTNM } - ${subheaderTitle }" />
-    <meta name="viewport" content="width=device-width,initial-scale=1.0,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-    <meta name="HandheldFriendly" content="true" />
-    <meta name="apple-mobile-web-app-capable" content="yes">
-    <!--begin::Fonts -->
-    <!--begin::Global Config(global config for global JS scripts)-->
-    <script>var KTAppSettings = { "breakpoints": { "sm": 576, "md": 768, "lg": 992, "xl": 1200, "xxl": 1400 }, "colors": { "theme": { "base": { "white": "#ffffff", "primary": "#3E97FF", "secondary": "#E5EAEE", "success": "#08D1AD", "info": "#844AFF", "warning": "#F5CE01", "danger": "#FF3D60", "light": "#E4E6EF", "dark": "#181C32" }, "light": { "white": "#ffffff", "primary": "#DEEDFF", "secondary": "#EBEDF3", "success": "#D6FBF4", "info": "#6125E1", "warning": "#FFF4DE", "danger": "#FFE2E5", "light": "#F3F6F9", "dark": "#D6D6E0" }, "inverse": { "white": "#ffffff", "primary": "#ffffff", "secondary": "#3F4254", "success": "#ffffff", "info": "#ffffff", "warning": "#ffffff", "danger": "#ffffff", "light": "#464E5F", "dark": "#ffffff" } }, "gray": { "gray-100": "#F3F6F9", "gray-200": "#EBEDF3", "gray-300": "#E4E6EF", "gray-400": "#D1D3E0", "gray-500": "#B5B5C3", "gray-600": "#7E8299", "gray-700": "#5E6278", "gray-800": "#3F4254", "gray-900": "#181C32" } }, "font-family": "Poppins" };</script>
-    <!--end::Global Config-->
-    <tiles:insertAttribute name="commons_css_block"/>
-    <tiles:insertAttribute name="commons_js_block"/>
-    <tiles:insertAttribute name="head_footer_script"/>
-    <script src="<tiles:getAsString name="page_footer_script"/>" type="text/javascript"></script>
-
-    <link rel="stylesheet" href="/static/assets/css/plugin/datatables/datatables.css">
+	<meta charset="utf-8"/>
+	<title>${johapData.CLNTNM } - ${subheaderTitle }</title>
+	<meta property="og:title" content="${johapData.CLNTNM } - ${subheaderTitle }">
+	<meta property="og:description" content="${johapData.CLNTNM } - ${subheaderTitle }" />
+	<meta name="description" content="${johapData.CLNTNM } - ${subheaderTitle }" />
+	<meta name="viewport" content="width=device-width,initial-scale=1.0,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+	<meta name="HandheldFriendly" content="true" />
+	<meta name="apple-mobile-web-app-capable" content="yes">
+	<tiles:insertAttribute name="commons_css_block"/>
+	<tiles:insertAttribute name="commons_js_block"/>
+	<tiles:insertAttribute name="head_footer_script"/>
+	<script src="<tiles:getAsString name="page_footer_script"/>" type="text/javascript"></script>
 </head>
-<body id="kt_body" class="quick-panel-dark demo-panel-dark offcanvas-right header-fixed header-mobile-fixed subheader-enabled aside-enabled aside-fixed aside-minimize-hoverable page-loading">
-<!--begin::Main-->
-<tiles:insertAttribute name="wrapper_header"/>
-
-<tiles:insertAttribute name="content"/>	
-
-<tiles:insertAttribute name="body_footer_script"/>
+<!-- body [s] -->
+<body style="background-color: #fff;">
+	<!-- wrap [s] -->
+	<div id="wrap">
+		<!-- admin_area [s] -->
+		<section class="admin_area" style="max-width: 1330px;">
+			<tiles:insertAttribute name="wrapper_header"/>
+			
+			<tiles:insertAttribute name="content"/>	
+			
+			<tiles:insertAttribute name="body_footer_script"/>
+			
+			<section class="admin_footer">Copyright(c) 가축시장.kr All right reserved.</section>
+		</section>
+		<!-- admin_area [e] -->
+	</div>
+	<!-- wrap [s] -->
 </body>
-<footer class="text-center text-lg-start bg-light text-muted w-100" style="position: fixed; bottom:0;">
-    <figure class="text-center">Copyright all right reserved. <cite title="Source Title">가축시장.kr</cite></figure>
-</footer>
+<!-- body [e] -->
 </html>

@@ -30,14 +30,6 @@
             <li class="txt">
             	<input type="text" name="searchTxt" id="searchTxt" maxlength="4" value="${inputParam.searchTxt }" placeholder="개체"/>
             </li>
-<!--             <li class="sort"> -->
-<!--                 <select name="searchOrder" id="searchOrder"> -->
-<!--                     <option value="">정렬</option> -->
-<%--                     <option value="AUC_PRG_SQ"${inputParam.searchOrder eq 'AUC_PRG_SQ' ? 'selected': ''}">경매번호</option> --%>
-<%--                     <option value="SRA_PDMNM" "${inputParam.searchOrder eq 'SRA_PDMNM' ? 'selected': ''}">출하주</option> --%>
-<%--                     <option value="KPN_NO" ${inputParam.searchOrder eq 'KPN_NO' ? 'selected': ''}">KPN</option> --%>
-<!--                 </select> -->
-<!--             </li> -->
             <li class="date">
                 <select name="searchDate" id="searchDate">
                 <option value="" ${(inputParam.searchDate == null || inputParam.searchDate == '')? 'selected' : ''}> 선택 </option>                
@@ -109,12 +101,10 @@
                     	<input type="hidden" class="mcowDsc" name="mcowDsc_${st.index }" value="${item.MCOW_DSC_NAME}"/>
                     	<input type="hidden" class="matime" name="matime_${st.index }" value="${item.MATIME}"/>
                     	
-<%--                     	<input type="hidden" class="sraPdRgnnm" name="sraPdRgnnm_${st.index }" value="${item.SRA_PD_RGNNM}"/> --%>
 						<c:set var="SRA_PD_RGNNM_ARR" value="${fn:split(item.SRA_PD_RGNNM,' ')}"></c:set>
 						<input type="hidden" class="sraPdRgnnm" name="sraPdRgnnm_${st.index }" value="${SRA_PD_RGNNM_ARR[0]} ${SRA_PD_RGNNM_ARR[1]} ${SRA_PD_RGNNM_ARR[2]}"/>
                     	<input type="hidden" class="sraIndvPasgQcn" name="sraIndvPasgQcn_${st.index }" value="${item.SRA_INDV_PASG_QCN}"/>
                     	<input type="hidden" class="sraSbidUpr" name="sraSbidUpr_${st.index }" value="${fn:split(item.SRA_SBID_UPR,'.')[0]}"/>
-<%--                     	<input type="hidden" class="sraMwmnnm" name="sraMwmnnm_${st.index }" value="${item.SRA_MWMNNM}"/> --%>
                     	<input type="hidden" class="rmkCntn" name="rmkCntn_${st.index }" value="${item.RMK_CNTN}"/>
                     	<input type="hidden" class="cowSogWt" name="cowSogWt_${st.index }" value="${fn:split(item.COW_SOG_WT,'.')[0] }"/>
                     	
@@ -129,8 +119,13 @@
                             <dd class="pd_num1">${item.SRA_INDV_PASG_QCN}</dd>
                             <dd class="pd_num2">${item.MATIME}</dd>
                             <dd class="pd_info">${item.RMK_CNTN}</dd>
-<%--                             <dd class="pd_pay">${fn:split(item.LOWS_SBID_LMT_UPR,'.')[0]}</dd> --%>
-                            <dd class="pd_pay textNumber">${(item.LOWS_SBID_LMT_AM eq '' || item.LOWS_SBID_LMT_AM == null || item.LOWS_SBID_LMT_AM <= 0 ) ? '-' :  fn:split(item.LOWS_SBID_LMT_UPR,'.')[0]}</dd>
+                            <dd class="pd_pay textNumber">
+								<c:choose>
+									<c:when test="${item.LOWS_SBID_LMT_AM eq '' || item.LOWS_SBID_LMT_AM == null || item.LOWS_SBID_LMT_AM <= 0}">-</c:when>
+									<c:otherwise>
+										<fmt:formatNumber value="${fn:split(item.LOWS_SBID_LMT_UPR,'.')[0]}" type="number" />
+									</c:otherwise>
+								</c:choose>
                             <dd class="pd_pav">
                             	<input type="hidden" class="sbidUpr" name="sbidUpr_${st.index }" value="${fn:split(item.SBID_UPR,'.')[0]}"/>
                             	<c:if test="${inputParam.loginNo != null && inputParam.loginNo != '' }">
@@ -141,7 +136,7 @@
 				                        			찜가격
 				                        		</c:when>
 				                        		<c:otherwise>
-				                        			${fn:split(item.SBID_UPR,'.')[0]}
+				                        			<fmt:formatNumber value="${fn:split(item.SBID_UPR,'.')[0]}" type="number" />
 				                        		</c:otherwise>
 				                        	</c:choose> 
 			                            </span>
@@ -212,8 +207,14 @@
                             <dd class="pd_sex">${ item.INDV_SEX_C_NAME}</dd>
                             <dd class="pd_kpn">${item.KPN_NO_STR}</dd>
 <%--                             <dd class="pd_pay">${fn:split(item.LOWS_SBID_LMT_UPR,'.')[0]}</dd> --%>
-                            <dd class="pd_pay textNumber">${(item.LOWS_SBID_LMT_AM eq '' || item.LOWS_SBID_LMT_AM == null || item.LOWS_SBID_LMT_AM <= 0 ) ? '-' : fn:split(item.LOWS_SBID_LMT_UPR,'.')[0]}</dd>                            
-                        	
+                            <dd class="pd_pay textNumber">
+								<c:choose>
+									<c:when test="${item.LOWS_SBID_LMT_AM eq '' || item.LOWS_SBID_LMT_AM == null || item.LOWS_SBID_LMT_AM <= 0}">-</c:when>
+									<c:otherwise>
+										<fmt:formatNumber value="${fn:split(item.LOWS_SBID_LMT_UPR,'.')[0]}" type="number" />
+									</c:otherwise>
+								</c:choose>
+                            </dd>
                         </dl>
 						<div class="pd_etc">
 							<p>${item.RMK_CNTN}</p>
@@ -227,7 +228,7 @@
 			                        			찜하기
 			                        		</c:when>
 			                        		<c:otherwise>
-			                        			${fn:split(item.SBID_UPR,'.')[0]}
+			                        			<fmt:formatNumber value="${fn:split(item.SBID_UPR,'.')[0]}" type="number" />
 			                        		</c:otherwise>
 			                        	</c:choose> 
 	                        		</span>

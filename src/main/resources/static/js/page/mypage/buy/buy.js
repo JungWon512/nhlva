@@ -98,7 +98,7 @@
 			$('.buy_list div.list_txts span').text(data.totPrice ? getStringValue(data.totPrice.SRA_SBID_AM,0).replace(/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g, ",") :'0');
 			$('.auction_result div.list_body ul').empty();
 			if(data.data.length == 0){
-				$('.auction_result div.list_body ul').append("<li><dl><dd>검색결과가 없습니다.</dd></dl></li>");								
+				$('.auction_result div.list_body ul').append("<li><dl><dd>검색결과가 없습니다.</dd></dl></li>");
 			}
 			data.data.forEach((item,i)=>{
 				var sHtml = "";							
@@ -111,8 +111,8 @@
 				sHtml += " <dd class='pd_kg'>"+getStringValue(item.COW_SOG_WT)+"</dd>";	
 				sHtml += " <dd class='pd_kpn'>"+getStringValue(item.KPN_NO_STR)+"</dd>";	
 				sHtml += " <dd class='pd_num1'>"+getStringValue(item.SRA_INDV_PASG_QCN)+"</dd>";	
-				sHtml += " <dd class='pd_pay1'>"+getStringValue(item.LOWS_SBID_LMT_UPR)+"</dd>";	
-				sHtml += " <dd class='pd_pay2'>"+getStringValue(item.SRA_SBID_UPR)+"</dd>";	
+				sHtml += " <dd class='pd_pay1'>"+fnSetComma(getStringValue(item.LOWS_SBID_LMT_UPR))+"</dd>";	
+				sHtml += " <dd class='pd_pay2'>"+fnSetComma(getStringValue(item.SRA_SBID_UPR))+"</dd>";	
 				sHtml += " <dd class='pd_state'>"+getStringValue(item.SEL_STS_DSC_NAME)+"</dd>";	
 				sHtml += " <dd class='pd_etc'>"+getStringValue(item.RMK_CNTN)+"</dd>";
 				sHtml += "</dl></li>";
@@ -143,9 +143,9 @@
 				sHtml += " <dd class='pd_ea'>"+getStringValue(item.SRA_INDV_AMNNO_FORMAT)+"</dd>";	
 				sHtml += " <dd class='pd_sex'>"+getStringValue(item.INDV_SEX_C_NAME)+"</dd>";	
 				sHtml += " <dd class='pd_kg'>"+getStringValue(item.COW_SOG_WT)+"</dd>";	
-				sHtml += " <dd class='pd_pay1'>"+getStringValue(item.LOWS_SBID_LMT_UPR)+"</dd>";	
-				sHtml += " <dd class='pd_pay2'>"+getStringValue(item.SRA_SBID_UPR)+"</dd>";	
-				sHtml += " <dd class='pd_pay3'>"+getStringValue(item.ATDR_AM)+"</dd>";	
+				sHtml += " <dd class='pd_pay1'>"+fnSetComma(getStringValue(item.LOWS_SBID_LMT_UPR))+"</dd>";	
+				sHtml += " <dd class='pd_pay3'>"+fnSetComma(getStringValue(item.ATDR_AM))+"</dd>";	
+				sHtml += " <dd class='pd_pay2'>"+fnSetComma(getStringValue(item.SRA_SBID_UPR))+"</dd>";	
 				sHtml += " <dd class='pd_state'>"+getStringValue(item.SEL_STS_DSC_NAME)+"</dd>";	
 				sHtml += "</dl></li>";
 				$('.auction_bid div.list_body ul').append(sHtml);
