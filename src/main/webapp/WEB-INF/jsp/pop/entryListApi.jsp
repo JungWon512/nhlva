@@ -174,8 +174,8 @@
 					<dd class="pd_ea">개체<span class="w_view_in">번호</span></dd>
 					<dd class="pd_sex">성별</dd>
 					<dd class="pd_pay1">예정가</dd>
-					<dd class="pd_pay2">낙찰가</dd>
 					<dd class="pd_pay3">응찰가</dd>
+					<dd class="pd_pay2">낙찰가</dd>
 				</dl>
 			</div>
 			<div class="list_body pop_style">
@@ -196,8 +196,8 @@
 								<dd class="pd_ea">${vo.SRA_INDV_AMNNO_FORMAT }</dd>
 								<dd class="pd_sex">${vo.INDV_SEX_C_NAME }</dd>
 								<dd class="pd_pay1">${vo.LOWS_SBID_LMT_AM <= 0 ? '0' : fn:split(vo.LOWS_SBID_LMT_UPR,'.')[0]}</dd>
-								<dd class="pd_pay2">${ fn:split(vo.SRA_SBID_UPR,'.')[0] }</dd>
 								<dd class="pd_pay3">${ fn:split(vo.ATDR_AM,'.')[0] }</dd>
+								<dd class="pd_pay2">${ fn:split(vo.SRA_SBID_UPR,'.')[0] }</dd>
 							</dl>
 						</li>
 	                </c:forEach>				

@@ -19,11 +19,6 @@ import org.springframework.stereotype.Component;
 
 import com.ishift.auction.vo.JwtTokenVo;
 
-import javax.annotation.PostConstruct;
-import javax.crypto.spec.SecretKeySpec;
-import javax.xml.bind.DatatypeConverter;
-
-import java.security.Key;
 import java.util.*;
 
 /**
@@ -35,17 +30,9 @@ import java.util.*;
 @Component
 public class JwtTokenUtil {
 
-	final private byte[] secretByte = DatatypeConverter.parseBase64Binary(Constants.JwtConstants.NH_AUCTION_CERT_CREATE_KEY);
+	final private String SIGNING_KEY = Constants.JwtConstants.NH_AUCTION_CERT_CREATE_KEY;
 	final SignatureAlgorithm signatureAlgorithm = SignatureAlgorithm.HS512;
 
-	private Key signingKey;
-
-	// 객체 초기화, secretKey를 Base64로 인코딩한다.
-	@PostConstruct
-	protected void init() {
-		signingKey = new SecretKeySpec(secretByte, signatureAlgorithm.getJcaName());
-	}
-	
 	/**
 	 * jwt 생성 및 리턴
 	 * @param jwtTokenVo
@@ -59,7 +46,7 @@ public class JwtTokenUtil {
 								.setIssuedAt(now)
 								.setClaims(createClaims(jwtTokenVo))
 								.setExpiration(createExpiredDate(tokenType))
-								.signWith(signingKey, signatureAlgorithm);
+								.signWith(signatureAlgorithm, Constants.JwtConstants.NH_AUCTION_CERT_CREATE_KEY);
 		return builder.compact();
 	}
 	
@@ -122,9 +109,8 @@ public class JwtTokenUtil {
 	 */
 	public Claims getClaims(String token) {
 		try {
-			return Jwts.parserBuilder()
-						.setSigningKey(signingKey)
-						.build()
+			return Jwts.parser()
+						.setSigningKey(SIGNING_KEY)
 						.parseClaimsJws(token)
 						.getBody();
 		}

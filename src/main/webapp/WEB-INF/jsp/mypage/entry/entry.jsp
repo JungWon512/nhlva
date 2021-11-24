@@ -93,8 +93,22 @@
 							<dd class="pd_kpn">${ item.KPN_NO_STR }</dd>
 							<dd class="pd_num1">${ item.SRA_INDV_PASG_QCN }</dd>
 <%-- 							<dd class="pd_pay1">${ fn:split(item.LOWS_SBID_LMT_UPR,'.')[0] }</dd> --%>
-							<dd class="pd_pay1">${vo.LOWS_SBID_LMT_AM <= 0 ? '0' : fn:split(vo.LOWS_SBID_LMT_UPR,'.')[0]}</dd>
-							<dd class="pd_pay2">${ fn:split(item.SRA_SBID_UPR,'.')[0] }</dd>
+							<dd class="pd_pay1">
+								<c:choose>
+									<c:when test="${item.LOWS_SBID_LMT_AM eq '' || item.LOWS_SBID_LMT_AM == null || item.LOWS_SBID_LMT_AM <= 0}">-</c:when>
+									<c:otherwise>
+										<fmt:formatNumber value="${fn:split(item.LOWS_SBID_LMT_UPR,'.')[0]}" type="number" />
+									</c:otherwise>
+								</c:choose>
+							</dd>
+							<dd class="pd_pay2">
+								<c:choose>
+									<c:when test="${empty item.SRA_SBID_UPR or item.SRA_SBID_UPR <= 0}">-</c:when>
+									<c:otherwise>
+										<fmt:formatNumber value="${fn:split(item.SRA_SBID_UPR,'.')[0]}" type="number" />
+									</c:otherwise>
+								</c:choose>
+							</dd>
 							<dd class="pd_state">${ item.SEL_STS_DSC_NAME }</dd>
 							<dd class="pd_etc">${ item.RMK_CNTN }</dd>
 						</dl>

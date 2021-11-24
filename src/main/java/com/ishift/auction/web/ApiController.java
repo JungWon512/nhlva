@@ -312,9 +312,7 @@ public class ApiController {
 					  .append(this.getStringValue(vo.get("SRA_SBID_AM")).replace("|", ",")).append('|')
 					  .append(this.getStringValue(vo.get("ATDR_DTM")).replace("|", ",")).append('|')
 					  .append('N').append('|')
-					  //.append(vo.getOrDefault("AUC_PRG_SQ")).append('|')	// 계류대 번호
-//					  .append(index++).append('|')				// 계류대 번호 
-					  .append(this.getStringValue(vo.get("AUC_PRG_SQ")).replace("|", ",")).append('|')	// 계류대 번호
+					  .append(this.getStringValue(vo.get("MODL_NO")).replace("|", ",")).append('|')	// 계류대 번호
 					  .append("N");								// 초과 줄장우 여부 
 
 					entryList.add(sb.toString());
@@ -1440,6 +1438,15 @@ public class ApiController {
 						if (returnMap != null && (Boolean)returnMap.get("success")) {
 							result.put("success", true);
 							result.put("message", "경매 시작이 정상 처리되었습니다.");
+							
+							params.put("stAucNo", aucStn.get("ST_AUC_NO"));
+							params.put("edAucNo", aucStn.get("ED_AUC_NO"));
+							params.put("aucYn", "1");
+							List<Map<String, Object>> entryList = auctionService.selectAuctCowList(params);
+							for (Map<String, Object> info : entryList) {
+								info.put("SRA_PD_RGNNM_FMT", this.getRgnName(info.get("SRA_PD_RGNNM")));
+							}
+							result.put("entryList", entryList);
 						}
 						else {
 							result.put("success", false);

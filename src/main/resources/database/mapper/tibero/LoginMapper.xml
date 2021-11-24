@@ -100,9 +100,9 @@
 		  FROM TB_LA_IS_MM_FHS A
 		 WHERE A.FTSNM = #{userName}
 		   AND (
-				REPLACE(A.OHSE_TELNO, '-', '') = #{telNo}
+				REGEXP_REPLACE(A.OHSE_TELNO, '[^0-9]') = REGEXP_REPLACE(#{telNo}, '[^0-9]')
 				OR
-				REPLACE(A.CUS_MPNO, '-', '') = #{telNo}
+				REGEXP_REPLACE(A.CUS_MPNO, '[^0-9]') = REGEXP_REPLACE(#{telNo}, '[^0-9]')
 			 )
 		   AND DEL_YN = '0'
 		   AND EXISTS (

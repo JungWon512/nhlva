@@ -111,9 +111,16 @@
 				A.BRANDNM,                    <!-- 브랜드명   -->
 				A.PRNY_MTCN,                   <!-- 임신개월수   -->
 				A.AUC_DT,                    <!-- 경매일자   -->
-				    TO_CHAR(A.LSCHG_DTM,'YYYYMMDDHH24mmss') as LSCHG_DTM, <!-- 최종변경일시   -->
+				TO_CHAR(A.LSCHG_DTM,'YYYYMMDDHH24mmss') as LSCHG_DTM, <!-- 최종변경일시   -->
 				A.LS_CMENO,                    <!-- 최종변경자개인번호  -->
+			<choose>
+			<when test="aucYn != null and aucYn != ''">
+				CASE WHEN #{aucYn} = '1' THEN '11' ELSE SEL_STS_DSC END AS SEL_STS_DSC,
+			</when>
+			<otherwise>
 				A.SEL_STS_DSC,                   <!-- 판매상태구분코드  -->
+			</otherwise>
+			</choose>
 				A.LWPR_CHG_NT,                   <!-- 최저가변경횟수  -->
 				A.LVST_AUC_PTC_MN_NO,                 <!-- 가축경매참여자번호  -->
 				A.DNA_YN,                    <!-- DNA    -->
@@ -236,8 +243,12 @@
 			 WHERE A.NA_BZPLC = #{naBzplc}
 			   AND A.AUC_DT  = #{aucDt}
 			   AND A.AUC_OBJ_DSC = CASE WHEN #{aucObjDsc} = '0' THEN A.AUC_OBJ_DSC ELSE #{aucObjDsc} END
+			   AND A.DEL_YN = '0'
 			<if test="mAuctionResult !=null and !mAuctionResult.equals('')">
 			   AND A.SEL_STS_DSC = #{mAuctionResult}
+			</if>
+			<if test="aucYn != null and aucYn != ''">
+			   AND A.AUC_YN = #{aucYn}
 			</if>
 			<if test="stAucNo !=null and !stAucNo.equals('') and edAucNo !=null and !edAucNo.equals('')">
 			   AND A.AUC_PRG_SQ <![CDATA[>=]]> #{stAucNo}

@@ -66,7 +66,7 @@
 								<input type="hidden" class="sbidUpr" name="sbidUpr_${st.index }" value="${fn:split(vo.SBID_UPR,'.')[0]}"/>
 								<c:if test="${!empty params.loginNo}">
 									<a href="javascript:;" class="${(vo.SBID_UPR eq '' || vo.SBID_UPR eq null )?'':'act'}">
-										<span class="ico_pav">                            
+										<span class="ico_pav">
 											<c:choose>
 											<c:when test="${vo.SBID_UPR eq '' || vo.SBID_UPR eq null }">
 												찜가격

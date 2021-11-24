@@ -270,7 +270,9 @@ input::-ms-clear {
 }
 
 .safari input[type=text]::-moz-placeholder, .safari input[type=tel]::-moz-placeholder,
-	.safari input[type=password]::-moz-placeholder.safari input[type=date]::-moz-placeholder
+.safari input[type=password]::-moz-placeholder.safari input[type=date]::-moz-placeholder,
+.safari input[type="text"]::-webkit-input-placeholder, .safari input[type="tel"]::-webkit-input-placeholder,
+.safari input[type="password"]::-webkit-input-placeholder.safari input[type="date"]::-webkit-input-placeholder
 	{
 	line-height: normal;
 	vertical-align: middle !important;
@@ -283,11 +285,18 @@ input::-ms-clear {
 	vertical-align: middle !important;
 }
 
-.safari input[type=text]::placeholder, .safari input[type=tel]::placeholder,
-	.safari input[type=password]::placeholder.safari input[type=date]::placeholder
+.safari input[type="text"]::-ms-input-placeholder, .safari input[type="tel"]::-ms-input-placeholder,
+	.safari input[type="password"]::-ms-input-placeholder.safari input[type="date"]::-ms-input-placeholder
 	{
 	line-height: normal;
-	vertical-align: middle !important;
+	vertical-align: middle !important
+}
+
+.safari input[type="text"]::placeholder, .safari input[type="tel"]::placeholder,
+	.safari input[type="password"]::placeholder.safari input[type="date"]::placeholder
+	{
+	line-height: normal;
+	vertical-align: middle !important
 }
 
 .m_view {
@@ -334,74 +343,75 @@ input::-ms-clear {
 	display: none !important;
 }
 
-.admin_chocie ul.choice_area, .admin_auc_main .main_search .sch_area,
-	.admin_auc_main .main_search .radio_group, .admin_auc_main .main_search,
-	.admin_area .sub_search .sch_area, .admin_area .sub_search,
-	.monitoring-view .table-inner .table-info ul, .auction_calculator .calculator_bottom .calculator-cell,
+.header .w_header_inner .w_header .side_menu ul, .header .w_header_inner .w_header #nav ul,
+	#menu-lnb .lnb_info, .move-btn ul, .chk_step1 ul.choice_area,
+	.chk_step2 ul.choice_area, .auction_info dl.board_top dd ul,
+	.auction_info .board_bottom .date_bottom ul li dl, .auction_list .auction_area,
+	.auction_list .list_search, .auction_list .list_search .radio_group,
+	.auction_list .list_search .sch_area, .auction_list .calculator_head_pc dl,
+	.list_downs ul, .auction_date .date_bottom li dl, .tab_list ul,
+	.auction_seeBox.calculator_type, .auction_seeBox .seeBox_top dl dd ul,
+	.auction_seeBox .seeBox_bottom, .auction_seeBox .seeBox_bottom .seeBox_slick .seeBox_slick_inner .seeBox-cell,
 	.auction_seeBox .seeBox_bottom .seeBox_slick .mo_seeBox ul,
-	.auction_seeBox .seeBox_bottom .seeBox_slick .seeBox_slick_inner .seeBox-cell,
-	.auction_seeBox .seeBox_bottom, .auction_seeBox .seeBox_top dl dd ul,
-	.auction_seeBox.calculator_type, .tab_list ul, .auction_date .date_bottom li dl,
-	.list_downs ul, .auction_list .calculator_head_pc dl, .auction_list .list_search .sch_area,
-	.auction_list .list_search .radio_group, .auction_list .list_search,
-	.auction_list .auction_area, .auction_info .board_bottom .date_bottom ul li dl,
-	.auction_info dl.board_top dd ul, .chk_step2 ul.choice_area, .chk_step1 ul.choice_area,
-	.move-btn ul, #menu-lnb .lnb_info, .header .w_header_inner .w_header #nav ul,
-	.header .w_header_inner .w_header .side_menu ul {
+	.auction_calculator .calculator_bottom .calculator-cell,
+	.monitoring-view .table-inner .table-info ul, .admin_area .sub_search,
+	.admin_area .sub_search .sch_area, .admin_auc_main .main_search,
+	.admin_auc_main .main_search .radio_group, .admin_auc_main .main_search .sch_area,
+	.admin_chocie ul.choice_area, .video_transmission .video_list {
 	*zoom: 1
 }
 
-.admin_chocie ul.choice_area:before, .admin_auc_main .main_search .sch_area:before,
-	.admin_auc_main .main_search .radio_group:before, .admin_auc_main .main_search:before,
-	.admin_area .sub_search .sch_area:before, .admin_area .sub_search:before,
-	.monitoring-view .table-inner .table-info ul:before,
-	.auction_calculator .calculator_bottom .calculator-cell:before,
-	.auction_seeBox .seeBox_bottom .seeBox_slick .mo_seeBox ul:before,
+.header .w_header_inner .w_header .side_menu ul:before, .header .w_header_inner .w_header #nav ul:before,
+	#menu-lnb .lnb_info:before, .move-btn ul:before, .chk_step1 ul.choice_area:before,
+	.chk_step2 ul.choice_area:before, .auction_info dl.board_top dd ul:before,
+	.auction_info .board_bottom .date_bottom ul li dl:before, .auction_list .auction_area:before,
+	.auction_list .list_search:before, .auction_list .list_search .radio_group:before,
+	.auction_list .list_search .sch_area:before, .auction_list .calculator_head_pc dl:before,
+	.list_downs ul:before, .auction_date .date_bottom li dl:before,
+	.tab_list ul:before, .auction_seeBox.calculator_type:before,
+	.auction_seeBox .seeBox_top dl dd ul:before, .auction_seeBox .seeBox_bottom:before,
 	.auction_seeBox .seeBox_bottom .seeBox_slick .seeBox_slick_inner .seeBox-cell:before,
-	.auction_seeBox .seeBox_bottom:before, .auction_seeBox .seeBox_top dl dd ul:before,
-	.auction_seeBox.calculator_type:before, .tab_list ul:before,
-	.auction_date .date_bottom li dl:before, .list_downs ul:before,
-	.auction_list .calculator_head_pc dl:before, .auction_list .list_search .sch_area:before,
-	.auction_list .list_search .radio_group:before, .auction_list .list_search:before,
-	.auction_list .auction_area:before, .auction_info .board_bottom .date_bottom ul li dl:before,
-	.auction_info dl.board_top dd ul:before, .chk_step2 ul.choice_area:before,
-	.chk_step1 ul.choice_area:before, .move-btn ul:before, #menu-lnb .lnb_info:before,
-	.header .w_header_inner .w_header #nav ul:before, .header .w_header_inner .w_header .side_menu ul:before,
-	.admin_chocie ul.choice_area:after, .admin_auc_main .main_search .sch_area:after,
-	.admin_auc_main .main_search .radio_group:after, .admin_auc_main .main_search:after,
-	.admin_area .sub_search .sch_area:after, .admin_area .sub_search:after,
-	.monitoring-view .table-inner .table-info ul:after, .auction_calculator .calculator_bottom .calculator-cell:after,
+	.auction_seeBox .seeBox_bottom .seeBox_slick .mo_seeBox ul:before,
+	.auction_calculator .calculator_bottom .calculator-cell:before,
+	.monitoring-view .table-inner .table-info ul:before, .admin_area .sub_search:before,
+	.admin_area .sub_search .sch_area:before, .admin_auc_main .main_search:before,
+	.admin_auc_main .main_search .radio_group:before, .admin_auc_main .main_search .sch_area:before,
+	.admin_chocie ul.choice_area:before, .video_transmission .video_list:before,
+	.header .w_header_inner .w_header .side_menu ul:after, .header .w_header_inner .w_header #nav ul:after,
+	#menu-lnb .lnb_info:after, .move-btn ul:after, .chk_step1 ul.choice_area:after,
+	.chk_step2 ul.choice_area:after, .auction_info dl.board_top dd ul:after,
+	.auction_info .board_bottom .date_bottom ul li dl:after, .auction_list .auction_area:after,
+	.auction_list .list_search:after, .auction_list .list_search .radio_group:after,
+	.auction_list .list_search .sch_area:after, .auction_list .calculator_head_pc dl:after,
+	.list_downs ul:after, .auction_date .date_bottom li dl:after, .tab_list ul:after,
+	.auction_seeBox.calculator_type:after, .auction_seeBox .seeBox_top dl dd ul:after,
+	.auction_seeBox .seeBox_bottom:after, .auction_seeBox .seeBox_bottom .seeBox_slick .seeBox_slick_inner .seeBox-cell:after,
 	.auction_seeBox .seeBox_bottom .seeBox_slick .mo_seeBox ul:after,
-	.auction_seeBox .seeBox_bottom .seeBox_slick .seeBox_slick_inner .seeBox-cell:after,
-	.auction_seeBox .seeBox_bottom:after, .auction_seeBox .seeBox_top dl dd ul:after,
-	.auction_seeBox.calculator_type:after, .tab_list ul:after,
-	.auction_date .date_bottom li dl:after, .list_downs ul:after,
-	.auction_list .calculator_head_pc dl:after, .auction_list .list_search .sch_area:after,
-	.auction_list .list_search .radio_group:after, .auction_list .list_search:after,
-	.auction_list .auction_area:after, .auction_info .board_bottom .date_bottom ul li dl:after,
-	.auction_info dl.board_top dd ul:after, .chk_step2 ul.choice_area:after,
-	.chk_step1 ul.choice_area:after, .move-btn ul:after, #menu-lnb .lnb_info:after,
-	.header .w_header_inner .w_header #nav ul:after, .header .w_header_inner .w_header .side_menu ul:after
+	.auction_calculator .calculator_bottom .calculator-cell:after,
+	.monitoring-view .table-inner .table-info ul:after, .admin_area .sub_search:after,
+	.admin_area .sub_search .sch_area:after, .admin_auc_main .main_search:after,
+	.admin_auc_main .main_search .radio_group:after, .admin_auc_main .main_search .sch_area:after,
+	.admin_chocie ul.choice_area:after, .video_transmission .video_list:after
 	{
 	content: " ";
 	display: table
 }
 
-.admin_chocie ul.choice_area:after, .admin_auc_main .main_search .sch_area:after,
-	.admin_auc_main .main_search .radio_group:after, .admin_auc_main .main_search:after,
-	.admin_area .sub_search .sch_area:after, .admin_area .sub_search:after,
-	.monitoring-view .table-inner .table-info ul:after, .auction_calculator .calculator_bottom .calculator-cell:after,
+.header .w_header_inner .w_header .side_menu ul:after, .header .w_header_inner .w_header #nav ul:after,
+	#menu-lnb .lnb_info:after, .move-btn ul:after, .chk_step1 ul.choice_area:after,
+	.chk_step2 ul.choice_area:after, .auction_info dl.board_top dd ul:after,
+	.auction_info .board_bottom .date_bottom ul li dl:after, .auction_list .auction_area:after,
+	.auction_list .list_search:after, .auction_list .list_search .radio_group:after,
+	.auction_list .list_search .sch_area:after, .auction_list .calculator_head_pc dl:after,
+	.list_downs ul:after, .auction_date .date_bottom li dl:after, .tab_list ul:after,
+	.auction_seeBox.calculator_type:after, .auction_seeBox .seeBox_top dl dd ul:after,
+	.auction_seeBox .seeBox_bottom:after, .auction_seeBox .seeBox_bottom .seeBox_slick .seeBox_slick_inner .seeBox-cell:after,
 	.auction_seeBox .seeBox_bottom .seeBox_slick .mo_seeBox ul:after,
-	.auction_seeBox .seeBox_bottom .seeBox_slick .seeBox_slick_inner .seeBox-cell:after,
-	.auction_seeBox .seeBox_bottom:after, .auction_seeBox .seeBox_top dl dd ul:after,
-	.auction_seeBox.calculator_type:after, .tab_list ul:after,
-	.auction_date .date_bottom li dl:after, .list_downs ul:after,
-	.auction_list .calculator_head_pc dl:after, .auction_list .list_search .sch_area:after,
-	.auction_list .list_search .radio_group:after, .auction_list .list_search:after,
-	.auction_list .auction_area:after, .auction_info .board_bottom .date_bottom ul li dl:after,
-	.auction_info dl.board_top dd ul:after, .chk_step2 ul.choice_area:after,
-	.chk_step1 ul.choice_area:after, .move-btn ul:after, #menu-lnb .lnb_info:after,
-	.header .w_header_inner .w_header #nav ul:after, .header .w_header_inner .w_header .side_menu ul:after
+	.auction_calculator .calculator_bottom .calculator-cell:after,
+	.monitoring-view .table-inner .table-info ul:after, .admin_area .sub_search:after,
+	.admin_area .sub_search .sch_area:after, .admin_auc_main .main_search:after,
+	.admin_auc_main .main_search .radio_group:after, .admin_auc_main .main_search .sch_area:after,
+	.admin_chocie ul.choice_area:after, .video_transmission .video_list:after
 	{
 	clear: both
 }
@@ -1187,9 +1197,15 @@ Base styles: contents layer
 	height: 120px;
 	padding: 0 5px;
 	background: #fff;
+	display: -webkit-box;
+	display: -ms-flexbox;
 	display: flex;
 	border-radius: 20px;
+	-webkit-box-pack: center;
+	-ms-flex-pack: center;
 	justify-content: center;
+	-webkit-box-align: center;
+	-ms-flex-align: center;
 	align-items: center;
 	font-size: 28px;
 	font-family: "Noto Sans KR", "Roboto", "AppleGothic", "sans-serif";
@@ -1198,8 +1214,10 @@ Base styles: contents layer
 	text-align: center;
 	color: #1a1a1a;
 	position: relative;
-	box-shadow: 0px 5px 10px 3px rgba(0, 0, 0, .05);
-	transition: all .2s
+	-webkit-box-shadow: 0px 5px 10px 3px rgba(0, 0, 0, 0.05);
+	box-shadow: 0px 5px 10px 3px rgba(0, 0, 0, 0.05);
+	-webkit-transition: all 0.2s;
+	transition: all 0.2s
 }
 
 .chk_step1 ul.choice_area li a:hover, .chk_step1 ul.choice_area li a.act
@@ -1304,9 +1322,15 @@ Base styles: contents layer
 	height: 160px;
 	padding: 0 5px;
 	background: #fff;
+	display: -webkit-box;
+	display: -ms-flexbox;
 	display: flex;
 	border-radius: 20px;
+	-webkit-box-pack: center;
+	-ms-flex-pack: center;
 	justify-content: center;
+	-webkit-box-align: center;
+	-ms-flex-align: center;
 	align-items: center;
 	font-size: 28px;
 	font-family: "Noto Sans KR", "Roboto", "AppleGothic", "sans-serif";
@@ -1315,14 +1339,17 @@ Base styles: contents layer
 	text-align: center;
 	color: #1a1a1a;
 	position: relative;
-	box-shadow: 0px 5px 10px 3px rgba(0, 0, 0, .05);
-	transition: all .2s
+	-webkit-box-shadow: 0px 5px 10px 3px rgba(0, 0, 0, 0.05);
+	box-shadow: 0px 5px 10px 3px rgba(0, 0, 0, 0.05);
+	-webkit-transition: all 0.2s;
+	transition: all 0.2s
 }
 
 .chk_step2 ul.choice_area li a:hover, .chk_step2 ul.choice_area li a.act
 	{
 	background: #007eff;
 	color: #fff;
+	-webkit-box-shadow: inherit;
 	box-shadow: inherit
 }
 
@@ -1417,6 +1444,7 @@ Base styles: contents layer
 	border-top: 2px solid #1a1a1a;
 	border-right: 2px solid #1a1a1a;
 	display: inline-block;
+	-webkit-transform: rotate(135deg);
 	transform: rotate(135deg);
 	position: absolute;
 	top: 7px;
@@ -1774,7 +1802,8 @@ Base styles: contents layer
 	font-family: "Noto Sans KR", "Roboto", "AppleGothic", "sans-serif";
 	font-weight: 700;
 	letter-spacing: -0.9px;
-	box-shadow: 0px 0 20px 5px rgba(0, 0, 0, 0.25);
+	-webkit-box-shadow: 0px 0 20px 5px rgba(0, 0, 0, 0.25);
+	box-shadow: 0px 0 20px 5px rgba(0, 0, 0, 0.25)
 }
 
 .auction_choice .auction_btn .auction_see {
@@ -1790,7 +1819,8 @@ Base styles: contents layer
 	font-family: "Noto Sans KR", "Roboto", "AppleGothic", "sans-serif";
 	font-weight: 700;
 	letter-spacing: -0.9px;
-	box-shadow: 0px 0 20px 5px rgba(0, 0, 0, 0.25);
+	-webkit-box-shadow: 0px 0 20px 5px rgba(0, 0, 0, 0.25);
+	box-shadow: 0px 0 20px 5px rgba(0, 0, 0, 0.25)
 }
 
 @media only all and (max-width: 1024px) {
@@ -1817,9 +1847,15 @@ Base styles: contents layer
 }
 
 .auction_choice .app_down {
+	display: -webkit-box;
+	display: -ms-flexbox;
 	display: flex;
+	-webkit-box-pack: justify;
+	-ms-flex-pack: justify;
 	justify-content: space-between;
-	align-items: center;
+	-webkit-box-align: center;
+	-ms-flex-align: center;
+	align-items: center
 }
 
 .auction_choice .app_down a {
@@ -1827,8 +1863,14 @@ Base styles: contents layer
 	width: 100%;
 	height: 70px;
 	text-align: center;
+	display: -webkit-box;
+	display: -ms-flexbox;
 	display: flex;
+	-webkit-box-pack: center;
+	-ms-flex-pack: center;
 	justify-content: center;
+	-webkit-box-align: center;
+	-ms-flex-align: center;
 	align-items: center;
 	padding: 0 20px;
 	border-radius: 20px;
@@ -1845,6 +1887,7 @@ Base styles: contents layer
 	max-width: 280px;
 	margin: 0 auto;
 	border-radius: 20px;
+	-webkit-box-shadow: 0 3px 10px 0 rgba(0, 0, 0, 0.16);
 	box-shadow: 0 3px 10px 0 rgba(0, 0, 0, 0.16);
 	border: 2px solid #dbdbdb;
 	background-color: #fff;
@@ -1975,9 +2018,18 @@ Base styles: contents layer
 }
 
 .auction_info dl.board_top dt {
+	display: -webkit-box;
+	display: -ms-flexbox;
 	display: flex;
+	-webkit-box-align: start;
+	-ms-flex-align: start;
 	align-items: start;
+	-webkit-box-pack: center;
+	-ms-flex-pack: center;
 	justify-content: center;
+	-webkit-box-orient: vertical;
+	-webkit-box-direction: normal;
+	-ms-flex-flow: column;
 	flex-flow: column;
 	background: #007eff;
 	border-radius: 20px;
@@ -1985,8 +2037,9 @@ Base styles: contents layer
 	max-width: 655px;
 	width: 100%;
 	min-height: 200px;
-	color: #ffffff;
-	box-shadow: 0px 5px 20px 2px rgba(0, 0, 0, 0.25);
+	color: #fff;
+	-webkit-box-shadow: 0px 5px 20px 2px rgba(0, 0, 0, 0.25);
+	box-shadow: 0px 5px 20px 2px rgba(0, 0, 0, 0.25)
 }
 
 .auction_info dl.board_top dt h4 {
@@ -2019,10 +2072,19 @@ Base styles: contents layer
 	top: 0;
 	width: 340px;
 	min-height: 200px;
+	display: -webkit-box;
+	display: -ms-flexbox;
 	display: flex;
+	-webkit-box-align: center;
+	-ms-flex-align: center;
 	align-items: center;
+	-webkit-box-pack: center;
+	-ms-flex-pack: center;
 	justify-content: center;
-	flex-flow: column;
+	-webkit-box-orient: vertical;
+	-webkit-box-direction: normal;
+	-ms-flex-flow: column;
+	flex-flow: column
 }
 
 .auction_info dl.board_top dd ul li {
@@ -2036,7 +2098,7 @@ Base styles: contents layer
 .auction_info dl.board_top dd ul li a {
 	width: 260px;
 	height: 50px;
-	line-height: 50px;
+	line-height: 46px;
 	display: block;
 	padding: 0 10px;
 	border-radius: 50px;
@@ -2095,8 +2157,15 @@ Base styles: contents layer
 		left: 0;
 		width: 100%;
 		display: block;
+		-webkit-box-align: inherit;
+		-ms-flex-align: inherit;
 		align-items: inherit;
+		-webkit-box-pack: inherit;
+		-ms-flex-pack: inherit;
 		justify-content: inherit;
+		-webkit-box-orient: vertical;
+		-webkit-box-direction: normal;
+		-ms-flex-flow: inherit;
 		flex-flow: inherit;
 		min-height: auto;
 	}
@@ -2168,9 +2237,16 @@ Base styles: contents layer
 }
 
 .auction_info .board_bottom .date_bottom ul {
+	display: -webkit-box;
+	display: -ms-flexbox;
 	display: flex;
+	-webkit-box-pack: justify;
+	-ms-flex-pack: justify;
 	justify-content: space-between;
+	-webkit-box-align: start;
+	-ms-flex-align: start;
 	align-items: start;
+	-ms-flex-flow: wrap;
 	flex-flow: wrap;
 	margin-left: -20px;
 }
@@ -2191,11 +2267,16 @@ Base styles: contents layer
 .auction_info .board_bottom .date_bottom ul li dl {
 	position: relative;
 	min-height: 110px;
+	display: -webkit-box;
+	display: -ms-flexbox;
 	display: flex;
+	-webkit-box-align: start;
+	-ms-flex-align: start;
 	align-items: flex-start;
 	border-radius: 10px;
+	-webkit-box-shadow: 0 3px 10px 0 rgba(0, 0, 0, 0.16);
 	box-shadow: 0 3px 10px 0 rgba(0, 0, 0, 0.16);
-	background-color: #ffffff;
+	background-color: #fff;
 	padding: 14.5px 18px;
 	overflow: hidden;
 }
@@ -2210,7 +2291,9 @@ Base styles: contents layer
 }
 
 .auction_info .board_bottom .date_bottom ul li dl.no_date {
-	align-items: center;
+	-webkit-box-align: center;
+	-ms-flex-align: center;
+	align-items: center
 }
 
 .auction_info .board_bottom .date_bottom ul li dl.no_date:before {
@@ -2243,10 +2326,19 @@ Base styles: contents layer
 .auction_info .board_bottom .date_bottom ul li dl dt {
 	width: calc(100% - 375px);
 	float: left;
+	display: -webkit-box;
+	display: -ms-flexbox;
 	display: flex;
+	-webkit-box-pack: center;
+	-ms-flex-pack: center;
 	justify-content: center;
+	-webkit-box-align: center;
+	-ms-flex-align: center;
 	align-items: center;
 	height: 100%;
+	-webkit-box-orient: vertical;
+	-webkit-box-direction: normal;
+	-ms-flex-flow: column;
 	flex-flow: column;
 	position: relative;
 }
@@ -2284,9 +2376,16 @@ Base styles: contents layer
 .auction_info .board_bottom .date_bottom ul li dl dd {
 	float: left;
 	width: calc(100% - 80px);
+	display: -webkit-box;
+	display: -ms-flexbox;
 	display: flex;
+	-webkit-box-pack: center;
+	-ms-flex-pack: center;
 	justify-content: center;
 	height: 100%;
+	-webkit-box-orient: vertical;
+	-webkit-box-direction: normal;
+	-ms-flex-flow: column;
 	flex-flow: column;
 	padding: 6px 0 0 40px;
 }
@@ -2393,17 +2492,29 @@ Base styles: contents layer
 	background: #ffffff;
 	padding: 25px 100px;
 	border-radius: 10px;
+	display: -webkit-box;
+	display: -ms-flexbox;
 	display: flex;
+	-webkit-box-pack: start;
+	-ms-flex-pack: start;
 	justify-content: flex-start;
+	-webkit-box-align: center;
+	-ms-flex-align: center;
 	align-items: center;
-	flex-wrap: wrap;
+	-ms-flex-wrap: wrap;
+	flex-wrap: wrap
 }
 
 @media only all and (max-width: 1024px) {
 	.auction_list .list_search {
 		display: block;
+		-webkit-box-pack: inherit;
+		-ms-flex-pack: inherit;
 		justify-content: inherit;
+		-webkit-box-align: inherit;
+		-ms-flex-align: inherit;
 		align-items: inherit;
+		-ms-flex-wrap: inherit;
 		flex-wrap: inherit;
 		background: #f5f5f5;
 		padding: 8px 15px;
@@ -2413,8 +2524,13 @@ Base styles: contents layer
 
 .auction_list .list_search.pop_style {
 	display: block;
+	-webkit-box-pack: inherit;
+	-ms-flex-pack: inherit;
 	justify-content: inherit;
+	-webkit-box-align: inherit;
+	-ms-flex-align: inherit;
 	align-items: inherit;
+	-ms-flex-wrap: inherit;
 	flex-wrap: inherit;
 	background: #f5f5f5;
 	padding: 8px 15px;
@@ -2947,8 +3063,7 @@ Base styles: contents layer
 	width: 32px;
 	height: 32px;
 	display: inline-block;
-	background: url(/static/images/guide/fav_off.svg) no-repeat center
-		center;
+	background: url(/static/images/guide/fav_off.svg) no-repeat center center;
 	background-size: 32px 32px;
 	position: absolute;
 	right: 0;
@@ -3116,8 +3231,7 @@ Base styles: contents layer
 	width: 30px;
 	height: 30px;
 	display: inline-block;
-	background: url(/static/images/guide/fav_off.svg) no-repeat center
-		center;
+	background: url(/static/images/guide/fav_off.svg) no-repeat center center;
 	background-size: 30px 30px;
 	position: absolute;
 	right: 0;
@@ -3218,8 +3332,7 @@ Base styles: contents layer
 		width: 30px;
 		height: 30px;
 		display: inline-block;
-		background: url(/static/images/guide/fav_off.svg) no-repeat center
-			center;
+		background: url(/static/images/guide/fav_off.svg) no-repeat center center;
 		background-size: 30px 30px;
 		position: absolute;
 		right: 0;
@@ -3291,6 +3404,22 @@ Base styles: contents layer
 	}
 }
 
+.auction_date .date_top dl dd.btn_prev {
+	left: 0;
+}
+
+.auction_date .date_top dl dd.btn_prev a {
+	background-image: url(/static/images/guide/btn_prev.svg);
+}
+
+.auction_date .date_top dl dd.btn_next {
+	right: 0;
+}
+
+.auction_date .date_top dl dd.btn_next a {
+	background-image: url(/static/images/guide/btn_next.svg);
+}
+
 .auction_date .date_top {
 	text-align: center;
 	margin-bottom: 30px;
@@ -3324,22 +3453,6 @@ Base styles: contents layer
 	background-repeat: no-repeat !important;
 	background-size: 14px 20px !important;
 	text-indent: -9999px;
-}
-
-.auction_date .date_top dl dd.btn_prev {
-	left: 0;
-}
-
-.auction_date .date_top dl dd.btn_prev a {
-	background-image: url(/static/images/guide/btn_prev.svg);
-}
-
-.auction_date .date_top dl dd.btn_next {
-	right: 0;
-}
-
-.auction_date .date_top dl dd.btn_next a {
-	background-image: url(/static/images/guide/btn_next.svg);
 }
 
 @media only all and (max-width: 768px) {
@@ -3380,9 +3493,14 @@ Base styles: contents layer
 .auction_date .date_bottom li dl {
 	position: relative;
 	min-height: 110px;
+	display: -webkit-box;
+	display: -ms-flexbox;
 	display: flex;
+	-webkit-box-align: start;
+	-ms-flex-align: start;
 	align-items: flex-start;
 	border-radius: 10px;
+	-webkit-box-shadow: 0 3px 10px 0 rgba(0, 0, 0, 0.16);
 	box-shadow: 0 3px 10px 0 rgba(0, 0, 0, 0.16);
 	background-color: #ffffff;
 	padding: 14.5px 18px;
@@ -3399,7 +3517,9 @@ Base styles: contents layer
 }
 
 .auction_date .date_bottom li dl.no_date {
-	align-items: center;
+	-webkit-box-align: center;
+	-ms-flex-align: center;
+	align-items: center
 }
 
 .auction_date .date_bottom li dl.no_date:before {
@@ -3432,10 +3552,19 @@ Base styles: contents layer
 .auction_date .date_bottom li dl dt {
 	width: calc(100% - 375px);
 	float: left;
+	display: -webkit-box;
+	display: -ms-flexbox;
 	display: flex;
+	-webkit-box-pack: center;
+	-ms-flex-pack: center;
 	justify-content: center;
+	-webkit-box-align: center;
+	-ms-flex-align: center;
 	align-items: center;
 	height: 100%;
+	-webkit-box-orient: vertical;
+	-webkit-box-direction: normal;
+	-ms-flex-flow: column;
 	flex-flow: column;
 	position: relative;
 }
@@ -3473,9 +3602,16 @@ Base styles: contents layer
 .auction_date .date_bottom li dl dd {
 	float: left;
 	width: calc(100% - 150px);
+	display: -webkit-box;
+	display: -ms-flexbox;
 	display: flex;
+	-webkit-box-pack: center;
+	-ms-flex-pack: center;
 	justify-content: center;
 	height: 100%;
+	-webkit-box-orient: vertical;
+	-webkit-box-direction: normal;
+	-ms-flex-flow: column;
 	flex-flow: column;
 	padding: 6px 0 0 40px;
 }
@@ -3607,12 +3743,15 @@ Base styles: contents layer
 	background: url(/static/images/guide/aco_btn.svg) no-repeat center
 		center;
 	background-size: 20px 12px;
+	-webkit-transition: all 0.3s;
 	transition: all 0.3s;
-	transform: rotate(0deg);
+	-webkit-transform: rotate(0deg);
+	transform: rotate(0deg)
 }
 
 .notice_area .notice_list>ul>li .notice_btn a.act:after {
-	transform: rotate(180deg);
+	-webkit-transform: rotate(180deg);
+	transform: rotate(180deg)
 }
 
 .notice_area .notice_list>ul>li .notice_btn a dl {
@@ -3768,7 +3907,7 @@ Base styles: contents layer
 	}
 	.auction_result .list_head dl dd.pd_ea, .auction_result .list_body dl dd.pd_ea
 		{
-		width: 29%;
+		width: 25%;
 	}
 	.auction_result .list_head dl dd.pd_sex, .auction_result .list_body dl dd.pd_sex
 		{
@@ -3788,7 +3927,7 @@ Base styles: contents layer
 	}
 	.auction_result .list_head dl dd.pd_pay1, .auction_result .list_body dl dd.pd_pay1
 		{
-		width: 17%;
+		width: 21%;
 	}
 	.auction_result .list_head dl dd.pd_pay2, .auction_result .list_body dl dd.pd_pay2
 		{
@@ -3932,7 +4071,7 @@ Base styles: contents layer
 	}
 	.auction_bid .list_head dl dd.pd_ea, .auction_bid .list_body dl dd.pd_ea
 		{
-		width: 29%;
+		width: 23%;
 		text-align: center;
 	}
 	.auction_bid .list_head dl dd.pd_sex, .auction_bid .list_body dl dd.pd_sex
@@ -3948,15 +4087,15 @@ Base styles: contents layer
 	}
 	.auction_bid .list_head dl dd.pd_pay1, .auction_bid .list_body dl dd.pd_pay1
 		{
-		width: 17%;
+		width: 19%;
 	}
 	.auction_bid .list_head dl dd.pd_pay2, .auction_bid .list_body dl dd.pd_pay2
 		{
-		width: 17%;
+		width: 19%;
 	}
 	.auction_bid .list_head dl dd.pd_pay3, .auction_bid .list_body dl dd.pd_pay3
 		{
-		width: 17%;
+		width: 19%;
 	}
 	.auction_bid .list_head dl dd.pd_state, .auction_bid .list_body dl dd.pd_state
 		{
@@ -4175,7 +4314,8 @@ Base styles: contents layer
 
 .auction_seeBox.calculator_type {
 	margin-bottom: 0 !important;
-	box-shadow: inherit !important;
+	-webkit-box-shadow: inherit !important;
+	box-shadow: inherit !important
 }
 
 @media only all and (max-width: 640px) {
@@ -4337,8 +4477,7 @@ Base styles: contents layer
 	height: 20px;
 	display: block;
 	text-indent: -99999px;
-	background: url(/static/images/guide/sound_on.svg) no-repeat center
-		center;
+	background: url(/static/images/guide/sound_on.svg) no-repeat center center;
 	background-size: 20px 20px !important;
 	position: relative;
 }
@@ -4352,7 +4491,8 @@ Base styles: contents layer
 	position: absolute;
 	left: 9px;
 	top: -4px;
-	transform: rotate(45deg);
+	-webkit-transform: rotate(45deg);
+	transform: rotate(45deg)
 }
 
 @media only all and (max-width: 1024px) {
@@ -4414,8 +4554,14 @@ Base styles: contents layer
 	top: 0;
 	bottom: 0;
 	background: rgba(0, 0, 0, 0.5);
+	display: -webkit-box;
+	display: -ms-flexbox;
 	display: flex;
+	-webkit-box-align: center;
+	-ms-flex-align: center;
 	align-items: center;
+	-webkit-box-pack: center;
+	-ms-flex-pack: center;
 	justify-content: center;
 	text-align: center;
 	color: #fff;
@@ -5117,10 +5263,19 @@ Base styles: contents layer
 	bottom: 0;
 	z-index: 10000;
 	background: #007eff;
+	display: -webkit-box;
+	display: -ms-flexbox;
 	display: flex;
+	-webkit-box-pack: justify;
+	-ms-flex-pack: justify;
 	justify-content: space-between;
+	-webkit-box-align: center;
+	-ms-flex-align: center;
 	align-items: center;
-	flex-flow: column;
+	-webkit-box-orient: vertical;
+	-webkit-box-direction: normal;
+	-ms-flex-flow: column;
+	flex-flow: column
 }
 
 .splash .ico-splash img {
@@ -5444,7 +5599,6 @@ Base styles: contents layer
 }
 
 .monitoring-view .table-inner .table-mt {
-	border-radius: 10px;
 	height: 90%;
 	border-left: 10px solid #0a1931;
 	border-right: 10px solid #0a1931;
@@ -5459,6 +5613,7 @@ Base styles: contents layer
 
 .monitoring-view .table-inner .table-mt .mt-tb-inner {
 	height: 100%;
+	border-radius: 10px;
 	-webkit-border-radius: 10px;
 	-moz-border-radius: 10px;
 	-ms-border-radius: 10px;
@@ -5557,9 +5712,16 @@ Base styles: contents layer
 	background: #fff;
 	padding: 25px 100px;
 	border-radius: 10px;
+	display: -webkit-box;
+	display: -ms-flexbox;
 	display: flex;
+	-webkit-box-pack: start;
+	-ms-flex-pack: start;
 	justify-content: flex-start;
+	-webkit-box-align: center;
+	-ms-flex-align: center;
 	align-items: center;
+	-ms-flex-wrap: wrap;
 	flex-wrap: wrap
 }
 
@@ -5567,8 +5729,13 @@ Base styles: contents layer
 	.admin_area .sub_search {
 		min-height: auto;
 		display: block;
+		-webkit-box-pack: inherit;
+		-ms-flex-pack: inherit;
 		justify-content: inherit;
+		-webkit-box-align: inherit;
+		-ms-flex-align: inherit;
 		align-items: inherit;
+		-ms-flex-wrap: inherit;
 		flex-wrap: inherit;
 		background: #f5f5f5;
 		padding: 15px 15px;
@@ -5598,7 +5765,11 @@ Base styles: contents layer
 .admin_area .sub_search .sch_area>li.barcoad {
 	width: 50%;
 	padding-left: 25px;
+	display: -webkit-box;
+	display: -ms-flexbox;
 	display: flex;
+	-webkit-box-align: center;
+	-ms-flex-align: center;
 	align-items: center
 }
 
@@ -5700,6 +5871,8 @@ Base styles: contents layer
 		right: 0;
 		bottom: 0;
 		margin-top: 0;
+		-webkit-box-align: center;
+		-ms-flex-align: center;
 		align-items: center
 	}
 	.admin_area .sub_search .sch_area>li a {
@@ -5709,8 +5882,14 @@ Base styles: contents layer
 		padding: 0 5px;
 		font-size: 18px;
 		letter-spacing: -0.9px;
+		display: -webkit-inline-box;
+		display: -ms-inline-flexbox;
 		display: inline-flex;
+		-webkit-box-align: center;
+		-ms-flex-align: center;
 		align-items: center;
+		-webkit-box-pack: center;
+		-ms-flex-pack: center;
 		justify-content: center
 	}
 }
@@ -5780,8 +5959,14 @@ Base styles: contents layer
 	max-width: 600px;
 	width: 100%;
 	margin: 30px auto 0;
+	display: -webkit-box;
+	display: -ms-flexbox;
 	display: flex;
+	-webkit-box-pack: center;
+	-ms-flex-pack: center;
 	justify-content: center;
+	-webkit-box-align: center;
+	-ms-flex-align: center;
 	align-items: center;
 	padding: 0 5px
 }
@@ -5811,7 +5996,8 @@ Base styles: contents layer
 	background: #181c32;
 	height: 48px;
 	width: 100%;
-	padding: 0 20px
+	padding: 0 20px;
+	position: relative
 }
 
 .admin_head a {
@@ -5819,12 +6005,26 @@ Base styles: contents layer
 	font-family: "Noto Sans KR", "Roboto", "AppleGothic", "sans-serif";
 	font-weight: 700;
 	color: #fff;
-	display: block;
-	width: 100%;
 	line-height: 46px;
 	padding-left: 34px;
 	background: url(/static/images/guide/ico_back.svg) no-repeat left center;
 	background-size: 24px
+}
+
+.admin_head a.no_ico {
+	padding-left: 0;
+	background: none
+}
+
+.admin_head button {
+	position: absolute;
+	right: 24px;
+	top: 0;
+	font-size: 18px;
+	height: 48px;
+	font-family: "Noto Sans KR", "Roboto", "AppleGothic", "sans-serif";
+	font-weight: 700;
+	color: #fff
 }
 
 .admin_auc_main h3 {
@@ -5841,17 +6041,29 @@ Base styles: contents layer
 	background: #fff;
 	padding: 25px 100px;
 	border-radius: 10px;
+	display: -webkit-box;
+	display: -ms-flexbox;
 	display: flex;
+	-webkit-box-pack: start;
+	-ms-flex-pack: start;
 	justify-content: flex-start;
+	-webkit-box-align: center;
+	-ms-flex-align: center;
 	align-items: center;
+	-ms-flex-wrap: wrap;
 	flex-wrap: wrap
 }
 
 @media only all and (max-width: 1024px) {
 	.admin_auc_main .main_search {
 		display: block;
+		-webkit-box-pack: inherit;
+		-ms-flex-pack: inherit;
 		justify-content: inherit;
+		-webkit-box-align: inherit;
+		-ms-flex-align: inherit;
 		align-items: inherit;
+		-ms-flex-wrap: inherit;
 		flex-wrap: inherit;
 		background: #f5f5f5;
 		padding: 8px 15px;
@@ -5965,7 +6177,11 @@ Base styles: contents layer
 		top: auto;
 		margin-top: 15px;
 		width: 100%;
+		display: -webkit-box;
+		display: -ms-flexbox;
 		display: flex;
+		-webkit-box-pack: justify;
+		-ms-flex-pack: justify;
 		justify-content: space-between
 	}
 	.admin_auc_main .main_search .sch_area li a {
@@ -6017,9 +6233,15 @@ Base styles: contents layer
 	height: 120px;
 	padding: 0 5px;
 	background: #fff;
+	display: -webkit-box;
+	display: -ms-flexbox;
 	display: flex;
 	border-radius: 20px;
+	-webkit-box-pack: center;
+	-ms-flex-pack: center;
 	justify-content: center;
+	-webkit-box-align: center;
+	-ms-flex-align: center;
 	align-items: center;
 	font-size: 28px;
 	font-family: "Noto Sans KR", "Roboto", "AppleGothic", "sans-serif";
@@ -6028,8 +6250,10 @@ Base styles: contents layer
 	text-align: center;
 	color: #1a1a1a;
 	position: relative;
-	box-shadow: 0px 5px 10px 3px rgba(0, 0, 0, .05);
-	transition: all .2s
+	-webkit-box-shadow: 0px 5px 10px 3px rgba(0, 0, 0, 0.05);
+	box-shadow: 0px 5px 10px 3px rgba(0, 0, 0, 0.05);
+	-webkit-transition: all 0.2s;
+	transition: all 0.2s
 }
 
 .admin_chocie ul.choice_area li a:hover, .admin_chocie ul.choice_area li a.act
@@ -6123,10 +6347,11 @@ Base styles: contents layer
 	right: 15px;
 	padding: 0 20px;
 	font-size: 20px;
-	font-family: "NanumSquare", "Roboto", "AppleGothic", "sans-serif";
+	font-family: "Noto Sans KR", "Roboto", "AppleGothic", "sans-serif";
 	font-weight: 700;
 	color: #1a1a1a;
-	box-shadow: 0 1.5px 5px 0 rgba(0, 0, 0, .16);
+	-webkit-box-shadow: 0 1.5px 5px 0 rgba(0, 0, 0, 0.16);
+	box-shadow: 0 1.5px 5px 0 rgba(0, 0, 0, 0.16);
 	border: 1px solid #dbdbdb;
 	height: 40px;
 	border-radius: 10px;
@@ -6156,10 +6381,11 @@ Base styles: contents layer
 	-o-border-radius: 10px;
 	text-align: center;
 	font-size: 20px;
-	font-family: "NanumSquare", "Roboto", "AppleGothic", "sans-serif";
+	font-family: "Noto Sans KR", "Roboto", "AppleGothic", "sans-serif";
 	font-weight: 700;
 	color: #1a1a1a;
-	box-shadow: 0 1.5px 5px 0 rgba(0, 0, 0, .16)
+	-webkit-box-shadow: 0 1.5px 5px 0 rgba(0, 0, 0, 0.16);
+	box-shadow: 0 1.5px 5px 0 rgba(0, 0, 0, 0.16)
 }
 
 .ai_report .list_head dl dd.date, .ai_report .list_body dl dd.date {
@@ -6189,7 +6415,7 @@ Base styles: contents layer
 	width: 10px;
 	height: 8px;
 	display: inline-block;
-	background: url(../image/arrow_up.svg) no-repeat center center;
+	background: url(/static/images/guide/arrow_up.svg) no-repeat center center;
 	background-size: 10px 8px;
 	vertical-align: middle;
 	margin-right: 5px
@@ -6201,7 +6427,7 @@ Base styles: contents layer
 	width: 10px;
 	height: 8px;
 	display: inline-block;
-	background: url(../image/arrow_down.svg) no-repeat center center;
+	background: url(/static/images/guide/arrow_down.svg) no-repeat center center;
 	background-size: 10px 8px;
 	vertical-align: middle;
 	margin-right: 5px;
@@ -6306,7 +6532,7 @@ Base styles: contents layer
 
 .error h2 {
 	font-size: 159px;
-	font-family: "NanumSquare", "Roboto", "AppleGothic", "sans-serif";
+	font-family: "Noto Sans KR", "Roboto", "AppleGothic", "sans-serif";
 	font-weight: 800;
 	color: #007eff;
 	line-height: 1
@@ -6335,7 +6561,7 @@ Base styles: contents layer
 .error p.txt1 {
 	margin-top: 20px;
 	font-size: 32px;
-	font-family: "NanumSquare", "Roboto", "AppleGothic", "sans-serif";
+	font-family: "Noto Sans KR", "Roboto", "AppleGothic", "sans-serif";
 	font-weight: 700;
 	color: #007eff
 }
@@ -6343,7 +6569,7 @@ Base styles: contents layer
 .error p.txt2 {
 	margin-top: 20px;
 	font-size: 26px;
-	font-family: "NanumSquare", "Roboto", "AppleGothic", "sans-serif";
+	font-family: "Noto Sans KR", "Roboto", "AppleGothic", "sans-serif";
 	font-weight: 700;
 	color: #767676
 }
@@ -6376,7 +6602,7 @@ Base styles: contents layer
 	padding: 0 70px;
 	background-color: #007eff;
 	font-size: 28px;
-	font-family: "NanumSquare", "Roboto", "AppleGothic", "sans-serif";
+	font-family: "Noto Sans KR", "Roboto", "AppleGothic", "sans-serif";
 	font-weight: 700;
 	color: #fff;
 	border-radius: 10px;
@@ -6465,6 +6691,827 @@ Base styles: contents layer
 		-ms-transform: translateX(-100%)
 	}
 }
+
+.login_section {
+	display: -webkit-box;
+	display: -ms-flexbox;
+	display: flex;
+	padding: 20px;
+	width: 100%;
+	height: 100%;
+	-webkit-box-align: center;
+	-ms-flex-align: center;
+	align-items: center;
+	-webkit-box-pack: center;
+	-ms-flex-pack: center;
+	justify-content: center
+}
+
+.login_section .login_box {
+	position: relative;
+	padding: 60px 48px;
+	max-width: 500px;
+	min-height: 470px;
+	background-color: #fff;
+	border-radius: 10px;
+	-webkit-box-shadow: 0 3px 10px 0 rgba(0, 0, 0, 0.2);
+	box-shadow: 0 3px 10px 0 rgba(0, 0, 0, 0.2)
+}
+
+@media only all and (max-width: 375px) {
+	.login_section .login_box {
+		padding-left: 30px;
+		padding-right: 30px
+	}
+}
+
+.login_section .login_box:before {
+	position: absolute;
+	left: 0;
+	top: 70px;
+	width: 6px;
+	height: 60px;
+	background-color: #007eff;
+	content: ''
+}
+
+.login_section .login_box h1 {
+	margin-bottom: 18px;
+	font-size: 36px;
+	font-weight: 700;
+	line-height: 1.5;
+	letter-spacing: -2.88px;
+	color: #007eff
+}
+
+.login_section .login_box h1 span {
+	display: block;
+	font-size: 16px;
+	font-weight: 500;
+	line-height: 1;
+	letter-spacing: -0.64px;
+	color: #85c5fc
+}
+
+.login_section .login_box .inp {
+	margin-top: 1px;
+	height: 60px;
+	padding-left: 28px;
+	border: 0;
+	border-bottom: 1px solid #acacac;
+	-webkit-box-shadow: 0 1px 0 0 rgba(0, 0, 0, 0.2);
+	box-shadow: 0 1px 0 0 rgba(0, 0, 0, 0.2);
+	font-size: 16px;
+	font-weight: 500
+}
+
+.login_section .login_box .inp::-webkit-input-placeholder {
+	color: #acacac;
+	font-family: "Noto Sans KR", "Roboto", "AppleGothic", "sans-serif";
+	font-weight: 400
+}
+
+.login_section .login_box .inp:-ms-input-placeholder {
+	color: #acacac;
+	font-family: "Noto Sans KR", "Roboto", "AppleGothic", "sans-serif";
+	font-weight: 400
+}
+
+.login_section .login_box .inp::-ms-input-placeholder {
+	color: #acacac;
+	font-family: "Noto Sans KR", "Roboto", "AppleGothic", "sans-serif";
+	font-weight: 400
+}
+
+.login_section .login_box .inp::placeholder {
+	color: #acacac;
+	font-family: "Noto Sans KR", "Roboto", "AppleGothic", "sans-serif";
+	font-weight: 400
+}
+
+.login_section .login_box .inp_id {
+	background: url(/static/images/guide/ico_id.svg) no-repeat 0 50%
+}
+
+.login_section .login_box .inp_pw {
+	font-family: initial;
+	background: url(/static/images/guide/ico_pw.svg) no-repeat 0 50%
+}
+
+.login_section .login_box #save_id {
+	position: absolute
+}
+
+.login_section .login_box #save_id+label:after {
+	width: 30px;
+	height: 30px;
+	background-size: 30px 30px
+}
+
+.login_section .login_box label {
+	margin-top: 20px;
+	padding-left: 40px;
+	padding-top: 6px;
+	font-size: 16px;
+	font-weight: 600;
+	color: #666
+}
+
+.login_section .login_box .btn_login {
+	margin-top: 30px;
+	width: 100%;
+	height: 60px;
+	border-radius: 6px;
+	background-color: #007eff;
+	color: #fff;
+	font-size: 20px;
+	font-weight: 700;
+	line-height: 1.2;
+	letter-spacing: -1.6px
+}
+
+.youtube-view {
+	overflow: auto;
+	background: #000;
+	width: 100%;
+	height: 100%
+}
+
+.youtube-view table {
+	table-layout: fixed;
+	width: 100%;
+	height: 100%;
+	border-collapse: separate;
+	border-spacing: 10px
+}
+
+@media only all and (max-width: 1600px) {
+	.youtube-view table {
+		border-spacing: 5px
+	}
+}
+
+.youtube-view table td {
+	height: 33.33%;
+	background: #1b1b1b;
+	overflow: hidden
+}
+
+.youtube-view table td.bg-blue {
+	background: #008fff;
+	height: 230px;
+	border-radius: 6px
+}
+
+.youtube-view table td.bg-blue p {
+	letter-spacing: -14.4px
+}
+
+@media only all and (max-width: 1600px) {
+	.youtube-view table td.bg-blue p {
+		letter-spacing: -2.8px
+	}
+}
+
+.youtube-view table td p {
+	text-align: center;
+	color: #fff;
+	font-family: "Noto Sans KR", "Roboto", "AppleGothic", "sans-serif";
+	font-weight: 700;
+	letter-spacing: -4px
+}
+
+.youtube-view table td p.txt-green {
+	color: #2fff00;
+	letter-spacing: -2.8px
+}
+
+.youtube-view table td p.fz40 {
+	font-size: 40px
+}
+
+.youtube-view table td p.fz60 {
+	font-size: 60px
+}
+
+.youtube-view table td p.fz100 {
+	font-size: 100px
+}
+
+.youtube-view table td p.fz120 {
+	font-size: 120px
+}
+
+.youtube-view table td p.fz180 {
+	font-size: 180px
+}
+
+.youtube-view table td p.txt-count {
+	font-size: 100px;
+	color: #2fff00;
+	letter-spacing: -2.8px;
+	font-family: "Noto Sans KR", "Roboto", "AppleGothic", "sans-serif";
+	font-weight: 400
+}
+
+.youtube-view table td p.txt-count b {
+	color: #f22800
+}
+
+@media only all and (max-width: 1600px) {
+	.youtube-view table td p {
+		letter-spacing: -2.8px
+	}
+	.youtube-view table td p.txt-green {
+		letter-spacing: -1px
+	}
+	.youtube-view table td p.fz40 {
+		font-size: 20px
+	}
+	.youtube-view table td p.fz60 {
+		font-size: 30px
+	}
+	.youtube-view table td p.fz100 {
+		font-size: 50px
+	}
+	.youtube-view table td p.fz120 {
+		font-size: 60px
+	}
+	.youtube-view table td p.fz180 {
+		font-size: 90px
+	}
+	.youtube-view table td p.txt-count {
+		font-size: 50px;
+		letter-spacing: -1px
+	}
+}
+
+.youtube-view table td.seller {
+	border: 10px solid #007eff;
+	height: 120px;
+	border-radius: 6px
+}
+
+.youtube-view table td.count-td {
+	height: 380px
+}
+
+.youtube-view table td.complate {
+	height: 380px
+}
+
+.youtube-view table .inner-table {
+	border: 10px solid #007eff;
+	border-radius: 6px
+}
+
+.youtube-view table .inner-table td {
+	border: 0
+}
+
+.youtube-view .seeBox_gp {
+	display: -webkit-box;
+	display: -ms-flexbox;
+	display: flex;
+	-webkit-box-align: center;
+	-ms-flex-align: center;
+	align-items: center;
+	-webkit-box-pack: center;
+	-ms-flex-pack: center;
+	justify-content: center;
+	padding: 40px 0
+}
+
+.youtube-view .seeBox_gp .chart {
+	position: relative
+}
+
+.youtube-view .seeBox_gp .chart .count {
+	position: absolute;
+	left: 50%;
+	top: 50%;
+	-webkit-transform: translate(-50%, -50%);
+	transform: translate(-50%, -50%);
+	font-size: 80px;
+	color: #fff;
+	white-space: nowrap
+}
+
+@media only all and (max-width: 1600px) {
+	.youtube-view .seeBox_gp .chart .count {
+		font-size: 40px
+	}
+}
+
+.youtube-view .seeBox_gp .chart_label {
+	padding-left: 40px
+}
+
+@media only all and (max-width: 1600px) {
+	.youtube-view .seeBox_gp .chart_label {
+		padding-left: 20px
+	}
+}
+
+.youtube-view .seeBox_gp .chart_label li {
+	position: relative;
+	padding-left: 60px;
+	font-size: 30px;
+	font-family: "Noto Sans KR", "Roboto", "AppleGothic", "sans-serif";
+	font-weight: 700;
+	letter-spacing: -0.45px;
+	color: #fff;
+	line-height: 40px;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	white-space: nowrap
+}
+
+@media only all and (max-width: 1600px) {
+	.youtube-view .seeBox_gp .chart_label li {
+		padding-left: 30px;
+		font-size: 15px;
+		line-height: 25px
+	}
+}
+
+.youtube-view .seeBox_gp .chart_label li:before {
+	content: '';
+	width: 40px;
+	height: 40px;
+	position: absolute;
+	left: 0;
+	top: 0;
+	background: #dbdbdb
+}
+
+@media only all and (max-width: 1600px) {
+	.youtube-view .seeBox_gp .chart_label li:before {
+		width: 20px;
+		height: 20px
+	}
+}
+
+.youtube-view .seeBox_gp .chart_label li.gp_tit2 {
+	margin-top: 20px
+}
+
+.youtube-view .seeBox_gp .chart_label li.gp_tit2:before {
+	background: #007eff !important
+}
+
+.youtube-view .bg_yotube {
+	width: 100%;
+	height: 100%;
+	background: url(/static/images/guide/bg_youtube.jpg) no-repeat 50% 50%;
+	background-size: cover
+}
+
+.video_transmission {
+	margin: 0 auto;
+	padding: 0 10px 60px;
+	max-width: 1320px
+}
+
+.video_transmission h3 {
+	padding: 16px 20px;
+	font-size: 20px;
+	font-family: "Noto Sans KR", "Roboto", "AppleGothic", "sans-serif";
+	font-weight: 700;
+	color: #222831;
+	border-bottom: 1px solid #dbdbdb
+}
+
+@media only all and (max-width: 768px) {
+	.video_transmission h3 {
+		padding: 20px 0;
+		font-size: 28px;
+		border-bottom: 0;
+		text-align: center
+	}
+}
+
+.video_transmission .video_list {
+	margin-left: -20px
+}
+
+@media only all and (max-width: 768px) {
+	.video_transmission .video_list {
+		margin-left: 0
+	}
+}
+
+.video_transmission .video_list .item {
+	float: left;
+	padding: 20px 0 0 20px;
+	width: 50%
+}
+
+@media only all and (max-width: 1024px) {
+	.video_transmission .video_list .item {
+		width: 100%
+	}
+}
+
+@media only all and (max-width: 768px) {
+	.video_transmission .video_list .item {
+		padding: 10px 0 0
+	}
+	.video_transmission .video_list .item:first-child {
+		padding-top: 0
+	}
+}
+
+.video_transmission .video_list .item .inner {
+	padding: 20px;
+	border-radius: 4px;
+	border: solid 1px #dbdbdb
+}
+
+@media only all and (max-width: 768px) {
+	.video_transmission .video_list .item .inner {
+		padding: 10px;
+		border-radius: 3px
+	}
+}
+
+.video_transmission .video_list .item .video_box {
+	position: relative;
+	padding-bottom: 44%;
+	background-color: #000
+}
+
+.video_transmission .video_list .item .video_box video {
+	position: absolute;
+	left: 0;
+	top: 0;
+	right: 0;
+	bottom: 0;
+	width: 100%;
+	height: 100%
+}
+
+.video_transmission .video_list .item dl.bot {
+	display: -webkit-box;
+	display: -ms-flexbox;
+	display: flex;
+	margin-top: 20px;
+	-webkit-box-align: center;
+	-ms-flex-align: center;
+	align-items: center;
+	-webkit-box-pack: justify;
+	-ms-flex-pack: justify;
+	justify-content: space-between
+}
+
+@media only all and (max-width: 768px) {
+	.video_transmission .video_list .item dl.bot {
+		position: relative;
+		margin-top: 10px;
+		padding-bottom: 60px
+	}
+}
+
+.video_transmission .video_list .item dl.bot dt {
+	font-weight: 500;
+	font-size: 18px;
+	color: #1a1a1a;
+	min-width: 55px
+}
+
+.video_transmission .video_list .item .select_area {
+	padding: 0 10px;
+	width: 100%
+}
+
+@media only all and (max-width: 768px) {
+	.video_transmission .video_list .item .select_area {
+		padding-right: 0
+	}
+}
+
+.video_transmission .video_list .item .selectric .label {
+	height: 38px;
+	line-height: 38px;
+	font-size: 16px;
+	color: #666;
+	font-weight: 400
+}
+
+.video_transmission .video_list .item .btn_box {
+	display: -webkit-box;
+	display: -ms-flexbox;
+	display: flex;
+	margin: 0 -5px
+}
+
+@media only all and (max-width: 768px) {
+	.video_transmission .video_list .item .btn_box {
+		position: absolute;
+		left: 0;
+		right: 0;
+		bottom: 0
+	}
+}
+
+.video_transmission .video_list .item .btn_box button {
+	margin: 0 5px;
+	width: 100px;
+	height: 40px;
+	color: #fff;
+	font-size: 16px;
+	border-radius: 6px
+}
+
+@media only all and (max-width: 768px) {
+	.video_transmission .video_list .item .btn_box button {
+		width: 100%;
+		height: 50px;
+		font-size: 18px;
+		border-radius: 3px
+	}
+}
+
+.video_transmission .video_list .item .btn_box button.btn_start {
+	background-color: #3699ff
+}
+
+.video_transmission .video_list .item .btn_box button.btn_stop {
+	background-color: #ffaf00
+}
+
+.admin_main {
+	margin: 0 auto;
+	padding: 0 10px 60px;
+	max-width: 1320px
+}
+
+.admin_main h3 {
+	padding: 16px 20px;
+	font-size: 20px;
+	font-family: "Noto Sans KR", "Roboto", "AppleGothic", "sans-serif";
+	font-weight: 700;
+	color: #222831;
+	border-bottom: 1px solid #dbdbdb
+}
+
+@media only all and (max-width: 768px) {
+	.admin_main h3 {
+		display: none
+	}
+}
+
+.admin_main h4 {
+	position: relative;
+	padding: 20px 32px;
+	font-size: 18px;
+	color: #1a1a1a;
+	font-weight: 500
+}
+
+@media only all and (max-width: 768px) {
+	.admin_main h4 {
+		padding: 21px 0;
+		font-size: 28px;
+		border-bottom: 0;
+		text-align: center;
+		font-family: "Noto Sans KR", "Roboto", "AppleGothic", "sans-serif";
+		font-weight: 700
+	}
+}
+
+.admin_main h4:before {
+	position: absolute;
+	left: 20px;
+	top: 20px;
+	width: 2px;
+	height: 20px;
+	background-color: #007eff;
+	content: ''
+}
+
+@media only all and (max-width: 768px) {
+	.admin_main h4:before {
+		display: none
+	}
+}
+
+.admin_main .menu_list {
+	display: -webkit-box;
+	display: -ms-flexbox;
+	display: flex;
+	margin-top: 20px;
+	-webkit-box-align: center;
+	-ms-flex-align: center;
+	align-items: center;
+	-webkit-box-pack: center;
+	-ms-flex-pack: center;
+	justify-content: center
+}
+
+@media only all and (max-width: 768px) {
+	.admin_main .menu_list {
+		-webkit-box-orient: vertical;
+		-webkit-box-direction: normal;
+		-ms-flex-direction: column;
+		flex-direction: column;
+		padding: 0 14px;
+		margin-top: 0
+	}
+}
+
+.admin_main .menu_list .menu_item {
+	margin: 10px;
+	width: 180px;
+	height: 160px
+}
+
+@media only all and (max-width: 768px) {
+	.admin_main .menu_list .menu_item {
+		margin: 0 0 17px 0;
+		width: 100%;
+		height: 100px
+	}
+}
+
+.admin_main .menu_list .menu_item a {
+	position: relative;
+	display: block;
+	padding-top: 110px;
+	height: 100%;
+	font-size: 18px;
+	font-family: "Noto Sans KR", "Roboto", "AppleGothic", "sans-serif";
+	font-weight: 700;
+	color: #1a1a1a;
+	background-color: #e9e9e9;
+	border-radius: 6px;
+	text-align: center;
+	-webkit-transition: all .1s;
+	transition: all .1s
+}
+
+.admin_main .menu_list .menu_item a:hover {
+	background-color: #007eff;
+	color: #fff
+}
+
+@media only all and (max-width: 768px) {
+	.admin_main .menu_list .menu_item a:hover .ico {
+		background-color: #fff
+	}
+}
+
+@media only all and (max-width: 768px) {
+	.admin_main .menu_list .menu_item a {
+		padding-top: 60px;
+		border-radius: 3px
+	}
+}
+
+.admin_main .menu_list .menu_item a .ico {
+	position: absolute;
+	left: 50%;
+	top: 25px;
+	width: 64px;
+	height: 64px;
+	-webkit-transform: translateX(-50%);
+	transform: translateX(-50%)
+}
+
+@media only all and (max-width: 768px) {
+	.admin_main .menu_list .menu_item a .ico {
+		top: 13px;
+		width: 40px;
+		height: 40px;
+		border-radius: 50%;
+/* 		background-color: #007eff */
+	}
+}
+
+@media only all and (max-width: 768px) {
+	.admin_main .menu_list .menu_item a .ico img {
+/* 		display: none */
+		width: 100%;
+	}
+}
+
+.admin_footer {
+	position: fixed;
+	left: 0;
+	bottom: 0;
+	padding: 22px 0;
+	width: 100%;
+	font-size: 14px;
+	font-family: "Noto Sans KR", "Roboto", "AppleGothic", "sans-serif";
+	font-weight: 700;
+	color: #767676;
+	text-align: center;
+	background-color: rgba(255, 255, 255, 0.9)
+}
+
+.auction_list_full {
+	padding: 10px;
+	width: 100%;
+	height: 100%;
+	min-width: 1280px;
+	background: #efefef
+}
+
+.auction_list_full .list_table_full {
+	height: 100%
+}
+
+.auction_list_full .list_table_full .mCustomScrollBox {
+	max-height: calc(100vh - 156px)
+}
+
+.auction_list_full .list_table_full .list_head {
+	background: #007eff;
+	border-radius: 5px;
+	height: 136px
+}
+
+.auction_list_full .list_table_full .list_head dl {
+	display: table;
+	width: 100%;
+	table-layout: fixed
+}
+
+.auction_list_full .list_table_full .list_head dl dd {
+	color: #fff;
+	font-size: 18px;
+	font-family: "Noto Sans KR", "Roboto", "AppleGothic", "sans-serif";
+	font-weight: 700;
+	letter-spacing: -0.45px;
+	display: table-cell;
+	padding: 20px 1px;
+	text-align: center;
+	vertical-align: middle
+}
+
+.auction_list_full .list_table_full .list_head dl dd span.txt_org {
+	color: #ff7f00
+}
+
+.auction_list_full .list_table_full .list_head dl dd.pd_name {
+	width: 70%;
+	font-size: 24px
+}
+
+.auction_list_full .list_table_full .list_head dl dd.pd_txt {
+	width: 30%;
+	text-align: left
+}
+
+.auction_list_full .list_table_full .list_head dl dd .space {
+	margin: 0 10px
+}
+
+.auction_list_full .list_table_full .list_body {
+	height: calc(100vh - 156px);
+	border-radius: 5px
+}
+
+.auction_list_full .list_table_full .list_body li {
+	border-bottom: 1px solid #dbdbdb;
+	position: relative;
+	height: calc(( 100vh - 156px)/10);
+	display: -webkit-box;
+	display: -ms-flexbox;
+	display: flex;
+	-webkit-box-align: center;
+	-ms-flex-align: center;
+	align-items: center
+}
+
+.auction_list_full .list_table_full .list_body li:nth-child(even) {
+	background-color: #fff
+}
+
+.auction_list_full .list_table_full .list_body dl {
+	display: table;
+	width: 100%;
+	table-layout: fixed
+}
+
+.auction_list_full .list_table_full .list_body dl dd {
+	color: #1a1a1a;
+	font-size: 17px;
+	font-family: "Noto Sans KR", "Roboto", "AppleGothic", "sans-serif";
+	font-weight: 700;
+	letter-spacing: -0.45px;
+	display: table-cell;
+	padding: 0 1px;
+	text-align: center;
+	vertical-align: middle
+}
+
+.auction_list_full .list_table_full .list_body dl dd.pd_kg,
+	.auction_list_full .list_table_full .list_body dl dd.pd_pay1,
+	.auction_list_full .list_table_full .list_body dl dd.pd_pay2 {
+	color: #007eff
+}
+
 .auction_calculator .calculator_bottom .calculator-cell li button.num_before
 	{
 	background: #ffaf00;

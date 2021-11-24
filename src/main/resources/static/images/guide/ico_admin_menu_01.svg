@@ -1,0 +1,11 @@
+<svg data-name="그룹 1237" xmlns="http://www.w3.org/2000/svg" width="64" height="64" viewBox="0 0 64 64">
+    <g data-name="그룹 1236">
+        <circle data-name="타원 28" cx="32" cy="32" r="32" style="fill:#fff"/>
+        <g data-name="그룹 1189">
+            <g data-name="그룹 1188">
+                <path data-name="빼기 3" d="M25.574 3.2h-1.6V1.6a1.6 1.6 0 0 0-3.2 0v1.6H7.992V1.6a1.6 1.6 0 1 0-3.2 0v1.6H3.2A3.2 3.2 0 0 0 0 6.394v22.378a3.206 3.206 0 0 0 3.2 3.2h22.374a3.206 3.206 0 0 0 3.2-3.2V6.394a3.207 3.207 0 0 0-3.2-3.194zM14.385 8a4.8 4.8 0 1 1-4.8 4.8 4.789 4.789 0 0 1 4.8-4.808zm9.59 19.181H4.8v-1.6c0-3.2 6.393-4.955 9.59-4.955s9.59 1.758 9.59 4.955z" style="fill:#01a014" transform="translate(17.598 15.158)"/>
+            </g>
+            <path data-name="사각형 23949" style="fill:none" d="M0 0h38v39H0z" transform="translate(13 13)"/>
+        </g>
+    </g>
+</svg>

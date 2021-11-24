@@ -71,7 +71,14 @@
 								<dd class="col2">${fn:split(item.COW_SOG_WT,'.')[0] eq '0' ? '-' : fn:split(item.COW_SOG_WT,'.')[0]}</dd>
 							</c:when>
 							<c:when test="${params.regType eq 'L'}">
-								<dd class="col2">${(item.LOWS_SBID_LMT_AM eq '' || item.LOWS_SBID_LMT_AM == null || item.LOWS_SBID_LMT_AM <= 0 ) ? '-' : fn:split(item.LOWS_SBID_LMT_UPR,'.')[0]}</dd>
+								<dd class="col2">
+									<c:choose>
+										<c:when test="${item.LOWS_SBID_LMT_AM eq '' || item.LOWS_SBID_LMT_AM == null || item.LOWS_SBID_LMT_AM <= 0}">-</c:when>
+										<c:otherwise>
+											<fmt:formatNumber value="${fn:split(item.LOWS_SBID_LMT_UPR,'.')[0]}" type="number" />
+										</c:otherwise>
+									</c:choose>
+								</dd>
 							</c:when>
 							<c:when test="${params.regType eq 'N'}">
 								<dd class="col2">${item.MODL_NO}</dd>

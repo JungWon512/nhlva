@@ -1,40 +1,50 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ include file="/WEB-INF/__system/taglibs.jsp"%>
-<!-- Page Content -->
-<div class="container">
-	<h4 class="font-weight-light text-center text-lg-left mt-4 mb-0">Main</h4>
-	<hr class="mt-2 mb-2">  
-	<div class="card-deck">
-		<div class="card">
-			<div class="card-body">
-				<a href="javascript:pageMove('/admin/task/main');" class="card-link">경매업무</a>
-			</div>
-		</div>
-		<div class="card">
-			<div class="card-body">
-				<a href="javascript:pageMove('/admin/broad/cast');" class="card-link">영상송출</a>
-			</div>
-		</div>
-		<div class="card">
-			<div class="card-body">
-				<a href="javascript:pageMove('/admin/auction/monster');" class="card-link">모니터링</a>
-			</div>
-		</div>
-		<div class="card">
-			<div class="card-body">
-				<a href="javascript:pageMove('/admin/auction/board');" class="card-link">멀티비젼</a>
-			</div>
-		</div>
-<!-- 		<div class="card"> -->
-<!-- 			<div class="card-body"> -->
-<!-- 				<a href="javascript:pageMove('/admin/auction/aucNotice');" class="card-link">공지사항</a> -->
-<!-- 			</div> -->
-<!-- 		</div> -->
-<!-- 	    <div class="card"> -->
-<!-- 	    <div class="card-body"> -->
-<!-- 	      <a href="javascript:pageMove('/admin/report/list');" class="card-link">접속현황</a> -->
-<!-- 	    </div> -->
-<!-- 	  </div> -->
-	</div>  
+<!-- admin_main [s] -->
+<div class="admin_main">
+	<h3>MAIN</h3>
+	<h4>${johapData.CLNTNM} 관리자 메뉴</h4>
+	<ul class="menu_list">
+		<li class="menu_item">
+			<a href="javascript:pageMove('/admin/broad/cast');">
+				<span class="ico">
+					<img src="/static/images/guide/ico_admin_menu_01.svg" alt="">
+				</span>
+				영상송출
+			</a>
+		</li>
+		<li class="menu_item">
+			<a href="javascript:pageMove('/admin/auction/monster');">
+				<span class="ico">
+					<img src="/static/images/guide/ico_admin_menu_02.svg" alt="">
+				</span>
+				모니터링
+			</a>
+		</li>
+		<li class="menu_item">
+			<a href="javascript:pageMove('/admin/auction/board');">
+				<span class="ico">
+					<img src="/static/images/guide/ico_admin_menu_03.svg" alt="">
+				</span>
+				멀티비젼
+			</a>
+		</li>
+		<li class="menu_item">
+			<a href="javascript:pageMove('/admin/auction/stream');">
+				<span class="ico">
+					<img src="/static/images/guide/ico_admin_menu_04.svg" alt="">
+				</span>
+				유투브방송
+			</a>
+		</li>
+		<li class="menu_item">
+			<a href="javascript:pageMove('/admin/task/main');">
+				<span class="ico">
+					<img src="/static/images/guide/ico_admin_menu_05.svg" alt="">
+				</span>
+				모바일업무
+			</a>
+		</li>
+	</ul>
 </div>
-<!-- /.container -->
+<!-- admin_main [s] -->
