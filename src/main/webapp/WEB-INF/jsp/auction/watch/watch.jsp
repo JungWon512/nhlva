@@ -9,6 +9,13 @@
     	height:100%;
     	width:100%;
     }
+	@media only all and (max-width: 1024px) {
+		.draggable {min-height:243px !important; }
+	}
+	
+	@media only all and (max-width: 768px) {
+		.draggable {min-height:243px !important; }
+	}
 </style>
 <div class="auction_list">
 	<input type="hidden" id="token" value="${watchToken }"/>

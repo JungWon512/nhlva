@@ -1,7 +1,7 @@
 $(function() {
 
     function getDetail() {
-        procCallAjax("/admin/auction/aucNotice"+'/'+$(".johpCd").val()+'/'+$(".seqNo").val()+".json", "GET", null, null, procCallback);
+        procCallAjax("/office/auction/aucNotice"+'/'+$(".johpCd").val()+'/'+$(".seqNo").val()+".json", "GET", null, null, procCallback);
     }
 
     var procCallback = function(result) {
@@ -41,10 +41,10 @@ $(function() {
         var ajaxUrl = "";
         var ajaxMethod = "post";
         if (params.uuid == "0") {
-            ajaxUrl = "/admin/auction/aucNotice.json";
+            ajaxUrl = "/office/auction/aucNotice.json";
             ajaxMethod = "post";
         } else {
-            ajaxUrl = "/admin/auction/aucNotice"+'/'+$(".johpCd").val()+'/'+$(".seqNo").val();
+            ajaxUrl = "/office/auction/aucNotice"+'/'+$(".johpCd").val()+'/'+$(".seqNo").val();
             ajaxMethod = "put";
         }
         procCallAjax(ajaxUrl, ajaxMethod, params, null, function(data) {
@@ -62,7 +62,7 @@ $(function() {
                     "confirmButtonClass" : "btn btn-secondary"
                 });
 
-                location.replace('/admin/auction/aucNotice');
+                location.replace('/office/auction/aucNotice');
             } else {
                 KTApp.unprogress(btn);
                 swal.fire({

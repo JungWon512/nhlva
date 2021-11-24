@@ -18,15 +18,16 @@ public interface Constants {
 		public static final String SUBJECT = "user_auth";
 		public static final String ISSUER = "IShift";
 		public static final String AUDIENCE = "client";
-		public static String SPLIT_TOKEN_SEPARATOR = "\\.";
-		public static String BEARER = "Bearer ";
-		public static String ACCESS_TOKEN = "access_token";
-		public static String REFRESH_TOKEN = "refresh_token";
+		public static final String SPLIT_TOKEN_SEPARATOR = "\\.";
+		public static final String BEARER = "Bearer ";
+		public static final String ACCESS_TOKEN = "access_token";
+		public static final String REFRESH_TOKEN = "refresh_token";
 
 		// Claim 관련
 		public static final String JWT_CLAIM_USER_MEM_NUM		= "userMemNum";				// 회원번호
 		public static final String JWT_CLAIM_AUCTION_HOUSE_CODE	= "auctionHouseCode";		// 조합코드
 		public static final String JWT_CLAIM_USER_ROLE			= "userRole";				// 사용자 권한(응찰, 농가, 일반, 관리자)
+		public static final String JWT_CLAIM_ISSUED_AT				= "issuedAt";
 
 		// 1차에서 제외 [s]
 		@Deprecated

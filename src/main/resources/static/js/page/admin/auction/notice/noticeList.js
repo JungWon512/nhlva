@@ -37,7 +37,7 @@
 
                 var con_test = confirm("해당 공지사항을 삭제 하시겠습니까?["+johpCdVal+"]["+seqNo+"]");
                 if(con_test == true){
-                    COMMONS.callAjax("/admin/auction/aucNotice/"+johpCdVal+"/"+seqNo+".json"+window.location.search,  "put", params, 'application/json','json',  procCallbackDelete );
+                    COMMONS.callAjax("/office/auction/aucNotice/"+johpCdVal+"/"+seqNo+".json"+window.location.search,  "put", params, 'application/json','json',  procCallbackDelete );
                 }
             }
         );

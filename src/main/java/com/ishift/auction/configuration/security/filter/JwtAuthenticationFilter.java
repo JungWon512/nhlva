@@ -56,7 +56,6 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 		final String cookieAccessToken = cookieUtil.getCookieValue(tmpRequest, Constants.JwtConstants.ACCESS_TOKEN);
 		final String headerAccessToken = tmpRequest.getHeader(HttpHeaders.AUTHORIZATION);
 
-		log.debug("place : {}", place);
 		// place가 parameter에 없는 경우 어느 조합의 회원을 검증해야 하는지 모르기 때문에 인증 절차를 pass한다.
 		if (place == null || "".equals(place)) {
 			log.error("지역코드가 없습니다.");
@@ -104,7 +103,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 		return uri.startsWith("/static/")
 			|| uri.startsWith("/user/login")
 			|| uri.startsWith("/user/loginProc")
-			|| uri.startsWith("/admin")
+			|| uri.startsWith("/office")
 			|| uri.startsWith("/api")
 			|| uri.startsWith("/batch")
 			|| uri.startsWith("/my/entry")

@@ -71,6 +71,7 @@ public class JwtTokenUtil {
 		claims.put(Constants.JwtConstants.JWT_CLAIM_USER_MEM_NUM, jwtTokenVo.getUserMemNum());
 		claims.put(Constants.JwtConstants.JWT_CLAIM_AUCTION_HOUSE_CODE, jwtTokenVo.getAuctionHouseCode());
 		claims.put(Constants.JwtConstants.JWT_CLAIM_USER_ROLE, jwtTokenVo.getUserRole());
+		claims.put(Constants.JwtConstants.JWT_CLAIM_ISSUED_AT, new Date());
 //		claims.put(Constants.JwtConstants.JWT_CLAIM_DEVICE_UUID, jwtTokenVo.getDeviceUUID());
 //		claims.put(Constants.JwtConstants.JWT_CLAIM_USER_NAME, jwtTokenVo.getUserName());
 //		claims.put(Constants.JwtConstants.JWT_CLAIM_USER_BIRTHDATE, jwtTokenVo.getUserBirthdate());
@@ -99,6 +100,15 @@ public class JwtTokenUtil {
 			date = calendar.getTime();
 		}
 		else if (Constants.JwtConstants.REFRESH_TOKEN.equals(tokenType)) {
+			Calendar calendar = Calendar.getInstance();
+			calendar.set(calendar.get(Calendar.YEAR) + 1
+					, calendar.get(Calendar.MONTH)
+					, calendar.get(Calendar.DATE)
+					, 23
+					, 59
+					, 59);
+			date = calendar.getTime();
+			System.out.println(date);
 		}
 		return date;
 	}

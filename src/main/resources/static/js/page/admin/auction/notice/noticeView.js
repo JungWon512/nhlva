@@ -16,7 +16,7 @@
     function getDetail() {
         if($("#seqNoVal").val()!="0") {
 			var place = $('#place').val();
-            COMMONS.callAjax("/admin/auction/aucNotice" + '/' + $("#johpCdVal").val() + '/' + $("#seqNoVal").val() + ".json?place="+place,
+            COMMONS.callAjax("/office/auction/aucNotice" + '/' + $("#johpCdVal").val() + '/' + $("#seqNoVal").val() + ".json?place="+place,
                 "GET", null, 'application/json','json', procCallback);
         }
     }
@@ -45,10 +45,10 @@
                 var con_test = confirm("해당 공지사항을 등록/수정 하시겠습니까?["+johpCdVal+"]["+seqNo+"]");
                 if(con_test == true){
                     if($("#seqNoVal").val()!="0") {
-                        COMMONS.callAjax("/admin/auction/aucNotice/"+johpCdVal+"/"+seqNo+".json"+window.location.search,  "put", params, 'application/json','json',  procCallbackModify );
+                        COMMONS.callAjax("/office/auction/aucNotice/"+johpCdVal+"/"+seqNo+".json"+window.location.search,  "put", params, 'application/json','json',  procCallbackModify );
                     } else {
                         params.delYn = "0";
-                        COMMONS.callAjax("/admin/auction/aucNotice.json"+window.location.search, "post", params, 'application/json', 'json', procCallbackModify);
+                        COMMONS.callAjax("/office/auction/aucNotice.json"+window.location.search, "post", params, 'application/json', 'json', procCallbackModify);
                     }
                 }
                 else if(con_test == false){
@@ -58,7 +58,7 @@
             }
         );
         $(document).on("click","a.notice-cancel",function(){
-			pageMove("/admin/auction/aucNotice");	
+			pageMove("/office/auction/aucNotice");	
 		});
 
     };
@@ -70,7 +70,7 @@
             location.reload();
         } else {
             //alert("등록 되었습니다.");
-            pageMove("/admin/auction/aucNotice");
+            pageMove("/office/auction/aucNotice");
         }
 
     }

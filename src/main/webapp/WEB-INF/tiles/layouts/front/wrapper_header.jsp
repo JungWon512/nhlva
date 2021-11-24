@@ -176,7 +176,7 @@
                         <div class="p-2"><a href="javascript:pageMove('/notice');">공지사항</a></div>
                         <div class="p-2"><a href="javascript:pageMove('/user/login');">로그인</a></div>
                         <div class="p-2"><a href="javascript:pageMove('/home');">지역선택</a></div>
-                        <div class="p-2"><a href="javascript:pageMove('/admin/main');">관리자</a></div>
+                        <div class="p-2"><a href="javascript:pageMove('/office/main');">관리자</a></div>
                     </div>
                 </div>
                 <div class="container-fluid  pr-0">

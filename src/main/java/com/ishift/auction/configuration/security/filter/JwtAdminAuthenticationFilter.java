@@ -84,8 +84,8 @@ public class JwtAdminAuthenticationFilter extends OncePerRequestFilter {
 	protected boolean shouldNotFilter(HttpServletRequest request) throws ServletException {
 		String uri = request.getRequestURI();
 		return uri.startsWith("/static/")
-			|| uri.startsWith("/admin/user")
-			|| !(uri.startsWith("/admin") || uri.startsWith("/api"))
+			|| uri.startsWith("/office/user")
+			|| !(uri.startsWith("/office") || uri.startsWith("/api"))
 			|| uri.endsWith("/login");
 	}
 }

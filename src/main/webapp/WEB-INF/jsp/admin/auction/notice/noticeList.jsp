@@ -10,7 +10,7 @@
 					<div class="card-title">
 						<h3 class="card-label h4">공지사항</h3>
 					</div>
-					<a href="javascript:pageMove('/admin/auction/aucNotice/${johapData.NA_BZPLC}/0');" class="btn btn-success h-25 mt-4 mr-2  new_notice">신규등록</a>
+					<a href="javascript:pageMove('/office/auction/aucNotice/${johapData.NA_BZPLC}/0');" class="btn btn-success h-25 mt-4 mr-2  new_notice">신규등록</a>
 				</div>
 				<div class="card-body">
 					<!--begin: Datatable-->
@@ -39,7 +39,7 @@
 								<td> 0 </td>
 								<td>${vo.DEL_YN?'Y':'N'}</td>
 								<td>
-									<a href="javascript:pageMove('/admin/auction/aucNotice/${johapData.NA_BZPLC}/${vo.SEQ_NO}');" class="modify-notice"><i class="la la-edit"></i>[수정]</a>
+									<a href="javascript:pageMove('/office/auction/aucNotice/${johapData.NA_BZPLC}/${vo.SEQ_NO}');" class="modify-notice"><i class="la la-edit"></i>[수정]</a>
 									<a href="javascript:;" class="delete-notice"><i class="la la-trash"></i> [삭제]</a>
 								</td>
 							</tr>

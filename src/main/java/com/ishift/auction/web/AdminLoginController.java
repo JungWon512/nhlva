@@ -58,7 +58,7 @@ public class AdminLoginController {
 	 * @param map
 	 * @return
 	 */
-	@GetMapping("/admin/user/login")
+	@GetMapping("/office/user/login")
 	public ModelAndView adminUserLogin(@RequestParam final Map<String,Object> map) {
 		ModelAndView mav = new ModelAndView("admin/user/login");
 		try {
@@ -79,7 +79,7 @@ public class AdminLoginController {
 	 * @throws Exception
 	 */
 	@ResponseBody
-	@PostMapping(value="/admin/user/loginProc", produces = MediaType.APPLICATION_JSON_VALUE)
+	@PostMapping(value="/office/user/loginProc", produces = MediaType.APPLICATION_JSON_VALUE)
 	public Map<String, Object> adminUserLoginProc(HttpServletRequest request
 										, HttpServletResponse response
 										, @RequestBody final Map<String,Object> params
@@ -143,7 +143,7 @@ public class AdminLoginController {
 	 * @throws Exception
 	 */
 	@Deprecated
-//	@PostMapping(value="/admin/user/loginProc", produces = MediaType.APPLICATION_JSON_VALUE)
+//	@PostMapping(value="/office/user/loginProc", produces = MediaType.APPLICATION_JSON_VALUE)
 	public Map<String, Object> adminUserLoginProcBack(HttpServletRequest request
 										, HttpServletResponse response
 										, @RequestBody final Map<String,Object> params

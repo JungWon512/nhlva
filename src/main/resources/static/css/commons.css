@@ -163,7 +163,7 @@ button.on-air {
 
 .admin_area h3.date {
     font-size: 28px;
-    font-family: "NanumSquare","Roboto","AppleGothic","sans-serif";
+    font-family: "Noto Sans KR","Roboto","AppleGothic","sans-serif";
     font-weight: 700;
     color: #1a1a1a;
     text-align: center;
@@ -224,7 +224,7 @@ button.on-air {
 .admin_area .sub_search .sch_area>li.barcoad p {
     width: 70px;
     font-size: 20px;
-    font-family: "NanumSquare","Roboto","AppleGothic","sans-serif";
+    font-family: "Noto Sans KR","Roboto","AppleGothic","sans-serif";
     font-weight: 700;
     color: #1a1a1a
 }
@@ -256,7 +256,7 @@ button.on-air {
     height: 100%;
     top: 50%;
     font-size: 20px;
-    font-family: "NanumSquare","Roboto","AppleGothic","sans-serif";
+    font-family: "Noto Sans KR","Roboto","AppleGothic","sans-serif";
     font-weight: 700;
     color: #1a1a1a;
     background: url(../image/input_reset.svg) no-repeat center center;
@@ -290,7 +290,7 @@ button.on-air {
     background: #007eff;
     color: #fff;
     font-size: 18px;
-    font-family: "NanumSquare","Roboto","AppleGothic","sans-serif";
+    font-family: "Noto Sans KR","Roboto","AppleGothic","sans-serif";
     font-weight: 700;
     letter-spacing: -0.45px
 }
@@ -420,7 +420,7 @@ button.on-air {
     background: #007eff;
     color: #fff;
     font-size: 18px;
-    font-family: "NanumSquare","Roboto","AppleGothic","sans-serif";
+    font-family: "Noto Sans KR","Roboto","AppleGothic","sans-serif";
     font-weight: 700;
     letter-spacing: -0.45px;
     border-radius: 5px;
@@ -439,7 +439,7 @@ button.on-air {
 
 .admin_head a {
     font-size: 20px;
-    font-family: "NanumSquare","Roboto","AppleGothic","sans-serif";
+    font-family: "Noto Sans KR","Roboto","AppleGothic","sans-serif";
     font-weight: 700;
     color: #fff;
     display: block;
@@ -453,7 +453,7 @@ button.on-air {
 .admin_auc_main h3 {
     font-size: 28px;
     text-align: center;
-    font-family: "NanumSquare","Roboto","AppleGothic","sans-serif";
+    font-family: "Noto Sans KR","Roboto","AppleGothic","sans-serif";
     font-weight: 700;
     margin: 20px auto;
     color: #1a1a1a
@@ -554,7 +554,7 @@ button.on-air {
     background: #007eff;
     color: #fff;
     font-size: 18px;
-    font-family: "NanumSquare","Roboto","AppleGothic","sans-serif";
+    font-family: "Noto Sans KR","Roboto","AppleGothic","sans-serif";
     font-weight: 700;
     letter-spacing: -0.45px
 }
@@ -615,7 +615,7 @@ button.on-air {
 .admin_chocie h3 {
     font-size: 28px;
     text-align: center;
-    font-family: "NanumSquare","Roboto","AppleGothic","sans-serif";
+    font-family: "Noto Sans KR","Roboto","AppleGothic","sans-serif";
     font-weight: 700;
     margin: 20px auto 10px;
     color: #1a1a1a
@@ -625,7 +625,7 @@ button.on-air {
     color: #767676;
     font-size: 20px;
     text-align: center;
-    font-family: "NanumSquare","Roboto","AppleGothic","sans-serif";
+    font-family: "Noto Sans KR","Roboto","AppleGothic","sans-serif";
     font-weight: 700;
     margin-bottom: 50px
 }
@@ -651,7 +651,7 @@ button.on-air {
     justify-content: center;
     align-items: center;
     font-size: 28px;
-    font-family: "NanumSquare","Roboto","AppleGothic","sans-serif";
+    font-family: "Noto Sans KR","Roboto","AppleGothic","sans-serif";
     font-weight: 700;
     letter-spacing: -0.7px;
     text-align: center;

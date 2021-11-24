@@ -827,11 +827,15 @@
 	</select>
 	
 	<select id="selectTestUserList" parameterType="map" resultType="map">
-		SELECT *
-		  FROM TB_LA_IS_MM_MWMN TLIMM 
-		 WHERE NA_BZPLC = '8808990656656'
-		   AND TRMN_AMNNO BETWEEN 2000 AND 3000
-		 ORDER BY TRMN_AMNNO
+		SELECT B.*
+		  FROM (
+				SELECT A.*
+					 , ROW_NUMBER() OVER(ORDER BY SRA_MWMNNM ASC) AS N_NUM
+				  FROM TB_LA_IS_MM_MWMN A
+				 WHERE NA_BZPLC = #{naBzplc}
+				   AND EXISTS ( SELECT 1 FROM TB_LA_IS_MH_AUC_ENTR B WHERE B.NA_BZPLC = A.NA_BZPLC AND B.TRMN_AMNNO = A.TRMN_AMNNO AND B.AUC_DT = #{aucDt} AND B.AUC_OBJ_DSC = #{aucObjDsc})
+		) B
+		 WHERE B.N_NUM <![CDATA[<=]]> NVL(#{limitCnt}, 10)
 	</select>
 	
 	<!-- 나의 참가 정보 리스트 -->

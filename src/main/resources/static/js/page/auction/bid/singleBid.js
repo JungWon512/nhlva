@@ -896,7 +896,6 @@ var setRemonJoinRemote =async function (index,callback) {
 	dummyRemon.config.credential.serviceId = serviceId;
     dummyRemon.config.credential.key = serviceKey;
 	await dummyRemon.fetchCasts().then(function(data){
-		debugConsole(data);		
 		var castList = data.filter(function(cast){if(cast.name.indexOf($('#naBzPlc').val()+'_remoteVideo'+index)>=0) return this;})
 			.sort(function(castPre,castNext){
 			var pre = castPre.name.split('_')[1].replace('remoteVideo','');
@@ -904,7 +903,6 @@ var setRemonJoinRemote =async function (index,callback) {
 			return pre-next;
 		});
 		var height = $('div.seeBox_slick ul.slider .boarder').closest('.slick-slide').height();
-		debugConsole(height);
 		$('div.seeBox_slick ul.slider li.video_item').height(height-1);
 	
 		if(castList.length > 0){
@@ -927,7 +925,6 @@ var setLoopChDraw = function(castList){
 	
 	//var height = $('div.seeBox_slick div.slick-list').height();
 	var height = $('div.seeBox_slick ul.slider .boarder').closest('.slick-slide').height();
-	debugConsole(height);
 	$('div.seeBox_slick ul.slider li.video_item').height(height-1);
 	
 	if(sortingCastList.length>0){

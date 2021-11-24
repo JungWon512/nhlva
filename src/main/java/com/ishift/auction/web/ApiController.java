@@ -709,23 +709,26 @@ public class ApiController {
 	 */
 	@ResponseBody
 	@GetMapping(value = "/api/{version}/biz/token")
-	Map<String, Object> userToken(@PathVariable(name = "version") final String version) {
+	Map<String, Object> userToken(@PathVariable(name = "version") final String version
+								 ,@RequestParam Map<String, Object> params) {
 		final Map<String, Object> result = new HashMap<>();
 		try {
-			final Map<String, Object> params = new HashMap<>();
 			List<Map<String, Object>> userList = auctionService.selectTestUserList(params);
 			
-			List<String> tokenList = new ArrayList<String>();
+			List<Map<String, Object>> tokenList = new ArrayList<>();
 			for (Map<String, Object> userVo : userList) {
+				Map<String, Object> tempVo = new HashMap<String, Object>();
 				JwtTokenVo jwtTokenVo = JwtTokenVo.builder()
 													.auctionHouseCode(userVo.get("NA_BZPLC").toString())
 													.userMemNum(userVo.get("TRMN_AMNNO").toString())
 													.userRole(Constants.UserRole.BIDDER)
 													.build();
-				tokenList.add(jwtTokenUtil.generateToken(jwtTokenVo, Constants.JwtConstants.ACCESS_TOKEN));
+				
+				tempVo.put("trmnAmnno", userVo.get("TRMN_AMNNO").toString());
+				tempVo.put("sraMwmnnm", userVo.get("SRA_MWMNNM").toString());
+				tempVo.put("token", jwtTokenUtil.generateToken(jwtTokenVo, Constants.JwtConstants.REFRESH_TOKEN));
+				tokenList.add(tempVo);
 			}
-			result.put("success", true);
-			result.put("message", "조회에 성공했습니다.");
 			result.put("tokenList", tokenList);
 			return result;
 		}catch (RuntimeException re) {

@@ -24,7 +24,7 @@ public class AdminUserAccessDeniedHandler implements AccessDeniedHandler {
 	public void handle(HttpServletRequest request, HttpServletResponse response,
 			AccessDeniedException accessDeniedException) throws IOException, ServletException {
 		log.debug("##### AdminUserAccessDeniedHandler #####");
-		response.sendRedirect("/admin/user/login");
+		response.sendRedirect("/office/user/login");
 	}
 
 }

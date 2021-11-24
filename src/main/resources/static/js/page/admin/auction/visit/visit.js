@@ -27,7 +27,7 @@
 		    "processing" : false,
 		    "serverSide" : true,        // serverside 사용 여부
 		    "ajax" : {
-		        url : "/admin/getReportList"
+		        url : "/office/getReportList"
 		        ,data : function(d) { 
 					d.searchDate = $('#searchYear').val();
 					d.searchFlag = fSearchCh;

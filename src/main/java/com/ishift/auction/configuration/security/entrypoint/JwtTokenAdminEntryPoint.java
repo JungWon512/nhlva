@@ -36,7 +36,7 @@ public class JwtTokenAdminEntryPoint implements AuthenticationEntryPoint {
 			response.getWriter().println(sb.toString());
 		}
 		else {
-			response.sendRedirect("/admin/user/login");
+			response.sendRedirect("/office/user/login");
 		}
 	}
 
