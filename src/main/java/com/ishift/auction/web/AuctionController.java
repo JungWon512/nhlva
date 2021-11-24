@@ -427,14 +427,11 @@ public class AuctionController extends CommonController {
             	params.put("loginNo", sessionUtill.getUserId());        		
         	}
             result.put("data", auctionService.insertUpdateZim(params));
-        }catch (RuntimeException re) {
+        }catch (RuntimeException | SQLException re) {
             result.put("success", false);
-            result.put("message", re.getMessage());
+            //result.put("message", re.getMessage());
+            result.put("message", "작업중 오류가 발생했습니다. 관리자에게 문의하세요.");
 			log.error("AuctionController.insertUpdateZim : {} ",re);
-		}catch (SQLException se) {
-            result.put("success", false);
-            result.put("message", se.getMessage());
-			log.error("AuctionController.insertUpdateZim : {} ",se);
 		}
         return result;
     }
@@ -450,14 +447,11 @@ public class AuctionController extends CommonController {
             	params.put("loginNo", sessionUtill.getUserId());        		
         	}
             result.put("data", auctionService.deleteZimPrice(params));
-        }catch (RuntimeException re) {
+        }catch (RuntimeException | SQLException re) {
             result.put("success", false);
-            result.put("message", re.getMessage());
+            //result.put("message", re.getMessage());
+            result.put("message", "작업중 오류가 발생했습니다. 관리자에게 문의하세요.");
 			log.error("AuctionController.deleteZimPrice : {} ",re);
-		}catch (SQLException se) {
-            result.put("success", false);
-            result.put("message", se.getMessage());
-			log.error("AuctionController.deleteZimPrice : {} ",se);
 		}
         return result;
     }

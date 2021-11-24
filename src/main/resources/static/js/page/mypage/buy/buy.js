@@ -73,9 +73,7 @@
     namespace[__COMPONENT_NAME] = (function () {
         var init = function(){
             setLayout();
-
             setBinding();
-			fnSearchBuy();
         };
         return {
             init: init
@@ -95,6 +93,11 @@
 		};
 		COMMONS.callAjax("/auction/api/select/myBuyList", "post", param, 'application/json', 'json'
 		, function(data){
+			if(data && !data.success){
+				modalAlert('','작업중 오류가 발생했습니다. <br/>관리자에게 문의하세요.');
+				return;
+			}
+			
 			$('.buy_list div.list_txts span').text(data.totPrice ? getStringValue(data.totPrice.SRA_SBID_AM,0).replace(/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g, ",") :'0');
 			$('.auction_result div.list_body ul').empty();
 			if(data.data.length == 0){
@@ -131,6 +134,10 @@
 		};
 		COMMONS.callAjax("/auction/api/select/myBidList", "post", param, 'application/json', 'json'
 		, function(data){
+			if(data && !data.success){
+				modalAlert('','작업중 오류가 발생했습니다. <br/>관리자에게 문의하세요.');
+				return;
+			}
 			$('.auction_bid div.list_body ul').empty();
 			if(data.data.length == 0){
 				$('.auction_bid div.list_body ul').append("<li><dl><dd>검색결과가 없습니다.</dd></dl></li>");								

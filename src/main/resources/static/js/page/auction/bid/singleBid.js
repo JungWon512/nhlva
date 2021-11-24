@@ -176,8 +176,12 @@ $(function() {
 					, $("form[name=frm_zim]").serializeObject()
 					, 'application/json'
 					, 'json'
-					, function(){
+					, function(data){
 						modalPopupClose('.popup .modal-wrap.pop_jjim_input.zim');
+						if(data && !data.success){
+							modalAlert('','작업중 오류가 발생했습니다. <br/>관리자에게 문의하세요.');
+							return;
+						}
 						COMMONS.callAjax("/pop/entryList"
 							, "post"											
 							, {naBzPlcNo : $("#naBzPlcNo").val(), place : $("#naBzPlcNo").val(), tabAct : $('div.entryList div.tab_list ul li a.act').data('tabId')}
