@@ -14,6 +14,7 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
@@ -39,7 +40,7 @@ public class MyPageController {
     private SessionUtill sessionUtill;
 	
 	@PreAuthorize("hasRole('ROLE_BIDDER')")
-	@RequestMapping(value = "/my/buy")	
+	@RequestMapping(value = "/my/buy",method = { RequestMethod.GET, RequestMethod.POST })	
 	public ModelAndView myresults(@RequestParam Map<String,Object> params) throws Exception {
 		// 나의낙찰내역
 		LOGGER.debug("start of myBuy.do");
@@ -126,7 +127,7 @@ public class MyPageController {
     }
 
 	@PreAuthorize("hasRole('ROLE_BIDDER')")
-	@RequestMapping(value = "/my/bid")
+	@RequestMapping(value = "/my/bid",method = { RequestMethod.GET, RequestMethod.POST })
 	public ModelAndView mybidding() throws Exception {
 		// 나의응찰내역
 		LOGGER.debug("start of bid.do");
@@ -137,7 +138,7 @@ public class MyPageController {
 	}
 	
 	@PreAuthorize("hasRole('ROLE_FARM')")
-	@RequestMapping(value = "/my/entry")
+	@RequestMapping(value = "/my/entry",method = { RequestMethod.GET, RequestMethod.POST })
 	public ModelAndView myEntry(@RequestParam Map<String, Object> params) throws Exception {
 		// 나의출장우내역(출하주)
 		LOGGER.debug("start of entry.do");

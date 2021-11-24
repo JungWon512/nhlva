@@ -12,6 +12,8 @@ import org.springframework.core.io.support.PathMatchingResourcePatternResolver;
 import org.springframework.jdbc.datasource.DataSourceTransactionManager;
 import org.springframework.transaction.PlatformTransactionManager;
 
+import javax.naming.InitialContext;
+import javax.naming.NamingException;
 import javax.sql.DataSource;
 
 /**
@@ -20,10 +22,17 @@ import javax.sql.DataSource;
  */
 @Configuration
 public class MainDatabaseConfig {
+//	@Bean(name = "dataSource")
+//	@ConfigurationProperties(prefix="spring.datasource")
+//	public DataSource dataSource() {
+//		return DataSourceBuilder.create().build();
+//	}
 	@Bean(name = "dataSource")
-	@ConfigurationProperties(prefix="spring.datasource")
-	public DataSource dataSource() {
-		return DataSourceBuilder.create().build();
+	public DataSource dataSource() throws NamingException {
+		InitialContext initialContext = new InitialContext();
+		DataSource ds = (DataSource) initialContext.lookup("java:comp/env/jdbc/Tibero");
+		return ds;
+
 	}
     /**
      * sessionfactory

@@ -8,6 +8,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.ModelAndView;
@@ -20,7 +21,7 @@ public class FrontController {
 	@Autowired
 	AuctionService auctionService;
 	
-	@RequestMapping(value="/") 	
+	@RequestMapping(value="/",method = { RequestMethod.GET, RequestMethod.POST }) 	
 	public ModelAndView init() throws Exception {
 		// 전국지도 - 8개군에서 선택 
 		LOGGER.debug("start of main.do");
@@ -29,7 +30,7 @@ public class FrontController {
 		return mav;
 	}	
 	
-	@RequestMapping(value = "/home")
+	@RequestMapping(value = "/home",method = { RequestMethod.GET, RequestMethod.POST })
 	public ModelAndView main() throws Exception {
 		// 전국지도 - 8개군에서 선택 
 		LOGGER.debug("start of main.do");
@@ -40,7 +41,7 @@ public class FrontController {
 		return mav;
 	}
 	
-	@RequestMapping(value = "/district")
+	@RequestMapping(value = "/district",method = { RequestMethod.GET, RequestMethod.POST })
 	public ModelAndView area(
 		@RequestParam(name = "loc", required = false) String loc
 		,@RequestParam(name = "auctingYn", required = false) String auctingYn
@@ -57,7 +58,7 @@ public class FrontController {
 		return mav;
 	}
 	
-    @RequestMapping(value="/index")
+    @RequestMapping(value="/index",method = { RequestMethod.GET, RequestMethod.POST })
     public ModelAndView login() {
         LOGGER.debug("start of index");
         ModelAndView mav = new ModelAndView();
@@ -65,7 +66,7 @@ public class FrontController {
         return mav;
     }
 	
-    @RequestMapping(value="/privacy")
+    @RequestMapping(value="/privacy",method = { RequestMethod.GET, RequestMethod.POST })
     public ModelAndView privacy() {
         LOGGER.debug("start of index");
         ModelAndView mav = new ModelAndView();
@@ -73,20 +74,11 @@ public class FrontController {
         return mav;
     }
 	
-    @RequestMapping(value="/agreement")
+    @RequestMapping(value="/agreement",method = { RequestMethod.GET, RequestMethod.POST })
     public ModelAndView agreement() {
         LOGGER.debug("start of index");
         ModelAndView mav = new ModelAndView();
         mav.setViewName("pop/agreement");
         return mav;
     }
-    
-	@RequestMapping(value = "/test")	
-	public ModelAndView test() throws Exception {
-		// 조합메인(main) 
-		LOGGER.debug("start of result.do");
-		ModelAndView mav = new ModelAndView();
-		mav.setViewName("pop/test");
-		return mav;
-	}
 }

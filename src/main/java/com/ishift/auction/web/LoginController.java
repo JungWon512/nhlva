@@ -57,7 +57,7 @@ public class LoginController {
 	 * @return
 	 * @throws Exception 
 	 */
-	@RequestMapping(value="/user/login")
+	@RequestMapping(value="/user/login",method = { RequestMethod.GET, RequestMethod.POST })
 	public ModelAndView login(HttpServletRequest request
 							, HttpServletResponse response
 							, @RequestParam final Map<String,Object> params

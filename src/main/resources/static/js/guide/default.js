@@ -187,16 +187,6 @@ $(document).ready(function() {
 						setTop :0
 						,setWidth: false
 						,setHeight: false
-						,callbacks:{
-							//커스텀 스크롤 최하단일시 최상단으로
-			      			onTotalScroll: function(){
-								$('html').animate({scrollTop:$('html').height()},880);		
-							}
-							//커스텀 스크롤 최상단일시 최상단으로
-							,onTotalScrollBack : function(){
-								$('html').animate({scrollTop:0},300);
-							}
-						},
 					});
 				}
 			});

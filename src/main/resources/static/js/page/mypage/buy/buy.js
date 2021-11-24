@@ -98,12 +98,12 @@
 				return;
 			}
 			
-			$('.buy_list div.list_txts span').text(data.totPrice ? getStringValue(data.totPrice.SRA_SBID_AM,0).replace(/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g, ",") :'0');
+			$('.buy_list div.list_txts span').text(data.totPrice ? getStringValue(data.totPrice.SRA_SBID_AM,0).replace(/\B(?=(\d{3})+(?!\d))/g, ",") :'0');
 			$('.auction_result div.list_body ul').empty();
 			if(data.data.length == 0){
 				$('.auction_result div.list_body ul').append("<li><dl><dd>검색결과가 없습니다.</dd></dl></li>");
 			}
-			data.data.forEach((item,i)=>{
+			data.data.forEach(function(item,i){
 				var sHtml = "";							
 				sHtml += "<li><dl>";
 				sHtml += " <dd class='date'>"+getStringValue(item.AUC_DT_STR)+"</dd>";	
@@ -142,7 +142,7 @@
 			if(data.data.length == 0){
 				$('.auction_bid div.list_body ul').append("<li><dl><dd>검색결과가 없습니다.</dd></dl></li>");								
 			}
-			data.data.forEach((item,i)=>{
+			data.data.forEach(function(item,i){
 				var sHtml = "";							
 				sHtml += "<li><dl>";
 				sHtml += " <dd class='date'>"+getStringValue(item.AUC_DT_STR)+"</dd>";	

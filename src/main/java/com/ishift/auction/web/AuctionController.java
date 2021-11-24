@@ -54,7 +54,7 @@ public class AuctionController extends CommonController {
 	@Autowired
 	private FormatUtil formatUtil;
 	
-	@RequestMapping(value = "/results")	
+	@RequestMapping(value = "/results",method = { RequestMethod.GET, RequestMethod.POST })	
 	public ModelAndView results(
 			@RequestParam Map<String, Object> param
 			) throws Exception {		
@@ -97,7 +97,7 @@ public class AuctionController extends CommonController {
 		return mav;
 	}
 
-	@RequestMapping(value = "/sales")
+	@RequestMapping(value = "/sales",method = { RequestMethod.GET, RequestMethod.POST })
 	public ModelAndView entry(@RequestParam Map<String,Object> param) throws Exception {
 		// 경매예정목록
 		String place = (String) param.get("place");
@@ -152,7 +152,7 @@ public class AuctionController extends CommonController {
 		return mav;
 	}
 
-	@RequestMapping(value = "/calendar")
+	@RequestMapping(value = "/calendar",method = { RequestMethod.GET, RequestMethod.POST })
 	public ModelAndView schedule(@RequestParam Map<String,Object> param) throws Exception {
 		// 경매일정
 		LOGGER.debug("start of calendar.do");        
@@ -188,7 +188,7 @@ public class AuctionController extends CommonController {
 		return mav;
 	}
 	
-	@RequestMapping(value = "/guide")
+	@RequestMapping(value = "/guide",method = { RequestMethod.GET, RequestMethod.POST })
 	public ModelAndView guide() throws Exception {
 		// 경매안내
 		LOGGER.debug("start of guide.do");
@@ -198,7 +198,7 @@ public class AuctionController extends CommonController {
 		return mav;
 	}
 
-	@RequestMapping(value = "/watch")
+	@RequestMapping(value = "/watch",method = { RequestMethod.GET, RequestMethod.POST })
 	public ModelAndView watch(@RequestParam(name = "place", required = false) String place) throws Exception {
 		// 경매관전
 		LOGGER.debug("start of watch.do");
@@ -239,7 +239,7 @@ public class AuctionController extends CommonController {
 		return mav;
 	}
 	
-	@RequestMapping(value = "/notice")
+	@RequestMapping(value = "/notice",method = { RequestMethod.GET, RequestMethod.POST })
 	public ModelAndView notice(@RequestParam(name = "place", required = false) String place) throws Exception {
 		// 경매안내
 		LOGGER.debug("start of notice.do");
@@ -260,7 +260,7 @@ public class AuctionController extends CommonController {
 	}
 	
 	
-	@RequestMapping(value = "/main")	
+	@RequestMapping(value = "/main",method = { RequestMethod.GET, RequestMethod.POST })	
 	public ModelAndView submain(@RequestParam(name = "place", required = false) String place) throws Exception {
 		// 조합메인(main)
 		LOGGER.debug("start of result.do");
@@ -456,7 +456,7 @@ public class AuctionController extends CommonController {
         return result;
     }
 
-	@RequestMapping(value = "/auction/api/entryListApi")
+	@RequestMapping(value = "/auction/api/entryListApi",method = { RequestMethod.GET, RequestMethod.POST })
 	public ModelAndView entryListApiPopUp(@RequestParam Map<String,Object> param) throws Exception {
 		// 경매관전
 		log.debug("start of pop_entryList.do");
