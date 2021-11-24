@@ -13,7 +13,7 @@ public interface Constants {
 	 *
 	 */
 	class JwtConstants {
-		public static final String NH_AUCTION_CERT_CREATE_KEY = "NHAUCTIONishiftNHAUCTIONishiftNHAUCTIONishiftNHAUCTIONishiftNHAUCTIONishiftNHAUCTIONishiftNHAUCTIONishiftNHAUCTIONishiftNHAUCTIONishiftNHAUCTIONishift";
+		public static final String NH_AUCTION_CERT_CREATE_KEY = "jwtsecretkey";
 
 		public static final String SUBJECT = "user_auth";
 		public static final String ISSUER = "IShift";
