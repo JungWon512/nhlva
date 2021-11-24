@@ -4,7 +4,7 @@
 <html>
 <head>
 	<meta charset="utf-8"/>
-	<title>TITLE</title>
+	<title>스마트 가축시장</title>
 	<meta name="description" content="Description">
 	<meta name="viewport" content="width=device-width,initial-scale=1.0,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no">
 	<meta name="HandheldFriendly" content="true" />

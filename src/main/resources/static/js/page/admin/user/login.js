@@ -34,6 +34,12 @@
 						if (chkOs() != 'web') {
 							uri = '/admin/task/main'
 						}
+						if ($("#save_id").is(":checked")) {
+							setCookieLimitDay("eno", $("#usrid").val());
+						}
+						else {
+							deleteCookie("eno");
+						}
 						pageMove(uri);
 					}
 				});
@@ -43,8 +49,11 @@
 		return {
 			// public functions
 			init: function () {
+				if (getCookie("eno") != undefined) {
+					$("#usrid").val(getCookie("eno"));
+					$("#save_id").prop("checked", true);
+				}
 				addEvent();
-				get_msg();
 			}
 		};
 	}();
@@ -52,4 +61,5 @@
 	jQuery(document).ready(function () {
 		Login.init();
 	});
+
 })(window, window.jQuery);

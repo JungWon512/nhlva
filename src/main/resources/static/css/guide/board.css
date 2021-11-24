@@ -4739,3 +4739,37 @@ min-width:1280px;overflow:auto
 }
 
 }
+.admin_head {
+	background: #181c32;
+	height: 48px;
+	width: 100%;
+	padding: 0 20px;
+	position: relative
+}
+
+.admin_head a {
+	font-size: 20px;
+	font-family: "Noto Sans KR", "Roboto", "AppleGothic", "sans-serif";
+	font-weight: 700;
+	color: #fff;
+	line-height: 46px;
+	padding-left: 34px;
+	background: url(/static/images/guide/ico_back.svg) no-repeat left center;
+	background-size: 24px
+}
+
+.admin_head a.no_ico {
+	padding-left: 0;
+	background: none
+}
+
+.admin_head button {
+	position: absolute;
+	right: 24px;
+	top: 0;
+	font-size: 18px;
+	height: 48px;
+	font-family: "Noto Sans KR", "Roboto", "AppleGothic", "sans-serif";
+	font-weight: 700;
+	color: #fff
+}

@@ -138,8 +138,6 @@ function modalPopupClose(target){
 	}
 };
 
-
-
 $(document).ready(function() {
 	var baseUi = {
 		init: function () {

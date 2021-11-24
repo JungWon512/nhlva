@@ -801,7 +801,7 @@ public class ApiController {
 				if (map == null) {
 					result.put("success", false);
 					result.put("message", "일괄경매회차정보가 없습니다.");
-					return result;					
+					return result;
 				}
 				params.put("stAucNo", map.get("ST_AUC_NO"));
 				params.put("edAucNo", map.get("ED_AUC_NO"));
