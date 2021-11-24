@@ -15,7 +15,7 @@
 					<li><a href="javascript:;" class="${(empty inputParam.tabAct or inputParam.tabAct eq 'bid')?'act':'' } bid" data-tab-id='bid'>응찰내역</a></li>
 				</c:otherwise>				
 			</c:choose>
-			<li><a href="javascript:;" class="auc ${(inputParam.tabAct eq 'auc')?'act':'' }" data-tab-id='auc'>예정조회</a></li>
+			<li><a href="javascript:;" class="auc ${(inputParam.tabAct eq 'auc')?'act':'' }" data-tab-id='auc'>출장우조회</a></li>
 			
 		</ul>
 	</div>

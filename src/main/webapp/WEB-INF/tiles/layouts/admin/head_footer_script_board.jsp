@@ -13,7 +13,8 @@
 <link href="/static/assets/css/themes/layout/header/menu/light.css" rel="stylesheet" type="text/css" />
 <link href="/static/css/commons.css" rel="stylesheet" type="text/css" />
 
-<link href="/static/css/guide/board.css" rel="stylesheet" type="text/css" />
+<!-- <link href="/static/css/guide/board.css" rel="stylesheet" type="text/css" /> -->
+<link href="/static/css/guide/common.css" rel="stylesheet" type="text/css" />
 <link rel="stylesheet" type="text/css" href="/static/css/guide/jquery-ui.css">
 <link rel="stylesheet" type="text/css" href="/static/css/guide/popup.css">
 <link rel="stylesheet" type="text/css" href="/static/css/guide/slick.css">

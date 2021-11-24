@@ -30,6 +30,7 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -186,9 +187,29 @@ public class AdminController {
 				map.put("delYn", "0");
 				if(userVo.getPlace() != null) map.put("naBzPlcNo", userVo.getPlace());
 				String usrid = userVo.getUsrid();
+				Map<String,Object> johap = adminService.selectOneJohap(map);
+				String aucGubun = (String) johap.getOrDefault("AUC_DSC","");
+				
+				if("1".equals(aucGubun)) {
+					mav.setViewName("admin/auction/board/singleBoard");					
+				}else if("2".equals(aucGubun)) {
+			        LocalDateTime date = LocalDateTime.now();
+			        Map<String,Object> temp = new HashMap<String,Object>();
+			        String today = date.format(DateTimeFormatter.ofPattern("yyyyMMdd"));
+			        temp.put("searchDate", today);
+			        temp.put("naBzPlcNo", johap.get("NA_BZPLCNO"));
+			        
+					List<Map<String,Object>> list=auctionService.entrySelectList(temp);
+					Map<String,Object> count =auctionService.selectCountEntry(temp);
+					mav.addObject("cowTotCnt", count);
+					mav.addObject("list", list);
+					mav.setViewName("admin/auction/board/groupBoard");					
+				}else {
+					mav.setViewName("redirect:/admin/main");			
+				}
 				mav.addObject("userId", usrid);
-				mav.addObject("johapData", adminService.selectOneJohap(map));
-				mav.setViewName("admin/auction/board/board");
+				mav.addObject("johapData", johap);
+				
 			}
 			else {
 				mav.setViewName("redirect:/admin/main");

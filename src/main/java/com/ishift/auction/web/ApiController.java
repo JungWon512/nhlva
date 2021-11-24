@@ -1720,13 +1720,17 @@ public class ApiController {
 	}
 	
 	@ResponseBody
-	@GetMapping(value = "/api/{version}/auction/select/absentCowList")
+	@GetMapping(value = "/api/{version}/auction/{naBzplc}/absentCowList")
 	public Map<String, Object> selectAbsentCowList(@PathVariable(name = "version") String version
+											, @PathVariable(name = "naBzplc") final String naBzplc
 											, @RequestParam final Map<String, Object> params) {
 		
 		final Map<String, Object> result = new HashMap<String, Object>();
-		final List<String> entryList = new ArrayList<String>();
+		StringBuffer sb = new StringBuffer();
 		try {			
+			params.put("naBzplc", naBzplc);
+			params.put("aucDt", params.get("date"));
+			
 			Map<String, Object> map = auctionService.selectAuctStn(params);
 			if (map == null) {
 				result.put("success", false);
@@ -1739,60 +1743,22 @@ public class ApiController {
 			List<Map<String, Object>> list = auctionService.selectCowList(params);
 			if (list != null) {
 				for (final Map<String, Object> vo : list) {
-					StringBuffer sb = new StringBuffer();
-					sb.append("SC").append('|')
-					  .append(this.getStringValue(vo.get("NA_BZPLC")).replace("|", ",")).append('|')
-					  .append(this.getStringValue(vo.get("AUC_PRG_SQ")).replace("|", ",")).append('|')
-					  .append(this.getStringValue(vo.get("QCN")).replace("|", ",")).append('|')
-					  .append(this.getStringValue(vo.get("AUC_OBJ_DSC")).replace("|", ",")).append('|')
-					  .append(this.getStringValue(vo.get("SRA_INDV_AMNNO")).replace("|", ",")).append('|')
-					  .append(this.getStringValue(vo.get("SRA_SRS_DSC")).replace("|", ",")).append('|')
-					  .append(this.getStringValue(vo.get("FHS_ID_NO")).replace("|", ",")).append('|')
-					  .append(this.getStringValue(vo.get("FARM_AMNNO")).replace("|", ",")).append('|')
-					  .append(this.getStringValue(vo.get("FTSNM")).replace("|", ",")).append('|')
-					  .append(this.getStringValue(vo.get("BRANDNM")).replace("|", ",")).append('|')
-					  .append(this.getStringValue(vo.get("BIRTH_FMT")).replace("|", ",")).append('|')
-					  .append(this.getStringValue(vo.get("KPN_NO")).replace("|", ",")).append('|')
-					  .append(this.getStringValue(vo.get("INDV_SEX_C_NAME")).replace("|", ",")).append('|')
-					  .append(this.getStringValue(vo.get("MCOW_DSC")).replace("|", ",")).append('|')
-					  .append(this.getStringValue(vo.get("MCOW_SRA_INDV_AMNNO")).replace("|", ",")).append('|')
-					  .append(this.getStringValue(vo.get("MATIME")).replace("|", ",")).append('|')
-					  .append(this.getStringValue(vo.get("PRNY_MTCN")).replace("|", ",")).append('|')
-					  .append(this.getStringValue(vo.get("SRA_INDV_PASG_QCN")).replace("|", ",")).append('|')
-					  .append(this.getStringValue(vo.get("INDV_ID_NO")).replace("|", ",")).append('|')
-					  .append(this.getStringValue(vo.get("SRA_INDV_BRDSRA_RG_NO")).replace("|", ",")).append('|')
-					  .append(this.getStringValue(vo.get("RG_DSC")).replace("|", ",")).append('|')
-					  .append(this.getRgnName(vo.get("SRA_PD_RGNNM")).replace("|", ",")).append('|')
-					  .append(this.getStringValue(vo.get("DNA_YN")).replace("|", ",")).append('|')
-					  .append(this.getStringValue(vo.get("ANW_YN")).replace("|", ",")).append('|')
-					  .append(this.getStringValue(vo.get("COW_SOG_WT")).replace("|", ",")).append('|')
-					  .append(this.getStringValue(vo.get("FIR_LOWS_SBID_LMT_AM")).replace("|", ",")).append('|')
-					  .append(this.getStringValue(vo.get("LOWS_SBID_LMT_AM")).replace("|", ",")).append('|')
-					  .append(this.getStringValue(vo.get("RMK_CNTN")).replace("|", ",")).append('|')
-					  .append(this.getStringValue(vo.get("SEL_STS_DSC")).replace("|", ",")).append('|')
-					  .append(this.getStringValue(vo.get("LVST_AUC_PTC_MN_NO")).replace("|", ",")).append('|')
-					  .append(this.getStringValue(vo.get("SRA_SBID_AM")).replace("|", ",")).append('|')
-					  .append(this.getStringValue(vo.get("ATDR_DTM")).replace("|", ",")).append('|')
-					  .append('N').append('|') 
-					  .append(this.getStringValue(vo.get("AUC_PRG_SQ")).replace("|", ",")).append('|')	// 계류대 번호
-					  .append("N");								// 초과 줄장우 여부 
-
-					entryList.add(sb.toString());
+					sb.append(this.getStringValue(vo.get("AUC_PRG_SQ")).replace("|", ",")).append('|');	// 계류대 번호
 				}
 			}
 			
 			result.put("success", true);
 			result.put("message", "조회에 성공했습니다.");
-			result.put("entry", entryList);
+			result.put("entry", sb.toString());
 		}catch (RuntimeException re) {
 			log.error("ApiController.selectAbsentCowList : {} ",re);
 			result.put("success", false);
-			result.put("entry", entryList);
+			result.put("entry", sb.toString());
 			result.put("message", re.getMessage());
 		}catch (SQLException se) {
 			log.error("ApiController.selectAbsentCowList : {} ",se);
 			result.put("success", false);
-			result.put("entry", entryList);
+			result.put("entry", sb.toString());
 			result.put("message", se.getMessage());
 		}
 		return result;

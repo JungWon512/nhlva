@@ -13,7 +13,7 @@
 					<li style="width: 50%;"><a href="javascript:;" class="${(empty params.tabAct or params.tabAct eq 'bid')?'act':'' } btnTabMove" data-tab-id="bid">응찰내역</a></li>
 				</c:otherwise>				
 			</c:choose>
-			<li style="width: 50%;"><a href="javascript:;" class="btnTabMove ${(params.tabAct eq 'schedule')?'act':'' }" data-tab-id="schedule">예정조회</a></li>			
+			<li style="width: 50%;"><a href="javascript:;" class="btnTabMove ${(params.tabAct eq 'schedule')?'act':'' }" data-tab-id="schedule">출장우조회</a></li>			
 <!-- 			<li><a href="javascript:;" class="btnTabMove" data-tab-id="bid">응찰내역</a></li> -->
 		</ul>
 	</div>
