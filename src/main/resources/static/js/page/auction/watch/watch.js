@@ -187,28 +187,26 @@ var messageHandler = function(data) {
 			//정상 응찰 취소 응답		2	4007
 		break;	
 		case "AS" : //현재 경매상태
-			if($('#aucDsc').val() != '1') return;
-		//AS|8808990656656|65|3700000|0|8004||||0|0
+			//AS|8808990656656|65|3700000|0|8004||||0|0
 			if(!auctionConfig.asData) auctionConfig.asData = {};
 			var tmpAsDAta = { 
 				aucPrgSq: dataArr[2]
-				, selSts: dataArr[6]
+				, selSts: dataArr[5]
 				, lowsSbidLmtAm: dataArr[4]
 			};							
-//			if(!auctionConfig.asData.curAucSeq || auctionConfig.asData.curAucSeq != dataArr[2]){
+
 			if(auctionConfig.asData.curAucSeq) auctionConfig.asData.preAucSeq = auctionConfig.asData.curAucSeq
 			auctionConfig.asData.curAucSeq = dataArr[2];
 			
 			var tr = getTrRow(auctionConfig.asData.curAucSeq);
 			tr.find('dl dd.lowsSbidLmtAm').text(Math.round(tmpAsDAta.lowsSbidLmtAm)+'');
-			if($('#aucDsc').val() != '1' && tmpAsDAta.selSts=='8006'){
+			if($('#aucDsc').val() == '2' && tmpAsDAta.selSts=='8006'){
 				location.reload();
 			};
-			changeTrRow(tr);	
-//			}
+			changeTrRow(tr);
 		break;	
 		case "SC" : //현재 출품정보
-			if($('#aucDsc').val() != '1') return;
+			if($('#aucDsc').val() == '2') return;
 			if(!auctionConfig.scData) auctionConfig.scData = {};
 			//if(auctionConfig.scData.curAucSeq) auctionConfig.scData.preAucSeq = auctionConfig.scData.curAucSeq
 			auctionConfig.scData.curAucSeq = dataArr[2];

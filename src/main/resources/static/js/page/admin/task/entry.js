@@ -221,7 +221,7 @@
 				sHtml.push('					<tr>');
 				sHtml.push('						<th>하한가</th>');
 				sHtml.push('						<td class="input-td">');
-				sHtml.push('							<input type="text" name="firLowsSbidLmtAm" class="pd5 required" value="' + ((cowInfo.LOWS_SBID_LMT_AM == null || cowInfo.LOWS_SBID_LMT_AM == "0")? "" : cowInfo.LOWS_SBID_LMT_AM) + '" maxlength="4" pattern="\d*" inputmode="numeric" style="width:70%;" />만 원');
+				sHtml.push('							<input type="text" name="firLowsSbidLmtAm" class="pd5 required" value="' + ((cowInfo.LOWS_SBID_LMT_AM == null || cowInfo.LOWS_SBID_LMT_AM == "0")? "" : cowInfo.LOWS_SBID_LMT_AM) + '" maxlength="4" pattern="\d*" inputmode="numeric" style="width:70%;" />');
 				sHtml.push('						</td>');
 				sHtml.push('					</tr>');
 			}

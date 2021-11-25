@@ -126,21 +126,21 @@
 	<!-- // -->
 	<div class="tab_area auction_list bid_area" style="display:none;">
 		<div class="list_txts" style="text-align: center;">
-			응찰 ${bidCnt.TOT_CNT}건 (암 : ${bidCnt.W_CNT}건 / 수 : ${bidCnt.M_CNT}			
+			응찰 ${bidCnt.TOT_CNT}건 (암 : ${bidCnt.W_CNT}건 / 수 : ${bidCnt.M_CNT}건
 			<c:if test="${bidCnt.NEUTER_CNT>0}">
-				/ 거세 : ${bidCnt.NEUTER_CNT }
+				/ 거세 : ${bidCnt.NEUTER_CNT }건
 			</c:if> 	
 			<c:if test="${bidCnt.NOT_BIRTH_CNT>0}">
-				/ 미경산 : ${bidCnt.NOT_BIRTH_CNT }
+				/ 미경산 : ${bidCnt.NOT_BIRTH_CNT }건
 			</c:if> 
 			<c:if test="${bidCnt.NOT_NEUTER_CNT>0}">
-				/ 비거세 : ${bidCnt.NOT_NEUTER_CNT }
+				/ 비거세 : ${bidCnt.NOT_NEUTER_CNT }건
 			</c:if> 
 			<c:if test="${bidCnt.FREEMARTIN_CNT>0}">
-				/ 프리마틴 : ${bidCnt.FREEMARTIN_CNT }
+				/ 프리마틴 : ${bidCnt.FREEMARTIN_CNT }건
 			</c:if> 
 			<c:if test="${bidCnt.COMMON_CNT>0}">
-				/ 공통 : ${bidCnt.COMMON_CNT }
+				/ 공통 : ${bidCnt.COMMON_CNT }건
 			</c:if> 
 			)
 		</div>

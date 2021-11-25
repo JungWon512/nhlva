@@ -796,15 +796,15 @@
 			 , A.LED_SQNO 										/* 원장일련번호 */
 			 , A.TRPCS_PY_YN 									/* 운송비지급여부 */
 			 , A.PPGCOW_FEE_DSC									/* 번식우수수료구분코드 1.임신우, 2.비임신우, 3.임신우+송아지, 4.비임신우+송아지,  5.해당없음 */
-			 , NVL(B.MACO_YN,0) AS FHS_MACO_YN 						/* 출하주 중도매인여부 */
-			 , NVL(D.MACO_YN,0) AS TRMN_MACO_YN 						/* 중도매인 조합원여부 */
+			 , NVL(B.MACO_YN,0) AS FHS_MACO_YN 					/* 출하주 중도매인여부 */
+			 , NVL(D.MACO_YN,0) AS TRMN_MACO_YN 				/* 중도매인 조합원여부 */
 			 , A.FHS_ID_NO										/* 농가식별번호 */
 			 , A.FARM_AMNNO										/* 농가관린번호 */
 			 , C.TRMN_AMNNO										/* 날찰예정 중도매인번호 */
 			 , C.ATDR_AM										/* 낙찰예정가 */
 			 , C.LVST_AUC_PTC_MN_NO								/* 낙찰예정 참가번호 */
 			 , C.ATDR_DTM										/* 최종응찰일시 */
-			 , A.COW_SOG_WT										/* 중량 */
+			 , NVL(REGEXP_REPLACE(A.COW_SOG_WT, '[^0-9]'), 0) AS COW_SOG_WT /* 중량 */
 			 , A.FEE_CHK_YN										/* 출하자 수수료 기적용 여부 */
 			 , A.FEE_CHK_YN_FEE									/* 출하자 수수료 기적용 금액 */
 			 , A.MT12_OVR_YN									/* 12개월 이상 수수료 적용 여부 */
