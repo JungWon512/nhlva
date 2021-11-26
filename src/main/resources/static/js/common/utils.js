@@ -479,23 +479,27 @@ var debugConsole = function() {
 
 // toast message
 let removeToast;
-var toast = function(string) {
+var toast = function(string, sec, top) {
 	if (!document.getElementById("toast")) {
 		var div = document.createElement('div');
 		div.id = "toast";
 		document.body.appendChild(div);
 	} 
 	const toast = document.getElementById("toast");
+	let tm = (sec == undefined ? 1 : sec) * 1000;
+	if (top != undefined) toast.style["top"] = top + "px";
 
 	toast.classList.contains("reveal") ?
 		(clearTimeout(removeToast), removeToast = setTimeout(function () {
-			document.getElementById("toast").classList.remove("reveal")
-		}, 1000)) :
+			document.getElementById("toast").classList.remove("reveal");
+			toast.innerHTML = "";
+		}, tm)) :
 		removeToast = setTimeout(function () {
 			document.getElementById("toast").classList.remove("reveal")
-		}, 1000)
-		toast.classList.add("reveal");
-		toast.innerText = string;
+			toast.innerHTML = "";
+		}, tm)
+	toast.innerHTML = string;
+	toast.classList.add("reveal");
 }
 
 var fnSetComma = function(str) {
