@@ -492,11 +492,11 @@ var toast = function(string, sec, top) {
 	toast.classList.contains("reveal") ?
 		(clearTimeout(removeToast), removeToast = setTimeout(function () {
 			document.getElementById("toast").classList.remove("reveal");
-			toast.innerHTML = "";
+			toast.innerHTML = "<span>&nbsp;</span>";
 		}, tm)) :
 		removeToast = setTimeout(function () {
 			document.getElementById("toast").classList.remove("reveal")
-			toast.innerHTML = "";
+			toast.innerHTML = "<span>&nbsp;</span>";
 		}, tm)
 	toast.innerHTML = string;
 	toast.classList.add("reveal");

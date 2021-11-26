@@ -79,6 +79,12 @@
 				});
 			});
 			
+			// 하한가, 계류대, 중량 숫자 입력만 가능하도록
+			$(document).on("keyup", ".onlyNumber", function(){
+				var temp = $(this).val().toString().replace(/[^0-9]/, "")
+				$(this).val(temp);
+			});
+			
 			// 팝업 닫기
 			$(document).on(clickEvent, ".btn_pop_close", function(){
 				modalPopupClose('.pop_mod_weight');
@@ -205,7 +211,7 @@
 				sHtml.push('					<tr>');
 				sHtml.push('						<th>중량</th>');
 				sHtml.push('						<td class="input-td">');
-				sHtml.push('							<input type="text" name="cowSogWt" class="pd5 required" value="' + (cowInfo.COW_SOG_WT == 0 ? "" : cowInfo.COW_SOG_WT) + '" maxlength="4" pattern="\d*" inputmode="numeric" style="width:70%;" /> kg');
+				sHtml.push('							<input type="text" name="cowSogWt" class="pd5 required onlyNumber" value="' + (cowInfo.COW_SOG_WT == 0 ? "" : cowInfo.COW_SOG_WT) + '" maxlength="4" pattern="\d*" inputmode="numeric" style="width:70%;" /> kg');
 				sHtml.push('						</td>');
 				sHtml.push('					</tr>');
 			}
@@ -221,7 +227,7 @@
 				sHtml.push('					<tr>');
 				sHtml.push('						<th>하한가</th>');
 				sHtml.push('						<td class="input-td">');
-				sHtml.push('							<input type="text" name="firLowsSbidLmtAm" class="pd5 required" value="' + ((cowInfo.LOWS_SBID_LMT_AM == null || cowInfo.LOWS_SBID_LMT_AM == "0")? "" : cowInfo.LOWS_SBID_LMT_AM) + '" maxlength="4" pattern="\d*" inputmode="numeric" style="width:70%;" />');
+				sHtml.push('							<input type="text" name="firLowsSbidLmtAm" class="pd5 required onlyNumber" value="' + ((cowInfo.LOWS_SBID_LMT_AM == null || cowInfo.LOWS_SBID_LMT_AM == "0")? "" : cowInfo.LOWS_SBID_LMT_AM) + '" maxlength="5" pattern="\d*" inputmode="numeric" style="width:70%;" />');
 				sHtml.push('						</td>');
 				sHtml.push('					</tr>');
 			}
@@ -233,7 +239,7 @@
 				sHtml.push('					<tr>');
 				sHtml.push('						<th>변경</th>');
 				sHtml.push('						<td class="input-td">');
-				sHtml.push('							<input type="text" name="modlNo" class="pd5 required" value="' + cowInfo.MODL_NO + '" maxlength="4" pattern="\d*" inputmode="numeric" style="width:70%;" />');
+				sHtml.push('							<input type="text" name="modlNo" class="pd5 required onlyNumber" value="' + cowInfo.MODL_NO + '" maxlength="4" pattern="\d*" inputmode="numeric" style="width:70%;" />');
 				sHtml.push('						</td>');
 				sHtml.push('					</tr>');
 			}
