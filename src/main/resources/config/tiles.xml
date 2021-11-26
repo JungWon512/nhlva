@@ -50,6 +50,14 @@
         <put-attribute name="body_footer_script" value="/WEB-INF/tiles/layouts/admin/body_footer_script_board.jsp"/>
         <put-attribute name="wrapper_header" value="/WEB-INF/tiles/layouts/admin/wrapper_header.jsp"/>
     </definition>
+    <definition name="youtube-layout" template="/WEB-INF/tiles/layouts/admin/layout_youtube.jsp">
+        <put-attribute name="commons_css_block" value="/WEB-INF/tiles/layouts/admin/commons_css_block.jsp"/>
+        <put-attribute name="commons_js_block" value="/WEB-INF/tiles/layouts/admin/commons_js_block.jsp"/>
+        <put-attribute name="content" value="/WEB-INF/tiles/layouts/admin/content.jsp"/>
+        <put-attribute name="head_footer_script" value="/WEB-INF/tiles/layouts/admin/head_footer_script.jsp"/>
+        <put-attribute name="body_footer_script" value="/WEB-INF/tiles/layouts/admin/body_footer_script_board.jsp"/>
+        <put-attribute name="wrapper_header" value="/WEB-INF/tiles/layouts/admin/wrapper_header.jsp"/>
+    </definition>
     <!-- 관리자 경매업무 레이아웃 -->
     <definition name="admin-task-layout" template="/WEB-INF/tiles/layouts/admin/layout_task.jsp">
         <put-attribute name="content" value="/WEB-INF/tiles/layouts/admin/content.jsp"/>
@@ -93,6 +101,10 @@
     <definition name="admin/auction/board/*" extends="board-layout">
         <put-attribute name="content" value="/WEB-INF/jsp/admin/auction/board/{1}.jsp"/>
         <put-attribute name="page_footer_script" value="/static/js/page/admin/auction/board/{1}.js" />
+    </definition>
+    <definition name="admin/auction/stream/*" extends="youtube-layout">
+        <put-attribute name="content" value="/WEB-INF/jsp/admin/auction/stream/{1}.jsp"/>
+        <put-attribute name="page_footer_script" value="/static/js/page/admin/auction/stream/{1}.js" />
     </definition>
     <definition name="admin/auction/monster/*" extends="monster-layout">
         <put-attribute name="content" value="/WEB-INF/jsp/admin/auction/monster/{1}.jsp"/>

@@ -76,7 +76,14 @@
 								<dd class="pd_date">${vo.BIRTH_MO }</dd>
 								<dd class="pd_sex">${vo.INDV_SEX_C_NAME }</dd>
 								<dd class="pd_kpn">${vo.KPN_NO_STR }</dd>
-								<dd class="pd_pay">${vo.LOWS_SBID_LMT_AM <= 0 ? '0' : fn:split(vo.LOWS_SBID_LMT_UPR,'.')[0]}</dd>
+								<dd class="pd_pay">
+									<c:choose>
+										<c:when test="${vo.LOWS_SBID_LMT_AM eq '' || vo.LOWS_SBID_LMT_AM == null || vo.LOWS_SBID_LMT_AM <= 0}">-</c:when>
+										<c:otherwise>
+											<fmt:formatNumber value="${fn:split(vo.LOWS_SBID_LMT_UPR,'.')[0]}" type="number"/>
+										</c:otherwise>
+									</c:choose>
+								</dd>
 							</dl>
 							<div class="pd_etc">
 								<p>${vo.RMK_CNTN }</p>
@@ -91,7 +98,7 @@
 				                        			찜가격
 				                        		</c:when>
 				                        		<c:otherwise>
-				                        			${fn:split(vo.SBID_UPR,'.')[0]}
+				                        			<fmt:formatNumber value="${fn:split(vo.SBID_UPR,'.')[0]}" type="number"  />
 				                        		</c:otherwise>
 				                        	</c:choose> 
 			                            </span>
@@ -195,9 +202,9 @@
 								<dd class="num">${vo.AUC_PRG_SQ }</dd>
 								<dd class="pd_ea">${vo.SRA_INDV_AMNNO_FORMAT }</dd>
 								<dd class="pd_sex">${vo.INDV_SEX_C_NAME }</dd>
-								<dd class="pd_pay1">${vo.LOWS_SBID_LMT_AM <= 0 ? '0' : fn:split(vo.LOWS_SBID_LMT_UPR,'.')[0]}</dd>
-								<dd class="pd_pay3">${ fn:split(vo.ATDR_AM,'.')[0] }</dd>
-								<dd class="pd_pay2">${ fn:split(vo.SRA_SBID_UPR,'.')[0] }</dd>
+								<dd class="pd_pay1"><fmt:formatNumber value="${fn:split(vo.LOWS_SBID_LMT_UPR,'.')[0]}" type="number" /></dd>
+								<dd class="pd_pay3"><fmt:formatNumber value="${fn:split(vo.ATDR_AM,'.')[0]}" type="number" /></dd>
+								<dd class="pd_pay2"><fmt:formatNumber value="${fn:split(vo.SRA_SBID_UPR,'.')[0]}" type="number" /></dd>
 							</dl>
 						</li>
 	                </c:forEach>				

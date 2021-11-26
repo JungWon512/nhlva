@@ -12,3 +12,7 @@
 <!--end::Global Theme Styles-->
 <!--begin::Layout Themes(used by all pages)-->
 <link rel="stylesheet" type="text/css" href="/static/css/guide/popup.css">
+<spring:eval expression="@environment.getProperty('spring.profiles.active')" var="ACTIVE" />
+<script type="text/javascript">
+	var active = "${ACTIVE}";
+</script>

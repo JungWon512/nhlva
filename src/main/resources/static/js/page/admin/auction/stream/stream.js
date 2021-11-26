@@ -1,11 +1,42 @@
 $(function() {
 
     var setLayout = function() {
+		$('.chart').easyPieChart({
+			barColor: '#007eff',
+			trackColor: '#dbdbdb',
+			lineCap: 'round',
+			lineWidth: 12,
+			size: 260,
+			animate: 1000,
+			scaleColor: false,
+		});
+		$(".seeBox_slick ul.slider").slick({
+			dots: true,
+			adaptiveHeight: true,
+		});
+		
+		$('.seeBox_slick ul.slider').on('afterChange', function(event, slick, currentSlide, nextSlide){
+			$('video[id^=remoteVideo]').each(function(){
+				if($(this).attr('id') == 'remoteVideo1') return;
+				$(this).get(0).muted = true;
+				if(!$(this).get(0).paused) $(this).get(0).pause();
+			});
+			
+			var callback = function(currentSlide){
+			var video =$('#remoteVideo'+(currentSlide+1)).get(0);
+				if($('#remoteVideo1').get(0) && currentSlide == 0){
+					$('#remoteVideo1').get(0).muted = false;
+				}
+				if(video && video.paused) video.play();
+			}
+			setRemonJoinRemote(currentSlide+1,callback);
+		});
+		afAuctionNum = new Set($('#listAucNum').val().split(','));
     };
 
     var setBinding = function() {
-		socketStart();
 		setRemon();
+		socketStart();
     };
 
     setLayout();    
@@ -14,6 +45,7 @@ $(function() {
 
 //소켓통신 connect 및 이벤트 바인딩
 var socket=null,scCnt=0,auctionConfig={};
+var afAuctionNum = null; 
 var socketStart = function(){        
 	if(!$('#naBzPlc').val()) return;
 	if(socket){ socket.connect(); return;}
@@ -36,6 +68,8 @@ var socketStart = function(){
 	socket.on('AuctionStatus', messageHandler);	
 	socket.on('AuctionResult', messageHandler);	
 	socket.on('CancelBidding', messageHandler);
+	socket.on('RetryTargetInfo', messageHandler);
+	socket.on('AuctionBidStatus', messageHandler);
 }
 //쿠키값얻는 function
 var getCookie = function(name){
@@ -82,45 +116,42 @@ var messageHandler = function(data) {
 			}
 		break;	
 		case "SC" : //현재 출품정보
-			var scInterval = setInterval(function() {
-				if(scCnt > 0 && (auctionConfig.auctionSt == '8003' || auctionConfig.auctionSt == '8002')) return;
-				clearInterval(scInterval);					
-
-				$('table.tblAuctionSt tbody tr.val td.auctionNum').text(dataArr[2]);	//경매번호
+				$('table.tblAuctionSt tbody tr td.val p.auctionNum').text(dataArr[2]);	//경매번호
 				
-				$('table.tblAuctionBoard tbody tr.val td.ftsnm').text(nameEnc(dataArr[9])); //출하주
-				$('table.tblAuctionBoard tbody tr.val td.cowSogWt').text(dataArr[25]); //중량
-				$('table.tblAuctionBoard tbody tr.val td.kpnNo').text(dataArr[12]&&dataArr[12].replace('KPN','')); //kpn
-				$('table.tblAuctionBoard tbody tr.val td.mcowDsc').text(dataArr[143]); //어미
-				$('table.tblAuctionBoard tbody tr.val td.sex').text(dataArr[13]); //성별				
-				$('table.tblAuctionBoard tbody tr.val td.lowsSbidLmtAm').text(dataArr[27]); //최저가
-				scCnt++;							  
-			}, 500);
+				$('table.tblAuctionSt tbody tr td td p.ftsnm').text(nameEnc(dataArr[9])); //출하주
+				$('table.tblAuctionSt tbody tr td td p.cowSogWt').text(dataArr[25]); //중량
+				$('table.tblAuctionSt tbody tr td td p.kpnNo').text(dataArr[12]&&dataArr[12].replace('KPN','')); //kpn
+				$('table.tblAuctionSt tbody tr td td p.mcowDsc').text(dataArr[14]); //어미
+				$('table.tblAuctionSt tbody tr td td p.sex').text(dataArr[13]); //성별				
+				$('table.tblAuctionSt tbody tr td td p.lowsSbidLmtAm').text(dataArr[27]); //최저가
+					
+				$('table.tblAuctionSt tbody tr td td p.sraIndvPasgQcn').text(dataArr[18]); //계대	
+				$('table.tblAuctionSt tbody tr td td p.matime').text(dataArr[16]); //산차
+				$('table.tblAuctionSt tbody tr td td p.rmkCntn').text(dataArr[28]); //산차
 		break;	
 		case "AS" : //현재 경매상태			
 			if(auctionConfig.auctionSt && (dataArr[6]=='8006' || dataArr[6]=='8002')){auctionConfig.auctionSt=dataArr[6]; return};
 			auctionConfig.auctionSt=dataArr[6];
-			$('.tblBoard table tbody tr.title td.auctionNum').text(dataArr[2]);
-			$('.tblBoard table tbody tr.title td.tdUser').hide();
-			$('.tblBoard table tbody tr.title td.tdPrice').hide();
-			$('.tblBoard table tbody tr.title td.tdTitle').show();
+			$('table.tblAuctionSt tbody tr td.val p.auctionNum').text(dataArr[2]);
+			$('table.tblAuctionSt tbody tr.st td.complate').hide();
+			$('table.tblAuctionSt tbody tr.st td.count-td').show();
 			var aucStConfig ={
-				t8001:'경매 대기중입니다.'
-				,t8002:'경매 대기중입니다.'
-				,t8003:'경매 시작되었습니다.'
-				,t8004:'경매 진행중입니다.'
-				,t8005:'경매 정지되었습니다.'
-				,t8006:'경매 완료되었습니다.'
-				,t8007:'경매 종료되었습니다.'
+				t8001:'경매 대기중'
+				,t8002:'경매 대기중'
+				,t8003:'경매 시작'
+				,t8004:'경매 진행중'
+				,t8005:'경매 정지'
+				,t8006:'경매응찰 완료'
+				,t8007:'경매 종료'
 			}
 			switch(dataArr[6]){
-				case "8001" : $('table.tblAuctionSt tbody tr td.tdBoard p').text(aucStConfig.t8001); break; 
-				case "8002" : $('table.tblAuctionSt tbody tr td.tdBoard p').text(aucStConfig.t8002); break; 
-				case "8003" : $('table.tblAuctionSt tbody tr td.tdBoard p').text(aucStConfig.t8003); break; 
-				case "8004" : $('table.tblAuctionSt tbody tr td.tdBoard p').text(aucStConfig.t8004); break; 
-				case "8005" : $('table.tblAuctionSt tbody tr td.tdBoard p').text(aucStConfig.t8005); break; 
-				case "8006" : $('table.tblAuctionSt tbody tr td.tdBoard p').text(aucStConfig.t8006); break; 
-				case "8007" : $('table.tblAuctionSt tbody tr td.tdBoard p').text(aucStConfig.t8007); break; 
+				case "8001" : $('table.tblAuctionSt tbody tr.st td.count-td p').text(aucStConfig.t8001); break; 
+				case "8002" : $('table.tblAuctionSt tbody tr.st td.count-td p').text(aucStConfig.t8002); break; 
+				case "8003" : $('table.tblAuctionSt tbody tr.st td.count-td p').text(aucStConfig.t8003); break; 
+				case "8004" : $('table.tblAuctionSt tbody tr.st td.count-td p').text(aucStConfig.t8004); break; 
+				case "8005" : $('table.tblAuctionSt tbody tr.st td.count-td p').text(aucStConfig.t8005); break; 
+				case "8006" : $('table.tblAuctionSt tbody tr.st td.count-td p').text(aucStConfig.t8006); break; 
+				case "8007" : $('table.tblAuctionSt tbody tr.st td.count-td p').text(aucStConfig.t8007); break; 
 				default:break;
 			}
 		break;	
@@ -128,46 +159,60 @@ var messageHandler = function(data) {
 			$('.tblBoard table tbody tr.title td.auctionNum').text(dataArr[2]);
 			if(dataArr[3]=='22'){ //낙찰
 				var user =dataArr[5],price = dataArr[6];
-				$('table.tblAuctionSt tbody tr .tdBiddAmt').show();
-				$('table.tblAuctionSt tbody tr .tdBiddNum').show();
-				$('table.tblAuctionSt tbody tr td.tdBoard').hide();
-				$('table.tblAuctionSt tbody tr td.tdBiddNum').html(''+ user);
-				$('table.tblAuctionSt tbody tr td.tdBiddAmt').html(''+ price);
+				$('table.tblAuctionSt tbody tr.st td.count-td').hide();
+				$('table.tblAuctionSt tbody tr.st td.complate').show();
+				$('table.tblAuctionSt tbody tr.st td.complate p.tdBiddNum').html(''+ user);
+				$('table.tblAuctionSt tbody tr.st td.complate p.tdBiddAmt').html(''+ price);
 			}else{
-				$('table.tblAuctionSt tbody tr .tdBiddNum').hide();
-				$('table.tblAuctionSt tbody tr .tdBiddAmt').hide();
-				$('table.tblAuctionSt tbody tr td.tdBoard').show();
-				$('table.tblAuctionSt tbody tr td.tdBoard p').text('유찰되었습니다.');				
+				$('table.tblAuctionSt tbody tr.st td.complate').hide();
+				$('table.tblAuctionSt tbody tr.st td.count-td').show();
+				$('table.tblAuctionSt tbody tr.st td.count-td p').text('유찰되었습니다.');				
 			}
+			calcPiePercent(dataArr[2]);
 		break;	
+		case "SD" : //경매종료 카운트		
+			if(dataArr[2]=='C'){
+				$('table.tblAuctionSt tbody tr.st td.complate').hide();
+				$('table.tblAuctionSt tbody tr.st td.count-td').show();
+				$('table.tblAuctionSt tbody tr.st td.count-td p').html('경매마감 <b>'+dataArr[3]+'</b>초 전');				
+			}	
+		break;	
+		case "AN" :
+			// 재경매 대상 수신
+			auctionConfig.anStatus = true;
+			$('table.tblAuctionSt tbody tr.st td.count-td p').text('재경매 진행 중');
+			break;
+		case "AY" :
+			// 재경매 대상 수신
+			if(dataArr[2]!=$('table.tblAuctionSt tbody tr td.val p.auctionNum').text()) return;
+			if((auctionConfig.auctionSt =='8003' || auctionConfig.auctionSt =='8004') && 'F' == dataArr[3].trim()) $('table.tblAuctionSt tbody tr.st td.count-td p').text('응찰 종료');
+			else if(auctionConfig.anStatus) $('table.tblAuctionSt tbody tr.st td.count-td p').text('재경매 진행중');
+			else $('table.tblAuctionSt tbody tr.st td.count-td p').text('경매 진행중');
+			break;
 		default:break;
 	}
 }
-
-//출품정보 변경시 row변경 로직
-var changeTrRow = function(tr) {
-	tr.css('background-color','#00ffff');			
-	var scroll = tr.offset().top - $('#kt_header_menu').height()-$('.tblAuction thead tr').height();
-	//현재 출품번호
-	tr.css('background-color','#00ffff');
-	$(document).scrollTop(scroll);
+function calcPiePercent(aucNum){
+	if(afAuctionNum.has(aucNum)) return;
+	afAuctionNum .add(aucNum);
+	var stantNotCnt = new Number($('.chart_label .gp_tit1 span').text()) +1;
+	var stantCnt = new Number($('.chart_label .gp_tit2 span').text()) -1;
+	var totCnt = stantNotCnt+stantCnt;
+	var result = new Number(stantNotCnt)/new Number(totCnt) *100;
+	result = result.toFixed(0);
+	$('.chart').attr('data-percent',result);
+	$('.chart_label .gp_tit1 span').text(stantNotCnt);
+	$('.chart_label .gp_tit2 span').text(stantCnt);
+	$('.chart span.count').text(result+'%');
+	$('.chart').data('easyPieChart').update(result);
 }
-var getTrRow = function(curAucSeq) {
-	return $('.tblAuction tbody tr').filter(function(i,obj){
-		var aucPrgSq = $(this).find('.aucPrgSq').text().trim();
-		if(aucPrgSq==curAucSeq) return this;
-	});
-}
-
 //remon 영성 관련 로직
 let dummyRemon,loop;
-const serviceId = '37924178-ee14-4f8a-9caa-ff858defea7f';
-const serviceKey = '5f7bc510a5607072e1a648926e7bfe1df6a44dfb800e750a698bf5265469e6ce';
 	
 var config = {
   	credential: {
-    	serviceId: serviceId,
-    	key: serviceKey
+    	serviceId: $('#kkoSvcId').val(),
+    	key: $('#kkoSvcKey').val()
   	},view: {
 		remote: '#remoteVideo'
 	},
@@ -175,7 +220,9 @@ var config = {
       recvonly: true,
       audio: false,
       video: false
-    }
+    },  dev:{
+		logLevel: 'SILENT'
+	}
 };
 //remon Event listener
 listener = {
@@ -194,112 +241,127 @@ listener = {
 
 //remon관련 실행 로직
 function setRemon(){	
+	config.credential.serviceId =  $('#kkoSvcId').val();
+	config.credential.key = $('#kkoSvcKey').val();
 	dummyRemon = new Remon({ config, listener });	
     setLoopJoinEvent();
-    loop = setInterval(setLoopJoinEvent,1000*15);
+    //loop = setInterval(setLoopJoinEvent,1000*15);
 }
 
 //특정주기마다 castlist 목록 불러와 html Draw
 var setLoopJoinEvent = async function () {  
-	dummyRemon.config.credential.serviceId = serviceId;
-    dummyRemon.config.credential.key = serviceKey;
+	
+	dummyRemon.config.credential.serviceId =  $('#kkoSvcId').val();
+	dummyRemon.config.credential.key = $('#kkoSvcKey').val();
 	var castLists = await dummyRemon.fetchCasts();
 	
 	setLoopChDraw(castLists);
 }
+
 var setLoopChDraw = function(castList){
-	var slideIndex= $('.vidioSlide li.active').attr('data-slide-to');
-	var compIndex = $('.vidioComp div.active').attr('data-item-index');
-	$('.remon').remove();
-	
-	var sHtml='',cHtml='';
-	var sortingCastList = castList.sort(function(castPre,castNext){
-		var pre = castPre.name.split('_')[0];
-		var next = castNext.name.split('_')[0];
-		return $(pre).text() - $(next).text();
-	});
-	
-	for(var i=0;i<sortingCastList.length;i++){
-		sHtml = '<li data-target="#carouselExampleIndicators" data-slide-to="'+(i+1)+'" class="remon '+(0==(i)?'active':'')+'"></li>';
-		cHtml = '<div class="remon carousel-item '+(0==(i)?'active':'')+'" data-item-index="'+(i+1)+'" style="width: 100%;height: 100%;"><div id="remoteVideoIe'+(i+1)+'"><video id="remoteVideo'+(i+1)+'" style="width: 100%;height: 100%;background-color: black;" poster="/static/images/assets/no_video_18980.png" autoplay></video></div></div>';
+	var sortingCastList = castList.filter(function(cast){if(cast.name.indexOf($('#naBzPlc').val()+'_remoteVideo')>=0) return this;})
+		.sort(function(castPre,castNext){
+		var pre = castPre.name.split('_')[1].replace('remoteVideo','');
+		var next = castNext.name.split('_')[1].replace('remoteVideo','');
 		
-		$('.vidioComp').append(cHtml);
-		$('.vidioSlide').append(sHtml);
-				
-		setLoopChJoinInIn(sortingCastList[i],i+1);
-	};
+		return pre-next;
+	});
+	console.log(sortingCastList);
+//	var height = $('div.seeBox_slick ul.slider .boarder').closest('.slick-slide').height();
+//	$('div.seeBox_slick ul.slider li.video_item').height(height-1);
+	$('div.seeBox_slick ul.slider li.video_item').height('360px');
 	
-	if($('.vidioSlide .active').length < 1 || $('.vidioComp .active').length < 1) $('.board').addClass('active');
-	else $('.board').removeClass('active');
+	if(sortingCastList.length > 0){
+		for(var i=0;i<sortingCastList.length;i++){
+			if($('#kkoSvcCnt').val() <= i) return;
+			 $('#remoteVideo'+(i+1)).attr('castName',sortingCastList[i].name);
+			 //setLoopChJoinInIn(sortingCastList[i],i+1);
+	 	};
+	
+		var castName = $('#remoteVideo1').attr('castName');
+		if(castName && castName.indexOf('remote') >= 0){
+			if(sortingCastList.length > 0) $('div.seeBox_slick ul.slider').slick('goTo', 0);
+		}
+	}
 };
 var setLoopChJoinInIn = function(cast,i){
-	dummyRemon.config.credential.serviceId = serviceId;
-    dummyRemon.config.credential.key = serviceKey;
+	dummyRemon.config.credential.serviceId = $('#kkoSvcId').val();
+    dummyRemon.config.credential.key = $('#kkoSvcKey').val();
     dummyRemon.config.view.remote = '#remoteVideo'+(i);
 	new Remon({ config:dummyRemon.config, listener }).joinCast(cast.name);
 };
 
-
-
-//remon관련 실행 로직
-function setRemon(){	
-	dummyRemon = new Remon({ config, listener });	
-    setLoopJoinEvent();
-//    setTimeout(setLoopJoinEvent,1000)
-    // loop = setInterval(setLoopJoinEvent,1000*60);
-}
-
 //특정주기마다 castlist 목록 불러와 html Draw
 var setLoopJoinEvent = async function () {  
-	dummyRemon.config.credential.serviceId = serviceId;
-    dummyRemon.config.credential.key = serviceKey;
+	dummyRemon.config.credential.serviceId = $('#kkoSvcId').val();
+    dummyRemon.config.credential.key = $('#kkoSvcKey').val();
 	await dummyRemon.fetchCasts().then(function(data){
 		setLoopChDraw(data);
 	});
 }
+
+var setRemonJoinRemote =async function (index,callback) {  
+	dummyRemon.config.credential.serviceId = $('#kkoSvcId').val();
+    dummyRemon.config.credential.key = $('#kkoSvcKey').val();
+	await dummyRemon.fetchCasts().then(function(data){
+		console.log(data);		
+		var castList = data.filter(function(cast){if(cast.name.indexOf($('#naBzPlc').val()+'_remoteVideo'+index)>=0) return this;})
+			.sort(function(castPre,castNext){
+			var pre = castPre.name.split('_')[1].replace('remoteVideo','');
+			var next = castNext.name.split('_')[1].replace('remoteVideo','');
+			return pre-next;
+		});
+		console.log(castList);
+//		var height = $('div.seeBox_slick ul.slider .boarder').closest('.slick-slide').height();
+//		$('div.seeBox_slick ul.slider li.video_item').height(height-1);
+	$('div.seeBox_slick ul.slider li.video_item').height('100%');
+		
+		if(castList.length > 0){
+			if($('#kkoSvcCnt').val() < index) return;
+			 $('#remoteVideo'+(index)).attr('castName',castList[0].name);
+			 setLoopChJoinInIn(castList[0],index);
+		
+			var castName = $('#remoteVideo1').attr('castName');
+		}
+		if(callback)callback(index);
+	});
+}
+
 var setLoopChDraw = function(castList){
-	var sortingCastList = castList.sort(function(castPre,castNext){
-		var pre = castPre.name.split('_')[0].replace('remoteVideo','');
-		var next = castNext.name.split('_')[0].replace('remoteVideo','');
+	console.log(castList);
+	var sortingCastList = castList.filter(function(cast){if(cast.name.indexOf($('#naBzPlc').val()+'_remoteVideo')>=0) return this;})
+		.sort(function(castPre,castNext){
+		var pre = castPre.name.split('_')[1].replace('remoteVideo','');
+		var next = castNext.name.split('_')[1].replace('remoteVideo','');
 		
 		return pre-next;
 	});
 	
-	var height = $('div.seeBox_slick ul.slider .boarder').closest('.slick-slide').height();
+	//$('div.seeBox_slick ul.slider li.video_item').height('360px');
+	$('div.seeBox_slick ul.slider li.video_item').height('100%');
 	
-	for(var i=0;i<sortingCastList.length;i++){		 
-		sHtml = '<li data-target="#carouselExampleIndicators" data-slide-to="'+(i+1)+'" class="remon '+(0==(i)?'active':'')+'"></li>';
-		cHtml = '<div class="remon carousel-item '+(0==(i)?'active':'')+'" data-item-index="'+(i+1)+'" style="width: 100%;height: 100%;"><div id="remoteVideoIe'+(i+1)+'"><video id="remoteVideo'+(i+1)+'" style="width: 100%;height: 100%;" poster="/static/images/assets/no_video_18980.png" playsinline webkit-playsinline controls></video></li></div></div></div>';
-		
-		$('.vidioComp').append(cHtml);
-		$('.vidioSlide').append(sHtml);
-		 
-		 setLoopChJoinInIn(sortingCastList[i],i+1);
-	};
+	if(sortingCastList.length > 0){
+		for(var i=0;i<sortingCastList.length;i++){
+			if($('#kkoSvcCnt').val() <= i) return;
+			 $('#remoteVideo'+(i+1)).attr('castName',sortingCastList[i].name);
+			 //setLoopChJoinInIn(sortingCastList[i],i+1);
+	 	};
+	
+		var castName = $('#remoteVideo1').attr('castName');
+		if(castName && castName.indexOf('remote') >= 0){
+			if(sortingCastList.length > 0) $('div.seeBox_slick ul.slider').slick('goTo', 0);
+		}
+	}
 };
 var remoteVideoArr = {};
 var setLoopChJoinInIn = function(cast,i){
 	var id = '#remoteVideo'+(i);
 	var castName = cast.name;
-//	if(castName.indexOf('remoteVideo1') < 0) return;
-	config.credential.serviceId = serviceId;
-    config.credential.key = serviceKey;
+	
+	config.credential.serviceId = $('#kkoSvcId').val();
+    config.credential.key = $('#kkoSvcKey').val();
     config.view.remote = id;
     
-	listener.onComplete = function(){
-		console.log('comple '+castName);
-		var video = remoteVideoArr[castName].context.remoteVideo;
-		
-		function errPlay(e){
-			console.log('err : '+e);
-			video.muted = true;
-			video.play().then(succPlay).catch(errPlay);
-		};
-		function succPlay(){
-			console.log('succ');
-		};
-		video.play().then(succPlay).catch(errPlay);		
-	}
     var tmpRemon = new Remon({ config, listener }); 
     remoteVideoArr[castName] = tmpRemon;
 	tmpRemon.joinCast(castName);

@@ -13,3 +13,7 @@
 <link rel="stylesheet" type="text/css" href="/static/css/guide/jquery.mCustomScrollbar.css">
 <link rel="stylesheet" type="text/css" href="/static/css/guide/selectric.css">
 
+<spring:eval expression="@environment.getProperty('spring.profiles.active')" var="ACTIVE" />
+<script type="text/javascript">
+	var active = "${ACTIVE}";
+</script>

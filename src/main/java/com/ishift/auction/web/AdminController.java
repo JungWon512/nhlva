@@ -286,11 +286,25 @@ public class AdminController {
 		final ModelAndView mav = new ModelAndView();
 		final Map<String,Object> map = new HashMap<>();
 		map.put("delYn", "0");
-
 		final AdminUserDetails userVo = (AdminUserDetails)sessionUtill.getUserVo();
+        String today = LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyyMMdd"));
+        
 		if(userVo != null) map.put("naBzPlcNo", userVo.getPlace());
+		
+		Map<String,Object> johap  = adminService.selectOneJohap(map);
+        JwtTokenVo jwtTokenVo = JwtTokenVo.builder()
+				.auctionHouseCode(johap.get("NA_BZPLC").toString())
+				.userMemNum("WATCHER")
+				.userRole(Constants.UserRole.WATCHER)
+				.build();
+        String token = jwtTokenUtil.generateToken(jwtTokenVo, Constants.JwtConstants.ACCESS_TOKEN);
 
-		mav.addObject("johapData", adminService.selectOneJohap(map));
+		map.put("searchDate", today);
+		Map<String,Object> count =auctionService.selectCountEntry(map);
+
+		mav.addObject("johapData", johap);
+        mav.addObject("token",token);
+        mav.addObject("count",count);
 		mav.setViewName("admin/auction/stream/stream");
 		mav.addObject("subheaderTitle", "방송");
 		return mav;
