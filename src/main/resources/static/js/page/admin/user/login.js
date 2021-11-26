@@ -53,7 +53,7 @@
 					$("#usrid").val(getCookie("eno"));
 					$("#save_id").prop("checked", true);
 				}
-				deleteCookie("access_token");
+				deleteCookie("access_token"); 
 				addEvent();
 			}
 		};
