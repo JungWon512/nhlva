@@ -7607,7 +7607,7 @@ div.list_txts {
 /* toast message */
 #toast {
 	position: fixed;
-/*     bottom: 30px; */
+/* 	bottom: 30px; */
 /* 	width:90%; */
 	width:100%;
 	top: 50%;
