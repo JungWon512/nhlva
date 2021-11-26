@@ -23,7 +23,6 @@ var setTileInit = function(){
 
 var setEventListener = function(){
 	$('#btnStart').click(function(){
-		console.log('btnStart : click');
 		$(this).prop('disabled',true);
 		$('#btnStop').prop('disabled',true);
 		$(this).closest('td').addClass('mt-deep').removeClass('mt-gray');
@@ -85,7 +84,7 @@ var setEventListener = function(){
 		modalComfirm('　',num+'번 응찰자의 접속을 끊으시겠습니까?',function(){ 
 			var packet = 'AL|'+$('#naBzPlc').val()+'|'+num+'|6001|'+gubun;
 			socket.emit('packetData', packet);
-			console.log(packet);			
+			debugConsole(packet);			
 		});
 	});
 }
@@ -99,7 +98,7 @@ var socketStart = function(){
 		return;
 	}
 	if(socket){ socket.connect(); return;}
-	var socketHost = (location.hostname.indexOf("xn--o39an74b9ldx9g.kr") >-1 || location.hostname.indexOf("nhlva.nonghyup.com") >-1)?"cowauction.kr":location.hostname.indexOf("xn--e20bw05b.kr")>-1?"xn--e20bw05b.kr":"xn--e20bw05b.kr";
+	var socketHost = (active == 'production')?"cowauction.kr":(active == 'develop')?"xn--e20bw05b.kr":"xn--e20bw05b.kr";
 	//socketHost += ':'+$('#webPort').val();
 	//socketHost = '192.168.0.23';
 	socketHost += ':9001';
@@ -107,7 +106,7 @@ var socketStart = function(){
 	//socket = io.connect('http://'+socketHost+ '/6005' + '?auctionHouseCode='  + $('#naBzPlc').val());
 
 	socket.on('connect_error', function(e) {
-		console.log(e);
+		debugConsole(e);
 		socket.disconnect();
 		$('#btnStop').prop('disabled',true);
 		$('#btnStart').prop('disabled',false);
@@ -149,13 +148,13 @@ var connectHandler = function() {
 	var num = $('#tokenNm').val();
 	
 	var packet = 'AI|'+johapCd+'|'+num+'|'+token+'|6005|MANAGE|N'
-	console.log(packet);
+	debugConsole(packet);
 	socket.emit('packetData', packet);	
 }
 
 var monsterConfig = {};
 var messageHandler = function(data) {
-	console.log(data);
+	debugConsole(data);
 	var dataArr = data.split('|');
 	var gubun = dataArr[0];
 	

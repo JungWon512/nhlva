@@ -473,7 +473,7 @@ var debugConsole = function() {
 		for (var i in arguments) {
 			arrConsole.push(arguments[i]);
 		}
-		console.log(arrConsole.join(" "));
+		console.log(arrConsole);
 	}
 };
 

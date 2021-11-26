@@ -15,7 +15,7 @@ var socket=null,scCnt=0,auctionConfig={};
 var setSocket = function(){        
 	if(!$('#naBzPlc').val()) return;
 	if(socket){ socket.connect(); return;}
-	var socketHost = (location.hostname.indexOf("xn--o39an74b9ldx9g.kr") >-1 || location.hostname.indexOf("nhlva.nonghyup.com") >-1)?"cowauction.kr":location.hostname.indexOf("xn--e20bw05b.kr")>-1?"xn--e20bw05b.kr":"xn--e20bw05b.kr";
+	var socketHost = (active == 'production')?"cowauction.kr":(active == 'develop')?"xn--e20bw05b.kr":"xn--e20bw05b.kr";
 	//socketHost += ':'+$('#webPort').val();
 	socketHost += ':9001';
 	socket = io.connect('https://'+socketHost+ '/6003' + '?auctionHouseCode='  + $('#naBzPlc').val(), {secure:true});
@@ -53,7 +53,7 @@ var disconnectHandler = function() {
 }
 
 var messageHandler = function(data) {
-	console.log(data);
+	debugConsole(data);
 	var dataArr = data.split('|');
 	var gubun = dataArr[0];
 	switch(gubun){	
@@ -161,7 +161,7 @@ var messageHandler = function(data) {
 			break;
 		case "AY" :
 			// 재경매 대상 수신
-			console.log(dataArr[2] +' : '+$('table.tblBoard tbody tr.title td p.auctionNum').text());
+			debugConsole(dataArr[2] +' : '+$('table.tblBoard tbody tr.title td p.auctionNum').text());
 			if(dataArr[2]!=$('table.tblBoard tbody tr.title td p.auctionNum').text()) return;
 			if((auctionConfig.auctionSt =='8003' || auctionConfig.auctionSt =='8004') && 'F' == dataArr[3].trim()) $('table.tblBoard tbody tr.title td p.boardTitle').text('응찰 종료');
 			else if(auctionConfig.anStatus) $('table.tblBoard tbody tr.title td p.boardTitle').text('재경매 진행중');

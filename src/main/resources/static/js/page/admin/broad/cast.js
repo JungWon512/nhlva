@@ -41,15 +41,15 @@
 	const listener = {
 		// 영상 송출이 시작되었을 때
 		onCreate(chid) {
-			console.log(`EVENT FIRED: onCreate: ${chid}`);
+			debugConsole(`EVENT FIRED: onCreate: ${chid}`);
 			$('.btn_start').filter('[data-view-id="' + viewId + '"]').prop("disabled", true);
 			$('.btn_stop').filter('[data-view-id="' + viewId + '"]').prop("disabled", false);
 		},
 		onConnect(chid) {
-			console.log(`EVENT FIRED: onConnect: ${chid}`);
+			debugConsole(`EVENT FIRED: onConnect: ${chid}`);
 		},
 		onComplete() {
-			console.log('EVENT FIRED: onComplete');
+			debugConsole('EVENT FIRED: onComplete');
 			setViewsViaParameters(false);
 		},
 		onDisconnectChannel() {
@@ -58,16 +58,16 @@
 		},
 		onClose() {
 			// is called when remon.close() method is called.
-			console.log('EVENT FIRED: onClose');
+			debugConsole('EVENT FIRED: onClose');
 			setViewsViaParameters(false);
 			$('.btn_start').filter('[data-view-id="' + viewId + '"]').prop("disabled", false);
 			$('.btn_stop').filter('[data-view-id="' + viewId + '"]').prop("disabled", true);
 		},
 		onError(error) {
-			console.log(`EVENT FIRED: onError: ${error}`);
+			debugConsole(`EVENT FIRED: onError: ${error}`);
 		},
 		onStat(result) {
-			console.log(`EVENT FIRED: onStat: ${result}`, result);
+			debugConsole(`EVENT FIRED: onStat: ${result}`, result);
 		}
 	}
 
@@ -134,7 +134,7 @@
 	// 선택 가능한 카메라, 오디오 장치를 가져온다.
 	var getDevices = async function () {
 		if (!navigator.mediaDevices || !navigator.mediaDevices.enumerateDevices) {
-			console.log("enumerateDevices()를 지원하지 않습니다.");
+			debugConsole("enumerateDevices()를 지원하지 않습니다.");
 			return;
 		}
 		
@@ -144,13 +144,13 @@
 					var devices = await navigator.mediaDevices.enumerateDevices();
 					for (let i = 0; i < devices.length; i++) {
 						let device = devices[i];
-						console.log(devices[i]);
+						debugConsole(devices[i]);
 						if (device.kind === 'videoinput') {
-//							console.log('video', device.label, device.groupId);
+//							debugConsole('video', device.label, device.groupId);
 							cameraList.push({ text: device.label, id: device.deviceId, group : device.groupId });
 						}
 						else if (device.kind === 'audioinput') {
-//							console.log('audio', device.label, device.groupId);
+//							debugConsole('audio', device.label, device.groupId);
 							audioMap.set(device.groupId, { text: device.label, id: device.deviceId });
 						}
 						// else if (device.kind === 'audiooutput') {
@@ -166,7 +166,7 @@
 				}
 			})
 			.catch(function(e){
-				console.log("getUserMedia()를 사용할 수 없습니다 : ", e);
+				debugConsole("getUserMedia()를 사용할 수 없습니다 : ", e);
 			});
 	}
 	

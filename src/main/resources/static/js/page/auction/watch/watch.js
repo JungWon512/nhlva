@@ -47,7 +47,6 @@ $(function() {
 				$('.boarder ul li dd.lowsSbidLmtAm').text($(this).find('dd.lowsSbidLmtAm').text());
 				$('.boarder ul li dd.kpnNo').text($(this).find('dd.kpnNo').text());
 				$('.boarder ul li dd.rmkCntn').text($(this).find('dd.rmkCntn').text());
-				console.log($(this).find('dd.aucDt').text());
 			});
 //			var index = 0;
 //			setInterval(function(){
@@ -107,7 +106,7 @@ var socket=null,auctionConfig={};
 var socketStart = function(){
 	if(!$('#naBzPlc').val()) return;        
 	if(socket){ socket.connect(); return;}
-	var socketHost = (location.hostname.indexOf("xn--o39an74b9ldx9g.kr") >-1 || location.hostname.indexOf("nhlva.nonghyup.com") >-1)?"cowauction.kr":location.hostname.indexOf("xn--e20bw05b.kr")>-1?"xn--e20bw05b.kr":"xn--e20bw05b.kr";
+	var socketHost = (active == 'production')?"cowauction.kr":(active == 'develop')?"xn--e20bw05b.kr":"xn--e20bw05b.kr";
 	//socketHost += ':'+$('#webPort').val();
 	socketHost += ':9001';
 	socket = io.connect('https://'+socketHost+ '/6003' + '?auctionHouseCode='  + $('#naBzPlc').val(), {secure:true});

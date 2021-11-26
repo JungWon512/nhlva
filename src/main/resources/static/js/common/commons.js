@@ -34,11 +34,11 @@
                     callback(data);
                 },
                 error: function(xhr, status, error) {
-                    console.log("ERROR :: data :: ", error, xhr);
+                    debugConsole("ERROR :: data :: ", error, xhr);
                 },
                 complete : function(data) {
                     // SKIP
-                    console.log("COMPLETE :: data :: ", data);
+                    debugConsole("COMPLETE :: data :: ", data);
                     // if(!param.nospinner) {
                         $(".spinner").hide();
                     // }
