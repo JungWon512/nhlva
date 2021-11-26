@@ -468,7 +468,7 @@ var appendFormSubmit = function(name, action, params, target) {
 };
 
 var debugConsole = function() {
-	if (active == "local" || active == "develop") {
+	if (active && (active == "local" || active == "develop" )){
 		var arrConsole = [];
 		for (var i in arguments) {
 			arrConsole.push(arguments[i]);

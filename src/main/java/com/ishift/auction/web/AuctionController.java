@@ -406,6 +406,7 @@ public class AuctionController extends CommonController {
 			mav.addObject("aucList", list);
 			mav.addObject("soldList", soldList);
 			mav.addObject("bidList", bidList);
+			mav.addObject("johapData", adminService.selectOneJohap(params));
 			mav.addObject("bidCnt", auctionService.selectBidLogListCnt(params));
 			mav.addObject("params", params);
 		}catch (RuntimeException re) {
@@ -468,8 +469,8 @@ public class AuctionController extends CommonController {
 	        if(param.get("naBzplc") != null) map.put("naBzplc", param.get("naBzplc"));
 			if(param.get("loginNo") != null)map.put("loginNo", param.get("loginNo"));
 			
-			map.put("searchDate", today);
-			//map.put("searchDate", param.get("date"));
+			//map.put("searchDate", today);
+			map.put("searchDate", param.get("date"));
 			Map<String,Object> johap=adminService.selectOneJohap(map);
 			List<Map<String,Object>> list=auctionService.entrySelectList(map);
 			if(param.get("loginNo") != null) map.put("searchTrmnAmnNo", param.get("loginNo"));

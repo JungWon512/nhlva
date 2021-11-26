@@ -113,9 +113,16 @@
 								<dd class="num">${vo.AUC_PRG_SQ }</dd>
 								<dd class="name">${vo.SRA_PDMNM }</dd>
 								<dd class="pd_sex">${vo.INDV_SEX_C_NAME }</dd>
-								<dd class="pd_kg">${fn:split(vo.COW_SOG_WT,'.')[0]}</dd>
-								<dd class="pd_pay1">${vo.LOWS_SBID_LMT_AM <= 0 ? '0' : fn:split(vo.LOWS_SBID_LMT_UPR,'.')[0]}</dd>
-								<dd class="pd_pay2">${ fn:split(vo.SRA_SBID_UPR,'.')[0] }</dd>
+								<dd class="pd_kg"><fmt:formatNumber value="${fn:split(vo.COW_SOG_WT,'.')[0]}" type="number" /></dd>
+								<dd class="pd_pay1">
+									<c:choose>
+										<c:when test="${vo.LOWS_SBID_LMT_AM eq '' || vo.LOWS_SBID_LMT_AM == null || vo.LOWS_SBID_LMT_AM <= 0}">-</c:when>
+										<c:otherwise>
+											<fmt:formatNumber value="${fn:split(vo.LOWS_SBID_LMT_UPR,'.')[0]}" type="number" />
+										</c:otherwise>
+									</c:choose>
+								</dd>
+								<dd class="pd_pay2"><fmt:formatNumber value="${fn:split(vo.SRA_SBID_UPR,'.')[0]}" type="number" /></dd>
 							</dl>
 						</li>
 					</c:forEach>
@@ -171,9 +178,9 @@
 								<dd class="num">${bvo.AUC_PRG_SQ }</dd>
 								<dd class="pd_ea">${bvo.SRA_INDV_AMNNO_FORMAT }</dd>
 								<dd class="pd_sex">${bvo.INDV_SEX_C_NAME }</dd>
-								<dd class="pd_pay1">${bvo.LOWS_SBID_LMT_AM <= 0 ? '0' : fn:split(bvo.LOWS_SBID_LMT_UPR,'.')[0]}</dd>
-								<dd class="pd_pay2">${ fn:split(bvo.SRA_SBID_UPR,'.')[0] }</dd>
-								<dd class="pd_pay3">${ fn:split(bvo.ATDR_AM,'.')[0] }</dd>
+								<dd class="pd_pay1"><fmt:formatNumber value="${bvo.LOWS_SBID_LMT_AM <= 0 ? '0' : fn:split(bvo.LOWS_SBID_LMT_UPR,'.')[0]}" type="number" /></dd>
+								<dd class="pd_pay2"><fmt:formatNumber value="${ fn:split(bvo.SRA_SBID_UPR,'.')[0] }" type="number" /></dd>
+								<dd class="pd_pay3"><fmt:formatNumber value="${ fn:split(bvo.ATDR_AM,'.')[0] }" type="number" /></dd>
 							</dl>
 						</li>
 	                </c:forEach>				

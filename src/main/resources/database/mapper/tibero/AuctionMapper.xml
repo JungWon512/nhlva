@@ -146,26 +146,31 @@
     
     
     <select id="selectCountEntry" parameterType="map" resultType="map">
-    	SELECT 
-			COUNT(*) CNT	-- 전체
-			,COUNT(CASE WHEN B.SEL_STS_DSC = 11 THEN 1 END) CNT_STAND	-- 대기
-			,COUNT(CASE WHEN B.SEL_STS_DSC != 11 THEN 1 END) CNT_STAND_ELSE	-- 대기 이외
-			,COUNT(CASE WHEN B.SEL_STS_DSC = 22 THEN 1 END) CNT_BID	-- 낙찰
-			,COUNT(CASE WHEN B.SEL_STS_DSC = 23 THEN 1 END) CNT_HOLD	-- 보류
-			,COUNT(CASE WHEN B.COW_SOG_WT = 0 AND B.LOWS_SBID_LMT_AM = 0 THEN 1 END) CNT_ABSENT	-- 미출장	
-		FROM TB_LA_IS_MH_SOG_COW B
-		LEFT JOIN TB_LA_IS_MM_INDV  A ON A.NA_BZPLC = B.NA_BZPLC 
-	        							AND A.SRA_SRS_DSC  = B.SRA_SRS_DSC
-										AND A.SRA_INDV_AMNNO = B.SRA_INDV_AMNNO
-		INNER JOIN TB_LA_IS_BM_BZLOC D ON B.NA_BZPLC = D.NA_BZPLC
-		WHERE 1=1
-		AND D.NA_BZPLCNO = #{naBzPlcNo}
-        <if test="searchDate != null and searchDate != ''">
-            AND B.AUC_DT = #{searchDate}
-        </if>
-        <if test="searchAucObjDsc != null and searchAucObjDsc != ''">
-			AND B.AUC_OBJ_DSC=#{searchAucObjDsc}
-        </if>
+    	SELECT T.* 
+		, ROUND(CNT_STAND_ELSE/CNT * 100) AS CNT_PERCENT
+		FROM (
+	    	SELECT 
+				COUNT(*) CNT	-- 전체
+				,COUNT(CASE WHEN B.SEL_STS_DSC = 11 THEN 1 END) CNT_STAND	-- 대기
+				,COUNT(CASE WHEN B.SEL_STS_DSC != 11 THEN 1 END) CNT_STAND_ELSE	-- 대기 이외
+				,COUNT(CASE WHEN B.SEL_STS_DSC = 22 THEN 1 END) CNT_BID	-- 낙찰
+				,COUNT(CASE WHEN B.SEL_STS_DSC = 23 THEN 1 END) CNT_HOLD	-- 보류
+				,COUNT(CASE WHEN B.COW_SOG_WT = 0 AND B.LOWS_SBID_LMT_AM = 0 THEN 1 END) CNT_ABSENT	-- 미출장
+				,LISTAGG(DECODE(B.SEL_STS_DSC,11,NULL,B.AUC_PRG_SQ),',') WITHIN GROUP(ORDER BY B.AUC_PRG_SQ) AS LIST_AUCNUM	
+			FROM TB_LA_IS_MH_SOG_COW B
+			LEFT JOIN TB_LA_IS_MM_INDV  A ON A.NA_BZPLC = B.NA_BZPLC 
+		        							AND A.SRA_SRS_DSC  = B.SRA_SRS_DSC
+											AND A.SRA_INDV_AMNNO = B.SRA_INDV_AMNNO
+			INNER JOIN TB_LA_IS_BM_BZLOC D ON B.NA_BZPLC = D.NA_BZPLC
+			WHERE 1=1
+			AND D.NA_BZPLCNO = #{naBzPlcNo}
+	        <if test="searchDate != null and searchDate != ''">
+	            AND B.AUC_DT = #{searchDate}
+	        </if>
+	        <if test="searchAucObjDsc != null and searchAucObjDsc != ''">
+				AND B.AUC_OBJ_DSC=#{searchAucObjDsc}
+	        </if>
+        ) T
     </select>
 
     <resultMap type="HashMap" id="AucNoticeMap">
