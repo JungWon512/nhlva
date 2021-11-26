@@ -49,7 +49,7 @@ var afAuctionNum = null;
 var socketStart = function(){        
 	if(!$('#naBzPlc').val()) return;
 	if(socket){ socket.connect(); return;}
-	var socketHost = (location.hostname.indexOf("xn--o39an74b9ldx9g.kr") >-1 || location.hostname.indexOf("nhlva.nonghyup.com") >-1)?"cowauction.kr":location.hostname.indexOf("xn--e20bw05b.kr")>-1?"xn--e20bw05b.kr":"xn--e20bw05b.kr";
+	var socketHost = (active == 'production')?"cowauction.kr":(active == 'develop')?"xn--e20bw05b.kr":"xn--e20bw05b.kr";
 	//socketHost += ':'+$('#webPort').val();
 	socketHost += ':9001';
 	socket = io.connect('https://'+socketHost+ '/6003' + '?auctionHouseCode='  + $('#naBzPlc').val(), {secure:true});
@@ -102,7 +102,7 @@ var disconnectHandler = function() {
 	CF : 낙찰데이터 정보	
 **/
 var messageHandler = function(data) {
-	console.log(data);
+	debugConsole(data);
 	var dataArr = data.split('|');
 	var gubun = dataArr[0];
 	                  
@@ -226,15 +226,15 @@ var config = {
 };
 //remon Event listener
 listener = {
-    onCreate(chid) { console.log(`EVENT FIRED: onCreate: ${chid}`); },
+    onCreate(chid) { debugConsole(`EVENT FIRED: onCreate: ${chid}`); },
     onJoin(chid) { 
-		console.log(`EVENT FIRED: onJoin: ${chid}`);
+		debugConsole(`EVENT FIRED: onJoin: ${chid}`);
 	},
     onClose() { 
-		console.log('EVENT FIRED: onClose'); 
+		debugConsole('EVENT FIRED: onClose'); 
     },
     onError(error) { 
-		console.log(`EVENT FIRED: onError: ${error}`);
+		debugConsole(`EVENT FIRED: onError: ${error}`);
     }, onStat(result) { 
 	}
 };
@@ -266,7 +266,7 @@ var setLoopChDraw = function(castList){
 		
 		return pre-next;
 	});
-	console.log(sortingCastList);
+	debugConsole(sortingCastList);
 //	var height = $('div.seeBox_slick ul.slider .boarder').closest('.slick-slide').height();
 //	$('div.seeBox_slick ul.slider li.video_item').height(height-1);
 	$('div.seeBox_slick ul.slider li.video_item').height('360px');
@@ -304,14 +304,14 @@ var setRemonJoinRemote =async function (index,callback) {
 	dummyRemon.config.credential.serviceId = $('#kkoSvcId').val();
     dummyRemon.config.credential.key = $('#kkoSvcKey').val();
 	await dummyRemon.fetchCasts().then(function(data){
-		console.log(data);		
+		debugConsole(data);		
 		var castList = data.filter(function(cast){if(cast.name.indexOf($('#naBzPlc').val()+'_remoteVideo'+index)>=0) return this;})
 			.sort(function(castPre,castNext){
 			var pre = castPre.name.split('_')[1].replace('remoteVideo','');
 			var next = castNext.name.split('_')[1].replace('remoteVideo','');
 			return pre-next;
 		});
-		console.log(castList);
+		debugConsole(castList);
 //		var height = $('div.seeBox_slick ul.slider .boarder').closest('.slick-slide').height();
 //		$('div.seeBox_slick ul.slider li.video_item').height(height-1);
 	$('div.seeBox_slick ul.slider li.video_item').height('100%');
@@ -328,7 +328,7 @@ var setRemonJoinRemote =async function (index,callback) {
 }
 
 var setLoopChDraw = function(castList){
-	console.log(castList);
+	debugConsole(castList);
 	var sortingCastList = castList.filter(function(cast){if(cast.name.indexOf($('#naBzPlc').val()+'_remoteVideo')>=0) return this;})
 		.sort(function(castPre,castNext){
 		var pre = castPre.name.split('_')[1].replace('remoteVideo','');

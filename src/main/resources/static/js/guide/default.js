@@ -55,15 +55,15 @@
 						if(socket && socket.connected) socket.disconnect();
 						location.reload();						
 					}catch(e){
-						console.log(e);
+						debugConsole(e);
 					}
 				}
 			}
 		});	
-		var titText = location.hostname.indexOf("xn--o39an74b9ldx9g.kr") >-1?$('.m_header .m_tit').text():$('.m_header .m_tit').text()+" DEV";
-		var footerTxt = location.hostname.indexOf("xn--o39an74b9ldx9g.kr") >-1?$('section.footer li:eq(2) a').text():" DEV"+$('section.footer li:eq(2) a').text();
-		$('.m_header .m_tit').text(titText);
-		$('section.footer li:eq(2) a').text(footerTxt);
+		if(active == 'production'){
+			$('.m_header .m_tit').text($('.m_header .m_tit').text()+" DEV");
+			$('section.footer li:eq(2) a').text(" DEV"+$('section.footer li:eq(2) a').text());			
+		}
 }());
 
 var $winW = $(window).width();
