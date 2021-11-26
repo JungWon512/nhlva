@@ -458,7 +458,7 @@ var messageHandler = function(data) {
 			// 8001. NONE(기본값-미진행), 8002. READY(대기), 8003. START(시작), 8004. PROGRESS(진행)
 			// 8005. PASS(정지), 8006. COMPLETED(완료), 8007. FINISH(종료)
 			if(!auctionConfig.asData) auctionConfig.asData = {};
-			auctionConfig.asData.status = dataArr[5];
+			auctionConfig.asData.status = dataArr[6];
 			auctionConfig.asData.aucSeq = dataArr[2];
 
 			if (auctionConfig.asData.status == "8001") {
@@ -469,7 +469,7 @@ var messageHandler = function(data) {
 			}
 			else if(auctionConfig.asData.status == "8002" || auctionConfig.asData.status == "8006") {
 				$("input[name='bidAmt']").val("");
-				toast("경매 <span class='txt-green'>대기 중</span>입니다.", 60*60*24);
+				toast("경매 <span class='txt-green'>대기 중</span>입니다.", 100000);
 				$("div.auc-txt > div.info_board").html("경매 <span class='txt-yellow'>대기 중</span>입니다.");
 				auctionConfig.enableBid = "N";
 			}
@@ -607,7 +607,7 @@ var messageHandler = function(data) {
 			else if (responseCode == "4006") {
 				auctionConfig.seData.clearYn = "Y";
 //				$(".btn_bid_cancel").prop("disabled", false);
-				$("div.auc-txt > div.info_board").html("<span class='txt-yellow'>응찰</span>되었습니다.");
+//				$("div.auc-txt > div.info_board").html("<span class='txt-yellow'>응찰</span>되었습니다.");
 				toast("<span class='txt-yellow'>응찰</span>되었습니다.", 1);
 				$("input[name=bidAmt]").removeClass("txt-blue");
 //				messageSample("응찰 되었습니다.");
