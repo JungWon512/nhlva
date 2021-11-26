@@ -216,7 +216,7 @@
 				</div>
 				<dl class="aucNum num-bun" style="background: #ffaf00;">
 					<dt>경매<br/>번호</dt>
-					<dd><input type="text" class="aucNum active" id="auction_num" name="aucNum" style="background: #ffaf00;" placeholder="0" readonly /><span>번</span></dd>
+					<dd><input type="text" class="aucNum active" id="auction_num" name="aucNum" style="background: #ffaf00;" placeholder="" readonly /><span>번</span></dd>
 				</dl>
 				<dl class="bidAmt" style="display:none;">
 					<dt>응찰<br/>금액</dt>

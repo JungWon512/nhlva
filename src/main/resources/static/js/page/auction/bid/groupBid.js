@@ -8,7 +8,7 @@ $(function() {
 			$('input[name=bidAmt]').on('input',function(){
 				inputNumberVaildBidAmt(this,5);
 			});
-			$('input[name=bidAmt]').on('keyup',function(e){				
+			$('input[name=bidAmt]').on('keyup',function(e){
 				if (e.keyCode == 13 && fnCheckBidData()) {
 					fnBid();
 				}				
@@ -17,10 +17,10 @@ $(function() {
 			$('input[name=aucNum]').on('input',function(){
 				inputNumberVaildBidAmt(this,5);
 			});
-			$('input[name=aucNum]').on('keyup',function(e){				
+			$('input[name=aucNum]').on('keyup',function(e){
 				if (e.keyCode == 13) {
 					fnSetAuctionInfo();
-				}				
+				}
 			});
 			$('input[name=aucNum]').focus();
 		}
@@ -88,6 +88,7 @@ $(function() {
 			if(!isApp() && chkOs() == 'web') $('input[name=bidAmt]').focus();
 			if (inputVal == "" && num == "0") return;
 			if (inputVal.length >= maxLength) return;
+			$target.removeClass("txt-blue");
 			$target.val(("" + inputVal + num).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ","));
 			auctionConfig.seData.clearYn = "N";	
 		});
@@ -505,17 +506,20 @@ var messageHandler = function(data) {
 			}
 			else if(auctionConfig.asData.status == "8002" || auctionConfig.asData.status == "8006") {
 				$("input[name='bidAmt']").val("");
+				toast("경매 <span class='txt-green'>대기 중</span>입니다.", 60*60*24);
 				$("div.auc-txt > div.info_board").html("경매 <span class='txt-yellow'>대기 중</span>입니다.");
 				auctionConfig.enableBid = "N";
 			}
 			else if(auctionConfig.asData.status == "8003") {
 				$("input[name='bidAmt']").val("");
+				$("#toast").removeClass("reveal");
 				fnBefore();
 				auctionConfig.asData.bidYn = "N";
 				auctionConfig.enableBid = "Y";
 			}
 			else if(auctionConfig.asData.status == "8004") {
 				$("div.auc-txt > div.info_board").html("<span class='txt-yellow'>경매 번호</span>를 입력하세요.");
+				$("#toast").removeClass("reveal");
 				$("input[name='bidAmt']").val("");
 				fnBefore();
 				// 출품번호, 경매대상구분코드
@@ -650,7 +654,8 @@ var messageHandler = function(data) {
 			}
 			else if (responseCode == "4006") {
 				auctionConfig.seData.clearYn = "Y";
-				messageSample("<span class='txt-yellow'>응찰</span>되었습니다.");
+//				messageSample("<span class='txt-yellow'>응찰</span>되었습니다.");
+				toast("<span class='txt-yellow'>응찰</span>되었습니다.", 1);
 				fnBefore();
 				$("input[name=bidAmt]").removeClass("txt-blue");
 			}
@@ -720,6 +725,8 @@ var fnSetAuctionInfo = function() {
 	reqData.push($("input[name='aucNum']").val());
 	socket.emit('packetData', reqData.join('|'));
 	if(!isApp() && chkOs() == 'web') $('input[name=bidAmt]').focus();
+	
+	auctionConfig.seData.clearYn = "Y";
 };
 
 var fnBefore = function() {
@@ -727,6 +734,7 @@ var fnBefore = function() {
 	$(".aucNum").show().find("input, button").prop("disabled", false).addClass("active").val("");
 	$(".bidAmt").hide().find("input, button").prop("disabled", true).removeClass("active").val("");
 	$(".btn_before").prop("disabled", true);
+	$(".mo_seeBox").find("dd").text("");
 	if(!isApp() && chkOs() == 'web') $('input[name=aucNum]').focus();
 	auctionConfig.enableCancel == "N";
 }
@@ -746,7 +754,7 @@ var fnCheckBidData = function() {
 		}
 		
 		if (parseInt(auctionConfig.scData.minBidAmt) > parseInt(bidAmt)) {
-			messageSample("응찰금액을 확인 하세요.");
+			messageSample("<span class='txt-red'>응찰금액을 확인하세요.</span>");
 			$("input[name=bidAmt]").val("");
 			return false;
 		}
@@ -790,7 +798,7 @@ var fnBid = function() {
 var fnBidCancel = function() {
 	// 응찰 취소 요청
 	// 구분자 | 조합구분코드 | 출품번호 | 경매회원번호(거래인번호) | 응찰자경매참가번호 | 접속채널(ANDROID/IOS/WEB) | 취소요청시간(yyyyMMddHHmmssSSS)
-	if (auctionConfig.enableCancel == "Y") {
+//	if (auctionConfig.enableCancel == "Y") {
 		var date = new Date();
 		var cancelDate = [date.getFullYear()
 						 , (date.getMonth() + 1).toString().padStart("2", "0")
@@ -809,10 +817,10 @@ var fnBidCancel = function() {
 		cancelData.push("WEB");
 		cancelData.push(cancelDate.join(""));
 		socket.emit('packetData', cancelData.join("|"));
-	}
-	else {
+//	}
+//	else {
 		$(".aucNum").val("");
-	}
+//	}
 };
 
 // 메시지 노출 샘플

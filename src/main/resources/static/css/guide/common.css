@@ -7607,16 +7607,17 @@ div.list_txts {
 /* toast message */
 #toast {
 	position: fixed;
-/*     bottom: 30px; */
-	width:90%;
-	top: 40%;
+/* 	bottom: 30px; */
+/* 	width:90%; */
+	width:100%;
+	top: 50%;
 	left: 50%;
-	line-height: 50px;
-	padding: 15px 20px;
+/* 	line-height: 80px; */
+	padding: 25px 20px;
 	transform: translate(-50%, 10px);
-	border-radius: 5px;
+/* 	border-radius: 5px; */
 	overflow: hidden;
-	font-size: 1.8rem;
+	font-size: 2.5rem;
 	text-align:center;
 	opacity: 0;
 	visibility: hidden;
@@ -7624,10 +7625,15 @@ div.list_txts {
 	background: rgba(0, 0, 0, .5);
 	color: #fff;
 	z-index: 10000;
+	font-weight: 500;
 }
 
 #toast.reveal {
 	opacity: 1;
 	visibility: visible;
 	transform: translate(-50%, 0)
+}
+
+#toast span.txt-green {
+	color: #86e57f;
 }
