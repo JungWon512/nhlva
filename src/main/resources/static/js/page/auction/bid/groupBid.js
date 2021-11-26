@@ -645,6 +645,7 @@ var messageHandler = function(data) {
 			}
 			else if (responseCode == "4003") {
 				messageSample("<span class='txt-red'>응찰금액을 확인하세요.</span>");
+				$("input[name=bidAmt]").removeClass("txt-blue").val("");
 			}
 			else if (responseCode == "4004") {
 				modalAlert("", "현재 응찰 가능상태가 아닙니다.");
