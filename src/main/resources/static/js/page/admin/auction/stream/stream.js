@@ -23,10 +23,7 @@ $(function() {
 			});
 			
 			var callback = function(currentSlide){
-			var video =$('#remoteVideo'+(currentSlide+1)).get(0);
-				if($('#remoteVideo1').get(0) && currentSlide == 0){
-					$('#remoteVideo1').get(0).muted = false;
-				}
+			var video =$('#remoteVideo'+(currentSlide+1)).get(0);				
 				if(video && video.paused) video.play();
 			}
 			setRemonJoinRemote(currentSlide+1,callback);

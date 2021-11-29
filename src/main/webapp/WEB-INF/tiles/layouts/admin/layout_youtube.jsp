@@ -22,9 +22,7 @@
 	<!-- wrap [s] -->
 	<div id="wrap">
 		<!-- admin_area [s] -->
-		<section class="youtube-view">
-			<tiles:insertAttribute name="wrapper_header"/>
-			
+		<section class="youtube-view">			
 			<tiles:insertAttribute name="content"/>	
 			
 			<tiles:insertAttribute name="body_footer_script"/>			
