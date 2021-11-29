@@ -886,7 +886,7 @@ public class ApiController {
 			params.put("list", temp);
 			if(temp.size() <= 0 ) {
 				result.put("success", false);
-				result.put("message", "변경된 정보가 없습니다.");				
+				result.put("message", "변경된 정보가 없습니다.");
 			}
 			int cnt = auctionService.updateLowSbidAmt(params);
 

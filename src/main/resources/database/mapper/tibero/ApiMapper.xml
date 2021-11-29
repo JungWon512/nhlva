@@ -262,18 +262,26 @@
 	</select>
 	
 	<update id="updateLowSbidAmt" parameterType="map" >
-	    <foreach collection="list" item="item" index="index" separator=";" open="DECLARE BEGIN" close="; END;">
-		   UPDATE TB_LA_IS_MH_SOG_COW
-		      SET LOWS_SBID_LMT_AM = #{item.mLowPrice},
-		        LWPR_CHG_NT = #{item.mLwprChgNt},
-		        LSCHG_DTM = SYSDATE,
-		        LS_CMENO = #{item.mLsCmeNo}
-		    WHERE NA_BZPLC = #{item.mAuctionHouseCode}
-		      AND AUC_OBJ_DSC = #{item.mEntryType}
-		      AND OSLP_NO  = #{item.mOslpNo}
-		      AND LED_SQNO     = #{item.mLedSqno}
-		      AND AUC_DT  = #{item.mAucDt}
-	     </foreach>		
+		<foreach collection="list" item="item" index="index" separator=";" open="DECLARE BEGIN" close="; END;">
+			UPDATE TB_LA_IS_MH_SOG_COW
+			   SET LOWS_SBID_LMT_AM = (
+										SELECT CASE WHEN #{item.mEntryType} = '1' THEN TO_NUMBER(#{item.mLowPrice}) * B.CALF_AUC_ATDR_UNT_AM
+													WHEN #{item.mEntryType} = '2' THEN TO_NUMBER(#{item.mLowPrice}) * B.NBFCT_AUC_ATDR_UNT_AM
+													WHEN #{item.mEntryType} = '3' THEN TO_NUMBER(#{item.mLowPrice}) * B.PPGCOW_AUC_ATDR_UNT_AM
+													ELSE TO_NUMBER(#{item.mLowPrice}) * 10000
+												END
+										  FROM TB_LA_IS_MM_ENV_EST B
+										 WHERE B.NA_BZPLC = #{item.mAuctionHouseCode}
+										),
+				   LWPR_CHG_NT = #{item.mLwprChgNt},
+				   LSCHG_DTM = SYSDATE,
+				   LS_CMENO = #{item.mLsCmeNo}
+			 WHERE NA_BZPLC = #{item.mAuctionHouseCode}
+			   AND AUC_OBJ_DSC = #{item.mEntryType}
+			   AND OSLP_NO  = #{item.mOslpNo}
+			   AND LED_SQNO     = #{item.mLedSqno}
+			   AND AUC_DT  = #{item.mAucDt}
+		</foreach>		
 	</update>
 	
 	<update id="updateAuctCowSt" parameterType="map" >  

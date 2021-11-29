@@ -50,7 +50,8 @@
 					aucObjDsc : aucObjDsc,
 					oslpNo : oslpNo,
 					ledSqno : ledSqno,
-					amnno : amnno
+					amnno : amnno,
+					searchTxt : $("input[name='searchTxt']").val()
 				}
 				
 				$.ajax({
@@ -158,7 +159,8 @@
 			$(".list_body > ul").animate({
 				scrollTop : ($(".list_body > ul > li").index(li) - 1) * 41
 			}, 500);
-			li.addClass("act");
+//			li.addClass("act");
+			$(".list_body > ul").find("li#" + aucPrgSq).addClass("act");
 		};
 		
 		var fnLayerPop = function(params, cowInfo) {
@@ -177,6 +179,7 @@
 			sHtml.push('			<input type="hidden" name="oslpNo" value="' + params.oslpNo + '" />');
 			sHtml.push('			<input type="hidden" name="ledSqno" value="' + params.ledSqno + '" />');
 			sHtml.push('			<input type="hidden" name="aucPrgSq" value="' + cowInfo.AUC_PRG_SQ + '" />');
+			sHtml.push('			<input type="hidden" name="searchTxt" value="' + params.searchTxt + '" />');
 			
 			sHtml.push('			<div class="modal-head">');
 			sHtml.push('				<h3>' + title + '</h3>');
@@ -200,13 +203,13 @@
 			sHtml.push('							<td>' + cowInfo.SRA_INDV_AMNNO_FORMAT + '</td>');
 			sHtml.push('						</tr>');
 			sHtml.push('						<tr>');
-			sHtml.push('							<th>어미</th>');
-			sHtml.push('							<td>' + cowInfo.MCOW_DSC_NM + '</td>');
+			sHtml.push('							<th>어미 / 성별</th>');
+			sHtml.push('							<td>' + cowInfo.MCOW_DSC_NM + ' / ' + cowInfo.INDV_SEX_NAME + '</td>');
 			sHtml.push('						</tr>');
-			sHtml.push('						<tr>');
-			sHtml.push('							<th>성별</th>');
-			sHtml.push('							<td>' + cowInfo.INDV_SEX_NAME + '</td>');
-			sHtml.push('						</tr>');
+//			sHtml.push('						<tr>');
+//			sHtml.push('							<th>성별</th>');
+//			sHtml.push('							<td>' + cowInfo.INDV_SEX_NAME + '</td>');
+//			sHtml.push('						</tr>');
 			if (params.regType == 'W') {
 				sHtml.push('					<tr>');
 				sHtml.push('						<th>중량</th>');
