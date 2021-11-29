@@ -386,13 +386,12 @@ var messageHandler = function(data) {
 				var amt = dataArr[6];
 				if (auctionConfig.arData.trmnAmnno == dataArr[4]
 				&& auctionConfig.arData.entryNum == dataArr[5]) {
-					$("div.auc-txt > div.info_board").html(amt + "만 원 <span class='txt-green'>낙찰</span>");
+					$("div.auc-txt > div.info_board").html(fnSetComma(amt) + "만 원 <span class='txt-green'>낙찰</span>");
 				}
 				else {
-					amt = amt.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
-					$("div.auc-txt > div.info_board").html("<span class='txt-green'>낙찰금액 " + amt + "만 원 / " + dataArr[5] + "번</span>");
+					$("div.auc-txt > div.info_board").html("<span class='txt-green'>낙찰금액 " + fnSetComma(amt) + "만 원 / " + dataArr[5] + "번</span>");
 				}
-				tr.find('dl dd.sraSbidAm').text(Math.round(tmpAsDAta.sraSbidAm));
+				tr.find('dl dd.sraSbidAm').text(fnSetComma(Math.round(tmpAsDAta.sraSbidAm)));
 			}
 			else if (auctionConfig.afData.status == "23") {
 				$("div.auc-txt > div.info_board").html("<span class='txt-green'>유찰</span>되었습니다.");
