@@ -131,7 +131,7 @@
 									<li>
 										<dl>
 											<dt>출하주</dt>
-											<dd class="ftsnm" style="overflow: hidden;text-overflow: ellipsis;white-space: nowrap;"></dd>
+											<dd class="ftsnm" style="overflow: hidden;text-overflow: ellipsis;white-space: nowrap;width:50%;"></dd>
 										</dl>
 									</li>
 									<li>

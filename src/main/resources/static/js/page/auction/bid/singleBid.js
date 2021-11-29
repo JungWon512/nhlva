@@ -541,7 +541,7 @@ var messageHandler = function(data) {
 			$('dd.mcowDsc', $(".seeBox_slick_inner, .mo_seeBox")).text(dataArr[14]);		// 어미
 			$('dd.sraIndvPasgQcn', $(".seeBox_slick_inner, .mo_seeBox")).text(dataArr[18]);	// 계대
 			$('dd.kpnNo', $(".seeBox_slick_inner, .mo_seeBox")).text(dataArr[11] && dataArr[12].replace('KPN',''));	// KPN번호
-			$('dd.lowsSbidLmtAm', $(".seeBox_slick_inner, .mo_seeBox")).text(dataArr[27]); // 최저가 > 24 :최초낙찰 ,25:최저낙찰
+			$('dd.lowsSbidLmtAm', $(".seeBox_slick_inner, .mo_seeBox")).text(fnSetComma(dataArr[27])); // 최저가 > 24 :최초낙찰 ,25:최저낙찰
 			$('dd.rmkCntn, p.rmkCntn', $(".seeBox_slick_inner, .mo_seeBox")).text(dataArr[28]);			// 비고
 			$('dd.sraPdRgnnm, p.sraPdRgnnm', $(".seeBox_slick_inner, .mo_seeBox")).text(dataArr[22]);	// 지역명
 			$('dd.dnaYn', $(".seeBox_slick_inner, .mo_seeBox")).text(dataArr[23]);			// 친자여부
@@ -550,7 +550,7 @@ var messageHandler = function(data) {
 			var tr = getTrRow(auctionConfig.scData.curAucSeq);
 			tr.find('dl dd.ftsnm').text(nameEnc(dataArr[9]));
 			tr.find('dl dd.cowSogWt').text(dataArr[25]);
-			tr.find('dl dd.lowsSbidLmtAm').text(dataArr[27]);
+			tr.find('dl dd.lowsSbidLmtAm').text(fnSetComma(dataArr[27]));
 			tr.find('dl dd.sraSbidAm').text(dataArr[31]+'');
 			tr.find('dl dd.rmkCntn').text(dataArr[28]);
 			tr.find('dl dd.selSts').text(dataArr[29]==11?'대기':dataArr[29]==22?'낙찰':dataArr[29]==23?'유찰':'대기');
