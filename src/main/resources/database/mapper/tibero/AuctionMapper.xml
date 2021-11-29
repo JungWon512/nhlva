@@ -141,7 +141,7 @@
 				AND B.FARM_AMNNO = #{searchFarmAmnno}
 			</if>
 			) G
-		ORDER BY AUC_DT ,AUC_OBJ_DSC ,AUC_PRG_SQ ASC
+		ORDER BY AUC_DT ,AUC_PRG_SQ ASC
     </select>
     
     
@@ -668,7 +668,7 @@
 			</otherwise>
 		</choose>
 			 ) C
-		 ORDER BY C.AUC_DT DESC, C.AUC_OBJ_DSC ASC, C.AUC_PRG_SQ ASC
+		 ORDER BY C.AUC_DT DESC,  C.AUC_PRG_SQ ASC
 	</select>
 	
 	<!-- 나의 찜 정보 - api요청 -->
