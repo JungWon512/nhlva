@@ -13,7 +13,13 @@
 		
 		var addEvent = function(){
 			// 바코드 검색
-			$(".btn_search").on(clickEvent, function(){
+			$(".btn_search").on(clickEvent, function() {
+				$("form[name='frm']").attr("action", "/office/task/entry").submit();
+			});
+			
+			// 검색어 지우기
+			$(".btn_input_reset").on(clickEvent, function(e) {
+				$("input[name='searchTxt']").val("");
 				$("form[name='frm']").attr("action", "/office/task/entry").submit();
 			});
 			
@@ -263,7 +269,7 @@
 			
 			$("body").append(sHtml.join(""));
 			modalPopup('.pop_mod_weight');
-			$(".pop_mod_weight").find("input").focus();
+			$(".pop_mod_weight").find("input.required").focus();
 		}
 		
 		//모달레이어팝업

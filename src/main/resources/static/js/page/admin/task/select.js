@@ -297,21 +297,20 @@
 			// 송아지 정보 > PPGCOW_FEE_DSC가 임신 + 송아지, 비임신 + 송아지인 경우 
 			var $ccowIndvSexC = $("select[name='ccowIndvSexC']");
 			var $ccowBirthMonth = $("select[name='ccowBirthMonth']");
+			// 송아지 성별 설정
+			$ccowIndvSexC.find("option").not(":first").remove();
+			for (var i in indvList) {
+				if(indvList[i].SIMP_C == cowInfo.CCOW_INDV_SEX_C) {
+					$ccowIndvSexC.append($("<option>", {value: indvList[i].SIMP_C, text : indvList[i].SIMP_CNM, selected : "selected"}));
+				}
+				else {
+					$ccowIndvSexC.append($("<option>", {value: indvList[i].SIMP_C, text : indvList[i].SIMP_CNM}));
+				}
+			}
+
 			if (cowInfo.PPGCOW_FEE_DSC == "3" || cowInfo.PPGCOW_FEE_DSC == "4") {
 				$ccowIndvSexC.prop("disabled", false);
 				$ccowBirthMonth.prop("disabled", false);
-				
-				// 송아지 성별 설정
-				$ccowIndvSexC.find("option").not(":first").remove();
-				for (var i in indvList) {
-					if(indvList[i].SIMP_C == cowInfo.CCOW_INDV_SEX_C) {
-						$ccowIndvSexC.append($("<option>", {value: indvList[i].SIMP_C, text : indvList[i].SIMP_CNM, selected : "selected"}));
-					}
-					else {
-						$ccowIndvSexC.append($("<option>", {value: indvList[i].SIMP_C, text : indvList[i].SIMP_CNM}));
-					}
-				}
-				
 				// 송아지 개월 수 설정
 				$ccowBirthMonth.find("option").each(function() {
 					if (cowInfo.GAP_MONTH == $(this).val()) $(this).prop("selected", "selected");
