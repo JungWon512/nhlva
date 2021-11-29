@@ -150,16 +150,10 @@ public class AdminTaskController {
 				result.put("indvList", auctionService.selectCodeList(params));
 			}
 		}
-		catch (RuntimeException re) {
+		catch (RuntimeException | SQLException re) {
 			log.error("AdminTaskController.selectCowInfo : {} ",re);
 			result.put("success", false);
-			result.put("message", re.getMessage());
-			return result;
-		}
-		catch (SQLException se) {
-			log.error("AdminTaskController.selectCowInfo : {} ",se);
-			result.put("success", false);
-			result.put("message", se.getMessage());
+			result.put("message", "작업중 오류가 발생했습니다. 관리자에게 문의하세요.");
 			return result;
 		}
 		result.put("params", params);
@@ -195,15 +189,10 @@ public class AdminTaskController {
 				result.put("success", false);
 				result.put("message", "출장우 정보가 없습니다.");
 			}
-		}catch (RuntimeException re) {
+		}catch (SQLException | RuntimeException re) {
 			log.error("AdminTaskController.saveCowInfo : {} ",re);
 			result.put("success", false);
-			result.put("message", re.getMessage());
-			return result;
-		} catch (SQLException se) {
-			log.error("AdminTaskController.saveCowInfo : {} ",se);
-			result.put("success", false);
-			result.put("message", se.getMessage());
+			result.put("message", "작업중 오류가 발생했습니다. 관리자에게 문의하세요.");
 			return result;
 		}
 		return result;

@@ -119,7 +119,7 @@ public class AdminLoginController {
 			
 		}catch (RuntimeException re) {
 			log.error("AdminLoginController.adminUserLogin : {} ",re);
-			result.put("message", re.getMessage());
+			result.put("message", "작업중 오류가 발생했습니다. 관리자에게 문의하세요.");
 			result.put("error", true);
 			return result;
 		}

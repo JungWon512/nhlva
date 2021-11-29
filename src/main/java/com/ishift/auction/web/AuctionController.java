@@ -537,14 +537,10 @@ public class AuctionController extends CommonController {
 			result.put("success", true);
 			result.put("data", temp);
 			result.put("message", "정상적으로 조회되었습니다.");
-		}catch (RuntimeException re) {
+		}catch (SQLException | RuntimeException re) {
 			log.debug("ApiController.selectNearAtdrAm : {} ",re);
 			result.put("success", false);
-			result.put("message", re.getMessage());
-		}catch (SQLException se) {
-			log.debug("ApiController.selectNearAtdrAm : {} ",se);
-			result.put("success", false);
-			result.put("message", se.getMessage());
+			result.put("message", "작업중 오류가 발생했습니다. 관리자에게 문의하세요.");
 		}
 		return result;
 	}

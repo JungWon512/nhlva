@@ -92,14 +92,10 @@ public class MyPageController {
         	List<Map<String,Object>> list=auctionService.entrySelectList(params);
         	result.put("totPrice", auctionService.selectTotSoldPrice(params));
             result.put("data", list);
-        }catch (RuntimeException re) {
+        }catch (SQLException | RuntimeException re) {
             result.put("success", false);
-            result.put("message", re.getMessage());
+            result.put("message", "작업중 오류가 발생했습니다. 관리자에게 문의하세요.");
 			log.error("MyPageController.selectMyBuyList : {} ",re);
-		}catch (SQLException se) {
-            result.put("success", false);
-            result.put("message", se.getMessage());
-			log.error("MyPageController.selectMyBuyList : {} ",se);
 		}
         return result;
     }
@@ -114,14 +110,10 @@ public class MyPageController {
         	if(params.get("loginNo") != null) params.put("searchTrmnAmnNo", params.get("loginNo"));
         	List<Map<String,Object>> list=auctionService.selectBidLogList(params);
             result.put("data", list);
-        }catch (RuntimeException re) {
+        }catch (SQLException | RuntimeException re) {
             result.put("success", false);
-            result.put("message", re.getMessage());
+            result.put("message", "작업중 오류가 발생했습니다. 관리자에게 문의하세요.");
 			log.error("MyPageController.selectMyBuyList : {} ",re);
-		}catch (SQLException se) {
-            result.put("success", false);
-            result.put("message", se.getMessage());
-			log.error("MyPageController.selectMyBuyList : {} ",se);
 		}
         return result;
     }
@@ -209,15 +201,10 @@ public class MyPageController {
 				result.put("message", "등록한 찜 정보가 없습니다.");
 			}
 			return result;
-		}catch (RuntimeException re) {
+		}catch (SQLException | RuntimeException re) {
 			log.error("MyPageController.myFavorite : {} ",re);
 			result.put("success", false);
-			result.put("message", re.getMessage());
-			return result;
-		} catch (SQLException se) {
-			log.error("MyPageController.myFavorite : {} ",se);
-			result.put("success", false);
-			result.put("message", se.getMessage());
+			result.put("message", "작업중 오류가 발생했습니다. 관리자에게 문의하세요.");
 			return result;
 		}
 	}
