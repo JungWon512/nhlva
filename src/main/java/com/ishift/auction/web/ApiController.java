@@ -291,11 +291,12 @@ public class ApiController {
 					  .append(this.getStringValue(vo.get("RMK_CNTN")).replace("|", ",")).append('|')
 					  .append(this.getStringValue(vo.get("SEL_STS_DSC")).replace("|", ",")).append('|')
 					  .append(this.getStringValue(vo.get("LVST_AUC_PTC_MN_NO")).replace("|", ",")).append('|')
-					  .append(this.getStringValue(vo.get("SRA_SBID_AM")).replace("|", ",")).append('|')
+					  .append(this.getStringValue(vo.get("SRA_SBID_UPR")).replace("|", ",")).append('|')	//낙찰금액(응찰단위-동일)
 					  .append(this.getStringValue(vo.get("ATDR_DTM")).replace("|", ",")).append('|')
 					  .append('N').append('|')
 					  .append(this.getStringValue(vo.get("MODL_NO")).replace("|", ",")).append('|')	// 계류대 번호
-					  .append("N");								// 초과 줄장우 여부 
+					  .append("N").append('|')								// 초과 줄장우 여부
+					  .append(this.getStringValue(vo.get("SRA_SBID_AM")).replace("|", ","));	//실-낙찰금액
 
 					entryList.add(sb.toString());
 				}
