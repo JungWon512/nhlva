@@ -165,8 +165,12 @@
 			$(".list_body > ul").animate({
 				scrollTop : ($(".list_body > ul > li").index(li) - 1) * 41
 			}, 500);
-//			li.addClass("act");
-			$(".list_body > ul").find("li#" + aucPrgSq).addClass("act");
+			if (regType == "L") {
+				li.addClass("act");
+			}
+			else {
+				$(".list_body > ul").find("li#" + aucPrgSq).addClass("act");
+			}
 		};
 		
 		var fnLayerPop = function(params, cowInfo) {
