@@ -216,15 +216,18 @@
 			sHtml.push('							<th>어미 / 성별</th>');
 			sHtml.push('							<td>' + cowInfo.MCOW_DSC_NM + ' / ' + cowInfo.INDV_SEX_NAME + '</td>');
 			sHtml.push('						</tr>');
-//			sHtml.push('						<tr>');
-//			sHtml.push('							<th>성별</th>');
-//			sHtml.push('							<td>' + cowInfo.INDV_SEX_NAME + '</td>');
-//			sHtml.push('						</tr>');
 			if (params.regType == 'W') {
 				sHtml.push('					<tr>');
 				sHtml.push('						<th>중량</th>');
 				sHtml.push('						<td class="input-td">');
 				sHtml.push('							<input type="text" name="cowSogWt" class="pd5 required onlyNumber" value="' + (cowInfo.COW_SOG_WT == 0 ? "" : cowInfo.COW_SOG_WT) + '" maxlength="4" pattern="\d*" inputmode="numeric" style="width:70%;" /> kg');
+				sHtml.push('						</td>');
+				sHtml.push('					</tr>');
+				sHtml.push('					<tr>');
+				sHtml.push('						<th>비고</th>');
+				sHtml.push('						<td class="input-td">');
+				sHtml.push('							<input type="text" name="rmkCntn" class="pd5" value="' + (cowInfo.RMK_CNTN == null ? "" : cowInfo.RMK_CNTN) + '" style="width:100%;" />');
+//				sHtml.push('							<textarea name="rmkCntn" class="pd5" value="' + cowInfo.RMK_CNTN + '" style="width:100%;" />');
 				sHtml.push('						</td>');
 				sHtml.push('					</tr>');
 			}

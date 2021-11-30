@@ -999,6 +999,7 @@
 			<choose>
 			<when test="regType == 'W'.toString()">
 				 , COW_SOG_WT = #{cowSogWt}
+				 , RMK_CNTN = #{rmkCntn}
 			</when>
 			<when test="regType == 'N'.toString()">
 				 , MODL_NO = #{modlNo}
