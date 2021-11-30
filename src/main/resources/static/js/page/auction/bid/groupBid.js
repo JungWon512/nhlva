@@ -421,7 +421,7 @@ var messageHandler = function(data) {
 				}
 				else {
 					amt = amt.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
-					$("div.auc-txt > div.info_board").html("<span class='txt-green'>낙찰금액 " + fnSetComma(amt) + " / " + dataArr[5] + "번</span>");
+					$("div.auc-txt > div.info_board").html("<span class='txt-green'>낙찰금액 " + fnSetComma(amt) + "만 원 / " + dataArr[5] + "번</span>");
 				}
 				tr.find('dl dd.sraSbidAm').text(Math.round(tmpAsDAta.sraSbidAm));
 			}
