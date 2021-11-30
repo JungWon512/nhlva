@@ -5,6 +5,15 @@ public class StringUtils<T> {
 	public static String getStringValue(Object obj) {
 		return obj == null ? "" : obj.toString();
 	}
+	
+	public static int getIntValue(Object obj) {
+		try {
+			return obj == null ? 0 : Integer.parseInt(getStringValue(obj));
+		}
+		catch(NumberFormatException e) {
+			return 0;
+		}
+	}
 
 	/**
 	 * 문자열 Null, Empty, Length 유효성 확인 함수
