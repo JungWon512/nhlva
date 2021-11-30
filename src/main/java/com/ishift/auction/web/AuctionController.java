@@ -84,12 +84,7 @@ public class AuctionController extends CommonController {
 		
 		mav.addObject("johapData", johap);
 		mav.addObject("paramVo", param);
-		//mav.addObject("param", map);
 		mav.addObject("dateList",datelist);
-//		for(Map<String,Object> entry : list) {
-//			String birthMonth = this.getConvertBirthDay(this.getStringValue(entry.get("BIRTH")));
-//			entry.put("BIRTH_MONTH", birthMonth);
-//		}
 		mav.addObject("resultList",list);
 		mav.addObject("subheaderTitle","경매결과 조회");
 		
