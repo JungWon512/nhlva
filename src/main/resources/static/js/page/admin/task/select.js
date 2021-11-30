@@ -80,7 +80,6 @@
 					$("select[name='ccowBirthMonth']").val("").prop("disabled", true);
 				}
 				$("select").selectric("refresh");
-				
 				// 비고에 임신 정보 append
 				fnSetRmkCntn();
 			});
@@ -226,7 +225,7 @@
 			$("body").append(popHtml.join(""));
 			modalPopup("." + className);
 			$("." + className).find("input:first").focus();
-			$("select").selectric();
+			$("select").selectric("refresh");
 		};
 		
 		//모달레이어팝업

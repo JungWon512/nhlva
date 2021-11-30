@@ -226,7 +226,8 @@ $(document).ready(function() {
 					$('body').removeClass('bg-gray');
 				}
 				if($("select").length > 0 ) {
-					$('select').selectric(); //selectric ui load
+					var chk = $('select').data('selectric');
+					if(!chk) $('select').selectric(); //selectric ui load
 				};
 			})));
 		},
