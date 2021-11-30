@@ -393,9 +393,8 @@
 			if (fnValidation()) {
 				var frmCowInfo = $("form[name='frm_cow_info']");
 				var frmSelect = $("form[name='frm_select']");
-				if (frmCowInfo.find("input[name='aucDt']").length < 1) {
-					frmCowInfo.append(frmSelect.find("input[name='aucDt']").clone(false));
-				}
+				frmCowInfo.find("input[name='aucDt']").remove();
+				frmCowInfo.append(frmSelect.find("input[name='aucDt']").clone(false));
 				frmCowInfo.find("input[name='regType']").val("I");
 				
 				$.ajax({

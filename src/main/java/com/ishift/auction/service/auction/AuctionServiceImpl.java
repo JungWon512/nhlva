@@ -449,6 +449,12 @@ public class AuctionServiceImpl implements AuctionService {
 			return params;
 		}
 		
+		if (bizAuctionInfo == null) {
+			// 조회한 정보가 없는 경우 return
+			params.put("message", "경매 기본 정보가 없습니다.");
+			return params;
+		}
+
 		final String aucDt			= info.get("AUC_DT").toString();
 		final String aucObjDsc		= info.get("AUC_OBJ_DSC").toString();
 		final String oslpNo			= info.get("OSLP_NO").toString();
@@ -701,6 +707,10 @@ public class AuctionServiceImpl implements AuctionService {
 
 		// 4. 조합 경매 기본 정보 조회
 		final Map<String, Object> bizAuctionInfo = auctionDAO.selectBizAuctionInfo(params);
+		if (bizAuctionInfo == null) {
+			// 조회한 정보가 없는 경우 return
+			throw new SQLException("조합 경매 기본 정보가 없습니다."); 
+		}
 		
 		// 5. 응찰 완료(낙찰 처리 대상) 리스트 조회
 		final List<Map<String, Object>> list = auctionDAO.selectBidCompleteList(params);
