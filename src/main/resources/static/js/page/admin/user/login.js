@@ -14,7 +14,7 @@
 			
 			$(document).on('click', ".btnApkDownload", function(e){					
 			    var pom = document.createElement('a');
-			    pom.setAttribute('href', '/static/apk/cowauction1.0.6_15-release.apk');
+			    pom.setAttribute('href', '/static/apk/test.apk');
 			    pom.setAttribute('type', 'application/vnd.android.package-archive');
 			    pom.setAttribute('download', "test.apk");
 			 
