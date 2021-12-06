@@ -11,6 +11,22 @@
 			$(document).on('keydown', "input[name=usrid],input[name=pw]",function(e){
 				if(e.keyCode == '13') $('.action-submit').click();
 			});
+			
+			$(document).on('click', ".btnApkDownload", function(e){					
+			    var pom = document.createElement('a');
+			    pom.setAttribute('href', '/static/apk/cowauction1.0.6_15-release.apk');
+			    pom.setAttribute('type', 'application/vnd.android.package-archive');
+			    pom.setAttribute('download', "test.apk");
+			 
+			    if (document.createEvent) {
+			        var event = document.createEvent('MouseEvents');
+			        event.initEvent('click', true, true);
+			        pom.dispatchEvent(event);
+			    }
+			    else {
+			        pom.click();
+			    }	
+			});
 			// 로그인 버튼
 			$(document).on('click', ".action-submit", function(e){
 				e.preventDefault();

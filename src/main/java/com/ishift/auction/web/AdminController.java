@@ -28,6 +28,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.sql.SQLException;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.Base64;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -179,7 +180,19 @@ public class AdminController {
 		final ModelAndView mav = new ModelAndView();
 
 		try {
-			boolean loginChk = this.adminUserLoginProc(response, params);
+			boolean loginChk = false;
+			if(params.get("usrid") != null && params.get("pw") != null) {
+				loginChk = this.adminUserLoginProc(response, params);				
+			}else if(params.get("ea") != null && params.get("eb") != null){
+				String decUsrId = new String(Base64.getDecoder().decode((String)params.getOrDefault("ea","")));
+				String decPw = new String(Base64.getDecoder().decode((String)params.getOrDefault("eb","")));
+				params.put("usrid",decUsrId);
+				params.put("pw",decPw);
+				loginChk = this.adminUserLoginProc(response, params);				
+			}
+			
+			
+			
 			final AdminUserDetails userVo = (AdminUserDetails)sessionUtill.getUserVo();
 
 			if(userVo != null || loginChk) {
@@ -217,8 +230,10 @@ public class AdminController {
 			}
 		}catch (RuntimeException re) {
 			log.error("AdminController.adminBoard : {} ",re);
+			mav.setViewName("redirect:/office/main");
 		} catch (SQLException se) {
 			log.error("AdminController.adminBoard : {} ",se);
+			mav.setViewName("redirect:/office/main");
 		}
 		mav.addObject("subheaderTitle", "멀티비전");
 		return mav;

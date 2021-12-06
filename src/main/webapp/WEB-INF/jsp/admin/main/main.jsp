@@ -5,7 +5,15 @@
 	<h3>MAIN</h3>
 	<h4>${johapData.CLNTNM} 관리자 메뉴</h4>
 	<ul class="menu_list">
-		<li class="menu_item">
+		<li class="menu_item mobile">
+			<a href="javascript:pageMove('/office/task/main');">
+				<span class="ico">
+					<img src="/static/images/guide/ico_admin_menu_05.svg" alt="">
+				</span>
+				모바일업무
+			</a>
+		</li>
+		<li class="menu_item mobile">
 			<a href="javascript:pageMove('/office/broad/cast');">
 				<span class="ico">
 					<img src="/static/images/guide/ico_admin_menu_01.svg" alt="">
@@ -35,14 +43,6 @@
 					<img src="/static/images/guide/ico_admin_menu_04.svg" alt="">
 				</span>
 				유투브방송
-			</a>
-		</li>
-		<li class="menu_item">
-			<a href="javascript:pageMove('/office/task/main');">
-				<span class="ico">
-					<img src="/static/images/guide/ico_admin_menu_05.svg" alt="">
-				</span>
-				모바일업무
 			</a>
 		</li>
 	</ul>

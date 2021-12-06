@@ -7637,3 +7637,9 @@ div.list_txts {
 #toast span.txt-green {
 	color: #86e57f;
 }
+
+@media only all and (max-width: 768px) {
+	.admin_main .menu_list .menu_item:not(.mobile) {
+		display:none;
+	}
+}
