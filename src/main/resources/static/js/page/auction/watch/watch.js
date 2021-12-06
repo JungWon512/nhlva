@@ -151,10 +151,6 @@ var connectHandler = function() {
 }
 
 var disconnectHandler = function() {
-	//socketConnectTimeInterval = setInterval(function () {
-	//	socket.reconnect();
-	//	if(socket.connected) {clearInterval(socketConnectTimeInterval);}
-    //}, 3000);
 }
 
 //소켓통신 수신시 제어하는 로직

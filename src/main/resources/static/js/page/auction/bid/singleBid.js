@@ -491,6 +491,8 @@ var messageHandler = function(data) {
 				auctionConfig.enableBid = "N";
 			}
 			else if(auctionConfig.asData.status == "8007") {
+				sFlag=true;
+				socket.disconnect();
 				modalAlert('', "<span style='color: #007eff;'>경매 종료</span>되었습니다.", function(){
 					pageMove('/main', false);
 				});

@@ -123,7 +123,10 @@ var messageHandler = function(data) {
 				case "8004" : $('table.tblBoard tbody tr.title td p.boardTitle').text(aucStConfig.t8004); break; 
 				case "8005" : $('table.tblBoard tbody tr.title td p.boardTitle').text(aucStConfig.t8005); break; 
 				case "8006" : $('table.tblBoard tbody tr.title td p.boardTitle').text(aucStConfig.t8006); break; 
-				case "8007" : $('table.tblBoard tbody tr.title td p.boardTitle').text(aucStConfig.t8007); break; 
+				case "8007" :
+					socketDisconnect();
+					$('table.tblBoard tbody tr.title td p.boardTitle').text(aucStConfig.t8007);  
+				break; 
 				default:break;
 			}
 		break;	
