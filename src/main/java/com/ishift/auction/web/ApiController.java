@@ -296,7 +296,8 @@ public class ApiController {
 					  .append('N').append('|')
 					  .append(this.getStringValue(vo.get("MODL_NO")).replace("|", ",")).append('|')	// 계류대 번호
 					  .append("N").append('|')								// 초과 줄장우 여부
-					  .append(this.getStringValue(vo.get("SRA_SBID_AM")).replace("|", ","));	//실-낙찰금액
+					  .append(this.getStringValue(vo.get("SRA_SBID_AM")).replace("|", ",")).append('|')	//실-낙찰금액
+					  .append(this.getStringValue(vo.get("LSCHG_DTM")).replace("|", ","));	// 최종변경일시
 
 					entryList.add(sb.toString());
 				}

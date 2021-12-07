@@ -115,7 +115,7 @@ public class AuctionServiceImpl implements AuctionService {
 					feeInfo.put("LED_SQNO",		ledSqno);
 					
 					// 중도매인, 출하주의 조합원 여부
-					String macoYn = ("1".equals(feeInfo.get("FEE_APL_OBJ_C"))) ? trmnMacoYn : fhsMacoYn;
+					String macoYn = ("1".equals(feeInfo.get("FEE_APL_OBJ_C"))) ? fhsMacoYn : trmnMacoYn;
 					
 					// 낙찰인 경우만 수수료 정보를 저장하므로 SBID_YN이 0인(미낙찰) 수수료 정보의 금액은 0으로 넣어준다.
 					if ("0".equals(feeInfo.get("SBID_YN"))) {
@@ -538,7 +538,7 @@ public class AuctionServiceImpl implements AuctionService {
 				feeInfo.put("LED_SQNO",		ledSqno);
 				
 				// 중도매인, 출하주의 조합원 여부
-				String macoYn = ("1".equals(feeInfo.get("FEE_APL_OBJ_C"))) ? trmnMacoYn : fhsMacoYn;
+				String macoYn = ("1".equals(feeInfo.get("FEE_APL_OBJ_C"))) ? fhsMacoYn : trmnMacoYn;
 				long feeAmt = 0L;
 				
 				// 낙찰인 경우만 수수료 정보를 저장하므로 SBID_YN이 0인(미낙찰) 수수료 정보의 금액은 0으로 넣어준다.
@@ -804,7 +804,7 @@ public class AuctionServiceImpl implements AuctionService {
 					feeInfo.put("LED_SQNO",		ledSqno);
 					
 					// 중도매인, 출하주의 조합원 여부
-					String macoYn = ("1".equals(feeInfo.get("FEE_APL_OBJ_C"))) ? trmnMacoYn : fhsMacoYn;
+					String macoYn = ("1".equals(feeInfo.get("FEE_APL_OBJ_C"))) ? fhsMacoYn : trmnMacoYn;
 					long feeAmt = 0L;
 					
 					// 낙찰인 경우만 수수료 정보를 저장하므로 SBID_YN이 0인(미낙찰) 수수료 정보의 금액은 0으로 넣어준다.
