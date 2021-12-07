@@ -14,9 +14,9 @@
 			
 			$(document).on('click', ".btnApkDownload", function(e){					
 			    var pom = document.createElement('a');
-			    pom.setAttribute('href', '/static/apk/test.apk');
+			    pom.setAttribute('href', '/static/apk/auctionmanager0.0.1_1-release.apk');
 			    pom.setAttribute('type', 'application/vnd.android.package-archive');
-			    pom.setAttribute('download', "test.apk");
+			    pom.setAttribute('download', "auctionmanager0.0.1_1-release.apk");
 			 
 			    if (document.createEvent) {
 			        var event = document.createEvent('MouseEvents');
@@ -25,7 +25,7 @@
 			    }
 			    else {
 			        pom.click();
-			    }	
+			    }
 			});
 			// 로그인 버튼
 			$(document).on('click', ".action-submit", function(e){
