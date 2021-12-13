@@ -35,6 +35,7 @@
     <properties>
         <java-version>1.8</java-version>
         <finalName>${project.artifactId}</finalName>
+    	<log4j2.version>2.15.0</log4j2.version>
     </properties>
     <build>
         <finalName>${finalName}</finalName>
@@ -116,11 +117,6 @@
             <artifactId>guava</artifactId>
             <version>30.0-jre</version>
         </dependency>
-<!--         <dependency> -->
-<!--             <groupId>com.zaxxer</groupId> -->
-<!--             <artifactId>HikariCP</artifactId> -->
-<!--             <version>4.0.3</version> -->
-<!--         </dependency> -->
         <dependency>
             <groupId>org.mybatis</groupId>
             <artifactId>mybatis</artifactId>
@@ -259,12 +255,6 @@
 			<optional>true</optional>
 			<scope>runtime</scope>
 		</dependency>
-		<!-- https://mvnrepository.com/artifact/org.bgee.log4jdbc-log4j2/log4jdbc-log4j2-jdbc4.1 -->
-		<dependency>
-		    <groupId>org.bgee.log4jdbc-log4j2</groupId>
-		    <artifactId>log4jdbc-log4j2-jdbc4.1</artifactId>
-		    <version>1.16</version>
-		</dependency>
 		<!-- https://mvnrepository.com/artifact/org.springframework.boot/spring-boot-starter-batch -->
 		<dependency>
 		    <groupId>org.springframework.boot</groupId>
@@ -318,8 +308,6 @@
 		    <groupId>org.hibernate.validator</groupId>
 		    <artifactId>hibernate-validator</artifactId>
 		</dependency>
-
-
 		<dependency>
 			<groupId>com.fasterxml.jackson.dataformat</groupId>
 			<artifactId>jackson-dataformat-xml</artifactId>
