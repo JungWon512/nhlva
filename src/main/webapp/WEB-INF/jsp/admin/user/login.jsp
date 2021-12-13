@@ -12,7 +12,7 @@
 				<input type="checkbox" id="save_id">
 				<label for="save_id">아이디 저장</label>
 				<button type="button" class="btn_login action-submit">로그인</button>
-				<button type="button" class="btn_login btnApkDownload">App 다운로드</button>
+				<button type="button" class="btn_login btnApkDownload" style="display:none;">App 다운로드</button>
 			</fieldset>			
 		</form>
 	</div>

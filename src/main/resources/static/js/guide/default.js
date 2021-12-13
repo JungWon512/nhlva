@@ -60,7 +60,7 @@
 				}
 			}
 		});	
-		if(active == 'production'){
+		if(active != 'production'){
 			$('.m_header .m_tit').text($('.m_header .m_tit').text()+" DEV");
 			$('section.footer li:eq(2) a').text(" DEV"+$('section.footer li:eq(2) a').text());			
 		}

@@ -12,11 +12,12 @@
 				if(e.keyCode == '13') $('.action-submit').click();
 			});
 			
-			$(document).on('click', ".btnApkDownload", function(e){					
+			$(document).on('click', ".btnApkDownload", function(e){
+				var apk = (active == 'production')?"auctionmanager0.0.1_1-release.apk":"auctionmanager0.0.1_1-debug_dev.apk";					
 			    var pom = document.createElement('a');
-			    pom.setAttribute('href', '/static/apk/auctionmanager0.0.1_1-release.apk');
+			    pom.setAttribute('href', 'https://xn--e20bw05b.kr/static/apk/'+apk);
 			    pom.setAttribute('type', 'application/vnd.android.package-archive');
-			    pom.setAttribute('download', "auctionmanager0.0.1_1-release.apk");
+			    pom.setAttribute('download', apk);
 			 
 			    if (document.createEvent) {
 			        var event = document.createEvent('MouseEvents');
@@ -69,6 +70,13 @@
 					$("#usrid").val(getCookie("eno"));
 					$("#save_id").prop("checked", true);
 				}
+		        if(!isApp()){
+			        $('.btnApkDownload').show();	
+				}
+				if(active != 'production'){
+					$('.login_box h1 span').text($('.login_box h1 span').text()+" DEV");			
+				}
+				
 				deleteCookie("access_token"); 
 				addEvent();
 			}
