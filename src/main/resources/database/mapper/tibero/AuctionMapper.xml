@@ -19,7 +19,7 @@
 					, B.LED_SQNO				/* 원장일련번호 */
 					, B.AUC_PRG_SQ             /* 경매진행순서 (출품번호)	*/
 					, A.BIRTH                  /* 생년월일  (생년)	*/
-					, TO_CHAR(TO_DATE(A.BIRTH,'YYYYMMDD'),'YYYY.MM.DD') BIRTH_STR                 /* 생년월일  (생년)	*/	
+					, TO_CHAR(TO_DATE(A.BIRTH,'YYYYMMDD'),'YY.MM.DD') BIRTH_STR                 /* 생년월일  (생년)	*/	
 					, TO_CHAR(TO_DATE(A.BIRTH,'YYYYMMDD'),'YY.MM') BIRTH_MO /* 생년월일  (생년) 모바일용	*/
 					, A.MCOW_DSC               /* 어미소구분코드	*/
 					, CASE
@@ -605,7 +605,7 @@
 				 , A.SRA_SBID_AM
 				 , A.SRA_SBID_UPR
 				 , D.ATDR_DTM
-				 , TO_CHAR(TO_DATE(B.BIRTH,'YYYYMMDD'),'YYYY.MM.DD') BIRTH_STR
+				 , TO_CHAR(TO_DATE(B.BIRTH,'YYYYMMDD'),'YY.MM.DD') BIRTH_STR
 				 , CASE WHEN MONTHS_BETWEEN(TO_DATE(A.AUC_DT,'YYYYMMDD'), TO_DATE(B.BIRTH,'YYYYMMDD')) <![CDATA[<=]]> 4 THEN 4
 						 ELSE TRUNC(MONTHS_BETWEEN(TO_DATE(A.AUC_DT,'YYYYMMDD'), TO_DATE(B.BIRTH,'YYYYMMDD')))
 					 END GAP_MONTH
