@@ -21,11 +21,12 @@
 			$(".btn_input_reset").on(clickEvent, function(e) {
 				$("input[name='searchTxt']").val("");
 				$("form[name='frm']").attr("action", "/office/task/entry").submit();
-			});
+			});-
 			
 			// 리스트 선택
 			$(document).on(clickEvent, ".list_body > ul > li", function(){
-				$(".list_body > ul > li").siblings().not(this).removeClass("act");
+				$(".list_body ul li").not(this).removeClass("act");
+				//$(".list_body > ul > li").siblings().not(this).removeClass("act");
 				$(this).toggleClass("act");
 			});
 			

@@ -15,7 +15,7 @@
 			$(document).on('click', ".btnApkDownload", function(e){
 				var apk = (active == 'production')?"auctionmanager0.0.1_1-release.apk":"auctionmanager0.0.1_1-debug_dev.apk";					
 			    var pom = document.createElement('a');
-			    pom.setAttribute('href', 'https://xn--e20bw05b.kr/static/apk/'+apk);
+			    pom.setAttribute('href', '/static/apk/'+apk);
 			    pom.setAttribute('type', 'application/vnd.android.package-archive');
 			    pom.setAttribute('download', apk);
 			 
