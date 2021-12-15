@@ -138,8 +138,9 @@ var messageHandler = function(data) {
 						
 						var entryArr = json.entry.split('|');
 						var len = json.entry.split('|').length;
-						var blankLen = len%15+1;
-						for(var i =0,totLen=len+blankLen;i<totLen;i++){
+						var blankLen = len%15;
+						var totLen=len+(blankLen<=0?0:15-blankLen);
+						for(var i =0;i<totLen;i++){
 							if(entryArr[i]){
 								body.append('<li><div class="bg bg-gray"><span class="fz120 txt-bold">'+entryArr[i]+'</span></div></li>');
 							}else{
