@@ -171,6 +171,14 @@ var getTodayStr = function(gubun) {
 	var day = date.getDate().toString().padStart("2", "0")
 	return date.getFullYear()+gubun+month+gubun+day;
 };
+var getTimeStr = function(gubun) {
+	var date = new Date();
+	var gubun = gubun?gubun:':';
+	var sec = date.getSeconds().toString().padStart("2", "0");
+	var min = date.getMinutes().toString().padStart("2", "0");
+	var hour = date.getHours().toString().padStart("2", "0");
+	return hour+gubun+min;
+};
 
 var getDateStr = function(date,gubun) {
 	var gubun = gubun?gubun:'-';

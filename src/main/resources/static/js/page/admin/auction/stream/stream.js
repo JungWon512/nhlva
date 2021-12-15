@@ -127,8 +127,9 @@ var messageHandler = function(data) {
 				$('table.tblAuctionSt tbody tr td td p.rmkCntn').text(dataArr[28]); //산차
 		break;	
 		case "AS" : //현재 경매상태			
-			if(auctionConfig.auctionSt && (dataArr[6]=='8006' || dataArr[6]=='8002')){auctionConfig.auctionSt=dataArr[6]; return};
+			//if(auctionConfig.auctionSt && (dataArr[6]=='8006' || dataArr[6]=='8002')){auctionConfig.auctionSt=dataArr[6]; return};
 			auctionConfig.auctionSt=dataArr[6];
+			auctionConfig.anStatus = false;
 			$('table.tblAuctionSt tbody tr td.val p.auctionNum').text(dataArr[2]);
 			$('table.tblAuctionSt tbody tr.st td.complate').hide();
 			$('table.tblAuctionSt tbody tr.st td.count-td').show();
@@ -148,7 +149,10 @@ var messageHandler = function(data) {
 				case "8004" : $('table.tblAuctionSt tbody tr.st td.count-td p').text(aucStConfig.t8004); break; 
 				case "8005" : $('table.tblAuctionSt tbody tr.st td.count-td p').text(aucStConfig.t8005); break; 
 				case "8006" : $('table.tblAuctionSt tbody tr.st td.count-td p').text(aucStConfig.t8006); break; 
-				case "8007" : $('table.tblAuctionSt tbody tr.st td.count-td p').text(aucStConfig.t8007); break; 
+				case "8007" : 
+					socketDisconnect();
+					$('table.tblAuctionSt tbody tr.st td.count-td p').text(aucStConfig.t8007); 
+				break; 
 				default:break;
 			}
 		break;	
@@ -264,21 +268,14 @@ var setLoopChDraw = function(castList){
 		return pre-next;
 	});
 	debugConsole(sortingCastList);
-//	var height = $('div.seeBox_slick ul.slider .boarder').closest('.slick-slide').height();
-//	$('div.seeBox_slick ul.slider li.video_item').height(height-1);
-	$('div.seeBox_slick ul.slider li.video_item').height('360px');
-	
+		
 	if(sortingCastList.length > 0){
 		for(var i=0;i<sortingCastList.length;i++){
 			if($('#kkoSvcCnt').val() <= i) return;
 			 $('#remoteVideo'+(i+1)).attr('castName',sortingCastList[i].name);
-			 //setLoopChJoinInIn(sortingCastList[i],i+1);
-	 	};
-	
-		var castName = $('#remoteVideo1').attr('castName');
-		if(castName && castName.indexOf('remote') >= 0){
-			if(sortingCastList.length > 0) $('div.seeBox_slick ul.slider').slick('goTo', 0);
-		}
+			 if(i==0) setLoopChJoinInIn(sortingCastList[i],i+1);
+	 	};	
+		
 	}
 };
 var setLoopChJoinInIn = function(cast,i){
@@ -309,9 +306,6 @@ var setRemonJoinRemote =async function (index,callback) {
 			return pre-next;
 		});
 		debugConsole(castList);
-//		var height = $('div.seeBox_slick ul.slider .boarder').closest('.slick-slide').height();
-//		$('div.seeBox_slick ul.slider li.video_item').height(height-1);
-	$('div.seeBox_slick ul.slider li.video_item').height('100%');
 		
 		if(castList.length > 0){
 			if($('#kkoSvcCnt').val() < index) return;
@@ -333,10 +327,7 @@ var setLoopChDraw = function(castList){
 		
 		return pre-next;
 	});
-	
-	//$('div.seeBox_slick ul.slider li.video_item').height('360px');
-	$('div.seeBox_slick ul.slider li.video_item').height('100%');
-	
+			
 	if(sortingCastList.length > 0){
 		for(var i=0;i<sortingCastList.length;i++){
 			if($('#kkoSvcCnt').val() <= i) return;

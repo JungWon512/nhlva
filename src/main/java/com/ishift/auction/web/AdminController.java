@@ -238,6 +238,33 @@ public class AdminController {
 		mav.addObject("subheaderTitle", "멀티비전");
 		return mav;
 	}
+
+	@ResponseBody
+	@RequestMapping(value = "/office/getAbsentCowList" ,method = { RequestMethod.GET, RequestMethod.POST })
+	public Map<String, Object> getAbsentCowList(@RequestParam Map<String, Object> params) {
+		
+		final Map<String, Object> result = new HashMap<String, Object>();
+		StringBuffer sb = new StringBuffer();
+		try {
+			params.put("absentYn", "Y");
+			List<Map<String, Object>> list = auctionService.selectCowList(params);
+			if (list != null) {
+				for (final Map<String, Object> vo : list) {
+					sb.append(this.getStringValue(vo.get("AUC_PRG_SQ")).replace("|", ",")).append('|');	// 계류대 번호
+				}
+			}
+			
+			result.put("success", true);
+			result.put("message", "조회에 성공했습니다.");
+			result.put("entry", sb.toString());
+		}catch (SQLException | RuntimeException re) {
+			log.error("ApiController.selectAbsentCowList : {} ",re);
+			result.put("success", false);
+			result.put("entry", sb.toString());
+			result.put("message", "작업중 오류가 발생했습니다. 관리자에게 문의하세요.");
+		}
+		return result;
+	}
 	
 	@PreAuthorize("hasRole('ROLE_ADMIN')")
 	@GetMapping(value = "/office/report/list")
@@ -358,5 +385,8 @@ public class AdminController {
 			return false;
 		}
 		return result;
+	}
+	private String getStringValue(Object value) {
+		return value == null ? "" : value.toString();
 	}
 }

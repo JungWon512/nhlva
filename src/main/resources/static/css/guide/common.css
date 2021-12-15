@@ -3407,22 +3407,6 @@ Base styles: contents layer
 	}
 }
 
-.auction_date .date_top dl dd.btn_prev {
-	left: 0;
-}
-
-.auction_date .date_top dl dd.btn_prev a {
-	background-image: url(/static/images/guide/btn_prev.svg);
-}
-
-.auction_date .date_top dl dd.btn_next {
-	right: 0;
-}
-
-.auction_date .date_top dl dd.btn_next a {
-	background-image: url(/static/images/guide/btn_next.svg);
-}
-
 .auction_date .date_top {
 	text-align: center;
 	margin-bottom: 30px;
@@ -3458,6 +3442,21 @@ Base styles: contents layer
 	text-indent: -9999px;
 }
 
+.auction_date .date_top dl dd.btn_prev {
+	left: 0;
+}
+
+.auction_date .date_top dl dd.btn_prev a {
+	background-image: url(/static/images/guide/btn_prev.svg);
+}
+
+.auction_date .date_top dl dd.btn_next {
+	right: 0;
+}
+
+.auction_date .date_top dl dd.btn_next a {
+	background-image: url(/static/images/guide/btn_next.svg);
+}
 @media only all and (max-width: 768px) {
 	.auction_date .date_top {
 		margin-bottom: 25px;
@@ -4668,7 +4667,7 @@ Base styles: contents layer
 .auction_seeBox .seeBox_bottom .seeBox_slick .mo_seeBox {
 	display: none;
 	background: #1a1a1a;
-	padding: 15px 30px 30px;
+	padding: 25px 30px 45px;
 }
 
 @media only all and (max-width: 640px) {
@@ -4680,7 +4679,7 @@ Base styles: contents layer
 @media only screen and (min-device-width: 360px) and
 	(max-device-height:740px) and (orientation: portrait) {
 	.auction_seeBox .seeBox_bottom .seeBox_slick .mo_seeBox {
-		padding: 5px 30px 20px;
+		padding: 10px 30px 20px;
 	}
 }
 
@@ -6839,7 +6838,9 @@ Base styles: contents layer
 	overflow: auto;
 	background: #000;
 	width: 100%;
-	height: 100%
+	height: 100%;
+	min-width:800px;
+	min-height:600px;
 }
 
 .youtube-view table {
@@ -6857,25 +6858,14 @@ Base styles: contents layer
 }
 
 .youtube-view table td {
+	padding:5px;
 	height: 33.33%;
 	background: #1b1b1b;
-	overflow: hidden
+	overflow: hidden;
+	white-space:nowrap
 }
-
-.youtube-view table td.bg-blue {
-	background: #008fff;
-	height: 230px;
-	border-radius: 6px
-}
-
-.youtube-view table td.bg-blue p {
-	letter-spacing: -14.4px
-}
-
-@media only all and (max-width: 1600px) {
-	.youtube-view table td.bg-blue p {
-		letter-spacing: -2.8px
-	}
+.youtube-view table td.count-td,.youtube-view table td.complate{
+	height:33.33%
 }
 
 .youtube-view table td p {
@@ -6904,11 +6894,15 @@ Base styles: contents layer
 }
 
 .youtube-view table td p.fz120 {
-	font-size: 120px
+	font-size:120px;
+	line-height:1.2;
+	letter-spacing:-0.05em
 }
 
 .youtube-view table td p.fz180 {
-	font-size: 180px
+	font-size: 180px;
+	line-height:1;
+	letter-spacing:-0.1em
 }
 
 .youtube-view table td p.txt-count {
@@ -6943,31 +6937,46 @@ Base styles: contents layer
 		font-size: 60px
 	}
 	.youtube-view table td p.fz180 {
-		font-size: 90px
+		font-size: 90px;
+		letter-spacing:-0.09em
 	}
 	.youtube-view table td p.txt-count {
-		font-size: 50px;
-		letter-spacing: -1px
+		font-size:50px;
+		letter-spacing:-1.4px;
+		letter-spacing:-0.05em
+	}
+}
+@media only all and (max-width: 800px){
+	.youtube-view table td p.fz120{
+		font-size:50px
+	}
+	.youtube-view table td p.fz180{
+		font-size:66px;
+		line-height:1.4;
+		letter-spacing:-0.06em
+	}
+	.youtube-view table td p.txt-count{
+		font-size:40px
+	}
+}
+.youtube-view table td.seller {
+	padding:15px 0 0;
+	background-color:#007eff;
+	border-radius:20px;
+	height:33.33%;
+}
+@media only all and (max-width: 1600px){
+	.youtube-view table td.seller{
+		border-radius:10px
 	}
 }
 
-.youtube-view table td.seller {
-	border: 10px solid #007eff;
-	height: 120px;
-	border-radius: 6px
+.youtube-view table td.td_video{
+	padding:0
 }
-
-.youtube-view table td.count-td {
-	height: 380px
-}
-
-.youtube-view table td.complate {
-	height: 380px
-}
-
-.youtube-view table .inner-table {
-	border: 10px solid #007eff;
-	border-radius: 6px
+.youtube-view table .inner-table{
+	border-radius:6px;
+	border-spacing:0
 }
 
 .youtube-view table .inner-table td {
@@ -6984,7 +6993,6 @@ Base styles: contents layer
 	-webkit-box-pack: center;
 	-ms-flex-pack: center;
 	justify-content: center;
-	padding: 40px 0
 }
 
 .youtube-view .seeBox_gp .chart {
@@ -6997,14 +7005,22 @@ Base styles: contents layer
 	top: 50%;
 	-webkit-transform: translate(-50%, -50%);
 	transform: translate(-50%, -50%);
-	font-size: 80px;
-	color: #fff;
+	font-size:60px;
+	font-family:'NanumSquare','Roboto','AppleGothic', 'sans-serif';
+	font-weight:700;
+	color:#fff;
 	white-space: nowrap
 }
 
 @media only all and (max-width: 1600px) {
 	.youtube-view .seeBox_gp .chart .count {
-		font-size: 40px
+		font-size: 30px
+	}
+}
+@media only all and (max-width: 1600px){
+	.youtube-view .seeBox_gp .chart canvas{
+		width:130px !important;
+		height:130px !important
 	}
 }
 
@@ -7059,6 +7075,12 @@ Base styles: contents layer
 
 .youtube-view .seeBox_gp .chart_label li.gp_tit2 {
 	margin-top: 20px
+}
+
+@media only all and (max-width: 1600px){
+	.youtube-view .seeBox_gp .chart_label li.gp_tit2{
+		margin-top:10px
+	}
 }
 
 .youtube-view .seeBox_gp .chart_label li.gp_tit2:before {
@@ -7181,7 +7203,7 @@ Base styles: contents layer
 	font-weight: 500;
 	font-size: 18px;
 	color: #1a1a1a;
-	min-width: 55px
+	min-width: 50px
 }
 
 .video_transmission .video_list .item .select_area {
@@ -7659,6 +7681,249 @@ Base styles: contents layer
 	font-weight: 700;
 	text-decoration: underline
 }
+
+.billboard-info{
+	background:#000;
+	width:100%;
+	height:100%
+}
+
+.billboard-info table {
+	table-layout:fixed;
+	width:100%;
+	height:100%;
+	border:5px solid #000
+}
+
+.billboard-info table td{
+	background:#1b1b1b;
+	border:5px solid #000;
+	overflow:hidden;
+	text-align:center
+}
+
+.billboard-info table td.bg-gray{
+	background-color:#3b3b3b;
+}
+
+.billboard-info table td.h-190{
+	height:190px;
+}
+
+@media only all and (max-width: 1600px){
+	.billboard-info table td.h-190{
+		height:95px
+	}
+}
+
+.billboard-info table td p,.billboard-info table td span{
+	color:#fff;
+	letter-spacing:-8px
+}
+
+.billboard-info table td p.txt-green,.billboard-info table td span.txt-green{
+	color:#2fff00;
+	letter-spacing:-2.8px
+}
+.billboard-info table td p.txt-orange,.billboard-info table td span.txt-orange{
+	color:#ffd500;
+	letter-spacing:-2.8px
+}
+.billboard-info table td p.txt-blue,.billboard-info table td span.txt-blue{
+	color:#007eff;
+	letter-spacing:-2.8px
+}
+.billboard-info table td p.fz60,.billboard-info table td span.fz60{
+	font-size:60px
+}
+.billboard-info table td p.fz80,.billboard-info table td span.fz80{
+	font-size:80px
+}
+.billboard-info table td p.fz100,.billboard-info table td span.fz100{
+	font-size:100px
+}
+.billboard-info table td p.fz120,.billboard-info table td span.fz120{
+	font-size:120px
+}
+.billboard-info table td p.txt-bold,.billboard-info table td span.txt-bold{
+	font-family:'NanumSquare','Roboto','AppleGothic', 'sans-serif';
+	font-weight:700
+}
+.billboard-info table td p.txt-name,.billboard-info table td span.txt-name{
+	position:absolute;
+	left:48px
+}
+@media only all and (max-width: 1600px){
+	.billboard-info table td p.txt-name,.billboard-info table td span.txt-name{
+	left:24px
+	}
+}
+
+@media only all and (max-width: 1600px){
+	.billboard-info table td p,.billboard-info table td span{
+		letter-spacing:-2.8px
+	}
+	.billboard-info table td p.txt-green,.billboard-info table td span.txt-green{
+		letter-spacing:-1px
+	}
+	.billboard-info table td p.fz60,.billboard-info table td span.fz60{
+		font-size:30px
+	}
+	.billboard-info table td p.fz80,.billboard-info table td span.fz80{
+		font-size:40px
+	}
+	.billboard-info table td p.fz100,.billboard-info table td span.fz100{
+		font-size:50px
+	}
+	.billboard-info table td p.fz120,.billboard-info table td span.fz120{
+		font-size:60px
+	}
+}
+
+.billboard-noBid{
+	padding:10px;
+	background:#000;
+	width:100%;
+	height:100%;
+	min-width:800px
+}
+
+@media only all and (max-width: 1600px){
+	.billboard-noBid{
+		padding:5px
+	}
+}
+
+.billboard-noBid h1{
+	display:-webkit-box;
+	display:-ms-flexbox;
+	display:flex;
+	-webkit-box-align:center;
+	-ms-flex-align:center;
+	align-items:center;
+	-webkit-box-pack:center;
+	-ms-flex-pack:center;
+	justify-content:center
+}
+
+.billboard-noBid h1.h-190{
+	height:190px
+}
+
+@media only all and (max-width: 1600px){
+	.billboard-noBid h1.h-190{
+		height:95px
+	}
+}
+
+.billboard-noBid .cow-number-list{
+	margin-left:-10px
+}
+
+.billboard-noBid .cow-number-list:not(.mCS_no_scrollbar){
+	margin-right:-5px
+}
+
+@media only all and (max-width: 1600px){
+	.billboard-noBid .cow-number-list{
+		margin-left:-5px
+	}
+}
+
+.billboard-noBid .cow-number-list li{
+	float:left;
+	width:20%;
+	height:calc((100vh - 210px)/3);
+	padding:10px 0 0 10px
+}
+
+@media only all and (max-width: 1600px){
+	.billboard-noBid .cow-number-list li{
+		height:calc((100vh - 105px)/3);
+		padding:5px 0 0 5px
+	}
+}
+
+.billboard-noBid .cow-number-list li .bg{
+	display:-webkit-box;
+	display:-ms-flexbox;
+	display:flex;
+	height:100%;
+	width:100%;
+	-webkit-box-align:center;
+	-ms-flex-align:center;
+	align-items:center;
+	-webkit-box-pack:center;
+	-ms-flex-pack:center;
+	justify-content:center;
+	background-color:#1b1b1b
+}
+
+.billboard-noBid .cow-number-list li .bg.bg-gray{
+	background-color:#3b3b3b
+}
+.billboard-noBid span{
+	color:#fff;
+	letter-spacing:-8px
+}
+.billboard-noBid span.txt-green{
+	color:#2fff00;
+	letter-spacing:-2.8px
+}
+.billboard-noBid span.txt-orange{
+	color:#ffd500;
+	letter-spacing:-2.8px
+}
+.billboard-noBid span.txt-blue{
+	color:#007eff;
+	letter-spacing:-2.8px
+}
+.billboard-noBid span.fz60{
+	font-size:60px
+}
+.billboard-noBid span.fz80{
+	font-size:80px
+}
+.billboard-noBid span.fz100{
+	font-size:100px
+}
+.billboard-noBid span.fz120{
+	font-size:120px
+}
+.billboard-noBid span.txt-bold{
+	font-family:'NanumSquare','Roboto','AppleGothic', 'sans-serif';
+	font-weight:700
+}
+@media only all and (max-width: 1600px){
+	.billboard-noBid span{
+		letter-spacing:-2.8px
+	}
+	.billboard-noBid span.txt-green{
+		letter-spacing:-1px
+	}
+	.billboard-noBid span.fz60{
+		font-size:30px
+	}
+	.billboard-noBid span.fz80{
+		font-size:40px
+	}
+	.billboard-noBid span.fz100{
+		font-size:50px
+	}
+	.billboard-noBid span.fz120{
+		font-size:60px
+	}
+}
+.billboard-noBid .mCustomScrollBox{
+	max-height:calc(100vh - 210px) !important
+}
+@media only all and (max-width: 1600px){
+	.billboard-noBid .mCustomScrollBox{
+		max-height:calc(100vh - 105px) !important
+	}
+}
+
+
 
 .auction_calculator .calculator_bottom .calculator-cell li button.num_before
 	{

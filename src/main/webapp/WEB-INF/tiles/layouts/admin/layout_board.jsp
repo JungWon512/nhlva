@@ -18,9 +18,7 @@
 </head>
 <body>
 	<div id="wrap">
-		<section class="billboard-view">
-			<tiles:insertAttribute name="content"/>
-		</section>
+		<tiles:insertAttribute name="content"/>
 	</div>
 	<!--begin::Main-->
 <%-- 	<tiles:insertAttribute name="wrapper_header"/> --%>

@@ -108,7 +108,7 @@
 				A.BRANDNM,                    <!-- 브랜드명   -->
 				A.PRNY_MTCN,                   <!-- 임신개월수   -->
 				A.AUC_DT,                    <!-- 경매일자   -->
-				TO_CHAR(A.LSCHG_DTM,'YYYYMMDDHH24mmss') as LSCHG_DTM, <!-- 최종변경일시   -->
+				TO_CHAR(A.LSCHG_DTM,'YYYYMMDDHH24MISS') as LSCHG_DTM, <!-- 최종변경일시   -->
 				A.LS_CMENO,                    <!-- 최종변경자개인번호  -->
 			<choose>
 			<when test="aucYn != null and aucYn != ''">
@@ -995,7 +995,7 @@
 				A.BRANDNM,                    <!-- 브랜드명   -->
 				A.PRNY_MTCN,                   <!-- 임신개월수   -->
 				A.AUC_DT,                    <!-- 경매일자   -->
-				TO_CHAR(A.LSCHG_DTM,'YYYYMMDDHH24mmss') as LSCHG_DTM, <!-- 최종변경일시   -->
+				TO_CHAR(A.LSCHG_DTM,'YYYYMMDDHH24MISS') as LSCHG_DTM, <!-- 최종변경일시   -->
 				A.LS_CMENO,                    <!-- 최종변경자개인번호  -->
 				A.SEL_STS_DSC,                   <!-- 판매상태구분코드  -->
 				A.LWPR_CHG_NT,                   <!-- 최저가변경횟수  -->

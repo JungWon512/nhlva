@@ -7,25 +7,9 @@ var init = function(){
 	setEventListener();
 };
 var setLayout = function(){
-	var index = 0;
-	setInterval(function(){
-//		debugConsole(index);
-		var len = $(".list_body ul li").length;
-		if(len<=index){
-			index = 0;
-		}else{
-			index += 10;
-		}
-		if(isApp() || chkOs() != 'web'){
-			var scH = $('.tblAuction .list_body ul li').outerHeight();					
-			$('.tblAuction .list_body ul').animate({scrollTop: (scH*index)},1000);
-		}else{
-			$(".list_body ul").mCustomScrollbar('scrollTo'
-				,$(".list_body ul").find('.mCSB_container').find('li:eq('+(index)+')')
-				,{scrollInertia:0}
-			);
-		}	
-	},1000*5);
+	infoInterval = setInterval(function(){
+		$('section.billboard-info .time').html(getTimeStr());
+	},1000*1);
 };
 var setEventListener = function(){
 	setSocket();
@@ -54,7 +38,7 @@ var setSocket = function(){
 	socket.on('CancelBidding', messageHandler);
 	socket.on('RetryTargetInfo', messageHandler);
 	socket.on('AuctionBidStatus', messageHandler);
-	
+	socket.on('ShowFailBIdding', messageHandler);	
 }
 
 var socketDisconnect = function(){
@@ -83,9 +67,98 @@ var messageHandler = function(data) {
 			}
 		break;	
 		case "AS" : //현재 경매상태	
+			var aucStConfig ={
+				t8001:'<span class="txt-blue">일괄</span><span class="txt-green"> 경매 대기 중</span>'
+				,t8002:'<span class="txt-blue">일괄</span><span class="txt-green"> 경매 대기 중</span>'
+				,t8003:'<span class="txt-blue">일괄</span><span class="txt-green"> 경매 시작</span>'
+				,t8004:'<span class="txt-blue">일괄</span><span class="txt-green"> 경매 진행 중</span><br>응찰하시기 바랍니다'
+				,t8004:'<span class="txt-blue">일괄</span><span class="txt-green"> 경매 정지</span>'
+				,t8006:'경매응찰 완료'
+				,t8007:'경매 종료'
+			}
+			switch(dataArr[6]){
+				case "8001" : $('section.billboard-info .infoTxt').html(aucStConfig.t8001); break; 
+				case "8002" : $('table.tblAuctionSt tbody tr.st td.count-td p').text(aucStConfig.t8002); break; 
+				case "8003" : $('table.tblAuctionSt tbody tr.st td.count-td p').text(aucStConfig.t8003); break; 
+				case "8004" : $('table.tblAuctionSt tbody tr.st td.count-td p').text(aucStConfig.t8004); break; 
+				case "8005" : $('table.tblAuctionSt tbody tr.st td.count-td p').text(aucStConfig.t8005); break; 
+				case "8006" : 
+					$('.billboard-info').hide();
+					$('.billboard-noBid').hide();
+					$('.billboard-view').show();
+					clearInterval(infoInterval);
+					clearInterval(noInfoInterval);
+					viewIntervalFunc();
+					
+				break; 
+				case "8007" : 
+					socketDisconnect();
+					$('.billboard-info').hide();
+					$('.billboard-noBid').hide();
+					$('.billboard-view').show();
+					clearInterval(infoInterval);
+					clearInterval(noInfoInterval);
+					viewIntervalFunc();
+					$('table.tblAuctionSt tbody tr.st td.count-td p').text(aucStConfig.t8007); 
+				break; 
+				default:break;
+			}
 			if(dataArr[6]=='8006'){
-				location.reload();
+				//location.reload();
 			};		
+		break;	
+		case "SZ" : 
+			//구분자 | 조합구분코드 | 경매일자(YYYYmmdd) | 경매구분(송아지 : 1 / 비육우 : 2 / 번식우 : 3 / 일괄 : 0) | 경매등록일련번호
+			
+			var params = {
+				naBzplc : dataArr[1]
+				, aucDt : dataArr[2]
+				, aucObjDsc : dataArr[3]
+			}
+			$.ajax({
+				url: '/office/getAbsentCowList',
+				data: params,
+				type: 'POST',
+				dataType: 'json',
+				success : function() {
+				},
+				error: function(xhr, status, error) {
+				}
+			}).done(function (json) {
+				console.log(json);				
+				var success = json.success;
+				var message = json.message;
+				if (!success) {
+					modalAlert("", message);
+				}
+				else {
+					if(json && json.entry){
+						var body = $('.billboard-noBid .list-body ul');
+						body.empty();
+						
+						var entryArr = json.entry.split('|');
+						var len = json.entry.split('|').length;
+						var blankLen = len%15+1;
+						for(var i =0,totLen=len+blankLen;i<totLen;i++){
+							if(entryArr[i]){
+								body.append('<li><div class="bg bg-gray"><span class="fz120 txt-bold">'+entryArr[i]+'</span></div></li>');
+							}else{
+								body.append('<li><div class="bg"></div></li>');								
+							}
+						}
+					}
+					$('.billboard-info').hide();
+					$('.billboard-view').hide();
+					$('.billboard-noBid').show();
+					$(".billboard-noBid .cow-number-list").mCustomScrollbar({
+						theme:"dark-thin",
+						scrollInertia: 200,
+					});
+					clearInterval(infoInterval);
+					clearInterval(viewInterval);
+					noInfoIntervalFun();
+				}
+			});
 		break;	
 		default:break;
 	}
@@ -99,3 +172,42 @@ var getCookie = function(name){
 		}
 	}
 } 
+
+
+var noInfoInterval,viewInterval,infoInterval;
+var viewIntervalFunc = function(index){
+	var index = 0;
+	setInterval(function(){
+		var len = $(".billboard-view .list_body ul li").length;
+		if(len<=index){
+			index = 0;
+		}else{
+			index += 10;
+		}
+		if(isApp() || chkOs() != 'web'){
+			var scH = $('.tblAuction .list_body ul li').outerHeight();					
+			$('.billboard-view .tblAuction .list_body ul').animate({scrollTop: (scH*index)},1000);
+		}else{
+			$(".billboard-view .list_body ul").mCustomScrollbar('scrollTo'
+				,$(".billboard-view .list_body ul").find('.mCSB_container').find('li:eq('+(index)+')')
+				,{scrollInertia:0}
+			);
+		}	
+	},1000*5)
+};
+var noInfoIntervalFun = function(index){
+	var index = 0;
+	noInfoInterval = setInterval(function(){
+		var len = $(".billboard-noBid .list-body ul li").length;
+		if(len<=index){
+			index = 0;
+		}else{
+			index += 15;
+		}
+		
+		$(".billboard-noBid .list-body ul").mCustomScrollbar('scrollTo'
+			,$(".billboard-noBid .list-body ul").find('.mCSB_container').find('li:eq('+(index)+')')
+			,{scrollInertia:0}
+		);
+	},1000*5)
+};
