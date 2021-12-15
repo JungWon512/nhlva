@@ -317,4 +317,6 @@ public interface AuctionService {
 	 * @throws SQLException
 	 */
 	Map<String, Object> selectTotSoldPrice(Map<String, Object> map) throws SQLException;
+
+	int updateCowInfoForModlNo(Map<String, Object> params) throws SQLException;
 }

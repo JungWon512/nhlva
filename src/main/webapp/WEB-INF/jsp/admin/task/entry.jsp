@@ -81,7 +81,7 @@
 								</dd>
 							</c:when>
 							<c:when test="${params.regType eq 'N'}">
-								<dd class="col2">${item.MODL_NO}</dd>
+								<dd class="col2" style="${item.MODL_NO != item.AUC_PRG_SQ ? 'color:#ff0000':''}">${item.MODL_NO}</dd>
 							</c:when>
 							</c:choose>
 								<dd class="col3">${item.SRA_INDV_AMNNO_FORMAT}</dd>

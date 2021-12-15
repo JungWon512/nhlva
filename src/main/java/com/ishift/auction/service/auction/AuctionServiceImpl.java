@@ -968,4 +968,8 @@ public class AuctionServiceImpl implements AuctionService {
 	public List<Map<String, Object>> selectCowList(Map<String, Object> params) throws SQLException {
 		return auctionDAO.selectCowList(params);
 	}
+	@Override
+	public int updateCowInfoForModlNo(Map<String, Object> params) throws SQLException{
+		return auctionDAO.updateCowInfoForModlNo(params);
+	}
 }

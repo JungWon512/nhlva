@@ -460,4 +460,9 @@ public class AuctionDAO {
 	public Map<String, Object> selectTotSoldPrice(Map<String, Object> params) throws SQLException {		
 		return mainDao.selectOne("auction.selectTotSoldPrice", params);
 	}
+
+	public int updateCowInfoForModlNo(Map<String, Object> params) throws SQLException {
+		// TODO Auto-generated method stub
+		return mainDao.update("auction.updateCowInfoForModlNo", params);
+	}
 }

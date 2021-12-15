@@ -1032,6 +1032,19 @@
 			   AND LED_SQNO = #{ledSqno}
 		</if>
 	</update>
+	
+	
+	<update id="updateCowInfoForModlNo" parameterType="map">
+		<if test="regType != null and regType != ''">
+			UPDATE TB_LA_IS_MH_SOG_COW
+			   SET LSCHG_DTM = SYSDATE
+				 , LS_CMENO = #{regUserId}
+				 , MODL_NO = 0
+			 WHERE NA_BZPLC = #{naBzplc}
+			   AND AUC_DT = #{aucDt}
+			   AND NVL(MODL_NO,AUC_PRG_SQ) = #{modlNo}
+		</if>
+	</update>
 
 	<select id="selectBidLogList" parameterType="map" resultType="map">
 		SELECT 

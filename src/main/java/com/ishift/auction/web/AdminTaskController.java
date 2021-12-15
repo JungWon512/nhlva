@@ -178,6 +178,11 @@ public class AdminTaskController {
 			if(params.get("aucDt") != null) params.put("searchDate", params.get("aucDt"));
 			if(params.get("aucObjDsc") != null) params.put("searchAucObjDsc", params.get("aucObjDsc"));
 			
+			String regType = (String)params.getOrDefault("regType", "");
+			if("N".equals(regType)) {
+				auctionService.updateCowInfoForModlNo(params);				
+			}
+			
 			final int cnt = auctionService.updateCowInfo(params);
 			if (cnt > 0) {
 				result.put("success", true);

@@ -152,7 +152,7 @@
 						listHtml.push('<dd class="col2">' + (item.LOWS_SBID_LMT_UPR == null || parseInt(item.LOWS_SBID_LMT_UPR) == '0' || parseInt(item.LOWS_SBID_LMT_UPR) == 'NaN' ? '-' : fnSetComma(item.LOWS_SBID_LMT_UPR)) + '</dd>');
 					}
 					else {
-						listHtml.push('<dd class="col2">' + item.MODL_NO + '</dd>');
+						listHtml.push('<dd class="col2" '+(item.MODL_NO != item.AUC_PRG_SQ?'style="color:#ff0000"':'')+'>' + item.MODL_NO + '</dd>');
 					}
 					listHtml.push('		<dd class="col3">' + item.SRA_INDV_AMNNO_FORMAT + '</dd>');
 					listHtml.push('		<dd class="col3">' + item.SRA_PDMNM_ORI + '</dd>');
