@@ -238,6 +238,30 @@ public class AdminController {
 		mav.addObject("subheaderTitle", "멀티비전");
 		return mav;
 	}
+	@RequestMapping(value = "/office/getCowList" ,method = { RequestMethod.GET, RequestMethod.POST })
+	public Map<String, Object> getCowList(@RequestParam Map<String, Object> params) {
+		
+		final Map<String, Object> result = new HashMap<String, Object>();
+		StringBuffer sb = new StringBuffer();
+		try {
+	        LocalDateTime date = LocalDateTime.now();
+	        Map<String,Object> temp = new HashMap<String,Object>();
+	        String today = date.format(DateTimeFormatter.ofPattern("yyyyMMdd"));
+	        temp.put("searchDate", today);
+	        temp.put("naBzplc", params.get("naBzplc"));
+	        
+			List<Map<String,Object>> list=auctionService.entrySelectList(temp);
+			
+			result.put("success", true);
+			result.put("message", "조회에 성공했습니다.");
+			result.put("list", list);
+		}catch (SQLException | RuntimeException re) {
+			log.error("AdminController.getCowList : {} ",re);
+			result.put("success", false);
+			result.put("message", "작업중 오류가 발생했습니다. 관리자에게 문의하세요.");
+		}
+		return result;
+	}
 
 	@ResponseBody
 	@RequestMapping(value = "/office/getAbsentCowList" ,method = { RequestMethod.GET, RequestMethod.POST })
