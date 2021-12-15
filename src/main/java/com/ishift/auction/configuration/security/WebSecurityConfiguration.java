@@ -75,6 +75,11 @@ public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
 		web.ignoring().requestMatchers(PathRequest.toStaticResources().atCommonLocations());
 	}
 
+	@Override
+	protected void configure(HttpSecurity http) throws Exception {
+		http.headers(headers -> headers.cacheControl(cache -> cache.disable()));
+	}
+	
 	// 관리자 권한 체크
 	@Order(1)
 	@Configuration
@@ -149,6 +154,7 @@ public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
 
 			http.addFilterBefore(jwtAdminAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
 			
+			http.headers(headers -> headers.cacheControl(cache -> cache.disable()));
 			log.debug("##### AdminConfigurationAdapter.configure [e] #####");
 		}
 	}
@@ -226,6 +232,7 @@ public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
 			http.addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class)
 				.addFilterBefore(jwtFarmAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
 
+			http.headers(headers -> headers.cacheControl(cache -> cache.disable()));
 			log.debug("##### BidderConfigurationAdapter.configure [e] #####");
 		}
 	}
