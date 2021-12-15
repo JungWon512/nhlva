@@ -7006,7 +7006,7 @@ Base styles: contents layer
 	-webkit-transform: translate(-50%, -50%);
 	transform: translate(-50%, -50%);
 	font-size:60px;
-	font-family:'NanumSquare','Roboto','AppleGothic', 'sans-serif';
+	font-family:'Noto Sans KR','Roboto','AppleGothic', 'sans-serif';
 	font-weight:700;
 	color:#fff;
 	white-space: nowrap
@@ -7746,7 +7746,7 @@ Base styles: contents layer
 	font-size:120px
 }
 .billboard-info table td p.txt-bold,.billboard-info table td span.txt-bold{
-	font-family:'NanumSquare','Roboto','AppleGothic', 'sans-serif';
+	font-family:'Noto Sans KR','Roboto','AppleGothic', 'sans-serif';
 	font-weight:700
 }
 .billboard-info table td p.txt-name,.billboard-info table td span.txt-name{
@@ -7891,7 +7891,7 @@ Base styles: contents layer
 	font-size:120px
 }
 .billboard-noBid span.txt-bold{
-	font-family:'NanumSquare','Roboto','AppleGothic', 'sans-serif';
+	font-family:'Noto Sans KR','Roboto','AppleGothic', 'sans-serif';
 	font-weight:700
 }
 @media only all and (max-width: 1600px){
@@ -8055,4 +8055,9 @@ div.list_txts {
 	.admin_main .menu_list .menu_item:not(.mobile) {
 		display:none;
 	}
+}
+.auction_list_full .list_table_full .list_body dl dd.name {
+	overflow: hidden;
+	text-overflow: ellipsis;
+	white-space: nowrap;
 }
