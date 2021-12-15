@@ -13,25 +13,25 @@
 		
 		var addEvent = function(){
 			// 바코드 검색
-			$(".btn_search").on(clickEvent, function() {
+			$(".btn_search").on("click", function() {
 				$("form[name='frm']").attr("action", "/office/task/entry").submit();
 			});
 			
 			// 검색어 지우기
-			$(".btn_input_reset").on(clickEvent, function(e) {
+			$(".btn_input_reset").on("click", function(e) {
 				$("input[name='searchTxt']").val("");
 				$("form[name='frm']").attr("action", "/office/task/entry").submit();
 			});-
 			
 			// 리스트 선택
-			$(document).on(clickEvent, ".list_body > ul > li", function(){
+			$(document).on("click", ".list_body > ul > li", function(){
 				$(".list_body ul li").not(this).removeClass("act");
 				//$(".list_body > ul > li").siblings().not(this).removeClass("act");
 				$(this).toggleClass("act");
 			});
 			
 			// 유형 선택 화면으로 이동
-			$(".btn_back").on(clickEvent, function(){
+			$(".btn_back").on("click", function(){
 				var params = {
 					aucDt : $("input[name='aucDt']").val(),
 					aucObjDsc : $("select[name='aucObjDsc']:checked").val()
@@ -40,7 +40,7 @@
 			});
 			
 			// 변경 팝업
-			$(".btn_modify").on(clickEvent, function(){
+			$(".btn_modify").on("click", function(){
 				if ($(".list_body > ul").find("li.act").length == 0) {
 					modalAlert("", "변경할 대상을 선택하세요.");
 					return
@@ -94,12 +94,12 @@
 			});
 			
 			// 팝업 닫기
-			$(document).on(clickEvent, ".btn_pop_close", function(){
+			$(document).on("click", ".btn_pop_close", function(){
 				modalPopupClose('.pop_mod_weight');
 			});
 			
 			// 변경내용 저장
-			$(document).on(clickEvent, ".btn_save", function(){
+			$(document).on("click", ".btn_save", function(){
 				var regType = $("input[name='regType']").val();
 				var regTypeNm = regType == "W" ? "중량" : regType == "N" ? "계류대 번호" : "하한가"; 
 				if ($("input.required").val() == "") {
@@ -127,7 +127,7 @@
 				});
 			});
 			
-			$(".btn_input_reset").on(clickEvent, function(){
+			$(".btn_input_reset").on("click", function(){
 				$("input[name='searchTxt']").val("");
 			});
 		};
