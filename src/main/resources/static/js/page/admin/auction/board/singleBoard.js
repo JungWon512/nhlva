@@ -67,8 +67,9 @@ var messageHandler = function(data) {
 		case "AS" : //현재 경매상태			
 			if(auctionConfig.curAucSeq) auctionConfig.preAucSeq = auctionConfig.curAucSeq
 			auctionConfig.curAucSeq = dataArr[2];
-			scLoad(scData[auctionConfig.curAucSeq].split('|'));
-			if(auctionConfig.auctionSt && (dataArr[6]=='8006' || dataArr[6]=='8002')){auctionConfig.auctionSt=dataArr[6]; return};
+			if(scData[auctionConfig.curAucSeq]) scLoad(scData[auctionConfig.curAucSeq].split('|'));
+			
+			//if(auctionConfig.auctionSt && (dataArr[6]=='8006' || dataArr[6]=='8002')){auctionConfig.auctionSt=dataArr[6]; return};
 			auctionConfig.auctionSt=dataArr[6];
 			auctionConfig.anStatus = false;
 			$('table.tblBoard tbody tr.title td p.auctionNum').text(dataArr[2]);

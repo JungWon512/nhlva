@@ -98,14 +98,13 @@ var disconnectHandler = function() {
 	SC : 현재 출품정보
 	CF : 낙찰데이터 정보	
 **/
+var auctionConfig,scData={};
 var messageHandler = function(data) {
 	debugConsole(data);
 	var dataArr = data.split('|');
 	var gubun = dataArr[0];
 	                  
 	switch(gubun){
-		case "AR" :
-		break;	
 		case "AR" : //인증정보 response
 			auctionConfig.status = dataArr[2]=='2000'?'succ':'fail';
 			if(auctionConfig.status=='fail'){
@@ -113,21 +112,15 @@ var messageHandler = function(data) {
 			}
 		break;	
 		case "SC" : //현재 출품정보
-				$('table.tblAuctionSt tbody tr td.val p.auctionNum').text(dataArr[2]);	//경매번호
-				
-				$('table.tblAuctionSt tbody tr td td p.ftsnm').text(nameEnc(dataArr[9])); //출하주
-				$('table.tblAuctionSt tbody tr td td p.cowSogWt').text(dataArr[25]); //중량
-				$('table.tblAuctionSt tbody tr td td p.kpnNo').text(dataArr[12]&&dataArr[12].replace('KPN','')); //kpn
-				$('table.tblAuctionSt tbody tr td td p.mcowDsc').text(dataArr[14]); //어미
-				$('table.tblAuctionSt tbody tr td td p.sex').text(dataArr[13]); //성별				
-				$('table.tblAuctionSt tbody tr td td p.lowsSbidLmtAm').text(dataArr[27]); //최저가
-					
-				$('table.tblAuctionSt tbody tr td td p.sraIndvPasgQcn').text(dataArr[18]); //계대	
-				$('table.tblAuctionSt tbody tr td td p.matime').text(dataArr[16]); //산차
-				$('table.tblAuctionSt tbody tr td td p.rmkCntn').text(dataArr[28]); //산차
+			scData[dataArr[2]] = data;
+			if(auctionConfig.curAucSeq && auctionConfig.curAucSeq != dataArr[2]) return;
+			scLoad(dataArr);
 		break;	
 		case "AS" : //현재 경매상태			
-			//if(auctionConfig.auctionSt && (dataArr[6]=='8006' || dataArr[6]=='8002')){auctionConfig.auctionSt=dataArr[6]; return};
+			if(auctionConfig.curAucSeq) auctionConfig.preAucSeq = auctionConfig.curAucSeq
+			auctionConfig.curAucSeq = dataArr[2];
+			if(scData[auctionConfig.curAucSeq]) scLoad(scData[auctionConfig.curAucSeq].split('|'));
+			
 			auctionConfig.auctionSt=dataArr[6];
 			auctionConfig.anStatus = false;
 			$('table.tblAuctionSt tbody tr td.val p.auctionNum').text(dataArr[2]);
@@ -354,3 +347,18 @@ var setLoopChJoinInIn = function(cast,i){
     remoteVideoArr[castName] = tmpRemon;
 	tmpRemon.joinCast(castName);
 };
+
+var scLoad = function(dataArr){
+	$('table.tblAuctionSt tbody tr td.val p.auctionNum').text(dataArr[2]);	//경매번호
+	
+	$('table.tblAuctionSt tbody tr td td p.ftsnm').text(nameEnc(dataArr[9],"●")); //출하주
+	$('table.tblAuctionSt tbody tr td td p.cowSogWt').text(dataArr[25]); //중량
+	$('table.tblAuctionSt tbody tr td td p.kpnNo').text(dataArr[12]&&dataArr[12].replace('KPN','')); //kpn
+	$('table.tblAuctionSt tbody tr td td p.mcowDsc').text(dataArr[14]); //어미
+	$('table.tblAuctionSt tbody tr td td p.sex').text(dataArr[13]); //성별				
+	$('table.tblAuctionSt tbody tr td td p.lowsSbidLmtAm').text(dataArr[27]); //최저가
+		
+	$('table.tblAuctionSt tbody tr td td p.sraIndvPasgQcn').text(dataArr[18]); //계대	
+	$('table.tblAuctionSt tbody tr td td p.matime').text(dataArr[16]); //산차
+	$('table.tblAuctionSt tbody tr td td p.rmkCntn').text(dataArr[28]); //산차
+}
