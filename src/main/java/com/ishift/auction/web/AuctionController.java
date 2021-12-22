@@ -403,6 +403,8 @@ public class AuctionController extends CommonController {
 			mav.addObject("bidList", bidList);
 			mav.addObject("johapData", adminService.selectOneJohap(params));
 			mav.addObject("bidCnt", auctionService.selectBidLogListCnt(params));
+			mav.addObject("buyCnt",auctionService.selectCountEntry(params));
+			mav.addObject("totPrice", auctionService.selectTotSoldPrice(params));
 			mav.addObject("params", params);
 		}catch (RuntimeException re) {
 			log.error("AuctionController.entryListPopUp : {} ",re);
@@ -494,6 +496,8 @@ public class AuctionController extends CommonController {
 			mav.addObject("soldList", soldList);
 			mav.addObject("bidList", bidList);
 			mav.addObject("bidCnt", auctionService.selectBidLogListCnt(map));
+			mav.addObject("buyCnt",auctionService.selectCountEntry(map));
+			mav.addObject("totPrice", auctionService.selectTotSoldPrice(map));
 			mav.addObject("inputParam", param);
 		}catch (RuntimeException re) {
 			log.error("AuctionController.entryListApiPopUp : {} ",re);
