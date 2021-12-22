@@ -37,6 +37,7 @@
 			$(document).on(clickEvent, ".btn_cow_search", function() {
 				var aucPrgSq = $("form[name='frm_cow_info']").find("input[name='aucPrgSq']").val();
 				$("form[name='frm_select']").find("input[name='aucPrgSq']").val(aucPrgSq);
+				$("form[name='frm_select']").find("input[name='regType']").val("I");
 				
 				$.ajax({
 					url: '/office/task/cowInfo',
@@ -120,7 +121,7 @@
 			popHtml.push('<div id="" class="modal-wrap ' + className + '">');
 			popHtml.push('	<form name="frm_cow_info" method="post">');
 			popHtml.push('		<input type="hidden" name="aucObjDsc" value="" />');
-			popHtml.push('		<input type="hidden" name="regType" value="" />');
+			popHtml.push('		<input type="hidden" name="regType" value="I" />');
 			popHtml.push('		<input type="hidden" name="oslpNo" value="" />');
 			popHtml.push('		<input type="hidden" name="ledSqno" value="" />');
 			popHtml.push('	<div class="modal-content pop_ad_mod">');
@@ -260,12 +261,12 @@
 			var ppgcowList = data.ppgcowList;
 			var indvList = data.indvList;
 			
-			$("input[name='ftsnm']").val(cowInfo.FTSNM);
-			$("input[name='rmkCntn']").val(cowInfo.RMK_CNTN);
-			$("input[name='aucObjDsc']").val(cowInfo.AUC_OBJ_DSC);
-			$("input[name='oslpNo']").val(cowInfo.OSLP_NO);
-			$("input[name='ledSqno']").val(cowInfo.LED_SQNO);
-			$("input[name='aucPrgSq']", $("form[name='frm_select']")).val(cowInfo.AUC_PRG_SQ);
+			$("input[name='ftsnm']", $("form[name='frm_cow_info']")).val(cowInfo.FTSNM);
+			$("input[name='rmkCntn']", $("form[name='frm_cow_info']")).val(cowInfo.RMK_CNTN);
+			$("input[name='aucObjDsc']", $("form[name='frm_cow_info']")).val(cowInfo.AUC_OBJ_DSC);
+			$("input[name='oslpNo']", $("form[name='frm_cow_info']")).val(cowInfo.OSLP_NO);
+			$("input[name='ledSqno']", $("form[name='frm_cow_info']")).val(cowInfo.LED_SQNO);
+//			$("input[name='aucPrgSq']", $("form[name='frm_select']")).val(cowInfo.AUC_PRG_SQ);
 
 			// 큰소 구분
 			var $ppgcowFeeDsc = $("select[name='ppgcowFeeDsc']");

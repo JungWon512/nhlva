@@ -1,11 +1,16 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
 <%@ include file="/WEB-INF/__system/taglibs.jsp" %>
 
+<style type="text/css">
+	div.list_body input{padding-right:8px; text-align:right;border-radius:5px;font-size:16px;}
+</style>
+
 <!--  admin_weight_list [s] -->
 <div class="admin_weight_list">
 	<form name="frm" action="" method="post">
 		<input type="hidden" name="regType" value="${params.regType}" />
 		<input type="hidden" name="aucDt" value="${params.aucDt}" />
+		<input type="hidden" name="naBzplc" value="${params.naBzplc}" />
 		
 		<!-- sub_search [s] -->
 		<div class="sub_search">
@@ -39,7 +44,7 @@
 				<dl>
 					<dd class="col1">번호</dd>
 					<c:choose>
-						<c:when test="${params.regType eq 'W'}">
+						<c:when test="${params.regType eq 'W' or params.regType eq 'AW'}">
 							<dd class="col2"><span class="txt_org">중량</span></dd>
 						</c:when>
 						<c:when test="${params.regType eq 'L'}">
@@ -70,6 +75,11 @@
 							<c:when test="${params.regType eq 'W'}">
 								<dd class="col2">${fn:split(item.COW_SOG_WT,'.')[0] eq '0' ? '-' : fn:split(item.COW_SOG_WT,'.')[0]}</dd>
 							</c:when>
+							<c:when test="${params.regType eq 'AW'}">
+								<dd class="col2">
+									<input type="text" name="cowSogWt" id="cowSogWt${item.AUC_PRG_SQ}" class="onlyNumber" value="${fn:split(item.COW_SOG_WT,'.')[0]}" maxlength="4" pattern="\d*" inputmode="numeric" onfocus="$(this).setCursorPosition(0); return false;"/>
+								</dd>
+							</c:when>
 							<c:when test="${params.regType eq 'L'}">
 								<dd class="col2">
 									<c:choose>
@@ -94,10 +104,12 @@
 		</div>
 		<!-- list_table [s] -->
 		<!-- btn_area [s] -->
-		<div class="btn_area">
-			<a href="javascript:;" class="list_sch btn_modify">변경</a>
-			<a href="javascript:;" class="list_sch btn_back">이전</a>
-		</div>
+		<c:if test="${params.regType ne 'AW'}">
+			<div class="btn_area">
+				<a href="javascript:;" class="list_sch btn_modify">변경</a>
+				<a href="javascript:;" class="list_sch btn_back">이전</a>
+			</div>
+		</c:if>
 		<!-- btn_area [e] -->
 	</form>
 </div>
