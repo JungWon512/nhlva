@@ -106,6 +106,7 @@
         namespace[__COMPONENT_NAME].init();
     });
 })(window, window.jQuery);
+
 (function(win, $){
     $.fn.serializeObject = function () {
         "use strict";
@@ -131,4 +132,49 @@
         $.each(this.serializeArray(), extend);
         return result;
     };
+    
+    $.fn.setCursorPosition = function( pos ) {
+	  "use strict";
+	  this.each( function( index, elem ) {
+	    if( elem.setSelectionRange ) {
+	      elem.setSelectionRange(pos, pos);
+	    } else if( elem.createTextRange ) {
+	      var range = elem.createTextRange();
+	      range.collapse(true);
+	      range.moveEnd('character', pos);
+	      range.moveStart('character', pos);
+	      range.select();
+	    }
+	  });
+  
+	  return this;
+	};
+	
+	$.event.special.dblclick = {
+	    setup: function(data, namespaces) {
+	        var elem = this,
+	            $elem = $(elem);
+	        $elem.bind('touchend.dblclick', $.event.special.dblclick.handler);
+	    },
+	
+	    teardown: function(namespaces) {
+	        var elem = this,
+	            $elem = $(elem);
+	        $elem.unbind('touchend.dblclick');
+	    },
+	
+	    handler: function(event) {
+	        var elem = event.target,
+	            $elem = $(elem),
+	            lastTouch = $elem.data('lastTouch') || 0,
+	            now = new Date().getTime();
+	
+	        var delta = now - lastTouch;
+	        if(delta > 20 && delta<500){
+	            $elem.data('lastTouch', 0);
+	            $elem.trigger('dblclick');
+	        }else
+	            $elem.data('lastTouch', now);
+	    }
+	};
 })(window, window.jQuery);

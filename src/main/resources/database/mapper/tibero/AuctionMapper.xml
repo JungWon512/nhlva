@@ -992,6 +992,9 @@
 		<if test="aucPrgSq != null and aucPrgSq != ''">
 		   AND A.AUC_PRG_SQ = #{aucPrgSq}
 		</if>
+		<if test="regType != null and regType != '' and regType == 'I'.toString()">
+		   AND A.AUC_OBJ_DSC = '3'
+		</if>
 	</select>
 	
 	<update id="updateCowInfo" parameterType="map">
@@ -999,11 +1002,13 @@
 			UPDATE TB_LA_IS_MH_SOG_COW
 			   SET LSCHG_DTM = SYSDATE
 				 , LS_CMENO = #{regUserId}
-			
 			<choose>
 			<when test="regType == 'W'.toString()">
 				 , COW_SOG_WT = #{cowSogWt}
 				 , RMK_CNTN = #{rmkCntn}
+			</when>
+			<when test="regType == 'AW'.toString()">
+				 , COW_SOG_WT = #{cowSogWt}
 			</when>
 			<when test="regType == 'N'.toString()">
 				 , MODL_NO = #{modlNo}

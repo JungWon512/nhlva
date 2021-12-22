@@ -8,7 +8,7 @@
 	<meta property="og:title" content="${johapData.CLNTNM} - ${subheaderTitle}">
 	<meta property="og:description" content="${johapData.CLNTNM} - ${subheaderTitle}" />
 	<meta name="description" content="${johapData.CLNTNM} - ${subheaderTitle}" />
-	<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+	<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no, maximum-scale=1.0, user-scalable=0">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge" />
 	<tiles:insertAttribute name="head_footer_script"/>
 </head>

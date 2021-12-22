@@ -99,7 +99,7 @@ public class AdminTaskController {
 	@SuppressWarnings("serial")
 	public ModelAndView entry(@RequestParam final Map<String, Object> params) {
 		final ModelAndView mav = new ModelAndView("admin/task/entry");
-		final Map<String, String> titleMap = new HashMap<String, String>() {{put("W", "중량 등록");put("L", "하한가 등록");put("N", "계류대 변경");}};
+		final Map<String, String> titleMap = new HashMap<String, String>() {{put("W", "중량 등록");put("L", "하한가 등록");put("N", "계류대 변경");put("AW", "중량 등록(일괄)");}};
 		try {			
 			final AdminUserDetails userVo = (AdminUserDetails)sessionUtill.getUserVo();
 			if(userVo != null) params.put("naBzPlcNo", userVo.getPlace());
