@@ -52,16 +52,16 @@ var connectHandler = function() {
 var disconnectHandler = function() {	
 }
 
-var auctionConfig;
+var auctionConfig,scData={};
 var messageHandler = function(data) {
 	debugConsole(data);
 	var dataArr = data.split('|');
 	var gubun = dataArr[0];
 	switch(gubun){	
 		case "AS" : //현재 경매상태
-			if(!auctionConfig.asData) auctionConfig.asData = {};
-			if(auctionConfig.asData.curAucSeq) auctionConfig.asData.preAucSeq = auctionConfig.asData.curAucSeq
-			auctionConfig.asData.curAucSeq = dataArr[2];			
+			if(auctionConfig.curAucSeq) auctionConfig.preAucSeq = auctionConfig.curAucSeq
+			auctionConfig.curAucSeq = dataArr[2];
+			scLoad(scData[auctionConfig.curAucSeq].split('|'));
 		break;	
 		case "AR" : //인증정보 response
 			auctionConfig.status = dataArr[2]=='2000'?'succ':'fail';
@@ -70,41 +70,9 @@ var messageHandler = function(data) {
 			}
 		break;	
 		case "SC" : //현재 출품정보
-				if(auctionConfig.asData.curAucSeq != dataArr[2]) return;
-				var sex = dataArr[13];
-//				switch(dataArr[13]){
-//					case '1' : sex = '암'; break;
-//					case '2' : sex = '수'; break;
-//					case '3' : sex = '거세'; break;
-//					case '4' : sex = '미경산'; break;
-//					case '5' : sex = '비거세'; break;
-//					case '6' : sex = '프리마틴'; break;
-//					case '9' : sex = '공통'; break;
-//					case '0' : sex = '없음'; break;
-//					default : sex = '없음'; break;					
-//				}
-				
-				$('table.tblBoard tbody tr.title td p.auctionNum').text(dataArr[2]);	//경매번호
-				$('table.tblBoard tbody tr.val td p.ftsnm').text(nameEnc(dataArr[9],"●")); //출하주
-				$('table.tblBoard tbody tr.val td p.cowSogWt').text(dataArr[25]); //중량
-				$('table.tblBoard tbody tr.val td p.lowsSbidLmtAm').text(Math.round(parseInt(dataArr[27]))); //최저가
-				// $('table.tblBoard tbody tr.val td p.prnyMtcn').text(Math.round(parseInt(dataArr[17]))); //임신
-				$('table.tblBoard tbody tr.val td p.sraIndvPasgQcn').text(dataArr[18]); //계대
-				$('table.tblBoard tbody tr.val td p.kpnNo').text(dataArr[11]&&dataArr[12].replace('KPN','')); //kpn
-				$('table.tblBoard tbody tr.val td p.mcowDsc').text(dataArr[14]); //어미
-				$('table.tblBoard tbody tr.val td p.matime').text(dataArr[16]); //산차
-				
-				$('table.tblBoard tbody tr.val td p.rmkCntn').removeAttr("style");
-				$('table.tblBoard tbody tr.val td p.rmkCntn').css("white-space",'nowrap');
-				$('table.tblBoard tbody tr.val td p.rmkCntn').removeClass("move-txt");
-				$('table.tblBoard tbody tr.val td p.rmkCntn').text(dataArr[28]?dataArr[28]:'　'); //비고
-				var width = $('table.tblBoard tbody tr.val td p.rmkCntn').width();
-				var len = $('table.tblBoard tbody tr.val td p.rmkCntn').text().trim().length * 12;
-				$('table.tblBoard tbody tr.val td p.rmkCntn').css('width',len>width?len:width);
-				
-				$('table.tblBoard tbody tr.val td p.rmkCntn').addClass("move-txt");
-				$('table.tblBoard tbody tr.val td p.sex').text(sex); //성별
-				convertDefaultValue('table.tblBoard tbody tr.val td p','-');
+			scData[dataArr[2]] = data;
+			if(auctionConfig.curAucSeq && auctionConfig.curAucSeq != dataArr[2]) return;
+			scLoad(dataArr);
 		break;	
 		case "AS" : //현재 경매상태			
 			if(auctionConfig.auctionSt && (dataArr[6]=='8006' || dataArr[6]=='8002')){auctionConfig.auctionSt=dataArr[6]; return};
@@ -189,3 +157,29 @@ var getCookie = function(name){
 		}
 	}
 } 
+
+var scLoad = function(dataArr){	
+	var sex = dataArr[13];
+	
+	$('table.tblBoard tbody tr.title td p.auctionNum').text(dataArr[2]);	//경매번호
+	$('table.tblBoard tbody tr.val td p.ftsnm').text(nameEnc(dataArr[9],"●")); //출하주
+	$('table.tblBoard tbody tr.val td p.cowSogWt').text(dataArr[25]); //중량
+	$('table.tblBoard tbody tr.val td p.lowsSbidLmtAm').text(Math.round(parseInt(dataArr[27]))); //최저가
+	// $('table.tblBoard tbody tr.val td p.prnyMtcn').text(Math.round(parseInt(dataArr[17]))); //임신
+	$('table.tblBoard tbody tr.val td p.sraIndvPasgQcn').text(dataArr[18]); //계대
+	$('table.tblBoard tbody tr.val td p.kpnNo').text(dataArr[11]&&dataArr[12].replace('KPN','')); //kpn
+	$('table.tblBoard tbody tr.val td p.mcowDsc').text(dataArr[14]); //어미
+	$('table.tblBoard tbody tr.val td p.matime').text(dataArr[16]); //산차
+	
+	$('table.tblBoard tbody tr.val td p.rmkCntn').removeAttr("style");
+	$('table.tblBoard tbody tr.val td p.rmkCntn').css("white-space",'nowrap');
+	$('table.tblBoard tbody tr.val td p.rmkCntn').removeClass("move-txt");
+	$('table.tblBoard tbody tr.val td p.rmkCntn').text(dataArr[28]?dataArr[28]:'　'); //비고
+	var width = $('table.tblBoard tbody tr.val td p.rmkCntn').width();
+	var len = $('table.tblBoard tbody tr.val td p.rmkCntn').text().trim().length * 12;
+	$('table.tblBoard tbody tr.val td p.rmkCntn').css('width',len>width?len:width);
+	
+	$('table.tblBoard tbody tr.val td p.rmkCntn').addClass("move-txt");
+	$('table.tblBoard tbody tr.val td p.sex').text(sex); //성별
+	convertDefaultValue('table.tblBoard tbody tr.val td p','-');
+}
