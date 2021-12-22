@@ -131,6 +131,9 @@
 			<if test="searchAucObjDsc != null and searchAucObjDsc != ''">
 				AND B.AUC_OBJ_DSC=#{searchAucObjDsc}
 			</if>
+			<if test="searchAucPrgSq != null and searchAucPrgSq != ''">
+				AND B.AUC_PRG_SQ =#{searchAucPrgSq}
+			</if>
 			<if test="searchTrmnAmnNo != null and searchTrmnAmnNo != ''">
 				AND B.TRMN_AMNNO=#{searchTrmnAmnNo}
 			</if>
@@ -169,6 +172,9 @@
 			AND D.NA_BZPLCNO = #{naBzPlcNo}
 	        <if test="searchDate != null and searchDate != ''">
 	            AND B.AUC_DT = #{searchDate}
+	        </if>
+	        <if test="searchTrmnAmnNo != null and searchTrmnAmnNo != ''">
+	            AND B.TRMN_AMNNO = #{searchTrmnAmnNo}
 	        </if>
 	        <if test="searchAucObjDsc != null and searchAucObjDsc != ''">
 				AND B.AUC_OBJ_DSC=#{searchAucObjDsc}
@@ -1185,32 +1191,55 @@
 
 	<select id="selectTotSoldPrice" parameterType="map" resultType="map">	
 		SELECT 
-			A.NA_BZPLC 
-			, A.AUC_DT
-			, NVL(SUM(A.SRA_SBID_AM),0) SRA_SBID_AM
-			, NVL(SUM(A.SRA_SBID_UPR),0) SRA_SBID_UPR
-		FROM TB_LA_IS_MH_SOG_COW A
-		INNER JOIN TB_LA_IS_BM_BZLOC B ON A.NA_BZPLC = B.NA_BZPLC
-		WHERE 1=1 
-        <if test="naBzPlcNo != null and naBzPlcNo != ''">
-			AND B.NA_BZPLCNO = #{naBzPlcNo}
-		</if>
-        <if test="naBzplc != null and naBzplc != ''">
-			AND A.NA_BZPLC = #{naBzplc}
-		</if>
-        <if test="searchAucObjDsc != null and searchAucObjDsc != ''">
-			AND A.AUC_OBJ_DSC=#{searchAucObjDsc}
-        </if>
-        <if test="searchTrmnAmnNo != null and searchTrmnAmnNo != ''">
-			AND A.TRMN_AMNNO = #{searchTrmnAmnNo}		
-		</if>
-        <if test="searchTxt != null and searchTxt != ''">
-            AND (
-            	SUBSTRING(A.SRA_INDV_AMNNO,LENGTH(A.SRA_INDV_AMNNO)-4,4 ) LIKE '%' || #{searchTxt} ||'%'
-            )
-        </if>	
-		AND A.AUC_DT = #{searchDate}
-		GROUP BY A.NA_BZPLC, A.AUC_DT
+			T.NA_BZPLC 
+			, T.AUC_DT
+			, SUM(T.SRA_SBID_AM) SRA_SBID_AM
+			, SUM(T.SRA_SBID_AM_SEX_W) SRA_SBID_AM_SEX_W
+			, SUM(T.SRA_SBID_AM_SEX_M) SRA_SBID_AM_SEX_M
+			, SUM(T.SRA_SBID_AM_SEX_ETC) SRA_SBID_AM_SEX_ETC
+		FROM (
+			SELECT 
+				A.NA_BZPLC 
+				, A.AUC_DT
+				, NVL(A.SRA_SBID_AM,0) SRA_SBID_AM
+				, CASE WHEN C.INDV_SEX_C = 1 THEN NVL(A.SRA_SBID_AM,0) ELSE 0 END SRA_SBID_AM_SEX_W /* 전체 암컷 출장우 */
+				, CASE WHEN C.INDV_SEX_C = 2 THEN NVL(A.SRA_SBID_AM,0) ELSE 0 END SRA_SBID_AM_SEX_M /* 전체 수컷 출장우 */
+				, CASE WHEN C.INDV_SEX_C != 2 AND C.INDV_SEX_C != 1 THEN NVL(A.SRA_SBID_AM,0) ELSE 0 END SRA_SBID_AM_SEX_ETC /* 전체 기타 출장우 */
+				, NVL(A.SRA_SBID_UPR,0) SRA_SBID_UPR
+			FROM TB_LA_IS_MH_SOG_COW A
+			INNER JOIN TB_LA_IS_BM_BZLOC B ON A.NA_BZPLC = B.NA_BZPLC
+			LEFT JOIN TB_LA_IS_MM_INDV C ON A.NA_BZPLC = C.NA_BZPLC 
+		        							AND A.SRA_SRS_DSC  = C.SRA_SRS_DSC
+											AND A.SRA_INDV_AMNNO = C.SRA_INDV_AMNNO											
+			WHERE 1=1 
+	        <if test="naBzPlcNo != null and naBzPlcNo != ''">
+				AND B.NA_BZPLCNO = #{naBzPlcNo}
+			</if>
+	        <if test="naBzplc != null and naBzplc != ''">
+				AND A.NA_BZPLC = #{naBzplc}
+			</if>
+	        <if test="searchAucObjDsc != null and searchAucObjDsc != ''">
+				AND A.AUC_OBJ_DSC=#{searchAucObjDsc}
+	        </if>
+	        <if test="searchTrmnAmnNo != null and searchTrmnAmnNo != ''">
+				AND A.TRMN_AMNNO = #{searchTrmnAmnNo}		
+			</if>
+	        <if test="searchTxt != null and searchTxt != ''">
+	            AND (
+	            	SUBSTRING(A.SRA_INDV_AMNNO,LENGTH(A.SRA_INDV_AMNNO)-4,4 ) LIKE '%' || #{searchTxt} ||'%'
+	            )
+	        </if>	
+	        <choose>
+	        	<when test = "searchDate != null and searchDate != ''">
+	        		AND A.AUC_DT = #{searchDate}
+	        	</when>
+	        	<otherwise>
+	        		AND A.AUC_DT = TO_CHAR(SYSDATE,'YYYYMMDD')
+	        	</otherwise>
+	        </choose>
+			
+		) T
+		GROUP BY T.NA_BZPLC, T.AUC_DT
 	</select>
 	
 	<!-- 공통 코드 리스트 조회 -->

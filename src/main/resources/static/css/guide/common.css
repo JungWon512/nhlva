@@ -8061,3 +8061,123 @@ div.list_txts {
 	text-overflow: ellipsis;
 	white-space: nowrap;
 }
+
+.sum_table {
+  margin: 0px 0px 20px 0px;
+  border: 1px solid #686868
+}
+
+.sum_table::after {
+  content: " ";
+  display: table;
+  clear: both;
+}
+
+.sum_table dl {
+  float: left;
+  width: 25%;
+  display: block;
+  background: #fff;
+  border-bottom: 0px;
+  border-right: 1px solid #686868;
+}
+
+.sum_table dl:last-child {
+  border-right: 0px;
+}
+
+.sum_table dt,
+dd {
+  display: block;
+  text-align: center;
+}
+
+.sum_table dt {
+  border-bottom: 1px solid #686868;
+  background: #FFF2CD;
+  font-weight: bold;
+}
+
+.sum_table dd {
+  display: table;
+  width: 100%;
+  table-layout: fixed;
+}
+
+.sum_table dt p,
+.sum_table dd p {
+  padding: 20px 1px;
+  vertical-align: text-top;
+  font-size: 17px;
+}
+
+.sum_table dd p {
+  display: block;
+}
+
+.sum_table dd p+p {
+  border-top: 1px solid #686868;
+}
+
+@media only all and (max-width:1024px) {
+  .sum_table {
+    margin-bottom: 0px;
+    margin: 0 10px 10px;
+  }
+
+  .sum_table dl {
+    display: block;
+    width: 100%;
+    border-top: 1px solid #686868;
+    border-right: 0px;
+  }
+
+  .sum_table dl:first-child {
+    border-top: 0px;
+  }
+
+  .sum_table dl::after {
+    content: " ";
+    display: table;
+    clear: both;
+  }
+
+  .sum_table dt,
+  .sum_table dd {
+    display: block;
+    letter-spacing: -0.45px;
+    text-align: center;
+    float: left;
+  }
+
+  .sum_table dt {
+    width: 30%;
+    border-bottom: 0px;
+    border-right: 1px solid #686868;
+  }
+
+  .sum_table dd {
+    width: 70%;
+    color: #fff;
+    color: #000;
+    display: table;
+  }
+  .sum_table dd p.cowCnt{
+  	width: 30%;
+  }
+  .sum_table dt p,
+  .sum_table dd p {
+    padding: 10px 1px;
+    vertical-align: text-top;
+    font-size: 16px;
+  }
+
+  .sum_table dd p {
+    display: table-cell;
+  }
+
+  .sum_table dd p+p {
+    border-left: 1px solid #686868;
+    border-top: 0px;
+  }
+}

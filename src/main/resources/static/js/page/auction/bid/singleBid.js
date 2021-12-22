@@ -182,16 +182,24 @@ $(function() {
 							modalAlert('','작업중 오류가 발생했습니다. <br/>관리자에게 문의하세요.');
 							return;
 						}
-						COMMONS.callAjax("/pop/entryList"
-							, "post"											
-							, {naBzPlcNo : $("#naBzPlcNo").val(), place : $("#naBzPlcNo").val(), tabAct : $('div.entryList div.tab_list ul li a.act').data('tabId')}
-							, 'application/json'
-							, 'html'
-							, function(data){
-								$(".pop_auction").html("");
-								$(data).appendTo($(".pop_auction"));
-								modalPopup('.pop_auction');
-							});
+						if(data.aucInfo){
+							var aucPrgSq =$('.pop_auction .schedule_area .list_table li dl dd.num').toArray().filter((obj) => {if($(obj).text() == data.aucInfo.AUC_PRG_SQ) return obj;});
+							var li = $(aucPrgSq[0]).closest('li');
+							li.find('input.sbidUpr').val(data.aucInfo.SBID_UPR);
+							li.find('.pd_pav span').text(data.aucInfo.SBID_UPR);
+							if(data.aucInfo.SBID_UPR && data.aucInfo.SBID_UPR != 0) li.find('.pd_pav a').addClass('act');
+							else li.find('.pd_pav a').removeClass('act');
+						}
+						//COMMONS.callAjax("/pop/entryList"
+						//	, "post"											
+						//	, {naBzPlcNo : $("#naBzPlcNo").val(), place : $("#naBzPlcNo").val(), tabAct : $('div.entryList div.tab_list ul li a.act').data('tabId')}
+						//	, 'application/json'
+						//	, 'html'
+						//	, function(data){
+						//		$(".pop_auction").html("");
+						//		$(data).appendTo($(".pop_auction"));
+						//		modalPopup('.pop_auction');
+						//	});
 				});
 				return;
 			}
@@ -219,16 +227,24 @@ $(function() {
 								, 'json'
 								, function(){
 									modalPopupClose('.popup .modal-wrap.pop_jjim_input.zim');
-									COMMONS.callAjax("/pop/entryList"
-										, "post"										
-										, {naBzPlcNo : $("#naBzPlcNo").val(), place : $("#naBzPlcNo").val(), tabAct : $('div.entryList div.tab_list ul li a.act').data('tabId')}
-										, 'application/json'
-										, 'html'
-										, function(data){
-											$(".pop_auction").html("");
-											$(data).appendTo($(".pop_auction"));
-											modalPopup('.pop_auction');
-										});
+									if(data.aucInfo){
+										var aucPrgSq =$('.pop_auction .schedule_area .list_table li dl dd.num').toArray().filter((obj) => {if($(obj).text() == data.aucInfo.AUC_PRG_SQ) return obj;});
+										var li = $(aucPrgSq[0]).closest('li');
+										li.find('input.sbidUpr').val(data.aucInfo.SBID_UPR);
+										li.find('.pd_pav span').text(data.aucInfo.SBID_UPR);
+										if(data.aucInfo.SBID_UPR && data.aucInfo.SBID_UPR != 0) li.find('.pd_pav a').addClass('act');
+										else li.find('.pd_pav a').removeClass('act');
+									}
+									//COMMONS.callAjax("/pop/entryList"
+									//	, "post"										
+									//	, {naBzPlcNo : $("#naBzPlcNo").val(), place : $("#naBzPlcNo").val(), tabAct : $('div.entryList div.tab_list ul li a.act').data('tabId')}
+									//	, 'application/json'
+									//	, 'html'
+									//	, function(data){
+									//		$(".pop_auction").html("");
+									//		$(data).appendTo($(".pop_auction"));
+									//		modalPopup('.pop_auction');
+									//	});
 							});
 						});
 			return;

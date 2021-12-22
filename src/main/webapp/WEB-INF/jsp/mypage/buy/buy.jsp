@@ -59,10 +59,40 @@
 				<li><a href="javascript:;" class="btn_excelBuy"><span class="ico_excel">엑셀다운</span></a></li>
 			</ul>
 		</div>
-		<div class="list_txts">
-			<fmt:formatNumber value="${totPrice.SRA_SBID_AM}" type="number" var="TOT_SRA_SBID_AM"/>
-			총금액 : <span>${empty TOT_SRA_SBID_AM?'0':TOT_SRA_SBID_AM}</span> 원
-		</div>
+		<div class="sum_table">
+			<dl>
+				<dt><p>암</p></dt>
+				<dd>
+					<p class="cowCnt">${buyCnt.CNT_SEX_W}두</p>
+					<fmt:formatNumber value="${totPrice.SRA_SBID_AM_SEX_W}" type="number" var="W_SRA_SBID_AM"/>
+					<p class="cowPrice">${empty W_SRA_SBID_AM?'0':W_SRA_SBID_AM} 원</p>
+				</dd>
+			</dl>
+			<dl>
+				<dt><p>수</p></dt>
+				<dd>
+					<p class="cowCnt">${buyCnt.CNT_SEX_M}두</p>
+					<fmt:formatNumber value="${totPrice.SRA_SBID_AM_SEX_M}" type="number" var="M_SRA_SBID_AM"/>
+					<p class="cowPrice">${empty M_SRA_SBID_AM?'0':M_SRA_SBID_AM} 원</p>
+				</dd>
+			</dl>
+			<dl>
+				<dt><p>기타</p></dt>
+				<dd>
+					<p class="cowCnt">${buyCnt.CNT_SEX_ETC}두</p>
+					<fmt:formatNumber value="${totPrice.SRA_SBID_AM_SEX_ETC}" type="number" var="ETC_SRA_SBID_AM"/>
+					<p class="cowPrice">${empty ETC_SRA_SBID_AM?'0':ETC_SRA_SBID_AM} 원</p>
+				</dd>
+			</dl>
+			<dl>
+				<dt><p>합계</p></dt>
+				<dd>
+					<p class="cowCnt">${buyCnt.CNT}두</p>
+					<fmt:formatNumber value="${totPrice.SRA_SBID_AM}" type="number" var="TOT_SRA_SBID_AM"/>
+					<p class="cowPrice">${empty TOT_SRA_SBID_AM?'0':TOT_SRA_SBID_AM} 원</p>
+				</dd>
+			</dl>
+		</div>		
 		<!-- //list_downs e -->
 		<div class="list_table auction_result">
 			<div class="list_head">

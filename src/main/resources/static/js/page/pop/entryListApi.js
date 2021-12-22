@@ -78,19 +78,27 @@
 					var searchObj = convertStrToObj(location.search);
 					searchObj.tabAct = $('.tab_list ul li a.act').data('tabId');
 					var search = convertObjToStr(searchObj);
-						location.href = location.pathname+'?'+search;
+					//location.href = location.pathname+'?'+search;
 					return;
 				}								
 				
 				params.inputUpr   = inputUpr;
 				modalComfirm('찜삭제',"찜가격을 삭제하시겠습니까?",function(){
 					 COMMONS.callAjax("/auction/api/deleteZimPrice", "post", params, 'application/json', 'json', function(data){
-						modalPopupClose('.popup .modal-wrap.pop_jjim_input.zim');					
+						modalPopupClose('.popup .modal-wrap.pop_jjim_input.zim');
+						if(data.aucInfo){
+							var aucPrgSq =$('.auc .list_table li dl dd.num').toArray().filter((obj) => {if($(obj).text() == data.aucInfo.AUC_PRG_SQ) return obj;});
+							var li = $(aucPrgSq[0]).closest('li');
+							li.find('input.sbidUpr').val(data.aucInfo.SBID_UPR ? data.aucInfo.SBID_UPR : '찜가격');
+							li.find('.pd_pav span').text(data.aucInfo.SBID_UPR ? data.aucInfo.SBID_UPR : '찜가격');
+							if(data.aucInfo.SBID_UPR && data.aucInfo.SBID_UPR != 0) li.find('.pd_pav a').addClass('act');
+							else li.find('.pd_pav a').removeClass('act');
+						}					
 						//location.reload();
-						var searchObj = convertStrToObj(location.search);
-						searchObj.tabAct = $('.tab_list ul li a.act').data('tabId');
-						var search = convertObjToStr(searchObj);
-						location.href = location.pathname+'?'+search;
+						//var searchObj = convertStrToObj(location.search);
+						//searchObj.tabAct = $('.tab_list ul li a.act').data('tabId');
+						//var search = convertObjToStr(searchObj);
+						//location.href = location.pathname+'?'+search;
 					 });	
 				 });
 			});
@@ -105,11 +113,20 @@
 							modalAlert('','작업중 오류가 발생했습니다. <br/>관리자에게 문의하세요.');
 							return;
 						}
+						if(data.aucInfo){
+							var aucPrgSq =$('.auc .list_table li dl dd.num').toArray().filter((obj) => {if($(obj).text() == data.aucInfo.AUC_PRG_SQ) return obj;});
+							var li = $(aucPrgSq[0]).closest('li');
+							li.find('input.sbidUpr').val(data.aucInfo.SBID_UPR);
+							li.find('.pd_pav span').text(data.aucInfo.SBID_UPR);
+							if(data.aucInfo.SBID_UPR && data.aucInfo.SBID_UPR != 0) li.find('.pd_pav a').addClass('act');
+							else li.find('.pd_pav a').removeClass('act');
+						}
+						
 						//location.reload();
-						var searchObj = convertStrToObj(location.search);
-						searchObj.tabAct = $('.tab_list ul li a.act').data('tabId');
-						var search = convertObjToStr(searchObj);
-						location.href = location.pathname+'?'+search;
+						//var searchObj = convertStrToObj(location.search);
+						//searchObj.tabAct = $('.tab_list ul li a.act').data('tabId');
+						//var search = convertObjToStr(searchObj);
+						//location.href = location.pathname+'?'+search;
 					 });
 				 }else{
 					modalAlert('',"최저가 이상의 가격을 입력해주세요.");
