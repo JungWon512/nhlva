@@ -57,24 +57,17 @@ var messageHandler = function(data) {
 	debugConsole(data);
 	var dataArr = data.split('|');
 	var gubun = dataArr[0];
-	switch(gubun){	
-		case "AS" : //현재 경매상태
-			if(auctionConfig.curAucSeq) auctionConfig.preAucSeq = auctionConfig.curAucSeq
-			auctionConfig.curAucSeq = dataArr[2];
-			scLoad(scData[auctionConfig.curAucSeq].split('|'));
-		break;	
+	switch(gubun){
 		case "AR" : //인증정보 response
 			auctionConfig.status = dataArr[2]=='2000'?'succ':'fail';
 			if(auctionConfig.status=='fail'){
 				socketDisconnect();
 			}
 		break;	
-		case "SC" : //현재 출품정보
-			scData[dataArr[2]] = data;
-			if(auctionConfig.curAucSeq && auctionConfig.curAucSeq != dataArr[2]) return;
-			scLoad(dataArr);
-		break;	
 		case "AS" : //현재 경매상태			
+			if(auctionConfig.curAucSeq) auctionConfig.preAucSeq = auctionConfig.curAucSeq
+			auctionConfig.curAucSeq = dataArr[2];
+			scLoad(scData[auctionConfig.curAucSeq].split('|'));
 			if(auctionConfig.auctionSt && (dataArr[6]=='8006' || dataArr[6]=='8002')){auctionConfig.auctionSt=dataArr[6]; return};
 			auctionConfig.auctionSt=dataArr[6];
 			auctionConfig.anStatus = false;
@@ -104,6 +97,11 @@ var messageHandler = function(data) {
 				break; 
 				default:break;
 			}
+		break;	
+		case "SC" : //현재 출품정보
+			scData[dataArr[2]] = data;
+			if(auctionConfig.curAucSeq && auctionConfig.curAucSeq != dataArr[2]) return;
+			scLoad(dataArr);
 		break;	
 		case "SD" : //경매종료 카운트		
 			if(dataArr[2]=='C'){				
