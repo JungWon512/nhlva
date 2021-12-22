@@ -52,11 +52,17 @@ var connectHandler = function() {
 var disconnectHandler = function() {	
 }
 
+var auctionConfig;
 var messageHandler = function(data) {
 	debugConsole(data);
 	var dataArr = data.split('|');
 	var gubun = dataArr[0];
 	switch(gubun){	
+		case "AS" : //현재 경매상태
+			if(!auctionConfig.asData) auctionConfig.asData = {};
+			if(auctionConfig.asData.curAucSeq) auctionConfig.asData.preAucSeq = auctionConfig.asData.curAucSeq
+			auctionConfig.asData.curAucSeq = dataArr[2];			
+		break;	
 		case "AR" : //인증정보 response
 			auctionConfig.status = dataArr[2]=='2000'?'succ':'fail';
 			if(auctionConfig.status=='fail'){
@@ -64,6 +70,7 @@ var messageHandler = function(data) {
 			}
 		break;	
 		case "SC" : //현재 출품정보
+				if(auctionConfig.asData.curAucSeq != dataArr[2]) return;
 				var sex = dataArr[13];
 //				switch(dataArr[13]){
 //					case '1' : sex = '암'; break;

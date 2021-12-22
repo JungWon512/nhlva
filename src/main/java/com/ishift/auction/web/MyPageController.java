@@ -64,13 +64,14 @@ public class MyPageController {
 		
 		map.put("naBzPlcNo", place);
 		if(sessionUtill.getUserId() != null) map.put("searchTrmnAmnNo", sessionUtill.getUserId());
-		List<Map<String,Object>> list=auctionService.entrySelectList(map);
+		List<Map<String,Object>> list=auctionService.entrySelectList(map);		
 		List<Map<String,Object>> bidList = auctionService.selectBidLogList(map);
 
 		if(sessionUtill.getUserId() != null) params.put("loginNo", sessionUtill.getUserId());
 		mav.addObject("johapData", johap);
 		mav.addObject("subheaderTitle","경매예정조회");
 		mav.addObject("dateList",datelist);
+		mav.addObject("buyCnt",auctionService.selectCountEntry(map));
 		mav.addObject("buyList",list);
 		mav.addObject("bidList",bidList);
 		mav.addObject("bidCnt", auctionService.selectBidLogListCnt(map));
@@ -91,6 +92,7 @@ public class MyPageController {
         	if(params.get("loginNo") != null) params.put("searchTrmnAmnNo", params.get("loginNo"));
         	List<Map<String,Object>> list=auctionService.entrySelectList(params);
         	result.put("totPrice", auctionService.selectTotSoldPrice(params));
+        	result.put("buyCnt",auctionService.selectCountEntry(params));
             result.put("data", list);
         }catch (SQLException | RuntimeException re) {
             result.put("success", false);

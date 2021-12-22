@@ -423,6 +423,14 @@ public class AuctionController extends CommonController {
             	params.put("loginNo", sessionUtill.getUserId());        		
         	}
             result.put("data", auctionService.insertUpdateZim(params));
+            Map<String,Object> map = new HashMap<String, Object>();
+            map.put("naBzplc", params.get("naBzPlc"));
+            map.put("searchDate", params.get("aucDt"));
+            map.put("searchAucObjDsc", params.get("aucObjDsc"));
+            map.put("searchAucPrgSq", params.get("aucPrgSq"));
+            map.put("loginNo", params.get("loginNo"));
+            List<Map<String,Object>> list = auctionService.entrySelectList(map);
+            result.put("aucInfo", list.size() > 0 ? list.get(0) : null);
         }catch (RuntimeException | SQLException re) {
             result.put("success", false);
             //result.put("message", re.getMessage());
@@ -443,6 +451,14 @@ public class AuctionController extends CommonController {
             	params.put("loginNo", sessionUtill.getUserId());        		
         	}
             result.put("data", auctionService.deleteZimPrice(params));
+            Map<String,Object> map = new HashMap<String, Object>();
+            map.put("naBzplc", params.get("naBzPlc"));
+            map.put("searchDate", params.get("aucDt"));
+            map.put("searchAucObjDsc", params.get("aucObjDsc"));
+            map.put("searchAucPrgSq", params.get("aucPrgSq"));
+            map.put("loginNo", params.get("loginNo"));
+            List<Map<String,Object>> list = auctionService.entrySelectList(map);
+            result.put("aucInfo", list.size() > 0 ? list.get(0) : null);
         }catch (RuntimeException | SQLException re) {
             result.put("success", false);
             //result.put("message", re.getMessage());
@@ -463,8 +479,9 @@ public class AuctionController extends CommonController {
 	        Map<String,Object> map = new HashMap<String,Object>();
 	        if(param.get("naBzplc") != null) map.put("naBzplc", param.get("naBzplc"));
 			if(param.get("loginNo") != null)map.put("loginNo", param.get("loginNo"));
+			if(param.get("date") != null) map.put("searchDate", param.get("date"));
+			else map.put("searchDate", today);
 			
-			map.put("searchDate", today);
 			//map.put("searchDate", param.get("date"));
 			Map<String,Object> johap=adminService.selectOneJohap(map);
 			List<Map<String,Object>> list=auctionService.entrySelectList(map);
@@ -539,5 +556,4 @@ public class AuctionController extends CommonController {
 		}
 		return result;
 	}
-
 }
