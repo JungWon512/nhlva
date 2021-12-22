@@ -169,7 +169,12 @@
 											AND A.SRA_INDV_AMNNO = B.SRA_INDV_AMNNO
 			INNER JOIN TB_LA_IS_BM_BZLOC D ON B.NA_BZPLC = D.NA_BZPLC
 			WHERE 1=1
-			AND D.NA_BZPLCNO = #{naBzPlcNo}
+	        <if test="naBzPlcNo != null and naBzPlcNo != ''">
+				AND D.NA_BZPLCNO = #{naBzPlcNo}
+	        </if>			
+	        <if test="naBzplc != null and naBzplc != ''">
+				AND A.NA_BZPLC = #{naBzplc}
+			</if>
 	        <if test="searchDate != null and searchDate != ''">
 	            AND B.AUC_DT = #{searchDate}
 	        </if>

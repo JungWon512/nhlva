@@ -480,6 +480,7 @@ public class AuctionController extends CommonController {
 			String today = date.format(DateTimeFormatter.ofPattern("yyyyMMdd"));
 	        Map<String,Object> map = new HashMap<String,Object>();
 	        if(param.get("naBzplc") != null) map.put("naBzplc", param.get("naBzplc"));
+	        if(param.get("naBzplc") != null) map.put("naBzPlc", param.get("naBzplc"));
 			if(param.get("loginNo") != null)map.put("loginNo", param.get("loginNo"));
 			if(param.get("date") != null) map.put("searchDate", param.get("date"));
 			else map.put("searchDate", today);
