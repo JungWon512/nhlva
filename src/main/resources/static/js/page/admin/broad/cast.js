@@ -30,9 +30,8 @@
 				height: '720',
 				codec: 'vp8',
 				maxBandwidth: 3000,
-				frameRate: 30,
+				frameRate: 30
 			},
-//			video : false,
 			audio : true,
 			audiogroup: ''
 		}

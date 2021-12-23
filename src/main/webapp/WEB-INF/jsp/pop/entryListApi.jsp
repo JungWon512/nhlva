@@ -56,7 +56,7 @@
 	                    	
 	                    	
 	                    	<input type="hidden" class="birth" name="birth_${st.index }" value="${vo.BIRTH}"/>
-	                    	<input type="hidden" class="sraPdmNm" name="sraPdmNm_${st.index }" value="${vo.SRA_PDMNM}"/>
+	                    	<input type="hidden" class="sraPdmNm" name="sraPdmNm_${st.index }" value="${vo.FTSNM}"/>
 	                    	<input type="hidden" class="indvSexCName" name="indvSexCName_${st.index }" value="${vo.INDV_SEX_C_NAME}"/>
 	                    	<input type="hidden" class="sraIndvAmnno" name="sraIndvAmnno_${st.index }" value="${vo.SRA_INDV_AMNNO}"/>
 	                    	<input type="hidden" class="kpnNoStr" name="kpnNoStr_${st.index }" value="${vo.KPN_NO_STR}"/>
@@ -173,7 +173,7 @@
 						<li>
 							<dl>
 								<dd class="num">${vo.AUC_PRG_SQ }</dd>
-								<dd class="name">${vo.SRA_PDMNM }</dd>
+								<dd class="name">${vo.FTSNM }</dd>
 								<dd class="pd_sex">${vo.INDV_SEX_C_NAME }</dd>
 								<dd class="pd_kg">${fn:split(vo.COW_SOG_WT,'.')[0]}</dd>
 								<dd class="pd_pay1">${vo.LOWS_SBID_LMT_AM <= 0 ? '0' : fn:split(vo.LOWS_SBID_LMT_UPR,'.')[0]}</dd>

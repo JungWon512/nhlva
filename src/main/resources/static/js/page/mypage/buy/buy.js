@@ -138,7 +138,7 @@
 				sHtml += "<li><dl>";
 				sHtml += " <dd class='date'>"+getStringValue(item.AUC_DT_STR)+"</dd>";	
 				sHtml += " <dd class='num'>"+getStringValue(item.AUC_PRG_SQ)+"</dd>";	
-				sHtml += " <dd class='name'>"+getStringValue(item.SRA_PDMNM)+"</dd>";	
+				sHtml += " <dd class='name'>"+getStringValue(item.FTSNM)+"</dd>";	
 				sHtml += " <dd class='pd_ea'>"+getStringValue(item.SRA_INDV_AMNNO_FORMAT)+"</dd>";	
 				sHtml += " <dd class='pd_sex'>"+getStringValue(item.INDV_SEX_C_NAME)+"</dd>";	
 				sHtml += " <dd class='pd_kg'>"+getStringValue(item.COW_SOG_WT)+"</dd>";	

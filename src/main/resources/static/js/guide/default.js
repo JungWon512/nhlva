@@ -1,10 +1,10 @@
+var preLoadDate;
 (function(){
     'use strict';
     var agent = navigator.userAgent.toLowerCase(),
         name = navigator.appName,
         browser;
         
-	var preLoadDate;
     if(name === 'Microsoft Internet Explorer' || agent.indexOf('trident') > -1 || agent.indexOf('edge/') > -1) {
         browser = 'ie';
         $("body").addClass("msie");
@@ -41,7 +41,7 @@
 		$('html').addClass("other")
 	}
 	//page unload page reload체크
-	if(location.pathname.indexOf('admin') < 0)
+	if(location.pathname.indexOf('office') < 0 || location.pathname.indexOf('office/task') > 0)
 		window.document.addEventListener("visibilitychange", function(e) {
 			if(window.document.visibilityState == 'hidden'){
 				preLoadDate=new Date();			

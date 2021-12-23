@@ -95,7 +95,7 @@
 							</c:when>
 							</c:choose>
 								<dd class="col3">${item.SRA_INDV_AMNNO_FORMAT}</dd>
-								<dd class="col4">${item.SRA_PDMNM_ORI}</dd>
+								<dd class="col4">${item.FTSNM_ORI}</dd>
 							</dl>
 						</li>
 					</c:forEach>

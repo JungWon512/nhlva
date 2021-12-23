@@ -248,7 +248,7 @@
 						listHtml.push('<dd class="col2" '+(item.MODL_NO != item.AUC_PRG_SQ?'style="color:#ff0000"':'')+'>' + item.MODL_NO + '</dd>');
 					}
 					listHtml.push('		<dd class="col3">' + item.SRA_INDV_AMNNO_FORMAT + '</dd>');
-					listHtml.push('		<dd class="col3">' + item.SRA_PDMNM_ORI + '</dd>');
+					listHtml.push('		<dd class="col3">' + item.FTSNM_ORI + '</dd>');
 					listHtml.push('	</dl>');
 					listHtml.push('</li>');
 				}

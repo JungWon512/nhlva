@@ -94,7 +94,7 @@
                     	
                     	<input type="hidden" class="birth" name="birth_${st.index }" value="${item.BIRTH}"/>
                     	<input type="hidden" class="birthMonth" name="birthMonth_${st.index }" value="${item.BIRTH_MONTH}"/>
-                    	<input type="hidden" class="sraPdmNm" name="sraPdmNm_${st.index }" value="${item.SRA_PDMNM}"/>
+                    	<input type="hidden" class="sraPdmNm" name="sraPdmNm_${st.index }" value="${item.FTSNM}"/>
                     	<input type="hidden" class="indvSexCName" name="indvSexCName_${st.index }" value="${item.INDV_SEX_C_NAME}"/>
                     	<input type="hidden" class="sraIndvAmnno" name="sraIndvAmnno_${st.index }" value="${item.SRA_INDV_AMNNO}"/>
                     	<input type="hidden" class="kpnNoStr" name="kpnNoStr_${st.index }" value="${item.KPN_NO_STR}"/>
@@ -111,7 +111,7 @@
                         <dl>
                             <dd class="date">${ item.AUC_DT_STR }</dd>
                             <dd class="num">${ item.AUC_PRG_SQ }</dd>
-                            <dd class="name">${ item.SRA_PDMNM}</dd>
+                            <dd class="name">${ item.FTSNM}</dd>
                             <dd class="pd_ea"><a href="javascript:;"><span class="" fullstr="${ item.SRA_INDV_AMNNO}">${ item.SRA_INDV_AMNNO_FORMAT}</span></a></dd>
                             <dd class="pd_sex">${ item.INDV_SEX_C_NAME}</dd>
                             <dd class="pd_date">${item.BIRTH}</dd>
@@ -183,7 +183,7 @@
                     	
                     	<input type="hidden" class="birth" name="birth_${st.index }" value="${item.BIRTH}"/>
                     	<input type="hidden" class="birthMonth" name="birthMonth_${st.index }" value="${item.BIRTH_MONTH}"/>
-                    	<input type="hidden" class="sraPdmNm" name="sraPdmNm_${st.index }" value="${item.SRA_PDMNM}"/>
+                    	<input type="hidden" class="sraPdmNm" name="sraPdmNm_${st.index }" value="${item.FTSNM}"/>
                     	<input type="hidden" class="indvSexCName" name="indvSexCName_${st.index }" value="${item.INDV_SEX_C_NAME}"/>
                     	<input type="hidden" class="sraIndvAmnno" name="sraIndvAmnno_${st.index }" value="${item.SRA_INDV_AMNNO}"/>
                     	<input type="hidden" class="kpnNoStr" name="kpnNoStr_${st.index }" value="${item.KPN_NO_STR}"/>

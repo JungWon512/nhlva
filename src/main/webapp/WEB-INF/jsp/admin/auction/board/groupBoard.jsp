@@ -96,7 +96,7 @@
 						<li>
 							<dl>
 								<dd class="num">${ vo.AUC_PRG_SQ }</dd>
-								<dd class="name">${ vo.SRA_PDMNM }</dd>
+								<dd class="name">${ vo.FTSNM }</dd>
 								<dd class="pd_ea">${ vo.SRA_INDV_AMNNO_FORMAT }</dd>
 								<dd class="pd_sex">${ vo.INDV_SEX_C_NAME }</dd>
 								<dd class="pd_kg"> ${(vo.COW_SOG_WT eq '' || vo.COW_SOG_WT == null || vo.COW_SOG_WT <= 0 ) ? '0' : fn:split(vo.COW_SOG_WT,'.')[0]} </dd>

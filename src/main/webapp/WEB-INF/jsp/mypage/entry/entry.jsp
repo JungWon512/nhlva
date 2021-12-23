@@ -29,7 +29,7 @@
 <!-- 				<select name="searchOrder" id="searchOrder"> -->
 <%-- 					<option value="" ${(paramVo.searchOrder == null || paramVo.searchOrder == '') ? 'selected':'' } >정렬</option> --%>
 <%--                     <option value="AUC_PRG_SQ" ${paramVo.searchOrder == 'AUC_PRG_SQ' ?'selected':'' }>경매번호</option> --%>
-<%--                     <option value="SRA_PDMNM" ${paramVo.searchOrder == 'SRA_PDMNM' ?'selected':'' }>출하주</option> --%>
+<%--                     <option value="FTSNM" ${paramVo.searchOrder == 'FTSNM' ?'selected':'' }>출하주</option> --%>
 <%--                     <option value="KPN_NO" ${paramVo.searchOrder == 'KPN_NO' ?'selected':'' }>KPN</option> --%>
 <!-- 				</select> -->
 <!-- 			</li> -->
@@ -86,7 +86,7 @@
 						<dl>
 							<dd class="date">${ item.AUC_DT_STR }</dd>
 							<dd class="num">${ item.AUC_PRG_SQ }</dd>
-							<dd class="name">${ item.SRA_PDMNM }</dd>
+							<dd class="name">${ item.FTSNM }</dd>
 							<dd class="pd_ea">${ item.SRA_INDV_AMNNO_FORMAT }</dd>
 							<dd class="pd_sex">${ item.INDV_SEX_C_NAME }</dd>
 							<dd class="pd_kg">${ fn:split(item.COW_SOG_WT,'.')[0] }</dd>

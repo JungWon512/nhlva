@@ -127,7 +127,7 @@
 							<dl>
 								<dd class="date">${ item.AUC_DT_STR }</dd>
 								<dd class="num">${ item.AUC_PRG_SQ }</dd>
-								<dd class="name">${ item.SRA_PDMNM }</dd>
+								<dd class="name">${ item.FTSNM }</dd>
 								<dd class="pd_ea">${ item.SRA_INDV_AMNNO_FORMAT }</dd>
 								<dd class="pd_sex">${ item.INDV_SEX_C_NAME }</dd>
 								<dd class="pd_kg">${ fn:split(item.COW_SOG_WT,'.')[0] }</dd>

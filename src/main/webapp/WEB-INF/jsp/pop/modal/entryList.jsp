@@ -145,7 +145,7 @@
 						<li>
 							<dl>
 								<dd class="num">${vo.AUC_PRG_SQ }</dd>
-								<dd class="name">${vo.SRA_PDMNM }</dd>
+								<dd class="name">${vo.FTSNM }</dd>
 								<dd class="pd_sex">${vo.INDV_SEX_C_NAME }</dd>
 								<dd class="pd_kg"><fmt:formatNumber value="${fn:split(vo.COW_SOG_WT,'.')[0]}" type="number" /></dd>
 								<dd class="pd_pay1">

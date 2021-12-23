@@ -235,7 +235,7 @@ var fnReloadView = function(){
 						var sHtml = "";					
 						sHtml += "	<li><dl>";
 						sHtml += "		<dd class='num'> "+vo.AUC_PRG_SQ +"</dd>";
-						sHtml += "		<dd class='name'>"+ vo.SRA_PDMNM +"</dd>";
+						sHtml += "		<dd class='name'>"+ vo.FTSNM +"</dd>";
 						sHtml += "		<dd class='pd_ea'> "+vo.SRA_INDV_AMNNO_FORMAT +"</dd>";
 						sHtml += "		<dd class='pd_sex'> "+vo.INDV_SEX_C_NAME +"</dd>";
 						sHtml += "		<dd class='pd_kg'> "+((vo.COW_SOG_WT == '' || vo.COW_SOG_WT == null || vo.COW_SOG_WT <= 0 ) ? '0' : vo.COW_SOG_WT) +"</dd>";

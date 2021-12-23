@@ -185,8 +185,8 @@ $(function() {
 						if(data.aucInfo){
 							var aucPrgSq =$('.pop_auction .schedule_area .list_table li dl dd.num').toArray().filter((obj) => {if($(obj).text() == data.aucInfo.AUC_PRG_SQ) return obj;});
 							var li = $(aucPrgSq[0]).closest('li');
-							li.find('input.sbidUpr').val(data.aucInfo.SBID_UPR);
-							li.find('.pd_pav span').text(data.aucInfo.SBID_UPR);
+							li.find('input.sbidUpr').val(data.aucInfo.SBID_UPR ? data.aucInfo.SBID_UPR : '찜가격');
+							li.find('.pd_pav span').text(data.aucInfo.SBID_UPR ? data.aucInfo.SBID_UPR : '찜가격');
 							if(data.aucInfo.SBID_UPR && data.aucInfo.SBID_UPR != 0) li.find('.pd_pav a').addClass('act');
 							else li.find('.pd_pav a').removeClass('act');
 						}
@@ -225,13 +225,13 @@ $(function() {
 								, $("form[name=frm_zim]").serializeObject()
 								, 'application/json'
 								, 'json'
-								, function(){
+								, function(data){
 									modalPopupClose('.popup .modal-wrap.pop_jjim_input.zim');
 									if(data.aucInfo){
 										var aucPrgSq =$('.pop_auction .schedule_area .list_table li dl dd.num').toArray().filter((obj) => {if($(obj).text() == data.aucInfo.AUC_PRG_SQ) return obj;});
 										var li = $(aucPrgSq[0]).closest('li');
-										li.find('input.sbidUpr').val(data.aucInfo.SBID_UPR);
-										li.find('.pd_pav span').text(data.aucInfo.SBID_UPR);
+										li.find('input.sbidUpr').val(data.aucInfo.SBID_UPR ? data.aucInfo.SBID_UPR : '찜가격');
+										li.find('.pd_pav span').text(data.aucInfo.SBID_UPR ? data.aucInfo.SBID_UPR : '찜가격');
 										if(data.aucInfo.SBID_UPR && data.aucInfo.SBID_UPR != 0) li.find('.pd_pav a').addClass('act');
 										else li.find('.pd_pav a').removeClass('act');
 									}
