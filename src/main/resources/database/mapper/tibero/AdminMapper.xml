@@ -294,4 +294,12 @@
  			AND TO_CHAR(VISIT_DTM,'YYYYMM') = #{searchDate}
  		</if>
     </sql>
+    
+	
+	<select id="selectBidderCnt" parameterType="map" resultType="java.lang.Integer">
+		SELECT COUNT(*) CNT 
+		FROM TB_LA_IS_MH_AUC_ENTR 
+		WHERE AUC_DT = #{searchDate}
+		AND NA_BZPLC = #{naBzplc}
+	</select>
 </mapper>

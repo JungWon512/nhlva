@@ -67,4 +67,9 @@ public class AdminServiceImpl implements AdminService {
     public int selectVisitTotalCnt(Map<String, Object> map) throws SQLException{
     	return adminDAO.selectVisitTotalCnt(map);
     }
+    
+    @Override
+    public int selectBidderCnt(Map<String, Object> param) throws SQLException{
+    	return adminDAO.selectBidderCnt(param);
+    }
 }

@@ -54,6 +54,11 @@ public class AdminDAO {
 		return mainDao.count("admin.selectVisitTotalCnt", map);
 	}
 
+	public int selectBidderCnt(Map<String, Object> param) throws SQLException {
+		// TODO Auto-generated method stub
+		return mainDao.count("admin.selectBidderCnt", param);
+	}
+
 
 
 }

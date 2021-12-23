@@ -136,8 +136,12 @@ public class AdminController {
 			final Map<String,Object> map = new HashMap<>();
 			final AdminUserDetails userVo = (AdminUserDetails)sessionUtill.getUserVo();
 			map.put("delYn", "0");
-			if(userVo != null) map.put("naBzPlcNo", userVo.getPlace());
-			mav.addObject("johapData", adminService.selectOneJohap(map));
+			if(userVo != null) {
+				map.put("naBzPlcNo", userVo.getPlace());
+				map.put("naBzplc", userVo.getNaBzplc());
+			}
+			Map<String,Object> johapData = adminService.selectOneJohap(map);
+			mav.addObject("johapData", johapData);
 
 			final LocalDateTime date = LocalDateTime.now();
 			final String today = date.format(DateTimeFormatter.ofPattern("yyyyMMdd"));
@@ -147,6 +151,7 @@ public class AdminController {
 			final Map<String,Object> count =auctionService.selectCountEntry(map);
 			String usrid = userVo.getUsrid();
 			mav.addObject("auctCount",count);
+			mav.addObject("bidderCnt", adminService.selectBidderCnt(map));
 			mav.addObject("userId", usrid);
 			mav.addObject("today",date.format(DateTimeFormatter.ofPattern("yyyy-MM-dd")));
 			String naBzPlc = userVo.getNaBzplc();
@@ -412,5 +417,30 @@ public class AdminController {
 	}
 	private String getStringValue(Object value) {
 		return value == null ? "" : value.toString();
+	}
+	
+	@ResponseBody
+	@RequestMapping(value = "/office/monster/getBidderCnt" ,method = { RequestMethod.GET, RequestMethod.POST })
+	public Map<String, Object> getBidderCnt(@RequestParam Map<String,Object> param) throws Exception{
+		final Map<String,Object> map = new HashMap<>();
+		final Map<String,Object> result = new HashMap<>();
+		System.out.println(param);
+		try {
+			if(null == param.get("searchDate") || "".equals(param.get("searchDate"))) {
+				final LocalDateTime date = LocalDateTime.now();
+				final String today = date.format(DateTimeFormatter.ofPattern("yyyyMMdd"));
+				param.put("searchDate",today);
+			}
+						
+			result.put("data", adminService.selectBidderCnt(param));
+			result.put("success", true);
+		}catch (RuntimeException re) {
+			result.put("success", false);
+			log.error("AdminController.adminBoard : {} ",re);
+		} catch (SQLException se) {
+			result.put("success", false);
+			log.error("AdminController.adminBoard : {} ",se);
+		}
+		return result;
 	}
 }

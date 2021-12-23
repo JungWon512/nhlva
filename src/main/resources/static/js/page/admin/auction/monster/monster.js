@@ -45,7 +45,23 @@ var setEventListener = function(){
 		//if(socket && socket.io.connected.length > 0){ 
 		//	var packet = 'AK|'+$('#naBzPlc').val();
 		//	socket.emit('packetData', packet);	
-		//}
+		//}	
+				
+		$.ajax({
+			url: '/office/monster/getBidderCnt',
+			data: {naBzplc:$('#naBzPlc').val()},
+			type: 'POST',
+			dataType: 'json',
+			success : function(json) {
+				if(json && json.data){
+					$('p.bidEntrCnt').text(fnSetComma(json.data)+'명');
+				}else{
+					$('p.bidEntrCnt').text('0명');					
+				}
+			},
+			error: function(xhr, status, error) {
+			}
+		});
 		var tdArr = [];
 		
 		//나가지 않은 접속자 sorting 및 td 저장

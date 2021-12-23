@@ -30,4 +30,6 @@ public interface AdminService {
 	List<Map<String,Object>> selectListVisit(Map<String, Object> map) throws SQLException;
 
 	int selectVisitTotalCnt(Map<String, Object> map) throws SQLException;
+
+	int selectBidderCnt(Map<String, Object> param) throws SQLException;
 }

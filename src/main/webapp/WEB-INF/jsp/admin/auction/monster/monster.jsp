@@ -23,7 +23,6 @@
 							<col width="16%">
 							<col width="12%">
 							<col width="12%">
-							<col width="12%">
 							<col width="*">
 						</colgroup>
 						<tbody>
@@ -33,6 +32,7 @@
 								<td class="bg-deep"><p class="">경매</p></td>
 <!-- 								<td class="bg-deep"><p class="">구분</p></td> -->
 								<td class="bg-deep"><p class="">출장우</p></td>
+								<td class="bg-deep"><p class="">참여자 수</p></td>
 								<td class="bg-dark" rowspan="2" colspan="2">
 									<p class="tit1">접속 <span class="num">0</span>명</p>
 									<p class="tit2">응찰 <span class="num">0</span>명</p>
@@ -42,7 +42,8 @@
 								<td class="bg-blue"><p class="">${today }</p></td>
 								<td class="bg-blue"><p class="">${johapData.AUC_DSC eq '1' ? '단일' : '일괄'}</p></td>
 <!-- 								<td class="bg-blue"><p class="">큰소경매</p></td> -->
-								<td class="bg-blue"><p class="">${auctCount.CNT }두</p></td>
+								<td class="bg-blue"><p class="">${auctCount.CNT } 두</p></td>
+								<td class="bg-blue"><p class="bidEntrCnt">${bidderCnt }명</p></td>
 							</tr>
 						</tbody>
 					</table>
@@ -60,7 +61,8 @@
 							<tr>
 								<td class="mt-gray"><button id="btnStart">모니터링<br>시작</button></td>
 								<td class="mt-gray"><button id="btnStop">모니터링<br>중지</button></td>
-								<td class="mt-gray"><button id="btnSort">매수인<br>정렬</button></td>
+<!-- 								<td class="mt-gray"><button id="btnSort">매수인<br>정렬</button></td> -->
+								<td class="mt-gray"><button id="btnSort">새로고침</button></td>
 							</tr>
 						</tbody>
 					</table>
