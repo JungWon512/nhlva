@@ -110,7 +110,7 @@ var messageHandler = function(data) {
 				error: function(xhr, status, error) {
 				}
 			}).done(function (json) {
-				console.log(json);				
+				debugConsole(json);				
 				var success = json.success;
 				var message = json.message;
 				if (!success) {
@@ -215,7 +215,7 @@ var fnReloadView = function(){
 		error: function(xhr, status, error) {
 		}
 	}).done(function (json) {
-		console.log(json);				
+		debugConsole(json);				
 		var success = json.success;
 		var message = json.message;
 		if (!success) {

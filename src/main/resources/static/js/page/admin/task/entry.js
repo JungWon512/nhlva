@@ -175,7 +175,7 @@
 					error: function(xhr, status, error) {
 					}
 				}).done(function (body) {
-					console.log(body);
+					debugConsole(body);
 				});
 			});
 			

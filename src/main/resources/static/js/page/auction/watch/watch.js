@@ -2,8 +2,8 @@ $(function() {
 	
     var setLayout = function() {		
 		$(".seeBox_slick ul.slider").slick({
-			dots: true,
-			adaptiveHeight: true,
+			dots: true
+//			adaptiveHeight: true
 		});
 		$('.m_sound').removeClass('fix_right');
 		$('.m_sound').addClass('off');
@@ -356,7 +356,7 @@ var setRemonJoinRemote =async function (index,callback) {
 			return pre-next;
 		});
 		var height = $('div.seeBox_slick ul.slider .boarder').closest('.slick-slide').height();
-		$('div.seeBox_slick ul.slider li.video_item').height(height-1);
+		$('div.seeBox_slick ul.slider li.video_item').height(height-3);
 		
 		if(castList.length > 0){
 			if($('#kkoSvcCnt').val() < index) return;
@@ -379,7 +379,7 @@ var setLoopChDraw = function(castList){
 	});
 	
 	var height = $('div.seeBox_slick ul.slider .boarder').closest('.slick-slide').height();
-	$('div.seeBox_slick ul.slider li.video_item').height(height-1);
+	$('div.seeBox_slick ul.slider li.video_item').height(height-3);
 	
 	if(sortingCastList.length > 0){
 		for(var i=0;i<sortingCastList.length;i++){

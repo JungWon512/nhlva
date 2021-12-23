@@ -7203,7 +7203,7 @@ Base styles: contents layer
 	font-weight: 500;
 	font-size: 18px;
 	color: #1a1a1a;
-	min-width: 50px
+	min-width: 55px
 }
 
 .video_transmission .video_list .item .select_area {
@@ -7262,9 +7262,15 @@ Base styles: contents layer
 .video_transmission .video_list .item .btn_box button.btn_start {
 	background-color: #3699ff
 }
+.video_transmission .video_list .item .btn_box button.btn_start:disabled {
+	background-color: #75a5d77d
+}
 
 .video_transmission .video_list .item .btn_box button.btn_stop {
 	background-color: #ffaf00
+}
+.video_transmission .video_list .item .btn_box button.btn_stop:disabled {
+	background-color: #ffaf008f
 }
 
 .admin_main {
