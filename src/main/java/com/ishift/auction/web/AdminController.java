@@ -424,7 +424,6 @@ public class AdminController {
 	public Map<String, Object> getBidderCnt(@RequestParam Map<String,Object> param) throws Exception{
 		final Map<String,Object> map = new HashMap<>();
 		final Map<String,Object> result = new HashMap<>();
-		System.out.println(param);
 		try {
 			if(null == param.get("searchDate") || "".equals(param.get("searchDate"))) {
 				final LocalDateTime date = LocalDateTime.now();
