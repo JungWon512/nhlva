@@ -3,6 +3,27 @@
 
 <style type="text/css">
 	div.list_body input{padding-right:8px; text-align:right;border-radius:5px;font-size:16px;}
+	div.barcoad_input input{font-size:20px;padding-right:0px !important;}
+	div.barcoad_input input::placeholder{font-size:15px;}
+	li.barcoad p{font-size:18px !important;}
+	dd.col5 button{
+		display: inline-block;
+		width: 75%;
+		text-align: center;
+		margin: -5px 5px;
+		padding: 0 5px;
+		background: #007eff;
+		color: #fff;
+		font-size: 16px;
+		font-family: "Noto Sans KR", "Roboto", "AppleGothic", "sans-serif";
+		font-weight: 500;
+		letter-spacing: 0.5px;
+		border-radius: 5px;
+		-webkit-border-radius: 5px;
+		line-height:30px;
+	}
+	dd.col5{padding:0 !important;}
+	div.list_body ul{height: 410px !important;}
 </style>
 
 <!--  admin_weight_list [s] -->
@@ -25,9 +46,9 @@
 					</select>
 				</li>
 				<li class="barcoad">
-					<p>바코드</p>
+					<p>바코드/경매번호</p>
 					<div class="barcoad_input">
-						<input type="text" name="searchTxt" maxlength="15" value="${params.searchTxt}" placeholder="바코드" pattern="\d*" inputmode="numeric"/>
+						<input type="text" name="searchTxt" maxlength="15" value="${params.searchTxt}" placeholder="바코드/경매번호" pattern="\d*" inputmode="numeric" />
 						<button type="button" class="btn_input_reset">X</button>
 					</div>
 				</li>
@@ -56,6 +77,9 @@
 					</c:choose>
 					<dd class="col3">귀표</dd>
 					<dd class="col4">출하자</dd>
+					<c:if test="${params.regType ne 'AW'}">
+						<dd class="col4">수정</dd>
+					</c:if>
 				</dl>
 			</div>
 			<div class="list_body">
@@ -96,6 +120,9 @@
 							</c:choose>
 								<dd class="col3">${item.SRA_INDV_AMNNO_FORMAT}</dd>
 								<dd class="col4">${item.FTSNM_ORI}</dd>
+								<c:if test="${params.regType ne 'AW'}">
+									<dd class="col4 col5"><button type="button" class="btn_modify">수정</button></dd>
+								</c:if>
 							</dl>
 						</li>
 					</c:forEach>
@@ -105,10 +132,10 @@
 		<!-- list_table [s] -->
 		<!-- btn_area [s] -->
 		<c:if test="${params.regType ne 'AW'}">
-			<div class="btn_area">
-				<a href="javascript:;" class="list_sch btn_modify">변경</a>
+			<!-- div class="btn_area">
+				<a href="javascript:;" class="list_sch btn_modify_pop">변경</a>
 				<a href="javascript:;" class="list_sch btn_back">이전</a>
-			</div>
+			</div -->
 		</c:if>
 		<!-- btn_area [e] -->
 	</form>

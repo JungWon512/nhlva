@@ -130,6 +130,8 @@
 			<if test="searchTxt != null and searchTxt != ''">
 			    AND (
 			    	SUBSTRING(A.SRA_INDV_AMNNO,LENGTH(A.SRA_INDV_AMNNO)-4,4 ) LIKE '%' || #{searchTxt} ||'%'
+			    	OR
+			    	TO_CHAR(B.AUC_PRG_SQ) LIKE '%' || #{searchTxt} ||'%'
 			    )
 			</if>	
 			<if test="searchDate != null and searchDate != ''">

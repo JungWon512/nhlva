@@ -5817,7 +5817,7 @@ Base styles: contents layer
 	font-weight: 700;
 	color: #1a1a1a;
 	background: url(/static/images/guide/input_reset.svg) no-repeat center center;
-	background-size: 12px 12px;
+	background-size: 10px 10px;
 	text-indent: -9999px;
 	transform: translateY(-50%);
 	-webkit-transform: translateY(-50%);
@@ -5942,19 +5942,19 @@ Base styles: contents layer
 
 @media only all and (max-width: 640px) {
 	.admin_area .list_body ul {
-		max-height: 380px
+		max-height: 410px
 	}
 }
 
 @media only all and (max-width: 360px) {
 	.admin_area .list_body ul {
-		max-height: 340px
+		max-height: 360px
 	}
 }
 
 @media only all and (max-width: 320px) {
 	.admin_area .list_body ul {
-		max-height: 300px
+		max-height: 330px
 	}
 }
 

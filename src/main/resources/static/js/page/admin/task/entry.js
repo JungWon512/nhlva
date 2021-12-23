@@ -35,10 +35,10 @@
 			
 			// 리스트 선택
 			$(document).on("click", ".list_body > ul > li", function(e){
-				var regType = $("input[name='regType']").val();
-				if (regType == "AW") return;
-				$(".list_body ul li").not(this).removeClass("act");
-				$(this).toggleClass("act");
+//				var regType = $("input[name='regType']").val();
+//				if (regType == "AW") return;
+//				$(".list_body ul li").not(this).removeClass("act");
+//				$(this).toggleClass("act");
 			});
 			
 			// 유형 선택 화면으로 이동
@@ -51,7 +51,12 @@
 			});
 			
 			// 변경 팝업
-			$(".btn_modify").on("click", function(){
+			$(document).on("click", ".btn_modify", function(){
+				fnModifyPop($(this).closest("li"));
+			});
+			
+			// 변경 팝업
+			$(".btn_modify_pop").on("click", function(){
 				if ($(".list_body > ul").find("li.act").length == 0) {
 					modalAlert("", "변경할 대상을 선택하세요.");
 					return
@@ -248,7 +253,10 @@
 						listHtml.push('<dd class="col2" '+(item.MODL_NO != item.AUC_PRG_SQ?'style="color:#ff0000"':'')+'>' + item.MODL_NO + '</dd>');
 					}
 					listHtml.push('		<dd class="col3">' + item.SRA_INDV_AMNNO_FORMAT + '</dd>');
-					listHtml.push('		<dd class="col3">' + item.FTSNM_ORI + '</dd>');
+					listHtml.push('		<dd class="col4">' + item.FTSNM_ORI + '</dd>');
+					if(regType != "AW") {
+						listHtml.push('		<dd class="col4 col5"><button type="button" class="btn_modify">수정</button></dd>');
+					}
 					listHtml.push('	</dl>');
 					listHtml.push('</li>');
 				}
@@ -259,12 +267,12 @@
 			$(".list_body > ul").animate({
 				scrollTop : ($(".list_body > ul > li").index(li) - 1) * ($(".list_body > ul > li:first").height() + 1)
 			}, 500);
-			if (regType == "L") {
-				li.addClass("act");
-			}
-			else {
+//			if (regType == "L") {
+//				li.addClass("act");
+//			}
+//			else {
 				$(".list_body > ul").find("li#" + aucPrgSq).addClass("act");
-			}
+//			}
 		};
 		
 		var fnLayerPop = function(params, cowInfo) {
