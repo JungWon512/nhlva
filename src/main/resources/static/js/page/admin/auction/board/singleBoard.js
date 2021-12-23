@@ -101,7 +101,7 @@ var messageHandler = function(data) {
 		break;	
 		case "SC" : //현재 출품정보
 			scData[dataArr[2]] = data;
-			if(auctionConfig.curAucSeq && auctionConfig.curAucSeq != dataArr[2]) return;
+			if(auctionConfig.curAucSeq || auctionConfig.curAucSeq != dataArr[2]) return;
 			scLoad(dataArr);
 		break;	
 		case "SD" : //경매종료 카운트		

@@ -102,7 +102,7 @@ $(function() {
 });
 
 //소켓통신 connect 및 이벤트 바인딩
-var socket=null,auctionConfig={};
+var socket=null,auctionConfig={},scData={};
 var socketStart = function(){
 	if(!$('#naBzPlc').val()) return;        
 	if(socket){ socket.connect(); return;}
@@ -183,6 +183,10 @@ var messageHandler = function(data) {
 		break;	
 		case "AS" : //현재 경매상태
 			//AS|8808990656656|65|3700000|0|8004||||0|0
+			if(auctionConfig.curAucSeq) auctionConfig.preAucSeq = auctionConfig.curAucSeq
+			auctionConfig.curAucSeq = dataArr[2];
+			if(scData[auctionConfig.curAucSeq]) scLoad(scData[auctionConfig.curAucSeq].split('|'));
+			
 			if(!auctionConfig.asData) auctionConfig.asData = {};
 			var tmpAsDAta = { 
 				aucPrgSq: dataArr[2]
@@ -201,34 +205,9 @@ var messageHandler = function(data) {
 			changeTrRow(tr);
 		break;	
 		case "SC" : //현재 출품정보
-			if($('#aucDsc').val() == '2') return;
-			if(!auctionConfig.scData) auctionConfig.scData = {};
-			//if(auctionConfig.scData.curAucSeq) auctionConfig.scData.preAucSeq = auctionConfig.scData.curAucSeq
-			auctionConfig.scData.curAucSeq = dataArr[2];
-						
-			//관전 전광판 데이터 update				
-			$('.vidioSlide li.boarder ul dl dd.auctionNum').text(dataArr[2]);
-			$('.vidioSlide li.boarder ul dl dd.ftsnm').text(nameEnc(dataArr[9]));
-			$('.vidioSlide li.boarder ul dl dd.sex').text(dataArr[13]);
-			$('.vidioSlide li.boarder ul dl dd.cowSogWt').text(dataArr[25]);
-			$('.vidioSlide li.boarder ul dl dd.matime').text(dataArr[16]);
-			$('.vidioSlide li.boarder ul dl dd.mcowDsc').text(dataArr[14]); //어미								
-			$('.vidioSlide li.boarder ul dl dd.sraIndvPasgQcn').text(dataArr[18]);
-			$('.vidioSlide li.boarder ul dl dd.kpnNo').text(dataArr[11] && dataArr[12].replace('KPN',''));
-			$('.vidioSlide li.boarder .seeBox_slick_inner ul dl dd.lowsSbidLmtAm').text(Math.round(dataArr[27])+''); //24 :최초낙찰 ,25:최저낙찰
-			$('.vidioSlide li.boarder .mo_seeBox ul dl dd.lowsSbidLmtAm').text(Math.round(dataArr[27])+''); //24 :최초낙찰 ,25:최저낙찰
-			$('.vidioSlide li.boarder ul dl dd.rmkCntn p').text(dataArr[28]);
-			convertDefaultValue('.vidioSlide li.boarder ul dl dd');
-			var tr = getTrRow(auctionConfig.scData.curAucSeq);
-			tr.find('dl dd.ftsnm').text(nameEnc(dataArr[9]));
-			tr.find('dl dd.cowSogWt').text(dataArr[25]);
-			tr.find('dl dd.lowsSbidLmtAm').text(dataArr[27]+'');
-			tr.find('dl dd.sraSbidAm').text(dataArr[31]+'');
-			tr.find('dl dd.rmkCntn').text(dataArr[28]);
-			
-			convertDefaultValue(tr.find('dl dd'));			
-			calcPiePercent();
-			//changeTrRow(tr);
+			scData[dataArr[2]] = data;
+			if(auctionConfig.curAucSeq || auctionConfig.curAucSeq != dataArr[2]) return;
+			scLoad(dataArr);
 		break;	
 		case "AF" :
 			if($('#aucDsc').val() != '1') return; 
@@ -407,3 +386,35 @@ var setLoopChJoinInIn = function(cast,i){
     remoteVideoArr[castName] = tmpRemon;
 	tmpRemon.joinCast(castName);
 };
+
+
+var scLoad = function(dataArr){	
+	if($('#aucDsc').val() == '2') return;
+	if(!auctionConfig.scData) auctionConfig.scData = {};
+	//if(auctionConfig.scData.curAucSeq) auctionConfig.scData.preAucSeq = auctionConfig.scData.curAucSeq
+	auctionConfig.scData.curAucSeq = dataArr[2];
+				
+	//관전 전광판 데이터 update				
+	$('.vidioSlide li.boarder ul dl dd.auctionNum').text(dataArr[2]);
+	$('.vidioSlide li.boarder ul dl dd.ftsnm').text(nameEnc(dataArr[9]));
+	$('.vidioSlide li.boarder ul dl dd.sex').text(dataArr[13]);
+	$('.vidioSlide li.boarder ul dl dd.cowSogWt').text(dataArr[25]);
+	$('.vidioSlide li.boarder ul dl dd.matime').text(dataArr[16]);
+	$('.vidioSlide li.boarder ul dl dd.mcowDsc').text(dataArr[14]); //어미								
+	$('.vidioSlide li.boarder ul dl dd.sraIndvPasgQcn').text(dataArr[18]);
+	$('.vidioSlide li.boarder ul dl dd.kpnNo').text(dataArr[11] && dataArr[12].replace('KPN',''));
+	$('.vidioSlide li.boarder .seeBox_slick_inner ul dl dd.lowsSbidLmtAm').text(Math.round(dataArr[27])+''); //24 :최초낙찰 ,25:최저낙찰
+	$('.vidioSlide li.boarder .mo_seeBox ul dl dd.lowsSbidLmtAm').text(Math.round(dataArr[27])+''); //24 :최초낙찰 ,25:최저낙찰
+	$('.vidioSlide li.boarder ul dl dd.rmkCntn p').text(dataArr[28]);
+	convertDefaultValue('.vidioSlide li.boarder ul dl dd');
+	var tr = getTrRow(auctionConfig.scData.curAucSeq);
+	tr.find('dl dd.ftsnm').text(nameEnc(dataArr[9]));
+	tr.find('dl dd.cowSogWt').text(dataArr[25]);
+	tr.find('dl dd.lowsSbidLmtAm').text(dataArr[27]+'');
+	tr.find('dl dd.sraSbidAm').text(dataArr[31]+'');
+	tr.find('dl dd.rmkCntn').text(dataArr[28]);
+	
+	convertDefaultValue(tr.find('dl dd'));			
+	calcPiePercent();
+	//changeTrRow(tr);
+}

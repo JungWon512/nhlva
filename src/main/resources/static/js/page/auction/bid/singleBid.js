@@ -278,7 +278,7 @@ var inputNumberVaild = function(el,len){
 }
 
 // 소켓통신 connect 및 이벤트 바인딩 [s]
-var socket = null, auctionConfig = {seData : {}};
+var socket = null, auctionConfig = {seData : {}},scData={};;
 var socketStart = function(){
 	if(!$('#naBzPlc').val()) return;
 	if(socket){ socket.connect(); return;}
@@ -472,6 +472,11 @@ var messageHandler = function(data) {
 			// 구분자 | 조합구분코드 | 출품번호 | 경매회차 | 시작가 | 현재응찰자수 | 경매상태 | 1순위회원번호 | 2순위회원번호 | 3순위회원번호 | 경매진행완료출품수 | 경매잔여출품수
 			// 8001. NONE(기본값-미진행), 8002. READY(대기), 8003. START(시작), 8004. PROGRESS(진행)
 			// 8005. PASS(정지), 8006. COMPLETED(완료), 8007. FINISH(종료)
+			
+			if(auctionConfig.curAucSeq) auctionConfig.preAucSeq = auctionConfig.curAucSeq
+			auctionConfig.curAucSeq = dataArr[2];
+			if(scData[auctionConfig.curAucSeq]) scLoad(scData[auctionConfig.curAucSeq].split('|'));
+			
 			if(!auctionConfig.asData) auctionConfig.asData = {};
 			auctionConfig.asData.status = dataArr[6];
 			auctionConfig.asData.aucSeq = dataArr[2];
@@ -544,37 +549,10 @@ var messageHandler = function(data) {
 			// 브랜드명 | 생년월일 | KPN번호 | 개체성별코드 | 어미소구분코드 | 어미소축산개체관리번호 | 산차 | 임신개월수 | 계대 | 계체식별번호 |
 			// 축산개체종축등록번호 | 등록구분번호 | 출하생산지역 | 친자검사결과여부 | 신규여부 | 우출하중량 | 최초최저낙찰한도금액 | 최저낙찰한도금액 | 비고내용 | 낙유찰결과 |
 			// 낙찰자 | 낙찰금액 | 응찰일시 | 마지막출품여부 | 계류대번호 | 초과출장우여부
-			if(!auctionConfig.scData) auctionConfig.scData = {};
 			
-			auctionConfig.scData.curAucSeq = dataArr[2];
-			auctionConfig.scData.minBidAmt = dataArr[27];
-			auctionConfig.scData.aucObjDsc = dataArr[4];
-			
-			// 관전 전광판 데이터 update
-			$('dd.auctionNum', $(".seeBox_slick_inner, .mo_seeBox")).text(dataArr[2]);		// 출품번호
-			$('dd.ftsnm', $(".seeBox_slick_inner, .mo_seeBox")).text(dataArr[9]);			// 출하주
-			$('dd.sex', $(".seeBox_slick_inner, .mo_seeBox")).text(dataArr[13]);			// 성별
-			$('dd.cowSogWt', $(".seeBox_slick_inner, .mo_seeBox")).text(dataArr[25]);		// 중량
-			$('dd.matime', $(".seeBox_slick_inner, .mo_seeBox")).text(dataArr[16]);			// 산차
-			$('dd.mcowDsc', $(".seeBox_slick_inner, .mo_seeBox")).text(dataArr[14]);		// 어미
-			$('dd.sraIndvPasgQcn', $(".seeBox_slick_inner, .mo_seeBox")).text(dataArr[18]);	// 계대
-			$('dd.kpnNo', $(".seeBox_slick_inner, .mo_seeBox")).text(dataArr[11] && dataArr[12].replace('KPN',''));	// KPN번호
-			$('dd.lowsSbidLmtAm', $(".seeBox_slick_inner, .mo_seeBox")).text(fnSetComma(dataArr[27])); // 최저가 > 24 :최초낙찰 ,25:최저낙찰
-			$('dd.rmkCntn, p.rmkCntn', $(".seeBox_slick_inner, .mo_seeBox")).text(dataArr[28]);			// 비고
-			$('dd.sraPdRgnnm, p.sraPdRgnnm', $(".seeBox_slick_inner, .mo_seeBox")).text(dataArr[22]);	// 지역명
-			$('dd.dnaYn', $(".seeBox_slick_inner, .mo_seeBox")).text(dataArr[23]);			// 친자여부
-			
-			convertDefaultValue($('dd', $(".seeBox_slick_inner, .mo_seeBox")));
-			var tr = getTrRow(auctionConfig.scData.curAucSeq);
-			tr.find('dl dd.ftsnm').text(nameEnc(dataArr[9]));
-			tr.find('dl dd.cowSogWt').text(dataArr[25]);
-			tr.find('dl dd.lowsSbidLmtAm').text(fnSetComma(dataArr[27]));
-			tr.find('dl dd.sraSbidAm').text(dataArr[31]+'');
-			tr.find('dl dd.rmkCntn').text(dataArr[28]);
-			tr.find('dl dd.selSts').text(dataArr[29]==11?'대기':dataArr[29]==22?'낙찰':dataArr[29]==23?'유찰':'대기');
-			changeTrRow(tr);
-			convertDefaultValue(tr.find('dl dd'));
-			if(!isApp() && chkOs() == 'web') $('input[name=bidAmt]').focus();
+			scData[dataArr[2]] = data;
+			if(auctionConfig.curAucSeq || auctionConfig.curAucSeq != dataArr[2]) return;
+			scLoad(dataArr);			
 			break;
 		case "SD" :
 			// 경매 시작/종료 카운트 다운 정보
@@ -965,4 +943,38 @@ var inputNumberVaildBidAmt = function(el,len){
 		el.value = el.value.substr(0, len);
 	}
 	el.value= el.value.replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+}
+
+var scLoad = function(dataArr){
+	if(!auctionConfig.scData) auctionConfig.scData = {};
+			
+	auctionConfig.scData.curAucSeq = dataArr[2];
+	auctionConfig.scData.minBidAmt = dataArr[27];
+	auctionConfig.scData.aucObjDsc = dataArr[4];
+	
+	// 관전 전광판 데이터 update
+	$('dd.auctionNum', $(".seeBox_slick_inner, .mo_seeBox")).text(dataArr[2]);		// 출품번호
+	$('dd.ftsnm', $(".seeBox_slick_inner, .mo_seeBox")).text(dataArr[9]);			// 출하주
+	$('dd.sex', $(".seeBox_slick_inner, .mo_seeBox")).text(dataArr[13]);			// 성별
+	$('dd.cowSogWt', $(".seeBox_slick_inner, .mo_seeBox")).text(dataArr[25]);		// 중량
+	$('dd.matime', $(".seeBox_slick_inner, .mo_seeBox")).text(dataArr[16]);			// 산차
+	$('dd.mcowDsc', $(".seeBox_slick_inner, .mo_seeBox")).text(dataArr[14]);		// 어미
+	$('dd.sraIndvPasgQcn', $(".seeBox_slick_inner, .mo_seeBox")).text(dataArr[18]);	// 계대
+	$('dd.kpnNo', $(".seeBox_slick_inner, .mo_seeBox")).text(dataArr[11] && dataArr[12].replace('KPN',''));	// KPN번호
+	$('dd.lowsSbidLmtAm', $(".seeBox_slick_inner, .mo_seeBox")).text(fnSetComma(dataArr[27])); // 최저가 > 24 :최초낙찰 ,25:최저낙찰
+	$('dd.rmkCntn, p.rmkCntn', $(".seeBox_slick_inner, .mo_seeBox")).text(dataArr[28]);			// 비고
+	$('dd.sraPdRgnnm, p.sraPdRgnnm', $(".seeBox_slick_inner, .mo_seeBox")).text(dataArr[22]);	// 지역명
+	$('dd.dnaYn', $(".seeBox_slick_inner, .mo_seeBox")).text(dataArr[23]);			// 친자여부
+	
+	convertDefaultValue($('dd', $(".seeBox_slick_inner, .mo_seeBox")));
+	var tr = getTrRow(auctionConfig.scData.curAucSeq);
+	tr.find('dl dd.ftsnm').text(nameEnc(dataArr[9]));
+	tr.find('dl dd.cowSogWt').text(dataArr[25]);
+	tr.find('dl dd.lowsSbidLmtAm').text(fnSetComma(dataArr[27]));
+	tr.find('dl dd.sraSbidAm').text(dataArr[31]+'');
+	tr.find('dl dd.rmkCntn').text(dataArr[28]);
+	tr.find('dl dd.selSts').text(dataArr[29]==11?'대기':dataArr[29]==22?'낙찰':dataArr[29]==23?'유찰':'대기');
+	changeTrRow(tr);
+	convertDefaultValue(tr.find('dl dd'));
+	if(!isApp() && chkOs() == 'web') $('input[name=bidAmt]').focus();
 }
