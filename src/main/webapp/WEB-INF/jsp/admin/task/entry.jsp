@@ -22,7 +22,6 @@
 		-webkit-border-radius: 5px;
 		line-height:30px;
 	}
-	dd.col5{padding:0 !important;}
 	div.list_body ul{height: 410px !important;}
 </style>
 

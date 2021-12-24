@@ -115,39 +115,31 @@
 		<!-- //list_search e -->
 		<div class="list_table auction_result">		
 			<div class="sum_table">
-				<dl>
-					<dt><p>암</p></dt>
-					<dd>
-						<p class="cowCnt">${buyCnt.CNT_SEX_W}두</p>
-						<fmt:formatNumber value="${totPrice.SRA_SBID_AM_SEX_W}" type="number" var="W_SRA_SBID_AM"/>
-						<p class="cowPrice">${empty W_SRA_SBID_AM?'0':W_SRA_SBID_AM} 원</p>
-					</dd>
-				</dl>
-				<dl>
-					<dt><p>수</p></dt>
-					<dd>
-						<p class="cowCnt">${buyCnt.CNT_SEX_M}두</p>
-						<fmt:formatNumber value="${totPrice.SRA_SBID_AM_SEX_M}" type="number" var="M_SRA_SBID_AM"/>
-						<p class="cowPrice">${empty M_SRA_SBID_AM?'0':M_SRA_SBID_AM} 원</p>
-					</dd>
-				</dl>
-				<dl>
-					<dt><p>기타</p></dt>
-					<dd>
-						<p class="cowCnt">${buyCnt.CNT_SEX_ETC}두</p>
-						<fmt:formatNumber value="${totPrice.SRA_SBID_AM_SEX_ETC}" type="number" var="ETC_SRA_SBID_AM"/>
-						<p class="cowPrice">${empty ETC_SRA_SBID_AM?'0':ETC_SRA_SBID_AM} 원</p>
-					</dd>
-				</dl>
-				<dl>
-					<dt><p>합계</p></dt>
-					<dd>
-						<p class="cowCnt">${buyCnt.CNT}두</p>
-						<fmt:formatNumber value="${totPrice.SRA_SBID_AM}" type="number" var="TOT_SRA_SBID_AM"/>
-						<p class="cowPrice">${empty TOT_SRA_SBID_AM?'0':TOT_SRA_SBID_AM} 원</p>
-					</dd>
-				</dl>
-			</div>		
+				<div>
+					<dl>
+						<dt><p>암</p></dt>
+						<dd>
+							<p class="cowCnt">${buyCnt.CNT_SEX_W}두</p>
+						</dd>
+					</dl>
+					<dl>
+						<dt><p>수</p></dt>
+						<dd>
+							<p class="cowCnt">${buyCnt.CNT_SEX_M}두</p>
+						</dd>
+					</dl>
+					<dl>
+						<dt><p>기타</p></dt>
+						<dd>
+							<p class="cowCnt">${buyCnt.CNT_SEX_ETC}두</p>
+						</dd>
+					</dl>
+				</div>
+				<div class="sumTxt">
+					<fmt:formatNumber value="${totPrice.SRA_SBID_AM}" type="number" var="TOT_SRA_SBID_AM"/>
+					<p>총 금액 : ${empty TOT_SRA_SBID_AM?'0':TOT_SRA_SBID_AM} 원</p>
+				</div>
+			</div>
 			<div class="list_head pop_style">
 				<dl>
 					<dd class="num"><span class="w_view_in">경매</span>번호</dd>

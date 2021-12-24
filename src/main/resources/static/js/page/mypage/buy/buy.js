@@ -120,14 +120,18 @@
 						if(data.totPrice && data.totPrice.SRA_SBID_AM_SEX_ETC) $(o).find('dd p.cowPrice').text(fnSetComma(data.totPrice.SRA_SBID_AM_SEX_ETC)+' 원');
 						else $(o).find('dd p.cowPrice').text(0+' 원');
 					break;
-					case 3 :
-						if(data.buyCnt && data.buyCnt.CNT) $(o).find('dd p.cowCnt').text(fnSetComma(data.buyCnt.CNT)+'두');
-						else $(o).find('dd p.cowCnt').text(0+'두');
-						if(data.totPrice && data.totPrice.SRA_SBID_AM) $(o).find('dd p.cowPrice').text(fnSetComma(data.totPrice.SRA_SBID_AM)+' 원');
-						else $(o).find('dd p.cowPrice').text(0+' 원');
-					break;
+//					case 3 :
+//						if(data.buyCnt && data.buyCnt.CNT) $(o).find('dd p.cowCnt').text(fnSetComma(data.buyCnt.CNT)+'두');
+//						else $(o).find('dd p.cowCnt').text(0+'두');
+//						if(data.totPrice && data.totPrice.SRA_SBID_AM) $(o).find('dd p.cowPrice').text(fnSetComma(data.totPrice.SRA_SBID_AM)+' 원');
+//						else $(o).find('dd p.cowPrice').text(0+' 원');
+//					break;
 				}
 			});
+			
+			if(data.totPrice && data.totPrice.SRA_SBID_AM) $("div.sumTxt p").text('총 금액 : '+fnSetComma(data.totPrice.SRA_SBID_AM)+' 원');
+			else $("div.sumTxt p").text('총 금액 : 0 원');
+			
 			//$('.buy_list div.list_txts span').text(data.totPrice ? getStringValue(data.totPrice.SRA_SBID_AM,0).replace(/\B(?=(\d{3})+(?!\d))/g, ",") :'0');
 			$('.auction_result div.list_body ul').empty();
 			if(data.data.length == 0){
