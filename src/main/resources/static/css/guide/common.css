@@ -8068,9 +8068,10 @@ div.list_txts {
 	white-space: nowrap;
 }
 
+/* sum_table 수정 12-24 [s] */
 .sum_table {
   margin: 0px 0px 20px 0px;
-  border: 1px solid #686868
+/*   border: 1px solid #686868 */
 }
 
 .sum_table::after {
@@ -8083,25 +8084,40 @@ div.list_txts {
   float: left;
   width: 25%;
   display: block;
-  background: #fff;
-  border-bottom: 0px;
-  border-right: 1px solid #686868;
+/*   background: #fff; */
+/*   border-bottom: 0px; */
+/*   border-right: 1px solid #686868; */
 }
 
-.sum_table dl:last-child {
-  border-right: 0px;
-}
+/* .sum_table dl:last-child { */
+/*   border-right: 0px; */
+/* } */
 
-.sum_table dt,
-dd {
+.sum_table dt, dd {
   display: block;
   text-align: center;
 }
 
 .sum_table dt {
-  border-bottom: 1px solid #686868;
-  background: #FFF2CD;
-  font-weight: bold;
+/*   border-bottom: 1px solid #686868; */
+/*   background: #FFF2CD; */
+/*   font-weight: bold; */
+	background: #007eff;
+	color: #ffffff;
+    font-size: 18px;
+    font-family: "Noto Sans KR", "Roboto", "AppleGothic", "sans-serif";
+    font-weight: 700;
+    letter-spacing: -0.45px;
+}
+
+.sum_table dl:first-child dt {
+	border-start-start-radius: 5px;
+	border-end-start-radius: 5px;
+}
+
+.sum_table dl:last-child dt {
+	border-start-end-radius: 5px;
+	border-end-end-radius: 5px;
 }
 
 .sum_table dd {
@@ -8119,13 +8135,35 @@ dd {
 
 .sum_table dd p {
   display: block;
+  border-bottom: 1px solid #dbdbdb;
+  border-right: 1px solid #dbdbdb;
 }
 
-.sum_table dd p+p {
-  border-top: 1px solid #686868;
+.sum_table dt p {
+  border-right: 1px solid #dbdbdb;
 }
+
+.sum_table dl:last-child dt p {
+  border-right: 0px;
+}
+
+.sum_table dl:first-child dd p {
+  border-left: 1px solid #dbdbdb;
+}
+
+/* .sum_table dd p+p { */
+/*   border-top: 1px solid #686868; */
+/* } */
 
 @media only all and (max-width:1024px) {
+  .sum_table dl dd p, .sum_table dl dt p{
+  	border: none;
+  }
+  
+  .sum_table dl:first-child dd p {
+    border-left: none;
+  }
+
   .sum_table {
     margin-bottom: 0px;
     margin: 0 10px 10px;
@@ -8134,8 +8172,8 @@ dd {
   .sum_table dl {
     display: block;
     width: 100%;
-    border-top: 1px solid #686868;
-    border-right: 0px;
+/*     border-top: 1px solid #dbdbdb; */
+/*     border-right: 0px; */
   }
 
   .sum_table dl:first-child {
@@ -8156,15 +8194,26 @@ dd {
     float: left;
   }
 
+  .sum_table dl:first-child dt {
+    border-start-start-radius:5px;
+	border-end-start-radius: 0px;
+  }
+	
+  .sum_table dl:last-child dt {
+	border-start-end-radius: 0px;
+	border-end-end-radius: 0px;
+	border-end-start-radius: 5px;
+  }
+
   .sum_table dt {
     width: 30%;
-    border-bottom: 0px;
-    border-right: 1px solid #686868;
+/*     border-bottom: 0px; */
+/*     border-right: 1px solid #dbdbdb; */
   }
 
   .sum_table dd {
     width: 70%;
-    color: #fff;
+/*     color: #fff; */
     color: #000;
     display: table;
   }
@@ -8178,12 +8227,31 @@ dd {
     font-size: 16px;
   }
 
+  .sum_table dl dd p, .sum_table dl dt p{
+  	border-top: 1px solid #dbdbdb;
+  	border-right: 1px solid #dbdbdb !important;
+  }
+  
+  .sum_table dl:last-child dd p, .sum_table dl:last-child dt p{
+    border-bottom: 1px solid #dbdbdb;
+  }
+
+  .sum_table dl:first-child dt p {
+  	border-start-start-radius: 5px;
+  }
+  
+  .sum_table dl:last-child dt p {
+  	border-end-start-radius: 5px;
+  }
+  
   .sum_table dd p {
     display: table-cell;
   }
 
-  .sum_table dd p+p {
-    border-left: 1px solid #686868;
-    border-top: 0px;
-  }
+/*   .sum_table dd p+p { */
+/*     border-left: 1px solid #dbdbdb; */
+/*     border-top: 0px; */
+/*   } */
+
+/* sum_table 수정 12-24 [e] */
 }
