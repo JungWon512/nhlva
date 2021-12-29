@@ -113,7 +113,7 @@ function modalPopup(target){
 		}else{
 			$(".pop_TermsBox,.pop_detailBox").mCustomScrollbar({
 				theme:"dark-thin",
-				scrollInertia: 200,
+				scrollInertia: 200
 			});
 		}
 		
@@ -183,7 +183,7 @@ $(document).ready(function() {
 				}else{
 					$(".list_body ul").mCustomScrollbar({
 						theme:"dark-thin",
-						scrollInertia: 0,
+						scrollInertia: 200,
 						setTop :0
 						,setWidth: false
 						,setHeight: false

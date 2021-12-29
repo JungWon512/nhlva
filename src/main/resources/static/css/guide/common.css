@@ -1,7 +1,7 @@
 @charset "UTF-8";
 @import url("normalize.css");
-/* @import url("notosanskr.css"); */
-
+@import url("notosanskr.css");
+/* @import url("https://cdn.rawgit.com/moonspam/Noto Sans KR/master/Noto Sans KR.css"); */
 /* @import url("https://cdn.rawgit.com/moonspam/NanumSquare/master/nanumsquare.css"); */
 /* @import url(https://fonts.googleapis.com/earlyaccess/notosanskr.css); */
 /* color */
@@ -650,7 +650,7 @@ body #wrap {
 }
 
 .header .w_header_inner .w_header .logo h1 {
-	font-size: 30px;
+	font-size: 29px;
 	line-height: 1;
 	letter-spacing: -0.75px;
 	text-align: left;
@@ -705,8 +705,8 @@ body #wrap {
 
 .header .w_header_inner .w_header #nav ul li {
 	float: left;
-	/*   margin-left: 37px; */
-	margin-left: 32px;
+/* 	margin-left: 32px; */
+	margin-left: 22px;
 }
 
 .header .w_header_inner .w_header #nav ul li a {
@@ -2786,6 +2786,9 @@ Base styles: contents layer
 .auction_list .calculator_head_pc .txt-yellow {
 	color: #ffaf00;
 }
+.auction_list .calculator_head_pc .txt-red {
+	color: #f22800;
+}
 
 .auction_list .calculator_head_pc .txt-green {
 	color: #2fff00;
@@ -3023,7 +3026,7 @@ Base styles: contents layer
 }
 
 .list_table .list_body dl dd.pd_ea a {
-	padding-right: 27px;
+/* 	padding-right: 27px; */
 	position: relative;
 	display: block;
 	color: #007eff;
@@ -3092,11 +3095,11 @@ Base styles: contents layer
 }
 
 .schedule_tb .list_head dl dd.date, .schedule_tb .list_body dl dd.date {
-	width: 10%;
+	width: 9%;
 }
 
 .schedule_tb .list_head dl dd.num, .schedule_tb .list_body dl dd.num {
-	width: 7%;
+	width: 8%;
 }
 
 .schedule_tb .list_head dl dd.name, .schedule_tb .list_body dl dd.name {
@@ -4971,8 +4974,8 @@ Base styles: contents layer
 	color: #007eff;
 }
 
-.auction_calculator .calculator_top .auc-txt span.txt-red {
-	color: #f22800;
+.auction_calculator .calculator_top .auc-txt span.txt-yellow {
+	color: #ffaf00;
 }
 
 .auction_calculator .calculator_top .auc-txt .dot-count {
@@ -8029,6 +8032,7 @@ div.list_txts {
 /* 	bottom: 30px; */
 /* 	width:90%; */
 	width:100%;
+/* 	top: 50%; */
 	top: 50%;
 	left: 50%;
 /* 	line-height: 80px; */
@@ -8036,7 +8040,8 @@ div.list_txts {
 	transform: translate(-50%, 10px);
 /* 	border-radius: 5px; */
 	overflow: hidden;
-	font-size: 2.5rem;
+/* 	font-size: 2.5rem; */
+	font-size: 1.95rem;
 	text-align:center;
 	opacity: 0;
 	visibility: hidden;
@@ -8055,6 +8060,9 @@ div.list_txts {
 
 #toast span.txt-green {
 	color: #86e57f;
+}
+#toast span.txt-red {
+	color: #f22800;
 }
 
 @media only all and (max-width: 768px) {
