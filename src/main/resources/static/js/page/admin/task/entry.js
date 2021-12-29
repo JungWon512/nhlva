@@ -149,7 +149,11 @@
 			});
 			
 			// 중량입력 input에서 focus out되는 경우 중량정보 저장
-			$("input[name='cowSogWt']").on("focusout", function(){
+			$("input[name='cowSogWt']").on('keydown',function(){
+				if(!$(this).val() || $(this).val() == '0') $(this).val('');
+			});
+			$("input[name='cowSogWt']").on("focusout", function(){				
+				if(!$(this).val() || $(this).val() == '') $(this).val('0');
 				var li = $(this).closest("li");
 				var params = {
 					regType : $("input[name='regType']").val()
@@ -181,6 +185,9 @@
 			
 			// 중량입력 input에 focus가 가는 경우 스크롤 이동
 			$("input[name='cowSogWt']").on("focus", function(){
+				var len =  $(this).val().length;
+				console.log(len);
+				$(this)[0].setSelectionRange(len,len);
 				var li = $(this).closest("li");
 				$(".list_body > ul").animate({
 					scrollTop : ($(".list_body > ul > li").index(li) - 1) * ($(".list_body > ul > li:first").height() + 1)
@@ -379,6 +386,14 @@
 			$("body").append(sHtml.join(""));
 			modalPopup('.pop_mod_weight');
 			$(".pop_mod_weight").find("input.required").focus();
+			$(".pop_mod_weight").find("input.required").on('keydown',function(){
+				if(!$(this).val() || $(this).val() == '0') $(this).val('');
+			});
+			$(".pop_mod_weight").find("input.required").on('focusout',function(){
+				if(!$(this).val() || $(this).val() == '') $(this).val('0');
+			});
+			var len = $(".pop_mod_weight").find("input.required").val().length;
+			$(".pop_mod_weight").find("input.required")[0].setSelectionRange(len,len);
 		}
 		
 		//모달레이어팝업

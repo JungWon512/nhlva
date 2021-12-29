@@ -45,7 +45,7 @@
 					</select>
 				</li>
 				<li class="barcoad">
-					<p>바코드/경매번호</p>
+					<p>바코드</p>
 					<div class="barcoad_input">
 						<input type="text" name="searchTxt" maxlength="15" value="${params.searchTxt}" placeholder="바코드/경매번호" pattern="\d*" inputmode="numeric" />
 						<button type="button" class="btn_input_reset">X</button>
@@ -100,7 +100,8 @@
 							</c:when>
 							<c:when test="${params.regType eq 'AW'}">
 								<dd class="col2">
-									<input type="text" name="cowSogWt" id="cowSogWt${item.AUC_PRG_SQ}" class="onlyNumber" value="${fn:split(item.COW_SOG_WT,'.')[0]}" maxlength="4" pattern="\d*" inputmode="numeric" onfocus="$(this).setCursorPosition(0); return false;"/>
+<%-- 									<input type="text" name="cowSogWt" id="cowSogWt${item.AUC_PRG_SQ}" class="onlyNumber" value="${fn:split(item.COW_SOG_WT,'.')[0]}" maxlength="4" pattern="\d*" inputmode="numeric" onfocus="$(this).setCursorPosition(0); return false;"/> --%>
+									<input type="text" name="cowSogWt" id="cowSogWt${item.AUC_PRG_SQ}" class="onlyNumber" value="${fn:split(item.COW_SOG_WT,'.')[0]}" maxlength="4" pattern="\d*" inputmode="numeric"/>
 								</dd>
 							</c:when>
 							<c:when test="${params.regType eq 'L'}">
