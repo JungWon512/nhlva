@@ -122,8 +122,9 @@
 			</h1>
 		</c:when>
 		<c:otherwise>
-			<a href="javascript:;" class="m_back">이전</a>
-			<h2 class="m_tit">${subheaderTitle}</h2>
+			<div class="m_backTit">
+				<a href="javascript:;" class="m_back"><h2 class="m_tit">${subheaderTitle}</h2></a>				
+			</div>
 			<c:if test="${requestPath eq '/bid'}">
 				<p class="join-box">참가번호:<b class="join-num"><span></span>번</b></p>
 			</c:if>
