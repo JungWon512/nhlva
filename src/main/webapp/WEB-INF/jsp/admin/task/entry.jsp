@@ -5,7 +5,7 @@
 	div.list_body input{padding-right:8px; text-align:right;border-radius:5px;font-size:16px;}
 	div.barcoad_input input{font-size:20px;padding-right:0px !important;}
 	div.barcoad_input input::placeholder{font-size:15px;}
-/* 	li.barcoad p{font-size:18px !important;} */
+/* 	li.barcoad p{font-size:18px !important;} */ 
 	dd.col5 button{
 		display: inline-block;
 		width: 75%;
