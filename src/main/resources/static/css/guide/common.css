@@ -4974,8 +4974,8 @@ Base styles: contents layer
 	color: #007eff;
 }
 
-.auction_calculator .calculator_top .auc-txt span.txt-yellow {
-	color: #ffaf00;
+.auction_calculator .calculator_top .auc-txt span.txt-red {
+	color: #f22800;
 }
 
 .auction_calculator .calculator_top .auc-txt .dot-count {

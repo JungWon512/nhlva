@@ -513,7 +513,7 @@ var messageHandler = function(data) {
 			else if(auctionConfig.asData.status == "8006") {			
 				$("input[name='bidAmt']").val("");
 				toast("경매가 <span class='txt-red'>종료</span>되었습니다.", 60*60*24);
-				$("div.auc-txt > div.info_board").html("경매가 <span class='txt-yellow'>종료</span>되었습니다.");
+				$("div.auc-txt > div.info_board").html("경매가 <span class='txt-red'>종료</span>되었습니다.");
 				auctionConfig.enableBid = "N";				
 			}
 			else if(auctionConfig.asData.status == "8003") {

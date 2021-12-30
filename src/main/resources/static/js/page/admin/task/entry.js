@@ -186,7 +186,6 @@
 			// 중량입력 input에 focus가 가는 경우 스크롤 이동
 			$("input[name='cowSogWt']").on("focus", function(){
 				var len =  $(this).val().length;
-				console.log(len);
 				$(this)[0].setSelectionRange(len,len);
 				var li = $(this).closest("li");
 				$(".list_body > ul").animate({
