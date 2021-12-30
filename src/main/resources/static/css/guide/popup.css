@@ -981,7 +981,8 @@ Base styles: popup_layer css
 }
 
 .modal-wrap.pop_exit_cow .modal-content table td.tal {
-	text-align: left
+	text-align: left;
+	font-weight: 700
 }
 
 .modal-wrap.pop_exit_cow .modal-content table td.auc-num, .modal-wrap.pop_exit_cow .modal-content table td.name

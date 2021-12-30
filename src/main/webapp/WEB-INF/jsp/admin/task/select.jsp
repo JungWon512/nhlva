@@ -18,11 +18,11 @@
 		</c:choose>
 	</p>
 	<ul class="choice_area">
-		<li><a href="javascript:;" class="card-link btn_move" data-type="W">중량등록</a></li>
-		<li><a href="javascript:;" class="card-link btn_move" data-type="AW">중량일괄등록</a></li>
-		<li><a href="javascript:;" class="card-link btn_move" data-type="L">하한가등록</a></li>
-		<li><a href="javascript:;" class="card-link btn_move" data-type="N">계류대변경</a></li>
-		<li><a href="javascript:;" class="card-link btn_info_pop" data-type="I">큰소 정보 입력</a></li>
+		<li><a href="javascript:;" class="card-link btn_move act" data-type="W">중량등록</a></li>
+		<li><a href="javascript:;" class="card-link btn_move act" data-type="AW">중량일괄등록</a></li>
+		<li><a href="javascript:;" class="card-link btn_move act" data-type="L">하한가등록</a></li>
+		<li><a href="javascript:;" class="card-link btn_move act" data-type="N">계류대변경</a></li>
+		<li><a href="javascript:;" class="card-link btn_info_pop act" data-type="I">큰소 정보 입력</a></li>
 <!-- 		<li><a href="javascript:;">낙찰 조회</a></li> -->
 <!-- 		<li><a href="javascript:;">예비</a></li> -->
 	</ul>

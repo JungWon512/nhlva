@@ -4,7 +4,7 @@
 <script type="text/javascript" src="/static/js/guide/jquery-1.12.4.js"></script>
 <script type="text/javascript" src="/static/js/guide/jquery-migrate-1.2.1.min.js"></script>
 <script type="text/javascript" src="/static/js/guide/jquery.easing.1.3.min.js"></script>
-<script type="text/javascript" src="/static/js/guide/jquery-ui.js"></script>
+<!-- <script type="text/javascript" src="/static/js/guide/jquery-ui.js"></script> -->
 <script type="text/javascript" src="/static/js/guide/jquery.mmenu.min.all.js"></script>
 <script type="text/javascript" src="/static/js/guide/slick.js"></script>
 <script type="text/javascript" src="/static/js/guide/jquery.placeholder.ls.js"></script>

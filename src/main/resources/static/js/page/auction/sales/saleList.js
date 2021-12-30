@@ -184,11 +184,11 @@
 			sHtml += '  					<td colspan="3" class="tal">'+tr.find('.sraPdRgnnm').val()+'</td>                                                             ';
 			sHtml += '  				</tr>                                                                                                              ';
 			sHtml += '  				<tr>                                                                                                               ';
-			sHtml += '  					<th>생년월일</th>                                                                                              ';
+			sHtml += '  					<th>생년<br/>월일</th>                                                                                              ';
 			sHtml += '  					<td colspan="3" class="tal">'+convertStrDate(tr.find('.birthMonth').val())+'</td>                                                           ';
 			sHtml += '  				</tr>                                                                                                              ';
 			sHtml += '  				<tr>                                                                                                               ';
-			sHtml += '  					<th>개체번호</th>                                                                                              ';
+			sHtml += '  					<th>개체<br/>번호</th>                                                                                              ';
 			sHtml += '  					<td colspan="3" class="num tal">'+pdEa.substring(6,10)+' <span>'+pdEa.substring(10,14)+'</span> '+pdEa.substring(14,15)+'</td>                                                              ';
 			sHtml += '  				</tr>                                                                                                              ';
 			sHtml += '  				<tr>                                                                                                               ';
@@ -214,7 +214,7 @@
 			sHtml += '  					<td class="fwb">'+tr.find('.sraIndvPasgQcn').val()+'</td>                                                                                         ';
 			sHtml += '  				</tr>                                                                                                              ';
 			sHtml += '  				<tr>                                                                                                               ';
-			sHtml += '  					<th class="vtt">특이사항</th>                                                                                  ';
+			sHtml += '  					<th class="vtt">특이<br/>사항</th>                                                                                  ';
 			sHtml += '  					<td colspan="3" class="tal vtt">'+tr.find('.rmkCntn').val()+'</td>                                                                          ';
 			sHtml += '  				</tr>                                                                                                              ';
 			sHtml += '  			</table>                                                                                                               ';

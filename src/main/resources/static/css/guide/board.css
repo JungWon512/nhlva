@@ -2319,6 +2319,9 @@ Base styles: contents layer
 .auction_list .calculator_head_pc .txt-green {
   color: #2fff00;
 }
+.auction_list .calculator_head_pc .txt-red {
+  color: #f22800;
+}
 .auction_list .calculator_head_pc .dot-count {
   display: inline-block;
   margin-left: 5px;

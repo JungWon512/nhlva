@@ -53,7 +53,7 @@
 				<dd class="date">경매일자</dd>
 				<dd class="num"><span class="w_view_in">경매</span>번호</dd>
 				<dd class="name">출하주</dd>
-				<dd class="pd_ea">개체번호</dd>
+				<dd class="pd_ea">개체</dd>
 				<dd class="pd_sex">성별</dd>
 				<dd class="pd_kg">중량<span class="w_view_in">(kg)</span></dd>
 				<dd class="pd_kpn">KPN</dd>

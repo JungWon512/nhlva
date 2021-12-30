@@ -504,11 +504,17 @@ var messageHandler = function(data) {
 						 , function(){pageMove('/main', false);}
 				);
 			}
-			else if(auctionConfig.asData.status == "8002" || auctionConfig.asData.status == "8006") {
+			else if(auctionConfig.asData.status == "8002") {
 				$("input[name='bidAmt']").val("");
 				toast("경매 <span class='txt-green'>대기 중</span>입니다.", 60*60*24);
 				$("div.auc-txt > div.info_board").html("경매 <span class='txt-yellow'>대기 중</span>입니다.");
 				auctionConfig.enableBid = "N";
+			}
+			else if(auctionConfig.asData.status == "8006") {			
+				$("input[name='bidAmt']").val("");
+				toast("경매가 <span class='txt-red'>종료</span>되었습니다.", 60*60*24);
+				$("div.auc-txt > div.info_board").html("경매가 <span class='txt-yellow'>종료</span>되었습니다.");
+				auctionConfig.enableBid = "N";				
 			}
 			else if(auctionConfig.asData.status == "8003") {
 				$("input[name='bidAmt']").val("");

@@ -6,7 +6,7 @@
 
 <!-- 20210805 jjw 퍼블리싱 css 및 js 추가 -->
 <link rel="stylesheet" type="text/css" href="/static/css/guide/common.css">
-<link rel="stylesheet" type="text/css" href="/static/css/guide/jquery-ui.css">
+<!-- <link rel="stylesheet" type="text/css" href="/static/css/guide/jquery-ui.css"> -->
 <link rel="stylesheet" type="text/css" href="/static/css/guide/popup.css">
 <link rel="stylesheet" type="text/css" href="/static/css/guide/slick.css">
 <link rel="stylesheet" type="text/css" href="/static/css/guide/jquery.mmenu.all.css">

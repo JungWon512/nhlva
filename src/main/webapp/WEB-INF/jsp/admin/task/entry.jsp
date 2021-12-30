@@ -100,7 +100,8 @@
 							</c:when>
 							<c:when test="${params.regType eq 'AW'}">
 								<dd class="col2">
-									<input type="text" name="cowSogWt" id="cowSogWt${item.AUC_PRG_SQ}" class="onlyNumber" value="${fn:split(item.COW_SOG_WT,'.')[0]}" maxlength="4" pattern="\d*" inputmode="numeric" onfocus="$(this).setCursorPosition(0); return false;"/>
+<%-- 									<input type="text" name="cowSogWt" id="cowSogWt${item.AUC_PRG_SQ}" class="onlyNumber" value="${fn:split(item.COW_SOG_WT,'.')[0]}" maxlength="4" pattern="\d*" inputmode="numeric" onfocus="$(this).setCursorPosition(0); return false;"/> --%>
+									<input type="text" name="cowSogWt" id="cowSogWt${item.AUC_PRG_SQ}" class="onlyNumber" value="${fn:split(item.COW_SOG_WT,'.')[0]}" maxlength="4" pattern="\d*" inputmode="numeric"/>
 								</dd>
 							</c:when>
 							<c:when test="${params.regType eq 'L'}">

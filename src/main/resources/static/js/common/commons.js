@@ -84,7 +84,7 @@
         })
 
         var setBinding = function(){
-            $(document).on('click','.m_header .m_back',function(){				 
+            $(document).on('click','.m_header .m_backTit',function(){				 
 				if(window.location.pathname == '/main'){pageMove('/home'); return;}
 				pageMove('/main');
 			});
