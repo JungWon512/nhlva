@@ -86,15 +86,15 @@ var messageHandler = function(data) {
 				,t8007:'경매 종료'
 			}
 			switch(dataArr[6]){
-				case "8001" : $('table.tblBoard tbody tr.title td p.boardTitle').text(aucStConfig.t8001); break; 
-				case "8002" : $('table.tblBoard tbody tr.title td p.boardTitle').text(aucStConfig.t8002); break; 
-				case "8003" : $('table.tblBoard tbody tr.title td p.boardTitle').text(aucStConfig.t8003); break; 
-				case "8004" : $('table.tblBoard tbody tr.title td p.boardTitle').text(aucStConfig.t8004); break; 
-				case "8005" : $('table.tblBoard tbody tr.title td p.boardTitle').text(aucStConfig.t8005); break; 
-				case "8006" : $('table.tblBoard tbody tr.title td p.boardTitle').text(aucStConfig.t8006); break; 
+				case "8001" : $('table.tblBoard tbody tr.title td p.boardTitle').removeClass('txt-red').text(aucStConfig.t8001); break; 
+				case "8002" : $('table.tblBoard tbody tr.title td p.boardTitle').removeClass('txt-red').text(aucStConfig.t8002); break; 
+				case "8003" : $('table.tblBoard tbody tr.title td p.boardTitle').removeClass('txt-red').text(aucStConfig.t8003); break; 
+				case "8004" : $('table.tblBoard tbody tr.title td p.boardTitle').addClass('txt-red').text(aucStConfig.t8004); break; 
+				case "8005" : $('table.tblBoard tbody tr.title td p.boardTitle').removeClass('txt-red').text(aucStConfig.t8005); break; 
+				case "8006" : $('table.tblBoard tbody tr.title td p.boardTitle').removeClass('txt-red').text(aucStConfig.t8006); break; 
 				case "8007" :
 					socketDisconnect();
-					$('table.tblBoard tbody tr.title td p.boardTitle').text(aucStConfig.t8007);  
+					$('table.tblBoard tbody tr.title td p.boardTitle').removeClass('txt-red').text(aucStConfig.t8007);  
 				break; 
 				default:break;
 			}
@@ -110,7 +110,7 @@ var messageHandler = function(data) {
 				$('table.tblBoard tbody tr.title td p.bidUser').closest('td').hide();
 				$('table.tblBoard tbody tr.title td p.bidPrice').closest('td').hide();
 				$('table.tblBoard tbody tr.title td p.boardTitle').closest('td').show();	
-				$('table.tblBoard tbody tr.title td p.boardTitle').html('경매마감 <b>'+dataArr[3]+'</b>초 전');				
+				$('table.tblBoard tbody tr.title td p.boardTitle').removeClass('txt-red').html('경매마감 <b>'+dataArr[3]+'</b>초 전');				
 			}	
 		break;	
 		case "AF" : //낙유찰 결과
@@ -128,21 +128,21 @@ var messageHandler = function(data) {
 				$('table.tblBoard tbody tr.title td p.bidUser').closest('td').hide();
 				$('table.tblBoard tbody tr.title td p.bidPrice').closest('td').hide();
 				$('table.tblBoard tbody tr.title td p.boardTitle').closest('td').show();
-				$('table.tblBoard tbody tr.title td p.boardTitle').text('유찰되었습니다.');				
+				$('table.tblBoard tbody tr.title td p.boardTitle').removeClass('txt-red').text('유찰되었습니다.');				
 			}
 		break;
 		case "AN" :
 			// 재경매 대상 수신
 			auctionConfig.anStatus = true;
-			$('table.tblBoard tbody tr.title td p.boardTitle').text('재경매 진행 중');
+			$('table.tblBoard tbody tr.title td p.boardTitle').removeClass('txt-red').text('재경매 진행 중');
 			break;
 		case "AY" :
 			// 재경매 대상 수신
 			debugConsole(dataArr[2] +' : '+$('table.tblBoard tbody tr.title td p.auctionNum').text());
 			if(dataArr[2]!=$('table.tblBoard tbody tr.title td p.auctionNum').text()) return;
-			if((auctionConfig.auctionSt =='8003' || auctionConfig.auctionSt =='8004') && 'F' == dataArr[3].trim()) $('table.tblBoard tbody tr.title td p.boardTitle').text('응찰 종료');
-			else if(auctionConfig.anStatus) $('table.tblBoard tbody tr.title td p.boardTitle').text('재경매 진행중');
-			else $('table.tblBoard tbody tr.title td p.boardTitle').text('경매 진행중');
+			if((auctionConfig.auctionSt =='8003' || auctionConfig.auctionSt =='8004') && 'F' == dataArr[3].trim()) $('table.tblBoard tbody tr.title td p.boardTitle').removeClass('txt-red').text('응찰 종료');
+			else if(auctionConfig.anStatus) $('table.tblBoard tbody tr.title td p.boardTitle').removeClass('txt-red').text('재경매 진행중');
+			else $('table.tblBoard tbody tr.title td p.boardTitle').removeClass('txt-red').text('경매 진행중');
 			break;
 		default:break;
 	}

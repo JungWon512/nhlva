@@ -136,15 +136,15 @@ var messageHandler = function(data) {
 				,t8007:'경매 종료'
 			}
 			switch(dataArr[6]){
-				case "8001" : $('table.tblAuctionSt tbody tr.st td.count-td p').text(aucStConfig.t8001); break; 
-				case "8002" : $('table.tblAuctionSt tbody tr.st td.count-td p').text(aucStConfig.t8002); break; 
-				case "8003" : $('table.tblAuctionSt tbody tr.st td.count-td p').text(aucStConfig.t8003); break; 
-				case "8004" : $('table.tblAuctionSt tbody tr.st td.count-td p').text(aucStConfig.t8004); break; 
-				case "8005" : $('table.tblAuctionSt tbody tr.st td.count-td p').text(aucStConfig.t8005); break; 
-				case "8006" : $('table.tblAuctionSt tbody tr.st td.count-td p').text(aucStConfig.t8006); break; 
+				case "8001" : $('table.tblAuctionSt tbody tr.st td.count-td p').removeClass('txt-red').text(aucStConfig.t8001); break; 
+				case "8002" : $('table.tblAuctionSt tbody tr.st td.count-td p').removeClass('txt-red').text(aucStConfig.t8002); break; 
+				case "8003" : $('table.tblAuctionSt tbody tr.st td.count-td p').removeClass('txt-red').text(aucStConfig.t8003); break; 
+				case "8004" : $('table.tblAuctionSt tbody tr.st td.count-td p').addClass('txt-red').text(aucStConfig.t8004); break; 
+				case "8005" : $('table.tblAuctionSt tbody tr.st td.count-td p').removeClass('txt-red').text(aucStConfig.t8005); break; 
+				case "8006" : $('table.tblAuctionSt tbody tr.st td.count-td p').removeClass('txt-red').text(aucStConfig.t8006); break; 
 				case "8007" : 
 					socketDisconnect();
-					$('table.tblAuctionSt tbody tr.st td.count-td p').text(aucStConfig.t8007); 
+					$('table.tblAuctionSt tbody tr.st td.count-td p').removeClass('txt-red').text(aucStConfig.t8007); 
 				break; 
 				default:break;
 			}
@@ -160,7 +160,7 @@ var messageHandler = function(data) {
 			}else{
 				$('table.tblAuctionSt tbody tr.st td.complate').hide();
 				$('table.tblAuctionSt tbody tr.st td.count-td').show();
-				$('table.tblAuctionSt tbody tr.st td.count-td p').text('유찰되었습니다.');				
+				$('table.tblAuctionSt tbody tr.st td.count-td p').removeClass('txt-red').text('유찰되었습니다.');				
 			}
 			calcPiePercent(dataArr[2]);
 		break;	
@@ -168,20 +168,20 @@ var messageHandler = function(data) {
 			if(dataArr[2]=='C'){
 				$('table.tblAuctionSt tbody tr.st td.complate').hide();
 				$('table.tblAuctionSt tbody tr.st td.count-td').show();
-				$('table.tblAuctionSt tbody tr.st td.count-td p').html('경매마감 <b>'+dataArr[3]+'</b>초 전');				
+				$('table.tblAuctionSt tbody tr.st td.count-td p').removeClass('txt-red').html('경매마감 <b>'+dataArr[3]+'</b>초 전');				
 			}	
 		break;	
 		case "AN" :
 			// 재경매 대상 수신
 			auctionConfig.anStatus = true;
-			$('table.tblAuctionSt tbody tr.st td.count-td p').text('재경매 진행 중');
+			$('table.tblAuctionSt tbody tr.st td.count-td p').removeClass('txt-red').text('재경매 진행 중');
 			break;
 		case "AY" :
 			// 재경매 대상 수신
 			if(dataArr[2]!=$('table.tblAuctionSt tbody tr td.val p.auctionNum').text()) return;
-			if((auctionConfig.auctionSt =='8003' || auctionConfig.auctionSt =='8004') && 'F' == dataArr[3].trim()) $('table.tblAuctionSt tbody tr.st td.count-td p').text('응찰 종료');
-			else if(auctionConfig.anStatus) $('table.tblAuctionSt tbody tr.st td.count-td p').text('재경매 진행중');
-			else $('table.tblAuctionSt tbody tr.st td.count-td p').text('경매 진행중');
+			if((auctionConfig.auctionSt =='8003' || auctionConfig.auctionSt =='8004') && 'F' == dataArr[3].trim()) $('table.tblAuctionSt tbody tr.st td.count-td p').removeClass('txt-red').text('응찰 종료');
+			else if(auctionConfig.anStatus) $('table.tblAuctionSt tbody tr.st td.count-td p').removeClass('txt-red').text('재경매 진행중');
+			else $('table.tblAuctionSt tbody tr.st td.count-td p').removeClass('txt-red').text('경매 진행중');
 			break;
 		default:break;
 	}
@@ -189,14 +189,14 @@ var messageHandler = function(data) {
 function calcPiePercent(aucNum){
 	if(afAuctionNum.has(aucNum)) return;
 	afAuctionNum .add(aucNum);
-	var stantNotCnt = new Number($('.chart_label .gp_tit1 span').text()) +1;
-	var stantCnt = new Number($('.chart_label .gp_tit2 span').text()) -1;
+	var stantNotCnt = new Number($('.chart_label .standNot span').text()) +1;
+	var stantCnt = new Number($('.chart_label .stand span').text()) -1;
 	var totCnt = stantNotCnt+stantCnt;
 	var result = new Number(stantNotCnt)/new Number(totCnt) *100;
 	result = result.toFixed(0);
 	$('.chart').attr('data-percent',result);
-	$('.chart_label .gp_tit1 span').text(stantNotCnt);
-	$('.chart_label .gp_tit2 span').text(stantCnt);
+	$('.chart_label .standNot span').text(stantNotCnt);
+	$('.chart_label .stand span').text(stantCnt);
 	$('.chart span.count').text(result+'%');
 	$('.chart').data('easyPieChart').update(result);
 }

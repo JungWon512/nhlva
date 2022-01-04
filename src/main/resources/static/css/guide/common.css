@@ -4245,15 +4245,15 @@ Base styles: contents layer
 }
 
 .auction_see .list_body li.act dd {
-	color: #007eff;
+	color: #007eff!important;
 }
 
 @media only all and (max-width: 1024px) {
 	.auction_see .list_body li.act {
-		background: #007eff;
+		background: #007eff!important;
 	}
 	.auction_see .list_body li.act dd {
-		color: #ffffff;
+		color: #ffffff!important;
 	}
 }
 
@@ -6928,10 +6928,10 @@ Base styles: contents layer
 		letter-spacing: -1px
 	}
 	.youtube-view table td p.fz40 {
-		font-size: 20px
+		font-size: 30px
 	}
 	.youtube-view table td p.fz60 {
-		font-size: 30px
+		font-size: 40px
 	}
 	.youtube-view table td p.fz100 {
 		font-size: 50px
@@ -7973,13 +7973,13 @@ Base styles: contents layer
 }
 
 .list_body li:not(.act) dl dd.textNumber {
-/* 	text-align: center !important; */
+	text-align: center !important;
 	color: #007eff !important;
 	padding-right: 5px !important;
 }
 
 .list_body li.act dl dd.textNumber {
-	text-align: right !important;
+	text-align: center !important;
 	padding-right: 5px !important;
 }
 
@@ -8159,4 +8159,9 @@ div.list_txts {
 	.auction_list .list_body li:nth-child(even) {
 		background: #f5f5f5;
 	}
+}
+
+table.tblBoard p.boardTitle.txt-red
+,tr.st td.count-td p.txt-red{
+	color: #f22800!important;
 }

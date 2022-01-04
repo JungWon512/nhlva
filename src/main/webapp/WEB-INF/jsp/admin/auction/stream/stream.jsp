@@ -117,8 +117,8 @@
 						<span class="count">${count.CNT_PERCENT }%</span>						
 					</div>					
 					<ul class="chart_label">
-						<li class="gp_tit1">완료 <span>${count.CNT_STAND_ELSE }</span></li>
-						<li class="gp_tit2">대기 <span>${count.CNT_STAND }</span></li>
+						<li class="gp_tit1 standNot">대기 <span>${count.CNT_STAND }</span></li>
+						<li class="gp_tit2 stand">완료 <span>${count.CNT_STAND_ELSE }</span></li>
 					</ul>
 				</div>
 			</td>

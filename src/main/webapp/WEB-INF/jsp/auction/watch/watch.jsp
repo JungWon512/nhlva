@@ -202,8 +202,8 @@
 						<input type='hidden' name='entryStandElseCnt' value='${watchCount.CNT_STAND_ELSE }' />
 						<dl>
 							<dt>${watchCount.CNT == 0 ? '0' : fn:split(watchCount.CNT_STAND_ELSE/ watchCount.CNT * 100,'.')[0] }%</dt>
-							<dd class="gp_tit1 bid">완료 <span>${watchCount.CNT_BID }</span> </dd>
-							<dd class="gp_tit2 stand">대기 <span>${watchCount.CNT_STAND }</span></dd>
+							<dd class="gp_tit1 stand">대기 <span>${watchCount.CNT_STAND }</span></dd>
+							<dd class="gp_tit2 bid">완료 <span>${watchCount.CNT_BID }</span> </dd>
 						</dl>
 					</div>
 				</div>
