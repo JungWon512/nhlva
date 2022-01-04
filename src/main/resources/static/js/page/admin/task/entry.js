@@ -269,7 +269,7 @@
 					}
 					listHtml.push('	</dl>');
 					if(regType == "W") {
-						listHtml.push('		<div class="pd_etc"><p>'+item.RMK_CNTN+'</p></div>');
+						listHtml.push('		<div class="pd_etc"><p>'+(item.RMK_CNTN ? item.RMK_CNTN:'')+'</p></div>');
 					}
 					listHtml.push('</li>');
 				}
