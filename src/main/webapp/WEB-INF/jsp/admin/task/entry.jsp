@@ -92,6 +92,9 @@
 					</c:if>
 					<c:forEach items="${entryList}" var="item" varStatus="st">
 						<li id="${item.AUC_PRG_SQ}">
+							<c:if test="${params.regType ne 'AW'}">
+								<span><button type="button" class="btn_modify" >수정</button></span>
+							</c:if>
 							<dl>
 								<dd class="col1" data-amnno="${item.SRA_INDV_AMNNO}" data-auc-obj-dsc="${item.AUC_OBJ_DSC}" data-oslp-no="${item.OSLP_NO}" data-led-sqno="${item.LED_SQNO}">${item.AUC_PRG_SQ}</dd>
 							<c:choose>
@@ -121,9 +124,15 @@
 								<dd class="col3">${item.SRA_INDV_AMNNO_FORMAT}</dd>
 								<dd class="col4">${item.FTSNM_ORI}</dd>
 								<c:if test="${params.regType ne 'AW'}">
-									<dd class="col4 col5"><button type="button" class="btn_modify">수정</button></dd>
+									<dd class="col4 col5"></dd>
+<!-- 									<dd class="col4 col5"><button type="button" class="btn_modify">수정</button></dd> -->
 								</c:if>
-							</dl>
+							</dl>							
+							<c:if test="${params.regType eq 'W'}">
+								<div class="pd_etc">
+									<p>${item.RMK_CNTN}</p>
+								</div>
+							</c:if>
 						</li>
 					</c:forEach>
 				</ul>

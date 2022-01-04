@@ -8165,3 +8165,51 @@ table.tblBoard p.boardTitle.txt-red
 ,tr.st td.count-td p.txt-red{
 	color: #f22800!important;
 }
+
+.admin_area div.admin_weight_list div.pd_etc{
+	padding-left: 9%;
+    padding-bottom: 10px;
+    width: 80%;	
+}
+
+.admin_area div.admin_weight_list div.pd_etc p{
+	height: 22px;
+    text-align: left;
+    margin-top: 10px;
+    color: #1a1a1a;
+    font-size: 16px;
+    font-family: "Noto Sans KR", "Roboto", "AppleGothic", "sans-serif";
+    font-weight: 700;
+    letter-spacing: -0.45px;
+    display: table-cell;
+}
+
+.admin_area div.admin_weight_list div.list_body ul li span{
+    text-align: center;
+    display: block;
+    width: 20%;
+    height: 100%;
+    position: absolute;
+    right: 0;
+    padding: 0px 10px;
+}
+
+.admin_area div.admin_weight_list div.list_body ul li span button{
+	position: absolute;
+    top: 50%;
+    display: block;
+    text-align: center;
+    margin: 0px;
+    padding: 0 5px;
+    background: #007eff;
+    color: #fff;
+    font-size: 16px;
+    font-family: "Noto Sans KR", "Roboto", "AppleGothic", "sans-serif";
+    font-weight: 500;
+    letter-spacing: 0.5px;
+    border-radius: 5px;
+    -webkit-border-radius: 5px;
+    line-height: 30px;
+    width: calc( 100% - 20px );
+    margin-top: -15px;
+}
