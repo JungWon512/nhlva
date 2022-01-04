@@ -247,6 +247,9 @@
 				for (var i = 0; i < entryList.length; i++) {
 					var item  = entryList[i];
 					listHtml.push('<li id="' + item.AUC_PRG_SQ + '">');
+					if (regType != "AW") {
+						listHtml.push('<span><button type="button" class="btn_modify" >수정</button></span>');
+					}
 					listHtml.push('	<dl>');
 					listHtml.push('		<dd class="col1" data-amnno="' + item.SRA_INDV_AMNNO+ '" data-auc-obj-dsc="' + item.AUC_OBJ_DSC+ '" data-oslp-no="' + item.OSLP_NO+ '" data-led-sqno="' + item.LED_SQNO+ '">' + item.AUC_PRG_SQ + '</dd>');
 					if (regType == "W") {
@@ -261,9 +264,13 @@
 					listHtml.push('		<dd class="col3">' + item.SRA_INDV_AMNNO_FORMAT + '</dd>');
 					listHtml.push('		<dd class="col4">' + item.FTSNM_ORI + '</dd>');
 					if(regType != "AW") {
-						listHtml.push('		<dd class="col4 col5"><button type="button" class="btn_modify">수정</button></dd>');
+//						listHtml.push('		<dd class="col4 col5"><button type="button" class="btn_modify">수정</button></dd>');
+						listHtml.push('		<dd class="col4 col5"></dd>');
 					}
 					listHtml.push('	</dl>');
+					if(regType == "W") {
+						listHtml.push('		<div class="pd_etc"><p>'+item.RMK_CNTN+'</p></div>');
+					}
 					listHtml.push('</li>');
 				}
 				
