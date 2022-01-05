@@ -86,7 +86,10 @@ var messageHandler = function(data) {
 					$('section.billboard-info .infoTxt').html(aucStConfig.t8002); 
 				break; 
 				case "8003" : $('section.billboard-info .infoTxt').html(aucStConfig.t8003); break; 
-				case "8004" : $('section.billboard-info .infoTxt').html(aucStConfig.t8004); break; 
+				case "8004" : 
+					getStnInfo();
+					$('section.billboard-info .infoTxt').html(aucStConfig.t8004); 
+				break; 
 				case "8005" : $('section.billboard-info .infoTxt').html(aucStConfig.t8005); break; 
 				case "8006" : 
 					fnReloadView();
@@ -210,6 +213,8 @@ var noInfoIntervalFun = function(index){
 var fnReloadView = function(){	
 	var params = {
 		naBzplc : $('#naBzPlc').val()		
+		, stAucNo : stAucNo		
+		, edAucNo : edAucNo		
 	}
 	$.ajax({
 		url: '/office/getCowList',
@@ -278,6 +283,28 @@ var fnReloadView = function(){
 			clearInterval(noInfoInterval);
 			viewIntervalFunc();
 		}
+	});
+	
+}
+
+var edAucNo,stAucNo;
+var getStnInfo = function(){	
+	var params = {
+		naBzplc : $('#naBzPlc').val()		
+	}
+	$.ajax({
+		url: '/office/getStnInfo',
+		data: params,
+		type: 'POST',
+		dataType: 'json',
+		success : function() {
+		},
+		error: function(xhr, status, error) {
+		}
+	}).done(function (json) {
+		console.log(json);
+		stAucNo = json.info.ST_AUC_NO;
+		edAucNo = json.info.ED_AUC_NO;	
 	});
 	
 }

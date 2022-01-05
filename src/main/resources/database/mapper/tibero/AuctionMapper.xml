@@ -152,6 +152,10 @@
 			<if test="searchFarmAmnno != null and searchFarmAmnno != ''">
 				AND B.FARM_AMNNO = #{searchFarmAmnno}
 			</if>
+			<if test="stAucNo !=null and !stAucNo.equals('') and edAucNo !=null and !edAucNo.equals('')">
+				AND B.AUC_PRG_SQ <![CDATA[>=]]> #{stAucNo}
+				AND B.AUC_PRG_SQ <![CDATA[<=]]> #{edAucNo}
+			</if>
 			) G
 		ORDER BY AUC_DT ,AUC_PRG_SQ ASC
     </select>
@@ -1272,4 +1276,11 @@
 		 ORDER BY SORT_SQ ASC
 	</select>
 	
+	<select id="getStnInfo" parameterType="map" resultType="map">
+		SELECT A.*
+		FROM TB_LA_IS_MH_AUC_STN A
+		WHERE A.AUC_DT = #{searchDate}
+		AND A.NA_BZPLC = #{naBzplc}
+		AND A.SEL_STS_DSC = #{selStsDsc}
+	</select>
 </mapper>

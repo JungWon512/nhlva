@@ -465,4 +465,9 @@ public class AuctionDAO {
 		// TODO Auto-generated method stub
 		return mainDao.update("auction.updateCowInfoForModlNo", params);
 	}
+
+	public Map<String, Object> getStnInfo(Map<String, Object> params) throws SQLException {
+		// TODO Auto-generated method stub
+		return mainDao.selectOne("auction.getStnInfo", params);
+	}
 }
