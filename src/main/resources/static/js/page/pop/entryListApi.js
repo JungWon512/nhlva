@@ -10,7 +10,8 @@
     var setBinding = function() {
         $(document).on("click",".tab_list ul > li", function(){
 			var tabId = $(this).find('a.act').attr('data-tab-id');
-			$('div.tab_area.'+tabId).show();	
+			$('div.tab_area.'+tabId).show();
+			convertScroll();	
 		});
 
         $(document).on("click",".pd_pav a", function(){
@@ -171,4 +172,24 @@ var inputNumberVaild = function(el,len){
 	if(el.value.length > len) {
 		el.value = el.value.substr(0, len);
 	}
+}
+
+var convertScroll = function(){	
+	var gubun = $('.tab_list li a.act').data('tabId');	
+	$('.tab_area.'+gubun).find(".list_table .list_body ul, div.modal-wrap .pop_TermsBox").each(function(){						
+		$(this).removeClass('mCustomScrollBox');		
+								
+		$(this).css('-webkit-overflow-scrolling','touch');
+		$(this).css('overflow-y','auto');
+		$(this).css('overflow-x','hidden');
+		
+		var gubun = $('.tab_list li a.act').data('tabId');
+		$('.tab_area.'+gubun).find('.list_table .list_body ul').css('height','');		
+		resultH= $('section.header').outerHeight() + ($('section.contents').outerHeight() - $('.tab_area.'+gubun+' .list_table .list_body ul').outerHeight()) +$('section.footer').outerHeight() +1;
+			
+		resultH = $('body').outerHeight() - resultH;
+		console.log(resultH);
+		$(this).css('height','  '+resultH+'px');
+		$(this).css('min-height','70px');
+	});	
 }

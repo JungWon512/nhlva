@@ -8,6 +8,7 @@
 			var tabId = $(this).find('a.act').attr('data-tab-id');
 			$('div.tab_area.'+tabId).show();
 			$('div.auction_list h3').text($(this).find('a').text());
+			convertScroll();
 		});
          $(document).on("keydown","li.txt input.searchTxtBuy", function(e){
 		 	if(e.keyCode == 13){
@@ -203,27 +204,21 @@ var inputNumberVaild = function(el,len){
 }
 
 var convertScroll = function(){	
-	$(".list_table .list_body ul, div.modal-wrap .pop_TermsBox").each(function(){
-		var preCss = $(this).closest('div.tab_area').attr("style");
-		$(this).closest('div.tab_area').css({position:   'absolute', visibility: 'hidden',display:    'block'});						
-		$(this).removeClass('mCustomScrollBox');
-		
-		var height = $('body').height() - ($(this).closest('.list_table').height() - $(this).closest('.list_body').height());
+	var gubun = $('.tab_list li a.act').data('tabId');	
+	$('.tab_area.'+gubun).find(".list_table .list_body ul, div.modal-wrap .pop_TermsBox").each(function(){						
+		$(this).removeClass('mCustomScrollBox');		
 								
 		$(this).css('-webkit-overflow-scrolling','touch');
 		$(this).css('overflow-y','auto');
 		$(this).css('overflow-x','hidden');
 		
-		if($(this).closest('.tab_area').hasClass('buy')){
-			resultH= $('section.header').outerHeight() + ($('section.contents').outerHeight() - $('.tab_area.buy .list_table .list_body ul').outerHeight()) +$('section.footer').outerHeight() +1;								
-		}else{
-			resultH= $('section.header').outerHeight() + ($('section.contents').outerHeight() - $('.tab_area.buy .list_table .list_body ul').outerHeight()) +$('section.footer').outerHeight() +1;								
-		}
-			
+		var gubun = $('.tab_list li a.act').data('tabId');
+		$('.tab_area.'+gubun).find('.list_table .list_body ul').css('height','');		
+		resultH= $('section.header').outerHeight() + ($('section.contents').outerHeight() - $('.tab_area.'+gubun+' .list_table .list_body ul').outerHeight()) +$('section.footer').outerHeight() +1;
 			
 		resultH = $('body').outerHeight() - resultH;
+		console.log(resultH);
 		$(this).css('height','  '+resultH+'px');
 		$(this).css('min-height','70px');
-		$(this).closest('div.tab_area').attr("style", preCss ? preCss : "");
 	});	
 }

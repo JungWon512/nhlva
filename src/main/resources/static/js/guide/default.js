@@ -165,40 +165,18 @@ $(document).ready(function() {
 			$(window).on("load",function(){
 				if(isApp() || chkOs() != 'web'){
 					$(".list_table .list_body ul, div.modal-wrap .pop_TermsBox").each(function(){
-						var preCss = $(this).closest('div.tab_area').attr("style");
-						$(this).closest('div.tab_area').css({position:   'absolute', visibility: 'hidden',display:    'block'});						
 						$(this).removeClass('mCustomScrollBox');
-						
-						var height = $('body').height() - ($(this).closest('.list_table').height() - $(this).closest('.list_body').height());
 												
 						$(this).css('-webkit-overflow-scrolling','touch');
 						$(this).css('overflow-y','auto');
 						$(this).css('overflow-x','hidden');
 						
 						var resultH= 0;
-//						if(location.href.indexOf('/office/task/entry') > 0){	
-//							resultH= $('.sub_search').outerHeight() + $('.admin_head').outerHeight() + $('.list_table .list_head').outerHeight()+36;
-//						}else if(location.href.indexOf('/watch') > 0){
-//							resultH= $('section.header').outerHeight() + ($('.contents').outerHeight() - $('.list_table .list_body ul').outerHeight()) +$('.footer').outerHeight() +1;
-//						}else if(location.href.indexOf('/sales') > 0){
-//							resultH= $('section.header').outerHeight() + $('.list_search').outerHeight() + $('.list_table .list_head').outerHeight()+$('.footer').outerHeight() + 122;
-//						}else if(location.href.indexOf('/my/buy') > 0){
-//							if($(this).closest('.tab_area').hasClass('buy')){
-//								resultH= $('section.header').outerHeight() + $('.tab_list').outerHeight() + $('.tab_area.buy .list_search').outerHeight() + $('.tab_area.buy .sum_table').outerHeight() + $('.tab_area.buy .list_table .list_head').outerHeight()+$('.footer').outerHeight() +82;								
-//							}else{
-//								resultH= $('section.header').outerHeight() + $('.tab_list').outerHeight() + $('.tab_area.bid .list_search').outerHeight() + $('.tab_area.bid .list_table .list_head').outerHeight()+$('.footer').outerHeight() +82;								
-//							}
-//						}else{
-//							resultH= $('section.header').outerHeight() + $('.list_search').outerHeight() + $('.list_table .list_head').outerHeight()+$('.footer').outerHeight() + 60;
-//						}
 						if(location.href.indexOf('/office/task/entry') > 0){	
 							resultH= $('.sub_search').outerHeight() + $('.admin_head').outerHeight() + $('.list_table .list_head').outerHeight()+36;
-						}else if(location.href.indexOf('/my/buy') > 0){
-							if($(this).closest('.tab_area').hasClass('buy')){
-								resultH= $('section.header').outerHeight() + ($('section.contents').outerHeight() - $('.tab_area.buy .list_table .list_body ul').outerHeight()) +$('section.footer').outerHeight() +1;								
-							}else{
-								resultH= $('section.header').outerHeight() + ($('section.contents').outerHeight() - $('.tab_area.buy .list_table .list_body ul').outerHeight()) +$('section.footer').outerHeight() +1;								
-							}
+						}else if(location.href.indexOf('/my/buy') > 0 || location.href.indexOf('/auction/api/entryListApi') > 0){
+							var gubun = $('.tab_list li a.act').data('tabId');
+							resultH= $('section.header').outerHeight() + ($('section.contents').outerHeight() - $('.tab_area.'+gubun+' .list_table .list_body ul').outerHeight()) +$('section.footer').outerHeight() +1;
 						}else if(location.href.indexOf('/sales') > 0){
 							resultH= $('section.header').outerHeight() + ($('section.contents').outerHeight() - $('.list_table.schedule_tb_mo .list_body ul').outerHeight()) +$('section.footer').outerHeight() +1;
 						}else {
@@ -208,7 +186,6 @@ $(document).ready(function() {
 						//$(this).css('height','calc( 100vh -  '+resultH+'px)');
 						$(this).css('height','  '+resultH+'px');
 						$(this).css('min-height','70px');
-						$(this).closest('div.tab_area').attr("style", preCss ? preCss : "");
 					});
 				}else{
 					$(".list_body ul").mCustomScrollbar({
