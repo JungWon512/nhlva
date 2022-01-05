@@ -6,6 +6,7 @@
 <style type="text/css">
 	@media only all and (max-width: 1024px) {
 		.draggable {min-height:243px !important; }
+		#toast {position:absolute !important; top:auto !important;}
 	}
 	@media only all and (max-width: 768px) {
 		.draggable {min-height:243px !important; }
@@ -214,6 +215,7 @@
 					<div class="message_board" style="min-height:37px;z-index: -1000;position: absolute;top: 0px;left: 0px;background: rgb(230, 239, 255);min-width:100%;"></div>
 					<a href="javascript:;" class="pop-btn btn_popup">팝업</a>
 				</div>
+				<div id="toast"></div>
 				<dl class="aucNum num-bun" style="background: #ffaf00;">
 					<dt>경매<br/>번호</dt>
 					<dd><input type="text" class="aucNum active" id="auction_num" name="aucNum" style="background: #ffaf00;" placeholder="" readonly /><span>번</span></dd>

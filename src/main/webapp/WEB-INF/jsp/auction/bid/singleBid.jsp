@@ -4,13 +4,13 @@
 <script src="https://cdn.jsdelivr.net/npm/@remotemonster/sdk/remon.min.js"></script>
 <script src="/static/js/socket.io/socket.io.js"></script>
 <style type="text/css">
-@media only all and (max-width: 1024px) {
-	.draggable {min-height:243px !important; }
-}
-
-@media only all and (max-width: 768px) {
-	.draggable {min-height:243px !important; }
-}
+	@media only all and (max-width: 1024px) {
+		.draggable {min-height:243px !important; }
+		#toast {position:absolute !important; top:auto !important;}
+	}
+	@media only all and (max-width: 768px) {
+		.draggable {min-height:243px !important; }
+	}
 </style>
 <!-- //auction_list s : 경매 응찰 본 화면 -->
 <div class="auction_list has_auction_see">
@@ -216,6 +216,7 @@
 					<div class="message_board" style="min-height:37px;z-index: -1000;position: absolute;top: 0px;left: 0px;background: rgb(230, 239, 255);min-width:100%;"></div>
 					<a href="javascript:;" class="pop-btn btn_popup">팝업</a>
 				</div>
+				<div id="toast"></div>
 				<dl>
 					<dt>응찰<br/>금액</dt>
 					<dd><input type="text" id="gang-calculator" name="bidAmt" placeholder="0" pattern="\d*" inputmode="numeric" readonly></dd>

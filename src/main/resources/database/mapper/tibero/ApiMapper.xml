@@ -110,6 +110,7 @@
 				A.AUC_DT,                    <!-- 경매일자   -->
 				TO_CHAR(A.LSCHG_DTM,'YYYYMMDDHH24MISS') as LSCHG_DTM, <!-- 최종변경일시   -->
 				A.LS_CMENO,                    <!-- 최종변경자개인번호  -->
+				A.AUC_YN,                      /* 경매진행여부 */
 			<choose>
 			<when test="aucYn != null and aucYn != ''">
 				CASE WHEN #{aucYn} = '1' THEN '11' ELSE SEL_STS_DSC END AS SEL_STS_DSC,
