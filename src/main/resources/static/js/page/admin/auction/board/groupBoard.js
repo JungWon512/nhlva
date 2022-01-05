@@ -78,11 +78,20 @@ var messageHandler = function(data) {
 				,t8007:'경매 종료'
 			}
 			switch(dataArr[6]){
-				case "8001" : $('section.billboard-info .infoTxt').html(aucStConfig.t8001); break; 
+				case "8001" : 
+					$('.billboard-info').show();
+					$('.billboard-view').hide();
+					$('.billboard-noBid').hide();
+					clearInterval(viewInterval);
+					clearInterval(noInfoInterval);
+					$('section.billboard-info .infoTxt').html(aucStConfig.t8001); 
+				break; 
 				case "8002" : 
 					$('.billboard-info').show();
 					$('.billboard-view').hide();
 					$('.billboard-noBid').hide();
+					clearInterval(viewInterval);
+					clearInterval(noInfoInterval);
 					$('section.billboard-info .infoTxt').html(aucStConfig.t8002); 
 				break; 
 				case "8003" : $('section.billboard-info .infoTxt').html(aucStConfig.t8003); break; 
@@ -150,7 +159,6 @@ var messageHandler = function(data) {
 						theme:"dark-thin",
 						scrollInertia: 200,
 					});
-					clearInterval(infoInterval);
 					clearInterval(viewInterval);
 					noInfoIntervalFun();
 				}
@@ -279,7 +287,6 @@ var fnReloadView = function(){
 			$('.billboard-info').hide();
 			$('.billboard-noBid').hide();
 			$('.billboard-view').show();
-			clearInterval(infoInterval);
 			clearInterval(noInfoInterval);
 			viewIntervalFunc();
 		}
