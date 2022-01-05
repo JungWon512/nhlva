@@ -213,10 +213,15 @@ var convertScroll = function(){
 		$(this).css('-webkit-overflow-scrolling','touch');
 		$(this).css('overflow-y','auto');
 		$(this).css('overflow-x','hidden');
-		//var tmpDate = $(this).closest('.tab_area').get(0)?150:"watch".indexOf(location.pathname.replace('/',''))>-1?382:290;
-		var tmpDate = $(this).closest('.tab_area').get(0)?150:"watch".indexOf(location.pathname.replace('/',''))>-1?($('#aucDsc').val()==1?382:155):290;
-		var resultH= ( height-tmpDate)<=0?'450':height-tmpDate;											
-		$(this).css('height',resultH+'px');						
+		
+		if($(this).closest('.tab_area').hasClass('buy')){
+			resultH= $('section.header').outerHeight() + $('.tab_list').outerHeight() + $('.list_search').outerHeight() + $('.sum_table').outerHeight() + $('.list_table .list_head').outerHeight()+$('.footer').outerHeight() +82;								
+		}else{
+			resultH= $('section.header').outerHeight() + $('.tab_list').outerHeight() + $('.tab_area.bid .list_search').outerHeight() + $('.tab_area.bid .list_table .list_head').outerHeight()+$('.footer').outerHeight() +82;			
+		}
+			
+		$(this).css('height','calc( 100vh -  '+resultH+'px)');
+		$(this).css('min-height','70px');
 		$(this).closest('div.tab_area').attr("style", preCss ? preCss : "");
 	});	
 }

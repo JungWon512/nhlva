@@ -149,7 +149,7 @@
   
 	  return this;
 	};
-	/* 20220103 모바일 더블클릭 이벤트 제거
+	/* 20220103 모바일 더블클릭 이벤트 제거 
 	$.event.special.dblclick = {
 	    setup: function(data, namespaces) {
 	        var elem = this,

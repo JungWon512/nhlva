@@ -22,7 +22,7 @@
 		-webkit-border-radius: 5px;
 		line-height:30px;
 	}
-	div.list_body ul{height: 410px !important;}
+	/* div.list_body ul{height: 410px !important;} */
 </style>
 
 <!--  admin_weight_list [s] -->

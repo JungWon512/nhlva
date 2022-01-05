@@ -95,6 +95,9 @@ var setEventListener = function(){
 	});
 	
 	$(document).on('dblclick','.connMnTable tr td.connect,.connMnTable tr td.ing',function(){
+		if(!socket || socket.disconnected){
+			return;
+		}
 		var num = $(this).find('p').attr('userNum');
 		var gubun = $(this).find('p').attr('gubun');
 		modalComfirm('　',num+'번 응찰자의 접속을 끊으시겠습니까?',function(){ 

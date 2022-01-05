@@ -5943,24 +5943,6 @@ Base styles: contents layer
 	color: #007eff
 }
 
-@media only all and (max-width: 640px) {
-	.admin_area .list_body ul {
-		max-height: 410px
-	}
-}
-
-@media only all and (max-width: 360px) {
-	.admin_area .list_body ul {
-		max-height: 360px
-	}
-}
-
-@media only all and (max-width: 320px) {
-	.admin_area .list_body ul {
-		max-height: 330px
-	}
-}
-
 .admin_area .btn_area {
 	max-width: 600px;
 	width: 100%;
