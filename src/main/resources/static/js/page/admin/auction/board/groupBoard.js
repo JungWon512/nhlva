@@ -38,6 +38,7 @@ var setSocket = function(){
 	socket.on('CancelBidding', messageHandler);
 	socket.on('RetryTargetInfo', messageHandler);
 	socket.on('AuctionBidStatus', messageHandler);
+	socket.on('ShowFailBidding', messageHandler);	
 	socket.on('ShowFailBIdding', messageHandler);	
 }
 
@@ -72,16 +73,21 @@ var messageHandler = function(data) {
 				,t8002:'<span class="txt-blue">일괄</span><span class="txt-green"> 경매 대기 중</span>'
 				,t8003:'<span class="txt-blue">일괄</span><span class="txt-green"> 경매 시작</span>'
 				,t8004:'<span class="txt-blue">일괄</span><span class="txt-green"> 경매 진행 중</span><br>응찰하시기 바랍니다'
-				,t8004:'<span class="txt-blue">일괄</span><span class="txt-green"> 경매 정지</span>'
+				,t8005:'<span class="txt-blue">일괄</span><span class="txt-green"> 경매 정지</span>'
 				,t8006:'경매응찰 완료'
 				,t8007:'경매 종료'
 			}
 			switch(dataArr[6]){
 				case "8001" : $('section.billboard-info .infoTxt').html(aucStConfig.t8001); break; 
-				case "8002" : $('table.tblAuctionSt tbody tr.st td.count-td p').text(aucStConfig.t8002); break; 
-				case "8003" : $('table.tblAuctionSt tbody tr.st td.count-td p').text(aucStConfig.t8003); break; 
-				case "8004" : $('table.tblAuctionSt tbody tr.st td.count-td p').text(aucStConfig.t8004); break; 
-				case "8005" : $('table.tblAuctionSt tbody tr.st td.count-td p').text(aucStConfig.t8005); break; 
+				case "8002" : 
+					$('.billboard-info').show();
+					$('.billboard-view').hide();
+					$('.billboard-noBid').hide();
+					$('section.billboard-info .infoTxt').html(aucStConfig.t8002); 
+				break; 
+				case "8003" : $('section.billboard-info .infoTxt').html(aucStConfig.t8003); break; 
+				case "8004" : $('section.billboard-info .infoTxt').html(aucStConfig.t8004); break; 
+				case "8005" : $('section.billboard-info .infoTxt').html(aucStConfig.t8005); break; 
 				case "8006" : 
 					fnReloadView();
 				break; 
@@ -235,14 +241,14 @@ var fnReloadView = function(){
 						var sHtml = "";					
 						sHtml += "	<li><dl>";
 						sHtml += "		<dd class='num'> "+vo.AUC_PRG_SQ +"</dd>";
-						sHtml += "		<dd class='name'>"+ vo.FTSNM +"</dd>";
+						sHtml += "		<dd class='name'>"+ (vo.FTSNM?vo.FTSNM.substring(0,3):'') +"</dd>";
 						sHtml += "		<dd class='pd_ea'> "+vo.SRA_INDV_AMNNO_FORMAT +"</dd>";
 						sHtml += "		<dd class='pd_sex'> "+vo.INDV_SEX_C_NAME +"</dd>";
 						sHtml += "		<dd class='pd_kg'> "+((vo.COW_SOG_WT == '' || vo.COW_SOG_WT == null || vo.COW_SOG_WT <= 0 ) ? '0' : vo.COW_SOG_WT) +"</dd>";
 						sHtml += "		<dd class='pd_kpn'> "+vo.KPN_NO_STR +"</dd>";
 						sHtml += "		<dd class='pd_pay1'>"+((vo.LOWS_SBID_LMT_AM == '' || vo.LOWS_SBID_LMT_AM == null || vo.LOWS_SBID_LMT_AM <= 0 ) ? '-' : vo.LOWS_SBID_LMT_AM <= 0 ? '0' : vo.LOWS_SBID_LMT_UPR)+"</dd>";
 						sHtml += "		<dd class='pd_pay2'>"+((vo.SRA_SBID_UPR == '' || vo.SRA_SBID_UPR == null || vo.SRA_SBID_UPR <= 0 ) ? '-' : vo.SRA_SBID_UPR <= 0 ? '0' : vo.SRA_SBID_UPR)+"</dd>";
-						sHtml += "		<dd class='pd_state'>"+ vo.SEL_STS_DSC_NAME +"</dd>";
+						sHtml += "		<dd class='pd_state'>"+ (vo.SEL_STS_DSC_NAME=='대기' && vo.LOWS_SBID_LMT_AM == 0 ? '결장':vo.SEL_STS_DSC_NAME) +"</dd>";
 						sHtml += "	</dl></li>";
 						body.append(sHtml);
 					}					
@@ -256,6 +262,15 @@ var fnReloadView = function(){
 					,setHeight: false
 				});
 			}
+			$('.billboard-view .list_body dd.pd_state').each((i,elem) =>{
+				var txt = $(elem).text();
+				switch(txt){
+					case "유찰": $(elem).css('color','#c2f200'); break;
+					case "결장": $(elem).css('color','#f22800'); break;
+					case "낙찰": $(elem).css('color','#ffffff'); break;
+					default:break;
+				}
+			});
 			$('.billboard-info').hide();
 			$('.billboard-noBid').hide();
 			$('.billboard-view').show();

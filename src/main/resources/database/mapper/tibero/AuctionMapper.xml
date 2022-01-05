@@ -566,9 +566,9 @@
 				 , B.FARM_AMNNO 				/* 농장관리번호 */
 				 , (SELECT C.FTSNM
 					  FROM TB_LA_IS_MM_FHS C
-					 WHERE C.NA_BZPLC = B.NA_BZPLC
-					   AND C.FHS_ID_NO = B.FHS_ID_NO
-					   AND C.FARM_AMNNO = B.FARM_AMNNO
+					 WHERE C.NA_BZPLC = A.NA_BZPLC
+					   AND C.FHS_ID_NO = A.FHS_ID_NO
+					   AND C.FARM_AMNNO = A.FARM_AMNNO
 				 ) AS FTSNM						/* 농가명 */
 				 , A.BRANDNM					/* 브랜드명 */
 				 , B.BIRTH						/* 생년월일 */
@@ -606,7 +606,7 @@
 				 , B.ANW_YN 					/* 신규여부 */
 				 , ROUND(A.COW_SOG_WT) AS COW_SOG_WT	/* 우출하중량 */
 				 , A.RMK_CNTN					/* 비고내용 */
-				 , A.SEL_STS_DSC 				/* 낙유찰결과 */
+				 , DECODE(A.AUC_YN,'1','11',A.SEL_STS_DSC) SEL_STS_DSC 				/* 낙유찰결과 */
 				 , (SELECT D.SRA_MWMNNM 
 					  FROM TB_LA_IS_MM_MWMN D
 					 WHERE D.NA_BZPLC = A.NA_BZPLC
