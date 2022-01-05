@@ -215,12 +215,14 @@ var convertScroll = function(){
 		$(this).css('overflow-x','hidden');
 		
 		if($(this).closest('.tab_area').hasClass('buy')){
-			resultH= $('section.header').outerHeight() + $('.tab_list').outerHeight() + $('.list_search').outerHeight() + $('.sum_table').outerHeight() + $('.list_table .list_head').outerHeight()+$('.footer').outerHeight() +82;								
+			resultH= $('section.header').outerHeight() + ($('section.contents').outerHeight() - $('.tab_area.buy .list_table .list_body ul').outerHeight()) +$('section.footer').outerHeight() +1;								
 		}else{
-			resultH= $('section.header').outerHeight() + $('.tab_list').outerHeight() + $('.tab_area.bid .list_search').outerHeight() + $('.tab_area.bid .list_table .list_head').outerHeight()+$('.footer').outerHeight() +82;			
+			resultH= $('section.header').outerHeight() + ($('section.contents').outerHeight() - $('.tab_area.buy .list_table .list_body ul').outerHeight()) +$('section.footer').outerHeight() +1;								
 		}
 			
-		$(this).css('height','calc( 100vh -  '+resultH+'px)');
+			
+		resultH = $('body').outerHeight() - resultH;
+		$(this).css('height','  '+resultH+'px');
 		$(this).css('min-height','70px');
 		$(this).closest('div.tab_area').attr("style", preCss ? preCss : "");
 	});	

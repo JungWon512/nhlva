@@ -176,22 +176,37 @@ $(document).ready(function() {
 						$(this).css('overflow-x','hidden');
 						
 						var resultH= 0;
+//						if(location.href.indexOf('/office/task/entry') > 0){	
+//							resultH= $('.sub_search').outerHeight() + $('.admin_head').outerHeight() + $('.list_table .list_head').outerHeight()+36;
+//						}else if(location.href.indexOf('/watch') > 0){
+//							resultH= $('section.header').outerHeight() + ($('.contents').outerHeight() - $('.list_table .list_body ul').outerHeight()) +$('.footer').outerHeight() +1;
+//						}else if(location.href.indexOf('/sales') > 0){
+//							resultH= $('section.header').outerHeight() + $('.list_search').outerHeight() + $('.list_table .list_head').outerHeight()+$('.footer').outerHeight() + 122;
+//						}else if(location.href.indexOf('/my/buy') > 0){
+//							if($(this).closest('.tab_area').hasClass('buy')){
+//								resultH= $('section.header').outerHeight() + $('.tab_list').outerHeight() + $('.tab_area.buy .list_search').outerHeight() + $('.tab_area.buy .sum_table').outerHeight() + $('.tab_area.buy .list_table .list_head').outerHeight()+$('.footer').outerHeight() +82;								
+//							}else{
+//								resultH= $('section.header').outerHeight() + $('.tab_list').outerHeight() + $('.tab_area.bid .list_search').outerHeight() + $('.tab_area.bid .list_table .list_head').outerHeight()+$('.footer').outerHeight() +82;								
+//							}
+//						}else{
+//							resultH= $('section.header').outerHeight() + $('.list_search').outerHeight() + $('.list_table .list_head').outerHeight()+$('.footer').outerHeight() + 60;
+//						}
 						if(location.href.indexOf('/office/task/entry') > 0){	
 							resultH= $('.sub_search').outerHeight() + $('.admin_head').outerHeight() + $('.list_table .list_head').outerHeight()+36;
-						}else if(location.href.indexOf('/watch') > 0){
-							resultH= $('section.header').outerHeight() + $('.seeBox_slick').outerHeight() + $('.list_table .list_head').outerHeight()+$('.footer').outerHeight() + 40;
-						}else if(location.href.indexOf('/sales') > 0){
-							resultH= $('section.header').outerHeight() + $('.list_search').outerHeight() + $('.list_table .list_head').outerHeight()+$('.footer').outerHeight() + 122;
 						}else if(location.href.indexOf('/my/buy') > 0){
 							if($(this).closest('.tab_area').hasClass('buy')){
-								resultH= $('section.header').outerHeight() + $('.tab_list').outerHeight() + $('.tab_area.buy .list_search').outerHeight() + $('.tab_area.buy .sum_table').outerHeight() + $('.tab_area.buy .list_table .list_head').outerHeight()+$('.footer').outerHeight() +82;								
+								resultH= $('section.header').outerHeight() + ($('section.contents').outerHeight() - $('.tab_area.buy .list_table .list_body ul').outerHeight()) +$('section.footer').outerHeight() +1;								
 							}else{
-								resultH= $('section.header').outerHeight() + $('.tab_list').outerHeight() + $('.tab_area.bid .list_search').outerHeight() + $('.tab_area.bid .list_table .list_head').outerHeight()+$('.footer').outerHeight() +82;								
+								resultH= $('section.header').outerHeight() + ($('section.contents').outerHeight() - $('.tab_area.buy .list_table .list_body ul').outerHeight()) +$('section.footer').outerHeight() +1;								
 							}
-						}else{
-							resultH= $('section.header').outerHeight() + $('.list_search').outerHeight() + $('.list_table .list_head').outerHeight()+$('.footer').outerHeight() + 60;
+						}else if(location.href.indexOf('/sales') > 0){
+							resultH= $('section.header').outerHeight() + ($('section.contents').outerHeight() - $('.list_table.schedule_tb_mo .list_body ul').outerHeight()) +$('section.footer').outerHeight() +1;
+						}else {
+							resultH= $('section.header').outerHeight() + ($('section.contents').outerHeight() - $('.list_table .list_body ul').outerHeight()) +$('section.footer').outerHeight() +1;
 						}
-						$(this).css('height','calc( 100vh -  '+resultH+'px)');
+						resultH = $('body').outerHeight() - resultH;
+						//$(this).css('height','calc( 100vh -  '+resultH+'px)');
+						$(this).css('height','  '+resultH+'px');
 						$(this).css('min-height','70px');
 						$(this).closest('div.tab_area').attr("style", preCss ? preCss : "");
 					});
