@@ -370,7 +370,7 @@
 				sHtml.push('					<tr>');
 				sHtml.push('						<th>변경</th>');
 				sHtml.push('						<td class="input-td">');
-				sHtml.push('							<input type="text" name="modlNo" class="pd5 required onlyNumber" value="' + cowInfo.MODL_NO + '" maxlength="4" pattern="\d*" inputmode="numeric" style="width:70%;" />');
+				sHtml.push('							<input type="text" name="modlNo" class="pd5 required onlyNumber" value="" maxlength="4" pattern="\d*" inputmode="numeric" style="width:70%;" />');
 				sHtml.push('						</td>');
 				sHtml.push('					</tr>');
 			}
@@ -395,7 +395,7 @@
 			$(".pop_mod_weight").find("input.required").on('keydown',function(){
 				if(!$(this).val() || $(this).val() == '0') $(this).val('');
 			});
-			$(".pop_mod_weight").find("input.required").on('focusout',function(){
+			$(".pop_mod_weight").find("input.required:not([name=modlNo])").on('focusout',function(){
 				if(!$(this).val() || $(this).val() == '') $(this).val('0');
 			});
 			var len = $(".pop_mod_weight").find("input.required").val().length;
