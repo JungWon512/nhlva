@@ -56,10 +56,11 @@
 	
 	<select id="selectAuctStn" parameterType="map" resultType="map">
 		SELECT A.*
-		FROM TB_LA_IS_MH_AUC_STN A
-		WHERE A.AUC_DT = #{aucDt}
-		AND A.NA_BZPLC = #{naBzplc}
-		AND A.AUC_OBJ_DSC = #{aucObjDsc}
+			 , MAX(A.DDL_QCN) OVER(PARTITION BY A.NA_BZPLC, A.AUC_OBJ_DSC, A.AUC_DT, A.RG_SQNO) AS MAX_DDL_QCN
+		  FROM TB_LA_IS_MH_AUC_STN A
+		 WHERE A.AUC_DT = #{aucDt}
+		   AND A.NA_BZPLC = #{naBzplc}
+		   AND A.AUC_OBJ_DSC = #{aucObjDsc}
 		<if test="rgSqno !=null and !rgSqno.equals('')">
 			AND A.RG_SQNO = #{rgSqno}
 		</if>
@@ -241,6 +242,9 @@
 			</if>
 			<if test="aucYn != null and aucYn != ''">
 			   AND A.AUC_YN = #{aucYn}
+			</if>
+			<if test="ddlQcn != null and ddlQcn != ''">
+			   AND A.DDL_QCN = #{ddlQcn}
 			</if>
 			<if test="stAucNo !=null and !stAucNo.equals('') and edAucNo !=null and !edAucNo.equals('')">
 			   AND A.AUC_PRG_SQ <![CDATA[>=]]> #{stAucNo}

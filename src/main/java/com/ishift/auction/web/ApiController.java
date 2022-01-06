@@ -70,14 +70,14 @@ public class ApiController {
 	@Value("${spring.profiles.active}")
 	private String profile;
 
-	@PostMapping(value = "/api/test", produces = MediaType.APPLICATION_JSON_VALUE)
+	@PostMapping(value = "/api/v1/biz/test", produces = MediaType.APPLICATION_JSON_VALUE)
 	public Map<String, Object> test(@RequestBody final Map<String, Object> map) {
 		Map<String, Object> result = new HashMap<String, Object>();
 		JwtTokenVo jwtTokenVo = JwtTokenVo.builder().auctionHouseCode(map.get("auctionHouseCode").toString())
 													.userMemNum(map.get("userName").toString())
 													.userRole(map.get("userRole").toString())
 													.build();
-		final String token = jwtTokenUtil.generateToken(jwtTokenVo, Constants.JwtConstants.ACCESS_TOKEN);
+		final String token = jwtTokenUtil.generateToken(jwtTokenVo, Constants.JwtConstants.REFRESH_TOKEN);
 		result.put("token", token);
 		return result;
 	}
@@ -681,7 +681,7 @@ public class ApiController {
 	}
 	
 	/**
-	 * 카카오 커넥트 라이브 서비스ID, Key 조회 api
+	 * 금일자 경매에 등록된 중도매인으로 테스트 토큰 발급(유효기간 1년)
 	 * @param version > api버전
 	 * @param naBzplc > 조합코드
 	 * @return
@@ -820,16 +820,23 @@ public class ApiController {
 		try {
 			String stnYn = params.get("stnYn") == null? "" :(String)params.get("stnYn");
 			if("Y".equals(stnYn)) {
-				Map<String, Object> map = auctionService.selectAuctStn(params);
+				final Map<String, Object> map = auctionService.selectAuctStn(params);
 				if (map == null) {
 					result.put("success", false);
 					result.put("message", "일괄경매회차정보가 없습니다.");
-					return result;					
+					return result;
+				}
+				if ("21".equals(map.get("SEL_STS_DSC"))) {
+					params.put("aucYn", "1");
+					params.put("ddlQcn", map.get("MAX_DDL_QCN"));
+				}
+				else if ("23".equals(map.get("SEL_STS_DSC"))) {
+					params.put("ddlQcn", map.get("MAX_DDL_QCN"));
 				}
 				params.put("stAucNo", map.get("ST_AUC_NO"));
 				params.put("edAucNo", map.get("ED_AUC_NO"));
 			}
-			List<Map<String, Object>> list = auctionService.selectAuctCowList(params);
+			final List<Map<String, Object>> list = auctionService.selectAuctCowList(params);
 			
 			for (Map<String, Object> info : list) {
 				info.put("SRA_PD_RGNNM_FMT", this.getRgnName(info.get("SRA_PD_RGNNM")));
@@ -903,6 +910,7 @@ public class ApiController {
 		}
 		return result;
 	}
+	
 	/**
 	 * 경매상태변경(보류)
 	 * @param version
@@ -1048,6 +1056,7 @@ public class ApiController {
 	 * @param params
 	 * @return
 	 */
+	@Deprecated
 	@ResponseBody
 	@PostMapping(value = "/api/{version}/auction/select/nextbid"
 			, consumes = MediaType.APPLICATION_FORM_URLENCODED_VALUE
@@ -1123,12 +1132,12 @@ public class ApiController {
 	}
 
 	/**
-	 * TODO : Deprecate 예정
 	 * 수수료 조회
 	 * @param version
 	 * @param params
 	 * @return
 	 */
+	@Deprecated
 	@ResponseBody
 	@PostMapping(value = "/api/{version}/auction/select/fee"
 			, consumes = MediaType.APPLICATION_FORM_URLENCODED_VALUE
@@ -1159,12 +1168,12 @@ public class ApiController {
 	}
 
 	/**
-	 * TODO : Deprecate 예정
 	 * 수수료내역 삭제
 	 * @param version
 	 * @param params
 	 * @return
 	 */
+	@Deprecated
 	@ResponseBody
 	@PostMapping(value = "/api/{version}/auction/delete/fee"
 			, consumes = MediaType.APPLICATION_FORM_URLENCODED_VALUE
@@ -1195,12 +1204,12 @@ public class ApiController {
 	}
 
 	/**
-	 * TODO : Deprecate 예정
 	 * 수수료 내역저장
 	 * @param version
 	 * @param params
 	 * @return
 	 */
+	@Deprecated
 	@ResponseBody
 	@PostMapping(value = "/api/{version}/auction/insert/fee"
 			, consumes = MediaType.APPLICATION_FORM_URLENCODED_VALUE
@@ -1426,6 +1435,7 @@ public class ApiController {
 	 * @param params
 	 * @return
 	 */
+	@Deprecated
 	@ResponseBody
 	@PostMapping(value = "/api/{version}/auction/select/macoYn"
 			, consumes = MediaType.APPLICATION_FORM_URLENCODED_VALUE
@@ -1454,6 +1464,7 @@ public class ApiController {
 		}
 		return result;
 	}
+	
 	/**
 	 * 금일 경매 차수 조회
 	 * @param version
@@ -1593,6 +1604,14 @@ public class ApiController {
 		return result;
 	}
 	
+	
+	/**
+	 * 미응찰 출장우 리스트 API
+	 * @param version
+	 * @param naBzplc
+	 * @param params
+	 * @return
+	 */
 	@ResponseBody
 	@GetMapping(value = "/api/{version}/auction/{naBzplc}/absentCowList")
 	public Map<String, Object> selectAbsentCowList(@PathVariable(name = "version") String version
