@@ -7,7 +7,7 @@
 	<meta charset="utf-8" />
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
 	<title>가축시장</title>
-	<link rel="SHORTCUT ICON" href="/static/favicon.ico" />
+	<link rel="SHORTCUT ICON" href="/static/images/guide/favicon_new.ic" />
 	<meta name="description" content="Updates and statistics" />
 	<meta name="viewport" content="width=device-width,initial-scale=1.0,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no">
 	<meta name="HandheldFriendly" content="true" />
@@ -21,6 +21,10 @@
 	<link rel="stylesheet" type="text/css" href="/static/css/guide/jquery.mCustomScrollbar.css">
 	<link rel="stylesheet" type="text/css" href="/static/css/guide/selectric.css">
 	<script type="text/javascript" src="/static/js/guide/jquery-1.12.4.js" style="user-select: auto;"></script>
+	<link rel="apple-touch-icon" sizes="64x64" href="/static/images/guide/favicon_new64.png">
+	<link rel="icon" type="image/png" sizes="16x16" href="/static/images/guide/favicon_new.ico">
+	<link rel="icon" type="image/png" sizes="32x32" href="/static/images/guide/favicon_new64.png">
+	<link rel="icon" type="image/png" sizes="128x128" href="/static/images/guide/favicon_new128.png">
 	<script src="/static/js/common/utils.js"></script>
 </head>
 <!--end::Head-->
