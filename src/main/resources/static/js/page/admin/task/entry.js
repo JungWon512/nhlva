@@ -278,7 +278,7 @@
 			}
 			var li = $(".list_body > ul").find("li#" + aucPrgSq).next() == undefined ? $(".list_body > ul").find("li#" + aucPrgSq) : $(".list_body > ul").find("li#" + aucPrgSq).next();
 			$(".list_body > ul").animate({
-				scrollTop : ($(".list_body > ul > li").index(li) - 1) * ($(".list_body > ul > li:first").height() + 1)
+				scrollTop : $(".list_body > ul").find("li#" + aucPrgSq).offset().top - $(".list_body > ul > li:first").offset().top
 			}, 500);
 //			if (regType == "L") {
 //				li.addClass("act");
