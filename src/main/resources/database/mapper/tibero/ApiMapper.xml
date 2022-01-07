@@ -245,6 +245,7 @@
 			</if>
 			<if test="ddlQcn != null and ddlQcn != ''">
 			   AND A.DDL_QCN = #{ddlQcn}
+			   AND NVL(A.LOWS_SBID_LMT_AM, 0) <![CDATA[>]]> 0
 			</if>
 			<if test="stAucNo !=null and !stAucNo.equals('') and edAucNo !=null and !edAucNo.equals('')">
 			   AND A.AUC_PRG_SQ <![CDATA[>=]]> #{stAucNo}

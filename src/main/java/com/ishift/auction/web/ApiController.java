@@ -254,8 +254,9 @@ public class ApiController {
 			params.put("searchDate", searchDate);
 			final List<Map<String, Object>> list = auctionService.selectAuctionEntry(params);
 			if (list != null) {
+				StringBuffer sb = new StringBuffer(500);
 				for (final Map<String, Object> vo : list) {
-					StringBuffer sb = new StringBuffer();
+					sb.delete(0, sb.length());
 					sb.append("SC").append('|')
 					  .append(this.getStringValue(vo.get("NA_BZPLC")).replace("|", ",")).append('|')
 //					  .append(this.getStringValue(vo.get("NA_BZPLC")).replace("|", "｜")).append('|')

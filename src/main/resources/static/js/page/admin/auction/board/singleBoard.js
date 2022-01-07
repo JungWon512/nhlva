@@ -93,7 +93,7 @@ var messageHandler = function(data) {
 				case "8005" : $('table.tblBoard tbody tr.title td p.boardTitle').removeClass('txt-red').text(aucStConfig.t8005); break; 
 				case "8006" : $('table.tblBoard tbody tr.title td p.boardTitle').removeClass('txt-red').text(aucStConfig.t8006); break; 
 				case "8007" :
-					socketDisconnect();
+//					socketDisconnect();
 					$('table.tblBoard tbody tr.title td p.boardTitle').removeClass('txt-red').text(aucStConfig.t8007);  
 				break; 
 				default:break;
