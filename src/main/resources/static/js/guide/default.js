@@ -42,10 +42,18 @@ var preLoadDate;
 	}
 	//page unload page reload체크
 	if(location.pathname.indexOf('office') < 0 || location.pathname.indexOf('office/task') > 0)
-		window.document.addEventListener("visibilitychange", function(e) {
+		window.document.addEventListener("visibilitychange", function(e) {			
 			if(window.document.visibilityState == 'hidden'){
+				if(location.pathname.indexOf('/watch') >= 0 || location.pathname.indexOf('/groupBid') >= 0 || location.pathname.indexOf('/singlebid') >= 0){
+					$('#remoteVideo1').get(0).muted=true;
+					$(".m_sound").addClass('off');
+				}
 				preLoadDate=new Date();			
 			}else{
+				if(location.pathname.indexOf('/watch') >= 0 || location.pathname.indexOf('/groupBid') >= 0 || location.pathname.indexOf('/singlebid') >= 0){		
+					$('#remoteVideo1').get(0).muted=false;
+					$(".m_sound").removeClass('off');
+				}
 				var tmpDate = new Date();
 				tmpDate.setMinutes(tmpDate.getMinutes()-15);
 				
