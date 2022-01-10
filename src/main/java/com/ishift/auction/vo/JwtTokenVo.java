@@ -48,14 +48,14 @@ public class JwtTokenVo {
 	public JwtTokenVo(String userName, String userBirthdate, int entryNum
 					, String auctionHouseCode, String deviceUUID, String userMemNum
 					, String userRole, String auctionClass, String auctionType) {
-		this.userName = userName;
-		this.userBirthdate = userBirthdate;
-		this.entryNum = entryNum;
+//		this.userName = userName;
+//		this.userBirthdate = userBirthdate;
+//		this.entryNum = entryNum;
 		this.auctionHouseCode = auctionHouseCode;
-		this.deviceUUID = deviceUUID;
+//		this.deviceUUID = deviceUUID;
 		this.userMemNum = userMemNum;
 		this.userRole = userRole;
-		this.auctionClass = auctionClass;
-		this.auctionType = auctionType;
+//		this.auctionClass = auctionClass;
+//		this.auctionType = auctionType;
 	}	
 }

@@ -22,10 +22,11 @@ public class HttpUtils {
 	public void postRequest() {
 		String apiUrl = "https://kakaoi-newtone-openapi.kakao.com/v1/synthesize";
 		String apiKey = "a36ce0d1cef0f4618bc716415b289972";
+		HttpURLConnection conn = null;
 		
 		try {
 			URL url = new URL(apiUrl);
-			HttpURLConnection conn = (HttpURLConnection)url.openConnection();
+			conn = (HttpURLConnection)url.openConnection();
 			conn.setRequestMethod("POST");
 			conn.setRequestProperty(HttpHeaders.AUTHORIZATION, "KakaoAK " + apiKey);
 			conn.setRequestProperty(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_XML_VALUE);
@@ -64,11 +65,63 @@ public class HttpUtils {
 			log.error("HttpUtils.postRequest : {} ",ie);
 		}catch (RuntimeException re) {
 			log.error("HttpUtils.postRequest : {} ",re);
+		}finally {
+			conn.disconnect();
 		}
 	}
 	
-	public void sendPost(String baseUrl, HttpHeaders header, String content) {
+	public boolean sendPost(String baseUrl, String content) {
+		boolean result = false;
+		HttpURLConnection con = null;
 		
+		try {
+			log.debug("start sendPost");
+
+			URL url = new URL(baseUrl);
+			con = (HttpURLConnection)url.openConnection();
+			
+			byte[] sendData = content.getBytes("UTF-8");
+			
+			con.setDoOutput(true);
+			con.setRequestMethod("POST");
+			con.setRequestProperty(HttpHeaders.CACHE_CONTROL, "no-cache");
+			con.setRequestProperty(HttpHeaders.PRAGMA, "no-cache");
+			con.setRequestProperty(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE);
+			con.setRequestProperty(HttpHeaders.ACCEPT_CHARSET, "UTF-8");
+			con.setRequestProperty(HttpHeaders.CONTENT_LENGTH, String.valueOf(sendData.length));
+			con.setConnectTimeout(5000);
+			con.setReadTimeout(10000);
+			con.getOutputStream().write(sendData);
+			con.getOutputStream().flush();
+			con.connect();
+			
+			int responseCode = con.getResponseCode();
+			String responseMessage = con.getResponseMessage();
+			
+			log.debug("HttpUtils.sendPost > responseCode : {}", responseCode);
+			log.debug("HttpUtils.sendPost > responseMessage : {}", responseMessage);
+		
+			if (responseCode == 200) {
+				StringBuffer sb = new StringBuffer();
+				BufferedReader reader = new BufferedReader(new InputStreamReader(con.getInputStream()));
+				for (String line; (line = reader.readLine()) != null;) {
+					sb.append(line).append("\n");
+				}
+				String responseBody = sb.toString();
+				log.debug("HttpUtils.sendPost responseBody : {}", responseBody);
+				result = true;
+			}
+			
+			con.disconnect();
+		}
+		catch (IOException | RuntimeException e) {
+			log.error("HttpUtils.sendPost : {}", e.getMessage());
+			return false;
+		}
+		finally {
+			if (con != null) con.disconnect();
+		}
+		return result;
 	}
 
 }

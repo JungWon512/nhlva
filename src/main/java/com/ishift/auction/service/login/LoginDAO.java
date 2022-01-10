@@ -65,4 +65,34 @@ public class LoginDAO {
 		return mainDao.selectOne("LoginMapper.selectFarmUser", params);
 	}
 
+	/**
+	 * 인증번호 조회
+	 * @param params
+	 * @return
+	 * @throws SQLException
+	 */
+	public Map<String, Object> selectAuthNumberInfo(Map<String, Object> params) throws SQLException {
+		return mainDao.selectOne("LoginMapper.selectAuthNumberInfo", params);
+	}
+
+	/**
+	 * 새로 발급한 인증번호 저장
+	 * @param params
+	 * @return
+	 * @throws SQLException
+	 */
+	public int updateAuthNumber(Map<String, Object> params) throws SQLException {
+		return mainDao.update("LoginMapper.updateAuthNumber", params);
+	}
+
+	/**
+	 * 로그인 인증번호 발송
+	 * @param params
+	 * @return
+	 * @throws SQLException
+	 */
+	public int sendSms(Map<String, Object> params) throws SQLException {
+		return mainDao.update("LoginMapper.sendSms", params);
+	}
+
 }

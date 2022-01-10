@@ -1,14 +1,9 @@
 package com.ishift.auction.util;
 
-import java.sql.SQLException;
-
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Component;
-
-import java.io.IOException;
 
 @Component
 public class CookieUtil {

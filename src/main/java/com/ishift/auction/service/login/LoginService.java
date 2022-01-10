@@ -12,7 +12,7 @@ public interface LoginService {
 	 * @return
 	 * @throws SQLException
 	 */
-	Map<String, Object> loginProc(Map<String, Object> params) throws SQLException;
+	Map<String, Object> loginProc(Map<String, Object> params) throws SQLException, RuntimeException;
 
 	/**
 	 * 로그인 중도매인 검색
@@ -40,6 +40,7 @@ public interface LoginService {
 	 * 로그인 출하주 검색
 	 * @param params
 	 * @return
+	 * @throws SQLException
 	 */
 	List<Map<String, Object>> selectFarmUserList(Map<String, Object> params) throws SQLException;
 
@@ -47,8 +48,42 @@ public interface LoginService {
 	 * 조합코드(NA_BZPLC)와 농가 식별번호(FHS_ID_NO)로 출하주 조회
 	 * @param params
 	 * @return
+	 * @throws SQLException
 	 */
 	Map<String, Object> selectFarmUser(Map<String, Object> params) throws SQLException;
+
+	/**
+	 * 인증번호 조회
+	 * @param params
+	 * @return
+	 * @throws SQLException
+	 */
+	Map<String, Object> selectAuthNumberInfo(Map<String, Object> params) throws SQLException;
+
+	/**
+	 * 새로 발급한 인증번호 저장
+	 * @param params
+	 * @return
+	 * @throws SQLException
+	 */
+	int updateAuthNumber(Map<String, Object> params) throws SQLException;
+
+	/**
+	 * 로그인 인증번호 발송
+	 * @param params
+	 * @return
+	 * @throws SQLException
+	 */
+	Map<String, Object> sendSmsProc(Map<String, Object> params) throws SQLException, RuntimeException;
+
+	/**
+	 * 로그인 인증번호 확인
+	 * @param params
+	 * @return
+	 * @throws SQLException
+	 * @throws RuntimeException
+	 */
+	Map<String, Object> loginAuthProc(Map<String, Object> params) throws SQLException, RuntimeException;
 
 
 }

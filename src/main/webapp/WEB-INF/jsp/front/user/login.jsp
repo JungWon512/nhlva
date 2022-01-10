@@ -1,42 +1,62 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ include file="/WEB-INF/__system/taglibs.jsp"%>
 
-<div class="login_area">
+<div class="login_area sms_authentication">
 	<form name="frm" id="frm" method="post">
-	<input type="hidden" name="place" value="${place}" />
-	<input type="hidden" name="type" value="${empty type ? '0' : type}" />
-	<div class="login_top">
-		<h3>${johapData.CLNTNM}</h3>
-		<dl>
-			<dd><input type="text" id="userName" name="userName" placeholder="이름" maxlength="20" required autofocus/></dd>
-		<c:choose>
-		<c:when test="${type ne '1'}">
-			<dd><input type="text" id="password" name="birthDate" placeholder="생년월일(6자리) 또는 사업자번호" maxlength="10" pattern="\d*" required inputmode="numeric"/></dd>
-		</c:when>
-		<c:otherwise>
-			<dd><input type="text" id="password" name="telNo" placeholder="전화번호 또는 휴대전화번호" maxlength="11" pattern="\d*" required inputmode="numeric" /></dd>
-		</c:otherwise>
-		</c:choose>
-		</dl>
-		<ul class="agree_list">
-			<li>
-				<input type="checkbox" id="agree_chk1"><label for="agree_chk1">개인정보 이용약관 동의(체크)</label>
-				<a href="javascript:;" class="agree_info btn_agreement_pop">팝업</a>
-			</li>
-			<li>
-				<input type="checkbox" id="agree_chk2"><label for="agree_chk2">가축시장 시스템 이용약관 동의(체크)</label>
-				<a href="javascript:;" class="agree_info btn_privacy_pop">팝업</a>
-			</li>
-		</ul>
-		<a href="javascript:;" class="btn_login">로그인</a>
-	</div>
-	<!-- //login_top e -->
-	<div class="login_bottom">
-		<p class="login_info">${johapData.CLNTNM} 이용문의</p>
-		<p class="cs_phone">${johapData.TEL_NO }</p>
-		<p class="cs_clock">월-토 9:00~18:00<br>(점심 12:00~13:00)</p>
-	</div>
-	<!-- //login_bottom e -->
+		<input type="hidden" name="place" value="${place}" />
+		<input type="hidden" name="type" value="${empty type ? '0' : type}" />
+		<div class="login_top" id="login_info">
+			<h3>${johapData.CLNTNM}</h3>
+			<dl>
+				<dd><input type="text" id="userName" name="userName" placeholder="이름" maxlength="20" required autofocus/></dd>
+			<c:choose>
+			<c:when test="${type ne '1'}">
+				<dd><input type="text" id="password" name="birthDate" placeholder="생년월일(6자리) 또는 사업자번호" maxlength="10" pattern="\d*" required inputmode="numeric"/></dd>
+			</c:when>
+			<c:otherwise>
+				<dd><input type="text" id="password" name="telNo" placeholder="전화번호 또는 휴대전화번호" maxlength="11" pattern="\d*" required inputmode="numeric" /></dd>
+			</c:otherwise>
+			</c:choose>
+			</dl>
+			<ul class="agree_list">
+				<li>
+					<input type="checkbox" id="agree_chk1"><label for="agree_chk1">개인정보 이용약관 동의(체크)</label>
+					<a href="javascript:;" class="agree_info btn_agreement_pop">팝업</a>
+				</li>
+				<li>
+					<input type="checkbox" id="agree_chk2"><label for="agree_chk2">가축시장 시스템 이용약관 동의(체크)</label>
+					<a href="javascript:;" class="agree_info btn_privacy_pop">팝업</a>
+				</li>
+			</ul>
+			<a href="javascript:;" class="btn_login">로그인</a>
+		</div>
+	</form>
+	<form name="frm_auth" id="frm_auth" method="post">
+		<input type="hidden" name="naBzplc" value="" />
+		<input type="hidden" name="token" value="" />
+		
+		<div class="login_top" id="login_sms_auth" style="display:none;">
+			<h3>무진장 축협</h3>
+			<dl>
+				<dd>
+					<div class="authentication_number">
+						<input type="text" name="authNumber" placeholder="인증번호 4자리" maxlength="4" pattern="\d*" required inputmode="numeric" />
+						<button type="button" class="btn_resend">재발송</button>
+					</div>
+					<p class="step_msg">휴대폰으로 수신된 인증번호를 입력하세요.</p>
+					<p class="err_msg" style="display:none;">인증번호가 올바르지 않습니다.</p>
+				</dd>
+			</dl>
+			<a href="javascript:;" class="btn_ok btn_confirm">확인</a>
+			<a href="javascript:;" class="btn_cancel">취소</a>
+		</div>
+		<!-- //login_top e -->
+		<div class="login_bottom">
+			<p class="login_info">${johapData.CLNTNM} 이용문의</p>
+			<p class="cs_phone">${johapData.TEL_NO }</p>
+			<p class="cs_clock">월-토 9:00~18:00<br>(점심 12:00~13:00)</p>
+		</div>
+		<!-- //login_bottom e -->
 	</form>
 	<div id="" class="modal-wrap pop_Terms pop_agreement">
 		<div class="modal-content">

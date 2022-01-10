@@ -201,4 +201,22 @@ public class JwtTokenUtil {
 		}
 	}
 	
+	/**
+	 * 토큰을 TokenVo 형태로 반환
+	 * @param token
+	 * @return JwtTokenVo
+	 */
+	public JwtTokenVo getTokenVo(String token) {
+		if (!this.isValidToken(token)) {
+			return null;
+		}
+		else {
+			return JwtTokenVo.builder()
+					.auctionHouseCode(this.getValue(token, Constants.JwtConstants.JWT_CLAIM_AUCTION_HOUSE_CODE))
+					.userMemNum(this.getValue(token, Constants.JwtConstants.JWT_CLAIM_USER_MEM_NUM))
+					.userRole(this.getValue(token, Constants.JwtConstants.JWT_CLAIM_USER_ROLE))
+					.build();
+		}
+	}
+	
 }

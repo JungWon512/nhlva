@@ -59,6 +59,8 @@
 			 , A.LS_CMENO
 			 , A.FSRG_DTM
 			 , A.FSRGMN_ENO
+			 , A.SMS_YMD
+			 , A.SMS_NO
 		  FROM TB_LA_IS_MM_MWMN A
 		  LEFT OUTER JOIN TB_LA_IS_BM_BZLOC B
 		    ON ( A.NA_BZPLC = B.NA_BZPLC )
@@ -166,5 +168,95 @@
 		    #{visit_agent}
 		)
 	</insert>
+	
+	<!-- 인증번호 정보 조회 -->
+	<select id="selectAuthNumberInfo" parameterType="map" resultType="map">
+		SELECT SMS_YMD
+			 , SMS_NO
+			 , CUS_MPNO
+			 , SRA_MWMNNM
+		  FROM TB_LA_IS_MM_MWMN
+		 WHERE NA_BZPLC = #{naBzplc}
+		   AND TRMN_AMNNO = #{trmnAmnno}
+	</select>
+	
+	<!-- 새로 받급받은 인증번호 저장 -->
+	<update id="updateAuthNumber" parameterType="map">
+		UPDATE TB_LA_IS_MM_MWMN
+		   SET SMS_YMD = TO_CHAR(SYSDATE, 'YYYYMMDD')
+			 , SMS_NO = #{smsNo}
+		 WHERE NA_BZPLC = #{naBzplc}
+		   AND TRMN_AMNNO = #{trmnAmnno}
+	</update>
+	
+	<insert id="sendSms" parameterType="map">
+		<selectKey keyProperty="smsFwdgSqno" resultType="int" order="BEFORE">
+			SELECT NVL(MAX(SMS_FWDG_SQNO)+1,1) AS NEXT_NUM
+			  FROM TB_LA_IS_MM_SMS
+			  WHERE NA_BZPLC = #{naBzplc}
+			  AND SMS_FWDG_DT = TO_CHAR(SYSDATE, 'YYYYMMDD')
+		</selectKey>
+		INSERT INTO TB_LA_IS_MM_SMS (
+			NA_BZPLC
+			, SMS_FWDG_DT
+			, SMS_FWDG_SQNO
+			, AUC_OBJ_DSC
+			, TRMN_AMNNO
+			, DPAMN_DSC
+			, SEL_STS_DSC
+			, RMS_MN_NAME
+			, SMS_RMS_MPNO
+			, IO_TRMSNM
+			, SMS_TRMS_TELNO
+			, SMS_FWDG_CNTN
+			, TMS_YN
+			, TMS_CN
+			, FSRG_DTM
+			, FSRGMN_ENO
+			, LSCHG_DTM
+			, LS_CMENO
+		) VALUES (
+			#{naBzplc}
+			, TO_CHAR(SYSDATE, 'YYYYMMDD')
+			, #{smsFwdgSqno}
+			, #{aucObjDsc}
+			, #{trmnAmnno}
+			, '1'
+			, '11'
+			, #{rmsMnName}
+			, #{smsRmsMpno}
+			, #{ioTrmsnm}
+			, #{smsTrmsTelno}
+			, #{smsFwdgCntn}
+			, '0'
+			, '0'
+			, SYSDATE
+			, 'SYSTEM'
+			, SYSDATE
+			, 'SYSTEM'
+		)
+		
+	</insert>
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
 	
 </mapper>
