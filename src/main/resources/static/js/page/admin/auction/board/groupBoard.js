@@ -69,11 +69,11 @@ var messageHandler = function(data) {
 		break;	
 		case "AS" : //현재 경매상태	
 			var aucStConfig ={
-				t8001:'<span class="txt-blue">일괄</span><span class="txt-green"> 경매 대기 중</span>'
-				,t8002:'<span class="txt-blue">일괄</span><span class="txt-green"> 경매 대기 중</span>'
-				,t8003:'<span class="txt-blue">일괄</span><span class="txt-green"> 경매 시작</span>'
-				,t8004:'<span class="txt-blue">일괄</span><span class="txt-green"> 경매 진행 중</span><br>응찰하시기 바랍니다'
-				,t8005:'<span class="txt-blue">일괄</span><span class="txt-green"> 경매 정지</span>'
+				t8001:'<span class="txt-green"> 경매 대기 중</span>'
+				,t8002:'<span class="txt-green"> 경매 대기 중</span>'
+				,t8003:'<span class="txt-green"> 경매 시작</span>'
+				,t8004:'<span class="txt-green"> 경매 진행 중</span><br>응찰하시기 바랍니다'
+				,t8005:'<span class="txt-green"> 경매 정지</span>'
 				,t8006:'경매응찰 완료'
 				,t8007:'경매 종료'
 			}
@@ -223,6 +223,7 @@ var fnReloadView = function(){
 		naBzplc : $('#naBzPlc').val()		
 		, stAucNo : stAucNo		
 		, edAucNo : edAucNo		
+		, aucObjDsc : aucObjDsc		
 	}
 	$.ajax({
 		url: '/office/getCowList',
@@ -294,7 +295,7 @@ var fnReloadView = function(){
 	
 }
 
-var edAucNo,stAucNo;
+var edAucNo,stAucNo,aucObjDsc;
 var getStnInfo = function(){	
 	var params = {
 		naBzplc : $('#naBzPlc').val()		
@@ -310,6 +311,8 @@ var getStnInfo = function(){
 		}
 	}).done(function (json) {
 		console.log(json);
+		
+		aucObjDsc = json.info.AUC_OBJ_DSC;
 		stAucNo = json.info.ST_AUC_NO;
 		edAucNo = json.info.ED_AUC_NO;	
 	});

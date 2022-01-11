@@ -256,6 +256,7 @@ public class AdminController {
 	        temp.put("stAucNo", params.get("stAucNo"));
 	        temp.put("edAucNo", params.get("edAucNo"));
 	        temp.put("naBzplc", params.get("naBzplc"));
+	        temp.put("searchAucObjDsc", params.get("aucObjDsc"));
 	        
 			List<Map<String,Object>> list=auctionService.entrySelectList(temp);
 			

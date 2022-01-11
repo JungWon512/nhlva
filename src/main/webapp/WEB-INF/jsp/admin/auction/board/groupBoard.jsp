@@ -9,40 +9,45 @@
 <section class="billboard-info" style="display:block;">
 	<table class="bill-table">
 		<colgroup>
-			<col width="33.33%">
-			<col width="33.33%">
-			<col width="33.33%">
+			<col width="25%">
+			<col width="25%">
+			<col width="25%">
+			<col width="25%">
 		</colgroup>
 		<tbody>
 			<tr>
-				<td colspan="3" class="h-190">
+				<td colspan="4" class="h-190">
 					<span class="txt-name fz100">${johapData.CLNTNM}</span>
 					<span class="txt-orange fz100 time">00:00</span>
 				</td>
 			</tr>
 			<tr>
-				<td colspan="3" class="bg-gray">
-					<p class="fz100 infoTxt"><span class="txt-blue">일괄</span><span class="txt-green"> 경매 대기 중</span></p>
+				<td colspan="4" class="bg-gray">
+					<p class="fz100 infoTxt"><span class="txt-green">경매 대기 중</span></p>
 				</td>
 			</tr>
 			<tr>
-				<td colspan="3">
+				<td colspan="4">
 					<span class="txt-green fz80">총 출장우 </span>
 					<span class="fz100 txt-bold">${cowTotCnt.CNT }</span>
 				</td>
 			</tr>
 			<tr>
 				<td>
-					<p class="txt-green fz60">암</p>
-					<p class="fz100 txt-bold">${cowTotCnt.CNT_SEX_W }</p>
+					<p class="txt-green fz60">암송아지</p>
+					<p class="fz100 txt-bold">${cowTotCnt.CNT_CALF_SEX_W }</p>
 				</td>
 				<td>
-					<p class="txt-green fz60">수</p>
-					<p class="fz100 txt-bold">${cowTotCnt.CNT_SEX_M }</p>
+					<p class="txt-green fz60">수송아지</p>
+					<p class="fz100 txt-bold">${cowTotCnt.CNT_CALF_SEX_M }</p>
+				</td>				
+				<td>
+					<p class="txt-green fz60">비육우</p>
+					<p class="fz100 txt-bold">${cowTotCnt.CNT_NO_COW_SEX }</p>
 				</td>
 				<td>
-					<p class="txt-green fz60">기타</p>
-					<p class="fz100 txt-bold">${cowTotCnt.CNT_SEX_ETC }</p>
+					<p class="txt-green fz60">번식우</p>
+					<p class="fz100 txt-bold">${cowTotCnt.CNT_COW_SEX }</p>
 				</td>
 			</tr>
 		</tbody>
