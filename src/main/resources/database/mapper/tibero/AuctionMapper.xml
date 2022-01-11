@@ -167,10 +167,10 @@
 		FROM (
 	    	SELECT 
 				COUNT(*) CNT	/* 전체	*/
-				, COUNT(CASE WHEN A.INDV_SEX_C = 1 THEN 1 END) CNT_SEX_W /* 전체 암컷 출장우 */
+				, COUNT(CASE WHEN (A.INDV_SEX_C = 1 OR A.INDV_SEX_C = 6) THEN 1 END) CNT_SEX_W /* 전체 암컷 출장우 */
 				, COUNT(CASE WHEN A.INDV_SEX_C = 2 THEN 1 END) CNT_SEX_M /* 전체 수컷 출장우 */
-				, COUNT(CASE WHEN A.INDV_SEX_C != 2 AND A.INDV_SEX_C != 1 THEN 1 END) CNT_SEX_ETC /* 전체 암수 출장우가 아닌것*/
-				, COUNT(CASE WHEN B.AUC_OBJ_DSC = '1' AND A.INDV_SEX_C = 1 THEN 1 END) CNT_CALF_SEX_W /* 전체 암컷 출장우 */
+				, COUNT(CASE WHEN A.INDV_SEX_C != 2 AND A.INDV_SEX_C != 6 AND A.INDV_SEX_C != 1 THEN 1 END) CNT_SEX_ETC /* 전체 암수 출장우가 아닌것*/
+				, COUNT(CASE WHEN B.AUC_OBJ_DSC = '1' AND (A.INDV_SEX_C = 1 OR A.INDV_SEX_C = 6) THEN 1 END) CNT_CALF_SEX_W /* 전체 암컷 출장우 */
 				, COUNT(CASE WHEN B.AUC_OBJ_DSC = '1' AND A.INDV_SEX_C = 2 THEN 1 END) CNT_CALF_SEX_M /* 전체 수컷 출장우 */
 				, COUNT(CASE WHEN B.AUC_OBJ_DSC = '2' THEN 1 END) CNT_NO_COW /* 전체 비육우*/
 				, COUNT(CASE WHEN B.AUC_OBJ_DSC = '3' THEN 1 END) CNT_COW /* 전체 번식우 */
