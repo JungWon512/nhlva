@@ -43,11 +43,11 @@
 				</td>				
 				<td>
 					<p class="txt-green fz60">비육우</p>
-					<p class="fz100 txt-bold">${cowTotCnt.CNT_NO_COW_SEX }</p>
+					<p class="fz100 txt-bold">${cowTotCnt.CNT_NO_COW }</p>
 				</td>
 				<td>
 					<p class="txt-green fz60">번식우</p>
-					<p class="fz100 txt-bold">${cowTotCnt.CNT_COW_SEX }</p>
+					<p class="fz100 txt-bold">${cowTotCnt.CNT_COW }</p>
 				</td>
 			</tr>
 		</tbody>
