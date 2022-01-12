@@ -11,6 +11,7 @@ import java.util.Random;
 import javax.annotation.Resource;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import com.ishift.auction.service.admin.AdminService;
@@ -37,6 +38,9 @@ public class LoginServiceImpl implements LoginService {
 	
 	@Autowired
 	private HttpUtils httpUtils;
+	
+	@Value("${spring.profiles.active}")
+	private String profile;
 
 	/**
 	 * 로그인 중도매인 검색
@@ -212,7 +216,9 @@ public class LoginServiceImpl implements LoginService {
 //			returnMap.put("success", false);
 //			returnMap.put("message", "인증번호 발송에 실패했습니다.");
 //		}
-		
+		if (!"production".equals(profile)) {
+			returnMap.put("smsNo", smsNo);
+		}
 		return returnMap;
 	}
 

@@ -46,7 +46,15 @@ function popUp(){
 				},1000)					
 			},500);
 		}
-		else if(chkOs() == 'ios') location.href = 'nhcowauction://com.nh.cowauction?targetUrl=main?place=119&aucYn=Y'; 
+		else if(chkOs() == 'ios') {
+			location.href = 'nhcowauction://com.nh.cowauction?targetUrl=main'+location.search;
+			
+			setTimeout(function(){				
+				setTimeout(function(){
+					location.href = 'https://apps.apple.com/kr/app/%EA%B0%80%EC%B6%95%EC%8B%9C%EC%9E%A5/id1588847718';
+				},1000)					
+			},500);
+		} 
 		modalPopupClose(".pop_app");		
 		$('.popup .modal-wrap.pop_app').remove();
 	});

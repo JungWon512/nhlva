@@ -40,7 +40,7 @@
 			<dl>
 				<dd>
 					<div class="authentication_number">
-						<input type="text" name="authNumber" placeholder="인증번호 4자리" maxlength="4" pattern="\d*" required inputmode="numeric" />
+						<input type="text" name="authNumber" id="authNumber" placeholder="인증번호 4자리" maxlength="4" pattern="\d*" required inputmode="numeric" />
 						<button type="button" class="btn_resend">재발송</button>
 					</div>
 					<p class="step_msg">휴대폰으로 수신된 인증번호를 입력하세요.</p>

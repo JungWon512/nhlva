@@ -103,6 +103,7 @@
 						$("#login_sms_auth").show();
 						$("input[name='naBzplc']", $("form[name='frm_auth']")).val(body.branchInfo.NA_BZPLC);
 						$("input[name='token']", $("form[name='frm_auth']")).val(body.token);
+						if (body.smsNo != undefined) $("input#authNumber").val(body.smsNo);
 					}
 					else {
 						var uri = body.returnUrl == null ? '/main' : body.returnUrl;
@@ -131,6 +132,14 @@
 		
 		// 인증번호 확인
 		var fnConfirm = function() {
+
+			if ($("input[name='authNumber']").val() == "") {
+				modalAlert('', $("input#authNumber").attr("placeHolder") + "을(를) 입력하세요."
+					 , function(){$("input#authNumber").focus();}
+				);
+				return;
+			}
+
 			$.ajax({
 				url: '/user/loginAuthProc',
 				data: JSON.stringify($("form[name='frm_auth']").serializeObject()),
@@ -153,6 +162,7 @@
 			});
 		}
 		
+		// app에 로그인 정보 전송
 		var sendUserInfo = function(token, info, branchInfo, uri) {
 			try {
 				var userInfo = {
