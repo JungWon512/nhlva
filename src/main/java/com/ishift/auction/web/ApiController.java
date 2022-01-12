@@ -1628,7 +1628,7 @@ public class ApiController {
 		try {			
 			params.put("naBzplc", naBzplc);
 			params.put("aucDt", params.get("date"));
-			params.put("selStsDsc", "21");
+//			params.put("selStsDsc", "21");	// api request parameter에 rgSqno 포함되어있어 처리 불필요 
 			
 			Map<String, Object> map = auctionService.selectAuctStn(params);
 			if (map == null) {
