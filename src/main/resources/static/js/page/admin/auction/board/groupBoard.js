@@ -310,11 +310,12 @@ var getStnInfo = function(){
 		error: function(xhr, status, error) {
 		}
 	}).done(function (json) {
-		console.log(json);
-		
-		aucObjDsc = json.info.AUC_OBJ_DSC;
-		stAucNo = json.info.ST_AUC_NO;
-		edAucNo = json.info.ED_AUC_NO;	
+		debugConsole(json);
+		if(json && json.info){
+			aucObjDsc = json.info.AUC_OBJ_DSC;
+			stAucNo = json.info.ST_AUC_NO;
+			edAucNo = json.info.ED_AUC_NO;			
+		}	
 	});
 	
 }
