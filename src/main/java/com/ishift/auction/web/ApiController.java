@@ -1628,6 +1628,7 @@ public class ApiController {
 		try {			
 			params.put("naBzplc", naBzplc);
 			params.put("aucDt", params.get("date"));
+			params.put("selStsDsc", "21");
 			
 			Map<String, Object> map = auctionService.selectAuctStn(params);
 			if (map == null) {

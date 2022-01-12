@@ -278,7 +278,16 @@ public class AdminController {
 		final Map<String, Object> result = new HashMap<String, Object>();
 		StringBuffer sb = new StringBuffer();
 		try {
+			params.put("selStsDsc", "21");			
+			Map<String, Object> map = auctionService.selectAuctStn(params);
+			if (map == null) {
+				result.put("success", false);
+				result.put("message", "회차 정보가 없습니다.");
+				return result;
+			}
 			params.put("absentYn", "Y");
+			params.put("stAucNo", map.get("ST_AUC_NO"));
+			params.put("edAucNo", map.get("ED_AUC_NO"));
 			List<Map<String, Object>> list = auctionService.selectCowList(params);
 			if (list != null) {
 				for (final Map<String, Object> vo : list) {

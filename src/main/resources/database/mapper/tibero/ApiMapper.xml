@@ -56,6 +56,9 @@
 		<if test="rgSqno !=null and !rgSqno.equals('')">
 			AND A.RG_SQNO = #{rgSqno}
 		</if>
+		<if test="selStsDsc !=null and !selStsDsc.equals('')">
+			AND A.SEL_STS_DSC = #{selStsDsc}
+		</if>
 	</select>
 	
 	<select id="selectAucStnList" parameterType="map" resultType="map">

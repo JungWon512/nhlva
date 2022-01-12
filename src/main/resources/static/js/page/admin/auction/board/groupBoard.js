@@ -128,7 +128,7 @@ var messageHandler = function(data) {
 				error: function(xhr, status, error) {
 				}
 			}).done(function (json) {
-				debugConsole(json);				
+				debugConsole(json);
 				var success = json.success;
 				var message = json.message;
 				if (!success) {
@@ -247,6 +247,16 @@ var fnReloadView = function(){
 				var body = $('.billboard-view .list_body ul');
 				body.mCustomScrollbar('destroy');
 				body.empty();
+				var cnt = json.list.length?json.list.length:'0';
+				var gubun = "일괄";
+				switch(aucObjDsc){
+					case "1": gubun="송아지"; break;
+					case "2": gubun="비육우"; break;
+					case "3": gubun="번식우"; break;
+					default:  gubun="일괄"; break;
+				}
+				$('.billboard-view .list_head dd.pd_txt span.auctGubun').text(gubun);
+				$('.billboard-view .list_head dd.pd_txt span.cowCnt').text(cnt);
 				if(json.list.length<1){
 					body.append("<li><dl><dd>경매관전 자료가 없습니다.</dd></dl></li>");
 				}else{

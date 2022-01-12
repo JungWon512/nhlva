@@ -74,7 +74,7 @@
 			<div class="list_head">
 				<dl>
 					<dd class="pd_name">${johapData.CLNTNM}</dd>
-					<dd class="pd_txt">일괄경매 <span class="space">|</span> 출장우 : ${cowTotCnt.CNT }두</dd>
+					<dd class="pd_txt"><span class="auctGubun">일괄</span> 경매 <span class="space">|</span> 출장우 : <span class="cowCnt">${cowTotCnt.CNT }</span>두</dd>
 				</dl>
 				<dl>
 					<dd class="num">번호</dd>
