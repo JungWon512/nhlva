@@ -744,6 +744,10 @@ public class ApiController {
 			if (map != null) {
 				result.put("success", true);
 				result.put("data", map);
+				// 일괄경매인 경우 STN 정보 추가
+				if ("2".equals(params.get("aucDsc"))) {
+					result.put("stnList", auctionService.selectAucStnList(params));
+				}
 				result.put("message", "정상적으로 조회되었습니다.");
 			}
 			else {

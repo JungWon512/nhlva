@@ -350,6 +350,17 @@ public class AuctionServiceImpl implements AuctionService {
 	}
 	
 	@Override
+	public List<Map<String, Object>> selectAucStnList(Map<String, Object> params) throws SQLException{
+		return auctionDAO.selectAucStnList(params);
+	}
+	
+	/**
+	 * 경매 구간 정보(전체)
+	 * @param params
+	 * @return
+	 * @throws SQLException
+	 */
+	@Override
 	public Map<String, Object> selectAuctStn(Map<String, Object> params) throws SQLException{
 		return auctionDAO.selectAuctStn(params);
 	}

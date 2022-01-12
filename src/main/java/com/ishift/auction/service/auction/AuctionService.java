@@ -290,8 +290,20 @@ public interface AuctionService {
 	 */
 	Map<String, Object> selectMyZimPrice(Map<String, Object> params) throws SQLException;
 
+	/**
+	 * 응찰목록
+	 * @param params
+	 * @return
+	 * @throws SQLException
+	 */
 	List<Map<String, Object>> selectBidLogList(Map<String, Object> params) throws SQLException;
 
+	/**
+	 * 응찰목록 수
+	 * @param params
+	 * @return
+	 * @throws SQLException
+	 */
 	Map<String, Object> selectBidLogListCnt(Map<String, Object> params) throws SQLException;
 
 	/**
@@ -318,7 +330,27 @@ public interface AuctionService {
 	 */
 	Map<String, Object> selectTotSoldPrice(Map<String, Object> map) throws SQLException;
 
+	/**
+	 * 기등록 계류대번호 초기화
+	 * @param params
+	 * @return
+	 * @throws SQLException
+	 */
 	int updateCowInfoForModlNo(Map<String, Object> params) throws SQLException;
 
+	/**
+	 * STN 정보
+	 * @param temp
+	 * @return
+	 * @throws SQLException
+	 */
 	Map<String, Object> getStnInfo(Map<String, Object> temp) throws SQLException;
+
+	/**
+	 * 경매 구간 정보(전체)
+	 * @param params
+	 * @return
+	 * @throws SQLException
+	 */
+	List<Map<String, Object>> selectAucStnList(Map<String, Object> params) throws SQLException;
 }

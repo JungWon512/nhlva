@@ -462,12 +462,20 @@ public class AuctionDAO {
 	}
 
 	public int updateCowInfoForModlNo(Map<String, Object> params) throws SQLException {
-		// TODO Auto-generated method stub
 		return mainDao.update("auction.updateCowInfoForModlNo", params);
 	}
 
 	public Map<String, Object> getStnInfo(Map<String, Object> params) throws SQLException {
-		// TODO Auto-generated method stub
 		return mainDao.selectOne("auction.getStnInfo", params);
+	}
+
+	/**
+	 * 경매 구간 정보(전체)
+	 * @param params
+	 * @return
+	 * @throws SQLException
+	 */
+	public List<Map<String, Object>> selectAucStnList(Map<String, Object> params) throws SQLException {
+		return mainDao.selectList("ApiMapper.selectAucStnList", params);
 	}
 }

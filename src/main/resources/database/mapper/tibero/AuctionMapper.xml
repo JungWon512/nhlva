@@ -1025,6 +1025,7 @@
 		</if>
 	</select>
 	
+	<!-- 경매결과 업데이트 -->
 	<update id="updateCowInfo" parameterType="map">
 		<if test="regType != null and regType != ''">
 			UPDATE TB_LA_IS_MH_SOG_COW
@@ -1069,7 +1070,7 @@
 		</if>
 	</update>
 	
-	
+	<!-- 기등록된 계류대번호 초기화(0) -->
 	<update id="updateCowInfoForModlNo" parameterType="map">
 		<if test="regType != null and regType != ''">
 			UPDATE TB_LA_IS_MH_SOG_COW
@@ -1082,6 +1083,7 @@
 		</if>
 	</update>
 
+	<!-- 응찰로그 리스트 -->
 	<select id="selectBidLogList" parameterType="map" resultType="map">
 		SELECT 
 			A.AUC_PRG_SQ 
@@ -1156,7 +1158,7 @@
 		AND C.ATDR_AM != 0
 	</select>
 	
-
+	<!-- 응찰내역 통계 -->
 	<select id="selectBidLogListCnt" parameterType="map" resultType="map">
 		SELECT 
 			COUNT(B.INDV_SEX_C) TOT_CNT
@@ -1211,6 +1213,7 @@
         </if>	
 	</select>	
 
+	<!-- 구매내역 통계 -->
 	<select id="selectTotSoldPrice" parameterType="map" resultType="map">	
 		SELECT 
 			T.NA_BZPLC 
@@ -1280,6 +1283,7 @@
 		 ORDER BY SORT_SQ ASC
 	</select>
 	
+	<!-- S -->
 	<select id="getStnInfo" parameterType="map" resultType="map">
 		SELECT A.*
 		FROM TB_LA_IS_MH_AUC_STN A
