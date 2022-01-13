@@ -117,6 +117,7 @@ var messageHandler = function(data) {
 				naBzplc : dataArr[1]
 				, aucDt : dataArr[2]
 				, aucObjDsc : dataArr[3]
+				, rgSqno : dataArr[4]
 			}
 			$.ajax({
 				url: '/office/getAbsentCowList',

@@ -278,7 +278,7 @@ public class AdminController {
 		final Map<String, Object> result = new HashMap<String, Object>();
 		StringBuffer sb = new StringBuffer();
 		try {
-			params.put("selStsDsc", "21");			
+			//params.put("selStsDsc", "21");			
 			Map<String, Object> map = auctionService.selectAuctStn(params);
 			if (map == null) {
 				result.put("success", false);
