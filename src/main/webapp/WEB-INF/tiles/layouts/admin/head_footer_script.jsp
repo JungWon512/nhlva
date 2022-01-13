@@ -8,7 +8,7 @@
 <!--end::Page Vendors Styles-->
 <!--begin::Global Theme Styles(used by all pages)-->
 <link href="/static/assets/plugins/global/plugins.bundle.css?v=2.1.1" rel="stylesheet" type="text/css" />
-<link href="/static/assets/css/style.bundle.css?v=2.1.1" rel="stylesheet" type="text/css" />
+<!--<link href="/static/assets/css/style.bundle.css?v=2.1.1" rel="stylesheet" type="text/css" />-->
 <!--end::Global Theme Styles-->
 <!--begin::Layout Themes(used by all pages)-->
 <link rel="stylesheet" type="text/css" href="/static/css/guide/popup.css">

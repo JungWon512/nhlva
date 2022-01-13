@@ -6,7 +6,7 @@ $(function() {
 			trackColor: '#dbdbdb',
 			lineCap: 'round',
 			lineWidth: 12,
-			size: 260,
+			size: 220,
 			animate: 1000,
 			scaleColor: false,
 		});
@@ -123,7 +123,7 @@ var messageHandler = function(data) {
 			
 			auctionConfig.auctionSt=dataArr[6];
 			auctionConfig.anStatus = false;
-			$('table.tblAuctionSt tbody tr td.val p.auctionNum').text(dataArr[2]);
+			$('table.tblAuctionSt tbody tr td.val p.auctionNum').text(dataArr[2]?dataArr[2]:"-");
 			$('table.tblAuctionSt tbody tr.st td.complate').hide();
 			$('table.tblAuctionSt tbody tr.st td.count-td').show();
 			var aucStConfig ={
@@ -349,7 +349,7 @@ var setLoopChJoinInIn = function(cast,i){
 };
 
 var scLoad = function(dataArr){
-	$('table.tblAuctionSt tbody tr td.val p.auctionNum').text(dataArr[2]);	//경매번호
+	$('table.tblAuctionSt tbody tr td.val p.auctionNum').text(dataArr[2]?dataArr[2]:"-");	//경매번호
 	
 	$('table.tblAuctionSt tbody tr td td p.ftsnm').text(nameEnc(dataArr[9],"●")); //출하주
 	$('table.tblAuctionSt tbody tr td td p.cowSogWt').text(dataArr[25]); //중량

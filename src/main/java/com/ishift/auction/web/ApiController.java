@@ -785,6 +785,13 @@ public class ApiController {
 					result.put("message", "일괄경매회차정보가 없습니다.");
 					return result;
 				}
+				if ("21".equals(map.get("SEL_STS_DSC"))) {
+					params.put("aucYn", "1");
+					params.put("ddlQcn", map.get("MAX_DDL_QCN"));
+				}
+				else if ("23".equals(map.get("SEL_STS_DSC"))) {
+					params.put("ddlQcn", map.get("MAX_DDL_QCN"));
+				}
 				params.put("stAucNo", map.get("ST_AUC_NO"));
 				params.put("edAucNo", map.get("ED_AUC_NO"));
 			}
