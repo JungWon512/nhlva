@@ -6842,15 +6842,17 @@ Base styles: contents layer
 	}
 }
 
-.youtube-view table td {
-	padding:5px;
-	height: 33.33%;
+.youtube-view table.youtube-table td {
+/* 	padding:5px; */
+/* 	height: 33.33%; */
+	height: 25%;
 	background: #1b1b1b;
 	overflow: hidden;
 	white-space:nowrap
 }
 .youtube-view table td.count-td,.youtube-view table td.complate{
-	height:33.33%
+/* 	height:33.33% */
+	height:35%
 }
 
 .youtube-view table td p {
@@ -6871,7 +6873,8 @@ Base styles: contents layer
 }
 
 .youtube-view table td p.fz60 {
-	font-size: 60px
+/* 	font-size: 60px */
+	font-size: 85px
 }
 
 .youtube-view table td p.fz100 {
@@ -6948,7 +6951,8 @@ Base styles: contents layer
 	padding:15px 0 0;
 	background-color:#007eff;
 	border-radius:20px;
-	height:33.33%;
+/* 	height:33.33%; */
+	height:20%;
 }
 @media only all and (max-width: 1600px){
 	.youtube-view table td.seller{
@@ -6961,7 +6965,8 @@ Base styles: contents layer
 }
 .youtube-view table .inner-table{
 	border-radius:6px;
-	border-spacing:0
+	border-spacing:0;
+	max-height :20vh;
 }
 
 .youtube-view table .inner-table td {
@@ -6981,7 +6986,8 @@ Base styles: contents layer
 }
 
 .youtube-view .seeBox_gp .chart {
-	position: relative
+	position: relative;
+	right : 35px;
 }
 
 .youtube-view .seeBox_gp .chart .count {
@@ -7010,7 +7016,8 @@ Base styles: contents layer
 }
 
 .youtube-view .seeBox_gp .chart_label {
-	padding-left: 40px
+/* 	padding-left: 40px */
+	padding-left: 80px
 }
 
 @media only all and (max-width: 1600px) {
@@ -8194,4 +8201,9 @@ table.tblBoard p.boardTitle.txt-red
     line-height: 30px;
     width: calc( 100% - 20px );
     margin-top: -15px;
+}
+
+video[poster]{
+	height:100%;
+	width:100%;
 }
