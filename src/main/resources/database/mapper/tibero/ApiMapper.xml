@@ -512,7 +512,7 @@
 			, LSCHG_DTM = SYSDATE
 			, LS_CMENO = #{lsCmeno}
 		WHERE NA_BZPLC = #{naBzPlc}
-		AND AUC_OBJ_DSC = #{aucObjDsc}
+		AND AUC_OBJ_DSC = CASE WHEN #{aucObjDsc} = '0' THEN AUC_OBJ_DSC ELSE #{aucObjDsc} END
 		AND AUC_DT = #{aucDt}
 		<![CDATA[
 		AND LOWS_SBID_LMT_AM > 0
