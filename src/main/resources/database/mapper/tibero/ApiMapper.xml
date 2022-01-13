@@ -990,7 +990,7 @@
 		    ON ( A.NA_BZPLC = B.NA_BZPLC )
 		 WHERE A.NA_BZPLC = #{naBzplc}
 		   AND B.AUC_DT = #{aucDt}
-		   AND DECODE(B.AUC_OBJ_DSC, '0', #{aucObjDsc}, B.AUC_OBJ_DSC) = #{aucObjDsc}
+		   AND B.AUC_OBJ_DSC = #{aucObjDsc}
 	</select>
 	
 	<!-- 출장우 정보 > APP에서 일괄 경매시 사용 -->

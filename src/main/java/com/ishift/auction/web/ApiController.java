@@ -366,7 +366,7 @@ public class ApiController {
 		}catch (RuntimeException re) {
 			log.error("ApiController.auctionEntry : {} ",re);
 			result.put("success", false);
-			result.put("message", "작업중 오류가 발생했습니다. 관리자에게 문의하세요.");
+			result.put("message", re.getMessage());
 			return result;
 		}
 	}
@@ -421,7 +421,7 @@ public class ApiController {
 		}catch (RuntimeException re) {
 			log.debug("ApiController.authLoginForForm : {} ",re);
 			result.put("success", false);
-			result.put("message", "작업중 오류가 발생했습니다. 관리자에게 문의하세요.");
+			result.put("message", re.getMessage());
 			return result;
 		}
 	}
