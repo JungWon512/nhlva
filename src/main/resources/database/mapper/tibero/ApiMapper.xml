@@ -462,7 +462,7 @@
 		FROM
 			TB_LA_IS_MH_AUC_STN A
 		WHERE A.NA_BZPLC = #{naBzPlc}
-		AND A.AUC_OBJ_DSC = CASE WHEN #{aucObjDsc} = '0' THEN A.AUC_OBJ_DSC ELSE #{aucObjDsc} END
+		AND A.AUC_OBJ_DSC = #{aucObjDsc}
 		AND A.AUC_DT = #{aucDt}
 		AND A.RG_SQNO = #{rgSqno}
 	</update>
@@ -477,7 +477,7 @@
 			 , LSCHG_DTM = SYSDATE
 			 , LS_CMENO = #{lsCmeno}
 		 WHERE NA_BZPLC = #{naBzPlc}
-		   AND AUC_OBJ_DSC = CASE WHEN #{aucObjDsc} = '0' THEN AUC_OBJ_DSC ELSE #{aucObjDsc} END
+		   AND AUC_OBJ_DSC = #{aucObjDsc}
 		   AND AUC_DT = #{aucDt}
 		   AND RG_SQNO = #{rgSqno}
 	</update>
