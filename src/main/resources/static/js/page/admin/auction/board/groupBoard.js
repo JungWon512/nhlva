@@ -106,7 +106,7 @@ var messageHandler = function(data) {
 					fnReloadView(rgSqno,aucObjDsc);
 				break; 
 				case "8007" : 				
-					socketDisconnect();
+					//socketDisconnect();
 					fnReloadView(rgSqno,aucObjDsc);
 				break; 
 				default:break;
