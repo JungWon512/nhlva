@@ -174,14 +174,14 @@ var messageHandler = function(data) {
 		case "AN" :
 			// 재경매 대상 수신
 			auctionConfig.anStatus = true;
-			$('table.tblAuctionSt tbody tr.st td.count-td p').removeClass('txt-red').text('재경매 진행 중');
+			$('table.tblAuctionSt tbody tr.st td.count-td p').addClass('txt-red').text('재경매 진행 중');
 			break;
 		case "AY" :
 			// 재경매 대상 수신
 			if(dataArr[2]!=$('table.tblAuctionSt tbody tr td.val p.auctionNum').text()) return;
 			if((auctionConfig.auctionSt =='8003' || auctionConfig.auctionSt =='8004') && 'F' == dataArr[3].trim()) $('table.tblAuctionSt tbody tr.st td.count-td p').removeClass('txt-red').text('응찰 종료');
-			else if(auctionConfig.anStatus) $('table.tblAuctionSt tbody tr.st td.count-td p').removeClass('txt-red').text('재경매 진행중');
-			else $('table.tblAuctionSt tbody tr.st td.count-td p').removeClass('txt-red').text('경매 진행중');
+			else if(auctionConfig.anStatus) $('table.tblAuctionSt tbody tr.st td.count-td p').addClass('txt-red').text('재경매 진행중');
+			else $('table.tblAuctionSt tbody tr.st td.count-td p').addClass('txt-red').text('경매 진행중');
 			break;
 		default:break;
 	}

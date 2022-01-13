@@ -22,6 +22,7 @@ var setSocket = function(){
 	//socketHost += ':'+$('#webPort').val();
 	socketHost += ':9001';
 	socket = io.connect('https://'+socketHost+ '/6003' + '?auctionHouseCode='  + $('#naBzPlc').val(), {secure:true});
+	//socket = io.connect('http://192.168.0.23:9001'+ '/6003' + '?auctionHouseCode='  + $('#naBzPlc').val());
 
 	socket.on('connect_error', socketDisconnect);	
 	socket.on('connect', connectHandler);	
@@ -77,6 +78,7 @@ var messageHandler = function(data) {
 				,t8006:'경매응찰 완료'
 				,t8007:'경매 종료'
 			}
+			var rgSqno=dataArr[12],aucObjDsc=dataArr[13];
 			switch(dataArr[6]){
 				case "8001" : 
 					$('.billboard-info').show();
@@ -96,16 +98,16 @@ var messageHandler = function(data) {
 				break; 
 				case "8003" : $('section.billboard-info .infoTxt').html(aucStConfig.t8003); break; 
 				case "8004" : 
-					getStnInfo();
+					//getStnInfo();
 					$('section.billboard-info .infoTxt').html(aucStConfig.t8004); 
 				break; 
 				case "8005" : $('section.billboard-info .infoTxt').html(aucStConfig.t8005); break; 
 				case "8006" : 
-					fnReloadView();
+					fnReloadView(rgSqno,aucObjDsc);
 				break; 
 				case "8007" : 				
 					socketDisconnect();
-					fnReloadView();
+					fnReloadView(rgSqno,aucObjDsc);
 				break; 
 				default:break;
 			}
@@ -219,12 +221,13 @@ var noInfoIntervalFun = function(index){
 	},1000*5)
 };
 
-var fnReloadView = function(){	
+var fnReloadView = function(rgSqno,aucObjDsc){	
 	var params = {
-		naBzplc : $('#naBzPlc').val()		
-		, stAucNo : stAucNo		
-		, edAucNo : edAucNo		
-		, aucObjDsc : aucObjDsc		
+		naBzplc : $('#naBzPlc').val()
+		, rgSqno : rgSqno			
+		, aucObjDsc : aucObjDsc
+		//, stAucNo : stAucNo		
+		//, edAucNo : edAucNo			
 	}
 	$.ajax({
 		url: '/office/getCowList',
@@ -307,7 +310,7 @@ var fnReloadView = function(){
 }
 
 var edAucNo,stAucNo,aucObjDsc;
-var getStnInfo = function(){	
+var getStnInfo = function(){
 	var params = {
 		naBzplc : $('#naBzPlc').val()		
 	}

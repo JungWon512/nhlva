@@ -134,15 +134,15 @@ var messageHandler = function(data) {
 		case "AN" :
 			// 재경매 대상 수신
 			auctionConfig.anStatus = true;
-			$('table.tblBoard tbody tr.title td p.boardTitle').removeClass('txt-red').text('재경매 진행 중');
+			$('table.tblBoard tbody tr.title td p.boardTitle').addClass('txt-red').text('재경매 진행 중');
 			break;
 		case "AY" :
 			// 재경매 대상 수신
 			debugConsole(dataArr[2] +' : '+$('table.tblBoard tbody tr.title td p.auctionNum').text());
 			if(dataArr[2]!=$('table.tblBoard tbody tr.title td p.auctionNum').text()) return;
 			if((auctionConfig.auctionSt =='8003' || auctionConfig.auctionSt =='8004') && 'F' == dataArr[3].trim()) $('table.tblBoard tbody tr.title td p.boardTitle').removeClass('txt-red').text('응찰 종료');
-			else if(auctionConfig.anStatus) $('table.tblBoard tbody tr.title td p.boardTitle').removeClass('txt-red').text('재경매 진행중');
-			else $('table.tblBoard tbody tr.title td p.boardTitle').removeClass('txt-red').text('경매 진행중');
+			else if(auctionConfig.anStatus) $('table.tblBoard tbody tr.title td p.boardTitle').addClass('txt-red').text('재경매 진행중');
+			else $('table.tblBoard tbody tr.title td p.boardTitle').addClass('txt-red').text('경매 진행중');
 			break;
 		default:break;
 	}

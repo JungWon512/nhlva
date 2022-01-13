@@ -1283,12 +1283,13 @@
 		 ORDER BY SORT_SQ ASC
 	</select>
 	
-	<!-- S -->
+	<!-- 경매구간 정보 조회 -->
 	<select id="getStnInfo" parameterType="map" resultType="map">
 		SELECT A.*
 		FROM TB_LA_IS_MH_AUC_STN A
 		WHERE A.AUC_DT = #{searchDate}
 		AND A.NA_BZPLC = #{naBzplc}
-		AND A.SEL_STS_DSC = #{selStsDsc}
+		AND A.AUC_OBJ_DSC = #{aucObjDsc}
+		AND A.RG_SQNO = #{rgSqno}
 	</select>
 </mapper>

@@ -249,14 +249,27 @@ public class AdminController {
 		final Map<String, Object> result = new HashMap<String, Object>();
 		StringBuffer sb = new StringBuffer();
 		try {
+
 	        LocalDateTime date = LocalDateTime.now();
 	        Map<String,Object> temp = new HashMap<String,Object>();
 	        String today = date.format(DateTimeFormatter.ofPattern("yyyyMMdd"));
 	        temp.put("searchDate", today);
-	        temp.put("stAucNo", params.get("stAucNo"));
-	        temp.put("edAucNo", params.get("edAucNo"));
 	        temp.put("naBzplc", params.get("naBzplc"));
-	        temp.put("searchAucObjDsc", params.get("aucObjDsc"));
+	        temp.put("rgSqno", params.get("rgSqno"));
+	        temp.put("aucObjDsc", params.get("aucObjDsc"));
+	        
+			Map<String,Object> info=auctionService.getStnInfo(temp);
+			
+			if(info == null && info.isEmpty()) {		
+				result.put("success", false);
+				result.put("message", "경매 차수 구간이 없습니다.");
+			}		
+	        temp.put("stAucNo", info.get("ST_AUC_NO"));
+	        temp.put("edAucNo", info.get("ED_AUC_NO"));
+	        temp.put("searchAucObjDsc", info.get("AUC_OBJ_DSC"));
+			
+	        temp.put("searchDate", today);
+	        temp.put("naBzplc", params.get("naBzplc"));
 	        
 			List<Map<String,Object>> list=auctionService.entrySelectList(temp);
 			
