@@ -238,7 +238,10 @@ public class ApiController {
 	@GetMapping(value = "/api/{version}/auction/{naBzplc}/entry")
 	Map<String, Object> auctionEntry(@PathVariable(name = "version") final String version
 									, @PathVariable(name = "naBzplc") final String naBzplc
-									, @RequestParam(name = "date", required = false) final String searchDate) {
+									, @RequestParam(name = "date", required = false) final String searchDate
+									, @RequestParam(name = "aucDsc", required = false) final String aucDsc
+									, @RequestParam(name = "aucObjDsc", required = false) final String aucObjDsc
+									, @RequestParam(name = "rgSqno", required = false) final String rgSqno) {
 		final Map<String, Object> result = new HashMap<String, Object>();
 		final List<String> entryList = new ArrayList<String>();
 		try {
@@ -248,10 +251,22 @@ public class ApiController {
 				result.put("message", "조합구분코드[naBzplc]를 확인하세요.");
 				return result;
 			}
-
+			
 			final Map<String, Object> params = new HashMap<String, Object>();
 			params.put("naBzplc", naBzplc);
 			params.put("searchDate", searchDate);
+
+			// 일괄경매인 경우 구간정보 조회 추가
+			if ("10".equals(aucDsc)) {
+				params.put("aucObjDsc", aucObjDsc);
+				params.put("rgSqno", rgSqno);
+				final Map<String, Object> map = auctionService.selectAuctStn(params);
+				if (map != null) {
+					params.put("stAucNo", map.get("ST_AUC_NO"));
+					params.put("edAucNo", map.get("ED_AUC_NO"));
+				}
+			}
+
 			final List<Map<String, Object>> list = auctionService.selectAuctionEntry(params);
 			if (list != null) {
 				StringBuffer sb = new StringBuffer(500);

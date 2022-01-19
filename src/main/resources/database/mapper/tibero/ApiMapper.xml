@@ -49,8 +49,15 @@
 		SELECT A.*
 			 , MAX(A.DDL_QCN) OVER(PARTITION BY A.NA_BZPLC, A.AUC_OBJ_DSC, A.AUC_DT, A.RG_SQNO) AS MAX_DDL_QCN
 		  FROM TB_LA_IS_MH_AUC_STN A
-		 WHERE A.AUC_DT = #{aucDt}
-		   AND A.NA_BZPLC = #{naBzplc}
+		 WHERE A.NA_BZPLC = #{naBzplc}
+		<choose>
+		<when test="aucDt != null and aucDt != ''">
+		   AND A.AUC_DT = #{aucDt}
+		</when>
+		<otherwise>
+		   AND A.AUC_DT = TO_CHAR(SYSDATE, 'YYYYMMDD')
+		</otherwise>
+		</choose>
 		   AND A.AUC_OBJ_DSC = #{aucObjDsc}
 		   AND A.DEL_YN = '0'
 		<if test="rgSqno !=null and !rgSqno.equals('')">
@@ -256,7 +263,7 @@
 			   AND A.AUC_YN = #{aucYn}
 			</if>
 			<if test="ddlQcn != null and ddlQcn != ''">
-			   AND A.DDL_QCN = #{ddlQcn}
+			   AND A.SEL_STS_DSC <![CDATA[<>]]> '22'
 			   AND NVL(A.LOWS_SBID_LMT_AM, 0) <![CDATA[>]]> 0
 			</if>
 			<if test="stAucNo !=null and !stAucNo.equals('') and edAucNo !=null and !edAucNo.equals('')">
@@ -1050,7 +1057,7 @@
 				WHEN C.INDV_SEX_C = '6' THEN '프리마틴'  WHEN C.INDV_SEX_C = '9' THEN '공통' END INDV_SEX_C_NAME, <!--  성별 문자열  -->
 				E.SIMP_C,                      <!-- 혈통코드 -->
 				E.SIMP_CNM AS MCOW_DSC ,                  <!-- 혈통명  -->
-				F.QCN,                       <!-- 차수 -->	     
+				(SELECT C.QCN FROM TB_LA_IS_MH_AUC_QCN C WHERE C.NA_BZPLC = A.NA_BZPLC AND C.AUC_DT = A.AUC_DT AND C.AUC_OBJ_DSC = #{aucObjDsc} AND ROWNUM = 1) AS QCN,  <!-- 차수 -->	     
 				TO_CHAR(TO_DATE(C.BIRTH,'YYYYMMDD'),'YY.MM.DD') BIRTH_STR,
 				CASE WHEN MONTHS_BETWEEN(TO_DATE(A.AUC_DT,'YYYYMMDD'), TO_DATE(C.BIRTH,'YYYYMMDD')) <![CDATA[<=]]> 4 THEN 4
 					 ELSE TRUNC(MONTHS_BETWEEN(TO_DATE(A.AUC_DT,'YYYYMMDD'), TO_DATE(C.BIRTH,'YYYYMMDD')))
@@ -1102,12 +1109,6 @@
 								 WHERE SIMP_TPC = 'SRA_INDV_BRDSRA_RG_DSC'
 				 ) E
 				ON C.MCOW_DSC = E.SIMP_C
-			  JOIN TB_LA_IS_MH_AUC_QCN AS F
-				ON (
-					A.NA_BZPLC = F.NA_BZPLC AND
-					A.AUC_DT = F.AUC_DT AND
-					A.AUC_OBJ_DSC = F.AUC_OBJ_DSC
-				 )
 			  LEFT OUTER JOIN (
 					SELECT RANK() OVER(PARTITION BY AUC_OBJ_DSC, OSLP_NO ORDER BY ATDR_AM DESC, ATDR_DTM ASC) AS ATDR_RANK
 						 , B.*

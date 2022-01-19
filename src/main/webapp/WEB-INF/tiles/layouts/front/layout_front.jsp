@@ -3,6 +3,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <c:set var="URL" value="${pageContext.request.requestURL}" />
+<c:set var="requestPath" value="${requestScope['javax.servlet.forward.request_uri']}"/>
 <!--begin::Head-->
 <head>
     <!-- Google Tag Manager -->
@@ -25,9 +26,11 @@
 
 <body>
 	<div id="wrap">
-		<section class="header">
-			<tiles:insertAttribute name="wrapper_header"/>
-		</section>
+		<c:if test="${requestPath ne '/watchApp'}">
+			<section class="header">
+				<tiles:insertAttribute name="wrapper_header"/>
+			</section>
+		</c:if>
 		<!-- //header e -->
 		<section class="contents">
 			<tiles:insertAttribute name="content"/>
