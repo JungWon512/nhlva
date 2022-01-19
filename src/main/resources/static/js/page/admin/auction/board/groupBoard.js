@@ -274,8 +274,8 @@ var fnReloadView = function(rgSqno,aucObjDsc){
 						sHtml += "		<dd class='pd_sex'> "+vo.INDV_SEX_C_NAME +"</dd>";
 						sHtml += "		<dd class='pd_kg'> "+((vo.COW_SOG_WT == '' || vo.COW_SOG_WT == null || vo.COW_SOG_WT <= 0 ) ? '0' : vo.COW_SOG_WT) +"</dd>";
 						sHtml += "		<dd class='pd_kpn'> "+vo.KPN_NO_STR +"</dd>";
-						sHtml += "		<dd class='pd_pay1'>"+((vo.LOWS_SBID_LMT_AM == '' || vo.LOWS_SBID_LMT_AM == null || vo.LOWS_SBID_LMT_AM <= 0 ) ? '-' : vo.LOWS_SBID_LMT_AM <= 0 ? '0' : vo.LOWS_SBID_LMT_UPR)+"</dd>";
-						sHtml += "		<dd class='pd_pay2'>"+((vo.SRA_SBID_UPR == '' || vo.SRA_SBID_UPR == null || vo.SRA_SBID_UPR <= 0 ) ? '-' : vo.SRA_SBID_UPR <= 0 ? '0' : vo.SRA_SBID_UPR)+"</dd>";
+						sHtml += "		<dd class='pd_pay1'>"+fnSetComma((vo.LOWS_SBID_LMT_AM == '' || vo.LOWS_SBID_LMT_AM == null || vo.LOWS_SBID_LMT_AM <= 0 ) ? '-' : vo.LOWS_SBID_LMT_AM <= 0 ? '0' : vo.LOWS_SBID_LMT_UPR)+"</dd>";
+						sHtml += "		<dd class='pd_pay2'>"+fnSetComma((vo.SRA_SBID_UPR == '' || vo.SRA_SBID_UPR == null || vo.SRA_SBID_UPR <= 0 ) ? '-' : vo.SRA_SBID_UPR <= 0 ? '0' : vo.SRA_SBID_UPR)+"</dd>";
 						sHtml += "		<dd class='pd_state'>"+ (vo.SEL_STS_DSC_NAME=='대기' && vo.LOWS_SBID_LMT_AM == 0 ? '결장':vo.SEL_STS_DSC_NAME) +"</dd>";
 						sHtml += "	</dl></li>";
 						body.append(sHtml);

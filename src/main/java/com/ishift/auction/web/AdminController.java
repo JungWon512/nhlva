@@ -243,6 +243,55 @@ public class AdminController {
 		mav.addObject("subheaderTitle", "멀티비전");
 		return mav;
 	}
+	
+	/**
+	 * 관리자 > 낙찰정보
+	 * @return
+	 */
+	@GetMapping("/office/auction/bidInfo")
+	public ModelAndView adminBidInfo(final HttpServletResponse response
+								 , @RequestParam final Map<String,Object> params) {
+
+		final ModelAndView mav = new ModelAndView();
+
+		try {
+			boolean loginChk = false;
+			if(params.get("usrid") != null && params.get("pw") != null) {
+				loginChk = this.adminUserLoginProc(response, params);				
+			}else if(params.get("ea") != null && params.get("eb") != null){
+				String decUsrId = new String(Base64.getDecoder().decode((String)params.getOrDefault("ea","")));
+				String decPw = new String(Base64.getDecoder().decode((String)params.getOrDefault("eb","")));
+				params.put("usrid",decUsrId);
+				params.put("pw",decPw);
+				loginChk = this.adminUserLoginProc(response, params);				
+			}					
+			
+			final AdminUserDetails userVo = (AdminUserDetails)sessionUtill.getUserVo();
+
+			if(userVo != null || loginChk) {
+				Map<String,Object> map = new HashMap<>();
+				map.put("delYn", "0");
+				if(userVo.getPlace() != null) map.put("naBzPlcNo", userVo.getPlace());
+				String usrid = userVo.getUsrid();
+				Map<String,Object> johap = adminService.selectOneJohap(map);
+				mav.setViewName("admin/auction/board/bidInfo");
+				mav.addObject("userId", usrid);
+				mav.addObject("johapData", johap);				
+			}
+			else {
+				mav.setViewName("redirect:/office/main");
+				return mav;
+			}
+		}catch (RuntimeException re) {
+			log.error("AdminController.adminBoard : {} ",re);
+			mav.setViewName("redirect:/office/main");
+		} catch (SQLException se) {
+			log.error("AdminController.adminBoard : {} ",se);
+			mav.setViewName("redirect:/office/main");
+		}
+		mav.addObject("subheaderTitle", "멀티비전");
+		return mav;
+	}
 	@RequestMapping(value = "/office/getCowList" ,method = { RequestMethod.GET, RequestMethod.POST })
 	public Map<String, Object> getCowList(@RequestParam Map<String, Object> params) {
 		
