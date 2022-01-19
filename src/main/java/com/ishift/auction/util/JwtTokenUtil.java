@@ -108,7 +108,6 @@ public class JwtTokenUtil {
 					, 59
 					, 59);
 			date = calendar.getTime();
-			System.out.println(date);
 		}
 		return date;
 	}

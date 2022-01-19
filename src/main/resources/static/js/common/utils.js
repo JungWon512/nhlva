@@ -64,11 +64,6 @@ var isApp = function() {
 // 경매 앱으로 이동
 var goAuctionApp = function(place) {
 	try {
-		//var place = location.search.replace(/[^0-9]/g, "");
-		//if(place && place != 119){
-		//	modalAlert('','서비스 준비중입니다.');
-		//	return;
-		//}
 		// 안드로이드
 		if (window.auctionBridge) {
 			window.auctionBridge.moveAuctionBid();
@@ -85,6 +80,30 @@ var goAuctionApp = function(place) {
 		location.href = window.location.origin + '/bid' + window.location.search
 	}
 };
+
+var goWatchApp = function() {
+	try {
+		// 안드로이드
+		if (window.auctionBridge) {
+			var params = {
+				"url" : window.location.origin + '/watchApp' + window.location.search
+				, "watch_token" : getCookie('watch_token')
+			};
+			window.auctionBridge.moveAuctionWatch(JSON.stringify(params));
+		}
+		// 아이폰
+		else if(isIos()) {
+			webkit.messageHandlers.moveAuctionWatch.postMessage(true);
+		}
+		else {
+			location.href = window.location.origin + '/watch' + window.location.search
+		}
+	}
+	catch(e) {
+		alert(e);
+		location.href = window.location.origin + '/watch' + window.location.search
+	}
+}
 
 var goLoginPage = function() {
 	modalComfirm(""

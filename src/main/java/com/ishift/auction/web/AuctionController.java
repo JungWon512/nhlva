@@ -8,6 +8,10 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import javax.servlet.http.Cookie;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
 import com.ishift.auction.util.FormatUtil;
 import com.ishift.auction.vo.BidUserDetails;
 import com.ishift.auction.vo.JwtTokenVo;
@@ -31,6 +35,7 @@ import org.springframework.web.servlet.ModelAndView;
 import com.ishift.auction.service.admin.AdminService;
 import com.ishift.auction.service.auction.AuctionService;
 import com.ishift.auction.util.Constants;
+import com.ishift.auction.util.CookieUtil;
 import com.ishift.auction.util.JwtTokenUtil;
 import com.ishift.auction.util.SessionUtill;
 
@@ -53,6 +58,9 @@ public class AuctionController extends CommonController {
 	
 	@Autowired
 	private FormatUtil formatUtil;
+	
+	@Autowired
+	private CookieUtil cookieUtil;
 	
 	@RequestMapping(value = "/results",method = { RequestMethod.GET, RequestMethod.POST })	
 	public ModelAndView results(
@@ -234,6 +242,41 @@ public class AuctionController extends CommonController {
 		return mav;
 	}
 	
+	/**
+	 * App 관전 페이지 ( 방송송출 영역 없이 출장 리스트만 노출 )
+	 * @param place
+	 * @return
+	 * @throws Exception
+	 */
+	@RequestMapping(value = "/watchApp",method = { RequestMethod.GET, RequestMethod.POST })
+	public ModelAndView watchApp(@RequestParam(name = "place", required = false) String place) throws Exception {
+		// 경매관전
+		LOGGER.debug("start of watchApp.do");
+		ModelAndView mav = new ModelAndView();
+		try {
+			LocalDateTime date = LocalDateTime.now();
+			Map<String,Object> map = new HashMap<String,Object>();
+			String today = date.format(DateTimeFormatter.ofPattern("yyyyMMdd"));
+			map.put("searchDate", today);
+			map.put("naBzPlcNo", place);
+			
+			Map<String,Object> johap = adminService.selectOneJohap(map);
+			List<Map<String,Object>> list=auctionService.entrySelectList(map);
+			Map<String,Object> count =auctionService.selectCountEntry(map);
+			
+			mav.addObject("johapData",johap);
+			mav.addObject("dateVo",auctionService.selectNearAucDate(map));
+			mav.addObject("watchList",list);
+			mav.addObject("watchCount",count);
+			mav.addObject("today",date.format(DateTimeFormatter.ofPattern("yyyy-MM-dd")));
+		}
+		catch (RuntimeException | SQLException e) {
+			log.error("AuctionController.watchApp : {} ", e);
+		}
+		mav.setViewName("auction/watch/watchApp");
+		return mav;
+	}
+	
 	@RequestMapping(value = "/notice",method = { RequestMethod.GET, RequestMethod.POST })
 	public ModelAndView notice(@RequestParam(name = "place", required = false) String place) throws Exception {
 		// 경매안내
@@ -256,12 +299,14 @@ public class AuctionController extends CommonController {
 	
 	
 	@RequestMapping(value = "/main",method = { RequestMethod.GET, RequestMethod.POST })	
-	public ModelAndView submain(@RequestParam(name = "place", required = false) String place) throws Exception {
+	public ModelAndView submain(@RequestParam(name = "place", required = false) String place
+							   , HttpServletRequest req
+							   , HttpServletResponse res) throws Exception {
 		// 조합메인(main)
-		LOGGER.debug("start of result.do");
-        LocalDateTime date = LocalDateTime.now();
-        String today = date.format(DateTimeFormatter.ofPattern("yyyyMMdd"));
-        
+		LOGGER.debug("start of main.do");
+		LocalDateTime date = LocalDateTime.now();
+		String today = date.format(DateTimeFormatter.ofPattern("yyyyMMdd"));
+
 		ModelAndView mav = new ModelAndView();
         Map<String,Object> map = new HashMap<>();
         map.put("naBzPlcNo", place);
@@ -278,17 +323,13 @@ public class AuctionController extends CommonController {
 		List<Map<String,Object>> bizList = auctionService.selectBizLocList(map);
 		mav.addObject("bizList",bizList);
 		long aucYn = bizList.size() < 1 ? 0 :Integer.parseInt((String)bizList.get(0).get("AUC_YN"));
-//		long aucCnt = bizList.size() < 1?0:(Long)bizList.get(0).get("AUC_CNT");
 		long aucCnt = bizList.size() < 1 ? 0 : Long.parseLong(bizList.get(0).getOrDefault("AUC_CNT", "0").toString());
-		
-		log.debug("instanceof : {}", sessionUtill.getUserVo() instanceof BidUserDetails);
 		
 		//전광판 개발 테스트를 위한 back
 		if(sessionUtill.getUserVo() instanceof BidUserDetails && list.size() > 0) {
 			BidUserDetails loginUser = (BidUserDetails)sessionUtill.getUserVo();
 			final Map<String, Object> params = new HashMap<String, Object>();
 			params.put("naBzplc", johapData.get("NA_BZPLC"));
-//			params.put("aucObjDsc", (list.get(0).get("AUC_OBJ_DSC") == null ? "" : list.get(0).get("AUC_OBJ_DSC").toString()).split(","));
 			String aucObjDsc = (String)list.get(0).get("AUC_OBJ_DSC");
 			params.put("aucObjDsc", aucObjDsc.split(","));
 			if(loginUser.getTrmnAmnno() != null) params.put("trmnAmnno", loginUser.getTrmnAmnno());
@@ -299,20 +340,32 @@ public class AuctionController extends CommonController {
 			//경매진행중
 			mav.setViewName("auction/info/noinfo");
 			mav.addObject("subheaderTitle","경매안내");
-		}else if(dateVo != null && today.equals(dateVo.get("AUC_DT")) && aucCnt > 0 ){
+		}
+		else if(dateVo != null && today.equals(dateVo.get("AUC_DT")) && aucCnt > 0){
+			// 경매진행중인 경우 관전토큰 생성 후 쿠키에 저장
+			JwtTokenVo jwtTokenVo = JwtTokenVo.builder()
+					.auctionHouseCode(johapData.get("NA_BZPLC").toString())
+					.userMemNum("WATCHER")
+					.userRole(Constants.UserRole.WATCHER)
+					.build();
+			String token = jwtTokenUtil.generateToken(jwtTokenVo, Constants.JwtConstants.ACCESS_TOKEN);
+			Cookie cookie = cookieUtil.createCookie("watch_token", token);
+			res.addCookie(cookie);
+			
 			//경매진행중
 			mav.setViewName("auction/main/main");
 			mav.addObject("subheaderTitle","경매참여");
-		}else {
-			//경매        	
+		}
+		else {
+			//경매
 			Map<String,Object> tempMap = new HashMap<>();
 			tempMap.put("naBzPlcNo", place);
 			tempMap.put("yyyymm", date.format(DateTimeFormatter.ofPattern("yyyyMM")));
 			List<Map<String,Object>> dateList = auctionService.selectCalendarList(tempMap);
 			mav.addObject("dateList",dateList);
 			
-	        mav.addObject("today", today);
-			mav.setViewName("auction/info/info");			
+			mav.addObject("today", today);
+			mav.setViewName("auction/info/info");
 			mav.addObject("subheaderTitle","경매안내");
 		}
 		return mav;

@@ -21,7 +21,7 @@
 			</sec:authorize>
 		</li>
 		<li>
-			<a href="javascript:pageMove('/watch');" class="auction_see">경매 관전</a>
+			<a href="javascript:goWatchApp();" class="auction_see">경매 관전</a>
 		</li>
 	</ul>
 <!-- 	<div class="app_down"> -->
