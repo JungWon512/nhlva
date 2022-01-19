@@ -534,6 +534,9 @@
 			 , SRA_SBID_AM = #{sraSbidAm}				/* 낙찰 금액 */
 			 , SRA_SBID_UPR = #{sraSbidUpr}				/* 낙찰 단가 */
 			 , SEL_STS_DSC = #{selStsDsc}				/* 판매상태 구분 코드 */
+		<if test="maxDdlQcn != null and maxDdlQcn != ''">
+			 , DDL_QCN = #{maxDdlQcn} + 1
+		</if>
 			 , AMNNO = #{trmnAmnno}						/* 정산자 중도매인 번호 */
 		<choose>
 		<when test="lschgDtm != null and lschgDtm != ''">
@@ -565,7 +568,7 @@
 				 	  FROM TB_LA_IS_MH_AUC_QCN C
 				 	 WHERE C.NA_BZPLC = A.NA_BZPLC
 				 	   AND C.AUC_DT = A.AUC_DT
-				 	   AND C.AUC_OBJ_DSC = #{aucObjDsc}
+				 	   AND C.AUC_OBJ_DSC = NVL(#{aucObjDsc}, C.AUC_OBJ_DSC)
 				 	   AND ROWNUM = 1) AS QCN
 				 , A.AUC_PRG_SQ					/* 경매순번 */
 				 , A.AUC_OBJ_DSC				/* 경매대상구분코드 */
