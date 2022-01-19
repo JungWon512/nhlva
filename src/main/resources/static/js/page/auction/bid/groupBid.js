@@ -900,11 +900,11 @@ var fnGetFavoritePrice = function(aucSeq, aucClass) {
 		success : function(data) {
 			if (data.success) {
 				if (data.info.ATDR_AM > 0) {
-					$("input[name=bidAmt]").removeClass("txt-blue").val(data.info.ATDR_AM);
+					$("input[name=bidAmt]").removeClass("txt-blue").val(fnSetComma(data.info.ATDR_AM));
 					auctionConfig.enableCancel = "Y";
 				}
 				else if (data.info.SBID_UPR > 0) {
-					$("input[name=bidAmt]").addClass("txt-blue").val(data.info.SBID_UPR);
+					$("input[name=bidAmt]").addClass("txt-blue").val(fnSetComma(data.info.SBID_UPR));
 					auctionConfig.enableCancel = "N";
 				}
 				else {

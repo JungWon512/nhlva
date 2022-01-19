@@ -7597,7 +7597,8 @@ Base styles: contents layer
 
 .auction_list_full .list_table_full .list_body dl dd {
 	color: #fff;
-	font-size: 44px;
+/* 	font-size: 44px; */
+	font-size: 60px;
 	font-family: "Noto Sans KR", "Roboto", "AppleGothic", "sans-serif";
 	font-weight: 700;
 	letter-spacing: -0.45px;
@@ -7609,7 +7610,7 @@ Base styles: contents layer
 
 @media only all and (max-width: 1600px) {
 	.auction_list_full .list_table_full .list_body dl dd {
-		font-size: 22px;
+		font-size: 29px;
 		letter-spacing: -0.2px
 	}
 }
@@ -7732,13 +7733,13 @@ Base styles: contents layer
 	letter-spacing:-2.8px
 }
 .billboard-info table td p.fz60,.billboard-info table td span.fz60{
-	font-size:60px
+	font-size:72px
 }
 .billboard-info table td p.fz80,.billboard-info table td span.fz80{
-	font-size:80px
+	font-size:95px
 }
 .billboard-info table td p.fz100,.billboard-info table td span.fz100{
-	font-size:100px
+	font-size:122px
 }
 .billboard-info table td p.fz120,.billboard-info table td span.fz120{
 	font-size:120px
