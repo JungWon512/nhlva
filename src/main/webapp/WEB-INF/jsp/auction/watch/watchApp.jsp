@@ -6,9 +6,6 @@
 	<input type="hidden" id="token" value="${watchToken }"/>
 	<input type="hidden" id="naBzPlc" value="${johapData.NA_BZPLC}" />
 	<input type="hidden" id="aucDsc" value="${johapData.AUC_DSC}" />
-	<input type="hidden" id="kkoSvcId" value="${johapData.KKO_SVC_ID}" />
-	<input type="hidden" id="kkoSvcKey" value="${johapData.KKO_SVC_KEY}" />
-	<input type="hidden" id="kkoSvcCnt" value="${johapData.KKO_SVC_CNT}" />
 	<input type="hidden" id="webPort" value="${johapData.WEB_PORT}" />
 	
 	<input type="hidden" id="aucDate" value="${dateVo.AUC_DT}" />
