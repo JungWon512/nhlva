@@ -67,19 +67,10 @@ var messageHandler = function(data) {
 		case "AF" : //낙유찰 결과
 			//구분자 | 조합구분코드 | 출품번호 | 낙/유찰결과코드(01/02) | 낙찰자회원번호 | 낙찰금액
 			//AF|8808990656656|65|02|null|null
-			$('table.tblBoard tbody tr.title td.auctionNum').text(dataArr[2]);
+			$('table.tblBoard tbody tr td.auctionNum p').text(dataArr[2]);
 			if(dataArr[3]=='22'){ //낙찰
 				var user =dataArr[5],price = dataArr[6];
-				$('table.tblBoard tbody tr.title td p.bidUser').closest('td').show();
-				$('table.tblBoard tbody tr.title td p.bidPrice').closest('td').show();
-				$('table.tblBoard tbody tr.title td p.boardTitle').closest('td').hide();
-				$('table.tblBoard tbody tr.title td p.bidUser').html(''+ user);
-				$('table.tblBoard tbody tr.title td p.bidPrice').html(''+ price);
-			}else if(dataArr[3]=='23'){
-				$('table.tblBoard tbody tr.title td p.bidUser').closest('td').hide();
-				$('table.tblBoard tbody tr.title td p.bidPrice').closest('td').hide();
-				$('table.tblBoard tbody tr.title td p.boardTitle').closest('td').show();
-				$('table.tblBoard tbody tr.title td p.boardTitle').removeClass('txt-red').text('유찰되었습니다.');				
+				$('table.tblBoard tbody tr td p.bidUser p').html(''+ user);
 			}
 		break;
 	}

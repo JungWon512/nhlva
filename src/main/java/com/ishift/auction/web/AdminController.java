@@ -454,6 +454,56 @@ public class AdminController {
 		mav.addObject("subheaderTitle", "방송");
 		return mav;
 	}
+		
+	@RequestMapping(value = "/office/auction/streamOnlyVideo" ,method = { RequestMethod.GET, RequestMethod.POST })
+	public ModelAndView streamOnlyVideo(final HttpServletResponse response
+			 , @RequestParam final Map<String,Object> params) throws Exception{
+		final ModelAndView mav = new ModelAndView();
+		final Map<String,Object> map = new HashMap<>();
+		map.put("delYn", "0");	
+
+		boolean loginChk = false;
+		if(params.get("usrid") != null && params.get("pw") != null) {
+			loginChk = this.adminUserLoginProc(response, params);				
+		}else if(params.get("ea") != null && params.get("eb") != null){
+			String decUsrId = new String(Base64.getDecoder().decode((String)params.getOrDefault("ea","")));
+			String decPw = new String(Base64.getDecoder().decode((String)params.getOrDefault("eb","")));
+			params.put("usrid",decUsrId);
+			params.put("pw",decPw);
+			loginChk = this.adminUserLoginProc(response, params);				
+		}
+		
+		final AdminUserDetails userVo = (AdminUserDetails)sessionUtill.getUserVo();
+
+		if(userVo != null || loginChk) {
+	        String today = LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyyMMdd"));
+	        
+			if(userVo != null) map.put("naBzPlcNo", userVo.getPlace());
+			
+			Map<String,Object> johap  = adminService.selectOneJohap(map);
+	        JwtTokenVo jwtTokenVo = JwtTokenVo.builder()
+					.auctionHouseCode(johap.get("NA_BZPLC").toString())
+					.userMemNum("WATCHER")
+					.userRole(Constants.UserRole.WATCHER)
+					.build();
+	        String token = jwtTokenUtil.generateToken(jwtTokenVo, Constants.JwtConstants.ACCESS_TOKEN);
+
+			map.put("searchDate", today);
+			Map<String,Object> count =auctionService.selectCountEntry(map);
+
+			mav.addObject("johapData", johap);
+	        mav.addObject("token",token);
+	        mav.addObject("count",count);
+			mav.setViewName("admin/auction/stream/streamOnlyVideo");
+			mav.addObject("subheaderTitle", "영상");
+			
+		}
+		else {
+			mav.setViewName("redirect:/office/main");
+			return mav;
+		}
+		return mav;
+	}
 	
 	private boolean adminUserLoginProc(final HttpServletResponse response
 									 , final Map<String,Object> params) {

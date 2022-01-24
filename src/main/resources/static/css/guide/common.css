@@ -6842,7 +6842,7 @@ Base styles: contents layer
 	}
 }
 
-.youtube-view table.youtube-table td {
+.youtube-view table.youtube-table td:not(.noCss) {
 /* 	padding:5px; */
 /* 	height: 33.33%; */
 	height: 25%;
@@ -6949,7 +6949,7 @@ Base styles: contents layer
 }
 .youtube-view table td.seller {
 	padding:15px 0 0;
-	background-color:#007eff;
+	background-color:#007eff!important;
 	border-radius:20px;
 /* 	height:33.33%; */
 	height:20%;
