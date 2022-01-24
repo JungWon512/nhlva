@@ -796,6 +796,7 @@ public class AuctionServiceImpl implements AuctionService {
 				// 낙찰 금액 계산 [e]
 
 				// 6. 낙찰 정보 업데이트
+				info.put("maxDdlQcn", maxDdlQcn.get("MAX_DDL_QCN"));
 				int cnt = auctionDAO.updateAuctionResult(info);
 				if (cnt == 0) {
 					continue;
