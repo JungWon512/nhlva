@@ -24,11 +24,6 @@ $(function() {
 
     var setBinding = function() {
 		setRemon();
-		loop = setInterval(function(){
-			console.log(remoteVideoArr);
-			//slickIndex+1
-			$('div.seeBox_slick ul.slider').slick('goTo', slickIndex);
-		},1000*5);
     };
 
     setLayout();    
@@ -86,7 +81,6 @@ function setRemon(){
 	config.credential.key = $('#kkoSvcKey').val();
 	dummyRemon = new Remon({ config, listener });	
     setLoopJoinEvent();
-    //loop = setInterval(setLoopJoinEvent,1000*15);
 }
 
 //특정주기마다 castlist 목록 불러와 html Draw
