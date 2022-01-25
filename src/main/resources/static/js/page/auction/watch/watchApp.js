@@ -20,6 +20,7 @@ $(function() {
 	};
 
 	setLayout();
+	socketStart();
 });
 
 //소켓통신 connect 및 이벤트 바인딩
