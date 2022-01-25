@@ -455,7 +455,7 @@ public class AdminController {
 		return mav;
 	}
 		
-	@RequestMapping(value = "/office/auction/streamOnlyVideo" ,method = { RequestMethod.GET, RequestMethod.POST })
+	@RequestMapping(value = "/office/auction/videoStream" ,method = { RequestMethod.GET, RequestMethod.POST })
 	public ModelAndView streamOnlyVideo(final HttpServletResponse response
 			 , @RequestParam final Map<String,Object> params) throws Exception{
 		final ModelAndView mav = new ModelAndView();

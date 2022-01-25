@@ -54,7 +54,7 @@
 			</a>
 		</li>
 		<li class="menu_item">
-			<a href="javascript:pageMove('/office/auction/streamOnlyVideo');">
+			<a href="javascript:pageMove('/office/auction/videoStream');">
 				<span class="ico">
 					<img src="/static/images/guide/ico_admin_menu_04.svg" alt="">
 				</span>
