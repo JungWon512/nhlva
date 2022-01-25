@@ -20,12 +20,12 @@
 	<tbody>	
 		<tr class="st">
 			<td class="noCss">
-				<div class="seeBox_bottom vidioSlide" style="max-height:99vh;width:99vw;">
+				<div class="seeBox_bottom vidioSlide" style="height:100vh;width:100vw;">
 					<div class="seeBox_slick">
 						<ul class="slider">									
 							<c:forEach begin="1" end="${(johapData.KKO_SVC_CNT eq '' or johapData.KKO_SVC_CNT == null) ? '0' : johapData.KKO_SVC_CNT}" varStatus="st">
 								<li class="video_item" style="width: 100%;height: auto;">
-									<video id="remoteVideo${st.index }" style="width: 100%;height: 95vh;background: black;" poster="/static/images/assets/no_video_18980.png" muted="muted" autoplay playsinline webkit-playsinline>
+									<video id="remoteVideo${st.index }" style="width: 100%;height: 98vh;background: black;" poster="/static/images/assets/no_video_18980.png" muted="muted" autoplay playsinline webkit-playsinline>
 										Your browser does not support HTML5 video.
 									</video>
 								</li>

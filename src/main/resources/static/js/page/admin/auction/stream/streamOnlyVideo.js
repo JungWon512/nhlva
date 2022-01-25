@@ -2,7 +2,8 @@ $(function() {
 
     var setLayout = function() {
 		$(".seeBox_slick ul.slider").slick({
-			dots: true,
+			dots: false,
+			arrows: false,
 			adaptiveHeight: true,
 		});
 		
