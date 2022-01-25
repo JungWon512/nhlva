@@ -1,6 +1,11 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ include file="/WEB-INF/__system/taglibs.jsp"%>
 <script src="/static/js/socket.io/socket.io.js"></script>
+<style type="text/css">
+	.contents {
+		padding: 5px 0 !important;
+	}
+</style>
 
 <div class="auction_list">
 	<input type="hidden" id="token" value="${watchToken }"/>

@@ -1,25 +1,4 @@
 $(function() {
-	
-	var setLayout = function() {		
-		if($('#aucDsc').val() == '2'){
-			calcPiePercent();
-			$(".tblAuction .list_body ul li").removeClass('act');
-			$(".tblAuction .list_body ul li").on('click',function(){
-				$('.boarder ul li dd.auctionNum').text($(this).find('dd.aucPrgSq').text());
-				$('.boarder ul li dd.ftsnm').text($(this).find('dd.ftsnm').text());
-				$('.boarder ul li dd.sex').text($(this).find('dd.indvSexC').text());
-				$('.boarder ul li dd.cowSogWt').text($(this).find('dd.cowSogWt').text());
-				$('.boarder ul li dd.matime').text($(this).find('input.matime').val());	//산차
-				$('.boarder ul li dd.sraIndvPasgQcn').text($(this).find('dd.sraIndvPasgQcn').text());
-				$('.boarder ul li dd.mcowDsc').text($(this).find('input.mcowDsc').val());	//어미
-				$('.boarder ul li dd.lowsSbidLmtAm').text($(this).find('dd.lowsSbidLmtAm').text());
-				$('.boarder ul li dd.kpnNo').text($(this).find('dd.kpnNo').text());
-				$('.boarder ul li dd.rmkCntn').text($(this).find('dd.rmkCntn').text());
-			});
-		}
-	};
-
-	setLayout();
 	socketStart();
 });
 
@@ -49,7 +28,7 @@ var socketStart = function(){
 }
 var connectErr = function(){
 	socketDisconnect();
-	modalAlert('','경매가 종료되었습니다.',function(){pageMove('/main', false);});
+//	modalAlert('','경매가 종료되었습니다.',function(){pageMove('/main', false);});
 }
 
 //소켓통신 disconnect Event
@@ -139,8 +118,6 @@ var messageHandler = function(data) {
 			 var oSelSts =tr.find('dl dd.selSts').text();
 			//if(tmpAsDAta.selSts && oSelSts != tmpAsDAta.selSts){
 			tr.find('dl dd.selSts').text(tmpAsDAta.selSts);
-			calcPiePercent();
-			//}
 			tr.find('dl dd.sraSbidAm').text(Math.round(tmpAsDAta.sraSbidAm));
 			changeTrRow(tr);	
 		break;	
@@ -181,24 +158,10 @@ var scLoad = function(dataArr){
 	auctionConfig.scData.curAucSeq = dataArr[2];
 				
 	//관전 전광판 데이터 update				
-	$('.vidioSlide li.boarder ul dl dd.auctionNum').text(dataArr[2]);
-	$('.vidioSlide li.boarder ul dl dd.ftsnm').text(nameEnc(dataArr[9]));
-	$('.vidioSlide li.boarder ul dl dd.sex').text(dataArr[13]);
-	$('.vidioSlide li.boarder ul dl dd.cowSogWt').text(dataArr[25]);
-	$('.vidioSlide li.boarder ul dl dd.matime').text(dataArr[16]);
-	$('.vidioSlide li.boarder ul dl dd.mcowDsc').text(dataArr[14]); //어미								
-	$('.vidioSlide li.boarder ul dl dd.sraIndvPasgQcn').text(dataArr[18]);
-	$('.vidioSlide li.boarder ul dl dd.kpnNo').text(dataArr[11] && dataArr[12].replace('KPN',''));
-	$('.vidioSlide li.boarder .seeBox_slick_inner ul dl dd.lowsSbidLmtAm').text(Math.round(dataArr[27])+''); //24 :최초낙찰 ,25:최저낙찰
-	$('.vidioSlide li.boarder .mo_seeBox ul dl dd.lowsSbidLmtAm').text(Math.round(dataArr[27])+''); //24 :최초낙찰 ,25:최저낙찰
-	$('.vidioSlide li.boarder ul dl dd.rmkCntn p').text(dataArr[28]);
-	convertDefaultValue('.vidioSlide li.boarder ul dl dd');
 	var tr = getTrRow(auctionConfig.scData.curAucSeq);
 	tr.find('dl dd.ftsnm').text(nameEnc(dataArr[9]));
 	tr.find('dl dd.cowSogWt').text(dataArr[25]);
 	tr.find('dl dd.lowsSbidLmtAm').text(dataArr[27]+'');
 	tr.find('dl dd.sraSbidAm').text(dataArr[31]+'');
 	tr.find('dl dd.rmkCntn').text(dataArr[28]);
-	
-	convertDefaultValue(tr.find('dl dd'));
 }
