@@ -494,9 +494,8 @@ public class AdminController {
 			mav.addObject("johapData", johap);
 	        mav.addObject("token",token);
 	        mav.addObject("count",count);
-			mav.setViewName("admin/auction/stream/streamOnlyVideo");
-			mav.addObject("subheaderTitle", "영상");
-			
+			mav.setViewName("admin/auction/board/streamOnlyVideo");
+			mav.addObject("subheaderTitle", "영상");			
 		}
 		else {
 			mav.setViewName("redirect:/office/main");
