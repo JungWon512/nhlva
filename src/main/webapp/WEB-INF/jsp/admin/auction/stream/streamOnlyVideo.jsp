@@ -11,21 +11,19 @@
 <input type="hidden" id="kkoSvcCnt" value="${johapData.KKO_SVC_CNT}" />
 <input type="hidden" id="webPort" value="${johapData.WEB_PORT}" />
 <input type="hidden" id="listAucNum" value="${count.LIST_AUCNUM}" />
-<table class="youtube-table tblAuctionSt">
+<table class="youtube-table tblAuctionSt" style="border-spacing: 0px;">
 	<colgroup>
-		<col width="18%">
-		<col width="18%">
-		<col width="64%">
+		<col width="*">
 	</colgroup>
 	<tbody>	
 		<tr class="st">
-			<td class="noCss">
-				<div class="seeBox_bottom vidioSlide" style="height:100vh;width:100vw;">
+			<td class="" style="height:100%;">
+				<div class="seeBox_bottom vidioSlide">
 					<div class="seeBox_slick">
 						<ul class="slider">									
 							<c:forEach begin="1" end="${(johapData.KKO_SVC_CNT eq '' or johapData.KKO_SVC_CNT == null) ? '0' : johapData.KKO_SVC_CNT}" varStatus="st">
 								<li class="video_item" style="width: 100%;height: auto;">
-									<video id="remoteVideo${st.index }" style="width: 100%;height: 98vh;background: black;" poster="/static/images/assets/no_video_18980.png" muted="muted" autoplay playsinline webkit-playsinline>
+									<video id="remoteVideo${st.index }" style="max-height: 90vh;background: black;" poster="/static/images/assets/no_video_18980.png" muted="muted" autoplay playsinline webkit-playsinline controls>
 										Your browser does not support HTML5 video.
 									</video>
 								</li>

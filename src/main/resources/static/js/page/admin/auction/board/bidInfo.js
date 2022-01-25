@@ -67,10 +67,10 @@ var messageHandler = function(data) {
 		case "AF" : //낙유찰 결과
 			//구분자 | 조합구분코드 | 출품번호 | 낙/유찰결과코드(01/02) | 낙찰자회원번호 | 낙찰금액
 			//AF|8808990656656|65|02|null|null
-			$('table.tblBoard tbody tr td.auctionNum p').text(dataArr[2]);
 			if(dataArr[3]=='22'){ //낙찰
 				var user =dataArr[5],price = dataArr[6];
-				$('table.tblBoard tbody tr td p.bidUser p').html(''+ user);
+				$('table.tblBoard tbody tr td.auctionNum p').text(dataArr[2]);
+				$('table.tblBoard tbody tr td.bidUser p').html(''+ user);
 			}
 		break;
 	}

@@ -8208,3 +8208,20 @@ video[poster]{
 	height:100%;
 	width:100%;
 }
+
+@font-face {
+	font-family: 'LAB디지털';
+	src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_20-07@1.0/LAB디지털.woff') format('woff');
+	font-weight: normal;
+	font-style: normal;
+}
+.billboard-view.bidInfo .countVer{color: #fff;border: 10px solid #000;border-bottom: 0px;background-color: #1b1b1b;}
+.billboard-view.bidInfo .countVer p{font-weight: normal;text-align: center;line-height: normal;}
+.billboard-view.bidInfo .countVer td{border: none;border-bottom: 10px solid #000;box-sizing: border-box;}/* padding: 2% 2.5%; */
+.billboard-view.bidInfo .countVer td + td{border-left: 10px solid #000;}
+.billboard-view.bidInfo .countVer .brandTit{height: 10%;}
+.billboard-view.bidInfo .countVer .brandTit p{text-align: left;font-size: 3vw;letter-spacing: -5px;}
+.billboard-view.bidInfo .countVer .secTxt{height: 34%;background-color: #3b3b3b;}
+.billboard-view.bidInfo .countVer .secTxt p{font-size: 8vw;letter-spacing: -7.5px;}
+.billboard-view.bidInfo .countVer .countTxt{height: 56%;padding:  0px;}
+.billboard-view.bidInfo .countVer .countTxt p{font-size: 24vw;color: #ffd500;font-family: 'LAB디지털';letter-spacing: 50px;}

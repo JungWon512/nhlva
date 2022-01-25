@@ -1,4 +1,26 @@
 $(function() {
+	if($('#aucDsc').val() == '2'){
+		$(".tblAuction .list_body ul li").removeClass('act');
+		$(".tblAuction .list_body ul li").on('click',function(){
+				var str ="";
+				str += $(this).find('dd.aucPrgSq').text().trim();
+				str +="|"+$(this).find('dd.indvSexC').text().trim();
+				str +="|"+$(this).find('dd.ftsnm').text().trim();
+				str +="|"+$(this).find('dd.cowSogWt').text().trim();
+				str +="|"+$(this).find('dd.matime').text().trim();
+				str +="|"+$(this).find('dd.mcowDsc').text().trim();
+				str +="|"+$(this).find('dd.sraIndvPasgQcn').text().trim();
+				str +="|"+$(this).find('dd.kpnNo').text().trim();
+				str +="|"+$(this).find('dd.lowsSbidLmtAm').text().trim();
+				str +="|"+$(this).find('dd.rmkCntn').text().trim();
+				console.log(str);
+				try{			
+					window.auctionBridge.setCowInfo(str);					
+				}catch(e){
+					console.log(e);
+				};
+		});
+	}
 	socketStart();
 });
 
