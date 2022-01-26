@@ -176,7 +176,6 @@ public class AdminTaskController {
 			if(userVo != null) params.put("regUserId", userVo.getEno());
 			if(userVo != null) params.put("naBzplc", userVo.getNaBzplc());
 			if(params.get("aucDt") != null) params.put("searchDate", params.get("aucDt"));
-			if(params.get("aucObjDsc") != null) params.put("searchAucObjDsc", params.get("aucObjDsc"));
 			
 			String regType = (String)params.getOrDefault("regType", "");
 			if("N".equals(regType)) {

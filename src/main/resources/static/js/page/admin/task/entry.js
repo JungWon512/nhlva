@@ -74,7 +74,8 @@
 					oslpNo : oslpNo,
 					ledSqno : ledSqno,
 					amnno : amnno,
-					searchTxt : $("input[name='searchTxt']").val()
+					searchTxt : $("input[name='searchTxt']").val(),
+					searchAucObjDsc : $("select#aucObjDsc").val()
 				}
 				
 				$.ajax({
@@ -152,6 +153,8 @@
 			$("input[name='cowSogWt']").on('keydown',function(){
 				if(!$(this).val() || $(this).val() == '0') $(this).val('');
 			});
+			
+			// 중량 일괄등록
 			$("input[name='cowSogWt']").on("focusout", function(){				
 				if(!$(this).val() || $(this).val() == '') $(this).val('0');
 				var li = $(this).closest("li");
@@ -163,6 +166,7 @@
 					, oslpNo : li.find("dd.col1").data("oslpNo")
 					, ledSqno : li.find("dd.col1").data("ledSqno")
 					, cowSogWt : $(this).val()
+					, searchAucObjDsc : $("select#aucObjDsc").val()
 				}
 				
 				$.ajax({
@@ -207,7 +211,8 @@
 				oslpNo : oslpNo,
 				ledSqno : ledSqno,
 				amnno : amnno,
-				searchTxt : $("input[name='searchTxt']").val()
+				searchTxt : $("input[name='searchTxt']").val(),
+				searchAucObjDsc : $("select#aucObjDsc").val()
 			}
 			
 			$.ajax({
@@ -289,6 +294,7 @@
 		};
 		
 		var fnLayerPop = function(params, cowInfo) {
+			console.log(params);
 			var title = ['W', 'AW'].indexOf(params.regType) > -1 ? '중량 등록' : params.regType == 'N' ? '계류대 변경' : '하한가 등록';
 			modalPopupClose('.pop_mod_weight');
 			$('.pop_mod_weight').remove();
@@ -305,6 +311,7 @@
 			sHtml.push('			<input type="hidden" name="ledSqno" value="' + params.ledSqno + '" />');
 			sHtml.push('			<input type="hidden" name="aucPrgSq" value="' + cowInfo.AUC_PRG_SQ + '" />');
 			sHtml.push('			<input type="hidden" name="searchTxt" value="' + params.searchTxt + '" />');
+			sHtml.push('			<input type="hidden" name="searchAucObjDsc" value="' + params.searchAucObjDsc + '" />');
 			
 			sHtml.push('			<div class="modal-head">');
 			sHtml.push('				<h3>' + title + '</h3>');
