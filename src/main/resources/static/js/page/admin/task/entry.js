@@ -12,6 +12,10 @@
 		})();
 		
 		var addEvent = function(){
+			
+			// 검색어 영역 focus
+			$("input[name='searchTxt']").focus();
+			
 			// 바코드 검색
 			$(".btn_search").on("click", function() {
 				$("form[name='frm']").attr("action", "/office/task/entry").submit();
