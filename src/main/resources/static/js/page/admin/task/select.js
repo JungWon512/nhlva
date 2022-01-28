@@ -52,7 +52,7 @@
 					var success = body.success;
 					var message = body.message;
 					if (!success) {
-						modalAlert("", message);
+						modalAlert("", message, fnReset);
 					}
 					else {
 						fnSetCowInfo(body);
