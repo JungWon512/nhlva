@@ -46,13 +46,15 @@ var preLoadDate;
 			if(window.document.visibilityState == 'hidden'){
 				if(location.pathname.indexOf('/watch') >= 0 || location.pathname.indexOf('/groupBid') >= 0 || location.pathname.indexOf('/singlebid') >= 0){
 					$('#remoteVideo1').get(0).muted=true;
-					$(".m_sound").addClass('off');
+					//$(".m_sound").addClass('off');
 				}
 				preLoadDate=new Date();			
 			}else{
-				if(location.pathname.indexOf('/watch') >= 0 || location.pathname.indexOf('/groupBid') >= 0 || location.pathname.indexOf('/singlebid') >= 0){		
-					$('#remoteVideo1').get(0).muted=false;
-					$(".m_sound").removeClass('off');
+				if(location.pathname.indexOf('/watch') >= 0 || location.pathname.indexOf('/groupBid') >= 0 || location.pathname.indexOf('/singlebid') >= 0){
+					if(!$(".m_sound").hasClass('off')){
+						$('#remoteVideo1').get(0).muted=false;
+						$(".m_sound").removeClass('off');						
+					}
 				}
 				var tmpDate = new Date();
 				tmpDate.setMinutes(tmpDate.getMinutes()-15);

@@ -1,5 +1,6 @@
 package com.ishift.auction.configuration;
 
+import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
@@ -14,10 +15,15 @@ public class WebMvcConfigurerConfiguration extends WebMvcConfigurerAdapter {
         registry.addResourceHandler("/static/**").addResourceLocations("classpath:/static/");
         registry.addResourceHandler("/**").addResourceLocations("classpath:/html/");
     }
-
+    
+    @Bean
+	public SessionContextInterceptor sessionContextInterceptor() {
+    	return new SessionContextInterceptor ();
+	}
+    
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
-        registry.addInterceptor(new SessionContextInterceptor())
+        registry.addInterceptor(sessionContextInterceptor())
                 .addPathPatterns("/**")
                 .excludePathPatterns("/static/**")
                 .excludePathPatterns("/j_spring_security_check")

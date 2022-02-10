@@ -343,14 +343,15 @@ public class AuctionController extends CommonController {
 		}
 		else if(dateVo != null && today.equals(dateVo.get("AUC_DT")) && aucCnt > 0){
 			// 경매진행중인 경우 관전토큰 생성 후 쿠키에 저장
-			JwtTokenVo jwtTokenVo = JwtTokenVo.builder()
-					.auctionHouseCode(johapData.get("NA_BZPLC").toString())
-					.userMemNum("WATCHER")
-					.userRole(Constants.UserRole.WATCHER)
-					.build();
-			String token = jwtTokenUtil.generateToken(jwtTokenVo, Constants.JwtConstants.ACCESS_TOKEN);
-			Cookie cookie = cookieUtil.createCookie("watch_token", token);
-			res.addCookie(cookie);
+			// 20220210 jjw - Watch token SessionContextInterceptor 생성
+			//JwtTokenVo jwtTokenVo = JwtTokenVo.builder()
+			//		.auctionHouseCode(johapData.get("NA_BZPLC").toString())
+			//		.userMemNum("WATCHER")
+			//		.userRole(Constants.UserRole.WATCHER)
+			//		.build();
+			//String token = jwtTokenUtil.generateToken(jwtTokenVo, Constants.JwtConstants.ACCESS_TOKEN);
+			//Cookie cookie = cookieUtil.createCookie("watch_token", token);
+			//res.addCookie(cookie);
 			
 			//경매진행중
 			mav.setViewName("auction/main/main");
