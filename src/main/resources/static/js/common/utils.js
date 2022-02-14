@@ -530,5 +530,5 @@ var toast = function(string, sec, top) {
 }
 
 var fnSetComma = function(str) {
-	return (str != undefined ? str.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") : "0");
+	return (str != undefined && str.toString().replace(/[^0-9]/gi, '') != "") ? str.toString().replace(/[^0-9]/gi, '').replace(/\B(?=(\d{3})+(?!\d))/g, ",") : "0";
 }

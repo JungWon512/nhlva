@@ -48,7 +48,7 @@
 							<input type="hidden" class="oslpNo" name="oslpNo_${st.index }" value="${vo.OSLP_NO}"/>
 							<input type="hidden" class="sbidUpr" name="sbidUpr_${st.index }" value="${fn:split(vo.SBID_UPR,'.')[0]}"/>
 							<input type="hidden" class="aucPrgSq" name="aucPrgSq_${st.index }" value="${vo.AUC_PRG_SQ}"/>
-							<input type="hidden" class="lowsSbidLmtUpr" name="lowsSbidLmtUpr_${st.index }" value="${vo.LOWS_SBID_LMT_AM <= 0 ? '0' : fn:split(vo.LOWS_SBID_LMT_UPR,'.')[0]}"/>
+							<input type="hidden" class="lowsSbidLmtUpr" name="lowsSbidLmtUpr_${st.index }" value="${empty vo.LOWS_SBID_LMT_AM or vo.LOWS_SBID_LMT_AM <= 0 ? '0' : fn:split(vo.LOWS_SBID_LMT_UPR,'.')[0]}"/>
 							<dl>
 								<dd class="num">${vo.AUC_PRG_SQ }</dd>
 								<dd class="pd_ea">
@@ -57,7 +57,9 @@
 								<dd class="pd_date">${vo.BIRTH_MO }</dd>
 								<dd class="pd_sex">${vo.INDV_SEX_C_NAME }</dd>
 								<dd class="pd_kpn">${vo.KPN_NO_STR }</dd>
-								<dd class="pd_pay">${vo.LOWS_SBID_LMT_AM <= 0 ? '0' : fn:split(vo.LOWS_SBID_LMT_UPR,'.')[0]}</dd>
+								<dd class="pd_pay">
+									<fmt:formatNumber value="${empty vo.LOWS_SBID_LMT_AM or vo.LOWS_SBID_LMT_AM <= 0 ? '0' : fn:split(vo.LOWS_SBID_LMT_UPR,'.')[0]}" type="number" />
+								</dd>
 							</dl>
 							<div class="pd_etc">
 								<p>${vo.RMK_CNTN }</p>
@@ -72,7 +74,7 @@
 												찜가격
 											</c:when>
 											<c:otherwise>
-												${fn:split(vo.SBID_UPR,'.')[0]}
+												<fmt:formatNumber value="${fn:split(vo.SBID_UPR,'.')[0]}" type="number" />
 											</c:otherwise>
 											</c:choose>
 										</span>
@@ -139,7 +141,7 @@
 								<dd class="num">${vo.AUC_PRG_SQ }</dd>
 								<dd class="name">${vo.FTSNM }</dd>
 								<dd class="pd_sex">${vo.INDV_SEX_C_NAME }</dd>
-								<dd class="pd_kg"><fmt:formatNumber value="${fn:split(vo.COW_SOG_WT,'.')[0]}" type="number" /></dd>
+								<dd class="pd_kg"><fmt:formatNumber value="${empty vo.COW_SOG_WT or vo.COW_SOG_WT <= 0 ? '0' : fn:split(vo.COW_SOG_WT,'.')[0]}" type="number" /></dd>
 								<dd class="pd_pay1">
 									<c:choose>
 										<c:when test="${vo.LOWS_SBID_LMT_AM eq '' || vo.LOWS_SBID_LMT_AM == null || vo.LOWS_SBID_LMT_AM <= 0}">-</c:when>

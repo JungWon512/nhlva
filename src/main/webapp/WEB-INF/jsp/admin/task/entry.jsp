@@ -99,11 +99,18 @@
 								<dd class="col1" data-amnno="${item.SRA_INDV_AMNNO}" data-auc-obj-dsc="${item.AUC_OBJ_DSC}" data-oslp-no="${item.OSLP_NO}" data-led-sqno="${item.LED_SQNO}">${item.AUC_PRG_SQ}</dd>
 							<c:choose>
 							<c:when test="${params.regType eq 'W'}">
-								<dd class="col2">${fn:split(item.COW_SOG_WT,'.')[0] eq '0' ? '-' : fn:split(item.COW_SOG_WT,'.')[0]}</dd>
+								<dd class="col2">
+									<c:choose>
+										<c:when test="${empty item.COW_SOG_WT or item.COW_SOG_WT <= 0}">-</c:when>
+										<c:otherwise>
+											<fmt:formatNumber value="${fn:split(item.COW_SOG_WT,'.')[0]}" type="number" />
+										</c:otherwise>
+									</c:choose>
+								</dd>
 							</c:when>
 							<c:when test="${params.regType eq 'AW'}">
 								<dd class="col2">
-<%-- 									<input type="text" name="cowSogWt" id="cowSogWt${item.AUC_PRG_SQ}" class="onlyNumber" value="${fn:split(item.COW_SOG_WT,'.')[0]}" maxlength="4" pattern="\d*" inputmode="numeric" onfocus="$(this).setCursorPosition(0); return false;"/> --%>
+<%-- 								<input type="text" name="cowSogWt" id="cowSogWt${item.AUC_PRG_SQ}" class="onlyNumber" value="${fn:split(item.COW_SOG_WT,'.')[0]}" maxlength="4" pattern="\d*" inputmode="numeric" onfocus="$(this).setCursorPosition(0); return false;"/> --%>
 									<input type="text" name="cowSogWt" id="cowSogWt${item.AUC_PRG_SQ}" class="onlyNumber" value="${fn:split(item.COW_SOG_WT,'.')[0]}" maxlength="4" pattern="\d*" inputmode="numeric"/>
 								</dd>
 							</c:when>

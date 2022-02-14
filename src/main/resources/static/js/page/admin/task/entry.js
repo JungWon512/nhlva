@@ -262,7 +262,7 @@
 					listHtml.push('	<dl>');
 					listHtml.push('		<dd class="col1" data-amnno="' + item.SRA_INDV_AMNNO+ '" data-auc-obj-dsc="' + item.AUC_OBJ_DSC+ '" data-oslp-no="' + item.OSLP_NO+ '" data-led-sqno="' + item.LED_SQNO+ '">' + item.AUC_PRG_SQ + '</dd>');
 					if (regType == "W") {
-						listHtml.push('<dd class="col2">' + (item.COW_SOG_WT == null || parseInt(item.COW_SOG_WT) == '0' || parseInt(item.COW_SOG_WT) == 'NaN' ? '-' : parseInt(item.COW_SOG_WT)) + '</dd>');
+						listHtml.push('<dd class="col2">' + (item.COW_SOG_WT == null || parseInt(item.COW_SOG_WT) == '0' || parseInt(item.COW_SOG_WT) == 'NaN' ? '-' : fnSetComma(parseInt(item.COW_SOG_WT))) + '</dd>');
 					}
 					else if (regType == "L") {
 						listHtml.push('<dd class="col2">' + (item.LOWS_SBID_LMT_UPR == null || parseInt(item.LOWS_SBID_LMT_UPR) == '0' || parseInt(item.LOWS_SBID_LMT_UPR) == 'NaN' ? '-' : fnSetComma(item.LOWS_SBID_LMT_UPR)) + '</dd>');
@@ -364,7 +364,7 @@
 				sHtml.push('					</tr>');
 				sHtml.push('					<tr>');
 				sHtml.push('						<th>중량</th>');
-				sHtml.push('						<td>' + cowInfo.COW_SOG_WT + ' kg</td>');
+				sHtml.push('						<td>' + fnSetComma(cowInfo.COW_SOG_WT) + ' kg</td>');
 				sHtml.push('					</tr>');
 				sHtml.push('					<tr>');
 				sHtml.push('						<th>하한가</th>');

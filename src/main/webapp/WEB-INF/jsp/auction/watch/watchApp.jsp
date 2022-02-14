@@ -52,14 +52,26 @@
 							<dd class="name ftsnm">${ vo.FTSNM }</dd>
 							<dd class="pd_ea sraIndvAmnno">${ vo.SRA_INDV_AMNNO_FORMAT }</dd>
 							<dd class="pd_sex indvSexC">${ vo.INDV_SEX_C_NAME }</dd>
-							<dd class="pd_kg cowSogWt textNumber">${(vo.COW_SOG_WT eq '' || vo.COW_SOG_WT == null || vo.COW_SOG_WT <= 0 ) ? '0' : fn:split(vo.COW_SOG_WT,'.')[0]}</dd>
+							<dd class="pd_kg cowSogWt textNumber">
+								<fmt:formatNumber value="${(empty vo.COW_SOG_WT or vo.COW_SOG_WT <= 0 ) ? '0' : fn:split(vo.COW_SOG_WT,'.')[0]}" type="number" />
+							</dd>
 							<dd class="pd_kpn kpnNo">${ vo.KPN_NO_STR }</dd>
 							<dd class="pd_num1 sraIndvPasgQcn">${ vo.SRA_INDV_PASG_QCN }</dd>
 							<dd class="pd_pay1 lowsSbidLmtAm textNumber">
-								${(vo.LOWS_SBID_LMT_AM eq '' || vo.LOWS_SBID_LMT_AM == null || vo.LOWS_SBID_LMT_AM <= 0 ) ? '-' : vo.LOWS_SBID_LMT_AM <= 0 ? '0' : fn:split(vo.LOWS_SBID_LMT_UPR,'.')[0]}
+								<c:choose>
+									<c:when test="${vo.LOWS_SBID_LMT_AM eq '' || vo.LOWS_SBID_LMT_AM == null || vo.LOWS_SBID_LMT_AM <= 0}">-</c:when>
+									<c:otherwise>
+										<fmt:formatNumber value="${fn:split(vo.LOWS_SBID_LMT_UPR,'.')[0]}" type="number" />
+									</c:otherwise>
+								</c:choose>
 							</dd>
 							<dd class="pd_pay2 sraSbidAm textNumber">
-								${(vo.SRA_SBID_UPR eq '' || vo.SRA_SBID_UPR == null || vo.SRA_SBID_UPR <= 0 ) ? '-' : fn:split(vo.SRA_SBID_UPR,'.')[0]}
+								<c:choose>
+									<c:when test="${vo.SRA_SBID_UPR eq '' || vo.SRA_SBID_UPR == null || vo.SRA_SBID_UPR <= 0}">-</c:when>
+									<c:otherwise>
+										<fmt:formatNumber value="${fn:split(vo.SRA_SBID_UPR,'.')[0]}" type="number" />
+									</c:otherwise>
+								</c:choose>
 							</dd>
 							<dd class="pd_state selSts">${vo.SEL_STS_DSC_NAME }</dd>
 							<dd class="pd_etc rmkCntn">${ fn:replace(vo.RMK_CNTN,'|',',') }</dd>

@@ -122,7 +122,14 @@
 								<dd class="name">${ item.FTSNM }</dd>
 								<dd class="pd_ea">${ item.SRA_INDV_AMNNO_FORMAT }</dd>
 								<dd class="pd_sex">${ item.INDV_SEX_C_NAME }</dd>
-								<dd class="pd_kg">${ fn:split(item.COW_SOG_WT,'.')[0] }</dd>
+								<dd class="pd_kg">
+									<c:choose>
+										<c:when test="${empty item.COW_SOG_WT || item.COW_SOG_WT <= 0}">-</c:when>
+										<c:otherwise>
+											<fmt:formatNumber value="${fn:split(item.COW_SOG_WT,'.')[0]}" type="number" />
+										</c:otherwise>
+									</c:choose>
+								</dd>
 								<dd class="pd_kpn">${ item.KPN_NO_STR }</dd>
 								<dd class="pd_num1">${ item.SRA_INDV_PASG_QCN }</dd>
 								<dd class="pd_pay1">
@@ -232,7 +239,14 @@
 								<dd class="num">${item.AUC_PRG_SQ }</dd>
 								<dd class="pd_ea">${item.SRA_INDV_AMNNO_FORMAT }</dd>
 								<dd class="pd_sex">${ item.INDV_SEX_C_NAME}</dd>
-								<dd class="pd_kg">${ fn:split(item.COW_SOG_WT,'.')[0] }</dd>
+								<dd class="pd_kg">
+									<c:choose>
+										<c:when test="${empty item.COW_SOG_WT || item.COW_SOG_WT <= 0}">-</c:when>
+										<c:otherwise>
+											<fmt:formatNumber value="${fn:split(item.COW_SOG_WT,'.')[0]}" type="number" />
+										</c:otherwise>
+									</c:choose>
+								</dd>
 								<dd class="pd_pay1">
 									<c:choose>
 										<c:when test="${empty item.LOWS_SBID_LMT_AM || item.LOWS_SBID_LMT_AM <= 0}">-</c:when>

@@ -103,7 +103,7 @@
 			sHtml += '  				</tr>                                                                                                                        ';
 			sHtml += '  				<tr>                                                                                                               ';
 			sHtml += '  					<th>중량</th>                                                                                                  ';
-			sHtml += '  					<td class="tal">'+tr.find('.cowSogWt').val()+'kg</td>                                                                                     ';
+			sHtml += '  					<td class="tal">'+fnSetComma(tr.find('.cowSogWt').val())+'kg</td>                                                                                     ';
 			sHtml += '  					<th>성별</th>                                                                                                  ';
 			sHtml += '  					<td class="sex">'+tr.find('.indvSexCName').val()+'</td>                                                                                        ';			
 			sHtml += '  				</tr>                                                                                                    ';

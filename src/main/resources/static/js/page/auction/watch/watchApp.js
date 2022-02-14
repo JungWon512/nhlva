@@ -6,14 +6,13 @@ $(function() {
 				str += $(this).find('dd.aucPrgSq').text().trim();
 				str +="|"+$(this).find('dd.indvSexC').text().trim();
 				str +="|"+$(this).find('dd.ftsnm').text().trim();
-				str +="|"+$(this).find('dd.cowSogWt').text().trim();
+				str +="|"+fnSetComma($(this).find('dd.cowSogWt').text().trim());
 				str +="|"+$(this).find('dd.matime').text().trim();
 				str +="|"+$(this).find('dd.mcowDsc').text().trim();
 				str +="|"+$(this).find('dd.sraIndvPasgQcn').text().trim();
 				str +="|"+$(this).find('dd.kpnNo').text().trim();
-				str +="|"+$(this).find('dd.lowsSbidLmtAm').text().trim();
+				str +="|"+fnSetComma($(this).find('dd.lowsSbidLmtAm').text().trim());
 				str +="|"+$(this).find('dd.rmkCntn').text().trim();
-				console.log(str);
 				try{			
 					window.auctionBridge.setCowInfo(str);					
 				}catch(e){
@@ -50,7 +49,6 @@ var socketStart = function(){
 }
 var connectErr = function(){
 	socketDisconnect();
-//	modalAlert('','경매가 종료되었습니다.',function(){pageMove('/main', false);});
 }
 
 //소켓통신 disconnect Event
@@ -115,7 +113,7 @@ var messageHandler = function(data) {
 			auctionConfig.asData.curAucSeq = dataArr[2];
 			
 			var tr = getTrRow(auctionConfig.asData.curAucSeq);
-			tr.find('dl dd.lowsSbidLmtAm').text(Math.round(tmpAsDAta.lowsSbidLmtAm)+'');
+			tr.find('dl dd.lowsSbidLmtAm').text(fnSetComma(Math.round(tmpAsDAta.lowsSbidLmtAm)+''));
 			if($('#aucDsc').val() == '2' && tmpAsDAta.selSts=='8006'){
 				location.reload();
 			};
@@ -140,7 +138,7 @@ var messageHandler = function(data) {
 			 var oSelSts =tr.find('dl dd.selSts').text();
 			//if(tmpAsDAta.selSts && oSelSts != tmpAsDAta.selSts){
 			tr.find('dl dd.selSts').text(tmpAsDAta.selSts);
-			tr.find('dl dd.sraSbidAm').text(Math.round(tmpAsDAta.sraSbidAm));
+			tr.find('dl dd.sraSbidAm').text(fnSetComma(Math.round(tmpAsDAta.sraSbidAm)));
 			changeTrRow(tr);	
 		break;	
 		default:break;
@@ -182,8 +180,8 @@ var scLoad = function(dataArr){
 	//관전 전광판 데이터 update				
 	var tr = getTrRow(auctionConfig.scData.curAucSeq);
 	tr.find('dl dd.ftsnm').text(nameEnc(dataArr[9]));
-	tr.find('dl dd.cowSogWt').text(dataArr[25]);
-	tr.find('dl dd.lowsSbidLmtAm').text(dataArr[27]+'');
-	tr.find('dl dd.sraSbidAm').text(dataArr[31]+'');
+	tr.find('dl dd.cowSogWt').text(fnSetComma(dataArr[25]));
+	tr.find('dl dd.lowsSbidLmtAm').text(fnSetComma(dataArr[27])+'');
+	tr.find('dl dd.sraSbidAm').text(fnSetComma(dataArr[31])+'');
 	tr.find('dl dd.rmkCntn').text(dataArr[28]);
 }

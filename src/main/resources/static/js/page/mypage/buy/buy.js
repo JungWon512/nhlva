@@ -146,7 +146,7 @@
 				sHtml += " <dd class='name'>"+getStringValue(item.FTSNM)+"</dd>";	
 				sHtml += " <dd class='pd_ea'>"+getStringValue(item.SRA_INDV_AMNNO_FORMAT)+"</dd>";	
 				sHtml += " <dd class='pd_sex'>"+getStringValue(item.INDV_SEX_C_NAME)+"</dd>";	
-				sHtml += " <dd class='pd_kg'>"+getStringValue(item.COW_SOG_WT)+"</dd>";	
+				sHtml += " <dd class='pd_kg'>"+fnSetComma(getStringValue(item.COW_SOG_WT))+"</dd>";	
 				sHtml += " <dd class='pd_kpn'>"+getStringValue(item.KPN_NO_STR)+"</dd>";	
 				sHtml += " <dd class='pd_num1'>"+getStringValue(item.SRA_INDV_PASG_QCN)+"</dd>";	
 				sHtml += " <dd class='pd_pay1'>"+fnSetComma(getStringValue(item.LOWS_SBID_LMT_UPR))+"</dd>";	
@@ -184,7 +184,7 @@
 				sHtml += " <dd class='num'>"+getStringValue(item.AUC_PRG_SQ)+"</dd>";	
 				sHtml += " <dd class='pd_ea'>"+getStringValue(item.SRA_INDV_AMNNO_FORMAT)+"</dd>";	
 				sHtml += " <dd class='pd_sex'>"+getStringValue(item.INDV_SEX_C_NAME)+"</dd>";	
-				sHtml += " <dd class='pd_kg'>"+getStringValue(item.COW_SOG_WT)+"</dd>";	
+				sHtml += " <dd class='pd_kg'>"+fnSetComma(getStringValue(item.COW_SOG_WT))+"</dd>";	
 				sHtml += " <dd class='pd_pay1'>"+fnSetComma(getStringValue(item.LOWS_SBID_LMT_UPR))+"</dd>";	
 				sHtml += " <dd class='pd_pay3'>"+fnSetComma(getStringValue(item.ATDR_AM))+"</dd>";	
 				sHtml += " <dd class='pd_pay2'>"+fnSetComma(getStringValue(item.SRA_SBID_UPR))+"</dd>";	
@@ -217,7 +217,6 @@ var convertScroll = function(){
 		resultH= $('section.header').outerHeight() + ($('section.contents').outerHeight() - $('.tab_area.'+gubun+' .list_table .list_body ul').outerHeight()) +$('section.footer').outerHeight() +1;
 			
 		resultH = $('body').outerHeight() - resultH;
-		console.log(resultH);
 		$(this).css('height','  '+resultH+'px');
 		$(this).css('min-height','70px');
 	});	
