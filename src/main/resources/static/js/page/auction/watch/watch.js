@@ -46,7 +46,7 @@ $(function() {
 				$('.boarder ul li dd.mcowDsc').text($(this).find('input.mcowDsc').val());	//어미
 				$('.boarder ul li dd.lowsSbidLmtAm').text($(this).find('dd.lowsSbidLmtAm').text());
 				$('.boarder ul li dd.kpnNo').text($(this).find('dd.kpnNo').text());
-				$('.boarder ul li dd.rmkCntn').text($(this).find('dd.rmkCntn').text());
+				$('.boarder ul li dd.rmkCntn p').text($(this).find('dd.rmkCntn').text());
 			});
 		}
     };
