@@ -996,7 +996,14 @@
 		    ON ( A.NA_BZPLC = B.NA_BZPLC )
 		 WHERE A.NA_BZPLC = #{naBzplc}
 		   AND B.AUC_DT = #{aucDt}
-		   AND B.AUC_OBJ_DSC = #{aucObjDsc}
+		   <choose>
+		   	<when test="aucObjDscQcn != null and !''.equals(aucObjDscQcn)">
+		   		AND B.AUC_OBJ_DSC = #{aucObjDscQcn}
+		   	</when>
+		   	<otherwise>
+		   		AND B.AUC_OBJ_DSC = #{aucObjDsc}
+		   	</otherwise>
+		   </choose>
 	</select>
 	
 	<!-- 출장우 정보 > APP에서 일괄 경매시 사용 -->
