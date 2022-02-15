@@ -29,25 +29,25 @@
 			<tr>
 				<td colspan="4">
 					<span class="txt-green fz80">총 출장우 </span>
-					<span class="fz100 txt-bold">${cowTotCnt.CNT }</span>
+					<span class="fz100 txt-bold"><fmt:formatNumber value="${cowTotCnt.CNT }" type="number" /></span>
 				</td>
 			</tr>
 			<tr>
 				<td>
 					<p class="txt-green fz60">암송아지</p>
-					<p class="fz100 txt-bold">${cowTotCnt.CNT_CALF_SEX_W }</p>
+					<p class="fz100 txt-bold"><fmt:formatNumber value="${cowTotCnt.CNT_CALF_SEX_W }" type="number" /></p>
 				</td>
 				<td>
 					<p class="txt-green fz60">수송아지</p>
-					<p class="fz100 txt-bold">${cowTotCnt.CNT_CALF_SEX_M }</p>
+					<p class="fz100 txt-bold"><fmt:formatNumber value="${cowTotCnt.CNT_CALF_SEX_M }" type="number" /></p>
 				</td>				
 				<td>
 					<p class="txt-green fz60">비육우</p>
-					<p class="fz100 txt-bold">${cowTotCnt.CNT_NO_COW }</p>
+					<p class="fz100 txt-bold"><fmt:formatNumber value="${cowTotCnt.CNT_NO_COW }" type="number" /></p>
 				</td>
 				<td>
 					<p class="txt-green fz60">번식우</p>
-					<p class="fz100 txt-bold">${cowTotCnt.CNT_COW }</p>
+					<p class="fz100 txt-bold"><fmt:formatNumber value="${cowTotCnt.CNT_COW }" type="number" /></p>
 				</td>
 			</tr>
 		</tbody>

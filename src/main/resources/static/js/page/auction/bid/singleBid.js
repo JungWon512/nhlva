@@ -592,7 +592,8 @@ var messageHandler = function(data) {
 			
 			var responseCode = dataArr[2];
 			if (responseCode == "4003") {
-				messageSample("응찰한 가격이 시작가보다 낮습니다.");
+				//messageSample("응찰한 가격이 시작가보다 낮습니다.");
+				messageSample("<span class='txt-red'>응찰금액을 확인하세요.</span>");
 			}
 			if (responseCode == "4004") {
 				modalAlert('', "진행중인 경매가 없습니다."

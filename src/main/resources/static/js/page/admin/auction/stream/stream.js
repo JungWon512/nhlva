@@ -356,7 +356,7 @@ var scLoad = function(dataArr){
 	$('table.tblAuctionSt tbody tr td td p.kpnNo').text(dataArr[12]&&dataArr[12].replace('KPN','')); //kpn
 	$('table.tblAuctionSt tbody tr td td p.mcowDsc').text(dataArr[14]); //어미
 	$('table.tblAuctionSt tbody tr td td p.sex').text(dataArr[13]); //성별				
-	$('table.tblAuctionSt tbody tr td td p.lowsSbidLmtAm').text(dataArr[27]); //최저가
+	$('table.tblAuctionSt tbody tr td td p.lowsSbidLmtAm').text(fnSetComma(dataArr[27]); //최저가
 		
 	$('table.tblAuctionSt tbody tr td td p.sraIndvPasgQcn').text(dataArr[18]); //계대	
 	$('table.tblAuctionSt tbody tr td td p.matime').text(dataArr[16]); //산차

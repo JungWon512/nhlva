@@ -289,8 +289,8 @@
 								<dd class="pd_kg cowSogWt">${fn:split(vo.COW_SOG_WT,'.')[0]}</dd>
 								<dd class="pd_kpn kpnNo">${ vo.KPN_NO_STR }</dd>
 								<dd class="pd_num1 sraIndvPasgQcn">${ vo.SRA_INDV_PASG_QCN }</dd>
-								<dd class="pd_pay1 lowsSbidLmtAm">${vo.LOWS_SBID_LMT_AM <= 0 ? '0' : fn:split(vo.LOWS_SBID_LMT_UPR,'.')[0]}</dd>
-								<dd class="pd_pay2 sraSbidAm">${fn:split(vo.SRA_SBID_UPR,'.')[0]}</dd>
+								<dd class="pd_pay1 lowsSbidLmtAm"><fmt:formatNumber value="${vo.LOWS_SBID_LMT_AM <= 0 ? '0' : fn:split(vo.LOWS_SBID_LMT_UPR,'.')[0]}" type="number" /></dd>
+								<dd class="pd_pay2 sraSbidAm"><fmt:formatNumber value="${fn:split(vo.SRA_SBID_UPR,'.')[0]}" type="number" /></dd>
 								<dd class="pd_state selSts">${ vo.SEL_STS_DSC_NAME }</dd>
 								<dd class="pd_etc rmkCntn">${ vo.RMK_CNTN }</dd>
 							</dl>
