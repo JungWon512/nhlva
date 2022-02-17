@@ -1001,7 +1001,7 @@
 		   		AND B.AUC_OBJ_DSC = #{aucObjDscQcn}
 		   	</when>
 		   	<otherwise>
-		   		AND B.AUC_OBJ_DSC = #{aucObjDsc}
+		   		AND DECODE(B.AUC_OBJ_DSC, '0', #{aucObjDsc}, B.AUC_OBJ_DSC) = #{aucObjDsc}
 		   	</otherwise>
 		   </choose>
 	</select>
