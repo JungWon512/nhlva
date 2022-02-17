@@ -82,7 +82,7 @@
 					<nav id="nav">
 						<ul>
 							<li class="watch">
-								<a href="javascript:pageMove('/watch');">경매관전</a>
+								<a href="javascript:goWatchApp();">경매관전</a>
 							</li>
 							<li class="auction">
 								<a href="javascript:pageMove('/main');">경매응찰</a>
@@ -195,7 +195,7 @@
 						<dd class="notice"><a href="javascript:pageMove('/notice');" class="ico_noti">공지사항</a></dd>
 					</dl>
 					<dl class="lnb_menu">
-						<dd><a href="javascript:pageMove('/watch');">경매관전</a></dd>
+						<dd><a href="javascript:goWatchApp();">경매관전</a></dd>
 						<dd><a href="javascript:pageMove('/main');">경매응찰</a></dd>
 						<dd><a href="javascript:pageMove('/sales');">출장우 조회</a></dd>
 						<dd><a href="javascript:pageMove('/results');">경매결과 조회</a></dd>
