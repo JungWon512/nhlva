@@ -437,7 +437,6 @@ public class AuctionServiceImpl implements AuctionService {
 		
 		// 1. 필수 인자 체크
 		if (params.get("naBzPlc") == null
-		 || params.get("aucObjDscQcn") == null
 		 || params.get("aucObjDsc") == null
 		 || params.get("aucDt") == null
 		 || params.get("oslpNo") == null
