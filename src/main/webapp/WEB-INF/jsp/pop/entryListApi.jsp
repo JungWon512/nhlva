@@ -168,8 +168,8 @@
 								<dd class="name">${vo.FTSNM }</dd>
 								<dd class="pd_sex">${vo.INDV_SEX_C_NAME }</dd>
 								<dd class="pd_kg"><fmt:formatNumber value="${empty vo.COW_SOG_WT or vo.COW_SOG_WT <= 0 ? '0' : fn:split(vo.COW_SOG_WT,'.')[0]}" type="number" /></dd>
-								<dd class="pd_pay1">${vo.LOWS_SBID_LMT_AM <= 0 ? '0' : fn:split(vo.LOWS_SBID_LMT_UPR,'.')[0]}</dd>
-								<dd class="pd_pay2">${ fn:split(vo.SRA_SBID_UPR,'.')[0] }</dd>
+								<dd class="pd_pay1"><fmt:formatNumber value="${vo.LOWS_SBID_LMT_AM <= 0 ? '0' : fn:split(vo.LOWS_SBID_LMT_UPR,'.')[0]}" type="number" /></dd>								
+								<dd class="pd_pay2"><fmt:formatNumber value="${ fn:split(vo.SRA_SBID_UPR,'.')[0] }" type="number" /></dd>								
 							</dl>
 						</li>
 	                </c:forEach>	

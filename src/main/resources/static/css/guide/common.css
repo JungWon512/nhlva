@@ -5672,13 +5672,17 @@ Base styles: contents layer
 	font-family: "Noto Sans KR", "Roboto", "AppleGothic", "sans-serif";
 	font-weight: 700
 }
+.monitoring-view .table-inner .table-mt .mt-table td.ing p {
+	color: #fff;
+	font-weight: 700
+}
 
 .monitoring-view .table-inner .table-mt .mt-table td.connect.bid {
 	background: #0082e5
 }
 
 .monitoring-view .table-inner .table-mt .mt-table td.ing {
-	background: #ffe135 !important
+	background: #ea0030 !important
 }
 
 @media all and (max-width: 1280px) {

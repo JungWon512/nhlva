@@ -118,7 +118,7 @@
 							var aucPrgSq =$('.auc .list_table li dl dd.num').toArray().filter((obj) => {if($(obj).text() == data.aucInfo.AUC_PRG_SQ) return obj;});
 							var li = $(aucPrgSq[0]).closest('li');
 							li.find('input.sbidUpr').val(data.aucInfo.SBID_UPR);
-							li.find('.pd_pav span').text(data.aucInfo.SBID_UPR);
+							li.find('.pd_pav span').text(fnSetComma(data.aucInfo.SBID_UPR));
 							if(data.aucInfo.SBID_UPR && data.aucInfo.SBID_UPR != 0) li.find('.pd_pav a').addClass('act');
 							else li.find('.pd_pav a').removeClass('act');
 						}
