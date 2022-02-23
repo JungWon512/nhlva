@@ -1139,6 +1139,9 @@
 	        <if test="naBzplc != null and naBzplc != ''">
 				AND A.NA_BZPLC = #{naBzplc}
 			</if>
+	        <if test="searchAucObjDsc != null and searchAucObjDsc != ''">
+				AND A.AUC_OBJ_DSC = #{searchAucObjDsc}
+			</if>
 			AND AUC_DT = #{searchDate}
 			AND TRMN_AMNNO = #{searchTrmnAmnNo}
 		) C
@@ -1154,6 +1157,11 @@
 		  ON ( A.NA_BZPLC = J.NA_BZPLC )
 		WHERE C.RNUM = 1
 		AND C.ATDR_AM != 0
+        <if test="searchTxt != null and searchTxt != ''">				
+            AND (
+            	SUBSTRING(A.SRA_INDV_AMNNO,LENGTH(A.SRA_INDV_AMNNO)-4,4 ) LIKE '%' || #{searchTxt} ||'%'
+            )
+		</if>
 	</select>
 	
 	<!-- 응찰내역 통계 -->

@@ -163,22 +163,22 @@
 		<div class="list_search">
 			<ul class="radio_group">
 	            <li>
-	                <input type="radio" name="searchAucObjDscBid" checked id="ra1" value=""><label for="ra1">전체</label>
+	                <input type="radio" name="searchAucObjDscBid" checked id="ra5" value=""><label for="ra5">전체</label>
 	            </li>
 	            <li>
-	                <input type="radio" name="searchAucObjDscBid" id="ra2" value="1" <c:if test="${inputParam.searchAucObjDsc eq '1'}">
+	                <input type="radio" name="searchAucObjDscBid" id="ra6" value="1" <c:if test="${inputParam.searchAucObjDsc eq '1'}">
 	                checked
-	                </c:if>><label for="ra2">송아지</label>
+	                </c:if>><label for="ra6">송아지</label>
 	            </li>
 	            <li>
-	                <input type="radio" name="searchAucObjDscBid" id="ra3" value="2" <c:if test="${inputParam.searchAucObjDsc eq '2'}">
+	                <input type="radio" name="searchAucObjDscBid" id="ra7" value="2" <c:if test="${inputParam.searchAucObjDsc eq '2'}">
 	                       checked
-	                </c:if>><label for="ra3">비육우</label>
+	                </c:if>><label for="ra7">비육우</label>
 	            </li>
 	            <li>
-	                <input type="radio" name="searchAucObjDscBid" id="ra4" value="3" <c:if test="${inputParam.searchAucObjDsc eq '3'}">
+	                <input type="radio" name="searchAucObjDscBid" id="ra8" value="3" <c:if test="${inputParam.searchAucObjDsc eq '3'}">
 	                       checked
-	                </c:if>><label for="ra4">번식우</label>
+	                </c:if>><label for="ra8">번식우</label>
 	            </li>
 			</ul>
 			<ul class="sch_area">
