@@ -188,7 +188,7 @@ var convertScroll = function(){
 		resultH= $('section.header').outerHeight() + ($('section.contents').outerHeight() - $('.tab_area.'+gubun+' .list_table .list_body ul').outerHeight()) +$('section.footer').outerHeight() +1;
 			
 		resultH = $('body').outerHeight() - resultH;
-		console.log(resultH);
+		
 		$(this).css('height','  '+resultH+'px');
 		$(this).css('min-height','70px');
 	});	

@@ -615,4 +615,41 @@ public class AuctionController extends CommonController {
 		}
 		return result;
 	}
+	
+
+	@RequestMapping(value = "/log",method = { RequestMethod.GET, RequestMethod.POST })
+	public ModelAndView log() throws Exception {
+		// 경매관전
+		ModelAndView mav = new ModelAndView();
+		try {	
+		}catch (RuntimeException re) {
+			log.error("AuctionController.watch : {} ",re);
+		}
+		mav.setViewName("log");
+		return mav;
+	}
+
+	@ResponseBody
+	@PostMapping(path = "/auction/api/getWatchToken", produces = MediaType.APPLICATION_JSON_VALUE)
+    Map<String, Object> getWatchToken(@RequestBody Map<String,Object> params) {
+        Map<String, Object> result = new HashMap<>();
+        
+        result.put("success", true);
+        try {        	
+        	JwtTokenVo jwtTokenVo = JwtTokenVo.builder()
+        			.auctionHouseCode((String)params.get("naBzPlc"))
+        			.userMemNum("WATCHER")
+        			.userRole(Constants.UserRole.WATCHER)
+        			.build();
+        	String token = jwtTokenUtil.generateToken(jwtTokenVo, Constants.JwtConstants.ACCESS_TOKEN);
+            result.put("token", token);            
+            
+        }catch (RuntimeException re) {
+            result.put("success", false);
+            result.put("message", "작업중 오류가 발생했습니다. 관리자에게 문의하세요.");
+			log.error("AuctionController.getWatchToken : {} ",re);
+		}
+        return result;
+    }
 }
+
