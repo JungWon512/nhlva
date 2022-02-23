@@ -4,7 +4,7 @@
 <c:set var="aucCnt" value="0" />
 <c:forEach items="${ bizList }" var="vo" varStatus="st">
 	<c:if test ="${vo.CUR_AUC_CNT > 0 }">
-		<c:set var="aucCnt" value="${aucCnt+1}" />
+		<c:set var="aucCnt" value="${aucCnt + vo.CUR_AUC_CNT}" />
 	</c:if>
 </c:forEach>
 <div class="chk_step1">
