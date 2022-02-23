@@ -652,4 +652,3 @@ public class AuctionController extends CommonController {
         return result;
     }
 }
-
