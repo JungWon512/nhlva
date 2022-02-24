@@ -629,7 +629,7 @@ var messageHandler = function(data) {
 			
 			// 송아지, 비육우, 번식우 경매단위
 			if (dataArr[dataArr.length - 1] != "10000") {
-				auctionConfig.divisionPriceUnit[2] = (dataArr[10] == "1" ? "원" : "천 원");
+				auctionConfig.divisionPriceUnit[2] = (dataArr[dataArr.length - 1] == "1" ? "원" : "천 원");
 			} 
 
 			var titleList = ["0", "auctionNum", "ftsnm", "sex", "cowSogWt", "mcowDsc", "sraIndvPasgQcn", "matime", "kpnNo", "sraPdRgnnm", "rmkCntn", "lowsSbidLmtAm", "dnaYn"];
