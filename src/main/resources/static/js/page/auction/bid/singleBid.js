@@ -278,14 +278,14 @@ var inputNumberVaild = function(el,len){
 }
 
 // 소켓통신 connect 및 이벤트 바인딩 [s]
-var socket = null, auctionConfig = {seData : {}},scData={};;
+var socket = null, auctionConfig = {seData : {}, divisionPriceUnit : ["만 원", "만 원", "만 원", "만 원"]},scData={};;
 var socketStart = function(){
 	if(!$('#naBzPlc').val()) return;
 	if(socket){ socket.connect(); return;}
-	var socketHost = (active == 'production')?"cowauction.kr":(active == 'develop')?"xn--e20bw05b.kr":"xn--e20bw05b.kr";
+	var socketHost = (active == 'production')?"cowauction.kr":(active == 'develop')?"xn--e20bw05b.kr":"192.168.0.23";
 	//socketHost += ':'+$('#webPort').val();
 	socketHost += ':9001';
-	socket = io.connect('https://'+socketHost + '/6003' + '?auctionHouseCode='  + $('#naBzPlc').val(), {secure:true});
+	socket = io.connect('http://'+socketHost + '/6003' + '?auctionHouseCode='  + $('#naBzPlc').val(), {secure:true});
 	//socket = io.connect('http://192.168.0.23:9001/6003?auctionHouseCode=' + $('#naBzPlc').val());
 	socket.on('connect', connectHandler);
 
@@ -388,7 +388,7 @@ var messageHandler = function(data) {
 			// 출품 번호 체크
 			if (auctionConfig.arData.naBzplc != dataArr[1]
 			 || auctionConfig.asData.aucSeq != dataArr[2]) return;
-			 
+			
 			var tmpAsDAta = { 
 				aucPrgSq: dataArr[2]
 				, selSts: dataArr[3]=='22'?'낙찰':(dataArr[3]=='23'?'유찰':dataArr[3]=='11'?'대기':'')
@@ -399,13 +399,14 @@ var messageHandler = function(data) {
 
 			// 낙찰인 경우
 			if (auctionConfig.afData.status == "22") {
+				var unit = auctionConfig.divisionPriceUnit[parseInt(auctionConfig.scData.aucObjDsc)];
 				var amt = dataArr[6];
 				if (auctionConfig.arData.trmnAmnno == dataArr[4]
 				&& auctionConfig.arData.entryNum == dataArr[5]) {
-					$("div.auc-txt > div.info_board").html(fnSetComma(amt) + "만 원 <span class='txt-green'>낙찰</span>");
+					$("div.auc-txt > div.info_board").html(fnSetComma(amt) + unit + " <span class='txt-green'>낙찰</span>");
 				}
 				else {
-					$("div.auc-txt > div.info_board").html("<span class='txt-green'>낙찰금액 " + fnSetComma(amt) + "만 원 / " + dataArr[5] + "번</span>");
+					$("div.auc-txt > div.info_board").html("<span class='txt-green'>낙찰금액 " + fnSetComma(amt) + unit + " / " + dataArr[5] + "번</span>");
 				}
 				tr.find('dl dd.sraSbidAm').text(fnSetComma(Math.round(tmpAsDAta.sraSbidAm)));
 			}
@@ -618,19 +619,24 @@ var messageHandler = function(data) {
 			break;
 		case "SH" :
 			// 출품 정보 노출 설정
-			// 구분자 | 조합구분코드  | 노출항목1 | 노출항목2 | 노출항목3 | 노출항목4 | 노출항목5 | 노출항목6 | 노출항목7 | 노출항목8
+			// 구분자 | 조합구분코드  | 노출항목1 | 노출항목2 | 노출항목3 | 노출항목4 | 노출항목5 | 노출항목6 | 노출항목7 | 노출항목8 | 비육우 경매단위
 			// SH | 1100 | 1 | 3 | 5 | 7 | 9 | 2 | 11 | 8
 			// 1. 출품번호(auctionNum), 2. 출하주(ftsnm), 3. 성별(sex), 4. 중량(cowSogWt), 5. 어미(mcowDsc), 6. 계대(sraIndvPasgQcn)
 			// 7. 산차(matime), 8. KPN(kpnNo), 9. 지역명(sraPdRgnnm), 10. 비고(rmkCntn), 11. 최처가(lowsSbidLmtAm), 12. 친자여부(dnaYn)
 			
 			// 조합코드 체크
 			if (auctionConfig.arData.naBzplc != dataArr[1]) return;
+			
+			// 송아지, 비육우, 번식우 경매단위
+			if (dataArr[dataArr.length - 1] != "10000") {
+				auctionConfig.divisionPriceUnit[2] = (dataArr[10] == "1" ? "원" : "천 원");
+			} 
 
 			var titleList = ["0", "auctionNum", "ftsnm", "sex", "cowSogWt", "mcowDsc", "sraIndvPasgQcn", "matime", "kpnNo", "sraPdRgnnm", "rmkCntn", "lowsSbidLmtAm", "dnaYn"];
 			var slideTitleList = ["rmkCntn"];
 			var showList = [];
 			dataArr.forEach(function(info, idx){
-				if (idx > 1 && info != "null" && info != "") showList.push(titleList[info]);
+				if (idx > 1 && info != "null" && info != "" && titleList[info] != undefined) showList.push(titleList[info]);
 			});
 
 			showList.forEach(function(name, idx){
