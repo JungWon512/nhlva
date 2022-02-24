@@ -29,6 +29,7 @@ public class MainDao {
         LOGGER.info("##### queryID : " + queryID);
         map.put("regUsrid",sessionUtill.getUserId());
     	map.put("uptUsrid",sessionUtill.getUserId());
+    	map.put("lsCmeno",sessionUtill.getEno());
         return sqlSession.insert(queryID, map);
     }
 
@@ -72,6 +73,7 @@ public class MainDao {
         LOGGER.info("##### queryID : " + queryID);
         map.put("regUsrid",sessionUtill.getUserId());
     	map.put("uptUsrid",sessionUtill.getUserId());
+    	map.put("lsCmeno",sessionUtill.getEno());
         return sqlSession.update(queryID, map);
     }
     
@@ -94,6 +96,7 @@ public class MainDao {
         LOGGER.info("##### queryID : " + queryID);
         map.put("regUsrid",sessionUtill.getUserId());
     	map.put("uptUsrid",sessionUtill.getUserId());
+    	map.put("lsCmeno",sessionUtill.getEno());
         return sqlSession.delete(queryID, map);
     }
     

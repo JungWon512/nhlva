@@ -33,6 +33,24 @@ public class SessionUtill {
 		}
 		return null;
 	}
+	
+	public String getEno() {
+		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+		
+		if (auth == null) return null;
+		
+		Collection<? extends GrantedAuthority> auths = auth.getAuthorities();
+		if(auths.contains(new SimpleGrantedAuthority(UserRole.ROLE_BIDDER))) {
+			return ((BidUserDetails)auth.getPrincipal()).getTrmnAmnno().toString();
+		}
+		else if(auths.contains(new SimpleGrantedAuthority(UserRole.ROLE_ADMIN))){
+			return ((AdminUserDetails)auth.getPrincipal()).getEno();
+		}
+		else if(auths.contains(new SimpleGrantedAuthority(UserRole.ROLE_FARM))){
+			return ((FarmUserDetails)auth.getPrincipal()).getFhsIdNo();
+		}
+		return null;
+	}
 
 	public Object getUserVo() {
 		Authentication auth = SecurityContextHolder.getContext().getAuthentication();

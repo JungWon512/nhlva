@@ -384,7 +384,35 @@ public class AuctionServiceImpl implements AuctionService {
 	 */
 	@Override
 	public int updateCowInfo(Map<String, Object> params) throws SQLException {
-		return auctionDAO.updateCowInfo(params);
+		final int cnt = auctionDAO.updateCowInfo(params);
+		
+		if (cnt == 0) {
+			return cnt;
+		}
+		else {
+			// 업데이트 유형이 중량 등록(W), 중량 일괄 등록(AW)이고 비육우인 경우 낙찰 금액을 다시 계산해준다.
+			if (("W".equals(params.get("regType")) || "AW".equals(params.get("regType")))
+			  && "2".equals(params.get("aucObjDsc"))) {
+
+				final Map<String, Object> cowInfo = this.selectCowInfo(params);
+
+				// 비육우 경매단위가 KG별이고 낙찰 상태인 경우
+				if ("1".equals(cowInfo.get("NBFCT_AUC_UPR_DSC")) || "22".equals(cowInfo.get("SEL_STS_DSC"))) {
+					params.put("naBzPlc", params.get("naBzplc"));
+					params.put("selStsDsc", cowInfo.get("SEL_STS_DSC"));
+					params.put("sraSbidUpr", cowInfo.get("SRA_SBID_UPR"));
+					params.put("trmnAmnno", cowInfo.get("TRMN_AMNNO"));
+					params.put("lvstAucPtcMnNo", cowInfo.get("LVST_AUC_PTC_MN_NO"));
+					
+					final Map<String, Object> returnMap = this.updateAuctionResultMap(params);
+					if (returnMap != null) {
+						throw new SQLException("출장우 정보 업데이트에 실패했습니다.");
+					}
+				}
+
+			}
+			return cnt;
+		}
 	}
 
 	/**
@@ -488,7 +516,9 @@ public class AuctionServiceImpl implements AuctionService {
 					params.put("sraSbidAm", 0);
 				}
 				else {
-					double bidAmt = Double.parseDouble(cowSogWt) * sraSbidUpr / cutAm;
+					aucAtdrUntAm = Integer.parseInt(bizAuctionInfo.getOrDefault("NBFCT_AUC_ATDR_UNT_AM", "1").toString());
+					double bidAmt = Double.parseDouble(cowSogWt) * sraSbidUpr * aucAtdrUntAm/ cutAm;
+//					double bidAmt = Double.parseDouble(cowSogWt) * sraSbidUpr / cutAm;
 					if ("1".equals(sgNoPrcDsc)) {
 						sraSbidAm = (long)Math.floor(bidAmt) * cutAm;
 					}
@@ -767,7 +797,9 @@ public class AuctionServiceImpl implements AuctionService {
 						info.put("sraSbidAm", 0);
 					}
 					else {
-						double bidAmt = Double.parseDouble(cowSogWt) * sraSbidUpr / cutAm;
+						aucAtdrUntAm = Integer.parseInt(bizAuctionInfo.getOrDefault("NBFCT_AUC_ATDR_UNT_AM", "1").toString());
+						double bidAmt = Double.parseDouble(cowSogWt) * sraSbidUpr * aucAtdrUntAm / cutAm;
+//						double bidAmt = Double.parseDouble(cowSogWt) * sraSbidUpr / cutAm;
 						if ("1".equals(sgNoPrcDsc)) {
 							sraSbidAm = (long)Math.floor(bidAmt) * cutAm;
 						}

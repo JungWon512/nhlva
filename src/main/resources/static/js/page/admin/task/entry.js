@@ -142,8 +142,14 @@
 					error: function(xhr, status, error) {
 					}
 				}).done(function (body) {
+					var success = body.success;
 					var message = body.message;
-					modalAlert("", message, fnReload(body));
+					if(!success) {
+						modalAlert("", message);
+					}
+					else {
+						modalAlert("", message, fnReload(body));
+					}
 					return;
 				});
 			});
@@ -166,9 +172,9 @@
 					regType : $("input[name='regType']").val()
 					, naBzplc : $("input[name='naBzplc']").val()
 					, aucDt : $("input[name='aucDt']").val()
-					, aucObjDsc : li.find("dd.col1").data("aucObjDsc")
-					, oslpNo : li.find("dd.col1").data("oslpNo")
-					, ledSqno : li.find("dd.col1").data("ledSqno")
+					, aucObjDsc : '' + li.find("dd.col1").data("aucObjDsc")
+					, oslpNo : '' + li.find("dd.col1").data("oslpNo")
+					, ledSqno : '' + li.find("dd.col1").data("ledSqno")
 					, cowSogWt : $(this).val()
 					, searchAucObjDsc : $("select#aucObjDsc").val()
 				}

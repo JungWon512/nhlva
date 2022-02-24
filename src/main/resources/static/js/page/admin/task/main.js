@@ -15,15 +15,20 @@
 			// 전체, 송아지, 비육우, 번식우 선택 이벤트
 			$("input:radio[name='searchAucObjDsc']").change(function(){
 				var aucObjDsc = $(this).val();
-				$("select[name='searchDate'] > option").show();
+				$("select[name='searchDate'] > option").prop("disabled", false).show();
 				if (aucObjDsc != "") {
 					$("select[name='searchDate'] > option").each(function(idx){
 						if (idx != 0) {
 							if ($(this).data("aucObjDsc").toString().indexOf(aucObjDsc) == -1) {
-								$(this).hide();
+								$(this).prop("disabled", true).hide();
 							}
 						}
 					});
+					
+					if ($("select[name='searchDate'] > option").not(":disabled").length < 2) {
+						$("select[name='searchDate']").val("");
+						$("select").selectric("refresh");
+					}
 				}
 			});
 			

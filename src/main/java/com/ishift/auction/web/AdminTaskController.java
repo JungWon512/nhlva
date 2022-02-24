@@ -179,7 +179,7 @@ public class AdminTaskController {
 			
 			String regType = (String)params.getOrDefault("regType", "");
 			if("N".equals(regType)) {
-				auctionService.updateCowInfoForModlNo(params);				
+				auctionService.updateCowInfoForModlNo(params);
 			}
 			
 			final int cnt = auctionService.updateCowInfo(params);
