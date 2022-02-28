@@ -100,7 +100,6 @@ var goWatchApp = function() {
 		}
 	}
 	catch(e) {
-		//alert(e);
 		location.href = window.location.origin + '/watch' + window.location.search
 	}
 }
