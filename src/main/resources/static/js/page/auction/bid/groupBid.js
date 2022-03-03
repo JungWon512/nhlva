@@ -577,7 +577,7 @@ var messageHandler = function(data) {
 				
 				// 관전 전광판 데이터 update
 				$('dd.auctionNum', $(".seeBox_slick_inner, .mo_seeBox")).text(dataArr[2]);		// 출품번호
-				$('dd.ftsnm', $(".seeBox_slick_inner, .mo_seeBox")).text(dataArr[9]);			// 출하주
+				$('dd.ftsnm', $(".seeBox_slick_inner, .mo_seeBox")).html(dataArr[9]);			// 출하주
 				$('dd.sex', $(".seeBox_slick_inner, .mo_seeBox")).text(dataArr[13]);			// 성별
 				$('dd.cowSogWt', $(".seeBox_slick_inner, .mo_seeBox")).text(dataArr[25]);		// 중량
 				$('dd.matime', $(".seeBox_slick_inner, .mo_seeBox")).text(dataArr[16]);			// 산차
@@ -591,7 +591,7 @@ var messageHandler = function(data) {
 				
 				convertDefaultValue($('dd', $(".seeBox_slick_inner, .mo_seeBox")));
 				var tr = getTrRow(auctionConfig.scData.curAucSeq);
-				tr.find('dl dd.ftsnm').text(nameEnc(dataArr[9]));
+				tr.find('dl dd.ftsnm').html(nameEnc(dataArr[9]));
 				tr.find('dl dd.cowSogWt').text(dataArr[25]);
 				tr.find('dl dd.lowsSbidLmtAm').text(fnSetComma(dataArr[27]));
 				tr.find('dl dd.sraSbidAm').text(dataArr[31]+'');

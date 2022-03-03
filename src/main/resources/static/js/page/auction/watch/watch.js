@@ -38,7 +38,7 @@ $(function() {
 			$(".tblAuction .list_body ul li").removeClass('act');
 			$(".tblAuction .list_body ul li").on('click',function(){
 				$('.boarder ul li dd.auctionNum').text($(this).find('dd.aucPrgSq').text());
-				$('.boarder ul li dd.ftsnm').text($(this).find('dd.ftsnm').text());
+				$('.boarder ul li dd.ftsnm').html($(this).find('dd.ftsnm').text());
 				$('.boarder ul li dd.sex').text($(this).find('dd.indvSexC').text());
 				$('.boarder ul li dd.cowSogWt').text($(this).find('dd.cowSogWt').text());
 				$('.boarder ul li dd.matime').text($(this).find('input.matime').val());	//산차
@@ -366,7 +366,7 @@ var scLoad = function(dataArr){
 				
 	//관전 전광판 데이터 update				
 	$('.vidioSlide li.boarder ul dl dd.auctionNum').text(dataArr[2]);
-	$('.vidioSlide li.boarder ul dl dd.ftsnm').text(nameEnc(dataArr[9]));
+	$('.vidioSlide li.boarder ul dl dd.ftsnm').html(nameEnc(dataArr[9]));
 	$('.vidioSlide li.boarder ul dl dd.sex').text(dataArr[13]);
 	$('.vidioSlide li.boarder ul dl dd.cowSogWt').text(fnSetComma(dataArr[25]));
 	$('.vidioSlide li.boarder ul dl dd.matime').text(dataArr[16]);
@@ -378,7 +378,7 @@ var scLoad = function(dataArr){
 	$('.vidioSlide li.boarder ul dl dd.rmkCntn p').text(dataArr[28]);
 	convertDefaultValue('.vidioSlide li.boarder ul dl dd');
 	var tr = getTrRow(auctionConfig.scData.curAucSeq);
-	tr.find('dl dd.ftsnm').text(nameEnc(dataArr[9]));
+	tr.find('dl dd.ftsnm').html(nameEnc(dataArr[9]));
 	tr.find('dl dd.cowSogWt').text(fnSetComma(dataArr[25]));
 	tr.find('dl dd.lowsSbidLmtAm').text(fnSetComma(dataArr[27])+'');
 	tr.find('dl dd.sraSbidAm').text(fnSetComma(dataArr[31])+'');

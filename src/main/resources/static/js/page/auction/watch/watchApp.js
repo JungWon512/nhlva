@@ -179,7 +179,7 @@ var scLoad = function(dataArr){
 				
 	//관전 전광판 데이터 update				
 	var tr = getTrRow(auctionConfig.scData.curAucSeq);
-	tr.find('dl dd.ftsnm').text(nameEnc(dataArr[9]));
+	tr.find('dl dd.ftsnm').html(nameEnc(dataArr[9]));
 	tr.find('dl dd.cowSogWt').text(fnSetComma(dataArr[25]));
 	tr.find('dl dd.lowsSbidLmtAm').text(fnSetComma(dataArr[27])+'');
 	tr.find('dl dd.sraSbidAm').text(fnSetComma(dataArr[31])+'');
