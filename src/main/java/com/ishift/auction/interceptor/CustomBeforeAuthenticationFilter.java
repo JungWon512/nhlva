@@ -20,7 +20,7 @@ public class CustomBeforeAuthenticationFilter extends UsernamePasswordAuthentica
 
         String email = request.getParameter("email");
 
-        System.out.println("The user " + email + " is about to login");
+        //System.out.println("The user " + email + " is about to login");
 
         // run custom logics...
 

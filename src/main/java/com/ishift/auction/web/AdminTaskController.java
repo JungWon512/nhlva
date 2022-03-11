@@ -29,7 +29,7 @@ import lombok.extern.slf4j.Slf4j;
  */
 @Slf4j
 @Controller
-public class AdminTaskController {
+public class AdminTaskController extends CommonController {
 	
 	@Autowired
 	private AuctionService auctionService;
@@ -72,7 +72,8 @@ public class AdminTaskController {
 	 * 관리자 > 경매업무 > 작업선택
 	 * @return
 	 */
-	@PostMapping("/office/task/select")
+//	@PostMapping("/office/task/select")
+	@RequestMapping(value = "/office/task/select", method = {RequestMethod.GET, RequestMethod.POST})
 	public ModelAndView select(@RequestParam final Map<String, Object> params) {
 		final ModelAndView mav = new ModelAndView("admin/task/select");
 		try {
@@ -82,8 +83,10 @@ public class AdminTaskController {
 			mav.addObject("johapData", adminService.selectOneJohap(map));
 		}catch (RuntimeException re) {
 			log.error("AdminTaskController.select : {} ",re);
+			return makeMessageResult(mav, params, "/office/task/main", "", "경매 서비스 준비중입니다.", "pageMove('/office/task/main');");
 		} catch (SQLException se) {
 			log.error("AdminTaskController.select : {} ",se);
+			return makeMessageResult(mav, params, "/office/task/main", "", "경매 서비스 준비중입니다.", "pageMove('/office/task/main');");
 		}
 		mav.addObject("params", params);
 		mav.addObject("subheaderTitle", "작업선택");
@@ -95,8 +98,9 @@ public class AdminTaskController {
 	 * @param params
 	 * @return
 	 */
-	@PostMapping("/office/task/entry")
 	@SuppressWarnings("serial")
+//	@PostMapping("/office/task/entry")
+	@RequestMapping(value = "/office/task/entry", method = {RequestMethod.GET, RequestMethod.POST})
 	public ModelAndView entry(@RequestParam final Map<String, Object> params) {
 		final ModelAndView mav = new ModelAndView("admin/task/entry");
 		final Map<String, String> titleMap = new HashMap<String, String>() {{put("W", "중량 등록");put("L", "하한가 등록");put("N", "계류대 변경");put("AW", "중량 일괄 등록");}};
@@ -111,8 +115,10 @@ public class AdminTaskController {
 			mav.addObject("entryList", auctionService.entrySelectList(params));
 		}catch (RuntimeException re) {
 			log.error("AdminTaskController.entry : {} ",re);
+			return makeMessageResult(mav, params, "/office/task/main", "", "작업중 오류가 발생했습니다. 관리자에게 문의하세요.", "pageMove('/office/task/main');");
 		} catch (SQLException se) {
 			log.error("AdminTaskController.entry : {} ",se);
+			return makeMessageResult(mav, params, "/office/task/main", "", "작업중 오류가 발생했습니다. 관리자에게 문의하세요.", "pageMove('/office/task/main');");
 		}
 		mav.addObject("params", params);
 		mav.addObject("subheaderTitle", titleMap.get(params.getOrDefault("regType", "")));

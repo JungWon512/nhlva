@@ -105,7 +105,7 @@ var messageHandler = function(data) {
 			if(!auctionConfig.asData) auctionConfig.asData = {};
 			var tmpAsDAta = { 
 				aucPrgSq: dataArr[2]
-				, selSts: dataArr[5]
+				, selSts: dataArr[6]
 				, lowsSbidLmtAm: dataArr[4]
 			};							
 
@@ -113,7 +113,7 @@ var messageHandler = function(data) {
 			auctionConfig.asData.curAucSeq = dataArr[2];
 			
 			var tr = getTrRow(auctionConfig.asData.curAucSeq);
-			tr.find('dl dd.lowsSbidLmtAm').text(fnSetComma(Math.round(tmpAsDAta.lowsSbidLmtAm)+''));
+			tr.find('dl dd.lowsSbidLmtAm').text(fnSetComma(Math.round(tmpAsDAta.lowsSbidLmtAm))+'');
 			if($('#aucDsc').val() == '2' && tmpAsDAta.selSts=='8006'){
 				location.reload();
 			};

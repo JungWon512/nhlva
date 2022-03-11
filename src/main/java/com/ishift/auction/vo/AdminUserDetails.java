@@ -36,12 +36,16 @@ public class AdminUserDetails implements UserDetails {
 	private LocalDateTime lschgDtm;		// 최종변경일시
 	private String lsCmeno;				// 최초변경자개인번호
 	private String place;
+	private String naBzplNm;
+	private String grpC;
 	
 	@Builder
 	public AdminUserDetails(String naBzplc, String usrid, String usrnm, String pw
 						, String eno, String mpno, String strgYn, int pwerrNt
 						, String fsrgmnEno, String lsCmeno, LocalDateTime fsrgDtm, LocalDateTime lschgDtm
-						, String place) {
+						, String place
+						, String naBzplNm
+						, String grpC) {
 		this.naBzplc = naBzplc;
 		this.usrid = usrid;
 		this.usrnm = usrnm;
@@ -55,6 +59,8 @@ public class AdminUserDetails implements UserDetails {
 		this.fsrgDtm = fsrgDtm;
 		this.lschgDtm = lschgDtm;
 		this.place = place;
+		this.naBzplNm = naBzplNm;
+		this.grpC = grpC;
 	}
 	
 	// 관리자 기본역할 ADMIN

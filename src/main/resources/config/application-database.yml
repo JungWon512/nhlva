@@ -11,27 +11,54 @@ spring:
 #   url: "jdbc:tibero:thin:@192.168.0.92:8629:tibero"
 #   username: lalm
 #   password: lalm123
+#   url: "jdbc:tibero:thin:@192.168.70.60:5550:NHLVADBD"
+#   username: nhlva
+#   password: Nhlva1!
+#   autoCommit: false # AOP로 트랜잭션을 제어하기 때문에 false로 사용 (default: true)
+#   connectionTimeout: 18000000 # 커넥션 타임 아웃 (120s)
+#   idleTimeout: 1200000 # pool 미사용 커넥션 유지 시간 (20m)
+#   minimumIdle: 100 # 최소 커넥션 유지 개수 (default: same as maximumPoolSize)
+#   maximumPoolSize: 500 # pool에 유지시킬 수 있는 최대 커넥션 수
 
 ---
 # profile(개발 서버 환경)
 spring.profiles: database-develop
 
 
+
 spring:
   datasource: 
    driver-class-name: com.tmax.tibero.jdbc.TbDriver
    url: "jdbc:tibero:thin:@121.126.222.181:8629:tibero"
    username: lalm
    password: lalm123
+#   url: "jdbc:tibero:thin:@192.168.70.60:5550:NHLVADBD"
+#   username: nhlva
+#   password: Nhlva1!
+#   autoCommit: false # AOP로 트랜잭션을 제어하기 때문에 false로 사용 (default: true)
+#   connectionTimeout: 18000000 # 커넥션 타임 아웃 (120s)
+#   idleTimeout: 1200000 # pool 미사용 커넥션 유지 시간 (20m)
+#   minimumIdle: 100 # 최소 커넥션 유지 개수 (default: same as maximumPoolSize)
+#   maximumPoolSize: 500 # pool에 유지시킬 수 있는 최대 커넥션 수
+
 
 ---
 # profile(상용 서버 환경)
 spring.profiles: database-production
 
 
+
 spring:
   datasource: 
    driver-class-name: com.tmax.tibero.jdbc.TbDriver
    url: "jdbc:tibero:thin:@121.126.222.181:8629:tibero"
    username: lalm
    password: lalm123
+#   url: "jdbc:tibero:thin:@192.168.70.107:7550:NHLVADBP"
+#   username: nhlva
+#   password: Nhlvaop1!
+#   autoCommit: false # AOP로 트랜잭션을 제어하기 때문에 false로 사용 (default: true)
+#   connectionTimeout: 18000000 # 커넥션 타임 아웃 (120s)
+#   idleTimeout: 1200000 # pool 미사용 커넥션 유지 시간 (20m)
+#   minimumIdle: 100 # 최소 커넥션 유지 개수 (default: same as maximumPoolSize)
+#   maximumPoolSize: 500 # pool에 유지시킬 수 있는 최대 커넥션 수

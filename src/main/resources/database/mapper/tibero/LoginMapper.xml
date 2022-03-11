@@ -27,8 +27,8 @@
 			 , A.FSRG_DTM
 			 , A.FSRGMN_ENO
 		  FROM TB_LA_IS_MM_MWMN A
-		 WHERE A.SRA_MWMNNM = #{userName}
-		   AND A.CUS_RLNO = #{birthDate}
+		 WHERE REPLACE(TRIM(A.SRA_MWMNNM),' ','') = REPLACE(TRIM(#{userName}),' ','')
+		   AND REPLACE(TRIM(A.CUS_RLNO),' ','') = REPLACE(TRIM(#{birthDate}),' ','')
 		   AND A.DEL_YN = '0'
 		   AND EXISTS (
 				SELECT 1 FROM TB_LA_IS_BM_BZLOC B WHERE B.NA_BZPLC = A.NA_BZPLC AND B.NA_BZPLCNO = #{place}
@@ -100,7 +100,7 @@
 			 , A.LSCHG_DTM
 			 , A.LS_CMENO
 		  FROM TB_LA_IS_MM_FHS A
-		 WHERE A.FTSNM = #{userName}
+		 WHERE REPLACE(TRIM(A.FTSNM),' ','') = REPLACE(TRIM(#{userName}),' ','')
 		   AND (
 				REGEXP_REPLACE(A.OHSE_TELNO, '[^0-9]') = REGEXP_REPLACE(#{telNo}, '[^0-9]')
 				OR
@@ -144,6 +144,7 @@
 		  LEFT OUTER JOIN TB_LA_IS_BM_BZLOC B
 			ON ( A.NA_BZPLC = B.NA_BZPLC )
 		 WHERE A.FHS_ID_NO = #{fhsIdNo}
+		   AND A.FARM_AMNNO = #{farmAmnno}
 		   AND A.NA_BZPLC = #{naBzplc}
 		   AND A.DEL_YN = '0'
 		   AND B.NA_BZPLCNO = #{naBzplcno}
@@ -161,7 +162,7 @@
 		)
 		VALUES
 		(
-		    SQ_LA_IS_BM_VISIT.nextval,
+		    SQ_LA_IS_BM_VISIT.NEXTVAL,
 		    #{visit_ip},
 		    SYSDATE,
 		    #{visit_refer},
@@ -228,7 +229,7 @@
 			, #{ioTrmsnm}
 			, #{smsTrmsTelno}
 			, #{smsFwdgCntn}
-			, '0'
+			, #{tmsYn}
 			, '0'
 			, SYSDATE
 			, 'SYSTEM'

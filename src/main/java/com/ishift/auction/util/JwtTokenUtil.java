@@ -17,8 +17,8 @@ import lombok.extern.slf4j.Slf4j;
 
 import org.springframework.stereotype.Component;
 
+import com.ishift.auction.vo.AdminJwtTokenVo;
 import com.ishift.auction.vo.JwtTokenVo;
-
 import java.util.*;
 
 /**
@@ -71,6 +71,30 @@ public class JwtTokenUtil {
 		claims.put(Constants.JwtConstants.JWT_CLAIM_USER_MEM_NUM, jwtTokenVo.getUserMemNum());
 		claims.put(Constants.JwtConstants.JWT_CLAIM_AUCTION_HOUSE_CODE, jwtTokenVo.getAuctionHouseCode());
 		claims.put(Constants.JwtConstants.JWT_CLAIM_USER_ROLE, jwtTokenVo.getUserRole());
+		claims.put(Constants.JwtConstants.JWT_CLAIM_ISSUED_AT, new Date());
+//		claims.put(Constants.JwtConstants.JWT_CLAIM_DEVICE_UUID, jwtTokenVo.getDeviceUUID());
+//		claims.put(Constants.JwtConstants.JWT_CLAIM_USER_NAME, jwtTokenVo.getUserName());
+//		claims.put(Constants.JwtConstants.JWT_CLAIM_USER_BIRTHDATE, jwtTokenVo.getUserBirthdate());
+//		claims.put(Constants.JwtConstants.JWT_CLAIM_ENTRY_NUM, jwtTokenVo.getEntryNum());
+//		claims.put(Constants.JwtConstants.JWT_CLAIM_AUCTION_CLASS, jwtTokenVo.getAuctionClass());
+//		claims.put(Constants.JwtConstants.JWT_CLAIM_AUCTION_TYPE, jwtTokenVo.getAuctionType());
+		return claims;
+	}
+	private Map<String, Object> createClaimsForAdmin(AdminJwtTokenVo jwtTokenVo) {
+		Map<String, Object> claims = new HashMap<>();
+		claims.put(Constants.JwtConstants.JWT_CLAIM_USER_MEM_NUM, jwtTokenVo.getUserMemNum());
+		claims.put(Constants.JwtConstants.JWT_CLAIM_AUCTION_HOUSE_CODE, jwtTokenVo.getAuctionHouseCode());
+		claims.put(Constants.JwtConstants.JWT_CLAIM_USER_ROLE, jwtTokenVo.getUserRole());
+	
+    	claims.put("userId", jwtTokenVo.getUserId());
+    	claims.put("password", jwtTokenVo.getPassword());
+    	claims.put("eno", jwtTokenVo.getEno());
+    	claims.put("userCusName", jwtTokenVo.getUserCusName());
+    	claims.put("na_bzplc", jwtTokenVo.getNa_bzplc());
+    	claims.put("security", jwtTokenVo.getSecurity());
+    	claims.put("apl_ed_dtm", jwtTokenVo.getApl_ed_dtm());
+    	claims.put("na_bzplnm", jwtTokenVo.getNa_bzplnm());
+    	claims.put("grp_c", jwtTokenVo.getGrp_c());
 		claims.put(Constants.JwtConstants.JWT_CLAIM_ISSUED_AT, new Date());
 //		claims.put(Constants.JwtConstants.JWT_CLAIM_DEVICE_UUID, jwtTokenVo.getDeviceUUID());
 //		claims.put(Constants.JwtConstants.JWT_CLAIM_USER_NAME, jwtTokenVo.getUserName());
@@ -160,7 +184,7 @@ public class JwtTokenUtil {
 	 * @return
 	 */
 	public String getValue(String token, String key) {
-		if (this.getClaims(token) == null) {
+		if (this.getClaims(token) == null || this.getClaims(token).get(key) == null) {
 			return "";
 		}
 		return this.getClaims(token).get(key).toString();
@@ -216,6 +240,17 @@ public class JwtTokenUtil {
 					.userRole(this.getValue(token, Constants.JwtConstants.JWT_CLAIM_USER_ROLE))
 					.build();
 		}
+	}
+	
+	public String generateToken(AdminJwtTokenVo jwtTokenVo, String tokenType) {
+		Date now = new Date();
+		JwtBuilder builder = Jwts.builder()
+								.setHeader(createHeader())
+								.setIssuedAt(now)
+								.setClaims(createClaimsForAdmin(jwtTokenVo))
+								.setExpiration(createExpiredDate(tokenType))
+								.signWith(signatureAlgorithm, SIGNING_KEY);
+		return builder.compact();
 	}
 	
 }

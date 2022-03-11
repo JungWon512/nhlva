@@ -352,7 +352,7 @@ var scLoad = function(dataArr){
 	$('table.tblAuctionSt tbody tr td.val p.auctionNum').text(dataArr[2]?dataArr[2]:"-");	//경매번호
 	
 	$('table.tblAuctionSt tbody tr td td p.ftsnm').html(nameEnc(dataArr[9],"●")); //출하주
-	$('table.tblAuctionSt tbody tr td td p.cowSogWt').text(dataArr[25]); //중량
+	$('table.tblAuctionSt tbody tr td td p.cowSogWt').text(fnSetComma(dataArr[25])); //중량
 	$('table.tblAuctionSt tbody tr td td p.kpnNo').text(dataArr[12]&&dataArr[12].replace('KPN','')); //kpn
 	$('table.tblAuctionSt tbody tr td td p.mcowDsc').text(dataArr[14]); //어미
 	$('table.tblAuctionSt tbody tr td td p.sex').text(dataArr[13]); //성별				

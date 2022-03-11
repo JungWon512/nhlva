@@ -64,19 +64,19 @@
 				<dl>
 					<dt><p>암</p></dt>
 					<dd>
-						<p class="cowCnt">${buyCnt.CNT_SEX_W}두</p>
+						<p class="cowCnt">${empty buyCnt.CNT_SEX_W? '0' : buyCnt.CNT_SEX_W}두</p>
 					</dd>
 				</dl>
 				<dl>
 					<dt><p>수</p></dt>
 					<dd>
-						<p class="cowCnt">${buyCnt.CNT_SEX_M}두</p>
+						<p class="cowCnt">${empty buyCnt.CNT_SEX_M? '0' : buyCnt.CNT_SEX_M }두</p>
 					</dd>
 				</dl>
 				<dl>
 					<dt><p>기타</p></dt>
 					<dd>
-						<p class="cowCnt">${buyCnt.CNT_SEX_ETC}두</p>
+						<p class="cowCnt">${empty buyCnt.CNT_SEX_ETC? '0' : buyCnt.CNT_SEX_ETC}두</p>
 					</dd>
 				</dl>
 			</div>

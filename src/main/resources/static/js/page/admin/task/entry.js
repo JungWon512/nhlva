@@ -304,7 +304,6 @@
 		};
 		
 		var fnLayerPop = function(params, cowInfo) {
-			console.log(params);
 			var title = ['W', 'AW'].indexOf(params.regType) > -1 ? '중량 등록' : params.regType == 'N' ? '계류대 변경' : '하한가 등록';
 			modalPopupClose('.pop_mod_weight');
 			$('.pop_mod_weight').remove();

@@ -3,9 +3,6 @@ package com.ishift.auction.util;
 
 import org.springframework.stereotype.Component;
 
-import java.io.IOException;
-
-import java.sql.SQLException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 

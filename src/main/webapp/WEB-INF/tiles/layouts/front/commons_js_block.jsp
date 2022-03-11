@@ -1,12 +1,10 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
 <%@ include file="/WEB-INF/__system/taglibs.jsp" %>
-<script type="text/javascript" src="https://ajax.aspnetcdn.com/ajax/jQuery/jquery-3.4.1.min.js"
-        crossorigin="anonymous"></script>
 
-<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"
-        crossorigin="anonymous"></script>
+<!-- <script type="text/javascript" src="https://ajax.aspnetcdn.com/ajax/jQuery/jquery-3.4.1.min.js" crossorigin="anonymous"></script> -->
+<!-- <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" crossorigin="anonymous"></script> -->
+<!-- <script type="text/javascript" src="/static/js/common/commons.js" crossorigin="anonymous"></script> -->
 
-<script type="text/javascript" src="/static/js/common/commons.js" crossorigin="anonymous"></script>
 <!-- Begin::util.js -->
 <script src="/static/js/common/utils.js"></script>
 <!-- end::util.js -->

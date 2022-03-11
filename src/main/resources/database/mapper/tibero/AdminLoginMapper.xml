@@ -12,15 +12,19 @@
 			 , A.PW
 			 , A.ENO
 			 , A.MPNO
-			 , A.STRG_YN
+			 , A.STRG_DT
 			 , A.PWERR_NT
 			 , A.FSRG_DTM
 			 , A.FSRGMN_ENO
 			 , A.LSCHG_DTM
 			 , A.LS_CMENO
+		     , NVL(C.NA_BZPLNM,'없음') NA_BZPLNM
+			 , NVL(D.GRP_C,'000') GRP_C
 		  FROM TB_LA_IS_MM_USR A
 		  LEFT OUTER JOIN TB_LA_IS_BM_BZLOC B
 		    ON ( A.NA_BZPLC = B.NA_BZPLC )
+		  LEFT OUTER JOIN TB_LA_IS_MM_WMC C ON ( A.NA_BZPLC = C.NA_BZPLC )
+		  LEFT OUTER JOIN TB_LA_IS_MM_GRP_USR D ON ( A.USRID = D.USRID )
 		 WHERE A.USRID = #{usrid}
 	</select>
 	
@@ -33,15 +37,19 @@
 			 , A.PW
 			 , A.ENO
 			 , A.MPNO
-			 , A.STRG_YN
+			 , A.STRG_DT
 			 , A.PWERR_NT
 			 , A.FSRG_DTM
 			 , A.FSRGMN_ENO
 			 , A.LSCHG_DTM
 			 , A.LS_CMENO
+		     , NVL(C.NA_BZPLNM,'없음') NA_BZPLNM
+			 , NVL(D.GRP_C,'000') GRP_C
 		  FROM TB_LA_IS_MM_USR A
 		  LEFT OUTER JOIN TB_LA_IS_BM_BZLOC B
 		    ON ( A.NA_BZPLC = B.NA_BZPLC )
+		  LEFT OUTER JOIN TB_LA_IS_MM_WMC C ON ( A.NA_BZPLC = C.NA_BZPLC )
+		  LEFT OUTER JOIN TB_LA_IS_MM_GRP_USR D ON ( A.USRID = D.USRID )
 		 WHERE A.NA_BZPLC = #{naBzplc}
 		   AND A.USRID = #{usrid}
 	</select>
@@ -53,18 +61,22 @@
 			 , A.PW
 			 , A.ENO
 			 , A.MPNO
-			 , A.STRG_YN
+			 , A.STRG_DT
 			 , A.PWERR_NT
 			 , A.FSRG_DTM
 			 , A.FSRGMN_ENO
 			 , A.LSCHG_DTM
 			 , A.LS_CMENO
+		     , NVL(C.NA_BZPLNM,'없음') NA_BZPLNM
+			 , NVL(D.GRP_C,'000') GRP_C
 		  FROM TB_LA_IS_MM_USR A
 		  LEFT OUTER JOIN TB_LA_IS_BM_BZLOC B
 		    ON ( A.NA_BZPLC = B.NA_BZPLC )
+		  LEFT OUTER JOIN TB_LA_IS_MM_WMC C ON ( A.NA_BZPLC = C.NA_BZPLC )
+		  LEFT OUTER JOIN TB_LA_IS_MM_GRP_USR D ON ( A.USRID = D.USRID )
 		 WHERE 1=1 
 		   AND A.USRID = #{usrid}
-		   AND A.PW = #{pw}
+		   AND A.PW = Damo.ENC_B64('KEY1', #{pw})
 	</select>
 	
 </mapper>

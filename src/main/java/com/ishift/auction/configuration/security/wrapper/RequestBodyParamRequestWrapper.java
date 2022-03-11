@@ -129,7 +129,6 @@ public class RequestBodyParamRequestWrapper extends HttpServletRequestWrapper{
 				obj = (JSONObject)parser.parse( this.body );
 				Set<String> keys = obj.keySet();
 				for(String key : keys) {
-					//System.out.println("##################### KEY : "+key +" VAL ## : "+obj.get(key));
 					this.params.put(key, new String[] { (String) obj.get(key) });
 				}	
 			}

@@ -1,7 +1,14 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ include file="/WEB-INF/__system/taglibs.jsp"%>
 <script type="text/javascript" src="/static/js/common/commons.js"></script>
+<script type="text/javascript" src="/static/js/common/rsa/jsbn.js"></script>
+<script type="text/javascript" src="/static/js/common/rsa/prng4.js"></script>
+<script type="text/javascript" src="/static/js/common/rsa/rng.js"></script>
+<script type="text/javascript" src="/static/js/common/rsa/rsa.js"></script>
 
+<input type="hidden" id="RSAKey"      value="${RSAKey }"/>
+<input type="hidden" id="RSAModulus"  value="${RSAModulus }"/>
+<input type="hidden" id="RSAExponent" value="${RSAExponent }"/>
 <div class="login_section">
 	<div class="login_box">
 		<h1>로그인<span>스마트가축시장</span></h1>

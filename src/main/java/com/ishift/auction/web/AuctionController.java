@@ -76,6 +76,7 @@ public class AuctionController extends CommonController {
         Map<String, Object> johap = adminService.selectOneJohap(map);
 
 		map.put("naBzPlc", johap.get("NA_BZPLC"));
+		map.put("naBzplc", johap.get("NA_BZPLC"));
 		map.put("entryType", "A");
 		List<Map<String,Object>> datelist=auctionService.selectAucDateList(map);
 		if(param.get("searchDate") != null && param != null) {
@@ -118,6 +119,7 @@ public class AuctionController extends CommonController {
 		Map<String, Object> nearAucDate =auctionService.selectNearAucDate(map);
 		
 		map.put("naBzPlc", johap.get("NA_BZPLC"));
+		map.put("naBzplc", johap.get("NA_BZPLC"));
 		map.put("entryType", "B");
 		
 		//sysdate로 쿼리 조회하기에 searchDate바라보지 않음.
@@ -651,4 +653,22 @@ public class AuctionController extends CommonController {
 		}
         return result;
     }
+	
+	@ResponseBody
+	@PostMapping(path = "/auction/api/updateNoticeReadCnt", produces = MediaType.APPLICATION_JSON_VALUE)
+    Map<String, Object> updateNoticeReadCnt(@RequestBody Map<String,Object> params) {
+        Map<String, Object> result = new HashMap<>();
+        try {
+			params.put("johpCd", params.get("naBzplc"));
+			result.put("updateRow", auctionService.updateNoticeReadCnt(params));
+			result.put("data", auctionService.selectOneNotice(params));
+		}catch (SQLException | RuntimeException se) {
+			log.debug("ApiController.updateNoticeReadCnt : {} ",se);
+			result.put("success", false);
+			//result.put("message", se.getMessage());
+            result.put("message", "작업중 에러가 발생하였습니다.");
+		}
+        return result;
+    }
+
 }

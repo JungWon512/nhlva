@@ -461,6 +461,20 @@ public class AuctionDAO {
 		return mainDao.selectOne("auction.selectTotSoldPrice", params);
 	}
 
+	public int updateNoticeReadCnt(Map<String, Object> params) throws SQLException {
+		return mainDao.update("auction.updateNoticeReadCnt", params);
+	}
+
+	/**
+	 * 안드로이드, 아이폰 버전 정보 업데이트
+	 * @param params
+	 * @return
+	 * @throws SQLException
+	 */
+	public int updateAppVersion(Map<String, Object> params) throws SQLException {
+		return mainDao.update("ApiMapper.updateAppVersion", params);
+	}
+
 	public int updateCowInfoForModlNo(Map<String, Object> params) throws SQLException {
 		return mainDao.update("auction.updateCowInfoForModlNo", params);
 	}

@@ -7,7 +7,9 @@ import com.ishift.auction.service.auction.AuctionService;
 import com.ishift.auction.util.Constants;
 import com.ishift.auction.util.CookieUtil;
 import com.ishift.auction.util.JwtTokenUtil;
+import com.ishift.auction.util.RSACriptoConfig;
 import com.ishift.auction.util.SessionUtill;
+import com.ishift.auction.vo.AdminJwtTokenVo;
 import com.ishift.auction.vo.AdminUserDetails;
 import com.ishift.auction.vo.JwtTokenVo;
 
@@ -18,6 +20,7 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
@@ -61,6 +64,11 @@ public class AdminController {
 	@Autowired
 	private CookieUtil cookieUtil;
 
+	@Autowired
+	private RSACriptoConfig rsaCriptoConfig;
+	@Autowired
+	private PasswordEncoder passwordEncoder;
+
 	/**
 	 * request path가 admin인 경우 관리자 main으로 redirect
 	 * @return
@@ -70,6 +78,27 @@ public class AdminController {
 	public ModelAndView init() throws Exception {
 		final ModelAndView mav = new ModelAndView();
 		mav.setViewName("redirect:/office/main");
+		return mav;
+	}
+	
+	@RequestMapping("/office/redirect")
+	public ModelAndView redirect(final HttpServletResponse response , @RequestParam final Map<String,Object> params) {
+		final ModelAndView mav = new ModelAndView();
+		try {
+			String caToken=params.getOrDefault("caToken", "").toString();
+			String url = params.getOrDefault("url","").toString();
+			final Cookie cookie = cookieUtil.createCookie(Constants.JwtConstants.ACCESS_TOKEN, caToken);
+			response.addCookie(cookie);
+			
+			if("".equals(caToken) || "".equals(url)) {
+				mav.setViewName("redirect:"+url);
+			}
+			else {
+				mav.setViewName("redirect:/admin/main");
+			}
+		} catch (RuntimeException re) {
+			log.error("AdminController.adminMain : {} ",re);
+		}
 		return mav;
 	}
 	
@@ -523,11 +552,24 @@ public class AdminController {
 			String usrid = adminUserDetails.getUsrid();
 			String naBzPlc = adminUserDetails.getNaBzplc();
 			if (adminUserDetails != null) {
-				final JwtTokenVo jwtTokenVo = JwtTokenVo.builder()
-														.userMemNum(usrid)
-														.auctionHouseCode(naBzPlc)
-														.userRole(Constants.UserRole.ADMIN)
-														.build();
+//				final JwtTokenVo jwtTokenVo = JwtTokenVo.builder()
+//														.userMemNum(usrid)
+//														.auctionHouseCode(naBzPlc)
+//														.userRole(Constants.UserRole.ADMIN)
+//														.build();
+				AdminJwtTokenVo jwtTokenVo = AdminJwtTokenVo.builder()
+						.userMemNum(adminUserDetails.getUsername())
+						.auctionHouseCode(adminUserDetails.getNaBzplc())
+						.userRole(Constants.UserRole.ADMIN)
+						.userId(adminUserDetails.getUsername())
+						.password(passwordEncoder.encode(adminUserDetails.getUsername()))
+						.eno(adminUserDetails.getEno())
+						.userCusName(adminUserDetails.getUsrnm())
+						.na_bzplc(adminUserDetails.getNaBzplc())
+						.security("security")
+						.na_bzplnm(adminUserDetails.getNaBzplNm())
+						.grp_c(adminUserDetails.getGrpC())
+						.build();
 				token = jwtTokenUtil.generateToken(jwtTokenVo, Constants.JwtConstants.ACCESS_TOKEN);
 				final Cookie cookie = cookieUtil.createCookie(Constants.JwtConstants.ACCESS_TOKEN, token);
 				response.addCookie(cookie);

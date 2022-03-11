@@ -10,6 +10,11 @@
 <link rel="stylesheet" type="text/css" href="/static/css/guide/jquery.mCustomScrollbar.css">
 <link rel="stylesheet" type="text/css" href="/static/css/guide/selectric.css">
 
+<link rel="shortcut icon" href="/static/images/guide/favicon_admin.ico">
+<link rel="apple-touch-icon" sizes="64x64" href="/static/images/guide/favicon_admin32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/static/images/guide/favicon_admin.ico">
+<link rel="icon" type="image/png" sizes="32x32" href="/static/images/guide/favicon_admin32.png">  <!-- 32x32 적용필요-->
+
 <spring:eval expression="@environment.getProperty('spring.profiles.active')" var="ACTIVE" />
 <script type="text/javascript">
 	var active = "${ACTIVE}";

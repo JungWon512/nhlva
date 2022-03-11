@@ -10,16 +10,18 @@
 			<c:forEach items="${ noticeList }" var="vo">
 				<li>
 					<div class="notice_btn">
+						<input type="hidden" class="noticeSeqNo" value="${vo.BBRD_SQNO}" />
+						<input type="hidden" class="noticeDsc" value="${vo.BLBD_DSC}" />
 						<a href="javascript:;">
 							<dl>
-								<dt>${vo.title }</dt>
-								<dd>${vo.uptDtm } / 조회수 102</dd>
+								<dt><c:out value="${vo.BBRD_TINM }" escapeXml="false" /></dt>
+								<dd>${vo.LSCHG_DTM } / 조회수 <span class="readCnt sqNo_${vo.BLBD_DSC}_${vo.BBRD_SQNO}">${vo.BBRD_INQ_CN }</span></dd>
 							</dl>
 						</a>
 					</div>
 					<!-- //notice_btn e -->
 					<div class="notice_view">
-						${vo.content }
+						${vo.BBRD_CNTN }
 					</div>
 					<!-- //notice_view e -->
 				</li>

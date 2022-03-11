@@ -12,7 +12,6 @@ import org.springframework.stereotype.Service;
 import com.ishift.auction.service.admin.login.AdminLoginService;
 import com.ishift.auction.vo.AdminUserDetails;
 
-import java.io.IOException;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
@@ -42,16 +41,18 @@ public class AdminUserDetailsServiceImpl implements AdminUserDetailsService {
 										.usrid(admin.get("USRID").toString())
 										.place(admin.get("NA_BZPLCNO").toString())
 										.eno(admin.get("ENO").toString())
+										.naBzplNm(admin.get("NA_BZPLNM").toString())
+										.grpC(admin.get("GRP_C").toString())
 										.build();
 				}
 			else {
 				throw new UsernameNotFoundException("[" + username + "] 1.로그인 정보를 찾을 수 없습니다.");
 			}
 		}catch (RuntimeException re) {
-			log.error("RuntimeException: AdminUserDetailsServiceImpl ",re);			
+			log.error("RuntimeException: AdminUserDetailsServiceImpl ");			
 			throw new UsernameNotFoundException("[" + username + "] 로그인 정보를 찾을 수 없습니다.");
 		} catch (SQLException se) {
-			log.error("SQLException: AdminUserDetailsServiceImpl ",se);			
+			log.error("SQLException: AdminUserDetailsServiceImpl ");			
 			throw new UsernameNotFoundException("[" + username + "] 로그인 정보를 찾을 수 없습니다.");
 		}
 		
@@ -79,16 +80,18 @@ public class AdminUserDetailsServiceImpl implements AdminUserDetailsService {
 										.usrid(admin.get("USRID").toString())
 										.place(admin.get("NA_BZPLCNO").toString())
 										.eno(admin.get("ENO").toString())
+										.naBzplNm(admin.get("NA_BZPLNM").toString())
+										.grpC(admin.get("GRP_C").toString())
 										.build();
 				}
 			else {
 				throw new UsernameNotFoundException(" 1.로그인 정보를 찾을 수 없습니다.");
 			}
 		}catch (RuntimeException re) {
-			log.error("RuntimeException: AdminUserDetailsServiceImpl ",re);			
+			log.error("RuntimeException: AdminUserDetailsServiceImpl ");			
 			throw new UsernameNotFoundException(" 로그인 정보를 찾을 수 없습니다.");
 		}catch (SQLException se) {
-			log.error("SQLException: AdminUserDetailsServiceImpl ",se);			
+			log.error("SQLException: AdminUserDetailsServiceImpl ");			
 			throw new UsernameNotFoundException("로그인 정보를 찾을 수 없습니다.");
 		}
 		

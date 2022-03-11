@@ -10,10 +10,13 @@ import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.web.AuthenticationEntryPoint;
 import org.springframework.stereotype.Component;
 
+import lombok.extern.slf4j.Slf4j;
+
 /**
  * Jwt 인증에 실패 처리 Entry Point
  * @author Yuchan
  */
+@Slf4j
 @Component
 public class JwtTokenEntryPoint implements AuthenticationEntryPoint {
 

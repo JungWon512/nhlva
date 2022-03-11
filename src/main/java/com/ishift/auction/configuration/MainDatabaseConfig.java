@@ -8,11 +8,12 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.boot.jdbc.DataSourceBuilder;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Profile;
 import org.springframework.core.io.support.PathMatchingResourcePatternResolver;
 import org.springframework.jdbc.datasource.DataSourceTransactionManager;
+import org.springframework.jdbc.datasource.lookup.JndiDataSourceLookup;
 import org.springframework.transaction.PlatformTransactionManager;
 
-import javax.naming.InitialContext;
 import javax.naming.NamingException;
 import javax.sql.DataSource;
 
@@ -22,17 +23,21 @@ import javax.sql.DataSource;
  */
 @Configuration
 public class MainDatabaseConfig {
-//	@Bean(name = "dataSource")
-//	@ConfigurationProperties(prefix="spring.datasource")
-//	public DataSource dataSource() {
-//		return DataSourceBuilder.create().build();
-//	}
 	@Bean(name = "dataSource")
+	@Profile("local")
+	@ConfigurationProperties(prefix="spring.datasource")
+	public DataSource dataSourceLocal() {
+		return DataSourceBuilder.create().build();
+	}
+	
+	@Bean(name = "dataSource")
+	@Profile({"develop","production"})
 	public DataSource dataSource() throws NamingException {
-		InitialContext initialContext = new InitialContext();
-		DataSource ds = (DataSource) initialContext.lookup("java:comp/env/jdbc/Tibero");
+		JndiDataSourceLookup lookup = new JndiDataSourceLookup();
+		lookup.setResourceRef(true);
+		DataSource ds = lookup.getDataSource("jdbc/nhlva");
+		
 		return ds;
-
 	}
     /**
      * sessionfactory

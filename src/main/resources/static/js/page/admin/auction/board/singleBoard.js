@@ -123,7 +123,7 @@ var messageHandler = function(data) {
 				$('table.tblBoard tbody tr.title td p.bidPrice').closest('td').show();
 				$('table.tblBoard tbody tr.title td p.boardTitle').closest('td').hide();
 				$('table.tblBoard tbody tr.title td p.bidUser').html(''+ user);
-				$('table.tblBoard tbody tr.title td p.bidPrice').html(''+ price);
+				$('table.tblBoard tbody tr.title td p.bidPrice').html(''+ fnSetComma(price));
 			}else if(dataArr[3]=='23'){
 				$('table.tblBoard tbody tr.title td p.bidUser').closest('td').hide();
 				$('table.tblBoard tbody tr.title td p.bidPrice').closest('td').hide();
@@ -162,7 +162,7 @@ var scLoad = function(dataArr){
 	
 	$('table.tblBoard tbody tr.title td p.auctionNum').text(dataArr[2]);	//경매번호
 	$('table.tblBoard tbody tr.val td p.ftsnm').html(nameEnc(dataArr[9],"●")); //출하주
-	$('table.tblBoard tbody tr.val td p.cowSogWt').text(dataArr[25]); //중량
+	$('table.tblBoard tbody tr.val td p.cowSogWt').text(fnSetComma(dataArr[25])); //중량
 	$('table.tblBoard tbody tr.val td p.lowsSbidLmtAm').text(fnSetComma(Math.round(parseInt(dataArr[27])))); //최저가
 	// $('table.tblBoard tbody tr.val td p.prnyMtcn').text(Math.round(parseInt(dataArr[17]))); //임신
 	$('table.tblBoard tbody tr.val td p.sraIndvPasgQcn').text(dataArr[18]); //계대

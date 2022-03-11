@@ -62,7 +62,7 @@
 					, TO_CHAR(TO_DATE(B.AUC_DT,'YYYYMMDD'),'MM.DD') AUC_DT_STR_MD /* 경매일자 (경매일자) FORMAT	*/
 					, B.TRMN_AMNNO             /* 거래인관리번호(중도매인기준정보번호)*/
 					, B.LVST_AUC_PTC_MN_NO     /* 가축경매참여자번호(참가번호)*/
-					, B.COW_SOG_WT             /* 우출하중량	      (중량)*/
+					, NVL(TRIM(B.COW_SOG_WT),0) COW_SOG_WT             /* 우출하중량	      (중량)*/
 					, B.FIR_LOWS_SBID_LMT_AM   /* 최초최저낙찰한도금액(원단위)*/
 					, B.LOWS_SBID_LMT_AM       /* 최저낙찰한도금액  (최저가-원단위)*/
 					, CASE WHEN B.AUC_OBJ_DSC = '1' THEN ROUND(B.FIR_LOWS_SBID_LMT_AM / NVL(J.CALF_AUC_ATDR_UNT_AM, 10000))
@@ -78,7 +78,7 @@
 					, B.LWPR_CHG_NT            /* 최저가변경횟수 */
 					, B.RMK_CNTN               /* 비고내용    (비고)*/
 					, B.BRANDNM                /* 브랜드명    (브랜드)*/
-					, FUNC_DEC_NAME(B.SRA_PDMNM) SRA_PDMNM              /* 축산생산자명 (출하주명)*/
+					, SUBSTR(B.SRA_PDMNM,1,1)||'*'||SUBSTR(B.SRA_PDMNM,3,LENGTH(B.SRA_PDMNM)-2) SRA_PDMNM              /* 축산생산자명 (출하주명)*/
 					, B.SRA_PDMNM AS SRA_PDMNM_ORI	/* 출하주명 */	
 					, B.SRA_PD_RGNNM           /* 축산생산지역 (출하지역)	*/
 					, B.SRA_SBID_AM            /* 축산낙찰금액 (낙찰단가-원단위)	*/
@@ -103,6 +103,11 @@
 						  ELSE GREATEST(TO_DATE(B.AUC_DT,'YYYYMMDD') - ADD_MONTHS(TO_DATE(A.BIRTH,'YYYYMMDD'), TRUNC(MONTHS_BETWEEN(TO_DATE(B.AUC_DT,'YYYYMMDD'), TO_DATE(A.BIRTH,'YYYYMMDD')))) + 1, 0) - 1
 					END GAP_DAY
 					, NVL(B.MODL_NO, B.AUC_PRG_SQ) AS MODL_NO
+					, CASE WHEN B.AUC_OBJ_DSC = '1' THEN ROUND(NVL(J.CALF_AUC_ATDR_UNT_AM, 10000))
+							WHEN B.AUC_OBJ_DSC = '2' THEN ROUND(NVL(J.NBFCT_AUC_ATDR_UNT_AM, 1))
+							WHEN B.AUC_OBJ_DSC = '3' THEN ROUND(NVL(J.PPGCOW_AUC_ATDR_UNT_AM, 10000))
+							ELSE 10000
+					END AS DIVISION_PRICE
 				FROM TB_LA_IS_MH_SOG_COW B
 				LEFT JOIN TB_LA_IS_MM_INDV A
 				  ON (
@@ -134,11 +139,16 @@
 			    	TO_CHAR(B.AUC_PRG_SQ) LIKE '%' || #{searchTxt} ||'%'
 			    )
 			</if>	
-			<if test="searchDate != null and searchDate != ''">
-			    AND B.AUC_DT = #{searchDate}
-			</if>
+			<choose>	
+				<when test="searchDate != null and searchDate != ''">
+				    AND B.AUC_DT = #{searchDate}
+				</when>
+				<otherwise>
+					AND B.AUC_DT = TO_CHAR(SYSDATE,'YYYYMMDD')
+				</otherwise>
+			</choose>
 			<if test="searchAucObjDsc != null and searchAucObjDsc != ''">
-				AND B.AUC_OBJ_DSC = CASE WHEN #{searchAucObjDsc} = '0' THEN B.AUC_OBJ_DSC ELSE #{searchAucObjDsc} END
+				AND B.AUC_OBJ_DSC = CASE WHEN TO_CHAR(#{searchAucObjDsc}) = '0' THEN B.AUC_OBJ_DSC ELSE TO_CHAR(#{searchAucObjDsc}) END
 			</if>
 			<if test="searchAucPrgSq != null and searchAucPrgSq != ''">
 				AND B.AUC_PRG_SQ =#{searchAucPrgSq}
@@ -199,46 +209,83 @@
 	            AND B.TRMN_AMNNO = #{searchTrmnAmnNo}
 	        </if>
 	        <if test="searchAucObjDsc != null and searchAucObjDsc != ''">
-				AND B.AUC_OBJ_DSC=#{searchAucObjDsc}
+				AND B.AUC_OBJ_DSC=TO_CHAR(#{searchAucObjDsc})
 	        </if>
         ) T
     </select>
 
     <resultMap type="HashMap" id="AucNoticeMap">
         <result property="johpCd" column="NA_BZPLC"/>
-        <result property="seqNo" column="SEQ_NO"/>
-        <result property="title" column="TITLE"/>
-        <result property="content" column="CONTENT"/>
-        <result property="delYn" column="DEL_YN"/>
+        <result property="seqNo" column="BBRD_SQNO"/>
+        <result property="title" column="BBRD_TINM"/>
+        <result property="content" column="BBRD_CNTN"/>
+        <result property="delYn" column="BBRD_DEL_YN"/>
         <result property="regDtm" column="FSRG_DTM"/>
         <result property="regUsrid" column="FSRGMN_ENO"/>
         <result property="uptDtm" column="LSCHG_DTM"/>
         <result property="uptUsrid" column="LS_CMENO"/>
     </resultMap>
 
-    <select id="selectListNotice" parameterType="map" resultMap="AucNoticeMap">
+    <select id="selectListNotice" parameterType="map" resultType="map">
         SELECT
-        <include refid="allResultNoti"></include>
-        FROM  TB_LA_IS_BM_NOTI
+			NA_BZPLC
+			, BLBD_DSC
+			, BBRD_SQNO
+			, RL_SQNO
+			, BBRD_TINM
+			, BBRD_CNTN
+			, BBRD_INQ_CN
+			, APDFL_ID
+			, PUP_UYN
+			, FIX_YN 
+			, BBRD_DEL_YN 
+			, ST_DT
+			, ED_DT
+            , TO_CHAR(FSRG_DTM,'YYYY-MM-DD') FSRG_DTM
+            , FSRGMN_ENO
+            , TO_CHAR(LSCHG_DTM,'YYYY-MM-DD') LSCHG_DTM
+			, LS_CMENO
+        FROM  TB_LA_IS_MM_BLBD
         <trim  prefix="WHERE" suffixOverrides="AND | OR">
-            NA_BZPLC = #{johpCd} AND
-            DEL_YN = #{delYn} AND
+            ( (BLBD_DSC = '1' AND NA_BZPLC = #{johpCd})
+  			OR (BLBD_DSC = '3' AND NA_BZPLC = '0000000000000')
+  			) AND
+            BBRD_DEL_YN = #{delYn} AND
         </trim>
-        <if test="order != null">
-            #{order}
-        </if>
-        <if test="pageSize != null and pageStart != null">
-            LIMIT #{pageStart} , #{pageSize}
-        </if>
+        ORDER BY NA_BZPLC,FSRG_DTM DESC
     </select>
     
-    <select id="selectOneNotice" parameterType="map" resultMap="AucNoticeMap">
+    <select id="selectOneNotice" parameterType="map" resultType="map">
         SELECT
-        <include refid="allResultNoti"></include>
-        FROM  tb_la_is_bm_noti
+			NA_BZPLC
+			, BLBD_DSC
+			, BBRD_SQNO
+			, RL_SQNO
+			, BBRD_TINM
+			, BBRD_CNTN
+			, BBRD_INQ_CN
+			, APDFL_ID
+			, PUP_UYN
+			, FIX_YN 
+			, BBRD_DEL_YN 
+			, ST_DT
+			, ED_DT
+            , TO_CHAR(FSRG_DTM,'YYYY-MM-DD') FSRG_DTM
+            , FSRGMN_ENO
+            , TO_CHAR(LSCHG_DTM,'YYYY-MM-DD') LSCHG_DTM
+			, LS_CMENO
+        FROM  TB_LA_IS_MM_BLBD
         <trim  prefix="WHERE" suffixOverrides="AND | OR">
+        	<choose>
+        		<when test="blbdDsc == '3'.toString()">        		
+            		NA_BZPLC = '0000000000000' AND
+        		</when>
+        		<otherwise>
             NA_BZPLC = #{johpCd} AND
-            SEQ_NO = #{seqNo} AND
+        		</otherwise>
+        	</choose>
+            BBRD_SQNO = #{seqNo} AND
+            BLBD_DSC = #{blbdDsc} AND
         </trim>
     </select>
     
@@ -388,7 +435,6 @@
 			ELSE '' END NA_BZPLCLOC_NM
 			,SUM(AUC_YN) AUC_YN
 			,SUM(CASE WHEN QCN_CNT > 0 THEN 1 ELSE 0 END) CUR_AUC_CNT
-<!-- 			,SUM(STN_CNT)+SUM(QCN_CNT) CUR_AUC_CNT	 -->
 		FROM 
 			(SELECT 
 				LOC.NA_BZPLCLOC
@@ -431,6 +477,7 @@
 					 WHEN AUC_OBJ_DSC=1 THEN '송아지'
 					 WHEN AUC_OBJ_DSC=2 THEN '비육우'
 					 WHEN AUC_OBJ_DSC=3 THEN '번식우'
+					 WHEN AUC_OBJ_DSC=0 THEN '일괄'
 					 ELSE ''
 				 END AUC_OBJ_DSC_NAME
 				,AUC_DT 
@@ -445,6 +492,7 @@
 					 WHEN AUC_OBJ_DSC=1 THEN '송아지'
 					 WHEN AUC_OBJ_DSC=2 THEN '비육우'
 					 WHEN AUC_OBJ_DSC=3 THEN '번식우'
+					 WHEN AUC_OBJ_DSC=0 THEN '일괄'
 					 ELSE ''
 				 END AUC_OBJ_DSC_NAME
 				,AUC_DT 				
@@ -516,7 +564,7 @@
 	<insert id="deleteZimPrice" parameterType="map">
 		DELETE FROM TB_LA_IS_MH_SOG_ZIM
 		WHERE  NA_BZPLC = #{naBzPlc}
-		AND AUC_OBJ_DSC = #{aucObjDsc}
+		AND AUC_OBJ_DSC = TO_CHAR(#{aucObjDsc})
 		AND AUC_DT = #{aucDt}
 		AND OSLP_NO = #{oslpNo}
 		AND TRMN_AMNNO = #{loginNo}
@@ -530,9 +578,9 @@
 			 , SRA_SBID_AM = #{sraSbidAm}				/* 낙찰 금액 */
 			 , SRA_SBID_UPR = #{sraSbidUpr}				/* 낙찰 단가 */
 			 , SEL_STS_DSC = #{selStsDsc}				/* 판매상태 구분 코드 */
-		<if test="maxDdlQcn != null and maxDdlQcn != ''">
-			 , DDL_QCN = #{maxDdlQcn} + 1
-		</if>
+			<if test="maxDdlQcn != null and maxDdlQcn != ''">
+				 , DDL_QCN = #{maxDdlQcn} + 1
+			</if>
 			 , AMNNO = #{trmnAmnno}						/* 정산자 중도매인 번호 */
 		<choose>
 		<when test="lschgDtm != null and lschgDtm != ''">
@@ -544,7 +592,7 @@
 		</choose>
 			 , LS_CMENO = #{lsCmeno}					/* 최종 변경자 */
 		 WHERE NA_BZPLC = #{naBzPlc}		/* 사업장코드 */
-		   AND AUC_OBJ_DSC = #{aucObjDsc}	/* 경매대상 구분코드 */
+		   AND AUC_OBJ_DSC = TO_CHAR(#{aucObjDsc})	/* 경매대상 구분코드 */
 		   AND AUC_DT = #{aucDt}			/* 경매일자 */
 		   AND OSLP_NO = #{oslpNo}			/* 원표번호 */
 		   AND LED_SQNO = #{ledSqno}		/* 원장 일련번호 */
@@ -570,8 +618,8 @@
 				 , A.AUC_OBJ_DSC				/* 경매대상구분코드 */
 				 , A.SRA_INDV_AMNNO				/* 축산개체관리번호 */
 				 , A.SRA_SRS_DSC				/* 축상축종구분코드 */
-				 , B.FHS_ID_NO 					/* 농가식별번호 */
-				 , B.FARM_AMNNO 				/* 농장관리번호 */
+				 , A.FHS_ID_NO 					/* 농가식별번호 */
+				 , A.FARM_AMNNO 				/* 농장관리번호 */
 				 , (SELECT C.FTSNM
 					  FROM TB_LA_IS_MM_FHS C
 					 WHERE C.NA_BZPLC = A.NA_BZPLC
@@ -715,7 +763,7 @@
 		SELECT SBID_UPR
 		  FROM TB_LA_IS_MH_SOG_ZIM
 		 WHERE NA_BZPLC = #{naBzplc}
-		   AND AUC_OBJ_DSC = #{aucObjDsc}
+		   AND AUC_OBJ_DSC = TO_CHAR(#{aucObjDsc})
 		   AND TRMN_AMNNO = #{trmnAmnno}
 		<choose>
 		<when test="aucDt != null and aucDt != ''">
@@ -769,7 +817,7 @@
 				  FROM TB_LA_IS_MH_SOG_COW
 				 WHERE TRMN_AMNNO IS NOT NULL
 				<if test="searchAucObjDsc != null and searchAucObjDsc != ''">
-				   AND AUC_OBJ_DSC = #{searchAucObjDsc}
+				   AND AUC_OBJ_DSC = TO_CHAR(#{searchAucObjDsc})
 				</if>
 				<if test="searchStDt != null and searchStDt != '' and searchEnDt != null and searchEnDt != ''">
 				   AND AUC_DT BETWEEN REPLACE(#{searchStDt}, '.', '') AND REPLACE(#{searchEnDt}, '.', '')
@@ -799,7 +847,7 @@
 			 WHERE SEL_STS_DSC = '22'
 			   AND COW_SOG_WT <![CDATA[>]]> 0
 			<if test="searchAucObjDsc != null and searchAucObjDsc != ''">
-			   AND AUC_OBJ_DSC = #{searchAucObjDsc}
+			   AND AUC_OBJ_DSC = TO_CHAR(#{searchAucObjDsc})
 			</if>
 			<if test="searchStDt != null and searchStDt != '' and searchEnDt != null and searchEnDt != ''">
 			   AND AUC_DT BETWEEN REPLACE(#{searchStDt}, '.', '') AND REPLACE(#{searchEnDt}, '.', '')
@@ -874,7 +922,7 @@
 					 , ROW_NUMBER() OVER(ORDER BY SRA_MWMNNM ASC) AS N_NUM
 				  FROM TB_LA_IS_MM_MWMN A
 				 WHERE NA_BZPLC = #{naBzplc}
-				   AND EXISTS ( SELECT 1 FROM TB_LA_IS_MH_AUC_ENTR B WHERE B.NA_BZPLC = A.NA_BZPLC AND B.TRMN_AMNNO = A.TRMN_AMNNO AND B.AUC_DT = #{aucDt} AND B.AUC_OBJ_DSC = #{aucObjDsc})
+				   AND EXISTS ( SELECT 1 FROM TB_LA_IS_MH_AUC_ENTR B WHERE B.NA_BZPLC = A.NA_BZPLC AND B.TRMN_AMNNO = A.TRMN_AMNNO AND B.AUC_DT = #{aucDt} AND B.AUC_OBJ_DSC = TO_CHAR(#{aucObjDsc}))
 		) B
 		 WHERE B.N_NUM <![CDATA[<=]]> NVL(#{limitCnt}, 10)
 	</select>
@@ -922,13 +970,13 @@
 			 , A.AUC_OBJ_DSC				/* 경매대상구분코드 */
 			 , A.SRA_INDV_AMNNO				/* 축산개체관리번호 */
 			 , A.SRA_SRS_DSC				/* 축상축종구분코드 */
-			 , B.FHS_ID_NO 					/* 농가식별번호 */
-			 , B.FARM_AMNNO 				/* 농장관리번호 */
+			 , A.FHS_ID_NO 					/* 농가식별번호 */
+			 , A.FARM_AMNNO 				/* 농장관리번호 */
 			 , (SELECT C.FTSNM
 				  FROM TB_LA_IS_MM_FHS C
-				 WHERE C.NA_BZPLC = B.NA_BZPLC
-				   AND C.FHS_ID_NO = B.FHS_ID_NO
-				   AND C.FARM_AMNNO = B.FARM_AMNNO
+				 WHERE C.NA_BZPLC = A.NA_BZPLC
+				   AND C.FHS_ID_NO = A.FHS_ID_NO
+				   AND C.FARM_AMNNO = A.FARM_AMNNO
 			 ) AS FTSNM						/* 농가명 */
 			 , A.BRANDNM					/* 브랜드명 */
 			 , B.BIRTH						/* 생년월일 */
@@ -946,7 +994,7 @@
 			 		WHEN B.MCOW_DSC = '02' THEN '혈통'
 			 		WHEN B.MCOW_DSC = '03' THEN '고등'
 			 		WHEN B.MCOW_DSC = '09' THEN '미등록우'
-			 		ELSE ''
+			 		ELSE '-'
 			 	END AS MCOW_DSC_NM
 			 , ROUND(NVL(B.MATIME, 0)) AS MATIME		/* 산차 */
 			 , ROUND(NVL(A.PRNY_MTCN, 0)) AS PRNY_MTCN	/* 임신개월수 */
@@ -964,7 +1012,7 @@
 			 , A.SRA_PD_RGNNM 				/* 축산생산지역 */
 			 , A.DNA_YN						/* 친자검사결과여부 */
 			 , B.ANW_YN 					/* 신규여부 */
-			 , ROUND(A.COW_SOG_WT) AS COW_SOG_WT	/* 우출하중량 */
+			 , NVL(ROUND(A.COW_SOG_WT),0) AS COW_SOG_WT	/* 우출하중량 */
 			 , ROUND(A.FIR_LOWS_SBID_LMT_AM / 10000) AS FIR_LOWS_SBID_LMT_AM_B		/* 최초최저낙찰한도금액 */
 			 , ROUND(A.LOWS_SBID_LMT_AM / 10000) AS LOWS_SBID_LMT_AM_B				/* 최저낙찰한도금액 */
 			 , A.RMK_CNTN					/* 비고내용 */
@@ -990,6 +1038,11 @@
 					WHEN A.AUC_OBJ_DSC = '3' THEN ROUND(A.SRA_SBID_AM / NVL(C.PPGCOW_AUC_ATDR_UNT_AM, 10000))
 					ELSE ROUND(A.SRA_SBID_AM / 10000)
 				END AS SRA_SBID_AM
+			 , CASE WHEN A.AUC_OBJ_DSC = '1' THEN ROUND(NVL(C.CALF_AUC_ATDR_UNT_AM, 10000))
+					WHEN A.AUC_OBJ_DSC = '2' THEN ROUND(NVL(C.NBFCT_AUC_ATDR_UNT_AM, 1))
+					WHEN A.AUC_OBJ_DSC = '3' THEN ROUND(NVL(C.PPGCOW_AUC_ATDR_UNT_AM, 10000))
+					ELSE ROUND(10000)
+				END AS DIVISION_PRICE
 			 , A.PPGCOW_FEE_DSC
 			 , A.PRNY_YN
 			 , A.LED_SQNO
@@ -1007,7 +1060,7 @@
 		 WHERE A.NA_BZPLC = #{naBzplc}
 		   AND A.AUC_DT = #{aucDt}
 		<if test="aucObjDsc != null and aucObjDsc != ''">
-		   AND A.AUC_OBJ_DSC = #{aucObjDsc}
+		   AND A.AUC_OBJ_DSC = TO_CHAR(#{aucObjDsc})
 		</if>
 		<if test="oslpNo != null and oslpNo != ''">
 		   AND A.OSLP_NO = #{oslpNo}
@@ -1055,6 +1108,9 @@
 															  WHERE NA_BZPLC = #{naBzplc})
 			</when>
 			<when test="regType == 'I'.toString()">
+				<if test ="sraPdmnm != null and sraPdmnm != ''">
+				 	, SRA_PDMNM = #{sraPdmnm}
+				 </if>
 				 , PPGCOW_FEE_DSC = #{ppgcowFeeDsc}
 				 , PRNY_MTCN = #{prnyMtcn}
 				 , RMK_CNTN = #{rmkCntn}
@@ -1062,11 +1118,29 @@
 			</choose>
 			 WHERE NA_BZPLC = #{naBzplc}
 			   AND AUC_DT = #{aucDt}
-			   AND AUC_OBJ_DSC = #{aucObjDsc}
+			   AND AUC_OBJ_DSC = TO_CHAR(#{aucObjDsc})
 			   AND OSLP_NO = #{oslpNo}
 			   AND LED_SQNO = #{ledSqno}
 		</if>
 	</update>
+	
+	<update id="updateNoticeReadCnt" parameterType="map">
+			UPDATE TB_LA_IS_MM_BLBD
+			   SET LSCHG_DTM = SYSDATE
+				 , LS_CMENO = 'SYSTEM'
+				 , BBRD_INQ_CN = NVL(BBRD_INQ_CN,0) +1
+			 WHERE 1=1
+	        	<choose>
+	        		<when test="blbdDsc == '3'.toString()">        		
+	            		AND NA_BZPLC = '0000000000000' 
+	        		</when>
+	        		<otherwise>
+	            		AND NA_BZPLC = #{johpCd} 
+	        		</otherwise>
+	        	</choose>
+			   AND BBRD_SQNO = #{seqNo}
+               AND BLBD_DSC = #{blbdDsc}
+	</update>	
 	
 	<!-- 기등록된 계류대번호 초기화(0) -->
 	<update id="updateCowInfoForModlNo" parameterType="map">

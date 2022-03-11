@@ -24,14 +24,6 @@ $(function() {
 			});
 			$('input[name=aucNum]').focus();
 		}
-		$('.chart').easyPieChart({
-			barColor: '#007eff',
-			trackColor: '#dbdbdb',
-			lineCap: 'round',
-			lineWidth: 18,
-			size: 344,
-			animate: 1000
-		});		
 		
 		$(".seeBox_slick ul.slider").slick({
 			dots: true,

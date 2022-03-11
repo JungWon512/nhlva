@@ -145,11 +145,9 @@
 						let device = devices[i];
 						debugConsole(devices[i]);
 						if (device.kind === 'videoinput') {
-//							debugConsole('video', device.label, device.groupId);
 							cameraList.push({ text: device.label, id: device.deviceId, group : device.groupId });
 						}
 						else if (device.kind === 'audioinput') {
-//							debugConsole('audio', device.label, device.groupId);
 							audioMap.set(device.groupId, { text: device.label, id: device.deviceId });
 						}
 						// else if (device.kind === 'audiooutput') {

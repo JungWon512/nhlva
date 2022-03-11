@@ -18,6 +18,8 @@ logging:
     org.hibernate.type.descriptor.sql.BasicBinder: trace
   config: classpath:config/logback-spring-develop.xml
   file:
+#    name: NHLVA_LOG
+#    path: /logs/nhlva/nhlva
     name: logExample
     path: /home/phps/data/logs
 ---
@@ -31,3 +33,6 @@ logging:
   file:
     name: logExample
     path: /home/phps/data/logs
+#    name: NHLVA_LOG
+#    path: /logs/nhlva/nhlva
+  

@@ -64,6 +64,44 @@
 			
 			reportExcel('구매내역',head,body);
         });
+		
+        $(document).on("click",".btn_printBid", function(){
+			var head = new Array();
+			var body = new Array();
+			$('.bid .list_table .list_head dd').each(function(i){
+				var txt = $(this).text();
+				head.push({text:txt,class:$(this).attr('class')});
+			});
+			$('.bid .list_table .list_body li').each(function(i,obj){
+				var txt = $(this).text();
+				var bodyTr = new Array(); 
+				$(obj).find('dl dd').each(function(i){
+					var txt = $(this).text();
+					bodyTr.push(txt);
+				});
+				body.push(bodyTr);
+			});
+			reportPrint('auction_bid','응찰내역',head,body);
+        });
+        $(document).on("click",".btn_excelBid", function(){
+			var head = new Array();
+			var body = new Array();
+			$('.bid .list_table .list_head dd').each(function(i){
+				var txt = $(this).text();
+				head.push({text:txt,class:$(this).attr('class')});
+			});
+			$('.bid .list_table .list_body li').each(function(i,obj){
+				var txt = $(this).text();
+				var bodyTr = new Array(); 
+				$(obj).find('dl dd').each(function(i){
+					var txt = $(this).text();
+					bodyTr.push(txt);
+				});
+				body.push(bodyTr);
+			});
+			
+			reportExcel('응찰내역',head,body);
+        });
     };
 	var setLayout  = function(){
 		var tabId = $('div.tab_list li a.act').attr('data-tab-id');

@@ -5555,11 +5555,11 @@ Base styles: contents layer
 }
 
 .monitoring-view .table-inner .table-info table td.bg-dark .tit1 {
-	color: #81c4ff
+	color: #008fff
 }
 
 .monitoring-view .table-inner .table-info table td.bg-dark .tit2 {
-	color: #008fff
+	color: #04cf5c
 }
 
 .monitoring-view .table-inner .table-info table td.mt-deep {
@@ -5664,24 +5664,24 @@ Base styles: contents layer
 }
 
 .monitoring-view .table-inner .table-mt .mt-table td.connect {
-	background: #81c4ff
+	/* 	background: #81c4ff */
+	background: #008fff
 }
 
-.monitoring-view .table-inner .table-mt .mt-table td.connect p {
-	color: #111;
-	font-family: "Noto Sans KR", "Roboto", "AppleGothic", "sans-serif";
-	font-weight: 700
-}
-.monitoring-view .table-inner .table-mt .mt-table td.ing p {
+.monitoring-view .table-inner .table-mt .mt-table td.connect p,.monitoring-view .table-inner .table-mt .mt-table td.ing p {
+/* 	color: #111; */
 	color: #fff;
+	font-family: "Noto Sans KR", "Roboto", "AppleGothic", "sans-serif";
 	font-weight: 700
 }
 
 .monitoring-view .table-inner .table-mt .mt-table td.connect.bid {
-	background: #0082e5
+/* 	background: #0082e5 */
+	background: #04cf5c
 }
 
 .monitoring-view .table-inner .table-mt .mt-table td.ing {
+/* 	background: #ffe135 !important */
 	background: #ea0030 !important
 }
 

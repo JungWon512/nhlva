@@ -329,6 +329,17 @@ public interface AuctionService {
 	 * @throws SQLException
 	 */
 	Map<String, Object> selectTotSoldPrice(Map<String, Object> map) throws SQLException;
+	
+	int updateNoticeReadCnt(Map<String, Object> params) throws SQLException;
+
+	/**
+	 * 안드로이드, 아이폰 버전 정보 업데이트
+	 * @param params
+	 * @return
+	 * @throws SQLException
+	 */
+	int updateAppVersion(Map<String, Object> params) throws SQLException;
+
 
 	/**
 	 * 기등록 계류대번호 초기화

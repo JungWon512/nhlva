@@ -119,10 +119,8 @@ var socketStart = function(){
 	if(socket){ socket.connect(); return;}
 	var socketHost = (active == 'production')?"cowauction.kr":(active == 'develop')?"xn--e20bw05b.kr":"xn--e20bw05b.kr";
 	//socketHost += ':'+$('#webPort').val();
-	//socketHost = '192.168.0.23';
 	socketHost += ':9001';
 	socket = io.connect('https://'+socketHost+ '/6005' + '?auctionHouseCode='  + $('#naBzPlc').val(), {secure:true});
-	//socket = io.connect('http://'+socketHost+ '/6005' + '?auctionHouseCode='  + $('#naBzPlc').val());
 
 	socket.on('connect_error', function(e) {
 		debugConsole(e);

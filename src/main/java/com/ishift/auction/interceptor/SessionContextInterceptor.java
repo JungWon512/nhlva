@@ -1,12 +1,10 @@
 package com.ishift.auction.interceptor;
 
-
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.servlet.HandlerInterceptor;
-import org.springframework.web.servlet.ModelAndView;
 
 import com.ishift.auction.service.admin.AdminService;
 import com.ishift.auction.util.Constants;
@@ -31,10 +29,6 @@ public class SessionContextInterceptor implements HandlerInterceptor {
 	private JwtTokenUtil jwtTokenUtil;
 	@Autowired
 	private AdminService adminService;
-	
-
-//    private final JwtAuthTokenProvider jwtAuthTokenProvider;
-//    private static final String AUTHORIZATION_HEADER ="x-auth-token";
 
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
@@ -42,27 +36,28 @@ public class SessionContextInterceptor implements HandlerInterceptor {
     	String place = request.getParameter("place");
     	String watchToken = cookieUtil.getCookieValue(request, "watch_token");
     	
-    	if(place != null && !"".equals(place)) {
-    		
-    		String naBzplc = "";
-    		if (watchToken != null && !"".equals(watchToken)) {
-    			naBzplc = jwtTokenUtil.getValue(watchToken, Constants.JwtConstants.JWT_CLAIM_AUCTION_HOUSE_CODE);
-    		}
-    		
-    		Map<String,Object> map = new HashMap<>();
-    		map.put("naBzPlcNo", place);
-    		final Map<String, Object> johapData = adminService.selectOneJohap(map);
-    		
-    		if (watchToken ==null || "".equals(watchToken) || !naBzplc.equals(johapData.get("NA_BZPLC"))) {
-    			JwtTokenVo jwtTokenVo = JwtTokenVo.builder()
-    					.auctionHouseCode(johapData.get("NA_BZPLC").toString())
-    					.userMemNum("WATCHER")
-    					.userRole(Constants.UserRole.WATCHER)
-    					.build();
-    			String token = jwtTokenUtil.generateToken(jwtTokenVo, Constants.JwtConstants.ACCESS_TOKEN);
-    			Cookie cookie = cookieUtil.createCookie("watch_token", token);
-    			response.addCookie(cookie);    		
-    		}
+			
+    	if(place != null && !"".equals(place)) {			
+            Map<String,Object> map = new HashMap<>();
+            map.put("naBzPlcNo", place);
+            
+        	final Map<String, Object> johapData = adminService.selectOneJohap(map);
+			
+        	String naBzplc = "";
+			if(watchToken !=null && !"".equals(watchToken)){
+				naBzplc = jwtTokenUtil.getValue(watchToken,"auctionHouseCode");				
+			}
+        	if(watchToken ==null || "".equals(watchToken) || !naBzplc.equals(johapData.get("NA_BZPLC"))){
+				JwtTokenVo jwtTokenVo = JwtTokenVo.builder()
+						.auctionHouseCode(johapData.get("NA_BZPLC").toString())
+						.userMemNum("WATCHER")
+						.userRole(Constants.UserRole.WATCHER)
+						.build();
+				String token = jwtTokenUtil.generateToken(jwtTokenVo, Constants.JwtConstants.ACCESS_TOKEN);
+				Cookie cookie = cookieUtil.createCookie("watch_token", token);
+				response.addCookie(cookie);        		
+			}
+
     	}
     	
     	

@@ -22,7 +22,6 @@ var setSocket = function(){
 	//socketHost += ':'+$('#webPort').val();
 	socketHost += ':9001';
 	socket = io.connect('https://'+socketHost+ '/6003' + '?auctionHouseCode='  + $('#naBzPlc').val(), {secure:true});
-	//socket = io.connect('http://192.168.0.23:9001'+ '/6003' + '?auctionHouseCode='  + $('#naBzPlc').val());
 
 	socket.on('connect_error', socketDisconnect);	
 	socket.on('connect', connectHandler);	
@@ -272,7 +271,7 @@ var fnReloadView = function(rgSqno,aucObjDsc){
 						sHtml += "		<dd class='name'>"+ (vo.FTSNM?vo.FTSNM.substring(0,3):'') +"</dd>";
 						sHtml += "		<dd class='pd_ea'> "+vo.SRA_INDV_AMNNO_FORMAT +"</dd>";
 						sHtml += "		<dd class='pd_sex'> "+vo.INDV_SEX_C_NAME +"</dd>";
-						sHtml += "		<dd class='pd_kg'> "+((vo.COW_SOG_WT == '' || vo.COW_SOG_WT == null || vo.COW_SOG_WT <= 0 ) ? '0' : vo.COW_SOG_WT) +"</dd>";
+						sHtml += "		<dd class='pd_kg'> "+fnSetComma(((vo.COW_SOG_WT == '' || vo.COW_SOG_WT == null || vo.COW_SOG_WT <= 0 ) ? '0' : vo.COW_SOG_WT)) +"</dd>";
 						sHtml += "		<dd class='pd_kpn'> "+vo.KPN_NO_STR +"</dd>";
 						sHtml += "		<dd class='pd_pay1'>"+fnSetComma((vo.LOWS_SBID_LMT_AM == '' || vo.LOWS_SBID_LMT_AM == null || vo.LOWS_SBID_LMT_AM <= 0 ) ? '-' : vo.LOWS_SBID_LMT_AM <= 0 ? '0' : vo.LOWS_SBID_LMT_UPR)+"</dd>";
 						sHtml += "		<dd class='pd_pay2'>"+fnSetComma((vo.SRA_SBID_UPR == '' || vo.SRA_SBID_UPR == null || vo.SRA_SBID_UPR <= 0 ) ? '-' : vo.SRA_SBID_UPR <= 0 ? '0' : vo.SRA_SBID_UPR)+"</dd>";

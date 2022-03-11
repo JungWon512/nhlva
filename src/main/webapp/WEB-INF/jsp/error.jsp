@@ -12,7 +12,7 @@
 	<meta name="viewport" content="width=device-width,initial-scale=1.0,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no">
 	<meta name="HandheldFriendly" content="true" />
 	<meta name="apple-mobile-web-app-capable" content="yes">
-	<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Poppins:300,400,500,600,700" />
+<!-- 	<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Poppins:300,400,500,600,700" /> -->
 	<link rel="stylesheet" type="text/css" href="/static/css/guide/common.css">
 <!-- 	<link rel="stylesheet" type="text/css" href="/static/css/guide/jquery-ui.css"> -->
 	<link rel="stylesheet" type="text/css" href="/static/css/guide/popup.css">
@@ -51,7 +51,14 @@
 				</h2>
 				<p class="txt1">페이지를 찾을 수 없습니다.</p>
 				<p class="txt2">입력하신 인터넷 주소(URL) 또는 <br>경로를 다시 한 번 확인해주시기 바랍니다.</p>
+				<c:choose>
+			<c:when test="${fn:indexOf(path, '/office') > -1}">
+				<a href="javascript:pageMove('/office/main');">메인으로</a>
+			</c:when>
+			<c:otherwise>
 				<a href="javascript:pageMove('/home');">가축시장 홈</a>
+			</c:otherwise>
+			</c:choose>
 			</div>
 		</div>
 	</div>

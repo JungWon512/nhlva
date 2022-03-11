@@ -10,6 +10,7 @@ import java.util.Random;
 
 import javax.annotation.Resource;
 
+import org.codehaus.jettison.json.JSONException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
@@ -21,6 +22,9 @@ import com.ishift.auction.util.HttpUtils;
 import com.ishift.auction.util.JwtTokenUtil;
 import com.ishift.auction.vo.JwtTokenVo;
 
+import lombok.extern.slf4j.Slf4j;
+
+@Slf4j
 @Service("LoginService")
 public class LoginServiceImpl implements LoginService {
 
@@ -34,10 +38,10 @@ public class LoginServiceImpl implements LoginService {
 	private JwtTokenUtil jwtTokenUtil;
 	
 	@Autowired
-	private AdminService adminService;
+	private HttpUtils httpUtils;
 	
 	@Autowired
-	private HttpUtils httpUtils;
+	private AdminService adminService;
 	
 	@Value("${spring.profiles.active}")
 	private String profile;
@@ -207,15 +211,34 @@ public class LoginServiceImpl implements LoginService {
 		sb.append("경매참가 인증번호 [").append(smsNo).append("] 입니다.");
 		params.put("smsFwdgCntn", sb.toString());
 		
-//		if (httpUtils.sendPost("http://192.168.97.141:18211/http/lvaca-fmec", "")) {
+		try {
+			
+	        String recvMsg = httpUtils.sendPostJson(params);
+	        log.info("recvMsg : "+recvMsg);
+	        Map<String, Object> map = new HashMap<String, Object>();
+	        //받은메시지를 map에 담기
+	        if(recvMsg.length()>0) {
+	        	try {
+	                map = httpUtils.getMapFromJsonObject(recvMsg);              
+	        	}catch (JSONException e) {
+					map = null;
+				}
+	        }
+	        if(map != null) {
+	            params.put("tmsYn", map.getOrDefault("RZTC","0"));
+	    		
 			loginDAO.sendSms(params);
 			returnMap.put("success", true);
 			returnMap.put("message", "인증번호 발송에 성공했습니다.");
-//		}
-//		else {
-//			returnMap.put("success", false);
-//			returnMap.put("message", "인증번호 발송에 실패했습니다.");
-//		}
+	        }else {
+	    		returnMap.put("success", false);
+	    		returnMap.put("message", "인증번호 발송에 실패했습니다.");        	
+		}
+		} catch (Exception e1) {
+    		returnMap.put("success", false);
+    		returnMap.put("message", "인증번호 발송에 실패했습니다.");      
+		}
+		
 		if (!"production".equals(profile)) {
 			returnMap.put("smsNo", smsNo);
 		}

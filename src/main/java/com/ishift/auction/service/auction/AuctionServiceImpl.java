@@ -634,11 +634,11 @@ public class AuctionServiceImpl implements AuctionService {
 						feeAmt = 0L;
 					}
 					// 괴사감정 수수료인 경우 NCSS_JUG_YN(괴사감정여부)가 0일 때는 수수료를 부과하지 않는다
-					if ("040".equals(feeInfo.get("NA_FEE_C")) && "1".equals(info.get("NCSS_JUG_YN"))) {
+					if ("050".equals(feeInfo.get("NA_FEE_C")) && !("1".equals(info.get("NCSS_JUG_YN")) && "1".equals(info.get("NCSS_YN")))) {
 						feeAmt = 0L;
 					}
 					// 제각수수료인 경우 경우 RMHN_YN(제각여부)가 0일 때는 수수료를 부과하지 않는다
-					if ("040".equals(feeInfo.get("NA_FEE_C")) && "1".equals(info.get("TRPCS_PY_YN"))) {
+					if ("110".equals(feeInfo.get("NA_FEE_C")) && "0".equals(info.get("RMHN_YN"))) {
 						feeAmt = 0L;
 					}
 				}
@@ -898,17 +898,16 @@ public class AuctionServiceImpl implements AuctionService {
 						if ("040".equals(feeInfo.get("NA_FEE_C")) && "1".equals(info.get("TRPCS_PY_YN"))) {
 							feeAmt = 0L;
 						}
-						
 						// 임신감정 수수료인 경우 PRNY_JUG_YN(임신감정여부)가 0일 때는 수수료를 부과하지 않는다
 						if ("060".equals(feeInfo.get("NA_FEE_C")) && "0".equals(info.get("PRNY_JUG_YN"))) {
 							feeAmt = 0L;
 						}
 						// 괴사감정 수수료인 경우 NCSS_JUG_YN(괴사감정여부)가 0일 때는 수수료를 부과하지 않는다
-						if ("040".equals(feeInfo.get("NA_FEE_C")) && "1".equals(info.get("NCSS_JUG_YN"))) {
+						if ("050".equals(feeInfo.get("NA_FEE_C")) && !("1".equals(info.get("NCSS_JUG_YN")) && "1".equals(info.get("NCSS_YN")))) {
 							feeAmt = 0L;
 						}
 						// 제각수수료인 경우 경우 RMHN_YN(제각여부)가 0일 때는 수수료를 부과하지 않는다
-						if ("040".equals(feeInfo.get("NA_FEE_C")) && "1".equals(info.get("TRPCS_PY_YN"))) {
+						if ("110".equals(feeInfo.get("NA_FEE_C")) && "0".equals(info.get("RMHN_YN"))) {
 							feeAmt = 0L;
 						}
 					}
@@ -1012,6 +1011,22 @@ public class AuctionServiceImpl implements AuctionService {
 	public List<Map<String, Object>> selectCowList(Map<String, Object> params) throws SQLException {
 		return auctionDAO.selectCowList(params);
 	}
+	@Override
+	public int updateNoticeReadCnt(Map<String, Object> params) throws SQLException{
+		return auctionDAO.updateNoticeReadCnt(params);
+	}
+
+	/**
+	 * 안드로이드, 아이폰 버전 정보 업데이트
+	 * @param params
+	 * @return
+	 * @throws SQLException
+	 */
+	@Override
+	public int updateAppVersion(Map<String, Object> params) throws SQLException {
+		return auctionDAO.updateAppVersion(params);
+	}
+	
 	@Override
 	public int updateCowInfoForModlNo(Map<String, Object> params) throws SQLException{
 		return auctionDAO.updateCowInfoForModlNo(params);

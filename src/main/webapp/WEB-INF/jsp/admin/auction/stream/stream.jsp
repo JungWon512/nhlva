@@ -20,7 +20,7 @@
 	</colgroup>
 	<tbody>
 		<tr>
-			<td class="seller">
+			<td class="seller val">
 				<p class="fz40">${johapData.CLNTNM}</p>
 			</td>
 			<td colspan="2" rowspan="2">

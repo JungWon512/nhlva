@@ -1,5 +1,14 @@
 package com.ishift.auction.web;
 
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
+import java.net.HttpURLConnection;
+import java.net.URL;
+import java.security.KeyPair;
+import java.security.KeyPairGenerator;
+import java.security.NoSuchAlgorithmException;
+import java.security.PrivateKey;
+import java.security.PublicKey;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -14,9 +23,12 @@ import com.ishift.auction.configuration.security.token.AdminUserAuthenticationTo
 import com.ishift.auction.service.auction.AuctionService;
 import com.ishift.auction.service.login.LoginService;
 import com.ishift.auction.util.Constants;
+import com.ishift.auction.util.HttpUtils;
 import com.ishift.auction.util.JsonUtils;
 import com.ishift.auction.util.JwtTokenUtil;
 import com.ishift.auction.util.SessionUtill;
+import com.ishift.auction.util.RSACriptoConfig;
+import com.ishift.auction.vo.AdminJwtTokenVo;
 import com.ishift.auction.vo.AdminUserDetails;
 import com.ishift.auction.vo.JwtTokenVo;
 
@@ -33,6 +45,7 @@ import org.springframework.http.MediaType;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -62,10 +75,17 @@ public class ApiController {
 	private JwtTokenUtil jwtTokenUtil;
 
 	@Autowired
-	SessionUtill sessionUtill;
+	private AuthenticationManager authenticationManager;
+	@Autowired
+	private PasswordEncoder passwordEncoder;
 	
 	@Autowired
-	private AuthenticationManager authenticationManager;
+	private RSACriptoConfig rsaCriptoConfig;
+	
+	@Autowired
+	SessionUtill sessionUtill;
+	@Autowired
+	HttpUtils httpUtils;
 	
 	@Value("${spring.profiles.active}")
 	private String profile;
@@ -255,11 +275,12 @@ public class ApiController {
 			final Map<String, Object> params = new HashMap<String, Object>();
 			params.put("naBzplc", naBzplc);
 			params.put("searchDate", searchDate);
+			params.put("aucObjDsc", aucObjDsc);
 
 			// 일괄경매인 경우 구간정보 조회 추가
 			if ("10".equals(aucDsc)) {
-				params.put("aucObjDsc", aucObjDsc);
 				params.put("rgSqno", rgSqno);
+				params.put("aucDt", searchDate);
 				final Map<String, Object> map = auctionService.selectAuctStn(params);
 				if (map != null) {
 					params.put("stAucNo", map.get("ST_AUC_NO"));
@@ -359,11 +380,24 @@ public class ApiController {
 			
 			if (adminUserDetails != null) {
 				SecurityContextHolder.getContext().setAuthentication(authentication);
-				final JwtTokenVo jwtTokenVo = JwtTokenVo.builder()
-														.userMemNum(adminUserDetails.getUsrid())
-														.auctionHouseCode(adminUserDetails.getNaBzplc())
-														.userRole(Constants.UserRole.ADMIN)
-														.build();
+//				final JwtTokenVo jwtTokenVo = JwtTokenVo.builder()
+//														.userMemNum(adminUserDetails.getUsrid())
+//														.auctionHouseCode(adminUserDetails.getNaBzplc())
+//														.userRole(Constants.UserRole.ADMIN)
+//														.build();
+				final AdminJwtTokenVo jwtTokenVo = AdminJwtTokenVo.builder()
+						.userMemNum(adminUserDetails.getUsername())
+						.auctionHouseCode(adminUserDetails.getNaBzplc())
+						.userRole(Constants.UserRole.ADMIN)
+						.userId(adminUserDetails.getUsername())
+						.password(passwordEncoder.encode(adminUserDetails.getUsername()))
+						.eno(adminUserDetails.getEno())
+						.userCusName(adminUserDetails.getUsrnm())
+						.na_bzplc(adminUserDetails.getNaBzplc())
+						.security("security")
+						.na_bzplnm(adminUserDetails.getNaBzplNm())
+						.grp_c(adminUserDetails.getGrpC())
+						.build();
 				
 				token = jwtTokenUtil.generateToken(jwtTokenVo, Constants.JwtConstants.ACCESS_TOKEN);
 				result.put("accessToken", token);
@@ -379,9 +413,9 @@ public class ApiController {
 			}
 			
 		}catch (RuntimeException re) {
-			log.error("ApiController.auctionEntry : {} ",re);
+			log.error("ApiController.authLoginForJson : {} ", re);
 			result.put("success", false);
-			result.put("message", re.getMessage());
+			result.put("message", "작업중 오류가 발생했습니다. 관리자에게 문의하세요.");
 			return result;
 		}
 	}
@@ -414,10 +448,23 @@ public class ApiController {
 
 			if (adminUserDetails != null) {
 				SecurityContextHolder.getContext().setAuthentication(authentication);
-				final JwtTokenVo jwtTokenVo = JwtTokenVo.builder()
-						.userMemNum(adminUserDetails.getUsrid())
+//				final JwtTokenVo jwtTokenVo = JwtTokenVo.builder()
+//						.userMemNum(adminUserDetails.getUsrid())
+//						.auctionHouseCode(adminUserDetails.getNaBzplc())
+//						.userRole(Constants.UserRole.ADMIN)
+//						.build();
+				final AdminJwtTokenVo jwtTokenVo = AdminJwtTokenVo.builder()
+						.userMemNum(adminUserDetails.getUsername())
 						.auctionHouseCode(adminUserDetails.getNaBzplc())
 						.userRole(Constants.UserRole.ADMIN)
+						.userId(adminUserDetails.getUsername())
+						.password(passwordEncoder.encode(adminUserDetails.getUsername()))
+						.eno(adminUserDetails.getEno())
+						.userCusName(adminUserDetails.getUsrnm())
+						.na_bzplc(adminUserDetails.getNaBzplc())
+						.security("security")
+						.na_bzplnm(adminUserDetails.getNaBzplNm())
+						.grp_c(adminUserDetails.getGrpC())
 						.build();
 				
 				token = jwtTokenUtil.generateToken(jwtTokenVo, Constants.JwtConstants.ACCESS_TOKEN);
@@ -436,7 +483,7 @@ public class ApiController {
 		}catch (RuntimeException re) {
 			log.debug("ApiController.authLoginForForm : {} ",re);
 			result.put("success", false);
-			result.put("message", re.getMessage());
+			result.put("message", "작업중 오류가 발생했습니다. 관리자에게 문의하세요.");
 			return result;
 		}
 	}
@@ -1650,7 +1697,6 @@ public class ApiController {
 		try {			
 			params.put("naBzplc", naBzplc);
 			params.put("aucDt", params.get("date"));
-//			params.put("selStsDsc", "21");	// api request parameter에 rgSqno 포함되어있어 처리 불필요 
 			
 			Map<String, Object> map = auctionService.selectAuctStn(params);
 			if (map == null) {
@@ -1680,4 +1726,247 @@ public class ApiController {
 		return result;
 	}
 	
+	/**
+	 * 조합 직원 로그인 api
+	 * @param version > api 버전
+	 * @param naBzplc > 조합코드
+	 * @param params > 로그인 정보
+	 * @return access_token
+	 */
+	@ResponseBody
+	@PostMapping(value = "/api/{version}/auth/rsa"
+				, consumes = MediaType.APPLICATION_FORM_URLENCODED_VALUE
+				, produces = MediaType.APPLICATION_JSON_VALUE)
+	Map<String, Object> authRsaKey(@PathVariable(name = "version") final String version
+										, @RequestParam final Map<String, Object> params
+										,@Value("${cript.key}")String iv
+										,@Value("${cript.iv}")String key) {
+
+		final Map<String, Object> result = new HashMap<String, Object>();
+		
+		try {
+			KeyPairGenerator generator = KeyPairGenerator.getInstance("RSA");
+			generator.initialize(2048);
+			KeyPair keyPair = generator.generateKeyPair();			
+			PublicKey publicKey   = keyPair.getPublic();
+			PrivateKey privateKey = keyPair.getPrivate();
+			
+			result.put("privateKey", new String(rsaCriptoConfig.byteArrayToHex(privateKey.getEncoded())));
+			result.put("publicKey", new String(rsaCriptoConfig.byteArrayToHex(publicKey.getEncoded())));
+			
+		}catch (RuntimeException re) {
+			log.debug("ApiController.authRsaKey : {} ",re);
+			result.put("success", false);
+			result.put("message", re.getMessage());
+			return result;
+		} catch (NoSuchAlgorithmException nsae) {
+			log.error("ApiController.authRsaKey : {} ",nsae);
+			result.put("success", false);
+			result.put("message", nsae.getMessage());
+			return result;
+		} 
+		return result;
+	}
+
+	@ResponseBody
+	@PostMapping(value = "/api/{version}/auth/enc"
+				, consumes = MediaType.APPLICATION_FORM_URLENCODED_VALUE
+				, produces = MediaType.APPLICATION_JSON_VALUE)
+	Map<String, Object> authRsaKeyEnc(@PathVariable(name = "version") final String version
+										, @RequestParam final Map<String, Object> params) {
+
+		final Map<String, Object> result = new HashMap<String, Object>();
+		
+		try {
+			String plainText = params.getOrDefault("text", "").toString();
+			String strPublicKey = params.getOrDefault("publicKey", "").toString();
+			PublicKey publicKey = rsaCriptoConfig.StringToPublicKey(strPublicKey);
+
+			String encText = rsaCriptoConfig.encryptRsa(plainText, publicKey);
+			result.put("encText", encText);
+		}catch (RuntimeException re) {
+			log.debug("ApiController.authRsaKey : {} ",re);
+			result.put("success", false);
+			result.put("message", re.getMessage());
+			return result;
+		} 
+		return result;
+	}
+	
+	/**
+	 * 조합 직원 로그인 api
+	 * @param version > api 버전
+	 * @param naBzplc > 조합코드
+	 * @param params > 로그인 정보
+	 * @return access_token
+	 */
+	@ResponseBody
+	@PostMapping(value = "/api/{version}/auth/rsaLogin"
+				, consumes = MediaType.APPLICATION_FORM_URLENCODED_VALUE
+				, produces = MediaType.APPLICATION_JSON_VALUE)
+	Map<String, Object> authLoginForFormRsa(@PathVariable(name = "version") final String version
+										, @RequestParam final Map<String, Object> params) {
+
+		final Map<String, Object> result = new HashMap<String, Object>();
+		String token = "";
+		
+		try {
+			String usrid = params.getOrDefault("usrid", "").toString();
+			String pw = params.getOrDefault("pw", "").toString();
+			PrivateKey privateKey = rsaCriptoConfig.StringToPrivateKey(params.getOrDefault("RSAKEY","").toString());
+			String decUsrId = rsaCriptoConfig.decryptRsa(privateKey, usrid);
+			String decPw = rsaCriptoConfig.decryptRsa(privateKey, pw);
+			final Authentication authentication = authenticationManager.authenticate(
+					new AdminUserAuthenticationToken(
+							decUsrId
+							, decPw
+							, null));
+
+			final AdminUserDetails adminUserDetails = (AdminUserDetails)authentication.getPrincipal();
+
+			if (adminUserDetails != null) {
+				SecurityContextHolder.getContext().setAuthentication(authentication);
+//				final JwtTokenVo jwtTokenVo = JwtTokenVo.builder()
+//						.userMemNum(adminUserDetails.getUsrid())
+//						.auctionHouseCode(adminUserDetails.getNaBzplc())
+//						.userRole(Constants.UserRole.ADMIN)
+//						.build();
+				final AdminJwtTokenVo jwtTokenVo = AdminJwtTokenVo.builder()
+						.userMemNum(adminUserDetails.getUsername())
+						.auctionHouseCode(adminUserDetails.getNaBzplc())
+						.userRole(Constants.UserRole.ADMIN)
+						.userId(adminUserDetails.getUsername())
+						.password(passwordEncoder.encode(adminUserDetails.getUsername()))
+						.eno(adminUserDetails.getEno())
+						.userCusName(adminUserDetails.getUsrnm())
+						.na_bzplc(adminUserDetails.getNaBzplc())
+						.security("security")
+						.na_bzplnm(adminUserDetails.getNaBzplNm())
+						.grp_c(adminUserDetails.getGrpC())
+						.build();
+				
+				token = jwtTokenUtil.generateToken(jwtTokenVo, Constants.JwtConstants.ACCESS_TOKEN);
+				result.put("naBzplc", adminUserDetails.getNaBzplc());
+				result.put("accessToken", token);
+				result.put("success", true);
+				result.put("message", "토큰 발급 성공했습니다.");
+				return result;
+			}
+			else {
+				result.put("message", "입력하신 정보가 없습니다.");
+				result.put("success", false);
+				return result;
+			}
+			
+		}catch (RuntimeException re) {
+			log.debug("ApiController.authLoginForForm : {} ",re);
+			result.put("success", false);
+			result.put("message", re.getMessage());
+			return result;
+		}
+	}
+	
+	/**
+	 * 안드로이드, 아이폰 버전 정보 업데이트
+	 * @param params
+	 * @return
+	 */
+	@ResponseBody
+	@PostMapping(value = "/api/{version}/biz/app/version"
+				, consumes = MediaType.APPLICATION_JSON_VALUE
+				, produces = MediaType.APPLICATION_JSON_VALUE)
+	public Map<String, Object> updateVersion(@RequestBody Map<String, Object> params) {
+		final Map<String, Object> result = new HashMap<String, Object>();
+		try {
+			if (params.get("osType") == null
+			|| (params.get("minVersion") == null && params.get("maxVersion") == null)
+			|| params.get("appVersionId") == null) {
+				result.put("success", false);
+				result.put("message", "업데이트 정보를 확인하세요.");
+			}
+			
+			int cnt = auctionService.updateAppVersion(params);
+			if (cnt > 0) {
+				result.put("success", true);
+				result.put("message", "정상적으로 변경되었습니다.");
+			}
+			else {
+				result.put("success", false);
+				result.put("message", "변경된 정보가 없습니다.");
+			}
+		}
+		catch (SQLException | RuntimeException e) {
+			log.error(e.getMessage());
+			result.put("success", false);
+			result.put("message", "작업중 오류가 발생했습니다. 관리자에게 문의하세요.");
+			return result;
+		}
+		return result;
+	}
+
+	@PostMapping(value = "/api/v1/biz/smsTest", produces = MediaType.APPLICATION_JSON_VALUE)
+	public Map<String, Object> smsTest(@RequestBody final Map<String, Object> param) {
+		Map<String, Object> result = new HashMap<String, Object>();		
+
+        String jsonValue = httpUtils.setJsonData(param);
+        HttpURLConnection con = null;
+    	result.put("jsonValue", jsonValue);
+        try {
+        	URL url = new URL("http://192.168.97.141:18211/http/lvaca-fmec");
+            con = (HttpURLConnection) url.openConnection();
+            log.debug("REST API START");
+            
+            byte[] sendData = jsonValue.getBytes("UTF-8");
+
+            con.setDoOutput(true);
+            con.setRequestMethod("POST");
+            con.setRequestProperty("Cache-Control", "no-cache");
+            con.setRequestProperty("Pragma", "no-cache");
+            con.setRequestProperty("Content-Type", "application/json");
+            con.setRequestProperty("Accept-Charset", "UTF-8");
+            con.setRequestProperty("Content-Length", String.valueOf(sendData.length));
+            con.setConnectTimeout(5000);//서버 접속시 연결시간
+            con.setReadTimeout(30000);//Read시 연결시간
+            con.getOutputStream().write(sendData);
+            con.getOutputStream().flush();
+            con.connect();
+
+            int responseCode = con.getResponseCode();
+            String responseMessage = con.getResponseMessage();
+
+            log.debug("REST API responseCode : " + responseCode);
+            log.debug("REST API responseMessage : " + responseMessage);
+            log.debug("REST API Error Stream : " + con.getErrorStream());
+        	result.put("responseCode", responseCode);
+        	result.put("responseMessage", responseMessage);
+        	result.put("responseError", con.getErrorStream());
+            
+            if(con.getResponseCode() == 301 || con.getResponseCode() == 302 || con.getResponseCode() == 307) // 300번대 응답은 redirect
+            {
+            }else {
+                StringBuffer sb = new StringBuffer();
+                BufferedReader reader = new BufferedReader(new InputStreamReader(con.getInputStream(), "UTF-8"));
+                for(String line; (line = reader.readLine()) != null; )
+                {
+                    sb.append(line).append("\n");
+                }                
+            	result.put("result", sb.toString());
+            }
+            
+            con.disconnect();
+            
+            log.debug("REST API END"); 
+            
+        } catch (RuntimeException e) {
+        	log.error("",e);
+        	result.put("error", e.getMessage());
+        } catch (Exception e) {
+        	log.error("",e);
+        	result.put("error", e.getMessage());
+        } finally {
+            if (con!= null) con.disconnect();
+        }
+		
+		return result;
+	}
 }

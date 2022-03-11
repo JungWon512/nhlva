@@ -15,7 +15,6 @@ import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 import org.springframework.web.context.support.WebApplicationContextUtils;
 
-import java.io.IOException;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
@@ -53,7 +52,6 @@ public class VisitSessionListenner implements HttpSessionListener{
 	        vo.put("visit_ip", ip);
 	        vo.put("visit_refer", req.getHeader("referer"));
 	        vo.put("visit_agent", req.getHeader("User-Agent"));
-	        //System.out.println(vo);
 	        SqlSessionTemplate sqlSession = getSessionService(http);
 	        sqlSession.insert("LoginMapper.insertVisitor",vo);
 		}catch (RuntimeException re) {

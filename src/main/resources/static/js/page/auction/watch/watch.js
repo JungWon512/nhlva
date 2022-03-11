@@ -3,7 +3,7 @@ $(function() {
     var setLayout = function() {		
 		$(".seeBox_slick ul.slider").slick({
 			dots: true
-//			adaptiveHeight: true
+			//,adaptiveHeight: true
 		});
 		$('.m_sound').removeClass('fix_right');
 		$('.m_sound').addClass('off');
@@ -40,11 +40,11 @@ $(function() {
 				$('.boarder ul li dd.auctionNum').text($(this).find('dd.aucPrgSq').text());
 				$('.boarder ul li dd.ftsnm').html($(this).find('dd.ftsnm').text());
 				$('.boarder ul li dd.sex').text($(this).find('dd.indvSexC').text());
-				$('.boarder ul li dd.cowSogWt').text($(this).find('dd.cowSogWt').text());
+				$('.boarder ul li dd.cowSogWt').text(fnSetComma($(this).find('dd.cowSogWt').text()));
 				$('.boarder ul li dd.matime').text($(this).find('input.matime').val());	//산차
 				$('.boarder ul li dd.sraIndvPasgQcn').text($(this).find('dd.sraIndvPasgQcn').text());
 				$('.boarder ul li dd.mcowDsc').text($(this).find('input.mcowDsc').val());	//어미
-				$('.boarder ul li dd.lowsSbidLmtAm').text($(this).find('dd.lowsSbidLmtAm').text());
+				$('.boarder ul li dd.lowsSbidLmtAm').text(fnSetComma($(this).find('dd.lowsSbidLmtAm').text()));
 				$('.boarder ul li dd.kpnNo').text($(this).find('dd.kpnNo').text());
 				$('.boarder ul li dd.rmkCntn p').text($(this).find('dd.rmkCntn').text());
 			});
@@ -53,12 +53,22 @@ $(function() {
 
     var setBinding = function() {
 		$(".m_sound").on('click', function(e){
-			if($('video[id^=remoteVideo]').get(0)){
+			if(joinChk && $('video[id^=remoteVideo]').get(0)){
 				var mute = $('video[id^=remoteVideo]').get(0).muted;
 				$('video[id^=remoteVideo]').get(0).muted = !mute;
 				if(!$(this).get(0).paused) $('video[id^=remoteVideo]').get(0).play();
 				else $('video[id^=remoteVideo]').get(0).pause();
+			}else{
+				setRemonJoinRemote(1,function(){
+					if($('video[id^=remoteVideo]').get(0)){
+						var mute = $('video[id^=remoteVideo]').get(0).muted;
+						$('video[id^=remoteVideo]').get(0).muted = !mute;
+						if(!$(this).get(0).paused) $('video[id^=remoteVideo]').get(0).play();
+						else $('video[id^=remoteVideo]').get(0).pause();
+					}
+				});
 			}
+			
 			$(".m_sound").toggleClass('off');
 		});
 		
@@ -165,7 +175,7 @@ var messageHandler = function(data) {
 			if(!auctionConfig.asData) auctionConfig.asData = {};
 			var tmpAsDAta = { 
 				aucPrgSq: dataArr[2]
-				, selSts: dataArr[5]
+				, selSts: dataArr[6]
 				, lowsSbidLmtAm: dataArr[4]
 			};							
 
@@ -173,7 +183,7 @@ var messageHandler = function(data) {
 			auctionConfig.asData.curAucSeq = dataArr[2];
 			
 			var tr = getTrRow(auctionConfig.asData.curAucSeq);
-			tr.find('dl dd.lowsSbidLmtAm').text(fnSetComma(Math.round(tmpAsDAta.lowsSbidLmtAm)+''));
+			tr.find('dl dd.lowsSbidLmtAm').text(fnSetComma(Math.round(tmpAsDAta.lowsSbidLmtAm))+'');
 			if($('#aucDsc').val() == '2' && tmpAsDAta.selSts=='8006'){
 				location.reload();
 			};
@@ -344,7 +354,9 @@ var setLoopChDraw = function(castList){
 	}
 };
 var remoteVideoArr = {};
+var joinChk = false;
 var setLoopChJoinInIn = function(cast,i){
+	joinChk = true;
 	var id = '#remoteVideo'+(i);
 	var castName = cast.name;
 	

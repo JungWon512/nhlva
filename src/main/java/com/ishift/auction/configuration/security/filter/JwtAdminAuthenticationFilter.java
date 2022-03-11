@@ -63,7 +63,8 @@ public class JwtAdminAuthenticationFilter extends OncePerRequestFilter {
 						: cookieAccessToken;
 				
 				if (jwtTokenUtil.isValidToken(accessToken)) {
-					UserDetails user = adminUserDateilsService.loadUserByUsername(jwtTokenUtil.getValue(accessToken, Constants.JwtConstants.JWT_CLAIM_USER_MEM_NUM));
+					UserDetails user = adminUserDateilsService.loadUserByUsername(jwtTokenUtil.getValue(accessToken, Constants.JwtConstants.JWT_CLAIM_USER_ID));
+//					UserDetails user = adminUserDateilsService.loadUserByUsername(jwtTokenUtil.getValue(accessToken, Constants.JwtConstants.JWT_CLAIM_USER_MEM_NUM));
 					UsernamePasswordAuthenticationToken auth = new UsernamePasswordAuthenticationToken(user, "", user.getAuthorities());
 					auth.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
 					SecurityContextHolder.getContext().setAuthentication(auth);

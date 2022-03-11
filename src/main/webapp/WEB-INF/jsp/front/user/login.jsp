@@ -36,7 +36,7 @@
 		<input type="hidden" name="token" value="" />
 		
 		<div class="login_top" id="login_sms_auth" style="display:none;">
-			<h3>무진장 축협</h3>
+			<h3>${johapData.CLNTNM }</h3>
 			<dl>
 				<dd>
 					<div class="authentication_number">

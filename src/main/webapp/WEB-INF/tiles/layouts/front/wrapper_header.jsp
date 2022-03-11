@@ -78,7 +78,7 @@
                                     <!--begin::Header Nav-->
                                     <ul class="menu-nav">
                                         <li class="mb-3">
-                                            <a href="javascript:goAuctionApp();"><p class="font-size-h4 font-weight-boldest color-000000"
+                                            <a href="javascript:pageMove('/watch');"><p class="font-size-h4 font-weight-boldest color-000000"
                                                                 style="display:inline;">경매 관전</p></a>
                                         </li>
                                         <li class="mb-3">

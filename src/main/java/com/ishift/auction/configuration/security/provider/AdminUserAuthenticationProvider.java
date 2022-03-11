@@ -1,6 +1,7 @@
 package com.ishift.auction.configuration.security.provider;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.InternalAuthenticationServiceException;
@@ -29,6 +30,9 @@ public class AdminUserAuthenticationProvider implements AuthenticationProvider {
 	
 	@Autowired
 	private PasswordEncoder passwordEncoder;
+	
+	@Value("${spring.profiles.service-name:nhlva}")
+	private String serviceName;
 
 	@Override
 	public Authentication authenticate(Authentication authentication) throws AuthenticationException {
@@ -44,18 +48,27 @@ public class AdminUserAuthenticationProvider implements AuthenticationProvider {
 		if (authentication.getCredentials() == null || "".equals(authentication.getCredentials())) {
 			throw new BadCredentialsException("패스워드를 입력해주세요.");
 		}
+		
+		AdminUserDetails adminUserDetails = null;
 
-		final AdminUserDetails adminUserDetails = (AdminUserDetails)adminUserDetailsService.loadUserByUsername(authentication.getName());
-		final String password = authentication.getCredentials() == null ? "" : authentication.getCredentials().toString();		
-//		final AdminUserDetails adminUserDetails = (AdminUserDetails)adminUserDetailsService.loadUserByUsername(authentication.getName(),password);
-		
-		if (adminUserDetails == null) {
-			throw new InternalAuthenticationServiceException("아이디 또는 패스워드를 확인해주세요.");
+		final String password = authentication.getCredentials() == null ? "" : authentication.getCredentials().toString();
+		if ("tibero".equals(serviceName)) {
+			adminUserDetails = (AdminUserDetails)adminUserDetailsService.loadUserByUsername(authentication.getName());
+
+			if (adminUserDetails == null) {
+				throw new InternalAuthenticationServiceException("아이디 또는 패스워드를 확인해주세요.");
+			}
+
+			log.debug("encode pw : {}", passwordEncoder.encode(password));
+			if (!passwordEncoder.matches(password, adminUserDetails.getPw())) {
+				throw new BadCredentialsException("아이디 또는 패스워드를 확인해주세요.");
+			}
 		}
-		
-		log.debug("encode pw : {}", passwordEncoder.encode(password));
-		if (!passwordEncoder.matches(password, adminUserDetails.getPw())) {
-			throw new BadCredentialsException("아이디 또는 패스워드를 확인해주세요.");
+		else {
+			adminUserDetails = (AdminUserDetails)adminUserDetailsService.loadUserByUsername(authentication.getName(),password);
+			if (adminUserDetails == null) {
+				throw new InternalAuthenticationServiceException("아이디 또는 패스워드를 확인해주세요.");
+			}
 		}
 		
 		// 인증 완료된 토큰을 리턴한다.

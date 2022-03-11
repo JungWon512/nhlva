@@ -31,9 +31,18 @@
 			// 로그인 버튼
 			$(document).on('click', ".action-submit", function(e){
 				e.preventDefault();
+		    	var rsa = new RSAKey();    	
+		    	rsa.setPublic($("#RSAModulus").val(), $("#RSAExponent").val());
+		    	var user_id = rsa.encrypt($("#usrid").val());
+		    	var user_pw = rsa.encrypt($("#pw").val());
+				var param = $("input").serializeObject();
+				param.rsaKey = $('#RSAKey').val();
+				param.usrid = user_id;
+				param.pw = user_pw;
+				
 				$.ajax({
 					url: './loginProc',
-					data: JSON.stringify($("input").serializeObject()),
+					data: JSON.stringify(param),
 					type: 'POST',
 					dataType: 'json',
 					beforeSend: function (xhr) {

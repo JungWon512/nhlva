@@ -15,14 +15,6 @@ $(function() {
 			});
 			$('input[name=bidAmt]').focus();
 		}
-		$('.chart').easyPieChart({
-			barColor: '#007eff',
-			trackColor: '#dbdbdb',
-			lineCap: 'round',
-			lineWidth: 18,
-			size: 344,
-			animate: 1000
-		});		
 		
 		$(".seeBox_slick ul.slider").slick({
 			dots: true,
@@ -186,7 +178,7 @@ $(function() {
 							var aucPrgSq =$('.pop_auction .schedule_area .list_table li dl dd.num').toArray().filter((obj) => {if($(obj).text() == data.aucInfo.AUC_PRG_SQ) return obj;});
 							var li = $(aucPrgSq[0]).closest('li');
 							li.find('input.sbidUpr').val(data.aucInfo.SBID_UPR ? data.aucInfo.SBID_UPR : '찜가격');
-							li.find('.pd_pav span').text(data.aucInfo.SBID_UPR ? data.aucInfo.SBID_UPR : '찜가격');
+							li.find('.pd_pav span').text(data.aucInfo.SBID_UPR ? fnSetComma(data.aucInfo.SBID_UPR) : '찜가격');
 							if(data.aucInfo.SBID_UPR && data.aucInfo.SBID_UPR != 0) li.find('.pd_pav a').addClass('act');
 							else li.find('.pd_pav a').removeClass('act');
 						}
@@ -282,10 +274,10 @@ var socket = null, auctionConfig = {seData : {}, divisionPriceUnit : ["만 원",
 var socketStart = function(){
 	if(!$('#naBzPlc').val()) return;
 	if(socket){ socket.connect(); return;}
-	var socketHost = (active == 'production')?"cowauction.kr":(active == 'develop')?"xn--e20bw05b.kr":"192.168.0.23";
+	var socketHost = (active == 'production')?"cowauction.kr":(active == 'develop')?"xn--e20bw05b.kr":"xn--e20bw05b.kr";
 	//socketHost += ':'+$('#webPort').val();
 	socketHost += ':9001';
-	socket = io.connect('http://'+socketHost + '/6003' + '?auctionHouseCode='  + $('#naBzPlc').val(), {secure:true});
+	socket = io.connect('https://'+socketHost + '/6003' + '?auctionHouseCode='  + $('#naBzPlc').val(), {secure:true});
 	//socket = io.connect('http://192.168.0.23:9001/6003?auctionHouseCode=' + $('#naBzPlc').val());
 	socket.on('connect', connectHandler);
 
