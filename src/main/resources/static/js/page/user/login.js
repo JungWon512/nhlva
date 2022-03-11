@@ -98,7 +98,7 @@
 					modalAlert('', message);
 				}
 				else {
-					if (body.branchInfo && body.branchInfo.SMS_AUTH_YN == '1') {
+					if (body.branchInfo && body.branchInfo.SMS_AUTH_YN == '1' && $("input[name='type']").val() == '0') {
 						$("#login_info").hide();
 						$("#login_sms_auth").show();
 						$("input[name='naBzplc']", $("form[name='frm_auth']")).val(body.branchInfo.NA_BZPLC);

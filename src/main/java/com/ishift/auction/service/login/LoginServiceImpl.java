@@ -210,36 +210,37 @@ public class LoginServiceImpl implements LoginService {
 		StringBuffer sb = new StringBuffer();
 		sb.append("경매참가 인증번호 [").append(smsNo).append("] 입니다.");
 		params.put("smsFwdgCntn", sb.toString());
-		
-		try {
-			
-	        String recvMsg = httpUtils.sendPostJson(params);
-	        log.info("recvMsg : "+recvMsg);
-	        Map<String, Object> map = new HashMap<String, Object>();
-	        //받은메시지를 map에 담기
-	        if(recvMsg.length()>0) {
-	        	try {
-	                map = httpUtils.getMapFromJsonObject(recvMsg);              
-	        	}catch (JSONException e) {
-					map = null;
+
+		if ("production".equals(profile)) {
+			try {
+				String recvMsg = httpUtils.sendPostJson(params);
+				log.info("recvMsg : "+recvMsg);
+				Map<String, Object> map = new HashMap<String, Object>();
+				//받은메시지를 map에 담기
+				if(recvMsg.length()>0) {
+					try {
+						map = httpUtils.getMapFromJsonObject(recvMsg);
+					}catch (JSONException e) {
+						map = null;
+					}
 				}
-	        }
-	        if(map != null) {
-	            params.put("tmsYn", map.getOrDefault("RZTC","0"));
-	    		
-			loginDAO.sendSms(params);
-			returnMap.put("success", true);
-			returnMap.put("message", "인증번호 발송에 성공했습니다.");
-	        }else {
-	    		returnMap.put("success", false);
-	    		returnMap.put("message", "인증번호 발송에 실패했습니다.");        	
+				if(map != null) {
+					params.put("tmsYn", map.getOrDefault("RZTC","0"));
+					
+					loginDAO.sendSms(params);
+					returnMap.put("success", true);
+					returnMap.put("message", "인증번호 발송에 성공했습니다.");
+				}
+				else {
+					returnMap.put("success", false);
+					returnMap.put("message", "인증번호 발송에 실패했습니다.");
+				}
+			} catch (Exception e1) {
+				returnMap.put("success", false);
+				returnMap.put("message", "인증번호 발송에 실패했습니다.");
+			}
 		}
-		} catch (Exception e1) {
-    		returnMap.put("success", false);
-    		returnMap.put("message", "인증번호 발송에 실패했습니다.");      
-		}
-		
-		if (!"production".equals(profile)) {
+		else {
 			returnMap.put("smsNo", smsNo);
 		}
 		return returnMap;
