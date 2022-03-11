@@ -1,5 +1,9 @@
+jwt:
+  secret: jwtsecretkey
+cript:
+  key: aaaaaaaaaabbbbbb
+  iv: aaaaaaaaaabbbbbb
 server:
-  port: 18080
   error:
     whitelabel:
       enabled: false
@@ -20,6 +24,7 @@ spring:
     include:
       - database
       - properties
+    service-name: tibero
   resources:
     chain:
       cache: false
