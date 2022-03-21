@@ -492,4 +492,8 @@ public class AuctionDAO {
 	public List<Map<String, Object>> selectAucStnList(Map<String, Object> params) throws SQLException {
 		return mainDao.selectList("ApiMapper.selectAucStnList", params);
 	}
+
+	public List<Map<String, Object>> selectVetList(Map<String, Object> params) throws SQLException {
+		return mainDao.selectList("auction.selectVetList", params);
+	}
 }

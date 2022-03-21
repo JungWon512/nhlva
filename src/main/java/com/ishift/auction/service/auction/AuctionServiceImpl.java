@@ -1035,4 +1035,15 @@ public class AuctionServiceImpl implements AuctionService {
 	public Map<String, Object> getStnInfo(Map<String, Object> params) throws SQLException{
 		return auctionDAO.getStnInfo(params);		
 	}
+
+	/**
+	 * 수의사 리스트
+	 * @param params
+	 * @return
+	 * @throws SQLException
+	 */
+	@Override
+	public List<Map<String, Object>> selectVetList(Map<String, Object> params) throws SQLException {
+		return auctionDAO.selectVetList(params);
+	}
 }

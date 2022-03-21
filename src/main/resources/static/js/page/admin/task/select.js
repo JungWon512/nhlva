@@ -204,6 +204,14 @@
 			popHtml.push('						</td>');
 			popHtml.push('					</tr>');
 			popHtml.push('					<tr>');
+			popHtml.push('						<th>수의사</th>');
+			popHtml.push('						<td class="input-td">');
+			popHtml.push('							<select name="lvstMktTrplAmnno" class="" id="lvstMktTrplAmnno" alt="수의사" disabled="disabled">');
+			popHtml.push('								<option value="0">선택</option>');
+			popHtml.push('							</select>');
+			popHtml.push('						</td>');
+			popHtml.push('					</tr>');
+			popHtml.push('					<tr>');
 			popHtml.push('						<th>비고</th>');
 			popHtml.push('						<td class="input-td">');
 			popHtml.push('							<input type="text" name="rmkCntn" id="rmkCntn" value="" alt="비고" />');
@@ -260,6 +268,7 @@
 			var cowInfo = data.cowInfo;
 			var ppgcowList = data.ppgcowList;
 			var indvList = data.indvList;
+			var vetList = data.vetList;
 			
 			$("input[name='ftsnm']", $("form[name='frm_cow_info']")).val(cowInfo.FTSNM);
 			$("input[name='rmkCntn']", $("form[name='frm_cow_info']")).val(cowInfo.RMK_CNTN);
@@ -268,10 +277,27 @@
 			$("input[name='ledSqno']", $("form[name='frm_cow_info']")).val(cowInfo.LED_SQNO);
 //			$("input[name='aucPrgSq']", $("form[name='frm_select']")).val(cowInfo.AUC_PRG_SQ);
 
+			var $lvstMktTrplAmnno = $("select[name='lvstMktTrplAmnno']");
+			if (vetList.length > 0) {
+				$lvstMktTrplAmnno.prop("disabled", false);
+				$lvstMktTrplAmnno.find("option").not(":first").remove();
+				for (var i in vetList) {
+					if (vetList[i].LVST_MKT_TRPL_AMNNO == cowInfo.LVST_MKT_TRPL_AMNNO) {
+						$lvstMktTrplAmnno.append($("<option>", {value: vetList[i].LVST_MKT_TRPL_AMNNO, text : vetList[i].BRKR_NAME, selected : "selected"}));
+					}
+					else {
+						$lvstMktTrplAmnno.append($("<option>", {value: vetList[i].LVST_MKT_TRPL_AMNNO, text : vetList[i].BRKR_NAME}));
+					}
+				}
+			}
+			else {
+				$lvstMktTrplAmnno.prop("disabled", true);
+			}
+
 			// 큰소 구분
 			var $ppgcowFeeDsc = $("select[name='ppgcowFeeDsc']");
 			$ppgcowFeeDsc.prop("disabled", false);
-			$ppgcowFeeDsc.find("option").not(":first").remove()
+			$ppgcowFeeDsc.find("option").not(":first").remove();
 			for (var i in ppgcowList) {
 				if(ppgcowList[i].SIMP_C == cowInfo.PPGCOW_FEE_DSC) {
 					$ppgcowFeeDsc.append($("<option>", {value: ppgcowList[i].SIMP_C, text : ppgcowList[i].SIMP_CNM, selected : "selected"}));
@@ -385,6 +411,7 @@
 		// 입력 초기화
 		var fnReset = function() {
 			$("form[name='frm_cow_info']").find("input, select").val("");
+			$("form[name='frm_cow_info']").find("select").prop("disabled", true);
 			$("select").selectric("refresh");
 		}
 		

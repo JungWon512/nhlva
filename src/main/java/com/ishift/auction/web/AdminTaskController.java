@@ -154,6 +154,7 @@ public class AdminTaskController extends CommonController {
 				result.put("ppgcowList", auctionService.selectCodeList(params));
 				params.put("simpTpc", "INDV_SEX_C");
 				result.put("indvList", auctionService.selectCodeList(params));
+				result.put("vetList", auctionService.selectVetList(params));	// 수의사 리스트
 			}
 		}
 		catch (RuntimeException | SQLException re) {
@@ -193,7 +194,9 @@ public class AdminTaskController extends CommonController {
 				result.put("success", true);
 				result.put("message", "수정되었습니다.");
 				result.put("params", params);
-				result.put("entryList", auctionService.entrySelectList(params));
+				if (!"I".equals(params.get("regType"))) {
+					result.put("entryList", auctionService.entrySelectList(params));
+				}
 			}
 			else {
 				result.put("success", false);

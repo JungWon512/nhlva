@@ -1046,6 +1046,7 @@
 			 , A.PPGCOW_FEE_DSC
 			 , A.PRNY_YN
 			 , A.LED_SQNO
+			 , A.LVST_MKT_TRPL_AMNNO		/* 가축시장거래처관리번호 */
 		  FROM TB_LA_IS_MH_SOG_COW A
 		  LEFT OUTER JOIN TB_LA_IS_MM_INDV B
 			ON (
@@ -1109,8 +1110,11 @@
 			</when>
 			<when test="regType == 'I'.toString()">
 				<if test ="sraPdmnm != null and sraPdmnm != ''">
-				 	, SRA_PDMNM = #{sraPdmnm}
-				 </if>
+					, SRA_PDMNM = #{sraPdmnm}
+				</if>
+				<if test="lvstMktTrplAmnno != null and lvstMktTrplAmnno != ''">
+					, LVST_MKT_TRPL_AMNNO = #{lvstMktTrplAmnno}
+				</if>
 				 , PPGCOW_FEE_DSC = #{ppgcowFeeDsc}
 				 , PRNY_MTCN = #{prnyMtcn}
 				 , RMK_CNTN = #{rmkCntn}
@@ -1371,5 +1375,14 @@
 		AND A.NA_BZPLC = #{naBzplc}
 		AND A.AUC_OBJ_DSC = #{aucObjDsc}
 		AND A.RG_SQNO = #{rgSqno}
+	</select>
+	
+	<select id="selectVetList" parameterType="map" resultType="map">
+		SELECT LVST_MKT_TRPL_AMNNO
+			 , BRKR_NAME
+		  FROM TB_LA_IS_MM_TRPL
+		 WHERE NA_BZPLC = #{naBzplc}
+		   AND LVST_MKT_TRPL_DSC = '1'
+		   AND DEL_YN = '0'
 	</select>
 </mapper>
