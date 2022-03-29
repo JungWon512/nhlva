@@ -606,6 +606,7 @@ public class AuctionServiceImpl implements AuctionService {
 						}
 					}
 					else {
+						
 					// 수수료가 금액인 경우
 						feeAmt = "0".equals(macoYn) ? Long.parseLong(feeInfo.getOrDefault("NMACO_FEE_UPR", "0").toString())
 													: Long.parseLong(feeInfo.getOrDefault("MACO_FEE_UPR", "0").toString());
@@ -622,6 +623,16 @@ public class AuctionServiceImpl implements AuctionService {
 								feeAmt += Long.parseLong(bizAuctionInfo.getOrDefault("SELFEE_CHK_DNA_YN_FEE", "0").toString());
 							}
 						}
+						
+						// 영주축협 송아지 12개월이상 수수료 적용
+						if ("8808990687094".equals(params.get("naBzPlc"))) {
+							if ("1".equals(info.get("MT12_OVR_YN"))) {
+								if ("011".equals(feeInfo.get("NA_FEE_C"))) {
+									feeAmt += Long.parseLong(bizAuctionInfo.getOrDefault("MT12_OVR_FEE", "0").toString());
+								}
+							}
+						}
+							
 					}
 					
 					// 운송비인 경우 TRPCS_PY_YN(운송비 지급 여부)가 1일 때는 수수를 부과하지 않는다.
@@ -891,7 +902,15 @@ public class AuctionServiceImpl implements AuctionService {
 									feeAmt += Long.parseLong(bizAuctionInfo.getOrDefault("SELFEE_CHK_DNA_YN_FEE", "0").toString());
 								}
 							}
-
+							
+							// 영주축협 송아지 12개월이상 수수료 적용
+							if ("8808990687094".equals(params.get("naBzPlc"))) {
+								if ("1".equals(info.get("MT12_OVR_YN"))) {
+									if ("011".equals(feeInfo.get("NA_FEE_C"))) {
+										feeAmt += Long.parseLong(bizAuctionInfo.getOrDefault("MT12_OVR_FEE", "0").toString());
+									}
+								}
+							}
 						}
 						
 						// 운송비인 경우 TRPCS_PY_YN(운송비 지급 여부)가 1일 때는 수수를 부과하지 않는다.
