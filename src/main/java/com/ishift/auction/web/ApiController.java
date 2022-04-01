@@ -1969,4 +1969,39 @@ public class ApiController {
 		
 		return result;
 	}
+	
+	/**
+	 * 경매참가번호로 중도매인번호 조회
+	 * @param version
+	 * @param params
+	 * @return
+	 */
+	@ResponseBody
+	@PostMapping(value = "/api/{version}/auction/select/mwmn"
+			, consumes = MediaType.APPLICATION_FORM_URLENCODED_VALUE
+				, produces = MediaType.APPLICATION_JSON_VALUE)
+	public Map<String, Object> selectAuctMwmn(@PathVariable(name = "version") String version
+			, @RequestParam final Map<String, Object> params) {
+		final Map<String, Object> result = new HashMap<String, Object>();
+
+		try {
+			Map<String, Object> map = auctionService.selectAuctMwmn(params);
+			
+			if ( map != null) {
+				result.put("success", true);
+				result.put("data", map);
+				result.put("message", "정상적으로 조회되었습니다.");
+			}
+			else {
+				result.put("success", false);
+				result.put("message", "조회된 정보가 없습니다.");
+			}
+		}catch (SQLException | RuntimeException re) {
+			log.error("error - selectAuctBidNum : {}", re);
+			result.put("success", false);
+			result.put("message", "작업중 오류가 발생했습니다. 관리자에게 문의하세요.");
+			return result;
+		}
+		return result;
+	}
 }

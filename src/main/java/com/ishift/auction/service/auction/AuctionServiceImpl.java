@@ -1065,4 +1065,15 @@ public class AuctionServiceImpl implements AuctionService {
 	public List<Map<String, Object>> selectVetList(Map<String, Object> params) throws SQLException {
 		return auctionDAO.selectVetList(params);
 	}
+
+	/***
+	 * 
+	 * @param params
+	 * @return
+	 * @throws SQLException
+	 */
+	@Override
+	public Map<String, Object> selectAuctMwmn(Map<String, Object> params) throws SQLException{
+		return auctionDAO.selectAuctMwmn(params);
+	}
 }

@@ -372,4 +372,12 @@ public interface AuctionService {
 	 * @throws SQLException
 	 */
 	List<Map<String, Object>> selectVetList(Map<String, Object> params) throws SQLException;
+
+	/***
+	 * 
+	 * @param params
+	 * @return
+	 * @throws SQLException
+	 */
+	Map<String, Object> selectAuctMwmn(Map<String, Object> params) throws SQLException;
 }

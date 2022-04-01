@@ -100,10 +100,27 @@ var setEventListener = function(){
 		}
 		var num = $(this).find('p').attr('userNum');
 		var gubun = $(this).find('p').attr('gubun');
+		
 		modalComfirm('　',num+'번 응찰자의 접속을 끊으시겠습니까?',function(){ 
-			var packet = 'AL|'+$('#naBzPlc').val()+'|'+num+'|6001|'+gubun;
-			socket.emit('packetData', packet);
-			debugConsole(packet);			
+			$.ajax({
+				url: '/api/v2/auction/select/mwmn',
+				//data: {naBzplc:$('#naBzPlc').val(),aucObjDsc:aucObjDsc,lvstAucPtcMnNo:num},
+				data: {naBzplc:'8808990656656',aucObjDsc:aucObjDsc,lvstAucPtcMnNo:num},
+				type: 'POST',
+				dataType: 'json',
+				success : function(json) {
+					console.log(json);
+					if(json != null && json.success && json.data){
+						var naBzplc = json.data.NA_BZPLC;
+						var trmnAmnno = json.data.TRMN_AMNNO;
+						var packet = 'AL|'+naBzplc+'|'+trmnAmnno+'|6001|'+gubun;
+						socket.emit('packetData', packet);
+						debugConsole(packet);
+					}	
+				},
+				error: function(xhr, status, error) {
+				}
+			});		
 		});
 	});
 }
@@ -117,7 +134,8 @@ var socketStart = function(){
 		return;
 	}
 	if(socket){ socket.connect(); return;}
-	var socketHost = (active == 'production')?"cowauction.kr":(active == 'develop')?"xn--e20bw05b.kr":"xn--e20bw05b.kr";
+	//var socketHost = (active == 'production')?"cowauction.kr":(active == 'develop')?"xn--e20bw05b.kr":"xn--e20bw05b.kr";
+	var socketHost = "cowauction.kr";
 	//socketHost += ':'+$('#webPort').val();
 	socketHost += ':9001';
 	socket = io.connect('https://'+socketHost+ '/6005' + '?auctionHouseCode='  + $('#naBzPlc').val(), {secure:true});
@@ -169,7 +187,7 @@ var connectHandler = function() {
 	socket.emit('packetData', packet);	
 }
 
-var monsterConfig = {};
+var monsterConfig = {},aucObjDsc='';
 var messageHandler = function(data) {
 	debugConsole(data);
 	var dataArr = data.split('|');
@@ -183,6 +201,7 @@ var messageHandler = function(data) {
 			}
 		break;	
 		case "AS" : 
+			aucObjDsc=dataArr[13];
 			if(monsterConfig.aucSt != dataArr[6] && (dataArr[6]=='8003' || dataArr[6]=='8004')){
 				//$('.connMnTable tbody td p.add').each((i,obj)=>{
 				$('.connMnTable tbody td.connect p.add, .connMnTable tbody td.ing p.add').each((i,obj)=>{

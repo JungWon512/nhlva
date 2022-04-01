@@ -1191,4 +1191,31 @@
 		 WHERE APP_VERSION_ID = #{appVersionId}
 		   AND OS_TYPE = #{osType}
 	</update>
+	
+	<select id="selectAuctMwmn" parameterType="map" resultType="map">
+		SELECT
+			A.NA_BZPLC	
+			,B.AUC_DT 
+			,B.AUC_OBJ_DSC 
+			,A.TRMN_AMNNO
+			,A.SRA_MWMNNM 
+			,B.LVST_AUC_PTC_MN_NO
+			,A.MACO_YN 
+			,A.RMK_CNTN 
+		FROM TB_LA_IS_MM_MWMN A
+		INNER JOIN TB_LA_IS_MH_AUC_ENTR B ON A.NA_BZPLC =B.NA_BZPLC AND B.TRMN_AMNNO =A.TRMN_AMNNO 
+		WHERE A.NA_BZPLC =#{naBzplc}
+		<choose>
+			<when test="aucDt != null and aucDt != ''">
+			   AND B.AUC_DT = #{aucDt}
+			</when>
+			<otherwise>
+			   AND B.AUC_DT = TO_CHAR(SYSDATE,'YYYYMMDD')
+			</otherwise>
+		</choose>
+		
+		AND B.AUC_OBJ_DSC = #{aucObjDsc}
+		AND B.LVST_AUC_PTC_MN_NO = #{lvstAucPtcMnNo}
+		ORDER BY AUC_DT DESC;
+	</select>
 </mapper>
