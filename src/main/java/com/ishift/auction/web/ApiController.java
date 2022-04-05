@@ -1445,7 +1445,7 @@ public class ApiController {
 							}										
 						} else {			
 							result.put("success", false);
-							result.put("message", "작업 중 오류가 발생했습니다.");	
+							result.put("message", "진행 가능한 경매 내역이 없습니다.");	
 						}
 						
 						break;

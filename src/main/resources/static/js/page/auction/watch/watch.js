@@ -247,7 +247,7 @@ var messageHandler = function(data) {
 					}	
 				});
 			};
-			changeTrRow(tr);
+			if($('#aucDsc').val() == '1') changeTrRow(tr);
 		break;	
 		case "SC" : //현재 출품정보
 			scData[dataArr[2]] = data;
@@ -279,8 +279,8 @@ var messageHandler = function(data) {
 
 //출품정보 변경시 row변경 로직
 var changeTrRow = function(tr) {
-	$(".tblAuction .list_body ul li").removeClass('act');
-	if(tr){
+	if(tr && tr.length > 0){
+		$(".tblAuction .list_body ul li").removeClass('act');
 		if(isApp() || chkOs() != 'web'){
 			//var scH = tr.outerHeight();
 			//$('.tblAuction .list_body ul').animate({scrollTop: (scH*tr.index())},1000);

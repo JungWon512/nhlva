@@ -38,8 +38,8 @@
 							WHEN A.MCOW_DSC = '09' THEN '미등록우'
 							ELSE '-'
 						END MCOW_DSC_NAME
-					, A.KPN_NO                 /* KPN번호  (KPN)	*/
-					, REPLACE (A.KPN_NO,'KPN','') KPN_NO_STR /* KPN번호  (KPN 제거)	*/
+					, NVL(A.KPN_NO,'-') KPN_NO                /* KPN번호  (KPN)	*/
+					, NVL(REPLACE (A.KPN_NO,'KPN',''),'-') KPN_NO_STR /* KPN번호  (KPN 제거)	*/
 					, A.INDV_SEX_C             /* 개체성별구분코드: 0없음1암2수3거세4미경산5비거세6프리마틴9공통  (성별)	*/
 					, CASE
 							WHEN A.INDV_SEX_C = 0 THEN '없음'		
