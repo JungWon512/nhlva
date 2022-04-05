@@ -197,6 +197,41 @@
 				});
 			});
 			
+			// 하한가 일괄등록
+			$("input[name='firLowsSbidLmtAm']").on("focusout", function(){
+				if(!$(this).val() || $(this).val() == '') $(this).val('0');
+				var li = $(this).closest("li");
+				var params = {
+					regType : $("input[name='regType']").val()
+					, naBzplc : $("input[name='naBzplc']").val()
+					, aucDt : $("input[name='aucDt']").val()
+					, aucObjDsc : '' + li.find("dd.col1").data("aucObjDsc")
+					, oslpNo : '' + li.find("dd.col1").data("oslpNo")
+					, ledSqno : '' + li.find("dd.col1").data("ledSqno")
+					, firLowsSbidLmtAm : $(this).val()
+					, searchAucObjDsc : $("select#aucObjDsc").val()
+				}
+				
+				$.ajax({
+					url : '/office/task/saveCowInfo',
+					data : JSON.stringify(params),
+					type : 'POST',
+					dataType : 'json',
+					beforeSend: function (xhr) {
+						xhr.setRequestHeader("Accept", "application/json");
+						xhr.setRequestHeader("Content-Type", "application/json");
+					},
+					success : function() {
+					},
+					error: function(xhr, status, error) {
+					}
+				}).done(function (body) {
+					debugConsole(body);
+				});
+			});
+			
+			
+			
 			// 중량입력 input에 focus가 가는 경우 스크롤 이동
 			$("input[name='cowSogWt']").on("focus", function(){
 				var len =  $(this).val().length;
@@ -262,7 +297,7 @@
 				for (var i = 0; i < entryList.length; i++) {
 					var item  = entryList[i];
 					listHtml.push('<li id="' + item.AUC_PRG_SQ + '">');
-					if (regType != "AW") {
+					if (regType != "AW" && regType != 'AL') {
 						listHtml.push('<span><button type="button" class="btn_modify" >수정</button></span>');
 					}
 					listHtml.push('	<dl>');
@@ -278,8 +313,7 @@
 					}
 					listHtml.push('		<dd class="col3">' + item.SRA_INDV_AMNNO_FORMAT + '</dd>');
 					listHtml.push('		<dd class="col4">' + item.FTSNM_ORI + '</dd>');
-					if(regType != "AW") {
-//						listHtml.push('		<dd class="col4 col5"><button type="button" class="btn_modify">수정</button></dd>');
+					if(regType != "AW" && regType != "AL") {
 						listHtml.push('		<dd class="col4 col5"></dd>');
 					}
 					listHtml.push('	</dl>');
@@ -295,12 +329,8 @@
 			$(".list_body > ul").animate({
 				scrollTop : $(".list_body > ul").find("li#" + aucPrgSq).offset().top - $(".list_body > ul > li:first").offset().top
 			}, 500);
-//			if (regType == "L") {
-//				li.addClass("act");
-//			}
-//			else {
-				$(".list_body > ul").find("li#" + aucPrgSq).addClass("act");
-//			}
+			
+			$(".list_body > ul").find("li#" + aucPrgSq).addClass("act");
 		};
 		
 		var fnLayerPop = function(params, cowInfo) {
@@ -358,11 +388,10 @@
 				sHtml.push('						<th>비고</th>');
 				sHtml.push('						<td class="input-td">');
 				sHtml.push('							<input type="text" name="rmkCntn" class="pd5" value="' + (cowInfo.RMK_CNTN == null ? "" : cowInfo.RMK_CNTN) + '" style="width:100%;" />');
-//				sHtml.push('							<textarea name="rmkCntn" class="pd5" value="' + cowInfo.RMK_CNTN + '" style="width:100%;" />');
 				sHtml.push('						</td>');
 				sHtml.push('					</tr>');
 			}
-			else if (params.regType == 'L') {
+			else if (['L', 'AL'].indexOf(params.regType) > -1) {
 				sHtml.push('					<tr>');
 				sHtml.push('						<th>산차</th>');
 				sHtml.push('						<td>' + cowInfo.MATIME + '</td>');
