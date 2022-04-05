@@ -1094,7 +1094,7 @@
 			<when test="regType == 'N'.toString()">
 				 , MODL_NO = #{modlNo}
 			</when>
-			<when test="regType == 'L'.toString()">
+			<when test="regType == 'L'.toString() or regType == 'AL'.toString()">
 				 , FIR_LOWS_SBID_LMT_AM = #{firLowsSbidLmtAm} * (SELECT CASE WHEN #{aucObjDsc} = '1' THEN CALF_AUC_ATDR_UNT_AM
 																			 WHEN #{aucObjDsc} = '2' THEN NBFCT_AUC_ATDR_UNT_AM
 																			 WHEN #{aucObjDsc} = '3' THEN PPGCOW_AUC_ATDR_UNT_AM
