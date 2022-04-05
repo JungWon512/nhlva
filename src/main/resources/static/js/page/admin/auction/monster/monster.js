@@ -104,8 +104,7 @@ var setEventListener = function(){
 		modalComfirm('　',num+'번 응찰자의 접속을 끊으시겠습니까?',function(){ 
 			$.ajax({
 				url: '/api/v2/auction/select/mwmn',
-				//data: {naBzplc:$('#naBzPlc').val(),aucObjDsc:aucObjDsc,lvstAucPtcMnNo:num},
-				data: {naBzplc:'8808990656656',aucObjDsc:aucObjDsc,lvstAucPtcMnNo:num},
+				data: {naBzplc:$('#naBzPlc').val(),aucObjDsc:aucObjDsc,lvstAucPtcMnNo:num},
 				type: 'POST',
 				dataType: 'json',
 				success : function(json) {
@@ -134,11 +133,12 @@ var socketStart = function(){
 		return;
 	}
 	if(socket){ socket.connect(); return;}
-	//var socketHost = (active == 'production')?"cowauction.kr":(active == 'develop')?"xn--e20bw05b.kr":"xn--e20bw05b.kr";
-	var socketHost = "cowauction.kr";
+	var socketHost = (active == 'production')?"cowauction.kr":(active == 'develop')?"xn--e20bw05b.kr":"xn--e20bw05b.kr";
+	var socketHost = "192.168.0.23";
 	//socketHost += ':'+$('#webPort').val();
 	socketHost += ':9001';
-	socket = io.connect('https://'+socketHost+ '/6005' + '?auctionHouseCode='  + $('#naBzPlc').val(), {secure:true});
+	//socket = io.connect('https://'+socketHost+ '/6005' + '?auctionHouseCode='  + $('#naBzPlc').val(), {secure:true});
+	socket = io.connect('http://'+socketHost+ '/6005' + '?auctionHouseCode='  + $('#naBzPlc').val());
 
 	socket.on('connect_error', function(e) {
 		debugConsole(e);
