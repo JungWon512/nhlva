@@ -67,7 +67,7 @@
 						<c:when test="${params.regType eq 'W' or params.regType eq 'AW'}">
 							<dd class="col2"><span class="txt_org">중량</span></dd>
 						</c:when>
-						<c:when test="${params.regType eq 'L'}">
+						<c:when test="${params.regType eq 'L' or params.regType eq 'AL'}">
 							<dd class="col2"><span class="txt_org">하한가</span></dd>
 						</c:when>
 						<c:when test="${params.regType eq 'N'}">
@@ -76,7 +76,7 @@
 					</c:choose>
 					<dd class="col3">귀표</dd>
 					<dd class="col4">출하자</dd>
-					<c:if test="${params.regType ne 'AW'}">
+					<c:if test="${params.regType ne 'AW' and params.regType ne 'AL'}">
 						<dd class="col4">수정</dd>
 					</c:if>
 				</dl>
@@ -92,7 +92,7 @@
 					</c:if>
 					<c:forEach items="${entryList}" var="item" varStatus="st">
 						<li id="${item.AUC_PRG_SQ}">
-							<c:if test="${params.regType ne 'AW'}">
+							<c:if test="${params.regType ne 'AW' and params.regType ne 'AL'}">
 								<span><button type="button" class="btn_modify" >수정</button></span>
 							</c:if>
 							<dl>
@@ -124,17 +124,22 @@
 									</c:choose>
 								</dd>
 							</c:when>
+							<c:when test="${params.regType eq 'AL'}">
+								<dd class="col2">
+									<input type="text" name="firLowsSbidLmtAm" id="cowSogWt${item.AUC_PRG_SQ}" class="onlyNumber" value="${fn:split(item.LOWS_SBID_LMT_UPR,'.')[0]}" maxlength="4" pattern="\d*" inputmode="numeric"/>
+								</dd>
+							</c:when>
 							<c:when test="${params.regType eq 'N'}">
 								<dd class="col2" style="${item.MODL_NO != item.AUC_PRG_SQ ? 'color:#ff0000':''}">${item.MODL_NO}</dd>
 							</c:when>
 							</c:choose>
 								<dd class="col3">${item.SRA_INDV_AMNNO_FORMAT}</dd>
 								<dd class="col4">${item.FTSNM_ORI}</dd>
-								<c:if test="${params.regType ne 'AW'}">
+								<c:if test="${params.regType ne 'AW' and params.regType ne 'AL'}">
 									<dd class="col4 col5"></dd>
 <!-- 									<dd class="col4 col5"><button type="button" class="btn_modify">수정</button></dd> -->
 								</c:if>
-							</dl>							
+							</dl>
 							<c:if test="${params.regType eq 'W'}">
 								<div class="pd_etc">
 									<p>${item.RMK_CNTN}</p>

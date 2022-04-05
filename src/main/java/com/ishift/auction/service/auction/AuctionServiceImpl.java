@@ -6,6 +6,7 @@ import org.springframework.transaction.annotation.Transactional;
 import javax.annotation.Resource;
 
 import java.sql.SQLException;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 
@@ -589,7 +590,6 @@ public class AuctionServiceImpl implements AuctionService {
 				else if ("5".equals(feeInfo.get("PPGCOW_FEE_DSC"))			// 수수료 정보의 번식우 구분코드가 5(해당없음)인 경우
 				 || ppgcowFeeDsc.equals(feeInfo.get("PPGCOW_FEE_DSC"))		// 출장우 정보의 번식우 구분코드와 수수료 정보의 번식우 구분코드가 일치하는 경우 
 				) {
-					
 					// 수수료가 비율인 경우 TB_LA_IS_MH_FEE의 절사구분(SGNO_PRC_DSC)을 참조하여 처리한다.
 					// 1.소수점 이하 버림, 2. 소수점 이상 절상, 3. 반올림
 					if ("2".equals(feeInfo.get("AM_RTO_DSC"))) {
@@ -604,52 +604,114 @@ public class AuctionServiceImpl implements AuctionService {
 						else if ("3".equals(feeInfo.get("SGNO_PRC_DSC"))) {
 							feeAmt = (long)Math.round(feeUpr / 100 * sraSbidAm);
 						}
+						
+						// 임신 감정료
+						if ("060".equals(feeInfo.get("NA_FEE_C"))) {
+							// 고창부안 : 8808990657189, 장흥 : 8808990656533, 보성 : 8808990656267, 화순 : 8808990661315, 곡성 : 8808990656717,순천광양 : 8808990658896, 영광 : 8808990811710, 장성 : 8808990817675
+							String[] arrNaBzplc = {"8808990657189", "8808990656533", "8808990656267", "8808990661315"
+												 , "8808990656717", "8808990658896", "8808990811710", "8808990817675"};
+							if (Arrays.asList(arrNaBzplc).contains(params.get("naBzPlc"))) {
+								// 출하자에게는 임신여부가 여(1)인 경우 수수료를 부과하지 않는다, 낙찰자에게는 임신여부가 부(0)인 경우 수수료를 부과하지 않는다.
+								if(("1".equals(feeInfo.get("FEE_APL_OBJ_C")) && "1".equals(auctionInfo.get("PRNY_YN")))
+								|| (!"1".equals(feeInfo.get("FEE_APL_OBJ_C")) && "0".equals(auctionInfo.get("PRNY_YN")))) {
+									feeAmt = 0L;
+								}
+							}
+						}
+						// 괴사 감정료
+						else if ("050".equals(feeInfo.get("NA_FEE_C"))) {
+							// 장흥 : 8808990656533, 보성 : 8808990656267, 영광 : 8808990811710, 장성 : 8808990817675
+							String[] arrNaBzplc = {"8808990656533", "8808990656267", "8808990811710", "8808990817675"};
+							// 위의 조합은 괴사 감정을 
+							if (Arrays.asList(arrNaBzplc).contains(params.get("naBzPlc"))) {
+								// 출하자에게는 괴사여부가 부(0)인 경우 수수료를 부과하지 않는다, 낙찰자에게는 괴사여부가 여(1)인 경우 수수료를 부과하지 않는다.
+								if(("1".equals(feeInfo.get("FEE_APL_OBJ_C")) && "0".equals(auctionInfo.get("NCSS_YN")))
+								|| (!"1".equals(feeInfo.get("FEE_APL_OBJ_C")) && "1".equals(auctionInfo.get("NCSS_YN")))) {
+									feeAmt = 0L;
+								}
+							}
+						}
 					}
 					else {
-						
 					// 수수료가 금액인 경우
 						feeAmt = "0".equals(macoYn) ? Long.parseLong(feeInfo.getOrDefault("NMACO_FEE_UPR", "0").toString())
 													: Long.parseLong(feeInfo.getOrDefault("MACO_FEE_UPR", "0").toString());
-						// 친자 확인 수수료
-						if ("1".equals(info.get("DNA_YN_CHK"))) {
-							// 출하자
-							if ("010".equals(feeInfo.get("NA_FEE_C"))) {
-								// TODO :: 합천인 경우에는 농가 정보 테이블에서 축산사료여부 사용 여부(SRA_FED_SPY_YN) 체크 후 미사용시(0) 친자 확인 수수료를 부과한다.
+						
+						// 출하자 출하수수료
+						if ("010".equals(feeInfo.get("NA_FEE_C"))) {
+							// 수수료 부과 대상이 낙찰자인 경우 혈통 송아지 수수료를 추가한다 (BLOOD_AM)
+							if(!"1".equals(feeInfo.get("FEE_APL_OBJ_C"))) {
+								feeAmt += Long.parseLong(auctionInfo.getOrDefault("BLOOD_AM", "0").toString());
+							}
+							
+							// 친자 검사 여부(DNA_YN_CHK) 수수료
+							// 합천인 경우에는 농가 정보 테이블에서 축산사료여부 사용 여부(SRA_FED_SPY_YN) 체크 후 미사용시(0) 친자 확인 수수료를 부과한다.
+							if ("1".equals(auctionInfo.get("DNA_YN_CHK"))) {
 								feeAmt += Long.parseLong(bizAuctionInfo.getOrDefault("FEE_CHK_DNA_YN_FEE", "0").toString());
 							}
-							// 낙찰자
-							else if ("011".equals(feeInfo.get("NA_FEE_C"))) {
-								// TODO :: 합천인 경우 출장우 정보 테이블의 친자 일치 여부(DNA_YN) 체크 후 일치 할 시(1) 친자 확인 수수료를 부과한다.
+						}
+						// 낙찰자 판매수수료
+						else if ("011".equals(feeInfo.get("NA_FEE_C"))) {
+							// 수수료 부과 대상이 낙찰자인 경우 혈통 송아지 수수료를 추가한다 (BLOOD_AM)
+							if(!"1".equals(feeInfo.get("FEE_APL_OBJ_C"))) {
+								feeAmt += Long.parseLong(auctionInfo.getOrDefault("BLOOD_AM", "0").toString());
+							}
+
+							// 친자 검사 여부(DNA_YN_CHK) 수수료
+							// 합천인 경우 출장우 정보 테이블의 친자 일치 여부(DNA_YN) 체크 후 일치 할 시(1) 친자 확인 수수료를 부과한다.
+							if ("1".equals(auctionInfo.get("DNA_YN_CHK"))) {
 								feeAmt += Long.parseLong(bizAuctionInfo.getOrDefault("SELFEE_CHK_DNA_YN_FEE", "0").toString());
 							}
-						}
-						
-						// 영주축협 송아지 12개월이상 수수료 적용
-						if ("8808990687094".equals(params.get("naBzPlc"))) {
-							if ("1".equals(info.get("MT12_OVR_YN"))) {
-								if ("011".equals(feeInfo.get("NA_FEE_C"))) {
+							
+							// 영주축협 송아지 12개월이상 수수료 적용
+							if ("8808990687094".equals(params.get("naBzPlc"))) {
+								if ("1".equals(auctionInfo.get("MT12_OVR_YN"))) {
 									feeAmt += Long.parseLong(bizAuctionInfo.getOrDefault("MT12_OVR_FEE", "0").toString());
 								}
 							}
 						}
-							
+						// 임신 감정료
+						else if ("060".equals(feeInfo.get("NA_FEE_C"))) {
+							// 고창부안 : 8808990657189, 장흥 : 8808990656533, 보성 : 8808990656267, 화순 : 8808990661315, 곡성 : 8808990656717,순천광양 : 8808990658896, 영광 : 8808990811710, 장성 : 8808990817675
+							String[] arrNaBzplc = {"8808990657189", "8808990656533", "8808990656267", "8808990661315"
+												 , "8808990656717", "8808990658896", "8808990811710", "8808990817675"};
+							if (Arrays.asList(arrNaBzplc).contains(params.get("naBzPlc"))) {
+								// 출하자에게는 임신여부가 여(1)인 경우 수수료를 부과하지 않는다, 낙찰자에게는 임신여부가 부(0)인 경우 수수료를 부과하지 않는다.
+								if(("1".equals(feeInfo.get("FEE_APL_OBJ_C")) && "1".equals(auctionInfo.get("PRNY_YN")))
+								|| (!"1".equals(feeInfo.get("FEE_APL_OBJ_C")) && "0".equals(auctionInfo.get("PRNY_YN")))) {
+									feeAmt = 0L;
+								}
+							}
+						}
+						// 괴사 감정료
+						else if ("050".equals(feeInfo.get("NA_FEE_C"))) {
+							// 장흥 : 8808990656533, 보성 : 8808990656267, 영광 : 8808990811710, 장성 : 8808990817675
+							String[] arrNaBzplc = {"8808990656533", "8808990656267", "8808990811710", "8808990817675"};
+							// 위의 조합은 괴사 감정을 
+							if (Arrays.asList(arrNaBzplc).contains(params.get("naBzPlc"))) {
+								// 출하자에게는 괴사여부가 부(0)인 경우 수수료를 부과하지 않는다, 낙찰자에게는 괴사여부가 여(1)인 경우 수수료를 부과하지 않는다.
+								if(("1".equals(feeInfo.get("FEE_APL_OBJ_C")) && "0".equals(auctionInfo.get("NCSS_YN")))
+								|| (!"1".equals(feeInfo.get("FEE_APL_OBJ_C")) && "1".equals(auctionInfo.get("NCSS_YN")))) {
+									feeAmt = 0L;
+								}
+							}
+						}
 					}
 					
 					// 운송비인 경우 TRPCS_PY_YN(운송비 지급 여부)가 1일 때는 수수를 부과하지 않는다.
-					if ("040".equals(feeInfo.get("NA_FEE_C")) && "1".equals(info.get("TRPCS_PY_YN"))) {
+					if ("040".equals(feeInfo.get("NA_FEE_C")) && "1".equals(auctionInfo.get("TRPCS_PY_YN"))) {
 						feeAmt = 0L;
 					}
-					
 					// 임신감정 수수료인 경우 PRNY_JUG_YN(임신감정여부)가 0일 때는 수수료를 부과하지 않는다
-					if ("060".equals(feeInfo.get("NA_FEE_C")) && "0".equals(info.get("PRNY_JUG_YN"))) {
+					if ("060".equals(feeInfo.get("NA_FEE_C")) && "0".equals(auctionInfo.get("PRNY_JUG_YN"))) {
 						feeAmt = 0L;
 					}
 					// 괴사감정 수수료인 경우 NCSS_JUG_YN(괴사감정여부)가 0일 때는 수수료를 부과하지 않는다
-					if ("050".equals(feeInfo.get("NA_FEE_C")) && !("1".equals(info.get("NCSS_JUG_YN")) && "1".equals(info.get("NCSS_YN")))) {
+					if ("050".equals(feeInfo.get("NA_FEE_C")) && "0".equals(auctionInfo.get("NCSS_JUG_YN"))) {
 						feeAmt = 0L;
 					}
 					// 제각수수료인 경우 경우 RMHN_YN(제각여부)가 0일 때는 수수료를 부과하지 않는다
-					if ("110".equals(feeInfo.get("NA_FEE_C")) && "0".equals(info.get("RMHN_YN"))) {
+					if ("110".equals(feeInfo.get("NA_FEE_C")) && "0".equals(auctionInfo.get("RMHN_YN"))) {
 						feeAmt = 0L;
 					}
 				}
@@ -884,30 +946,95 @@ public class AuctionServiceImpl implements AuctionService {
 							else if ("3".equals(feeInfo.get("SGNO_PRC_DSC"))) {
 								feeAmt = (long)Math.round(feeUpr / 100 * sraSbidAm);
 							}
+							
+							// 임신 감정료
+							if ("060".equals(feeInfo.get("NA_FEE_C"))) {
+								// 고창부안 : 8808990657189, 장흥 : 8808990656533, 보성 : 8808990656267, 화순 : 8808990661315, 곡성 : 8808990656717,순천광양 : 8808990658896, 영광 : 8808990811710, 장성 : 8808990817675
+								String[] arrNaBzplc = {"8808990657189", "8808990656533", "8808990656267", "8808990661315"
+													 , "8808990656717", "8808990658896", "8808990811710", "8808990817675"};
+								if (Arrays.asList(arrNaBzplc).contains(params.get("naBzPlc"))) {
+									// 출하자에게는 임신여부가 여(1)인 경우 수수료를 부과하지 않는다, 낙찰자에게는 임신여부가 부(0)인 경우 수수료를 부과하지 않는다.
+									if(("1".equals(feeInfo.get("FEE_APL_OBJ_C")) && "1".equals(info.get("PRNY_YN")))
+									|| (!"1".equals(feeInfo.get("FEE_APL_OBJ_C")) && "0".equals(info.get("PRNY_YN")))) {
+										feeAmt = 0L;
+									}
+								}
+							}
+							// 괴사 감정료
+							else if ("050".equals(feeInfo.get("NA_FEE_C"))) {
+								// 장흥 : 8808990656533, 보성 : 8808990656267, 영광 : 8808990811710, 장성 : 8808990817675
+								String[] arrNaBzplc = {"8808990656533", "8808990656267", "8808990811710", "8808990817675"};
+								// 위의 조합은 괴사 감정을 
+								if (Arrays.asList(arrNaBzplc).contains(params.get("naBzPlc"))) {
+									// 출하자에게는 괴사여부가 부(0)인 경우 수수료를 부과하지 않는다, 낙찰자에게는 괴사여부가 여(1)인 경우 수수료를 부과하지 않는다.
+									if(("1".equals(feeInfo.get("FEE_APL_OBJ_C")) && "0".equals(info.get("NCSS_YN")))
+									|| (!"1".equals(feeInfo.get("FEE_APL_OBJ_C")) && "1".equals(info.get("NCSS_YN")))) {
+										feeAmt = 0L;
+									}
+								}
+							}
 						}
 						else {
 						// 수수료가 금액인 경우
 							feeAmt = "0".equals(macoYn) ? Long.parseLong(feeInfo.getOrDefault("NMACO_FEE_UPR", "0").toString())
 														: Long.parseLong(feeInfo.getOrDefault("MACO_FEE_UPR", "0").toString());
-							// 친자 확인 수수료
-							if ("1".equals(info.get("DNA_YN_CHK"))) {
-								// 출하자
-								if ("010".equals(feeInfo.get("NA_FEE_C"))) {
-									// TODO :: 합천인 경우에는 농가 정보 테이블에서 축산사료여부 사용 여부(SRA_FED_SPY_YN) 체크 후 미사용시(0) 친자 확인 수수료를 부과한다.
+							
+							// 출하자 출하수수료
+							if ("010".equals(feeInfo.get("NA_FEE_C"))) {
+								// 수수료 부과 대상이 낙찰자인 경우 혈통 송아지 수수료를 추가한다 (BLOOD_AM)
+								if(!"1".equals(feeInfo.get("FEE_APL_OBJ_C"))) {
+									feeAmt += Long.parseLong(info.getOrDefault("BLOOD_AM", "0").toString());
+								}
+								
+								// 친자 검사 여부(DNA_YN_CHK) 수수료
+								// 합천인 경우에는 농가 정보 테이블에서 축산사료여부 사용 여부(SRA_FED_SPY_YN) 체크 후 미사용시(0) 친자 확인 수수료를 부과한다.
+								if ("1".equals(info.get("DNA_YN_CHK"))) {
 									feeAmt += Long.parseLong(bizAuctionInfo.getOrDefault("FEE_CHK_DNA_YN_FEE", "0").toString());
 								}
-								// 낙찰자
-								else if ("011".equals(feeInfo.get("NA_FEE_C"))) {
-									// TODO :: 합천인 경우 출장우 정보 테이블의 친자 일치 여부(DNA_YN) 체크 후 일치 할 시(1) 친자 확인 수수료를 부과한다.
+							}
+							// 낙찰자 판매수수료
+							else if ("011".equals(feeInfo.get("NA_FEE_C"))) {
+								// 수수료 부과 대상이 낙찰자인 경우 혈통 송아지 수수료를 추가한다 (BLOOD_AM)
+								if(!"1".equals(feeInfo.get("FEE_APL_OBJ_C"))) {
+									feeAmt += Long.parseLong(info.getOrDefault("BLOOD_AM", "0").toString());
+								}
+
+								// 친자 검사 여부(DNA_YN_CHK) 수수료
+								// 합천인 경우 출장우 정보 테이블의 친자 일치 여부(DNA_YN) 체크 후 일치 할 시(1) 친자 확인 수수료를 부과한다.
+								if ("1".equals(info.get("DNA_YN_CHK"))) {
 									feeAmt += Long.parseLong(bizAuctionInfo.getOrDefault("SELFEE_CHK_DNA_YN_FEE", "0").toString());
 								}
-							}
-							
-							// 영주축협 송아지 12개월이상 수수료 적용
-							if ("8808990687094".equals(params.get("naBzPlc"))) {
-								if ("1".equals(info.get("MT12_OVR_YN"))) {
-									if ("011".equals(feeInfo.get("NA_FEE_C"))) {
+								
+								// 영주축협 송아지 12개월이상 수수료 적용
+								if ("8808990687094".equals(params.get("naBzPlc"))) {
+									if ("1".equals(info.get("MT12_OVR_YN"))) {
 										feeAmt += Long.parseLong(bizAuctionInfo.getOrDefault("MT12_OVR_FEE", "0").toString());
+									}
+								}
+							}
+							// 임신 감정료
+							else if ("060".equals(feeInfo.get("NA_FEE_C"))) {
+								// 고창부안 : 8808990657189, 장흥 : 8808990656533, 보성 : 8808990656267, 화순 : 8808990661315, 곡성 : 8808990656717,순천광양 : 8808990658896, 영광 : 8808990811710, 장성 : 8808990817675
+								String[] arrNaBzplc = {"8808990657189", "8808990656533", "8808990656267", "8808990661315"
+													 , "8808990656717", "8808990658896", "8808990811710", "8808990817675"};
+								if (Arrays.asList(arrNaBzplc).contains(params.get("naBzPlc"))) {
+									// 출하자에게는 임신여부가 여(1)인 경우 수수료를 부과하지 않는다, 낙찰자에게는 임신여부가 부(0)인 경우 수수료를 부과하지 않는다.
+									if(("1".equals(feeInfo.get("FEE_APL_OBJ_C")) && "1".equals(info.get("PRNY_YN")))
+									|| (!"1".equals(feeInfo.get("FEE_APL_OBJ_C")) && "0".equals(info.get("PRNY_YN")))) {
+										feeAmt = 0L;
+									}
+								}
+							}
+							// 괴사 감정료
+							else if ("050".equals(feeInfo.get("NA_FEE_C"))) {
+								// 장흥 : 8808990656533, 보성 : 8808990656267, 영광 : 8808990811710, 장성 : 8808990817675
+								String[] arrNaBzplc = {"8808990656533", "8808990656267", "8808990811710", "8808990817675"};
+								// 위의 조합은 괴사 감정을 
+								if (Arrays.asList(arrNaBzplc).contains(params.get("naBzPlc"))) {
+									// 출하자에게는 괴사여부가 부(0)인 경우 수수료를 부과하지 않는다, 낙찰자에게는 괴사여부가 여(1)인 경우 수수료를 부과하지 않는다.
+									if(("1".equals(feeInfo.get("FEE_APL_OBJ_C")) && "0".equals(info.get("NCSS_YN")))
+									|| (!"1".equals(feeInfo.get("FEE_APL_OBJ_C")) && "1".equals(info.get("NCSS_YN")))) {
+										feeAmt = 0L;
 									}
 								}
 							}
@@ -922,7 +1049,7 @@ public class AuctionServiceImpl implements AuctionService {
 							feeAmt = 0L;
 						}
 						// 괴사감정 수수료인 경우 NCSS_JUG_YN(괴사감정여부)가 0일 때는 수수료를 부과하지 않는다
-						if ("050".equals(feeInfo.get("NA_FEE_C")) && !("1".equals(info.get("NCSS_JUG_YN")) && "1".equals(info.get("NCSS_YN")))) {
+						if ("050".equals(feeInfo.get("NA_FEE_C")) && "0".equals(info.get("NCSS_JUG_YN"))) {
 							feeAmt = 0L;
 						}
 						// 제각수수료인 경우 경우 RMHN_YN(제각여부)가 0일 때는 수수료를 부과하지 않는다
