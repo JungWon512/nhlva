@@ -7,7 +7,9 @@
 			 , CASE WHEN G.GAP_DAY = 0 THEN G.BIRTH_STR || '(' || TO_CHAR(G.GAP_MONTH ) || '개월)' 
 					ELSE G.BIRTH_STR || '(' || TO_CHAR(G.GAP_MONTH) || '개월 ' || TO_CHAR(G.GAP_DAY) || '일)'
 				END AS BIRTH_MONTH
-			 , SUBSTRING(G.FTSNM_ORI,1,1)  || '*' ||	SUBSTRING(G.FTSNM_ORI,3) FTSNM
+			 ,CASE WHEN LENGTH(G.FTSNM_ORI) > 1 THEN SUBSTRING(G.FTSNM_ORI,1,1)  || '*' ||	SUBSTRING(G.FTSNM_ORI,3)
+			 WHEN LENGTH(G.FTSNM_ORI) = 1 THEN G.FTSNM_ORI
+			 ELSE '-' END FTSNM
 		  FROM (
 				SELECT B.NA_BZPLC               /* 사업장번호	*/
 					, B.SRA_INDV_AMNNO         /* 축산개체관리번호	*/
