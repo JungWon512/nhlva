@@ -635,7 +635,7 @@ var messageHandler = function(data) {
 			
 			var responseCode = dataArr[2];
 			if (responseCode == "4001") {
-				modalAlert("", "경매 진행 대상이 아닙니다.<br/>경매 번호를 확인해주세요.");
+				modalAlert("", "출장우정보가 없습니다.<br/>경매 번호를 확인해주세요.");
 				$(".aucNum").val("");
 			}
 			else if (responseCode == "4002") {

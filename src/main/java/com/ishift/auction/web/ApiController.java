@@ -1416,26 +1416,36 @@ public class ApiController {
 							result.put("success", false);
 							result.put("message", "이미 진행중인 경매입니다.");
 							return result;
-						}
+						}						
 						
-						// 경매 시작
-						returnMap = auctionService.auctionStart(aucStn, temp);
-						if (returnMap != null && (Boolean)returnMap.get("success")) {
-							result.put("success", true);
-							result.put("message", "경매 시작이 정상 처리되었습니다.");
+						//경매시작전 size chk
+						params.put("stAucNo", aucStn.get("ST_AUC_NO"));
+						params.put("edAucNo", aucStn.get("ED_AUC_NO"));
+						params.put("ddlQcn", "0");
+						List<Map<String, Object>> preEntryList = auctionService.selectAuctCowList(params);
+						
+						if(preEntryList.size() > 0) {
+							// 경매 시작
+							returnMap = auctionService.auctionStart(aucStn, temp);
 							
-							params.put("stAucNo", aucStn.get("ST_AUC_NO"));
-							params.put("edAucNo", aucStn.get("ED_AUC_NO"));
-							params.put("aucYn", "1");
-							List<Map<String, Object>> entryList = auctionService.selectAuctCowList(params);
-							for (Map<String, Object> info : entryList) {
-								info.put("SRA_PD_RGNNM_FMT", this.getRgnName(info.get("SRA_PD_RGNNM")));
+							if (returnMap != null && (Boolean)returnMap.get("success")) {
+								result.put("success", true);
+								result.put("message", "경매 시작이 정상 처리되었습니다.");
+								
+								params.put("aucYn", "1");
+								List<Map<String, Object>> entryList = auctionService.selectAuctCowList(params);
+								for (Map<String, Object> info : entryList) {
+									info.put("SRA_PD_RGNNM_FMT", this.getRgnName(info.get("SRA_PD_RGNNM")));
+								}
+								result.put("entryList", entryList);
 							}
-							result.put("entryList", entryList);
-						}
-						else {
+							else {
+								result.put("success", false);
+								result.put("message", "작업 중 오류가 발생했습니다.");
+							}										
+						} else {			
 							result.put("success", false);
-							result.put("message", "작업 중 오류가 발생했습니다.");
+							result.put("message", "진행 가능한 경매 내역이 없습니다.");	
 						}
 						
 						break;
