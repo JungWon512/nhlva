@@ -275,7 +275,7 @@ var fnReloadView = function(rgSqno,aucObjDsc){
 						sHtml += "		<dd class='pd_kpn'> "+vo.KPN_NO_STR +"</dd>";
 						sHtml += "		<dd class='pd_pay1'>"+fnSetComma((vo.LOWS_SBID_LMT_AM == '' || vo.LOWS_SBID_LMT_AM == null || vo.LOWS_SBID_LMT_AM <= 0 ) ? '-' : vo.LOWS_SBID_LMT_AM <= 0 ? '0' : vo.LOWS_SBID_LMT_UPR)+"</dd>";
 						sHtml += "		<dd class='pd_pay2'>"+fnSetComma((vo.SRA_SBID_UPR == '' || vo.SRA_SBID_UPR == null || vo.SRA_SBID_UPR <= 0 ) ? '-' : vo.SRA_SBID_UPR <= 0 ? '0' : vo.SRA_SBID_UPR)+"</dd>";
-						sHtml += "		<dd class='pd_state'>"+ (vo.SEL_STS_DSC_NAME=='대기' && vo.LOWS_SBID_LMT_AM == 0 ? '결장':vo.SEL_STS_DSC_NAME) +"</dd>";
+						sHtml += "		<dd class='pd_state'>"+ (vo.SEL_STS_DSC_NAME=='대기' && vo.LOWS_SBID_LMT_AM == 0 ? '결장' : (vo.SEL_STS_DSC_NAME == '낙찰' ? vo.LVST_AUC_PTC_MN_NO : vo.SEL_STS_DSC_NAME)) +"</dd>";
 						sHtml += "	</dl></li>";
 						body.append(sHtml);
 					}					

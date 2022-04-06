@@ -85,7 +85,7 @@
 					<dd class="pd_kpn">KPN</dd>
 					<dd class="pd_pay1">최저가</dd>
 					<dd class="pd_pay2">낙찰가</dd>
-					<dd class="pd_state">결과</dd>
+					<dd class="pd_state">낙찰자</dd>
 				</dl>
 			</div>
 			<div class="list_body">
@@ -108,7 +108,13 @@
 								<dd class="pd_kpn">${ vo.KPN_NO_STR }</dd>
 								<dd class="pd_pay1">${(vo.LOWS_SBID_LMT_AM eq '' || vo.LOWS_SBID_LMT_AM == null || vo.LOWS_SBID_LMT_AM <= 0 ) ? '-' : vo.LOWS_SBID_LMT_AM <= 0 ? '0' : fn:split(vo.LOWS_SBID_LMT_UPR,'.')[0]}</dd>
 								<dd class="pd_pay2">${(vo.SRA_SBID_UPR eq '' || vo.SRA_SBID_UPR == null || vo.SRA_SBID_UPR <= 0 ) ? '-' : vo.SRA_SBID_UPR <= 0 ? '0' : fn:split(vo.SRA_SBID_UPR,'.')[0]}</dd>
-								<dd class="pd_state">${ vo.SEL_STS_DSC_NAME }</dd>
+								<dd class="pd_state">
+									<c:choose>
+										<c:when test="${vo.SEL_STS_DSC_NAME eq '대기' and (empty vo.LOWS_SBID_LMT_AM or vo.LOWS_SBID_LMT_AM <= 0)}">결장</c:when>
+										<c:when test="${vo.SEL_STS_DSC_NAME eq '낙찰'}">${vo.LVST_AUC_PTC_MN_NO}</c:when>
+										<c:otherwise>${vo.SEL_STS_DSC_NAME}</c:otherwise>
+									</c:choose>
+								</dd>
 							</dl>
 						</li>
 					</c:forEach>
