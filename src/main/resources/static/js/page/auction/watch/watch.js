@@ -36,7 +36,7 @@ $(function() {
 		if($('#aucDsc').val() == '2'){
 			calcPiePercent();
 			$(".tblAuction .list_body ul li").removeClass('act');
-			$(".tblAuction .list_body ul li").on('click',function(){
+			$(document).on('click',".tblAuction .list_body ul li",function(){
 				$('.boarder ul li dd.auctionNum').text($(this).find('dd.aucPrgSq').text());
 				$('.boarder ul li dd.ftsnm').html($(this).find('dd.ftsnm').text());
 				$('.boarder ul li dd.sex').text($(this).find('dd.indvSexC').text());
@@ -210,7 +210,7 @@ var messageHandler = function(data) {
 						if(arr.length > 1){
 							arr.forEach(function(vo,i){
 								var html = '';
-								html +='<li class="'+(i==0?'act':'')+'">';
+								html +='<li class="'+(i==0?'':'')+'">';
 								html +='  <input type="hidden" name="mcowDsc" class="mcowDsc" value="'+vo.MCOW_DSC_NAME +'"/>';
 								html +='  <input type="hidden" name="hidden" class="hidden" value="'+vo.MATIME +'"/>';
 								html +='  <dl>';

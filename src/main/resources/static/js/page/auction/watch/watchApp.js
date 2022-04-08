@@ -1,7 +1,7 @@
 $(function() {
 	if($('#aucDsc').val() == '2'){
 		$(".tblAuction .list_body ul li").removeClass('act');
-		$(".tblAuction .list_body ul li").on('click',function(){
+		$(document).on('click',".tblAuction .list_body ul li",function(){
 				var str ="";
 				str += $(this).find('dd.aucPrgSq').text().trim();
 				str +="|"+$(this).find('dd.indvSexC').text().trim();
@@ -137,7 +137,7 @@ var messageHandler = function(data) {
 						if(arr.length > 1){
 							arr.forEach(function(vo,i){
 								var html = '';
-								html +='<li class="'+(i==0?'act':'')+'">';
+								html +='<li class="'+(i==0?'':'')+'">';
 								html +='  <input type="hidden" name="mcowDsc" class="mcowDsc" value="'+vo.MCOW_DSC_NAME +'"/>';
 								html +='  <input type="hidden" name="hidden" class="hidden" value="'+vo.MATIME +'"/>';
 								html +='  <dl>';
