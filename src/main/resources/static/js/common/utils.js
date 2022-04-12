@@ -83,17 +83,17 @@ var goAuctionApp = function(place) {
 
 var goWatchApp = function() {
 	try {
+		var params = {
+			"url" : window.location.origin + '/watchApp' + window.location.search
+			, "watch_token" : getCookie('watch_token')
+		};
 		// 안드로이드
 		if (window.auctionBridge) {
-			var params = {
-				"url" : window.location.origin + '/watchApp' + window.location.search
-				, "watch_token" : getCookie('watch_token')
-			};
 			window.auctionBridge.moveAuctionWatch(JSON.stringify(params));
 		}
 		// 아이폰
 		else if(isIos()) {
-			webkit.messageHandlers.moveAuctionWatch.postMessage(true);
+			webkit.messageHandlers.moveAuctionWatch.postMessage(JSON.stringify(params));
 		}
 		else {
 			location.href = window.location.origin + '/watch' + window.location.search
