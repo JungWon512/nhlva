@@ -338,9 +338,10 @@ public class AdminController {
 	        
 			Map<String,Object> info=auctionService.getStnInfo(temp);
 			
-			if(info == null && info.isEmpty()) {		
+			if(info == null || info.isEmpty()) {		
 				result.put("success", false);
 				result.put("message", "경매 차수 구간이 없습니다.");
+				return result;
 			}		
 	        temp.put("stAucNo", info.get("ST_AUC_NO"));
 	        temp.put("edAucNo", info.get("ED_AUC_NO"));
