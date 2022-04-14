@@ -126,7 +126,7 @@
 							</c:when>
 							<c:when test="${params.regType eq 'AL'}">
 								<dd class="col2">
-									<input type="text" name="firLowsSbidLmtAm" id="cowSogWt${item.AUC_PRG_SQ}" class="onlyNumber" value="${fn:split(item.LOWS_SBID_LMT_UPR,'.')[0]}" maxlength="4" pattern="\d*" inputmode="numeric"/>
+									<input type="text" name="firLowsSbidLmtAm" id="firLowsSbidLmtAm${item.AUC_PRG_SQ}" class="onlyNumber" value="${fn:split(item.LOWS_SBID_LMT_UPR,'.')[0]}" maxlength="5" pattern="\d*" inputmode="numeric"/>
 								</dd>
 							</c:when>
 							<c:when test="${params.regType eq 'N'}">
