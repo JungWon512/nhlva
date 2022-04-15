@@ -19,7 +19,7 @@ $(function() {
 			});
 			$('input[name=aucNum]').on('keyup',function(e){
 				if (e.keyCode == 13) {
-					fnSetAuctionInfo();
+					fnSetAuctionInfo($(this).val());
 				}
 			});
 			$('input[name=aucNum]').focus();
@@ -116,6 +116,11 @@ $(function() {
 			var tabId = $(this).data("tabId");
 			$("." + tabId + "_area").show();
 		});
+		
+		$(document).on(clickEvent, ".modal-wrap .entryList .list_body li", function(){
+			fnSetAuctionInfo($(this).find('dd.num').text());
+			modalPopupClose('.pop_auction');			
+		});
 
 		// 찜하기 팝업
 		$(document).on(clickEvent, ".pd_pav a", function(){
@@ -164,7 +169,7 @@ $(function() {
 			
 			div.append($(sHtml));
 			modalPopup('.popup .modal-wrap.pop_jjim_input.zim');
-		});
+		});		
 		
 		// 찜하기 이벤트
 		$(document).on(clickEvent, ".pop_jjim_input .btn_ok", function(){
@@ -241,7 +246,8 @@ $(function() {
 		
 		// 경매 번호 입력
 		$(".btn_confirm").on(clickEvent, function(){
-			fnSetAuctionInfo();
+			var num = $('input[name=aucNum]').val();
+			fnSetAuctionInfo(num);
 		});
 		
 		// 경매 번호 입력화면 이동
@@ -706,7 +712,7 @@ var messageHandler = function(data) {
 }
 
 // 경매 번호 입력
-var fnSetAuctionInfo = function() {
+var fnSetAuctionInfo = function(aucNum) {
 	if (!auctionConfig.asData || !(auctionConfig.asData.status == "8003" || auctionConfig.asData.status == "8004")) {
 		return;
 	}
@@ -721,7 +727,7 @@ var fnSetAuctionInfo = function() {
 	reqData.push("AE");
 	reqData.push(auctionConfig.arData.naBzplc);
 	reqData.push(auctionConfig.arData.trmnAmnno);
-	reqData.push($("input[name='aucNum']").val());
+	reqData.push(aucNum);
 	socket.emit('packetData', reqData.join('|'));
 	if(!isApp() && chkOs() == 'web') $('input[name=bidAmt]').focus();
 	
