@@ -11,11 +11,19 @@ $(function() {
 				str +="|"+$(this).find('dd.mcowDsc').text().trim();
 				str +="|"+$(this).find('dd.sraIndvPasgQcn').text().trim();
 				str +="|"+$(this).find('dd.kpnNo').text().trim();
-				str +="|"+fnSetComma($(this).find('dd.lowsSbidLmtAm').text().trim());
+				str +="|"+$(this).find('dd.lowsSbidLmtAm').text().trim().replace(/[^0-9.]/g,'').replace(/(\..*)\./g,'$1');
 				str +="|"+$(this).find('dd.rmkCntn').text().trim();
-				try{			
-					window.auctionBridge.setCowInfo(str);					
-				}catch(e){
+				try{
+					// 안드로이드
+					if (window.auctionBridge) {
+						window.auctionBridge.setCowInfo(str);
+					}
+					// 아이폰
+					else if(isIos()) {
+						window.webkit.messageHandlers.setCowInfo.postMessage(str);
+					}
+				}
+				catch(e){
 					console.log(e);
 				};
 		});

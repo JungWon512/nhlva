@@ -134,6 +134,23 @@
 				}
 			});
         });
+        
+        $(document).on("click", ".auction_bid > .list_body > ul > li", function(){
+			try{
+				const aucPrgSq = $(this).find("dd.num").text().replace(/[^0-9.]/g,'').replace(/(\..*)\./g,'$1');;
+				// 안드로이드
+				if (window.auctionBridge) {
+					window.auctionBridge.setAucPrgSq(aucPrgSq);
+				}
+				// 아이폰
+				else if(isIos()) {
+					window.webkit.messageHandlers.setAucPrgSq.postMessage(aucPrgSq);
+				}
+			}
+			catch(e){
+				console.log(e);
+			};
+		}); 
     };
     
 

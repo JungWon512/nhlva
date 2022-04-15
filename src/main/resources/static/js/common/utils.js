@@ -18,7 +18,7 @@ var pageMove = function(uri,chkSearch) {
 			}
 			// 아이폰
 			else if(isIos()) {
-				webkit.messageHandlers.moveWebPage.postMessage(url);
+				window.webkit.messageHandlers.moveWebPage.postMessage(url);
 			}
 			else {
 				location.href = url;
@@ -70,7 +70,7 @@ var goAuctionApp = function(place) {
 		}
 		// 아이폰
 		else if(isIos()) {
-			webkit.messageHandlers.moveAuctionBid.postMessage(true);
+			window.webkit.messageHandlers.moveAuctionBid.postMessage(true);
 		}
 		else {
 			location.href = window.location.origin + '/bid' + window.location.search
@@ -93,7 +93,7 @@ var goWatchApp = function() {
 		}
 		// 아이폰
 		else if(isIos()) {
-			webkit.messageHandlers.moveAuctionWatch.postMessage(JSON.stringify(params));
+			window.webkit.messageHandlers.moveAuctionWatch.postMessage(JSON.stringify(params));
 		}
 		else {
 			location.href = window.location.origin + '/watch' + window.location.search
