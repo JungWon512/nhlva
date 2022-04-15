@@ -29,13 +29,22 @@
 			});
 			
 			// 큰소 정보 입력 팝업 
-			$(".btn_info_pop").on(clickEvent, function() {
-				fnLayerPop("pop_cow_input");
+			$(".btn_info_pop.cow").on(clickEvent, function() {
+				fnLayerPop("cow_input");
+			});
+			// 경매상태 입력 팝업 
+			$(".btn_info_pop.status").on(clickEvent, function() {
+				fnLayerPop("status_change");
 			});
 			
 			// 정보 조회
-			$(document).on(clickEvent, ".btn_cow_search", function() {
+			$(document).on(clickEvent, ".cow_input .btn_cow_search", function() {
 				var aucPrgSq = $("form[name='frm_cow_info']").find("input[name='aucPrgSq']").val();
+				
+				if(aucPrgSq ==null || aucPrgSq == ''){
+					modalAlert("", '경매번호를 입력해주세요.');
+					return
+				}
 				$("form[name='frm_select']").find("input[name='aucPrgSq']").val(aucPrgSq);
 				$("form[name='frm_select']").find("input[name='regType']").val("I");
 				
@@ -60,6 +69,80 @@
 				});
 			});
 			
+			// 정보 조회
+			$(document).on(clickEvent, ".status_change .btn_cow_search", function() {
+				var aucPrgSq = $("form[name='frm_cow_info']").find("input[name='aucPrgSq']").val();
+				
+				if(aucPrgSq ==null || aucPrgSq == ''){
+					modalAlert("", '경매번호를 입력해주세요.');
+					return
+				}
+				$("form[name='frm_select']").find("input[name='aucPrgSq']").val(aucPrgSq);
+				$("form[name='frm_select']").find("input[name='regType']").val("S");
+				
+				$.ajax({
+					url: '/office/task/cowInfo',
+					data: JSON.stringify($("form[name='frm_select']").serializeObject()),
+					type: 'POST',
+					dataType: 'json',
+					beforeSend: function (xhr) {
+						xhr.setRequestHeader("Accept", "application/json");
+						xhr.setRequestHeader("Content-Type", "application/json");
+					}
+				}).done(function (data) {
+					var success = data.success;
+					var message = data.message;
+					if (!success) {
+						modalAlert("", message, fnReset);
+					}
+					else {
+						console.log(data);									
+						var cowInfo = data.cowInfo;
+						
+						$("input[name='qcnAucObjDsc']", $("form[name='frm_cow_info']")).val(cowInfo.QCN_AUC_OBJ_DSC);
+						$("input[name='aucObjDsc']", $("form[name='frm_cow_info']")).val(cowInfo.AUC_OBJ_DSC);
+						$("input[name='oslpNo']", $("form[name='frm_cow_info']")).val(cowInfo.OSLP_NO);
+						$("input[name='ledSqno']", $("form[name='frm_cow_info']")).val(cowInfo.LED_SQNO);
+			
+						$("input[name='cowSogWt']", $("form[name='frm_cow_info']")).val(cowInfo.COW_SOG_WT);
+						$("input[name='lvstAucPtcMnNo']", $("form[name='frm_cow_info']")).val(cowInfo.LVST_AUC_PTC_MN_NO);
+						$("input[name='sraSbidUpr']", $("form[name='frm_cow_info']")).val(cowInfo.SRA_SBID_UPR);
+						$("input[name='lowsSbidLmtAm']", $("form[name='frm_cow_info']")).val(cowInfo.LOWS_SBID_LMT_AM);
+						
+						//$("input[name='ledSqno']", $("form[name='frm_cow_info']")).val(cowInfo.LED_SQNO);
+						var $selStsDsc = $("select[name='selStsDsc']");							
+						$selStsDsc.find("option").each(function() {
+							if (cowInfo.SEL_STS_DSC == $(this).val()) $(this).prop("selected", "selected");
+						});
+						
+						if(cowInfo.SEL_STS_DSC == '22'){
+							$("input[name='lvstAucPtcMnNo']", $("form[name='frm_cow_info']")).prop("disabled", false);
+							$("input[name='sraSbidUpr']", $("form[name='frm_cow_info']")).prop("disabled", false);
+							$("input[name='lvstAucPtcMnNo']", $("form[name='frm_cow_info']")).val(cowInfo.LVST_AUC_PTC_MN_NO);
+							$("input[name='sraSbidUpr']", $("form[name='frm_cow_info']")).val(cowInfo.SRA_SBID_UPR);							
+						}else{
+							$("input[name='lvstAucPtcMnNo']", $("form[name='frm_cow_info']")).val('');
+							$("input[name='sraSbidUpr']", $("form[name='frm_cow_info']")).val('');							
+						}
+						
+						$("select").selectric("refresh");
+					}
+				});
+			});
+			
+			$(document).on("change", ".modal-wrap.status_change select[name=selStsDsc]", function() {
+				if($(this).val() == '22'){
+					$("input[name='lvstAucPtcMnNo']", $("form[name='frm_cow_info']")).prop("disabled", false);
+					$("input[name='sraSbidUpr']", $("form[name='frm_cow_info']")).prop("disabled", false);
+					$("input[name='lvstAucPtcMnNo']", $("form[name='frm_cow_info']")).focus();					
+				}else{
+					$("input[name='lvstAucPtcMnNo']", $("form[name='frm_cow_info']")).val('');
+					$("input[name='sraSbidUpr']", $("form[name='frm_cow_info']")).val('');
+					$("input[name='lvstAucPtcMnNo']", $("form[name='frm_cow_info']")).prop("disabled", true);
+					$("input[name='sraSbidUpr']", $("form[name='frm_cow_info']")).prop("disabled", true);
+					
+				}
+			});
 			// 큰소 구분 선택 이벤트
 			$(document).on("change", "#ppgcowFeeDsc", function() {
 				var ppgcowFeeDsc = $(this).val();
@@ -103,12 +186,20 @@
 //				fnSetRmkCntn();
 //			});
 			
-			$(document).on(clickEvent, ".btn_reset", function(){
+			$(document).on(clickEvent, ".modal-wrap.cow_input .btn_reset", function(){
 				fnReset();
 			});
 			
-			$(document).on(clickEvent, ".btn_save", function(){
+			$(document).on(clickEvent, ".modal-wrap.cow_input .btn_save", function(){
 				fnSave();
+			});
+			
+			$(document).on(clickEvent, ".modal-wrap.status_change .btn_reset", function(){
+				fnReset();
+			});
+			
+			$(document).on(clickEvent, ".modal-wrap.status_change .btn_save", function(){
+				fnStatusSave();
 			});
 		};
 		
@@ -118,16 +209,25 @@
 			$("." + className).remove();
 			
 			var popHtml = [];
-			popHtml.push('<div id="" class="modal-wrap ' + className + '">');
+			popHtml.push('<div id="" class="modal-wrap pop_cow_input ' + className + '">');
 			popHtml.push('	<form name="frm_cow_info" method="post">');
 			popHtml.push('		<input type="hidden" name="aucObjDsc" value="" />');
-			popHtml.push('		<input type="hidden" name="regType" value="I" />');
+			if(className == 'cow_input'){
+				popHtml.push('		<input type="hidden" name="regType" value="I" />');
+			}else if(className =='status_change'){				
+				popHtml.push('		<input type="hidden" name="qcnAucObjDsc" value="" />');
+				popHtml.push('		<input type="hidden" name="regType" value="S" />');				
+			}
 			popHtml.push('		<input type="hidden" name="oslpNo" value="" />');
 			popHtml.push('		<input type="hidden" name="ledSqno" value="" />');
 			popHtml.push('	<div class="modal-content pop_ad_mod">');
 			popHtml.push('		<div class="modal-head">');
-			popHtml.push('			<h3>큰소 정보 입력</h3>');
-			popHtml.push('			<button type="button" class="modal_popup_close" onclick="modalPopupClose(\'.' + className + '\');return false;">닫기</button>');
+			if(className == 'cow_input'){
+				popHtml.push('			<h3>큰소 정보 입력</h3>');
+			}else if(className =='status_change'){
+				popHtml.push('			<h3>경매상태 변경</h3>');				
+			}			
+			popHtml.push('			<button type="button" class="modal_popup_close" onclick="javascript:fnLayerClose(\'' + className + '\') return false;">닫기</button>');
 			popHtml.push('		</div>');
 			popHtml.push('		<div class="modal-body">');
 			popHtml.push('			<div class="table-mod">');
@@ -145,78 +245,114 @@
 			popHtml.push('							</ul>');
 			popHtml.push('						</td>');
 			popHtml.push('					</tr>');
-			popHtml.push('					<tr>');
-			popHtml.push('						<th>출하주</th>');
-			popHtml.push('						<td class="input-td">');
-			popHtml.push('							<input type="text" name="ftsnm" id="ftsnm" disabled="disabled" alt="출하주" value="" />');
-			popHtml.push('						</td>');
-			popHtml.push('					</tr>');
-			popHtml.push('					<tr>');
-			popHtml.push('						<th>큰소 구분</th>');
-			popHtml.push('						<td class="input-td">');
-			popHtml.push('							<select name="ppgcowFeeDsc" class="required" id="ppgcowFeeDsc" alt="큰소 구분" disabled="disabled">');
-			popHtml.push('								<option value="">선택</option>');
-			popHtml.push('							</select>');
-			popHtml.push('						</td>');
-			popHtml.push('					</tr>');
-			popHtml.push('					<tr>');
-			popHtml.push('						<th>임신 개월</th>');
-			popHtml.push('						<td class="input-td">');
-			popHtml.push('							<select name="prnyMtcn" class="required" id="prnyMtcn" alt="임신 개월" disabled="disabled">');
-			popHtml.push('								<option value="">선택</option>');
-			popHtml.push('								<option value="0">0개월</option>');
-			popHtml.push('								<option value="1">1개월</option>');
-			popHtml.push('								<option value="2">2개월</option>');
-			popHtml.push('								<option value="3">3개월</option>');
-			popHtml.push('								<option value="4">4개월</option>');
-			popHtml.push('								<option value="5">5개월</option>');
-			popHtml.push('								<option value="6">6개월</option>');
-			popHtml.push('								<option value="7">7개월</option>');
-			popHtml.push('								<option value="8">8개월</option>');
-			popHtml.push('								<option value="9">9개월</option>');
-			popHtml.push('							</select>');
-			popHtml.push('						</td>');
-			popHtml.push('					</tr>');
-			popHtml.push('					<tr>');
-			popHtml.push('						<th>(송)<span>성별<br>개월</span></th>');
-			popHtml.push('						<td class="input-td">');
-			popHtml.push('							<ul class="harf_ul">');
-			popHtml.push('								<li>');
-			popHtml.push('									<select name="ccowIndvSexC" class="required" alt="송아지 성별" id="ccowIndvSexC" disabled="disabled">');
-			popHtml.push('										<option value="">선택</option>');
-			popHtml.push('									</select>');
-			popHtml.push('								</li>');
-			popHtml.push('								<li>');
-			popHtml.push('									<select name="ccowBirthMonth" class="required" alt="송아지 개월" id="ccowBirthMonth" disabled="disabled">');
-			popHtml.push('										<option value="">선택</option>');
-			popHtml.push('										<option value="1">1개월</option>');
-			popHtml.push('										<option value="2">2개월</option>');
-			popHtml.push('										<option value="3">3개월</option>');
-			popHtml.push('										<option value="4">4개월</option>');
-			popHtml.push('										<option value="5">5개월</option>');
-			popHtml.push('										<option value="6">6개월</option>');
-			popHtml.push('										<option value="7">7개월</option>');
-			popHtml.push('										<option value="8">8개월</option>');
-			popHtml.push('										<option value="9">9개월</option>');
-			popHtml.push('									</select>');
-			popHtml.push('								</li>');
-			popHtml.push('							</ul>');
-			popHtml.push('						</td>');
-			popHtml.push('					</tr>');
-			popHtml.push('					<tr>');
-			popHtml.push('						<th>수의사</th>');
-			popHtml.push('						<td class="input-td">');
-			popHtml.push('							<select name="lvstMktTrplAmnno" class="" id="lvstMktTrplAmnno" alt="수의사" disabled="disabled">');
-			popHtml.push('								<option value="0">선택</option>');
-			popHtml.push('							</select>');
-			popHtml.push('						</td>');
-			popHtml.push('					</tr>');
-			popHtml.push('					<tr>');
-			popHtml.push('						<th>비고</th>');
-			popHtml.push('						<td class="input-td">');
-			popHtml.push('							<input type="text" name="rmkCntn" id="rmkCntn" value="" alt="비고" />');
-			popHtml.push('						</td>');
-			popHtml.push('					</tr>');
+			if(className == 'cow_input'){
+				popHtml.push('					<tr>');
+				popHtml.push('						<th>출하주</th>');
+				popHtml.push('						<td class="input-td">');
+				popHtml.push('							<input type="text" name="ftsnm" id="ftsnm" disabled="disabled" alt="출하주" value="" />');
+				popHtml.push('						</td>');
+				popHtml.push('					</tr>');
+				popHtml.push('					<tr>');
+				popHtml.push('						<th>큰소 구분</th>');
+				popHtml.push('						<td class="input-td">');
+				popHtml.push('							<select name="ppgcowFeeDsc" class="required" id="ppgcowFeeDsc" alt="큰소 구분" disabled="disabled">');
+				popHtml.push('								<option value="">선택</option>');
+				popHtml.push('							</select>');
+				popHtml.push('						</td>');
+				popHtml.push('					</tr>');
+				popHtml.push('					<tr>');
+				popHtml.push('						<th>임신 개월</th>');
+				popHtml.push('						<td class="input-td">');
+				popHtml.push('							<select name="prnyMtcn" class="required" id="prnyMtcn" alt="임신 개월" disabled="disabled">');
+				popHtml.push('								<option value="">선택</option>');
+				popHtml.push('								<option value="0">0개월</option>');
+				popHtml.push('								<option value="1">1개월</option>');
+				popHtml.push('								<option value="2">2개월</option>');
+				popHtml.push('								<option value="3">3개월</option>');
+				popHtml.push('								<option value="4">4개월</option>');
+				popHtml.push('								<option value="5">5개월</option>');
+				popHtml.push('								<option value="6">6개월</option>');
+				popHtml.push('								<option value="7">7개월</option>');
+				popHtml.push('								<option value="8">8개월</option>');
+				popHtml.push('								<option value="9">9개월</option>');
+				popHtml.push('							</select>');
+				popHtml.push('						</td>');
+				popHtml.push('					</tr>');
+				popHtml.push('					<tr>');
+				popHtml.push('						<th>(송)<span>성별<br>개월</span></th>');
+				popHtml.push('						<td class="input-td">');
+				popHtml.push('							<ul class="harf_ul">');
+				popHtml.push('								<li>');
+				popHtml.push('									<select name="ccowIndvSexC" class="required" alt="송아지 성별" id="ccowIndvSexC" disabled="disabled">');
+				popHtml.push('										<option value="">선택</option>');
+				popHtml.push('									</select>');
+				popHtml.push('								</li>');
+				popHtml.push('								<li>');
+				popHtml.push('									<select name="ccowBirthMonth" class="required" alt="송아지 개월" id="ccowBirthMonth" disabled="disabled">');
+				popHtml.push('										<option value="">선택</option>');
+				popHtml.push('										<option value="1">1개월</option>');
+				popHtml.push('										<option value="2">2개월</option>');
+				popHtml.push('										<option value="3">3개월</option>');
+				popHtml.push('										<option value="4">4개월</option>');
+				popHtml.push('										<option value="5">5개월</option>');
+				popHtml.push('										<option value="6">6개월</option>');
+				popHtml.push('										<option value="7">7개월</option>');
+				popHtml.push('										<option value="8">8개월</option>');
+				popHtml.push('										<option value="9">9개월</option>');
+				popHtml.push('									</select>');
+				popHtml.push('								</li>');
+				popHtml.push('							</ul>');
+				popHtml.push('						</td>');
+				popHtml.push('					</tr>');
+				popHtml.push('					<tr>');
+				popHtml.push('						<th>수의사</th>');
+				popHtml.push('						<td class="input-td">');
+				popHtml.push('							<select name="lvstMktTrplAmnno" class="" id="lvstMktTrplAmnno" alt="수의사" disabled="disabled">');
+				popHtml.push('								<option value="0">선택</option>');
+				popHtml.push('							</select>');
+				popHtml.push('						</td>');
+				popHtml.push('					</tr>');
+				popHtml.push('					<tr>');
+				popHtml.push('						<th>비고</th>');
+				popHtml.push('						<td class="input-td">');
+				popHtml.push('							<input type="text" name="rmkCntn" id="rmkCntn" value="" alt="비고" />');
+				popHtml.push('						</td>');
+				popHtml.push('					</tr>');
+				
+			}else if(className =='status_change'){
+				popHtml.push('					<tr>');
+				popHtml.push('						<th>하한가</th>');
+				popHtml.push('						<td class="input-td">');
+				popHtml.push('							<input type="text" name="lowsSbidLmtAm" id="lowsSbidLmtAm" value="" alt="하한가" disabled="disabled"/>');
+				popHtml.push('						</td>');
+				popHtml.push('					</tr>');
+				popHtml.push('					<tr>');
+				popHtml.push('						<th>경매상태</th>');
+				popHtml.push('						<td class="input-td">');
+				popHtml.push('							<select name="selStsDsc" class="required" id="selStsDsc">');
+				popHtml.push('								<option value="">선택</option>');
+				popHtml.push('								<option value="11">대기</option>');
+				popHtml.push('								<option value="21">경매</option>');
+				popHtml.push('								<option value="22">낙찰</option>');
+				popHtml.push('								<option value="23">유찰</option>');
+				popHtml.push('							</select>');
+				popHtml.push('						</td>');
+				popHtml.push('					</tr>');
+				popHtml.push('					<tr>');
+				popHtml.push('						<th>낙찰자<br/>(번호)</th>');
+				popHtml.push('						<td class="input-td">');
+				popHtml.push('							<input type="text" name="lvstAucPtcMnNo" id="lvstAucPtcMnNo" class="required" value="" alt="낙찰자" disabled="disabled"/>');
+				popHtml.push('						</td>');
+				popHtml.push('					</tr>');
+				popHtml.push('					<tr>');
+				popHtml.push('						<th>낙찰단가</th>');
+				popHtml.push('						<td class="input-td">');
+				popHtml.push('							<input type="text" name="sraSbidUpr" id="sraSbidUpr" class="required" value="" alt="낙찰단가" disabled="disabled"/>');
+				popHtml.push('						</td>');
+				popHtml.push('					</tr>');
+				
+			}
+		
 			popHtml.push('				</table>');
 			popHtml.push('			</div>');
 			popHtml.push('		</div>');
@@ -224,7 +360,7 @@
 			popHtml.push('			<div class="btn_area">');
 			popHtml.push('				<a href="javascript:;" class="btn_reset">초기화</a>');
 			popHtml.push('				<a href="javascript:;" class="btn_save">저장</a>');
-			popHtml.push('				<a href="javascript:modalPopupClose(\'.' + className + '\');">종료</a>');
+			popHtml.push('				<a href="javascript:fnLayerClose(\'' + className + '\');">종료</a>');
 			popHtml.push('			</div>');
 			popHtml.push('		</div>');
 			popHtml.push('	</div>');
@@ -416,6 +552,44 @@
 		}
 		
 		// 저장
+		var fnStatusSave = function() {
+			if(!fnValidation()) return;
+			
+			var lowsSbidLmtAm = $("input[name='lowsSbidLmtAm']", $("form[name='frm_cow_info']")).val();
+			var sraSbidUpr = $("input[name='sraSbidUpr']", $("form[name='frm_cow_info']")).val();
+			var selStsDsc = $("select[name='selStsDsc']", $("form[name='frm_cow_info']")).val();
+			if(selStsDsc == '22' && sraSbidUpr < lowsSbidLmtAm){
+				modalAlert('','낙찰가가 하한가보다 작습니다.');
+				return;
+			}
+			
+			var frmCowInfo = $("form[name='frm_cow_info']");
+			var frmSelect = $("form[name='frm_select']");
+			frmCowInfo.find("input[name='aucDt']").remove();
+			frmCowInfo.append(frmSelect.find("input[name='aucDt']").clone(false));
+			frmCowInfo.find("input[name='regType']").val("S");
+			
+			$.ajax({
+				url : '/office/task/saveCowInfo',
+				data : JSON.stringify($("form[name='frm_cow_info']").serializeObject()),
+				type : 'POST',
+				dataType : 'json',
+				beforeSend: function (xhr) {
+					xhr.setRequestHeader("Accept", "application/json");
+					xhr.setRequestHeader("Content-Type", "application/json");
+				},
+				success : function() {
+				},
+				error: function(xhr, status, error) {
+				}
+			}).done(function (body) {
+				var message = body.message;
+				modalAlert("", message);
+				return;
+			});
+		}
+		
+		// 저장
 		var fnSave = function() {
 			if (fnValidation()) {
 				var frmCowInfo = $("form[name='frm_cow_info']");
@@ -481,3 +655,7 @@
 		Select.init();
 	});
 })(window, window.jQuery);
+var fnLayerClose = function(className){
+	modalPopupClose('.' + className);		
+	$("." + className).remove();	
+}

@@ -971,6 +971,11 @@
 			 	 WHERE C.NA_BZPLC = A.NA_BZPLC
 			 	   AND C.AUC_DT = A.AUC_DT
 			 	   AND C.AUC_OBJ_DSC = A.AUC_OBJ_DSC) AS QCN
+			 , (SELECT D.AUC_OBJ_DSC
+			 	  FROM TB_LA_IS_MH_AUC_QCN D
+			 	 WHERE D.NA_BZPLC = A.NA_BZPLC
+			 	   AND D.AUC_DT = A.AUC_DT
+			 	   AND DECODE(D.AUC_OBJ_DSC,'0',A.AUC_OBJ_DSC,D.AUC_OBJ_DSC) = A.AUC_OBJ_DSC) AS QCN_AUC_OBJ_DSC
 			 , A.AUC_PRG_SQ					/* 경매순번 */
 			 , A.AUC_OBJ_DSC				/* 경매대상구분코드 */
 			 , A.SRA_INDV_AMNNO				/* 축산개체관리번호 */
@@ -1124,6 +1129,22 @@
 				 , PRNY_MTCN = #{prnyMtcn}
 				 , RMK_CNTN = #{rmkCntn}
 			</when>
+			<when test="regType == 'S'.toString()">
+				<choose>
+					<when test ="selStsDsc == '22'">
+						, SRA_SBID_UPR = #{sraSbidUpr}
+						, LVST_AUC_PTC_MN_NO = #{lvstAucPtcMnNo}
+						, TRMN_AMNNO = #{trmnAmnno}
+					</when>
+					<otherwise>
+						, SRA_SBID_UPR = 0
+						, SRA_SBID_AM = 0
+						, LVST_AUC_PTC_MN_NO = NULL
+						, TRMN_AMNNO = NULL
+					</otherwise>
+				</choose>
+				, SEL_STS_DSC = #{selStsDsc}				
+			</when>
 			</choose>
 			 WHERE NA_BZPLC = #{naBzplc}
 			   AND AUC_DT = #{aucDt}
@@ -1245,6 +1266,7 @@
             	SUBSTRING(A.SRA_INDV_AMNNO,LENGTH(A.SRA_INDV_AMNNO)-4,4 ) LIKE '%' || #{searchTxt} ||'%'
             )
 		</if>
+		ORDER BY A.AUC_PRG_SQ ASC
 	</select>
 	
 	<!-- 응찰내역 통계 -->

@@ -393,12 +393,13 @@ public class AuctionServiceImpl implements AuctionService {
 		else {
 			// 업데이트 유형이 중량 등록(W), 중량 일괄 등록(AW)이고 비육우인 경우 낙찰 금액을 다시 계산해준다.
 			if (("W".equals(params.get("regType")) || "AW".equals(params.get("regType")))
-			  && "2".equals(params.get("aucObjDsc"))) {
+			  && "2".equals(params.get("aucObjDsc")) 
+			  || "S".equals(params.get("regType"))) {
 
 				final Map<String, Object> cowInfo = this.selectCowInfo(params);
 
 				// 비육우 경매단위가 KG별이고 낙찰 상태인 경우
-				if ("1".equals(cowInfo.get("NBFCT_AUC_UPR_DSC")) || "22".equals(cowInfo.get("SEL_STS_DSC"))) {
+				if ("22".equals(cowInfo.get("SEL_STS_DSC")) || "S".equals(params.get("regType"))) {
 					params.put("naBzPlc", params.get("naBzplc"));
 					params.put("selStsDsc", cowInfo.get("SEL_STS_DSC"));
 					params.put("sraSbidUpr", cowInfo.get("SRA_SBID_UPR"));

@@ -188,6 +188,20 @@ public class AdminTaskController extends CommonController {
 			if("N".equals(regType)) {
 				auctionService.updateCowInfoForModlNo(params);
 			}
+
+			String selStsDsc = (String)params.getOrDefault("selStsDsc", "");
+			if("S".equals(regType) && "22".equals(selStsDsc)) {
+				Map<String,Object> temp = new HashMap<>();
+				temp.putAll(params);
+				temp.put("aucObjDsc", params.get("qcnAucObjDsc"));
+				Map<String,Object> mwmn =  auctionService.selectAuctMwmn(temp);
+				if(mwmn == null || mwmn.isEmpty()) {
+					result.put("success", false);
+					result.put("message", "입력한 참가번호가 없습니다.");
+					return result;
+				}
+				params.put("trmnAmnno", mwmn.get("TRMN_AMNNO"));
+			}
 			
 			final int cnt = auctionService.updateCowInfo(params);
 			if (cnt > 0) {
