@@ -227,7 +227,7 @@
 			}else if(className =='status_change'){
 				popHtml.push('			<h3>경매상태 변경</h3>');				
 			}			
-			popHtml.push('			<button type="button" class="modal_popup_close" onclick="javascript:fnLayerClose(\'' + className + '\') return false;">닫기</button>');
+			popHtml.push('			<button type="button" class="modal_popup_close" onclick="javascript:fnLayerClose(\'' + className + '\'); return false;">닫기</button>');
 			popHtml.push('		</div>');
 			popHtml.push('		<div class="modal-body">');
 			popHtml.push('			<div class="table-mod">');

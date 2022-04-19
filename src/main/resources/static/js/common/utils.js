@@ -96,11 +96,11 @@ var goWatchApp = function() {
 			window.webkit.messageHandlers.moveAuctionWatch.postMessage(JSON.stringify(params));
 		}
 		else {
-			location.href = window.location.origin + '/watch' + window.location.search
+			location.href = window.location.origin + '/watch' + window.location.search;
 		}
 	}
 	catch(e) {
-		location.href = window.location.origin + '/watch' + window.location.search
+		location.href = window.location.origin + '/watch' + window.location.search;
 	}
 }
 
