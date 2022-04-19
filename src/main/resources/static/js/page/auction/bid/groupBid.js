@@ -117,7 +117,7 @@ $(function() {
 			$("." + tabId + "_area").show();
 		});
 		
-		$(document).on(clickEvent, ".modal-wrap .entryList .list_body li", function(){
+		$(document).on(clickEvent, ".modal-wrap .entryList .tab_area.bid_area .list_body li", function(){
 			fnSetAuctionInfo($(this).find('dd.num').text());
 			modalPopupClose('.pop_auction');			
 		});
