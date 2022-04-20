@@ -96,7 +96,6 @@
 						modalAlert("", message, fnReset);
 					}
 					else {
-						console.log(data);									
 						var cowInfo = data.cowInfo;
 						
 						$("input[name='qcnAucObjDsc']", $("form[name='frm_cow_info']")).val(cowInfo.QCN_AUC_OBJ_DSC);
@@ -547,7 +546,7 @@
 		// 입력 초기화
 		var fnReset = function() {
 			$("form[name='frm_cow_info']").find("input, select").val("");
-			$("form[name='frm_cow_info']").find("select").prop("disabled", true);
+			$("form[name='frm_cow_info']").find("select").not("select[name='selStsDsc']").prop("disabled", true);
 			$("select").selectric("refresh");
 		}
 		
