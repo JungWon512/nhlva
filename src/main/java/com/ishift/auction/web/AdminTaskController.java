@@ -208,7 +208,7 @@ public class AdminTaskController extends CommonController {
 				result.put("success", true);
 				result.put("message", "수정되었습니다.");
 				result.put("params", params);
-				if (!"I".equals(params.get("regType"))) {
+				if (!"I".equals(params.get("regType")) && !"S".equals(params.get("regType"))) {
 					result.put("entryList", auctionService.entrySelectList(params));
 				}
 			}

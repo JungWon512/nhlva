@@ -24,7 +24,7 @@
 		<li><a href="javascript:;" class="card-link btn_move act" data-type="AL">하한가일괄등록</a></li>
 		<li><a href="javascript:;" class="card-link btn_move act" data-type="N">계류대변경</a></li>
 		<li><a href="javascript:;" class="card-link btn_info_pop cow act" data-type="I">큰소 정보 입력</a></li>
-<!-- 		<li><a href="javascript:;" class="card-link btn_info_pop status act" data-type="S">경매상태 변경</a></li> -->
+		<li><a href="javascript:;" class="card-link btn_info_pop status act" data-type="S">경매상태 변경</a></li>
 <!-- 		<li><a href="javascript:;">낙찰 조회</a></li> -->
 <!-- 		<li><a href="javascript:;">예비</a></li> -->
 	</ul>

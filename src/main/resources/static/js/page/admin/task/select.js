@@ -330,7 +330,7 @@
 				popHtml.push('						<td class="input-td">');
 				popHtml.push('							<select name="selStsDsc" class="required" id="selStsDsc">');
 				popHtml.push('								<option value="">선택</option>');
-				popHtml.push('								<option value="11">대기</option>');
+				popHtml.push('								<option value="11">송장등록</option>');
 				popHtml.push('								<option value="21">경매</option>');
 				popHtml.push('								<option value="22">낙찰</option>');
 				popHtml.push('								<option value="23">유찰</option>');
@@ -338,7 +338,7 @@
 				popHtml.push('						</td>');
 				popHtml.push('					</tr>');
 				popHtml.push('					<tr>');
-				popHtml.push('						<th>낙찰자<br/>(번호)</th>');
+				popHtml.push('						<th>낙찰자<br/>참가번호</th>');
 				popHtml.push('						<td class="input-td">');
 				popHtml.push('							<input type="text" name="lvstAucPtcMnNo" id="lvstAucPtcMnNo" class="required" value="" alt="낙찰자" disabled="disabled"/>');
 				popHtml.push('						</td>');
@@ -583,7 +583,7 @@
 				}
 			}).done(function (body) {
 				var message = body.message;
-				modalAlert("", message);
+				modalAlert("", message, fnReset);
 				return;
 			});
 		}
