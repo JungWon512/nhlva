@@ -69,7 +69,7 @@
 				});
 			});
 			
-			// 정보 조회
+			//경매상태 정보 조회
 			$(document).on(clickEvent, ".status_change .btn_cow_search", function() {
 				var aucPrgSq = $("form[name='frm_cow_info']").find("input[name='aucPrgSq']").val();
 				
@@ -90,42 +90,7 @@
 						xhr.setRequestHeader("Content-Type", "application/json");
 					}
 				}).done(function (data) {
-					var success = data.success;
-					var message = data.message;
-					if (!success) {
-						modalAlert("", message, fnReset);
-					}
-					else {
-						var cowInfo = data.cowInfo;
-						
-						$("input[name='qcnAucObjDsc']", $("form[name='frm_cow_info']")).val(cowInfo.QCN_AUC_OBJ_DSC);
-						$("input[name='aucObjDsc']", $("form[name='frm_cow_info']")).val(cowInfo.AUC_OBJ_DSC);
-						$("input[name='oslpNo']", $("form[name='frm_cow_info']")).val(cowInfo.OSLP_NO);
-						$("input[name='ledSqno']", $("form[name='frm_cow_info']")).val(cowInfo.LED_SQNO);
-			
-						$("input[name='cowSogWt']", $("form[name='frm_cow_info']")).val(cowInfo.COW_SOG_WT);
-						$("input[name='lvstAucPtcMnNo']", $("form[name='frm_cow_info']")).val(cowInfo.LVST_AUC_PTC_MN_NO);
-						$("input[name='sraSbidUpr']", $("form[name='frm_cow_info']")).val(cowInfo.SRA_SBID_UPR);
-						$("input[name='lowsSbidLmtAm']", $("form[name='frm_cow_info']")).val(cowInfo.LOWS_SBID_LMT_AM);
-						
-						//$("input[name='ledSqno']", $("form[name='frm_cow_info']")).val(cowInfo.LED_SQNO);
-						var $selStsDsc = $("select[name='selStsDsc']");							
-						$selStsDsc.find("option").each(function() {
-							if (cowInfo.SEL_STS_DSC == $(this).val()) $(this).prop("selected", "selected");
-						});
-						
-						if(cowInfo.SEL_STS_DSC == '22'){
-							$("input[name='lvstAucPtcMnNo']", $("form[name='frm_cow_info']")).prop("disabled", false);
-							$("input[name='sraSbidUpr']", $("form[name='frm_cow_info']")).prop("disabled", false);
-							$("input[name='lvstAucPtcMnNo']", $("form[name='frm_cow_info']")).val(cowInfo.LVST_AUC_PTC_MN_NO);
-							$("input[name='sraSbidUpr']", $("form[name='frm_cow_info']")).val(cowInfo.SRA_SBID_UPR);							
-						}else{
-							$("input[name='lvstAucPtcMnNo']", $("form[name='frm_cow_info']")).val('');
-							$("input[name='sraSbidUpr']", $("form[name='frm_cow_info']")).val('');							
-						}
-						
-						$("select").selectric("refresh");
-					}
+					fnStatusReload(data);
 				});
 			});
 			
@@ -370,6 +335,9 @@
 			modalPopup("." + className);
 			$("." + className).find("input:first").focus();
 			$("select").selectric("refresh");
+			$('input[name=aucPrgSq]').on('keydown',function(){
+				$('.'+className+' .btn_cow_search').click();
+			});
 		};
 		
 		//모달레이어팝업
@@ -543,11 +511,81 @@
 			rmkCntn.val(uniqueArr.join(","));
 		};
 		
+		// 저장
+		var fnSave = function() {
+			if (fnValidation()) {
+				var frmCowInfo = $("form[name='frm_cow_info']");
+				var frmSelect = $("form[name='frm_select']");
+				frmCowInfo.find("input[name='aucDt']").remove();
+				frmCowInfo.append(frmSelect.find("input[name='aucDt']").clone(false));
+				frmCowInfo.find("input[name='regType']").val("I");
+				
+				$.ajax({
+					url : '/office/task/saveCowInfo',
+					data : JSON.stringify($("form[name='frm_cow_info']").serializeObject()),
+					type : 'POST',
+					dataType : 'json',
+					beforeSend: function (xhr) {
+						xhr.setRequestHeader("Accept", "application/json");
+						xhr.setRequestHeader("Content-Type", "application/json");
+					},
+					success : function() {
+					},
+					error: function(xhr, status, error) {
+					}
+				}).done(function (body) {
+					var message = body.message;
+					modalAlert("", message);
+					return;
+				});
+			}
+		};
+		
 		// 입력 초기화
 		var fnReset = function() {
 			$("form[name='frm_cow_info']").find("input, select").val("");
 			$("form[name='frm_cow_info']").find("select").not("select[name='selStsDsc']").prop("disabled", true);
 			$("select").selectric("refresh");
+		}
+		
+		//경매 상태데이터 리로드
+		var fnStatusReload = function(data){			
+			var success = data.success;
+			var message = data.message;
+			if (!success) {
+				modalAlert("", message, fnReset);
+			}
+			else {
+				var cowInfo = data.cowInfo;
+				
+				$("input[name='qcnAucObjDsc']", $("form[name='frm_cow_info']")).val(cowInfo.QCN_AUC_OBJ_DSC);
+				$("input[name='aucObjDsc']", $("form[name='frm_cow_info']")).val(cowInfo.AUC_OBJ_DSC);
+				$("input[name='oslpNo']", $("form[name='frm_cow_info']")).val(cowInfo.OSLP_NO);
+				$("input[name='ledSqno']", $("form[name='frm_cow_info']")).val(cowInfo.LED_SQNO);
+	
+				$("input[name='cowSogWt']", $("form[name='frm_cow_info']")).val(cowInfo.COW_SOG_WT);
+				$("input[name='lvstAucPtcMnNo']", $("form[name='frm_cow_info']")).val(cowInfo.LVST_AUC_PTC_MN_NO);
+				$("input[name='sraSbidUpr']", $("form[name='frm_cow_info']")).val(cowInfo.SRA_SBID_UPR);
+				$("input[name='lowsSbidLmtAm']", $("form[name='frm_cow_info']")).val(cowInfo.LOWS_SBID_LMT_AM);
+				
+				//$("input[name='ledSqno']", $("form[name='frm_cow_info']")).val(cowInfo.LED_SQNO);
+				var $selStsDsc = $("select[name='selStsDsc']");							
+				$selStsDsc.find("option").each(function() {
+					if (cowInfo.SEL_STS_DSC == $(this).val()) $(this).prop("selected", "selected");
+				});
+				
+				if(cowInfo.SEL_STS_DSC == '22'){
+					$("input[name='lvstAucPtcMnNo']", $("form[name='frm_cow_info']")).prop("disabled", false);
+					$("input[name='sraSbidUpr']", $("form[name='frm_cow_info']")).prop("disabled", false);
+					$("input[name='lvstAucPtcMnNo']", $("form[name='frm_cow_info']")).val(cowInfo.LVST_AUC_PTC_MN_NO);
+					$("input[name='sraSbidUpr']", $("form[name='frm_cow_info']")).val(cowInfo.SRA_SBID_UPR);							
+				}else{
+					$("input[name='lvstAucPtcMnNo']", $("form[name='frm_cow_info']")).val('');
+					$("input[name='sraSbidUpr']", $("form[name='frm_cow_info']")).val('');							
+				}
+				
+				$("select").selectric("refresh");
+			}			
 		}
 		
 		// 저장
@@ -586,36 +624,6 @@
 				modalAlert("", message, fnReset);
 				return;
 			});
-		}
-		
-		// 저장
-		var fnSave = function() {
-			if (fnValidation()) {
-				var frmCowInfo = $("form[name='frm_cow_info']");
-				var frmSelect = $("form[name='frm_select']");
-				frmCowInfo.find("input[name='aucDt']").remove();
-				frmCowInfo.append(frmSelect.find("input[name='aucDt']").clone(false));
-				frmCowInfo.find("input[name='regType']").val("I");
-				
-				$.ajax({
-					url : '/office/task/saveCowInfo',
-					data : JSON.stringify($("form[name='frm_cow_info']").serializeObject()),
-					type : 'POST',
-					dataType : 'json',
-					beforeSend: function (xhr) {
-						xhr.setRequestHeader("Accept", "application/json");
-						xhr.setRequestHeader("Content-Type", "application/json");
-					},
-					success : function() {
-					},
-					error: function(xhr, status, error) {
-					}
-				}).done(function (body) {
-					var message = body.message;
-					modalAlert("", message);
-					return;
-				});
-			}
 		}
 		
 		// 필수 입력값 체크
