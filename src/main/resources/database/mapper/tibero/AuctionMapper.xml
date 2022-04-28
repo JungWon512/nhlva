@@ -1135,6 +1135,12 @@
 						, SRA_SBID_UPR = #{sraSbidUpr}
 						, LVST_AUC_PTC_MN_NO = #{lvstAucPtcMnNo}
 						, TRMN_AMNNO = #{trmnAmnno}
+						 , LOWS_SBID_LMT_AM = #{sraSbidUpr} * (SELECT CASE WHEN #{aucObjDsc} = '1' THEN CALF_AUC_ATDR_UNT_AM
+																				 WHEN #{aucObjDsc} = '2' THEN NBFCT_AUC_ATDR_UNT_AM
+																				 WHEN #{aucObjDsc} = '3' THEN PPGCOW_AUC_ATDR_UNT_AM
+																				 ELSE 10000 END
+																	   FROM TB_LA_IS_MM_ENV_EST
+																	  WHERE NA_BZPLC = #{naBzplc})
 					</when>
 					<otherwise>
 						, SRA_SBID_UPR = 0

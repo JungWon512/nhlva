@@ -293,7 +293,7 @@
 				popHtml.push('					<tr>');
 				popHtml.push('						<th>경매상태</th>');
 				popHtml.push('						<td class="input-td">');
-				popHtml.push('							<select name="selStsDsc" class="required" id="selStsDsc">');
+				popHtml.push('							<select name="selStsDsc" class="required" alt="경매상태" id="selStsDsc">');
 				popHtml.push('								<option value="">선택</option>');
 				popHtml.push('								<option value="11">송장등록</option>');
 				popHtml.push('								<option value="21">경매</option>');
@@ -335,9 +335,6 @@
 			modalPopup("." + className);
 			$("." + className).find("input:first").focus();
 			$("select").selectric("refresh");
-			$('input[name=aucPrgSq]').on('keydown',function(){
-				$('.'+className+' .btn_cow_search').click();
-			});
 		};
 		
 		//모달레이어팝업
@@ -575,11 +572,16 @@
 				});
 				
 				if(cowInfo.SEL_STS_DSC == '22'){
-					$("input[name='lvstAucPtcMnNo']", $("form[name='frm_cow_info']")).prop("disabled", false);
-					$("input[name='sraSbidUpr']", $("form[name='frm_cow_info']")).prop("disabled", false);
 					$("input[name='lvstAucPtcMnNo']", $("form[name='frm_cow_info']")).val(cowInfo.LVST_AUC_PTC_MN_NO);
-					$("input[name='sraSbidUpr']", $("form[name='frm_cow_info']")).val(cowInfo.SRA_SBID_UPR);							
+					$("input[name='sraSbidUpr']", $("form[name='frm_cow_info']")).val(cowInfo.SRA_SBID_UPR);
+					
+					$("input[name='sraSbidUpr']", $("form[name='frm_cow_info']")).prop("disabled", true);
+					$("input[name='lvstAucPtcMnNo']", $("form[name='frm_cow_info']")).prop("disabled", true);
+					$("select[name='selStsDsc']", $("form[name='frm_cow_info']")).prop("disabled", true);
 				}else{
+					$("select[name='selStsDsc']", $("form[name='frm_cow_info']")).prop("disabled", false);
+					$("input[name='lvstAucPtcMnNo']", $("form[name='frm_cow_info']")).prop("disabled", true);
+					$("input[name='sraSbidUpr']", $("form[name='frm_cow_info']")).prop("disabled", true);
 					$("input[name='lvstAucPtcMnNo']", $("form[name='frm_cow_info']")).val('');
 					$("input[name='sraSbidUpr']", $("form[name='frm_cow_info']")).val('');							
 				}
@@ -591,12 +593,19 @@
 		// 저장
 		var fnStatusSave = function() {
 			if(!fnValidation()) return;
+			if($("input[name='sraSbidUpr']", $("form[name='frm_cow_info']")).prop("disabled") && $("input[name='lvstAucPtcMnNo']", $("form[name='frm_cow_info']")).prop("disabled") && $("select[name='selStsDsc']", $("form[name='frm_cow_info']")).prop("disabled")){
+				modalAlert('','낙찰상태에서 경매상태를<br/> 변경할수 없습니다.',function(){
+					$('#aucPrgSq').focus();
+				});
+				return;
+			}
 			
 			var lowsSbidLmtAm = $("input[name='lowsSbidLmtAm']", $("form[name='frm_cow_info']")).val();
 			var sraSbidUpr = $("input[name='sraSbidUpr']", $("form[name='frm_cow_info']")).val();
 			var selStsDsc = $("select[name='selStsDsc']", $("form[name='frm_cow_info']")).val();
-			if(selStsDsc == '22' && sraSbidUpr < lowsSbidLmtAm){
-				modalAlert('','낙찰가가 하한가보다 작습니다.');
+			if(selStsDsc == '22' && (sraSbidUpr == '0' || sraSbidUpr == '') ){
+				modalAlert('','낙찰가을 입력하세요.');
+				$("input[name='sraSbidUpr']", $("form[name='frm_cow_info']")).focus();
 				return;
 			}
 			
