@@ -5,7 +5,7 @@
 <input type="hidden" id="naBzPlcNo" value="${johapData.NA_BZPLCNO}"/>
 <input type="hidden" id="johpCd" value="${johapData.NA_BZPLC}"/>
 <div class="auction_list">
-	<h3>구매내역</h3>
+	<h3>나의 경매내역</h3>
 	<div class="tab_list">
 		<ul>
 			<li><a href="javascript:;" class="act" data-tab-id="buy">구매내역</a></li>

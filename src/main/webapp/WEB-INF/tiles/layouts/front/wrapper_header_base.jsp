@@ -47,7 +47,7 @@
 								<a href="javascript:pageMove('/main');">경매결과 조회</a>
 							</li>
 							<li class="myBuy">
-								<a href="javascript:pageMove('/main');">나의 구매내역</a>
+								<a href="javascript:pageMove('/main');">나의 경매내역</a>
 							</li>
 							<li class="myEntry">
 								<a href="javascript:pageMove('/main');">나의 출장우</a>
@@ -94,7 +94,7 @@
 								<a href="javascript:pageMove('/results');">경매결과 조회</a>
 							</li>
 							<li class="myBuy">
-								<a href="javascript:pageMove('/my/buy');">나의 구매내역</a>
+								<a href="javascript:pageMove('/my/buy');">나의 경매내역</a>
 							</li>
 							<li class="myEntry">
 								<a href="javascript:pageMove('/my/entry');">나의 출장우</a>
@@ -177,7 +177,7 @@
 						</dd>
 						<dd><a href="javascript:pageMove('/main');">출장우 조회</a></dd>
 						<dd><a href="javascript:pageMove('/main');">경매결과 조회</a></dd>
-						<dd><a href="javascript:pageMove('/main');">나의 구매내역</a></dd>
+						<dd><a href="javascript:pageMove('/main');">나의 경매내역</a></dd>
 						<dd><a href="javascript:pageMove('/main');">나의 출장우</a></dd>
 						<dd><a href="javascript:pageMove('/calendar');">일정안내</a></dd>
 						<dd><a href="javascript:pageMove('/guide');">이용안내</a></dd>
@@ -199,7 +199,7 @@
 						<dd><a href="javascript:pageMove('/main');">경매응찰</a></dd>
 						<dd><a href="javascript:pageMove('/sales');">출장우 조회</a></dd>
 						<dd><a href="javascript:pageMove('/results');">경매결과 조회</a></dd>
-						<dd><a href="javascript:pageMove('/my/buy');">나의 구매내역</a></dd>
+						<dd><a href="javascript:pageMove('/my/buy');">나의 경매내역</a></dd>
 						<dd><a href="javascript:pageMove('/my/entry');">나의 출장우</a></dd>
 						<dd><a href="javascript:pageMove('/calendar');">일정안내</a></dd>
 						<dd><a href="javascript:pageMove('/guide');">이용안내</a></dd>

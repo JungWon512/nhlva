@@ -453,6 +453,7 @@ public class AuctionController extends CommonController {
 			list = auctionService.entrySelectList(params);
 			if(sessionUtill.getUserId() != null) params.put("searchTrmnAmnNo", sessionUtill.getUserId());
 			List<Map<String,Object>> soldList = auctionService.entrySelectList(params);
+			params.put("aucYn", "1");
 			List<Map<String,Object>> bidList = auctionService.selectBidLogList(params);
 			mav.addObject("aucList", list);
 			mav.addObject("soldList", soldList);
@@ -546,6 +547,7 @@ public class AuctionController extends CommonController {
 			List<Map<String,Object>> list=auctionService.entrySelectList(map);
 			if(param.get("loginNo") != null) map.put("searchTrmnAmnNo", param.get("loginNo"));
 			List<Map<String,Object>> soldList = auctionService.entrySelectList(map);
+			map.put("aucYn", "1");
 			List<Map<String,Object>> bidList = auctionService.selectBidLogList(map);
 			
 			mav.addObject("johapData", johap);
