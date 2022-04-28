@@ -1266,6 +1266,9 @@
             	SUBSTRING(A.SRA_INDV_AMNNO,LENGTH(A.SRA_INDV_AMNNO)-4,4 ) LIKE '%' || #{searchTxt} ||'%'
             )
 		</if>
+		<if test="aucYn != null and aucYn != ''">
+		   AND A.AUC_YN = #{aucYn}
+		</if>
 		ORDER BY A.AUC_PRG_SQ ASC
 	</select>
 	
@@ -1321,7 +1324,10 @@
             AND (
             	SUBSTRING(A.SRA_INDV_AMNNO,LENGTH(A.SRA_INDV_AMNNO)-4,4 ) LIKE '%' || #{searchTxt} ||'%'
             )
-        </if>	
+        </if>
+        <if test="aucYn != null and aucYn != ''">
+		   AND A.AUC_YN = #{aucYn} 
+		</if>
 	</select>	
 
 	<!-- 구매내역 통계 -->

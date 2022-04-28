@@ -77,7 +77,7 @@ public class MyPageController {
 		mav.addObject("bidCnt", auctionService.selectBidLogListCnt(map));
 		mav.addObject("totPrice", auctionService.selectTotSoldPrice(map));
 		mav.addObject("inputParam", params);
-		mav.addObject("subheaderTitle","나의 구매내역");
+		mav.addObject("subheaderTitle","나의 경매내역");
 		mav.setViewName("mypage/buy/buy");
 		return mav;
 	}
