@@ -716,8 +716,8 @@ public class ApiController {
 		if (rgnNm == null) return "";
 		try {
 			String[] splitAddr = rgnNm.toString().split("\\s+");
-			if (splitAddr.length > 2) {
-				String tmpAddr = splitAddr[2].trim();
+			if (splitAddr.length > 1) {
+				String tmpAddr = splitAddr[1].trim();
 				if (tmpAddr.length() == 3) {
 					String subAddr = tmpAddr.substring(0, 2);
 					if (this.isValidString(subAddr)) {
