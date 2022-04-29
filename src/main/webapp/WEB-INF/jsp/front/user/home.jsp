@@ -13,7 +13,7 @@
 			<li>
 				<a href="javascript:;">
 					<img src="/static/images/guide/pc_banner.jpg" alt="" class="pc_banner">
-					<img src="/static/images/guide/mo_banner.jpg" alt="" class="mo_banner">
+					<img src="/static/images/guide/new_mo_banner.jpg" alt="" class="mo_banner">
 				</a>
 			</li>
 		</ul>
