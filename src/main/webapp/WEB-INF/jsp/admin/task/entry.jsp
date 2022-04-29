@@ -63,6 +63,7 @@
 			<div class="list_head">
 				<dl>
 					<dd class="col1">번호</dd>
+					
 					<c:choose>
 						<c:when test="${params.regType eq 'W' or params.regType eq 'AW'}">
 							<dd class="col2"><span class="txt_org">중량</span></dd>
@@ -74,9 +75,17 @@
 							<dd class="col2"><span class="txt_org">계류대</span></dd>
 						</c:when>
 					</c:choose>
+						
 					<dd class="col3">귀표</dd>
-					<dd class="col4">출하자</dd>
-					<c:if test="${params.regType ne 'AW' and params.regType ne 'AL'}">
+					<c:if test="${params.regType ne 'SB'}">
+						<dd class="col4">출하자</dd>
+					</c:if>
+					<c:if test="${params.regType eq 'SB'}">
+						<dd class="col4">응찰번호</dd>
+						<dd class="col4">낙찰자</dd>
+						<dd class="col4">낙찰가</dd>
+					</c:if>
+					<c:if test="${params.regType ne 'AW' and params.regType ne 'AL' and params.regType ne 'SB'}">
 						<dd class="col4">수정</dd>
 					</c:if>
 				</dl>
@@ -92,7 +101,7 @@
 					</c:if>
 					<c:forEach items="${entryList}" var="item" varStatus="st">
 						<li id="${item.AUC_PRG_SQ}">
-							<c:if test="${params.regType ne 'AW' and params.regType ne 'AL'}">
+							<c:if test="${params.regType ne 'AW' and params.regType ne 'AL' and params.regType ne 'SB'}">
 								<span><button type="button" class="btn_modify" >수정</button></span>
 							</c:if>
 							<dl>
@@ -134,8 +143,15 @@
 							</c:when>
 							</c:choose>
 								<dd class="col3">${item.SRA_INDV_AMNNO_FORMAT}</dd>
-								<dd class="col4">${item.FTSNM_ORI}</dd>
-								<c:if test="${params.regType ne 'AW' and params.regType ne 'AL'}">
+								<c:if test="${params.regType ne 'SB'}">
+									<dd class="col4">${item.FTSNM_ORI}</dd>
+								</c:if>
+								<c:if test="${params.regType eq 'SB'}">
+									<dd class="col4">${item.LVST_AUC_PTC_MN_NO}</dd>
+									<dd class="col4">${item.SRA_MWMNNM}</dd>
+									<dd class="col4">${item.SRA_SBID_UPR}</dd>
+								</c:if>
+								<c:if test="${params.regType ne 'AW' and params.regType ne 'AL' and params.regType ne 'SB'}">
 									<dd class="col4 col5"></dd>
 <!-- 									<dd class="col4 col5"><button type="button" class="btn_modify">수정</button></dd> -->
 								</c:if>

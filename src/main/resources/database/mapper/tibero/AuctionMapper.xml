@@ -92,6 +92,7 @@
 						WHEN B.SEL_STS_DSC = 23 THEN '유찰'
 						ELSE '대기'
 					END SEL_STS_DSC_NAME
+					, E.SRA_MWMNNM
 					, B.PRNY_YN                /* 임신여부    (임신여부)	*/
 					, B.PRNY_MTCN              /* 임신개월수   (임신개월)	*/
 					, B.AUC_YN                 /* 경매여부    (경매여부)	*/
@@ -127,6 +128,8 @@
 				INNER JOIN TB_LA_IS_BM_BZLOC D ON B.NA_BZPLC = D.NA_BZPLC
 				LEFT OUTER JOIN TB_LA_IS_MM_ENV_EST J
 				  ON ( B.NA_BZPLC = J.NA_BZPLC )
+				LEFT OUTER JOIN TB_LA_IS_MM_MWMN E
+				  ON ( B.NA_BZPLC = E.NA_BZPLC AND B.TRMN_AMNNO = E.TRMN_AMNNO)
 				WHERE 1=1
 			<if test="naBzPlcNo != null and naBzPlcNo != ''">
 				AND D.NA_BZPLCNO = #{naBzPlcNo}
@@ -168,6 +171,11 @@
 				AND B.AUC_PRG_SQ <![CDATA[>=]]> #{stAucNo}
 				AND B.AUC_PRG_SQ <![CDATA[<=]]> #{edAucNo}
 			</if>
+			<if test="searchSelStsDsc != null and searchSelStsDsc != ''">
+				AND B.SEL_STS_DSC=#{searchSelStsDsc}
+			</if>
+			
+			
 			) G
 		ORDER BY AUC_DT ,AUC_PRG_SQ ASC
     </select>
@@ -1198,7 +1206,15 @@
 			,A.AUC_DT 
 			, TO_CHAR(TO_DATE(A.AUC_DT,'YYYYMMDD'),'YYYY.MM.DD') AUC_DT_STR
 			,B.INDV_SEX_C 
-			, A.SRA_INDV_AMNNO         
+			, A.SRA_INDV_AMNNO
+			, A.AUC_OBJ_DSC         
+			,CASE
+				 WHEN A.AUC_OBJ_DSC=1 THEN '송아지'
+				 WHEN A.AUC_OBJ_DSC=2 THEN '비육우'
+				 WHEN A.AUC_OBJ_DSC=3 THEN '번식우'
+				 WHEN A.AUC_OBJ_DSC=0 THEN '일괄'
+				 ELSE ''
+			 END AUC_OBJ_DSC_NAME
 			, SUBSTRING(A.SRA_INDV_AMNNO,LENGTH(A.SRA_INDV_AMNNO)-4,5) SRA_INDV_AMNNO_STR
 			, SUBSTRING(A.SRA_INDV_AMNNO,LENGTH(A.SRA_INDV_AMNNO)-4,4) || '-' || SUBSTRING(A.SRA_INDV_AMNNO, LENGTH(A.SRA_INDV_AMNNO), 1) AS SRA_INDV_AMNNO_FORMAT
 			, CASE
