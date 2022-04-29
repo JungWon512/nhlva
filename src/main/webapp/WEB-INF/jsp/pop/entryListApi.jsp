@@ -205,6 +205,7 @@
 				<dl>
 					<dd class="num"><span class="w_view_in">경매</span>번호</dd>
 					<dd class="pd_ea">개체<span class="w_view_in">번호</span></dd>
+					<dd class="pd_dsc">유형</dd>
 					<dd class="pd_sex">성별</dd>
 					<dd class="pd_pay1">예정가</dd>
 					<dd class="pd_pay3">응찰가</dd>
@@ -227,6 +228,7 @@
 							<dl>
 								<dd class="num">${vo.AUC_PRG_SQ }</dd>
 								<dd class="pd_ea">${vo.SRA_INDV_AMNNO_FORMAT }</dd>
+								<dd class="pd_dsc">${vo.AUC_OBJ_DSC_NAME }</dd>
 								<dd class="pd_sex">${vo.INDV_SEX_C_NAME }</dd>
 								<dd class="pd_pay1"><fmt:formatNumber value="${fn:split(vo.LOWS_SBID_LMT_UPR,'.')[0]}" type="number" /></dd>
 								<dd class="pd_pay3"><fmt:formatNumber value="${fn:split(vo.ATDR_AM,'.')[0]}" type="number" /></dd>
