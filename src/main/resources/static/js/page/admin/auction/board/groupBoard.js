@@ -112,8 +112,11 @@ var messageHandler = function(data) {
 			}
 		break;	
 		case "SZ" : 
-			//구분자 | 조합구분코드 | 경매일자(YYYYmmdd) | 경매구분(송아지 : 1 / 비육우 : 2 / 번식우 : 3 / 일괄 : 0) | 경매등록일련번호
-			
+			//구분자 | 조합구분코드 | 경매일자(YYYYmmdd) | 경매구분(송아지 : 1 / 비육우 : 2 / 번식우 : 3 / 일괄 : 0) | 경매등록일련번호		
+			$('.billboard-info').hide();
+			$('.billboard-view').hide();
+			$('.billboard-noBid').show();
+			clearInterval(viewInterval);
 			var params = {
 				naBzplc : dataArr[1]
 				, aucDt : dataArr[2]
@@ -134,7 +137,13 @@ var messageHandler = function(data) {
 				var success = json.success;
 				var message = json.message;
 				if (!success) {
-					modalAlert("", message);
+					modalAlert("", message,function(){						
+						$('.billboard-info').show();
+						$('.billboard-view').hide();
+						$('.billboard-noBid').hide();
+						clearInterval(viewInterval);
+						clearInterval(noInfoInterval);
+					});
 				}
 				else {
 					if(json && json.entry){
@@ -154,14 +163,10 @@ var messageHandler = function(data) {
 							}
 						}
 					}
-					$('.billboard-info').hide();
-					$('.billboard-view').hide();
-					$('.billboard-noBid').show();
 					$(".billboard-noBid .cow-number-list").mCustomScrollbar({
 						theme:"dark-thin",
 						scrollInertia: 200,
-					});
-					clearInterval(viewInterval);
+					});	
 					noInfoIntervalFun();
 				}
 			});
