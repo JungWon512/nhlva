@@ -4076,12 +4076,12 @@ Base styles: contents layer
 	}
 	.auction_bid .list_head dl dd.pd_ea, .auction_bid .list_body dl dd.pd_ea
 		{
-		width: 22%;
+		width: 19%;
 		text-align: center;
 	}
 	.auction_bid .list_head dl dd.pd_dsc, .auction_bid .list_body dl dd.pd_dsc
 		{
-		width: 9%;
+		width: 12%;
 	}
 	.auction_bid .list_head dl dd.pd_sex, .auction_bid .list_body dl dd.pd_sex
 		{
