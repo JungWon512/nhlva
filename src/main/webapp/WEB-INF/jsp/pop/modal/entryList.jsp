@@ -5,6 +5,7 @@
 	<button class="modal_popup_close" onclick="modalPopupClose('.pop_auction');return false;">닫기</button>
 	<div class="tab_list">
 		<ul>
+		<!--
 			<c:choose>
 				<c:when test="${johapData.AUC_DSC eq '1' }">
 					<li style="width: 50%;"><a href="javascript:;" class="${(empty params.tabAct or params.tabAct eq 'result')?'act':'' } btnTabMove" data-tab-id="result">낙찰내역</a></li>
@@ -14,6 +15,9 @@
 				</c:otherwise>				
 			</c:choose>
 			<li style="width: 50%;"><a href="javascript:;" class="btnTabMove ${(params.tabAct eq 'schedule')?'act':'' }" data-tab-id="schedule">출장우조회</a></li>			
+		-->	
+			<li style="width: 50%;"><a href="javascript:;" class="${(params.tabAct eq 'result')?'act':'' } btnTabMove" data-tab-id="result">낙찰내역</a></li>
+			<li style="width: 50%;"><a href="javascript:;" class="${(empty params.tabAct or params.tabAct eq 'bid')?'act':'' } btnTabMove" data-tab-id="bid">응찰내역</a></li>
 <!-- 			<li><a href="javascript:;" class="btnTabMove" data-tab-id="bid">응찰내역</a></li> -->
 		</ul>
 	</div>
@@ -57,8 +61,13 @@
 								<dd class="pd_date">${vo.BIRTH_MO }</dd>
 								<dd class="pd_sex">${vo.INDV_SEX_C_NAME }</dd>
 								<dd class="pd_kpn">${vo.KPN_NO_STR }</dd>
-								<dd class="pd_pay">
-									<fmt:formatNumber value="${empty vo.LOWS_SBID_LMT_AM or vo.LOWS_SBID_LMT_AM <= 0 ? '0' : fn:split(vo.LOWS_SBID_LMT_UPR,'.')[0]}" type="number" />
+								<dd class="pd_pay">											
+									<c:choose>
+										<c:when test="${vo.LOWS_SBID_LMT_UPR eq '' || vo.LOWS_SBID_LMT_UPR == null || vo.LOWS_SBID_LMT_UPR <= 0}">-</c:when>
+										<c:otherwise>
+											<fmt:formatNumber value="${fn:split(vo.LOWS_SBID_LMT_UPR,'.')[0]}" type="number" />
+										</c:otherwise>
+									</c:choose>
 								</dd>
 							</dl>
 							<div class="pd_etc">
@@ -150,7 +159,14 @@
 										</c:otherwise>
 									</c:choose>
 								</dd>
-								<dd class="pd_pay2"><fmt:formatNumber value="${fn:split(vo.SRA_SBID_UPR,'.')[0]}" type="number" /></dd>
+								<dd class="pd_pay2">							
+									<c:choose>
+										<c:when test="${vo.SRA_SBID_UPR eq '' || vo.SRA_SBID_UPR == null || vo.SRA_SBID_UPR <= 0}">-</c:when>
+										<c:otherwise>
+											<fmt:formatNumber value="${fn:split(vo.SRA_SBID_UPR,'.')[0]}" type="number" />
+										</c:otherwise>
+									</c:choose>
+								</dd>
 							</dl>
 						</li>
 					</c:forEach>
@@ -208,9 +224,30 @@
 								<dd class="pd_ea">${bvo.SRA_INDV_AMNNO_FORMAT }</dd>
 								<dd class="pd_dsc">${bvo.AUC_OBJ_DSC_NAME }</dd>
 								<dd class="pd_sex">${bvo.INDV_SEX_C_NAME }</dd>
-								<dd class="pd_pay1"><fmt:formatNumber value="${bvo.LOWS_SBID_LMT_AM <= 0 ? '0' : fn:split(bvo.LOWS_SBID_LMT_UPR,'.')[0]}" type="number" /></dd>
-								<dd class="pd_pay2"><fmt:formatNumber value="${ fn:split(bvo.SRA_SBID_UPR,'.')[0] }" type="number" /></dd>
-								<dd class="pd_pay3"><fmt:formatNumber value="${ fn:split(bvo.ATDR_AM,'.')[0] }" type="number" /></dd>
+								<dd class="pd_pay1">							
+									<c:choose>
+										<c:when test="${bvo.LOWS_SBID_LMT_AM eq '' || bvo.LOWS_SBID_LMT_AM == null || bvo.LOWS_SBID_LMT_AM <= 0}">-</c:when>
+										<c:otherwise>
+											<fmt:formatNumber value="${fn:split(bvo.LOWS_SBID_LMT_AM,'.')[0]}" type="number" />
+										</c:otherwise>
+									</c:choose>
+								</dd>
+								<dd class="pd_pay2">							
+									<c:choose>
+										<c:when test="${bvo.SRA_SBID_UPR eq '' || bvo.SRA_SBID_UPR == null || bvo.SRA_SBID_UPR <= 0}">-</c:when>
+										<c:otherwise>
+											<fmt:formatNumber value="${fn:split(bvo.SRA_SBID_UPR,'.')[0]}" type="number" />
+										</c:otherwise>
+									</c:choose>
+								</dd>
+								<dd class="pd_pay3">							
+									<c:choose>
+										<c:when test="${bvo.ATDR_AM eq '' || bvo.ATDR_AM == null || bvo.ATDR_AM <= 0}">-</c:when>
+										<c:otherwise>
+											<fmt:formatNumber value="${fn:split(bvo.ATDR_AM,'.')[0]}" type="number" />
+										</c:otherwise>
+									</c:choose>
+								</dd>
 							</dl>
 						</li>
 	                </c:forEach>				
