@@ -502,6 +502,7 @@
 		<![CDATA[
 		   AND SEL_STS_DSC <> #{selStsDsc}
 		   AND LOWS_SBID_LMT_AM > 0
+		   AND DEL_YN = '0'
 		]]> 
 		</if>
 		<![CDATA[
