@@ -181,73 +181,24 @@ var messageHandler = function(data) {
 
 			if(auctionConfig.asData.curAucSeq) auctionConfig.asData.preAucSeq = auctionConfig.asData.curAucSeq
 			auctionConfig.asData.curAucSeq = dataArr[2];
+			auctionConfig.asData.rgSqno = dataArr[12];
+			auctionConfig.asData.aucObjDsc = dataArr[13];
 			
-			var tr = getTrRow(auctionConfig.asData.curAucSeq);
-			tr.find('dl dd.lowsSbidLmtAm').text(fnSetComma(Math.round(tmpAsDAta.lowsSbidLmtAm))+'');
-			if($('#aucDsc').val() == '2' && tmpAsDAta.selSts=='8006'){
-				//location.reload();
+			if($('#aucDsc').val() == '2' && (tmpAsDAta.selSts=='8001' || tmpAsDAta.selSts=='8002' || tmpAsDAta.selSts=='8006') 
+			|| $('#aucDsc').val() != '2'){
 				var params = {
-					naBzplc : $('#naBzPlc').val()		
-				}				
-				$.ajax({
-					url: '/front/getCowList',
-					data: params,
-					type: 'POST',
-					dataType: 'json',
-					success : function() {
-					},
-					error: function(xhr, status, error) {
-					}
-				}).done(function (json) {
-					debugConsole(json);
-					if(json && json.list ){						
-						if(!isApp() && chkOs() == 'web'){
-							$(".list_body ul").mCustomScrollbar('destroy');							
-						}
-						
-						$(".list_body ul").empty();
-						var arr = json.list;
-						if(arr.length > 1){
-							arr.forEach(function(vo,i){
-								var html = '';
-								html +='<li class="'+(i==0?'':'')+'">';
-								html +='  <input type="hidden" name="mcowDsc" class="mcowDsc" value="'+vo.MCOW_DSC_NAME +'"/>';
-								html +='  <input type="hidden" name="hidden" class="hidden" value="'+vo.MATIME +'"/>';
-								html +='  <dl>';
-								html +='    <dd class="date aucDt">'+ vo.AUC_DT_STR +'</dd>';
-								html +='    <dd class="num aucPrgSq">'+ vo.AUC_PRG_SQ +'</dd>';
-								html +='    <dd class="name ftsnm">'+ vo.FTSNM +'</dd>';
-								html +='    <dd class="pd_ea sraIndvAmnno">'+ vo.SRA_INDV_AMNNO_FORMAT +'</dd>';
-								html +='    <dd class="pd_sex indvSexC">'+ vo.INDV_SEX_C_NAME +'</dd>';
-								html +='    <dd class="pd_kg cowSogWt textNumber">'+fnSetComma(vo.COW_SOG_WT)+'</dd>';
-								html +='    <dd class="pd_kpn kpnNo">'+ vo.KPN_NO_STR +'</dd>';
-								html +='    <dd class="pd_num1 sraIndvPasgQcn">'+ vo.SRA_INDV_PASG_QCN +'</dd>';
-								html +='    <dd class="pd_pay1 lowsSbidLmtAm textNumber">'+fnSetComma(vo.LOWS_SBID_LMT_UPR)+'</dd>';
-								html +='    <dd class="pd_pay1 sraSbidAm textNumber">'+fnSetComma(vo.SRA_SBID_UPR)+'</dd>';
-								html +='    <dd class="pd_state selSts">'+ vo.SEL_STS_DSC_NAME +'</dd>';
-								html +='    <dd class="pd_etc rmkCntn">'+ (vo.RMK_CNTN || '').replace('|',',') +'</dd>';
-								html +='  </dl>';
-								html +='</li>';
-								$(".list_body ul").append(html);
-							});							
-						}else{							
-							$(".list_body ul").append('<li><dl><dd>경매관전 자료가 없습니다.</dd></dl></li>');
-						}
-						
-						if(isApp() || chkOs() != 'web'){
-							$('.tblAuction .list_body ul').animate({scrollTop: 0},0);
-						}else{
-							$(".list_body ul").mCustomScrollbar({theme:"dark-thin",scrollInertia: 200});						
-							$(".list_body ul").mCustomScrollbar('scrollTo'
-								,$(".list_body ul").find('.mCSB_container').find('li:eq(0)')
-								,{scrollInertia:0}
-							);
-							
-						}											
-					}	
+					naBzplc : $('#naBzPlc').val()
+					,aucObjDsc : auctionConfig.asData.aucObjDsc
+					,rgSqno : auctionConfig.asData.rgSqno
+					,aucDsc : $('#aucDsc').val()
+				}
+				fnAuctionReload(params,tmpAsDAta,function(){
+					var tr = getTrRow(auctionConfig.asData.curAucSeq);
+					tr.find('dl dd.lowsSbidLmtAm').text(fnSetComma(Math.round(tmpAsDAta.lowsSbidLmtAm))+'');
+					if($('#aucDsc').val() == '1') changeTrRow(tr);
+					calcPiePercent();					
 				});
-			};
-			if($('#aucDsc').val() == '1') changeTrRow(tr);
+			}
 		break;	
 		case "SC" : //현재 출품정보
 			scData[dataArr[2]] = data;
@@ -459,4 +410,66 @@ var scLoad = function(dataArr){
 	convertDefaultValue(tr.find('dl dd'));			
 	calcPiePercent();
 	//changeTrRow(tr);
+}
+
+var fnAuctionReload = function(params,tmpAsDAta,callback){		
+	$.ajax({
+		url: '/front/getCowList',
+		data: params,
+		type: 'POST',
+		dataType: 'json',
+		success : function() {
+		},
+		error: function(xhr, status, error) {
+		}
+	}).done(function (json) {
+		debugConsole(json);
+		if(json && json.list ){						
+			if(!isApp() && chkOs() == 'web'){
+				$(".list_body ul").mCustomScrollbar('destroy');							
+			}
+			
+			$(".list_body ul").empty();
+			var arr = json.list;
+			$('span.watchCowCnt').text(arr.length);
+			if(arr.length > 1){
+				arr.forEach(function(vo,i){
+					var html = '';
+					html +='<li class="'+(i==0?'':'')+'">';
+					html +='  <input type="hidden" name="mcowDsc" class="mcowDsc" value="'+vo.MCOW_DSC_NAME +'"/>';
+					html +='  <input type="hidden" name="hidden" class="hidden" value="'+vo.MATIME +'"/>';
+					html +='  <dl>';
+					html +='    <dd class="date aucDt">'+ vo.AUC_DT_STR +'</dd>';
+					html +='    <dd class="num aucPrgSq">'+ vo.AUC_PRG_SQ +'</dd>';
+					html +='    <dd class="name ftsnm">'+ vo.FTSNM +'</dd>';
+					html +='    <dd class="pd_ea sraIndvAmnno">'+ vo.SRA_INDV_AMNNO_FORMAT +'</dd>';
+					html +='    <dd class="pd_sex indvSexC">'+ vo.INDV_SEX_C_NAME +'</dd>';
+					html +='    <dd class="pd_kg cowSogWt textNumber">'+fnSetComma(vo.COW_SOG_WT)+'</dd>';
+					html +='    <dd class="pd_kpn kpnNo">'+ vo.KPN_NO_STR +'</dd>';
+					html +='    <dd class="pd_num1 sraIndvPasgQcn">'+ vo.SRA_INDV_PASG_QCN +'</dd>';
+					html +='    <dd class="pd_pay1 lowsSbidLmtAm textNumber">'+fnSetComma(vo.LOWS_SBID_LMT_UPR)+'</dd>';
+					html +='    <dd class="pd_pay1 sraSbidAm textNumber">'+fnSetComma(vo.SRA_SBID_UPR)+'</dd>';
+					html +='    <dd class="pd_state selSts">'+ vo.SEL_STS_DSC_NAME +'</dd>';
+					html +='    <dd class="pd_etc rmkCntn">'+ (vo.RMK_CNTN || '').replace('|',',') +'</dd>';
+					html +='  </dl>';
+					html +='</li>';
+					$(".list_body ul").append(html);
+				});							
+			}else{							
+				$(".list_body ul").append('<li><dl><dd>경매관전 자료가 없습니다.</dd></dl></li>');
+			}
+			
+			if(isApp() || chkOs() != 'web'){
+				$('.tblAuction .list_body ul').animate({scrollTop: 0},0);
+			}else{
+				$(".list_body ul").mCustomScrollbar({theme:"dark-thin",scrollInertia: 200});						
+				$(".list_body ul").mCustomScrollbar('scrollTo'
+					,$(".list_body ul").find('.mCSB_container').find('li:eq(0)')
+					,{scrollInertia:0}
+				);
+				
+			}
+			if(callback) callback();
+		}	
+	});
 }

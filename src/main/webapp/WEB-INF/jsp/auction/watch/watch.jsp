@@ -37,7 +37,7 @@
 					<ul>
 						<!-- <li>송아지 경매</li> -->
 						<li>${johapData.AUC_DSC eq '1' ? '단일' : '일괄'} 경매</li>
-						<li>출장우 : ${watchCount.CNT } 두</li>
+						<li>출장우 : <span class='watchCowCnt'>${watchCount.CNT }</span> 두</li>
 						<c:if test="${johapData.AUC_DSC eq '1' }"><li><a href="javscript:;" class="m_sound">소리</a></li></c:if>
 					</ul>
 				</dd>

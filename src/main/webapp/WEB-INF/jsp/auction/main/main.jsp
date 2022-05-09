@@ -3,7 +3,7 @@
 <div class="auction_choice">
 	<h3>실시간경매</h3>
 	<dl>
-		<dt><span>${fn:substring(johapData.CLNTNM,0,6) }</span></dt>
+		<dt><span>${fn:substring(johapData.CLNTNM,0,8) }</span></dt>
 		<dd>${aucDate[0].AUC_MONTH }월 ${aucDate[0].AUC_DAY }일(${aucDate[0].AUC_WEEK_DAY }) ${aucDate[0].AUC_OBJ_DSC_NAME } 경매</dd>
 		<dd class="link"><a href="javascript:pageMove('/home');"><span class="ico_arrowblue">지역선택</span></a></dd>
 	</dl>

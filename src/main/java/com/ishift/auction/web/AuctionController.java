@@ -685,6 +685,24 @@ public class AuctionController extends CommonController {
 			
 	        temp.put("searchDate", today);
 	        temp.put("naBzplc", params.get("naBzplc"));
+	        temp.put("searchAucObjDsc", params.get("aucObjDsc"));
+
+	        
+	        if("2".equals(params.get("aucDsc"))) {
+		        temp.put("rgSqno", params.get("rgSqno"));
+		        temp.put("aucObjDsc", params.get("aucObjDsc"));
+		        
+				Map<String,Object> info=auctionService.getStnInfo(temp);
+				
+				if(info == null || info.isEmpty()) {		
+					result.put("success", false);
+					result.put("message", "경매 차수 구간이 없습니다.");
+					return result;
+				}		
+		        temp.put("searchAucObjDsc", info.get("AUC_OBJ_DSC"));
+		        temp.put("stAucNo", info.get("ST_AUC_NO"));
+		        temp.put("edAucNo", info.get("ED_AUC_NO"));	        	
+	        }	        
 	        
 			List<Map<String,Object>> list=auctionService.entrySelectList(temp);
 			
