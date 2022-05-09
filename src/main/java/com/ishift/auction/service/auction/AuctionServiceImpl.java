@@ -632,6 +632,18 @@ public class AuctionServiceImpl implements AuctionService {
 								}
 							}
 						}
+						else if ("010".equals(feeInfo.get("NA_FEE_C"))) {
+							// 출하수수료 수기등록(FEE_CHK_YN)인 경우 해당 금액(FEE_CHK_YN_FEE)을 출하수수료로 부과
+							if ("1".equals(auctionInfo.getOrDefault("FEE_CHK_YN", "0"))) {
+								feeAmt = Long.parseLong(auctionInfo.getOrDefault("FEE_CHK_YN_FEE", "0").toString());
+							}
+						}
+						else if ("011".equals(feeInfo.get("NA_FEE_C"))) {
+							// 판매수수료 수기등록(SELFEE_CHK_YN)인 경우 해당 금액(SELFEE_CHK_YN_FEE)을 출하수수료로 부과
+							if ("1".equals(auctionInfo.getOrDefault("SELFEE_CHK_YN", "0"))) {
+								feeAmt = Long.parseLong(auctionInfo.getOrDefault("SELFEE_CHK_YN_FEE", "0").toString());
+							}
+						}
 					}
 					else {
 					// 수수료가 금액인 경우
@@ -645,10 +657,16 @@ public class AuctionServiceImpl implements AuctionService {
 								feeAmt += Long.parseLong(auctionInfo.getOrDefault("BLOOD_AM", "0").toString());
 							}
 							
-							// 친자 검사 여부(DNA_YN_CHK) 수수료
-							// 합천인 경우에는 농가 정보 테이블에서 축산사료여부 사용 여부(SRA_FED_SPY_YN) 체크 후 미사용시(0) 친자 확인 수수료를 부과한다.
-							if ("1".equals(auctionInfo.get("DNA_YN_CHK"))) {
-								feeAmt += Long.parseLong(bizAuctionInfo.getOrDefault("FEE_CHK_DNA_YN_FEE", "0").toString());
+							if ("8808990687094".equals(params.get("naBzPlc"))) {
+								// 친자 검사 여부(DNA_YN_CHK) 수수료
+								if ("1".equals(auctionInfo.get("DNA_YN_CHK"))) {
+									feeAmt += Long.parseLong(bizAuctionInfo.getOrDefault("FEE_CHK_DNA_YN_FEE", "0").toString());
+								}
+							}
+							
+							// 출하수수료 수기등록(FEE_CHK_YN)인 경우 해당 금액(FEE_CHK_YN_FEE)을 출하수수료로 부과
+							if ("1".equals(auctionInfo.getOrDefault("FEE_CHK_YN", "0"))) {
+								feeAmt = Long.parseLong(auctionInfo.getOrDefault("FEE_CHK_YN_FEE", "0").toString());
 							}
 						}
 						// 낙찰자 판매수수료
@@ -658,17 +676,20 @@ public class AuctionServiceImpl implements AuctionService {
 								feeAmt += Long.parseLong(auctionInfo.getOrDefault("BLOOD_AM", "0").toString());
 							}
 
-							// 친자 검사 여부(DNA_YN_CHK) 수수료
-							// 합천인 경우 출장우 정보 테이블의 친자 일치 여부(DNA_YN) 체크 후 일치 할 시(1) 친자 확인 수수료를 부과한다.
-							if ("1".equals(auctionInfo.get("DNA_YN_CHK"))) {
-								feeAmt += Long.parseLong(bizAuctionInfo.getOrDefault("SELFEE_CHK_DNA_YN_FEE", "0").toString());
-							}
-							
 							// 영주축협 송아지 12개월이상 수수료 적용
 							if ("8808990687094".equals(params.get("naBzPlc"))) {
 								if ("1".equals(auctionInfo.get("MT12_OVR_YN"))) {
 									feeAmt += Long.parseLong(bizAuctionInfo.getOrDefault("MT12_OVR_FEE", "0").toString());
 								}
+								else if ("1".equals(auctionInfo.get("DNA_YN_CHK"))) {
+									// 친자 검사 여부(DNA_YN_CHK) 수수료
+									feeAmt += Long.parseLong(bizAuctionInfo.getOrDefault("SELFEE_CHK_DNA_YN_FEE", "0").toString());
+								}
+							}
+							
+							// 판매수수료 수기등록(SELFEE_CHK_YN)인 경우 해당 금액(SELFEE_CHK_YN_FEE)을 출하수수료로 부과
+							if ("1".equals(auctionInfo.getOrDefault("SELFEE_CHK_YN", "0"))) {
+								feeAmt = Long.parseLong(auctionInfo.getOrDefault("SELFEE_CHK_YN_FEE", "0").toString());
 							}
 						}
 						// 임신 감정료
@@ -974,6 +995,18 @@ public class AuctionServiceImpl implements AuctionService {
 									}
 								}
 							}
+							else if ("010".equals(feeInfo.get("NA_FEE_C"))) {
+								// 출하수수료 수기등록(FEE_CHK_YN)인 경우 해당 금액(FEE_CHK_YN_FEE)을 출하수수료로 부과
+								if ("1".equals(info.getOrDefault("FEE_CHK_YN", "0"))) {
+									feeAmt = Long.parseLong(info.getOrDefault("FEE_CHK_YN_FEE", "0").toString());
+								}
+							}
+							else if ("011".equals(feeInfo.get("NA_FEE_C"))) {
+								// 판매수수료 수기등록(SELFEE_CHK_YN)인 경우 해당 금액(SELFEE_CHK_YN_FEE)을 출하수수료로 부과
+								if ("1".equals(info.getOrDefault("SELFEE_CHK_YN", "0"))) {
+									feeAmt = Long.parseLong(info.getOrDefault("SELFEE_CHK_YN_FEE", "0").toString());
+								}
+							}
 						}
 						else {
 						// 수수료가 금액인 경우
@@ -987,10 +1020,17 @@ public class AuctionServiceImpl implements AuctionService {
 									feeAmt += Long.parseLong(info.getOrDefault("BLOOD_AM", "0").toString());
 								}
 								
-								// 친자 검사 여부(DNA_YN_CHK) 수수료
-								// 합천인 경우에는 농가 정보 테이블에서 축산사료여부 사용 여부(SRA_FED_SPY_YN) 체크 후 미사용시(0) 친자 확인 수수료를 부과한다.
-								if ("1".equals(info.get("DNA_YN_CHK"))) {
-									feeAmt += Long.parseLong(bizAuctionInfo.getOrDefault("FEE_CHK_DNA_YN_FEE", "0").toString());
+								// 영주축협
+								if ("8808990687094".equals(params.get("naBzPlc"))) {
+									// 친자 검사 여부(DNA_YN_CHK) 수수료
+									if ("1".equals(info.get("DNA_YN_CHK"))) {
+										feeAmt += Long.parseLong(bizAuctionInfo.getOrDefault("FEE_CHK_DNA_YN_FEE", "0").toString());
+									}
+								}
+								
+								// 출하수수료 수기등록(FEE_CHK_YN)인 경우 해당 금액(FEE_CHK_YN_FEE)을 출하수수료로 부과
+								if ("1".equals(info.getOrDefault("FEE_CHK_YN", "0"))) {
+									feeAmt = Long.parseLong(info.getOrDefault("FEE_CHK_YN_FEE", "0").toString());
 								}
 							}
 							// 낙찰자 판매수수료
@@ -1000,17 +1040,20 @@ public class AuctionServiceImpl implements AuctionService {
 									feeAmt += Long.parseLong(info.getOrDefault("BLOOD_AM", "0").toString());
 								}
 
-								// 친자 검사 여부(DNA_YN_CHK) 수수료
-								// 합천인 경우 출장우 정보 테이블의 친자 일치 여부(DNA_YN) 체크 후 일치 할 시(1) 친자 확인 수수료를 부과한다.
-								if ("1".equals(info.get("DNA_YN_CHK"))) {
-									feeAmt += Long.parseLong(bizAuctionInfo.getOrDefault("SELFEE_CHK_DNA_YN_FEE", "0").toString());
-								}
-								
 								// 영주축협 송아지 12개월이상 수수료 적용
 								if ("8808990687094".equals(params.get("naBzPlc"))) {
 									if ("1".equals(info.get("MT12_OVR_YN"))) {
 										feeAmt += Long.parseLong(bizAuctionInfo.getOrDefault("MT12_OVR_FEE", "0").toString());
 									}
+									else if ("1".equals(info.get("DNA_YN_CHK"))) {
+										// 친자 검사 여부(DNA_YN_CHK) 수수료
+										feeAmt += Long.parseLong(bizAuctionInfo.getOrDefault("SELFEE_CHK_DNA_YN_FEE", "0").toString());
+									}
+								}
+								
+								// 판매수수료 수기등록(SELFEE_CHK_YN)인 경우 해당 금액(SELFEE_CHK_YN_FEE)을 출하수수료로 부과
+								if ("1".equals(info.getOrDefault("SELFEE_CHK_YN", "0"))) {
+									feeAmt = Long.parseLong(info.getOrDefault("SELFEE_CHK_YN_FEE", "0").toString());
 								}
 							}
 							// 임신 감정료
