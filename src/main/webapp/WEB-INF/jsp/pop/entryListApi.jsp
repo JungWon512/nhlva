@@ -6,16 +6,18 @@
 
 <div id="" class="entryList pop_auction">
 	<div class="tab_list">
-		<ul class="tab_2">
+		<ul class="${johapData.AUC_DSC eq '1'?'tab_2':'tab_3' }">
 			<c:choose>
 				<c:when test="${johapData.AUC_DSC eq '1' }">
 					<li><a href="javascript:;" class="${(empty inputParam.tabAct or inputParam.tabAct eq 'sold')?'act':'' } sold" data-tab-id='sold'>낙찰내역</a></li>
+					<li><a href="javascript:;" class="auc ${(inputParam.tabAct eq 'auc')?'act':'' }" data-tab-id='auc'>출장우조회</a></li>
 				</c:when>
 				<c:otherwise>
 					<li><a href="javascript:;" class="${(empty inputParam.tabAct or inputParam.tabAct eq 'bid')?'act':'' } bid" data-tab-id='bid'>응찰내역</a></li>
+					<li><a href="javascript:;" class="${(inputParam.tabAct eq 'sold')?'act':'' } sold" data-tab-id='sold'>낙찰내역</a></li>
+					<li><a href="javascript:;" class="auc ${(inputParam.tabAct eq 'auc')?'act':'' }" data-tab-id='auc'>출장우조회</a></li>
 				</c:otherwise>				
-			</c:choose>
-			<li><a href="javascript:;" class="auc ${(inputParam.tabAct eq 'auc')?'act':'' }" data-tab-id='auc'>출장우조회</a></li>
+			</c:choose>			
 			
 		</ul>
 	</div>
@@ -144,6 +146,7 @@
 				<dl>
 					<dd class="num"><span class="w_view_in">경매</span>번호</dd>
 					<dd class="name">출하주</dd>
+					<dd class="pd_dsc">유형</dd>
 					<dd class="pd_sex">성별</dd>
 					<dd class="pd_kg">중량<span class="w_view_in">(kg)</span></dd>
 					<dd class="pd_pay1">최저가</dd>
@@ -166,6 +169,7 @@
 							<dl>
 								<dd class="num">${vo.AUC_PRG_SQ }</dd>
 								<dd class="name">${vo.FTSNM }</dd>
+								<dd class="pd_dsc">${vo.AUC_OBJ_DSC_NAME }</dd>
 								<dd class="pd_sex">${vo.INDV_SEX_C_NAME }</dd>
 								<dd class="pd_kg"><fmt:formatNumber value="${empty vo.COW_SOG_WT or vo.COW_SOG_WT <= 0 ? '0' : fn:split(vo.COW_SOG_WT,'.')[0]}" type="number" /></dd>
 								<dd class="pd_pay1">
@@ -219,7 +223,6 @@
 				<dl>
 					<dd class="num"><span class="w_view_in">경매</span>번호</dd>
 					<dd class="pd_ea">개체<span class="w_view_in">번호</span></dd>
-					<dd class="pd_dsc">유형</dd>
 					<dd class="pd_sex">성별</dd>
 					<dd class="pd_pay1">예정가</dd>
 					<dd class="pd_pay3">응찰가</dd>
@@ -242,7 +245,6 @@
 							<dl>
 								<dd class="num">${vo.AUC_PRG_SQ }</dd>
 								<dd class="pd_ea">${vo.SRA_INDV_AMNNO_FORMAT }</dd>
-								<dd class="pd_dsc">${vo.AUC_OBJ_DSC_NAME }</dd>
 								<dd class="pd_sex">${vo.INDV_SEX_C_NAME }</dd>
 								<dd class="pd_pay1">							
 									<c:choose>

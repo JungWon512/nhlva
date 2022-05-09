@@ -10,6 +10,13 @@
 			 ,CASE WHEN LENGTH(G.FTSNM_ORI) > 1 THEN SUBSTRING(G.FTSNM_ORI,1,1)  || '*' ||	SUBSTRING(G.FTSNM_ORI,3)
 			 WHEN LENGTH(G.FTSNM_ORI) = 1 THEN G.FTSNM_ORI
 			 ELSE '-' END FTSNM
+			,CASE
+				 WHEN G.AUC_OBJ_DSC=1 THEN '송아지'
+				 WHEN G.AUC_OBJ_DSC=2 THEN '비육우'
+				 WHEN G.AUC_OBJ_DSC=3 THEN '번식우'
+				 WHEN G.AUC_OBJ_DSC=0 THEN '일괄'
+				 ELSE ''
+			 END AUC_OBJ_DSC_NAME
 		  FROM (
 				SELECT B.NA_BZPLC               /* 사업장번호	*/
 					, B.SRA_INDV_AMNNO         /* 축산개체관리번호	*/

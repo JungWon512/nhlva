@@ -4,20 +4,18 @@
 <div class="modal-content entryList">
 	<button class="modal_popup_close" onclick="modalPopupClose('.pop_auction');return false;">닫기</button>
 	<div class="tab_list">
-		<ul>
-		<!--
+		<ul>		
 			<c:choose>
 				<c:when test="${johapData.AUC_DSC eq '1' }">
 					<li style="width: 50%;"><a href="javascript:;" class="${(empty params.tabAct or params.tabAct eq 'result')?'act':'' } btnTabMove" data-tab-id="result">낙찰내역</a></li>
+					<li style="width: 50%;"><a href="javascript:;" class="btnTabMove ${(params.tabAct eq 'schedule')?'act':'' }" data-tab-id="schedule">출장우조회</a></li>
 				</c:when>
 				<c:otherwise>
-					<li style="width: 50%;"><a href="javascript:;" class="${(empty params.tabAct or params.tabAct eq 'bid')?'act':'' } btnTabMove" data-tab-id="bid">응찰내역</a></li>
+					<li style="width: 33%;"><a href="javascript:;" class="${(empty params.tabAct or params.tabAct eq 'bid')?'act':'' } btnTabMove" data-tab-id="bid">응찰내역</a></li>
+					<li style="width: 33%;"><a href="javascript:;" class="${(params.tabAct eq 'result')?'act':'' } btnTabMove" data-tab-id="result">낙찰내역</a></li>
+					<li style="width: 33%;"><a href="javascript:;" class="btnTabMove ${(params.tabAct eq 'schedule')?'act':'' }" data-tab-id="schedule">출장우조회</a></li>
 				</c:otherwise>				
-			</c:choose>
-			<li style="width: 50%;"><a href="javascript:;" class="btnTabMove ${(params.tabAct eq 'schedule')?'act':'' }" data-tab-id="schedule">출장우조회</a></li>			
-		-->	
-			<li style="width: 50%;"><a href="javascript:;" class="${(params.tabAct eq 'result')?'act':'' } btnTabMove" data-tab-id="result">낙찰내역</a></li>
-			<li style="width: 50%;"><a href="javascript:;" class="${(empty params.tabAct or params.tabAct eq 'bid')?'act':'' } btnTabMove" data-tab-id="bid">응찰내역</a></li>
+			</c:choose>			
 <!-- 			<li><a href="javascript:;" class="btnTabMove" data-tab-id="bid">응찰내역</a></li> -->
 		</ul>
 	</div>
@@ -129,6 +127,7 @@
 				<dl>
 					<dd class="num"><span class="w_view_in">경매</span>번호</dd>
 					<dd class="name">출하주</dd>
+					<dd class="pd_dsc">유형</dd>
 					<dd class="pd_sex">성별</dd>
 					<dd class="pd_kg">중량<span class="w_view_in">(kg)</span></dd>
 					<dd class="pd_pay1">최저가</dd>
@@ -149,6 +148,7 @@
 							<dl>
 								<dd class="num">${vo.AUC_PRG_SQ }</dd>
 								<dd class="name">${vo.FTSNM }</dd>
+								<dd class="pd_dsc">${vo.AUC_OBJ_DSC_NAME }</dd>
 								<dd class="pd_sex">${vo.INDV_SEX_C_NAME }</dd>
 								<dd class="pd_kg"><fmt:formatNumber value="${empty vo.COW_SOG_WT or vo.COW_SOG_WT <= 0 ? '0' : fn:split(vo.COW_SOG_WT,'.')[0]}" type="number" /></dd>
 								<dd class="pd_pay1">
@@ -200,8 +200,7 @@
 			<div class="list_head pop_style">
 				<dl>
 					<dd class="num"><span class="w_view_in">경매</span>번호</dd>
-					<dd class="pd_ea">개체<span class="w_view_in">번호</span></dd>
-					<dd class="pd_dsc">유형</dd>
+					<dd class="pd_ea">개체<span class="w_view_in">번호</span></dd>					
 					<dd class="pd_sex">성별</dd>
 					<dd class="pd_pay1">예정가</dd>
 					<dd class="pd_pay2">낙찰가</dd>
@@ -221,8 +220,7 @@
 						<li class="${bvo.SEL_STS_DSC_NAME eq '본인낙찰' ?'act':''}">
 							<dl>
 								<dd class="num">${bvo.AUC_PRG_SQ }</dd>
-								<dd class="pd_ea">${bvo.SRA_INDV_AMNNO_FORMAT }</dd>
-								<dd class="pd_dsc">${bvo.AUC_OBJ_DSC_NAME }</dd>
+								<dd class="pd_ea">${bvo.SRA_INDV_AMNNO_FORMAT }</dd>								
 								<dd class="pd_sex">${bvo.INDV_SEX_C_NAME }</dd>
 								<dd class="pd_pay1">							
 									<c:choose>
