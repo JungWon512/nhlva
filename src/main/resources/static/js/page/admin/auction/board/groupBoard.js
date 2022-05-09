@@ -77,6 +77,8 @@ var messageHandler = function(data) {
 				,t8006:'경매응찰 완료'
 				,t8007:'경매 종료'
 			}
+			auctionConfig.rgSqno	=dataArr[12];
+			auctionConfig.aucObjDsc	=dataArr[13];
 			var rgSqno=dataArr[12],aucObjDsc=dataArr[13];
 			switch(dataArr[6]){
 				case "8001" : 
@@ -95,12 +97,19 @@ var messageHandler = function(data) {
 					clearInterval(noInfoInterval);
 					$('section.billboard-info .infoTxt').html(aucStConfig.t8002); 
 				break; 
-				case "8003" : $('section.billboard-info .infoTxt').html(aucStConfig.t8003); break; 
+				case "8003" : 
+					//$('section.billboard-info .infoTxt').html(aucStConfig.t8003);					
+					fnReloadView(rgSqno,aucObjDsc); 
+				break; 
 				case "8004" : 
 					//getStnInfo();
-					$('section.billboard-info .infoTxt').html(aucStConfig.t8004); 
+//					$('section.billboard-info .infoTxt').html(aucStConfig.t8004);
+					fnReloadView(rgSqno,aucObjDsc); 
 				break; 
-				case "8005" : $('section.billboard-info .infoTxt').html(aucStConfig.t8005); break; 
+				case "8005" : 
+					//$('section.billboard-info .infoTxt').html(aucStConfig.t8005);					
+					fnReloadView(rgSqno,aucObjDsc); 
+				break; 
 				case "8006" : 
 					fnReloadView(rgSqno,aucObjDsc);
 				break; 
@@ -112,64 +121,71 @@ var messageHandler = function(data) {
 			}
 		break;	
 		case "SZ" : 
-			//구분자 | 조합구분코드 | 경매일자(YYYYmmdd) | 경매구분(송아지 : 1 / 비육우 : 2 / 번식우 : 3 / 일괄 : 0) | 경매등록일련번호		
-			$('.billboard-info').hide();
-			$('.billboard-view').hide();
-			$('.billboard-noBid').show();
-			clearInterval(viewInterval);
-			var params = {
-				naBzplc : dataArr[1]
-				, aucDt : dataArr[2]
-				, aucObjDsc : dataArr[3]
-				, rgSqno : dataArr[4]
-			}
-			$.ajax({
-				url: '/office/getAbsentCowList',
-				data: params,
-				type: 'POST',
-				dataType: 'json',
-				success : function() {
-				},
-				error: function(xhr, status, error) {
+			//구분자 | 조합구분코드 | 경매일자(YYYYmmdd) | 경매구분(송아지 : 1 / 비육우 : 2 / 번식우 : 3 / 일괄 : 0) | 경매등록일련번호
+			if('N' == dataArr[5]){
+				auctionConfig.rgSqno	=dataArr[4];
+				auctionConfig.aucObjDsc	=dataArr[3];
+				fnReloadView(dataArr[4],dataArr[3]);
+			}else{
+				$('.billboard-info').hide();
+				$('.billboard-view').hide();
+				$('.billboard-noBid').show();
+				clearInterval(viewInterval);
+				var params = {
+					naBzplc : dataArr[1]
+					, aucDt : dataArr[2]
+					, aucObjDsc : dataArr[3]
+					, rgSqno : dataArr[4]
 				}
-			}).done(function (json) {
-				debugConsole(json);
-				var success = json.success;
-				var message = json.message;
-				if (!success) {
-					modalAlert("", message,function(){						
-						$('.billboard-info').show();
-						$('.billboard-view').hide();
-						$('.billboard-noBid').hide();
-						clearInterval(viewInterval);
-						clearInterval(noInfoInterval);
-					});
-				}
-				else {
-					if(json && json.entry){
-						var body = $('.billboard-noBid .list-body ul');
-						$(".billboard-noBid .cow-number-list").mCustomScrollbar('destroy');
-						body.empty();
-						
-						var entryArr = json.entry.split('|');
-						var len = json.entry.split('|').length;
-						var blankLen = len%15;
-						var totLen=len+(blankLen<=0?0:15-blankLen);
-						for(var i =0;i<totLen;i++){
-							if(entryArr[i]){
-								body.append('<li><div class="bg bg-gray"><span class="fz120 txt-bold">'+entryArr[i]+'</span></div></li>');
-							}else{
-								body.append('<li><div class="bg"></div></li>');								
+				$.ajax({
+					url: '/office/getAbsentCowList',
+					data: params,
+					type: 'POST',
+					dataType: 'json',
+					success : function() {
+					},
+					error: function(xhr, status, error) {
+					}
+				}).done(function (json) {
+					debugConsole(json);
+					var success = json.success;
+					var message = json.message;
+					if (!success) {
+						modalAlert("", message,function(){						
+							$('.billboard-info').show();
+							$('.billboard-view').hide();
+							$('.billboard-noBid').hide();
+							clearInterval(viewInterval);
+							clearInterval(noInfoInterval);
+						});
+					}
+					else {
+						if(json && json.entry){
+							var body = $('.billboard-noBid .list-body ul');
+							$(".billboard-noBid .cow-number-list").mCustomScrollbar('destroy');
+							body.empty();
+							
+							var entryArr = json.entry.split('|');
+							var len = json.entry.split('|').length;
+							var blankLen = len%15;
+							var totLen=len+(blankLen<=0?0:15-blankLen);
+							for(var i =0;i<totLen;i++){
+								if(entryArr[i]){
+									body.append('<li><div class="bg bg-gray"><span class="fz120 txt-bold">'+entryArr[i]+'</span></div></li>');
+								}else{
+									body.append('<li><div class="bg"></div></li>');								
+								}
 							}
 						}
+						$(".billboard-noBid .cow-number-list").mCustomScrollbar({
+							theme:"dark-thin",
+							scrollInertia: 200,
+						});	
+						noInfoIntervalFun();
 					}
-					$(".billboard-noBid .cow-number-list").mCustomScrollbar({
-						theme:"dark-thin",
-						scrollInertia: 200,
-					});	
-					noInfoIntervalFun();
-				}
-			});
+				});
+				
+			}
 		break;	
 		default:break;
 	}
@@ -192,7 +208,9 @@ var viewIntervalFunc = function(index){
 	viewInterval = setInterval(function(){
 		var len = $(".billboard-view .list_body ul li").length;
 		if(len<=index){
-			index = 0;
+			//index = 0;
+			fnReloadView(auctionConfig.rgSqno,auctionConfig.aucObjDsc);
+			clearInterval(viewInterval);
 		}else{
 			index += 10;
 		}
@@ -275,7 +293,7 @@ var fnReloadView = function(rgSqno,aucObjDsc){
 						sHtml += "		<dd class='num'> "+vo.AUC_PRG_SQ +"</dd>";
 						sHtml += "		<dd class='name'>"+ (vo.FTSNM?vo.FTSNM.substring(0,3):'') +"</dd>";
 						sHtml += "		<dd class='pd_ea'> "+vo.SRA_INDV_AMNNO_FORMAT +"</dd>";
-						sHtml += "		<dd class='pd_sex'> "+vo.INDV_SEX_C_NAME +"</dd>";
+						sHtml += "		<dd class='pd_sex'> "+(vo.FTSNM?vo.INDV_SEX_C_NAME.substring(0,2):'')  +"</dd>";
 						sHtml += "		<dd class='pd_kg'> "+fnSetComma(((vo.COW_SOG_WT == '' || vo.COW_SOG_WT == null || vo.COW_SOG_WT <= 0 ) ? '0' : vo.COW_SOG_WT)) +"</dd>";
 						sHtml += "		<dd class='pd_kpn'> "+vo.KPN_NO_STR +"</dd>";
 						sHtml += "		<dd class='pd_pay1'>"+fnSetComma((vo.LOWS_SBID_LMT_AM == '' || vo.LOWS_SBID_LMT_AM == null || vo.LOWS_SBID_LMT_AM <= 0 ) ? '-' : vo.LOWS_SBID_LMT_AM <= 0 ? '0' : vo.LOWS_SBID_LMT_UPR)+"</dd>";
