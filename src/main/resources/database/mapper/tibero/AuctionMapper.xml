@@ -181,6 +181,9 @@
 			<if test="searchSelStsDsc != null and searchSelStsDsc != ''">
 				AND B.SEL_STS_DSC=#{searchSelStsDsc}
 			</if>
+			<if test="aucYn != null and aucYn != ''">
+			   AND B.AUC_YN = #{aucYn}
+			</if>
 			
 			
 			) G

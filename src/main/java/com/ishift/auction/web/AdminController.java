@@ -335,6 +335,7 @@ public class AdminController {
 	        temp.put("naBzplc", params.get("naBzplc"));
 	        temp.put("rgSqno", params.get("rgSqno"));
 	        temp.put("aucObjDsc", params.get("aucObjDsc"));
+	        temp.put("aucYn", params.get("aucYn"));
 	        
 			Map<String,Object> info=auctionService.getStnInfo(temp);
 			

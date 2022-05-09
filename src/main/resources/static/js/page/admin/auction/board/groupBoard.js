@@ -79,7 +79,9 @@ var messageHandler = function(data) {
 			}
 			auctionConfig.rgSqno	=dataArr[12];
 			auctionConfig.aucObjDsc	=dataArr[13];
-			var rgSqno=dataArr[12],aucObjDsc=dataArr[13];
+			auctionConfig.aucYn	=null;
+			var rgSqno=dataArr[12],aucObjDsc=dataArr[13];			
+			
 			switch(dataArr[6]){
 				case "8001" : 
 					$('.billboard-info').show();
@@ -90,21 +92,24 @@ var messageHandler = function(data) {
 					$('section.billboard-info .infoTxt').html(aucStConfig.t8001); 
 				break; 
 				case "8002" : 
-					$('.billboard-info').show();
-					$('.billboard-view').hide();
-					$('.billboard-noBid').hide();
-					clearInterval(viewInterval);
-					clearInterval(noInfoInterval);
-					$('section.billboard-info .infoTxt').html(aucStConfig.t8002); 
+//					$('.billboard-info').show();
+//					$('.billboard-view').hide();
+//					$('.billboard-noBid').hide();
+//					clearInterval(viewInterval);
+//					clearInterval(noInfoInterval);
+//					$('section.billboard-info .infoTxt').html(aucStConfig.t8002);
+					if($('.billboard-view').css('display') == 'none') fnReloadView(rgSqno,aucObjDsc); 
 				break; 
 				case "8003" : 
-					//$('section.billboard-info .infoTxt').html(aucStConfig.t8003);					
-					fnReloadView(rgSqno,aucObjDsc); 
+					//$('section.billboard-info .infoTxt').html(aucStConfig.t8003);		
+					auctionConfig.aucYn	=1;			
+					fnReloadView(rgSqno,aucObjDsc,auctionConfig.aucYn); 
 				break; 
 				case "8004" : 
 					//getStnInfo();
 //					$('section.billboard-info .infoTxt').html(aucStConfig.t8004);
-					fnReloadView(rgSqno,aucObjDsc); 
+					auctionConfig.aucYn	=1;
+					fnReloadView(rgSqno,aucObjDsc,auctionConfig.aucYn); 
 				break; 
 				case "8005" : 
 					//$('section.billboard-info .infoTxt').html(aucStConfig.t8005);					
@@ -125,7 +130,7 @@ var messageHandler = function(data) {
 			if('N' == dataArr[5]){
 				auctionConfig.rgSqno	=dataArr[4];
 				auctionConfig.aucObjDsc	=dataArr[3];
-				fnReloadView(dataArr[4],dataArr[3]);
+				fnReloadView(dataArr[4],dataArr[3],auctionConfig.aucYn);
 			}else{
 				$('.billboard-info').hide();
 				$('.billboard-view').hide();
@@ -207,13 +212,14 @@ var viewIntervalFunc = function(index){
 	clearInterval(viewInterval);
 	viewInterval = setInterval(function(){
 		var len = $(".billboard-view .list_body ul li").length;
+		
+		index += 10;
 		if(len<=index){
 			//index = 0;
-			fnReloadView(auctionConfig.rgSqno,auctionConfig.aucObjDsc);
 			clearInterval(viewInterval);
-		}else{
-			index += 10;
+			fnReloadView(auctionConfig.rgSqno,auctionConfig.aucObjDsc,auctionConfig.aucYn);
 		}
+		
 		if(isApp() || chkOs() != 'web'){
 			var scH = $('.tblAuction .list_body ul li').outerHeight();					
 			$('.billboard-view .tblAuction .list_body ul').animate({scrollTop: (scH*index)},1000);
@@ -230,10 +236,9 @@ var noInfoIntervalFun = function(index){
 	clearInterval(noInfoInterval);
 	noInfoInterval = setInterval(function(){
 		var len = $(".billboard-noBid .list-body ul li").length;
+		index += 15;
 		if(len<=index){
 			index = 0;
-		}else{
-			index += 15;
 		}
 		
 		$(".billboard-noBid .list-body ul").mCustomScrollbar('scrollTo'
@@ -243,11 +248,12 @@ var noInfoIntervalFun = function(index){
 	},1000*5)
 };
 
-var fnReloadView = function(rgSqno,aucObjDsc){	
+var fnReloadView = function(rgSqno,aucObjDsc,aucYn){	
 	var params = {
 		naBzplc : $('#naBzPlc').val()
 		, rgSqno : rgSqno			
 		, aucObjDsc : aucObjDsc
+		, aucYn : aucYn
 		//, stAucNo : stAucNo		
 		//, edAucNo : edAucNo			
 	}
@@ -256,6 +262,7 @@ var fnReloadView = function(rgSqno,aucObjDsc){
 		data: params,
 		type: 'POST',
 		dataType: 'json',
+		async: false,
 		success : function() {
 		},
 		error: function(xhr, status, error) {
@@ -294,15 +301,15 @@ var fnReloadView = function(rgSqno,aucObjDsc){
 						sHtml += "		<dd class='name'>"+ (vo.FTSNM?vo.FTSNM.substring(0,3):'') +"</dd>";
 						sHtml += "		<dd class='pd_ea'> "+vo.SRA_INDV_AMNNO_FORMAT +"</dd>";
 						sHtml += "		<dd class='pd_sex'> "+(vo.FTSNM?vo.INDV_SEX_C_NAME.substring(0,2):'')  +"</dd>";
-						sHtml += "		<dd class='pd_kg'> "+fnSetComma(((vo.COW_SOG_WT == '' || vo.COW_SOG_WT == null || vo.COW_SOG_WT <= 0 ) ? '0' : vo.COW_SOG_WT)) +"</dd>";
+						sHtml += "		<dd class='pd_kg'> "+((vo.COW_SOG_WT == '' || vo.COW_SOG_WT == null || vo.COW_SOG_WT <= 0 ) ? '-' : fnSetComma(vo.COW_SOG_WT)) +"</dd>";
 						sHtml += "		<dd class='pd_kpn'> "+vo.KPN_NO_STR +"</dd>";
-						sHtml += "		<dd class='pd_pay1'>"+fnSetComma((vo.LOWS_SBID_LMT_AM == '' || vo.LOWS_SBID_LMT_AM == null || vo.LOWS_SBID_LMT_AM <= 0 ) ? '-' : vo.LOWS_SBID_LMT_AM <= 0 ? '0' : vo.LOWS_SBID_LMT_UPR)+"</dd>";
-						sHtml += "		<dd class='pd_pay2'>"+fnSetComma((vo.SRA_SBID_UPR == '' || vo.SRA_SBID_UPR == null || vo.SRA_SBID_UPR <= 0 ) ? '-' : vo.SRA_SBID_UPR <= 0 ? '0' : vo.SRA_SBID_UPR)+"</dd>";
-						sHtml += "		<dd class='pd_state'>"+ (vo.SEL_STS_DSC_NAME=='대기' && vo.LOWS_SBID_LMT_AM == 0 ? '결장' : (vo.SEL_STS_DSC_NAME == '낙찰' ? vo.LVST_AUC_PTC_MN_NO : vo.SEL_STS_DSC_NAME)) +"</dd>";
+						sHtml += "		<dd class='pd_pay1'>"+((vo.LOWS_SBID_LMT_AM == '' || vo.LOWS_SBID_LMT_AM == null || vo.LOWS_SBID_LMT_AM <= 0 ) ? '-' : fnSetComma(vo.LOWS_SBID_LMT_UPR))+"</dd>";
+						sHtml += "		<dd class='pd_pay2'>"+((vo.SRA_SBID_UPR == '' || vo.SRA_SBID_UPR == null || vo.SRA_SBID_UPR <= 0 ) ? '-' : fnSetComma(vo.SRA_SBID_UPR))+"</dd>";
+						sHtml += "		<dd class='pd_state'>"+ (vo.SEL_STS_DSC_NAME=='대기' && vo.LOWS_SBID_LMT_AM == 0 ? '결장' : (vo.SEL_STS_DSC_NAME == '낙찰' ? vo.LVST_AUC_PTC_MN_NO : (aucYn=='1'?'':vo.SEL_STS_DSC_NAME))) +"</dd>";
 						sHtml += "	</dl></li>";
 						body.append(sHtml);
 					}					
-				}
+				}                       
 				
 				body.mCustomScrollbar({
 					theme:"dark-thin",
