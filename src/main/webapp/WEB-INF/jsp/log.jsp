@@ -22,6 +22,11 @@
 			<option value="8808990656656">하동축협</option>
 			<option value="8808990657202">무진장축협</option>
 			<option value="8808990660783">임실축협</option>
+			<option value="8808990687094">영주축협</option>
+			<option value="8808990656410">함양산청축협</option>
+			<option value="8808990661315">화순축협</option>
+			<option value="8808990656953">정읍축협</option>
+			<option value="8808990656960">순창축협</option>
 		</select>
 		<button type="button" onclick="getWatchToken();">토큰</button>
 		<button type="button" onclick="socketStart();">시작</button>
