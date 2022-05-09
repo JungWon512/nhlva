@@ -224,9 +224,9 @@
 								<dd class="pd_sex">${bvo.INDV_SEX_C_NAME }</dd>
 								<dd class="pd_pay1">							
 									<c:choose>
-										<c:when test="${bvo.LOWS_SBID_LMT_AM eq '' || bvo.LOWS_SBID_LMT_AM == null || bvo.LOWS_SBID_LMT_AM <= 0}">-</c:when>
+										<c:when test="${bvo.LOWS_SBID_LMT_UPR eq '' || bvo.LOWS_SBID_LMT_UPR == null || bvo.LOWS_SBID_LMT_UPR <= 0}">-</c:when>
 										<c:otherwise>
-											<fmt:formatNumber value="${fn:split(bvo.LOWS_SBID_LMT_AM,'.')[0]}" type="number" />
+											<fmt:formatNumber value="${fn:split(bvo.LOWS_SBID_LMT_UPR,'.')[0]}" type="number" />
 										</c:otherwise>
 									</c:choose>
 								</dd>
