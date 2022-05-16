@@ -80,6 +80,7 @@ var messageHandler = function(data) {
 			auctionConfig.rgSqno	=dataArr[12];
 			auctionConfig.aucObjDsc	=dataArr[13];
 			auctionConfig.aucYn	=null;
+			auctionConfig.nextBidYn	= null;
 			var rgSqno=dataArr[12],aucObjDsc=dataArr[13];			
 			
 			switch(dataArr[6]){
@@ -126,12 +127,19 @@ var messageHandler = function(data) {
 			}
 		break;	
 		case "SZ" : 
+			auctionConfig.nextBidYn	= null;
 			//구분자 | 조합구분코드 | 경매일자(YYYYmmdd) | 경매구분(송아지 : 1 / 비육우 : 2 / 번식우 : 3 / 일괄 : 0) | 경매등록일련번호
 			if('N' == dataArr[5]){
 				auctionConfig.rgSqno	=dataArr[4];
 				auctionConfig.aucObjDsc	=dataArr[3];
 				fnReloadView(dataArr[4],dataArr[3],auctionConfig.aucYn);
-			}else{
+			}else if('P' == dataArr[5]){
+				auctionConfig.rgSqno	=dataArr[4];
+				auctionConfig.aucObjDsc	=dataArr[3];
+				auctionConfig.aucYn = null;
+				auctionConfig.nextBidYn	= 'Y';
+				fnReloadView(dataArr[4],dataArr[3],auctionConfig.aucYn,auctionConfig.nextBidYn);
+			}else if('Y' == dataArr[5]){
 				$('.billboard-info').hide();
 				$('.billboard-view').hide();
 				$('.billboard-noBid').show();
@@ -217,7 +225,7 @@ var viewIntervalFunc = function(index){
 		if(len<=index){
 			//index = 0;
 			clearInterval(viewInterval);
-			fnReloadView(auctionConfig.rgSqno,auctionConfig.aucObjDsc,auctionConfig.aucYn);
+			fnReloadView(auctionConfig.rgSqno,auctionConfig.aucObjDsc,auctionConfig.aucYn,auctionConfig.nextBidYn);
 		}
 		
 		if(isApp() || chkOs() != 'web'){
@@ -248,15 +256,17 @@ var noInfoIntervalFun = function(index){
 	},1000*5)
 };
 
-var fnReloadView = function(rgSqno,aucObjDsc,aucYn){	
+var fnReloadView = function(rgSqno,aucObjDsc,aucYn,nextBidYn){	
 	var params = {
 		naBzplc : $('#naBzPlc').val()
 		, rgSqno : rgSqno			
 		, aucObjDsc : aucObjDsc
 		, aucYn : aucYn
+		, nextBidYn : nextBidYn
 		//, stAucNo : stAucNo		
 		//, edAucNo : edAucNo			
 	}
+	console.log(params);
 	$.ajax({
 		url: '/office/getCowList',
 		data: params,

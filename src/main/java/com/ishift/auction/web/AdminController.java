@@ -336,7 +336,6 @@ public class AdminController {
 	        temp.put("rgSqno", params.get("rgSqno"));
 	        temp.put("aucObjDsc", params.get("aucObjDsc"));
 	        temp.put("aucYn", params.get("aucYn"));
-	        
 			Map<String,Object> info=auctionService.getStnInfo(temp);
 			
 			if(info == null || info.isEmpty()) {		
@@ -347,6 +346,7 @@ public class AdminController {
 	        temp.put("stAucNo", info.get("ST_AUC_NO"));
 	        temp.put("edAucNo", info.get("ED_AUC_NO"));
 	        temp.put("searchAucObjDsc", info.get("AUC_OBJ_DSC"));
+	        temp.put("nextBidYn", params.get("nextBidYn"));
 			
 	        temp.put("searchDate", today);
 	        temp.put("naBzplc", params.get("naBzplc"));

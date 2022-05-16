@@ -72,8 +72,8 @@
 					, B.TRMN_AMNNO             /* 거래인관리번호(중도매인기준정보번호)*/
 					, B.LVST_AUC_PTC_MN_NO     /* 가축경매참여자번호(참가번호)*/
 					, NVL(TRIM(B.COW_SOG_WT),0) COW_SOG_WT             /* 우출하중량	      (중량)*/
-					, B.FIR_LOWS_SBID_LMT_AM   /* 최초최저낙찰한도금액(원단위)*/
-					, B.LOWS_SBID_LMT_AM       /* 최저낙찰한도금액  (최저가-원단위)*/
+					, NVL(B.FIR_LOWS_SBID_LMT_AM,'0') FIR_LOWS_SBID_LMT_AM  /* 최초최저낙찰한도금액(원단위)*/
+					, NVL(B.LOWS_SBID_LMT_AM,'0') LOWS_SBID_LMT_AM       /* 최저낙찰한도금액  (최저가-원단위)*/
 					, CASE WHEN B.AUC_OBJ_DSC = '1' THEN ROUND(B.FIR_LOWS_SBID_LMT_AM / NVL(J.CALF_AUC_ATDR_UNT_AM, 10000))
 							WHEN B.AUC_OBJ_DSC = '2' THEN ROUND(B.FIR_LOWS_SBID_LMT_AM / NVL(J.NBFCT_AUC_ATDR_UNT_AM, 1))
 							WHEN B.AUC_OBJ_DSC = '3' THEN ROUND(B.FIR_LOWS_SBID_LMT_AM / NVL(J.PPGCOW_AUC_ATDR_UNT_AM, 10000))
@@ -183,6 +183,10 @@
 			</if>
 			<if test="aucYn != null and aucYn != ''">
 			   AND B.AUC_YN = #{aucYn}
+			</if>
+			<if test="nextBidYn != null and nextBidYn != ''">				
+			   AND B.SEL_STS_DSC <![CDATA[<>]]> '22'
+			   AND NVL(B.LOWS_SBID_LMT_AM, 0) <![CDATA[>]]> 0
 			</if>
 			
 			
