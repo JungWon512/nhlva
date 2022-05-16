@@ -4,7 +4,7 @@
 	<h3>경매안내</h3>
 	<dl class="board_top">
 		<dt>
-			<h4><span>${fn:substring(johapData.CLNTNM,0,6) }</span></h4>
+			<h4><span>${fn:substring(johapData.CLNTNM,0,8) }</span></h4>
 			
 			<c:choose>
 				<c:when test="${aucDate.size() > 0  }">
