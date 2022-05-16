@@ -80,7 +80,7 @@ var messageHandler = function(data) {
 			auctionConfig.rgSqno	=dataArr[12];
 			auctionConfig.aucObjDsc	=dataArr[13];
 			auctionConfig.aucYn	=null;
-			auctionConfig.nextBidYn	= null;
+			auctionConfig.nextBidYn	= null;				
 			var rgSqno=dataArr[12],aucObjDsc=dataArr[13];			
 			
 			switch(dataArr[6]){
@@ -282,7 +282,7 @@ var fnReloadView = function(rgSqno,aucObjDsc,aucYn,nextBidYn){
 		var success = json.success;
 		var message = json.message;
 		if (!success) {
-			modalAlert("", message);
+			//modalAlert("", message);
 		}
 		else {
 			if(json && json.list){
@@ -309,13 +309,13 @@ var fnReloadView = function(rgSqno,aucObjDsc,aucYn,nextBidYn){
 						sHtml += "	<li><dl>";
 						sHtml += "		<dd class='num'> "+vo.AUC_PRG_SQ +"</dd>";
 						sHtml += "		<dd class='name'>"+ (vo.FTSNM?vo.FTSNM.substring(0,3):'') +"</dd>";
-						sHtml += "		<dd class='pd_ea'> "+vo.SRA_INDV_AMNNO_FORMAT +"</dd>";
+						sHtml += "		<dd class='pd_ea'> "+vo.SRA_INDV_AMNNO_FORMAT2 +"</dd>";
 						sHtml += "		<dd class='pd_sex'> "+(vo.FTSNM?vo.INDV_SEX_C_NAME.substring(0,2):'')  +"</dd>";
 						sHtml += "		<dd class='pd_kg'> "+((vo.COW_SOG_WT == '' || vo.COW_SOG_WT == null || vo.COW_SOG_WT <= 0 ) ? '-' : fnSetComma(vo.COW_SOG_WT)) +"</dd>";
 						sHtml += "		<dd class='pd_kpn'> "+vo.KPN_NO_STR +"</dd>";
 						sHtml += "		<dd class='pd_pay1'>"+((vo.LOWS_SBID_LMT_AM == '' || vo.LOWS_SBID_LMT_AM == null || vo.LOWS_SBID_LMT_AM <= 0 ) ? '-' : fnSetComma(vo.LOWS_SBID_LMT_UPR))+"</dd>";
 						sHtml += "		<dd class='pd_pay2'>"+((vo.SRA_SBID_UPR == '' || vo.SRA_SBID_UPR == null || vo.SRA_SBID_UPR <= 0 ) ? '-' : fnSetComma(vo.SRA_SBID_UPR))+"</dd>";
-						sHtml += "		<dd class='pd_state'>"+ (vo.SEL_STS_DSC_NAME=='대기' && vo.LOWS_SBID_LMT_AM == 0 ? '결장' : (vo.SEL_STS_DSC_NAME == '낙찰' ? vo.LVST_AUC_PTC_MN_NO : (aucYn=='1'?'':vo.SEL_STS_DSC_NAME))) +"</dd>";
+						sHtml += "		<dd class='pd_state'>"+ (vo.SEL_STS_DSC_NAME=='대기' && vo.LOWS_SBID_LMT_AM == 0 ? '결장' : (vo.SEL_STS_DSC_NAME == '낙찰' ? vo.LVST_AUC_PTC_MN_NO : (aucYn=='1' || nextBidYn == 'Y'?'':vo.SEL_STS_DSC_NAME))) +"</dd>";
 						sHtml += "	</dl></li>";
 						body.append(sHtml);
 					}					

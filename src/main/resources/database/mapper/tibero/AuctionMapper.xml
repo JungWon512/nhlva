@@ -22,6 +22,7 @@
 					, B.SRA_INDV_AMNNO         /* 축산개체관리번호	*/
 					, SUBSTRING(B.SRA_INDV_AMNNO,LENGTH(B.SRA_INDV_AMNNO)-4,5) SRA_INDV_AMNNO_STR /* 축산개체관리번호(앞자리 7자 제거)	*/
 					, SUBSTRING(B.SRA_INDV_AMNNO,LENGTH(B.SRA_INDV_AMNNO)-4,4) || '-' || SUBSTRING(B.SRA_INDV_AMNNO, LENGTH(B.SRA_INDV_AMNNO), 1) AS SRA_INDV_AMNNO_FORMAT
+					, SUBSTRING(B.SRA_INDV_AMNNO,LENGTH(B.SRA_INDV_AMNNO)-4,4) AS SRA_INDV_AMNNO_FORMAT2
 					, B.SRA_SRS_DSC            /* 축산축종구분코드: 01	*/
 					, B.FHS_ID_NO              /* 농가식별번호	*/
 					, B.FARM_AMNNO             /* 농장관리번호	*/
