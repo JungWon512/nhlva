@@ -383,8 +383,11 @@ public class AdminController {
 			params.put("edAucNo", map.get("ED_AUC_NO"));
 			List<Map<String, Object>> list = auctionService.selectCowList(params);
 			if (list != null) {
+				int index = 0; 
 				for (final Map<String, Object> vo : list) {
-					sb.append(this.getStringValue(vo.get("AUC_PRG_SQ")).replace("|", ",")).append('|');	// 계류대 번호
+					if(index != 0) sb.append('|');
+					sb.append(this.getStringValue(vo.get("AUC_PRG_SQ")).replace("|", ","));	// 계류대 번호
+					index++;
 				}
 			}
 			

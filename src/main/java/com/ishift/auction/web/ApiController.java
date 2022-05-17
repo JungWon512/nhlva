@@ -1719,8 +1719,11 @@ public class ApiController {
 			params.put("absentYn", "Y");
 			List<Map<String, Object>> list = auctionService.selectCowList(params);
 			if (list != null) {
+				int index = 0; 
 				for (final Map<String, Object> vo : list) {
-					sb.append(this.getStringValue(vo.get("AUC_PRG_SQ")).replace("|", ",")).append('|');	// 계류대 번호
+					sb.append(this.getStringValue(vo.get("AUC_PRG_SQ")).replace("|", ","));	// 계류대 번호
+					sb.append('|');
+					index++;
 				}
 			}
 			
