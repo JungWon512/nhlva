@@ -122,8 +122,7 @@ var messageHandler = function(data) {
 			auctionConfig.asData.rgSqno = dataArr[12];
 			auctionConfig.asData.aucObjDsc = dataArr[13];
 			
-			if($('#aucDsc').val() == '2' && (tmpAsDAta.selSts=='8001' || tmpAsDAta.selSts=='8002' || tmpAsDAta.selSts=='8006') 
-			|| $('#aucDsc').val() != '2'){
+			if($('#aucDsc').val() == '2' && (tmpAsDAta.selSts=='8001' || tmpAsDAta.selSts=='8002' || tmpAsDAta.selSts=='8006')){
 				var params = {
 					naBzplc : $('#naBzPlc').val()
 					,aucObjDsc : auctionConfig.asData.aucObjDsc
