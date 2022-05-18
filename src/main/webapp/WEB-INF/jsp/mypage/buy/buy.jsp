@@ -99,7 +99,7 @@
 					<dd class="pd_num1">계대</dd>
 					<dd class="pd_pay1">최저가</dd>
 					<dd class="pd_pay2">낙찰가</dd>
-					<dd class="pd_state">경매상태</dd>
+					<dd class="pd_state">경매결과</dd>
 					<dd class="pd_etc">비고</dd>
 				</dl>
 			</div>
@@ -218,7 +218,7 @@
 					<dd class="pd_pay1">예정가</dd>
 					<dd class="pd_pay3">응찰가</dd>
 					<dd class="pd_pay2">낙찰가</dd>
-					<dd class="pd_state">경매상태</dd>
+					<dd class="pd_state">경매결과</dd>
 				</dl>
 			</div>
 			<div class="list_body">

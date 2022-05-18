@@ -19,7 +19,7 @@
 		<dd>
 			<ul>
 				<li><a href="javascript:pageMove('/results');"><span class="ico_arrowblue">경매결과 보기</span></a></li>
-				<li><a href="javascript:pageMove('/sales');"><span class="ico_arrowblue">예정조회 보기</span></a></li>
+				<li><a href="javascript:pageMove('/sales');"><span class="ico_arrowblue">출장우 보기</span></a></li>
 			</ul>
 		</dd>
 	</dl>
