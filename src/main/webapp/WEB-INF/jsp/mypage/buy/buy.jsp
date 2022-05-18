@@ -202,8 +202,8 @@
 		<!-- //list_search e -->
 		<div class="list_downs">
 			<ul>
-				<li><a href="javascript:;"><span class="ico_print">인쇄하기</span></a></li>
-				<li><a href="javascript:;"><span class="ico_excel">엑셀다운</span></a></li>
+				<li><a href="javascript:;" class="btn_printBid"><span class="ico_print">인쇄하기</span></a></li>
+				<li><a href="javascript:;" class="btn_excelBid"><span class="ico_excel">엑셀다운</span></a></li>
 			</ul>
 		</div>
 		<!-- //list_downs e -->
