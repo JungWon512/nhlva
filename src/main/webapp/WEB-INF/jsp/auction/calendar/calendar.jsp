@@ -4,7 +4,7 @@
 <!--    <img src="/static/images/prepare.png" style="width:100vw;"></img> -->
 <!-- </div> -->
 <div class="auction_date">
-	<h3>일정안내</h3>
+	<h3>경매일정</h3>
 	<div class="date_board">
 		<input type="hidden" id="searchYm" name="searchYm" value="${paramVo.searchYm }"/>
 		<dl class="date_top">

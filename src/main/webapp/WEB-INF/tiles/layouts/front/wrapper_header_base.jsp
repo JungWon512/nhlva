@@ -53,7 +53,7 @@
 								<a href="javascript:pageMove('/main');">나의 출장우</a>
 							</li>
 							<li class="calendar">
-								<a href="javascript:pageMove('/calendar');">일정안내</a>
+								<a href="javascript:pageMove('/calendar');">경매일정</a>
 							</li>
 						</ul>
 					</nav>
@@ -100,7 +100,7 @@
 								<a href="javascript:pageMove('/my/entry');">나의 출장우</a>
 							</li>
 							<li class="calendar">
-								<a href="javascript:pageMove('/calendar');">일정안내</a>
+								<a href="javascript:pageMove('/calendar');">경매일정</a>
 							</li>
 						</ul>
 					</nav>
@@ -179,7 +179,7 @@
 						<dd><a href="javascript:pageMove('/main');">경매결과 조회</a></dd>
 						<dd><a href="javascript:pageMove('/main');">나의 경매내역</a></dd>
 						<dd><a href="javascript:pageMove('/main');">나의 출장우</a></dd>
-						<dd><a href="javascript:pageMove('/calendar');">일정안내</a></dd>
+						<dd><a href="javascript:pageMove('/calendar');">경매일정</a></dd>
 						<dd><a href="javascript:pageMove('/guide');">이용안내</a></dd>
 					</dl>
 				</c:when>
@@ -201,7 +201,7 @@
 						<dd><a href="javascript:pageMove('/results');">경매결과 조회</a></dd>
 						<dd><a href="javascript:pageMove('/my/buy');">나의 경매내역</a></dd>
 						<dd><a href="javascript:pageMove('/my/entry');">나의 출장우</a></dd>
-						<dd><a href="javascript:pageMove('/calendar');">일정안내</a></dd>
+						<dd><a href="javascript:pageMove('/calendar');">경매일정</a></dd>
 						<dd><a href="javascript:pageMove('/guide');">이용안내</a></dd>
 					</dl>
 				</c:otherwise>

@@ -188,7 +188,7 @@ public class AuctionController extends CommonController {
 		}catch (SQLException se) {
 			log.error("AuctionController.schedule : {} ",se);
 		}
-		mav.addObject("subheaderTitle","일정안내");
+		mav.addObject("subheaderTitle","경매일정");
 		mav.setViewName("auction/calendar/calendar");
 		return mav;
 	}

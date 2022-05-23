@@ -35,7 +35,7 @@
 	</div>
 	
 	<div class="auction_date">
-		<h3>일정안내</h3>
+		<h3>경매일정</h3>
 		<div class="date_board">
 			<div class="date_bottom">
 				<ul>
