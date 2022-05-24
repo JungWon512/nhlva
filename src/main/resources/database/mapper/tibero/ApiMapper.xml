@@ -1173,6 +1173,9 @@
 			   AND A.AUC_PRG_SQ <![CDATA[>=]]> #{stAucNo}
 			   AND A.AUC_PRG_SQ <![CDATA[<=]]> #{edAucNo}
 			</if>
+			<if test='absentYn !=null and absentYn.equals("Y")'>			   
+			   AND A.LOWS_SBID_LMT_AM > 0
+			</if>
 			) H
 			WHERE 1=1
 			<if test='absentYn !=null and absentYn.equals("Y")'>
