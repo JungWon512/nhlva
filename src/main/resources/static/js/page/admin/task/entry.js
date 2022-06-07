@@ -30,7 +30,7 @@
 			// 리스트 선택
 			$(document).on("dblclick", ".list_body > ul > li", function(e){
 				var regType = $("input[name='regType']").val();
-				if (regType == "AW") return;
+				if (regType == "AW" || regType == "AL") return;
 				$(".list_body ul li").not(this).removeClass("act");
 				$(this).toggleClass("act");
 				
