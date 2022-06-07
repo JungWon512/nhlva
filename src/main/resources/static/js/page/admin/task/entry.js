@@ -39,10 +39,10 @@
 			
 			// 리스트 선택
 			$(document).on("click", ".list_body > ul > li", function(e){
-//				var regType = $("input[name='regType']").val();
-//				if (regType == "AW") return;
-//				$(".list_body ul li").not(this).removeClass("act");
-//				$(this).toggleClass("act");
+				var regType = $("input[name='regType']").val();
+				if (regType != "SB") return;
+				$(".list_body ul li").not(this).removeClass("act");
+				$(this).toggleClass("act");
 			});
 			
 			// 유형 선택 화면으로 이동
@@ -334,7 +334,7 @@
 		};
 		
 		var fnLayerPop = function(params, cowInfo) {
-			var title = ['W', 'AW'].indexOf(params.regType) > -1 ? '중량 등록' : params.regType == 'N' ? '계류대 변경' : '하한가 등록';
+			var title = ['W', 'AW'].indexOf(params.regType) > -1 ? '중량 등록' : params.regType == 'N' ? '계류대 변경' : params.regType=='SB'? '낙찰결과' : '하한가 등록';
 			modalPopupClose('.pop_mod_weight');
 			$('.pop_mod_weight').remove();
 
@@ -426,7 +426,9 @@
 			// modal-body [e]
 			sHtml.push('			<div class="modal-foot">');
 			sHtml.push('				<div class="btn_area">');
-			sHtml.push('						<a href="javascript:;" class="btn_save">저장</a>');
+			if (params.regType != 'SB'){
+				sHtml.push('						<a href="javascript:;" class="btn_save">저장</a>');
+			}
 			sHtml.push('						<a href="javascript:;" class="btn_pop_close">닫기</a>');
 			sHtml.push('				</div>');
 			sHtml.push('			</div>');
@@ -436,15 +438,17 @@
 			
 			$("body").append(sHtml.join(""));
 			modalPopup('.pop_mod_weight');
-			$(".pop_mod_weight").find("input.required").focus();
-			$(".pop_mod_weight").find("input.required").on('keydown',function(){
-				if(!$(this).val() || $(this).val() == '0') $(this).val('');
-			});
-			$(".pop_mod_weight").find("input.required:not([name=modlNo])").on('focusout',function(){
-				if(!$(this).val() || $(this).val() == '') $(this).val('0');
-			});
-			var len = $(".pop_mod_weight").find("input.required").val().length;
-			$(".pop_mod_weight").find("input.required")[0].setSelectionRange(len,len);
+			if (params.regType != 'SB') {
+				$(".pop_mod_weight").find("input.required").focus();
+				$(".pop_mod_weight").find("input.required").on('keydown',function(){
+					if(!$(this).val() || $(this).val() == '0') $(this).val('');
+				});
+				$(".pop_mod_weight").find("input.required:not([name=modlNo])").on('focusout',function(){
+					if(!$(this).val() || $(this).val() == '') $(this).val('0');
+				});
+				var len = $(".pop_mod_weight").find("input.required").val().length;
+				$(".pop_mod_weight").find("input.required")[0].setSelectionRange(len,len);
+			}
 		}
 		
 		//모달레이어팝업
