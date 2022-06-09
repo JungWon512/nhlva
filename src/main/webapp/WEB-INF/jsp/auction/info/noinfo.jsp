@@ -71,7 +71,8 @@ div.btn_app a {
 <div class="auction_choice">
 	<h3>경매안내</h3>	
 	<dl>
-		<dt><span>${fn:substring(johapData.CLNTNM,0,8)}</span></dt>
+		<!--<dt><span>${fn:substring(johapData.CLNTNM,0,8)}</span></dt>-->
+		<dt class="tit"><span>${johapData.CLNTNM}</span></dt>
 		<dd class="link"><a href="javascript:pageMove('/home');"><span class="ico_arrowblue">지역선택</span></a></dd>
 	</dl>
 	

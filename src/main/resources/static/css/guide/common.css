@@ -1690,6 +1690,9 @@ Base styles: contents layer
 	color: #1a1a1a;
 	margin-bottom: 15px;
 }
+.auction_choice dl dt.tit {
+	width: calc(100% - 150px);
+}
 
 .auction_choice dl dt span {
 	font-family: "Noto Sans KR", "Roboto", "AppleGothic", "sans-serif";
@@ -1710,7 +1713,7 @@ Base styles: contents layer
 }
 
 .auction_choice dl dd.link a {
-	width: 160px;
+	width: 150px;
 	height: 50px;
 	line-height: 46px;
 	display: block;
@@ -1758,6 +1761,9 @@ Base styles: contents layer
 		position: absolute;
 		right: 0;
 		top: -2px;
+	}
+	.auction_choice dl dt.tit {
+		width: calc(100% - 105px);
 	}
 	.auction_choice dl dd.link a {
 		width: 105px;
