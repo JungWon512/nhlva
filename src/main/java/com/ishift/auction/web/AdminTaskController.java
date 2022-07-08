@@ -103,7 +103,7 @@ public class AdminTaskController extends CommonController {
 	@RequestMapping(value = "/office/task/entry", method = {RequestMethod.GET, RequestMethod.POST})
 	public ModelAndView entry(@RequestParam final Map<String, Object> params) {
 		final ModelAndView mav = new ModelAndView("admin/task/entry");
-		final Map<String, String> titleMap = new HashMap<String, String>() {{put("W", "중량 등록");put("L", "하한가 등록");put("N", "계류대 변경");put("AW", "중량 일괄 등록");put("AL", "하한가 일괄 등록");put("SB", "낙찰결과 조회");}};
+		final Map<String, String> titleMap = new HashMap<String, String>() {{put("W", "중량 등록");put("L", "하한가 등록");put("N", "계류대 변경");put("AW", "중량 일괄 등록");put("AL", "하한가 일괄 등록");put("SB", "낙찰결과 조회");put("SCOW", "출장우 리스트");put("SMCOW", "미감정 임신우");}};
 		try {			
 			final AdminUserDetails userVo = (AdminUserDetails)sessionUtill.getUserVo();
 			if(userVo != null) params.put("naBzPlcNo", userVo.getPlace());
@@ -115,6 +115,10 @@ public class AdminTaskController extends CommonController {
 			if(params.get("regType") != null && "SB".equals(params.get("regType"))) {
 				params.put("searchSelStsDsc", "22");
 			}
+			if(params.get("regType") != null && "SMCOW".equals(params.get("regType"))) {
+				params.put("mCowYn", "Y");
+			}
+			
 			mav.addObject("entryList", auctionService.entrySelectList(params));
 		}catch (RuntimeException re) {
 			log.error("AdminTaskController.entry : {} ",re);
