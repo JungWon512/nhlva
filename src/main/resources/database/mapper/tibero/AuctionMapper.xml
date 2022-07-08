@@ -195,7 +195,7 @@
 			</if>			
 			<if test='"Y".equals(mCowYn)'>				
 				AND (
-					B.LVST_MKT_TRPL_AMNNO IS NULL AND B.PPGCOW_FEE_DSC IN ('1','3','5')			
+					B.LVST_MKT_TRPL_AMNNO IS NULL AND B.PPGCOW_FEE_DSC IN ('1','3')			
 					OR B.RMK_CNTN LIKE '%감정불가%'
 				)
 			</if>			
