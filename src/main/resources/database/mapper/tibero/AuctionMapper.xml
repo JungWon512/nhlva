@@ -187,7 +187,10 @@
 				AND B.SEL_STS_DSC=#{searchSelStsDsc}
 			</if>
 			<if test="aucYn != null and aucYn != ''">
-			   AND B.AUC_YN = #{aucYn}
+<!-- 			   AND B.AUC_YN = #{aucYn} -->
+				AND B.LOWS_SBID_LMT_AM <![CDATA[>]]> 0
+				AND B.SEL_STS_DSC != '22'
+				AND B.DEL_YN = '0'
 			</if>
 			<if test="nextBidYn != null and nextBidYn != ''">				
 			   AND B.SEL_STS_DSC <![CDATA[<>]]> '22'
