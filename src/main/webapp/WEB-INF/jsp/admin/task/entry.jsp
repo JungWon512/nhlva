@@ -77,7 +77,7 @@
 					</c:choose>
 						
 					<dd class="col3">귀표</dd>
-					<c:if test="${params.regType ne 'SB'}">
+					<c:if test="${params.regType ne 'SB' and params.regType ne 'SMCOW'}">
 						<dd class="col4">출하자</dd>
 					</c:if>
 					<c:if test="${params.regType eq 'SB'}">
@@ -85,7 +85,20 @@
 						<dd class="col4">낙찰자</dd>
 						<dd class="col4">낙찰가</dd>
 					</c:if>
-					<c:if test="${params.regType ne 'AW' and params.regType ne 'AL' and params.regType ne 'SB'}">
+					<c:if test="${params.regType eq 'SCOW'}">
+						<dd class="col4">계류대</dd>
+						<dd class="col4">중량</dd>
+						<dd class="col4">하한가</dd>
+						<dd class="col4">임신개월</dd>
+						<dd class="col4">비고</dd>
+					</c:if>
+					<c:if test="${params.regType eq 'SMCOW'}">
+						<dd class="col4">수의사</dd>
+						<dd class="col4">임신구분</dd>
+						<dd class="col4">임신개월</dd>
+						<dd class="col4">비고</dd>
+					</c:if>
+					<c:if test="${params.regType ne 'AW' and params.regType ne 'AL' and params.regType ne 'SB' and params.regType ne 'SMCOW' and params.regType ne 'SCOW'}">
 						<dd class="col4">수정</dd>
 					</c:if>
 				</dl>
@@ -101,7 +114,7 @@
 					</c:if>
 					<c:forEach items="${entryList}" var="item" varStatus="st">
 						<li id="${item.AUC_PRG_SQ}">
-							<c:if test="${params.regType ne 'AW' and params.regType ne 'AL' and params.regType ne 'SB'}">
+							<c:if test="${params.regType ne 'AW' and params.regType ne 'AL' and params.regType ne 'SB' and params.regType ne 'SCOW' and params.regType ne 'SMCOW'}">
 								<span><button type="button" class="btn_modify" >수정</button></span>
 							</c:if>
 							<dl>
@@ -143,7 +156,7 @@
 							</c:when>
 							</c:choose>
 								<dd class="col3">${item.SRA_INDV_AMNNO_FORMAT}</dd>
-								<c:if test="${params.regType ne 'SB'}">
+								<c:if test="${params.regType ne 'SB' and params.regType ne 'SMCOW'}">
 									<dd class="col4">${item.FTSNM_ORI}</dd>
 								</c:if>
 								<c:if test="${params.regType eq 'SB'}">
@@ -151,7 +164,20 @@
 									<dd class="col4">${item.SRA_MWMNNM}</dd>
 									<dd class="col4">${item.SRA_SBID_UPR}</dd>
 								</c:if>
-								<c:if test="${params.regType ne 'AW' and params.regType ne 'AL' and params.regType ne 'SB'}">
+								<c:if test="${params.regType eq 'SMCOW'}">
+									<dd class="col4">${item.LVST_MKT_TRPL_AMNNO_NM}</dd>
+									<dd class="col4">${item.PPGCOW_FEE_DSC_NM}</dd>
+									<dd class="col4">${item.PRNY_MTCN}</dd>
+									<dd class="col4">${item.RMK_CNTN}</dd>
+								</c:if>
+								<c:if test="${params.regType eq 'SCOW'}">
+									<dd class="col4">${item.MODL_NO}</dd>
+									<dd class="col4">${item.COW_SOG_WT}</dd>
+									<dd class="col4">${item.LOWS_SBID_LMT_UPR}</dd>
+									<dd class="col4">${item.PRNY_MTCN}</dd>
+									<dd class="col4">${item.RMK_CNTN}</dd>
+								</c:if>
+								<c:if test="${params.regType ne 'AW' and params.regType ne 'AL' and params.regType ne 'SB' and params.regType ne 'SCOW' and params.regType ne 'SMCOW'}">
 									<dd class="col4 col5"></dd>
 <!-- 									<dd class="col4 col5"><button type="button" class="btn_modify">수정</button></dd> -->
 								</c:if>
