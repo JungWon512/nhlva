@@ -904,7 +904,6 @@
 		   AND A.SEL_STS_DSC <![CDATA[<>]]> '22'
 		   AND A.AUC_PRG_SQ BETWEEN #{stAucNo} AND #{edAucNo}
 		   AND A.LOWS_SBID_LMT_AM > 0
-		   AND A.AUC_YN = '1'
 		 ORDER BY A.AUC_PRG_SQ
 	</select>
 	
