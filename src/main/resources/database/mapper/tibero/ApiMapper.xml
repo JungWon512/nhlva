@@ -711,6 +711,7 @@
 			 , A.NCSS_YN										/* 괴사여부 */
 			 , A.RMHN_YN										/* 제각여부 */
 			 , A.BLOOD_AM										/* 송아지 혈통 수수료 */
+			 , C.SRA_FED_SPY_YN									/* 사료미사용 여부 */
 		  FROM TB_LA_IS_MH_SOG_COW A
 		  LEFT OUTER JOIN TB_LA_IS_MM_MWMN B
 		    ON ( A.NA_BZPLC = B.NA_BZPLC AND A.TRMN_AMNNO = B.TRMN_AMNNO )
@@ -757,6 +758,9 @@
 		   AND A.AUC_OBJ_DSC	= #{aucObjDsc}
 		   AND A.DEL_YN			= '0'
 		   AND A.NA_BZPLC		= #{naBzplc}
+		<if test="sbidYn != null and sbidYn != ''">
+		   AND A.SBID_YN		= #{sbidYn}
+		</if>
 	</select>
 	
 	<!-- 수수료 정보 저장 -->
@@ -847,6 +851,7 @@
 			 , A.NCSS_YN										/* 괴사여부 */
 			 , A.RMHN_YN										/* 제각여부 */
 			 , A.BLOOD_AM										/* 송아지 혈통 수수료 */
+			 , B.SRA_FED_SPY_YN									/* 사료미사용 여부 */
 		  FROM TB_LA_IS_MH_SOG_COW A
 		  LEFT OUTER JOIN TB_LA_IS_MM_FHS B
 			ON (
@@ -892,6 +897,53 @@
 		   AND A.SEL_STS_DSC <![CDATA[<>]]> '22'
 		   AND A.AUC_PRG_SQ BETWEEN #{stAucNo} AND #{edAucNo}
 		   AND A.LOWS_SBID_LMT_AM > 0
+		   AND A.AUC_YN = '1'
+		 ORDER BY A.AUC_PRG_SQ
+	</select>
+	
+	<!-- 유찰 처리 대상 목록 -->
+	<select id="selectBidFailList" parameterType="map" resultType="map">
+		SELECT A.NA_BZPLC										/* 조합코드 */
+			 , A.AUC_DT											/* 경매일자 */
+			 , A.AUC_PRG_SQ										/* 경매번호 */
+			 , A.AUC_OBJ_DSC									/* 경매유형 */
+			 , A.OSLP_NO										/* 원표번호 */
+			 , A.LED_SQNO 										/* 원장일련번호 */
+			 , A.TRPCS_PY_YN 									/* 운송비지급여부 */
+			 , A.PPGCOW_FEE_DSC									/* 번식우수수료구분코드 1.임신우, 2.비임신우, 3.임신우+송아지, 4.비임신우+송아지,  5.해당없음 */
+			 , NVL(B.MACO_YN,0) AS FHS_MACO_YN 					/* 출하주 중도매인여부 */
+			 , A.FHS_ID_NO										/* 농가식별번호 */
+			 , A.FARM_AMNNO										/* 농가관린번호 */
+			 , NVL(REGEXP_REPLACE(A.COW_SOG_WT, '[^0-9]'), 0) AS COW_SOG_WT /* 중량 */
+			 , A.FEE_CHK_YN										/* 출하자 수수료 기적용 여부 */
+			 , A.FEE_CHK_YN_FEE									/* 출하자 수수료 기적용 금액 */
+			 , A.MT12_OVR_YN									/* 12개월 이상 수수료 적용 여부 */
+			 , NVL(TRIM(A.MT12_OVR_FEE),0) MT12_OVR_FEE			/* 12개월 이상 수수료 적용 금액 */
+			 , A.SELFEE_CHK_YN									/* 판매자 수수료 기적용 여부 */
+			 , A.SELFEE_CHK_YN_FEE								/* 판매자 수수료 기적용 금액 */
+			 , A.DNA_YN											/* 친자일치 검사 여부 */
+			 , A.DNA_YN_CHK										/* 친자일차 여부 */
+			 , A.PRNY_YN										/* 임신여부 */
+			 , A.PRNY_JUG_YN									/* 임신감정여부 */
+			 , A.NCSS_JUG_YN									/* 괴사감정여부 */
+			 , A.NCSS_YN										/* 괴사여부 */
+			 , A.RMHN_YN										/* 제각여부 */
+			 , A.BLOOD_AM										/* 송아지 혈통 수수료 */
+			 , B.SRA_FED_SPY_YN									/* 사료미사용 여부 */
+		  FROM TB_LA_IS_MH_SOG_COW A
+		  LEFT OUTER JOIN TB_LA_IS_MM_FHS B
+			ON (
+				A.NA_BZPLC = B.NA_BZPLC
+				AND A.FHS_ID_NO = B.FHS_ID_NO
+				AND A.FARM_AMNNO = B.FARM_AMNNO
+			 )
+		 WHERE A.NA_BZPLC = #{naBzplc}
+		   AND A.AUC_DT = #{aucDt}
+		   AND A.AUC_OBJ_DSC = CASE WHEN #{aucObjDsc} = '0' THEN A.AUC_OBJ_DSC ELSE #{aucObjDsc} END
+		   AND A.SEL_STS_DSC <![CDATA[<>]]> '22'
+		   AND A.AUC_PRG_SQ BETWEEN #{stAucNo} AND #{edAucNo}
+		   AND A.LOWS_SBID_LMT_AM > 0
+		   AND A.AUC_YN = '1'
 		 ORDER BY A.AUC_PRG_SQ
 	</select>
 	
