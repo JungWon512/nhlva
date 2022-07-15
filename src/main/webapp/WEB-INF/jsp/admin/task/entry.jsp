@@ -36,6 +36,7 @@
 		<div class="sub_search">
 			<!-- sch_area [s] -->
 			<ul class="sch_area">
+				<c:if test="${params.regType ne 'SMCOW'}">
 				<li class="sort">
 					<select name="aucObjDsc" id="aucObjDsc">
 						<option value="" ${empty params.aucObjDsc ? 'selected' : ''}> 전체 </option>
@@ -44,6 +45,7 @@
 						<option value="3" ${params.aucObjDsc eq '3' ? 'selected' : ''}> 번식우 </option>
 					</select>
 				</li>
+				</c:if>
 				<li class="barcoad">
 					<p>바코드</p>
 					<div class="barcoad_input">
@@ -71,6 +73,10 @@
 						<c:when test="${params.regType eq 'L' or params.regType eq 'AL'}">
 							<dd class="col2"><span class="txt_org">하한가</span></dd>
 						</c:when>
+						<c:when test="${params.regType eq 'LW'}">
+							<dd class="col2"><span class="txt_org">중량</span></dd>
+							<dd class="col2"><span class="txt_org">하한가</span></dd>
+						</c:when>
 						<c:when test="${params.regType eq 'N'}">
 							<dd class="col2"><span class="txt_org">계류대</span></dd>
 						</c:when>
@@ -90,13 +96,11 @@
 						<dd class="col4">중량</dd>
 						<dd class="col4">하한가</dd>
 						<dd class="col4">임신개월</dd>
-						<dd class="col4">비고</dd>
 					</c:if>
 					<c:if test="${params.regType eq 'SMCOW'}">
 						<dd class="col4">수의사</dd>
 						<dd class="col4">임신구분</dd>
 						<dd class="col4">임신개월</dd>
-						<dd class="col4">비고</dd>
 					</c:if>
 					<c:if test="${params.regType ne 'AW' and params.regType ne 'AL' and params.regType ne 'SB' and params.regType ne 'SMCOW' and params.regType ne 'SCOW'}">
 						<dd class="col4">수정</dd>
@@ -120,7 +124,7 @@
 							<dl>
 								<dd class="col1" data-amnno="${item.SRA_INDV_AMNNO}" data-auc-obj-dsc="${item.AUC_OBJ_DSC}" data-oslp-no="${item.OSLP_NO}" data-led-sqno="${item.LED_SQNO}">${item.AUC_PRG_SQ}</dd>
 							<c:choose>
-							<c:when test="${params.regType eq 'W'}">
+							<c:when test="${params.regType eq 'LW'}">
 								<dd class="col2">
 									<c:choose>
 										<c:when test="${empty item.COW_SOG_WT or item.COW_SOG_WT <= 0}">-</c:when>
@@ -129,14 +133,6 @@
 										</c:otherwise>
 									</c:choose>
 								</dd>
-							</c:when>
-							<c:when test="${params.regType eq 'AW'}">
-								<dd class="col2">
-<%-- 								<input type="text" name="cowSogWt" id="cowSogWt${item.AUC_PRG_SQ}" class="onlyNumber" value="${fn:split(item.COW_SOG_WT,'.')[0]}" maxlength="4" pattern="\d*" inputmode="numeric" onfocus="$(this).setCursorPosition(0); return false;"/> --%>
-									<input type="text" name="cowSogWt" id="cowSogWt${item.AUC_PRG_SQ}" class="onlyNumber" value="${fn:split(item.COW_SOG_WT,'.')[0]}" maxlength="4" pattern="\d*" inputmode="numeric"/>
-								</dd>
-							</c:when>
-							<c:when test="${params.regType eq 'L'}">
 								<dd class="col2">
 									<c:choose>
 										<c:when test="${item.LOWS_SBID_LMT_AM eq '' || item.LOWS_SBID_LMT_AM == null || item.LOWS_SBID_LMT_AM <= 0}">-</c:when>
@@ -144,6 +140,13 @@
 											<fmt:formatNumber value="${fn:split(item.LOWS_SBID_LMT_UPR,'.')[0]}" type="number" />
 										</c:otherwise>
 									</c:choose>
+								</dd>
+							</c:when>
+							
+							<c:when test="${params.regType eq 'AW'}">
+								<dd class="col2">
+<%-- 								<input type="text" name="cowSogWt" id="cowSogWt${item.AUC_PRG_SQ}" class="onlyNumber" value="${fn:split(item.COW_SOG_WT,'.')[0]}" maxlength="4" pattern="\d*" inputmode="numeric" onfocus="$(this).setCursorPosition(0); return false;"/> --%>
+									<input type="text" name="cowSogWt" id="cowSogWt${item.AUC_PRG_SQ}" class="onlyNumber" value="${fn:split(item.COW_SOG_WT,'.')[0]}" maxlength="4" pattern="\d*" inputmode="numeric"/>
 								</dd>
 							</c:when>
 							<c:when test="${params.regType eq 'AL'}">
@@ -168,21 +171,19 @@
 									<dd class="col4">${item.LVST_MKT_TRPL_AMNNO_NM}</dd>
 									<dd class="col4">${item.PPGCOW_FEE_DSC_NM}</dd>
 									<dd class="col4">${item.PRNY_MTCN}</dd>
-									<dd class="col4">${item.RMK_CNTN}</dd>
 								</c:if>
 								<c:if test="${params.regType eq 'SCOW'}">
 									<dd class="col4">${item.MODL_NO}</dd>
 									<dd class="col4">${item.COW_SOG_WT}</dd>
 									<dd class="col4">${item.LOWS_SBID_LMT_UPR}</dd>
 									<dd class="col4">${item.PRNY_MTCN}</dd>
-									<dd class="col4">${item.RMK_CNTN}</dd>
 								</c:if>
 								<c:if test="${params.regType ne 'AW' and params.regType ne 'AL' and params.regType ne 'SB' and params.regType ne 'SCOW' and params.regType ne 'SMCOW'}">
 									<dd class="col4 col5"></dd>
 <!-- 									<dd class="col4 col5"><button type="button" class="btn_modify">수정</button></dd> -->
 								</c:if>
 							</dl>
-							<c:if test="${params.regType eq 'W'}">
+							<c:if test="${params.regType eq 'W' or params.regType eq 'LW' or params.regType eq 'SCOW'or params.regType eq 'SMCOW'}">
 								<div class="pd_etc">
 									<p>${item.RMK_CNTN}</p>
 								</div>

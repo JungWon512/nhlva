@@ -1129,6 +1129,22 @@
 			   SET LSCHG_DTM = SYSDATE
 				 , LS_CMENO = #{regUserId}
 			<choose>
+			<when test="regType == 'LW'.toString()">
+				 , COW_SOG_WT = #{cowSogWt}
+				 , RMK_CNTN = #{rmkCntn}
+				 , FIR_LOWS_SBID_LMT_AM = #{firLowsSbidLmtAm} * (SELECT CASE WHEN #{aucObjDsc} = '1' THEN CALF_AUC_ATDR_UNT_AM
+																			 WHEN #{aucObjDsc} = '2' THEN NBFCT_AUC_ATDR_UNT_AM
+																			 WHEN #{aucObjDsc} = '3' THEN PPGCOW_AUC_ATDR_UNT_AM
+																			 ELSE 10000 END
+																   FROM TB_LA_IS_MM_ENV_EST
+																  WHERE NA_BZPLC = #{naBzplc})
+				 , LOWS_SBID_LMT_AM = #{firLowsSbidLmtAm} * (SELECT CASE WHEN #{aucObjDsc} = '1' THEN CALF_AUC_ATDR_UNT_AM
+																		 WHEN #{aucObjDsc} = '2' THEN NBFCT_AUC_ATDR_UNT_AM
+																		 WHEN #{aucObjDsc} = '3' THEN PPGCOW_AUC_ATDR_UNT_AM
+																		 ELSE 10000 END
+															   FROM TB_LA_IS_MM_ENV_EST
+															  WHERE NA_BZPLC = #{naBzplc})
+			</when>
 			<when test="regType == 'W'.toString()">
 				 , COW_SOG_WT = #{cowSogWt}
 				 , RMK_CNTN = #{rmkCntn}
