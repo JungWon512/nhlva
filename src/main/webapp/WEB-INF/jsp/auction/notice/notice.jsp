@@ -20,9 +20,7 @@
 						</a>
 					</div>
 					<!-- //notice_btn e -->
-					<div class="notice_view">
-						${vo.BBRD_CNTN }
-					</div>
+					<div class="notice_view readCnt sqNo_${vo.BLBD_DSC}_${vo.BBRD_SQNO}""></div>
 					<!-- //notice_view e -->
 				</li>
 			</c:forEach>

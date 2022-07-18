@@ -16,10 +16,27 @@
 		        params.naBzplc = $("#johpCdVal").val();
 		        params.seqNo = $(this).find(".noticeSeqNo").val();
 		        params.blbdDsc = $(this).find(".noticeDsc").val();
-    			procCallAjax('/auction/api/updateNoticeReadCnt', 'post', params, null, function(data,ajax) {
-    				console.log(data);
+    			procCallAjax('/auction/api/updateNoticeReadCnt', 'post', params, null, function(data,ajax) {    				
     				var param = JSON.parse(ajax.data);
+					function fn_xxsDecode(p_str){
+					    var result = "";
+					    if(p_str != null && typeof p_str == 'string' && p_str != ""){
+					    	result = p_str;
+					        result = result.replace(/&amp;/gi , "&");
+					        result = result.replace(/&#35;/gi , "#");
+					        result = result.replace(/&lt;/gi  , "<");
+					        result = result.replace(/&gt;/gi  , ">");
+					        result = result.replace(/&#40;/gi , "(");
+					        result = result.replace(/&#41;/gi , ")");
+					        result = result.replace(/&quot;/gi, "\"");
+					        result = result.replace(/&#x27;/gi, "'");      
+					        return result;
+					    }else{
+					    	return p_str;
+					    }
+					}
     				$('.notice_btn .readCnt.sqNo_'+param.blbdDsc+'_'+param.seqNo).text(data.data.BBRD_INQ_CN);
+    				$('.notice_view.sqNo_'+param.blbdDsc+'_'+param.seqNo).html(fn_xxsDecode(data.data.BBRD_CNTN));
 		        });
 		        
 				var focus_top = $(this).offset().top;
