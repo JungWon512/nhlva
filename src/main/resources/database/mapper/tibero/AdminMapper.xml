@@ -28,6 +28,8 @@
 			, NET_PORT
 			, WEB_PORT
 			, SMS_AUTH_YN
+			, SMS_BUFFER_1
+			, SMS_BUFFER_2
  		FROM TB_LA_IS_BM_BZLOC
  		WHERE 1=1
 		<if test="naBzPlcNo != null and naBzPlcNo != ''">
