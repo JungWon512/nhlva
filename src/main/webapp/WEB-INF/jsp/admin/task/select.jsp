@@ -24,9 +24,13 @@
 		<c:forEach items="${fn:split(johapData.SMS_BUFFER_2,',')}" var="item">
 			<li>
 				<c:choose>
-					<c:when test="${'S' eq item or 'I' eq item}">					
+					<c:when test="${'I' eq item}">					
 						<a href="javascript:;" class="card-link btn_info_pop cow act" data-type="${item}">
-					</c:when>					
+					</c:when>
+					<c:when test="${'S' eq item}">					
+						<a href="javascript:;" class="card-link btn_info_pop status act" data-type="${item}">
+					</c:when>	
+								
 					<c:otherwise>
 						<a href="javascript:;" class="card-link btn_move act" data-type="${item}">
 					</c:otherwise>
