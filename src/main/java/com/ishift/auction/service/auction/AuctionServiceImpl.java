@@ -392,7 +392,7 @@ public class AuctionServiceImpl implements AuctionService {
 		}
 		else {
 			// 업데이트 유형이 중량 등록(W), 중량 일괄 등록(AW)이고 비육우인 경우 낙찰 금액을 다시 계산해준다.
-			if (("W".equals(params.get("regType")) || "AW".equals(params.get("regType")))
+			if (("W".equals(params.get("regType")) || "AW".equals(params.get("regType")) || "LW".equals(params.get("regType")))
 			  && "2".equals(params.get("aucObjDsc")) 
 			  || "S".equals(params.get("regType"))) {
 
