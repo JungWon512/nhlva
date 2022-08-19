@@ -82,6 +82,9 @@ public class AuctionServiceImpl implements AuctionService {
 			params.put("naBzplc", params.get("naBzPlc"));
 			
 			int cnt = auctionDAO.updateAuctionResult(params);
+			params.put("chg_pgid", "API");
+			params.put("chg_rmk_cntn", "API 경매결과 변경");
+			auctionDAO.insertSogCowLog(params);
 			if (cnt == 0) {
 				return 0;
 			}
@@ -147,7 +150,11 @@ public class AuctionServiceImpl implements AuctionService {
 			return cnt;
 		}
 		else {
-			return auctionDAO.updateAuctionResult(params);
+			int updateNum = auctionDAO.updateAuctionResult(params);
+			params.put("chg_pgid", "API");
+			params.put("chg_rmk_cntn", "API 경매결과 변경");
+			auctionDAO.insertSogCowLog(params);
+			return updateNum; 
 		}
 	}
 	
@@ -386,6 +393,9 @@ public class AuctionServiceImpl implements AuctionService {
 	@Override
 	public int updateCowInfo(Map<String, Object> params) throws SQLException {
 		final int cnt = auctionDAO.updateCowInfo(params);
+		params.put("chg_pgid", "OFFICE");
+		params.put("chg_rmk_cntn", "출장우정보변경");
+		auctionDAO.insertSogCowLog(params);
 		
 		if (cnt == 0) {
 			return cnt;
@@ -551,6 +561,9 @@ public class AuctionServiceImpl implements AuctionService {
 		
 		// 5. 경매결과 업데이트
 		int cnt = auctionDAO.updateAuctionResult(params);
+		params.put("chg_pgid", "API");
+		params.put("chg_rmk_cntn", "API 경매결과 변경");
+		auctionDAO.insertSogCowLog(params);
 		if (cnt == 0) {
 			// 실패한 정보를 다시 return
 			params.put("message", "출하우 정보가 없습니다.");
@@ -938,6 +951,9 @@ public class AuctionServiceImpl implements AuctionService {
 				// 6. 낙찰 정보 업데이트
 				info.put("maxDdlQcn", maxDdlQcn.get("MAX_DDL_QCN"));
 				int cnt = auctionDAO.updateAuctionResult(info);
+				info.put("chg_pgid", "API");
+				info.put("chg_rmk_cntn", "API 경매결과 변경");
+				auctionDAO.insertSogCowLog(info);
 				if (cnt == 0) {
 					continue;
 				}

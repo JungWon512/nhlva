@@ -501,4 +501,17 @@ public class AuctionDAO {
 		// TODO Auto-generated method stub
 		return mainDao.selectOne("ApiMapper.selectAuctMwmn", params);
 	}
+
+	/**
+	 * @methodName    : insertSogCowLog
+	 * @author        : Jung JungWon
+	 * @return 
+	 * @throws SQLException 
+	 * @date          : 2022.08.19
+	 * @Comments      : 
+	 */
+	public int insertSogCowLog(Map<String, Object> params) throws SQLException {
+		// TODO Auto-generated method stub
+		return mainDao.insert("auction.insertSogCowLog", params);
+	}
 }

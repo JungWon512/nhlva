@@ -1489,4 +1489,201 @@
 		   AND LVST_MKT_TRPL_DSC = '1'
 		   AND DEL_YN = '0'
 	</select>
+
+    <update id="insertSogCowLog" parameterType="map">
+        INSERT  INTO TB_LA_IS_MH_SOG_COW_LOG (
+	          NA_BZPLC                          /* 경제통합사업장코드                    */
+	        , AUC_OBJ_DSC                       /* 경매대상구분코드                      */
+	        , AUC_DT                            /* 경매일자                              */
+	        , OSLP_NO                           /* 원표번호                              */
+	        , LED_SQNO                          /* 원장일련번호                          */
+	        , FHS_ID_NO                         /* 농가식별번호                          */
+	        , FARM_AMNNO                        /* 농장관리번호                          */
+	        , SOG_NA_TRPL_C                     /* 출하경제통합거래처코드                */
+	        , VHC_SHRT_C                        /* 차량단축코드                          */
+	        , RC_DT                             /* 접수일자                              */
+	        , TRMN_AMNNO                        /* 거래인관리번호                        */
+	        , LVST_AUC_PTC_MN_NO                /* 가축경매참여자번호                    */
+	        , SRA_SRS_DSC                       /* 축산축종구분코드                      */
+	        , SRA_INDV_AMNNO                    /* 축산개체관리번호                      */
+	        , COW_SOG_WT                        /* 우출하중량                            */
+	        , FIR_LOWS_SBID_LMT_AM              /* 최초최저낙찰한도금액                  */
+	        , LOWS_SBID_LMT_AM                  /* 최저낙찰한도금액                      */
+	        , SRA_SBID_UPR                      /* 축산낙찰단가                          */
+	        , SRA_SBID_AM                       /* 축산낙찰금액                          */
+	        , SEL_STS_DSC                       /* 판매상태구분코드                      */
+	        , BRCL_ISP_CTFW_SMT_YN              /* 브루셀라검사증명서제출여부            */
+	        , BRCL_ISP_DT                       /* 브루셀라검사일자                      */
+	        , LWPR_CHG_NT                       /* 최저가변경횟수                        */
+	        , VACN_DT                           /* 예방접종일자                          */
+	        , LVST_MKT_TRPL_AMNNO               /* 가축시장거래처관리번호                */
+	        , MT12_OVR_YN                       /* 12개월이상여부                        */
+	        , PPGCOW_FEE_DSC                    /* 번식우수수료구분코드                  */
+	        , PRNY_JUG_YN                       /* 임신감정여부                          */
+	        , PRNY_YN                           /* 임신여부                              */
+	        , NCSS_JUG_YN                       /* 괴사감정여부                          */
+	        , NCSS_YN                           /* 괴사여부                              */
+	        , TRPCS_PY_YN                       /* 운송비지급여부                        */
+	        , SRA_TRPCS                         /* 축산운송비                            */
+	        , SRA_PYIVA                         /* 축산납입출자금                        */
+	        , SRA_FED_SPY_AM                    /* 축산사료공급금액                      */
+	        , TD_RC_CST                         /* 당일접수비용                          */
+	        , MT12_OVR_FEE                      /* 12개월이상수수료                      */
+	        , AFISM_MOD_DT                      /* 인공수정일자                          */
+	        , PRNY_MTCN                         /* 임신개월수                            */
+	        , AFISM_MOD_CTFW_SMT_YN             /* 인공수정증명서제출여부                */
+	        , RMHN_YN                           /* 제각여부                              */
+	        , SRA_PDMNM                         /* 축산생산자명                          */
+	        , SRA_PD_RGNNM                      /* 축산생산지역명                        */
+	        , RMK_CNTN                          /* 비고내용                              */
+	        , AUC_PRG_SQ                        /* 경매진행순서                          */
+	        , DEL_YN                            /* 삭제여부                              */
+	        , TMS_YN                            /* 전송여부                              */
+	        , AUC_YN                            /* 경매여부                              */
+	        , MOD_KPN_NO                        /* 수정KPN                               */
+	        , SOGMN_C                           /* 생산자코드                            */
+	        , DDL_QCN                           /* 마감차수(일괄경매 진행차수)           */	        
+            , FEE_CHK_YN                        /* 출하수수료수기적용여부                */	        
+            , SELFEE_CHK_YN                     /* 판매수수료수기적용여부                */
+            , FEE_CHK_YN_FEE                    /* 출하수수료수기적용수수료              */
+            , SELFEE_CHK_YN_FEE                 /* 판매수수료수기적용수수료              */
+            , BLOOD_AM                          /* 송아지혈통수수료                      */
+            , DNA_YN                            /* 친자확인여부                          */
+            , DNA_YN_CHK                        /* 친자검사여부                          */
+            , BRANDNM                           /* 브랜드명                              */
+            , PDA_ID                            /* PDA_ID 수의사번호                     */ 
+            , BOVINE_DT                         /* 우결핵검사일자                        */
+            , RE_PRODUCT_1                      /* 유전능력 냉도체중                     */
+            , RE_PRODUCT_1_1                    /* 유전능력 냉도체중 등급                */
+            , RE_PRODUCT_2                      /* 유전능력 배최장근단면적               */
+            , RE_PRODUCT_2_1                    /* 유전능력 배최장근단면적 등급          */
+            , RE_PRODUCT_3                      /* 유전능력 등지방두께                   */
+            , RE_PRODUCT_3_1                    /* 유전능력 등지방두께 등급              */
+            , RE_PRODUCT_4                      /* 유전능력 근내지방도                   */
+            , RE_PRODUCT_4_1                    /* 유전능력 근내지방도 등급              */
+            , EPD_YN                            /* 고능력여부                            */
+            , RE_PRODUCT_11                     /* 모개체 유전능력 냉도체중              */
+            , RE_PRODUCT_11_1                   /* 모개체 유전능력 냉도체중 등급         */
+            , RE_PRODUCT_12                     /* 모개체 유전능력 배최장근단면적        */
+            , RE_PRODUCT_12_1                   /* 모개체 유전능력 배최장근단면적 등급   */
+            , RE_PRODUCT_13                     /* 모개체 유전능력 등지방두께            */
+            , RE_PRODUCT_13_1                   /* 모개체 유전능력 등지방두께 등급       */
+            , RE_PRODUCT_14                     /* 모개체 유전능력 근내지방도            */
+            , RE_PRODUCT_14_1                   /* 모개체 유전능력 근내지방도 등급       */
+            , SPAY_YN                           /* 난소적출여부                          */
+            , CASE_COW                          /* 우출하브랜드구분코드                  */
+	        , FSRG_DTM                          /* 최초등록일시                          */
+	        , FSRGMN_ENO                        /* 최초등록자개인번호                    */
+	        , LSCHG_DTM                         /* 최종변경일시                          */
+	        , LS_CMENO                          /* 최종변경자개인번호                    */
+            , CHG_PGID                          /* 변경프로그램ID                        */
+            , CHG_RMK_CNTN                      /* 변경비고내용                          */ 
+            , FED_SPY_YN                        /* 전이용사료여부                        */
+            , AMNNO                             /* 정산자거래인번호                       */
+            , MODL_NO                           /* 정산자거래인번호                       */
+	    )
+        SELECT
+	          A.NA_BZPLC                        /* 경제통합사업장코드                    */
+	        , A.AUC_OBJ_DSC                     /* 경매대상구분코드                      */
+	        , A.AUC_DT                          /* 경매일자                              */
+	        , A.OSLP_NO                         /* 원표번호                              */
+	        , A.LED_SQNO                        /* 원장일련번호                          */
+	        , A.FHS_ID_NO                       /* 농가식별번호                          */
+	        , A.FARM_AMNNO                      /* 농장관리번호                          */
+	        , A.SOG_NA_TRPL_C                   /* 출하경제통합거래처코드                */
+	        , A.VHC_SHRT_C                      /* 차량단축코드                          */
+	        , A.RC_DT                           /* 접수일자                              */
+	        , A.TRMN_AMNNO                      /* 거래인관리번호                        */
+	        , A.LVST_AUC_PTC_MN_NO              /* 가축경매참여자번호                    */
+	        , A.SRA_SRS_DSC                     /* 축산축종구분코드                      */
+	        , A.SRA_INDV_AMNNO                  /* 축산개체관리번호                      */
+	        , A.COW_SOG_WT                      /* 우출하중량                            */
+	        , A.FIR_LOWS_SBID_LMT_AM            /* 최초최저낙찰한도금액                  */
+	        , A.LOWS_SBID_LMT_AM                /* 최저낙찰한도금액                      */
+	        , A.SRA_SBID_UPR                    /* 축산낙찰단가                          */
+	        , A.SRA_SBID_AM                     /* 축산낙찰금액                          */
+	        , A.SEL_STS_DSC                     /* 판매상태구분코드                      */
+	        , A.BRCL_ISP_CTFW_SMT_YN            /* 브루셀라검사증명서제출여부            */
+	        , A.BRCL_ISP_DT                     /* 브루셀라검사일자                      */
+	        , A.LWPR_CHG_NT                     /* 최저가변경횟수                        */
+	        , A.VACN_DT                         /* 예방접종일자                          */
+	        , A.LVST_MKT_TRPL_AMNNO             /* 가축시장거래처관리번호                */
+	        , A.MT12_OVR_YN                     /* 12개월이상여부                        */
+	        , A.PPGCOW_FEE_DSC                  /* 번식우수수료구분코드                  */
+	        , A.PRNY_JUG_YN                     /* 임신감정여부                          */
+	        , A.PRNY_YN                         /* 임신여부                              */
+	        , A.NCSS_JUG_YN                     /* 괴사감정여부                          */
+	        , A.NCSS_YN                         /* 괴사여부                              */
+	        , A.TRPCS_PY_YN                     /* 운송비지급여부                        */
+	        , A.SRA_TRPCS                       /* 축산운송비                            */
+	        , A.SRA_PYIVA                       /* 축산납입출자금                        */
+	        , A.SRA_FED_SPY_AM                  /* 축산사료공급금액                      */
+	        , A.TD_RC_CST                       /* 당일접수비용                          */
+	        , A.MT12_OVR_FEE                    /* 12개월이상수수료                      */
+	        , A.AFISM_MOD_DT                    /* 인공수정일자                          */
+	        , A.PRNY_MTCN                       /* 임신개월수                            */
+	        , A.AFISM_MOD_CTFW_SMT_YN           /* 인공수정증명서제출여부                */
+	        , A.RMHN_YN                         /* 제각여부                              */
+	        , A.SRA_PDMNM                       /* 축산생산자명                          */
+	        , A.SRA_PD_RGNNM                    /* 축산생산지역명                        */
+	        , A.RMK_CNTN                        /* 비고내용                              */
+	        , A.AUC_PRG_SQ                      /* 경매진행순서                          */
+	        <choose>
+		        <when test='chg_del_yn != null and chg_del_yn != ""'>
+		    , #{chg_del_yn}                     /* 삭제여부                              */
+		        </when>
+		        <otherwise>
+		    , A.DEL_YN                          /* 삭제여부                              */
+		        </otherwise>
+		    </choose>
+	        , A.TMS_YN                          /* 전송여부                              */
+	        , A.AUC_YN                          /* 경매여부                              */
+	        , A.MOD_KPN_NO                      /* 수정KPN                               */
+	        , A.SOGMN_C                         /* 생산자코드                            */
+	        , A.DDL_QCN                         /* 마감차수(일괄경매 진행차수)           */	        
+            , A.FEE_CHK_YN                      /* 출하수수료수기적용여부                */
+            , A.SELFEE_CHK_YN                   /* 판매수수료수기적용여부                */
+            , A.FEE_CHK_YN_FEE                  /* 출하수수료수기적용수수료              */
+            , A.SELFEE_CHK_YN_FEE               /* 판매수수료수기적용수수료              */
+            , A.BLOOD_AM                        /* 혈통수수료                            */
+            , A.DNA_YN                          /* 친자확인여부                          */
+            , A.DNA_YN_CHK                      /* 친자검사여부                          */
+            , A.BRANDNM                         /* 브랜드명                              */
+            , A.PDA_ID                          /* PDA_ID 수의사번호                     */
+            , A.BOVINE_DT                       /* 우결핵검사일자                        */ 
+            , A.RE_PRODUCT_1                    /* 유전능력 냉도체중                     */
+            , A.RE_PRODUCT_1_1                  /* 유전능력 냉도체중 등급                */
+            , A.RE_PRODUCT_2                    /* 유전능력 배최장근단면적               */
+            , A.RE_PRODUCT_2_1                  /* 유전능력 배최장근단면적 등급          */
+            , A.RE_PRODUCT_3                    /* 유전능력 등지방두께                   */
+            , A.RE_PRODUCT_3_1                  /* 유전능력 등지방두께 등급              */
+            , A.RE_PRODUCT_4                    /* 유전능력 근내지방도                   */
+            , A.RE_PRODUCT_4_1                  /* 유전능력 근내지방도 등급              */
+            , A.EPD_YN                          /* 고능력여부                            */
+            , A.RE_PRODUCT_11                   /* 모개체 유전능력 냉도체중              */
+            , A.RE_PRODUCT_11_1                 /* 모개체 유전능력 냉도체중 등급         */
+            , A.RE_PRODUCT_12                   /* 모개체 유전능력 배최장근단면적        */
+            , A.RE_PRODUCT_12_1                 /* 모개체 유전능력 배최장근단면적 등급   */
+            , A.RE_PRODUCT_13                   /* 모개체 유전능력 등지방두께            */
+            , A.RE_PRODUCT_13_1                 /* 모개체 유전능력 등지방두께 등급       */
+            , A.RE_PRODUCT_14                   /* 모개체 유전능력 근내지방도            */
+            , A.RE_PRODUCT_14_1                 /* 모개체 유전능력 근내지방도 등급       */
+            , A.SPAY_YN                         /* 난소적출여부                          */
+            , A.CASE_COW                        /* 우출하브랜드구분코드                  */
+	        , A.FSRG_DTM                        /* 최초등록일시                          */
+	        , A.FSRGMN_ENO                      /* 최초등록자개인번호                    */
+	        , A.LSCHG_DTM                       /* 최종변경일시                          */
+	        , A.LS_CMENO                        /* 최종변경자개인번호                    */
+            , #{chg_pgid}                       /* 변경프로그램ID                        */
+            , #{chg_pgid} || '['||TO_CHAR(SYSDATE,'YYYY-MM-DD HH24:MI:SS')||']'||#{chg_rmk_cntn}   /* 변경비고내용                          */
+            , A.FED_SPY_YN                      /* 전이용사료여부                     */
+            , A.AMNNO                           /* 정산자거래인번호                       */
+            , A.MODL_NO                         /* 정산자거래인번호                       */
+        FROM   TB_LA_IS_MH_SOG_COW A
+		 WHERE A.NA_BZPLC = #{naBzPlc}		/* 사업장코드 */
+		   AND A.AUC_OBJ_DSC = TO_CHAR(#{aucObjDsc})	/* 경매대상 구분코드 */
+		   AND A.AUC_DT = #{aucDt}			/* 경매일자 */
+		   AND A.OSLP_NO = #{oslpNo}			/* 원표번호 */
+		   AND A.LED_SQNO = #{ledSqno}		/* 원장 일련번호 */
+    </update>
 </mapper>
