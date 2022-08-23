@@ -15,16 +15,28 @@ $(function() {
 			adaptiveHeight: true,
 		});
 		
+		//22.08.23 jjw 경매번호클릭시 영상 mute toggle
+		$('.auctionNum').closest('td').on('click',function(){
+			var currentSlide = $('.seeBox_slick ul.slider').slick('slickCurrentSlide');
+			var video =$('#remoteVideo'+(currentSlide+1)).get(0);
+			video.muted = !video.muted;
+		});
+
 		$('.seeBox_slick ul.slider').on('afterChange', function(event, slick, currentSlide, nextSlide){
 			$('video[id^=remoteVideo]').each(function(){
-				if($(this).attr('id') == 'remoteVideo1') return;
 				$(this).get(0).muted = true;
 				if(!$(this).get(0).paused) $(this).get(0).pause();
 			});
 			
 			var callback = function(currentSlide){
-			var video =$('#remoteVideo'+(currentSlide+1)).get(0);				
+				var video =$('#remoteVideo'+(currentSlide)).get(0);
 				if(video && video.paused) video.play();
+				//setTimeout(
+				//	function(){
+				//		video.muted=false;
+				//	}
+				//,1000);
+				//video.muted = false;
 			}
 			setRemonJoinRemote(currentSlide+1,callback);
 		});
@@ -33,7 +45,7 @@ $(function() {
 
     var setBinding = function() {
 		setRemon();
-		socketStart();
+		socketStart();		
     };
 
     setLayout();    
@@ -219,13 +231,28 @@ var config = {
 	}
 };
 //remon Event listener
+var reStartRemonIntrval;
 listener = {
     onCreate(chid) { debugConsole(`EVENT FIRED: onCreate: ${chid}`); },
     onJoin(chid) { 
 		debugConsole(`EVENT FIRED: onJoin: ${chid}`);
 	},
     onClose() { 
-		debugConsole('EVENT FIRED: onClose'); 
+		debugConsole('EVENT FIRED: onClose');
+		//reStartRemonIntrval = setInterval(function(){
+		//	var callback = function(currentSlide){
+		//		var video =$('#remoteVideo'+(currentSlide)).get(0);
+		//		video.muted=true;
+		//		if(video && video.paused) video.play();
+		//		//setTimeout(
+		//		//	function(){
+		//		//		video.muted=false;
+		//		//	}
+		//		//,1000);
+		//		//video.muted = false;
+		//	}
+		//	setRemonJoinRemote(1,callback);			
+		//},5000);
     },
     onError(error) { 
 		debugConsole(`EVENT FIRED: onError: ${error}`);
@@ -237,40 +264,11 @@ listener = {
 function setRemon(){	
 	config.credential.serviceId =  $('#kkoSvcId').val();
 	config.credential.key = $('#kkoSvcKey').val();
-	dummyRemon = new Remon({ config, listener });	
-    setLoopJoinEvent();
-    //loop = setInterval(setLoopJoinEvent,1000*15);
+	dummyRemon = new Remon({ config, listener });
+    //loop = setInterval(setLoopJoinEvent,1000*5);	
+   setLoopJoinEvent();
 }
 
-//특정주기마다 castlist 목록 불러와 html Draw
-var setLoopJoinEvent = async function () {  
-	
-	dummyRemon.config.credential.serviceId =  $('#kkoSvcId').val();
-	dummyRemon.config.credential.key = $('#kkoSvcKey').val();
-	var castLists = await dummyRemon.fetchCasts();
-	
-	setLoopChDraw(castLists);
-}
-
-var setLoopChDraw = function(castList){
-	var sortingCastList = castList.filter(function(cast){if(cast.name.indexOf($('#naBzPlc').val()+'_remoteVideo')>=0) return this;})
-		.sort(function(castPre,castNext){
-		var pre = castPre.name.split('_')[1].replace('remoteVideo','');
-		var next = castNext.name.split('_')[1].replace('remoteVideo','');
-		
-		return pre-next;
-	});
-	debugConsole(sortingCastList);
-		
-	if(sortingCastList.length > 0){
-		for(var i=0;i<sortingCastList.length;i++){
-			if($('#kkoSvcCnt').val() <= i) return;
-			 $('#remoteVideo'+(i+1)).attr('castName',sortingCastList[i].name);
-			 if(i==0) setLoopChJoinInIn(sortingCastList[i],i+1);
-	 	};	
-		
-	}
-};
 var setLoopChJoinInIn = function(cast,i){
 	dummyRemon.config.credential.serviceId = $('#kkoSvcId').val();
     dummyRemon.config.credential.key = $('#kkoSvcKey').val();
@@ -301,6 +299,7 @@ var setRemonJoinRemote =async function (index,callback) {
 		debugConsole(castList);
 		
 		if(castList.length > 0){
+			//if(reStartRemonIntrval) clearInterval(reStartRemonIntrval);
 			if($('#kkoSvcCnt').val() < index) return;
 			 $('#remoteVideo'+(index)).attr('castName',castList[0].name);
 			 setLoopChJoinInIn(castList[0],index);
@@ -321,7 +320,8 @@ var setLoopChDraw = function(castList){
 		return pre-next;
 	});
 			
-	if(sortingCastList.length > 0){
+	if(sortingCastList.length > 0){		
+		//clearInterval(loop);
 		for(var i=0;i<sortingCastList.length;i++){
 			if($('#kkoSvcCnt').val() <= i) return;
 			 $('#remoteVideo'+(i+1)).attr('castName',sortingCastList[i].name);

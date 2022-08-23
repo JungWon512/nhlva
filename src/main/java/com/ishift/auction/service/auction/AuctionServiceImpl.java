@@ -393,9 +393,6 @@ public class AuctionServiceImpl implements AuctionService {
 	@Override
 	public int updateCowInfo(Map<String, Object> params) throws SQLException {
 		final int cnt = auctionDAO.updateCowInfo(params);
-		params.put("chg_pgid", "OFFICE");
-		params.put("chg_rmk_cntn", "출장우정보변경");
-		auctionDAO.insertSogCowLog(params);
 		
 		if (cnt == 0) {
 			return cnt;
@@ -421,7 +418,11 @@ public class AuctionServiceImpl implements AuctionService {
 						throw new SQLException("출장우 정보 업데이트에 실패했습니다.");
 					}
 				}
-
+			}else {
+				params.put("naBzPlc", params.get("naBzplc"));
+				params.put("chg_pgid", "OFFICE");
+				params.put("chg_rmk_cntn", "출장우정보변경");
+				auctionDAO.insertSogCowLog(params);
 			}
 			return cnt;
 		}
@@ -951,9 +952,6 @@ public class AuctionServiceImpl implements AuctionService {
 				// 6. 낙찰 정보 업데이트
 				info.put("maxDdlQcn", maxDdlQcn.get("MAX_DDL_QCN"));
 				int cnt = auctionDAO.updateAuctionResult(info);
-				info.put("chg_pgid", "API");
-				info.put("chg_rmk_cntn", "API 경매결과 변경");
-				auctionDAO.insertSogCowLog(info);
 				if (cnt == 0) {
 					continue;
 				}
