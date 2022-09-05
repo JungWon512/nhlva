@@ -48,7 +48,7 @@
     <div class="list_txt">
         <p>*경매번호는 변경될 수 있으며 <span>경매당일</span> 확정됩니다.</p>
     </div>
-    
+	
     <div class="list_downs">
         <ul>
             <li><a href="javascript:;" class="btn_print"><span class="ico_print">인쇄하기</span></a></li>
@@ -151,6 +151,28 @@
     </div>
     <!-- //list_table :: pc 전용 e -->
     <div class="list_table schedule_tb_mo">
+		<div class="search sum_table">
+			<div>
+				<dl>
+					<dt><p>암</p></dt>
+					<dd>
+						<p class="cowCnt">${buyCnt.CNT_SEX_W}두</p>
+					</dd>
+				</dl>
+				<dl>
+					<dt><p>수</p></dt>
+					<dd>
+						<p class="cowCnt">${buyCnt.CNT_SEX_M}두</p>
+					</dd>
+				</dl>
+				<dl>
+					<dt><p>기타</p></dt>
+					<dd>
+						<p class="cowCnt">${buyCnt.CNT_SEX_ETC}두</p>
+					</dd>
+				</dl>
+			</div>
+		</div>
         <div class="list_head">
             <dl>
                 <dd class="num">번호</dd>

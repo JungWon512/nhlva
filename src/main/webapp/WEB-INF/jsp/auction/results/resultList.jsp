@@ -37,8 +37,7 @@
 				<a href="javascript:;" class="list_sch">검색</a>
 			</li>
 		</ul>
-	</div>
-	
+	</div>	
 	<!-- //list_search e -->
 	<div class="list_downs">
 		<ul>
@@ -48,6 +47,28 @@
 	</div>
 	<!-- //list_downs e -->
 	<div class="list_table auction_result">
+		<div class="search sum_table">
+			<div>
+				<dl>
+					<dt><p>암</p></dt>
+					<dd>
+						<p class="cowCnt">${buyCnt.CNT_SEX_W}두</p>
+					</dd>
+				</dl>
+				<dl>
+					<dt><p>수</p></dt>
+					<dd>
+						<p class="cowCnt">${buyCnt.CNT_SEX_M}두</p>
+					</dd>
+				</dl>
+				<dl>
+					<dt><p>기타</p></dt>
+					<dd>
+						<p class="cowCnt">${buyCnt.CNT_SEX_ETC}두</p>
+					</dd>
+				</dl>
+			</div>
+		</div>
 		<div class="list_head">
 			<dl>
 				<dd class="date">경매일자</dd>

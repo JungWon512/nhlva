@@ -95,6 +95,7 @@ public class AuctionController extends CommonController {
 		mav.addObject("paramVo", param);
 		mav.addObject("dateList",datelist);
 		mav.addObject("resultList",list);
+		mav.addObject("buyCnt",auctionService.selectCountEntry(map));
 		mav.addObject("subheaderTitle","경매결과 조회");
 		
 		mav.setViewName("auction/results/resultList");
@@ -151,6 +152,7 @@ public class AuctionController extends CommonController {
 		mav.addObject("dateList",datelist);
 		mav.addObject("salesList",list);
 		mav.addObject("inputParam", param);
+		mav.addObject("buyCnt",auctionService.selectCountEntry(map));
 		mav.addObject("subheaderTitle","출장우 조회");
 		// mav.addObject("today",date.format(DateTimeFormatter.ofPattern("yyyy-MM-dd")));
 		mav.setViewName("auction/sales/saleList");

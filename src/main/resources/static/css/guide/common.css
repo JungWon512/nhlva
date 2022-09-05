@@ -8235,3 +8235,22 @@ video[poster]{
 .billboard-view.bidInfo .countVer .secTxt p{font-size: 8vw;letter-spacing: -7.5px;}
 .billboard-view.bidInfo .countVer .countTxt{height: 56%;padding:  0px;}
 .billboard-view.bidInfo .countVer .countTxt p{font-size: 24vw;color: #ffd500;font-family: 'LAB디지털';letter-spacing: 50px;}
+
+div.search.sum_table{display:none;}
+/*22.09.05 출장우조회,출장우결과조회 sum_talbe추가*/
+@media only all and (max-width:1024px) {
+	div.search.sum_table{
+		width:90%;
+		margin-left:5%;
+	/*     border: 1px solid #ccc; */
+	    border-radius: 10px 10px 0 0;
+	    display:block;
+	}
+	.search.sum_table dt, .search.sum_table dd{
+	    border-right: 1px solid #ccc;	
+		border-bottom: 1px solid #ccc;
+	}
+	.search.sum_table dl:first-child dd {
+	    border-left: 1px solid #ccc;
+	}
+}
