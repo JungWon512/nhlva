@@ -232,4 +232,10 @@ public class AdminTaskController extends CommonController {
 		return result;
 	}
 	
+	@RequestMapping(value = "/office/task/uploadImage", method = {RequestMethod.GET, RequestMethod.POST})
+	public ModelAndView uploadImage(@RequestParam final Map<String, Object> params) {
+		final ModelAndView mav = new ModelAndView("admin/task/uploadImage");
+		return mav;
+	}
+	
 }

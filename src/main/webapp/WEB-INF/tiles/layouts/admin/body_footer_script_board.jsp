@@ -15,3 +15,14 @@
 <script type="text/javascript" src="/static/js/guide/default.js"></script>
 <script src="/static/js/common/utils.js"></script>
 <script src="/static/js/common/commons.js"></script>
+
+<script src="/static/js/upload/load-image.js"></script>
+<script src="/static/js/upload/load-image-scale.js"></script>
+<script src="/static/js/upload/load-image-meta.js"></script>
+<script src="/static/js/upload/load-image-fetch.js"></script>
+<script src="/static/js/upload/load-image-orientation.js"></script>
+<script src="/static/js/upload/load-image-exif.js"></script>
+<script src="/static/js/upload/load-image-exif-map.js"></script>
+<script src="/static/js/upload/load-image-iptc.js"></script>
+<script src="/static/js/upload/load-image-iptc-map.js"></script>
+<script src="/static/js/upload/vendor/jquery.Jcrop.js"></script>
