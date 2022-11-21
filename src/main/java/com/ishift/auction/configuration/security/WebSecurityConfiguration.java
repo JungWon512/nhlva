@@ -144,6 +144,7 @@ public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
 					.antMatchers("/api/**/auth/**", "/api/appversion", "/api/**/biz/**", "/api/**/my/**", "/api/**/host/**").permitAll()
 					.antMatchers("/office/**").hasRole(Constants.UserRole.ADMIN)
 					.antMatchers("/api/**").hasRole(Constants.UserRole.ADMIN)
+					.antMatchers("/daemon/api/**").permitAll()
 					.anyRequest().permitAll()
 			.and()
 				.exceptionHandling()

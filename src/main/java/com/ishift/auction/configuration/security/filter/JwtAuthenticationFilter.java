@@ -107,6 +107,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 			|| uri.startsWith("/api")
 			|| uri.startsWith("/batch")
 			|| uri.startsWith("/my/entry")
+			|| uri.startsWith("/daemon/api")
 			;
 	}
 }

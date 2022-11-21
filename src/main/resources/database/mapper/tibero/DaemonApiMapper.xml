@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="DaemonApiMapper">
+
+	<select id="selectIndvs" parameterType="hashMap" resultType="hashMap">
+		SELECT A.*
+			 , MAX(TO_CHAR(LSCHG_DTM, 'YYYYMMDDHH24MISS')) OVER(PARTITION BY NA_BZPLC) AS TIMESTAMP
+		  FROM TB_LA_IS_MM_INDV A
+		 WHERE NA_BZPLC = #{naBzplc}
+		   AND TO_CHAR(LSCHG_DTM, 'YYYYMMDDHH24MISS') > #{timeStamp}
+		 ORDER BY LSCHG_DTM ASC
+	</select>
+</mapper>

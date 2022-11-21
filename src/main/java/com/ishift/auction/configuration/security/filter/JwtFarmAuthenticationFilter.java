@@ -106,6 +106,7 @@ public class JwtFarmAuthenticationFilter extends OncePerRequestFilter {
 			|| uri.startsWith("/user/loginProc")
 			|| uri.startsWith("/office")
 			|| uri.startsWith("/api")
-			|| uri.startsWith("/batch");
+			|| uri.startsWith("/batch")
+			|| uri.startsWith("/daemon/api");
 	}
 }
