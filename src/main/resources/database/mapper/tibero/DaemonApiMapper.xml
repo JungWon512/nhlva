@@ -7,7 +7,18 @@
 			 , MAX(TO_CHAR(LSCHG_DTM, 'YYYYMMDDHH24MISS')) OVER(PARTITION BY NA_BZPLC) AS TIMESTAMP
 		  FROM TB_LA_IS_MM_INDV A
 		 WHERE NA_BZPLC = #{naBzplc}
+		    AND EXISTS ( 
+					SELECT 1
+					  FROM TB_LA_IS_MH_SOG_COW B
+					 WHERE B.NA_BZPLC = #{naBzplc}
+					   AND B.AUC_DT = #{aucDt}
+					   AND B.NA_BZPLC = A.NA_BZPLC
+					   AND B.SRA_INDV_AMNNO = A.SRA_INDV_AMNNO
+					   AND B.SRA_SRS_DSC = A.SRA_SRS_DSC
+			 )
+		<if test="timeStamp != null and timeStamp != ''">
 		   AND TO_CHAR(LSCHG_DTM, 'YYYYMMDDHH24MISS') > #{timeStamp}
+		</if>
 		 ORDER BY LSCHG_DTM ASC
 	</select>
 </mapper>

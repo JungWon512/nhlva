@@ -11,14 +11,18 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.ishift.auction.service.deamon.DaemonApiService;
+
+import lombok.extern.slf4j.Slf4j;
 
 /**
  * 데몬 호출 api controller
  * @author iShift
  */
+@Slf4j
 @RestController
 @RequestMapping("/daemon/api")
 public class DaemonApiController {
@@ -33,19 +37,25 @@ public class DaemonApiController {
 	 * @return
 	 * @throws SQLException 
 	 */
-	@GetMapping("/indvs/{naBzplc}/{timeStamp}")
+	@GetMapping("/indvs/{naBzplc}/{aucDt}")
 	public Map<String, Object> indvs(@PathVariable("naBzplc") long naBzplc
-									, @PathVariable("timeStamp") long timeStamp) throws SQLException {
+									, @PathVariable("aucDt") long aucDt
+									, @RequestParam(name = "timeStamp", required = false) String timeStamp) throws SQLException {
 		
+		log.info("{} : {} : {}", naBzplc, aucDt, timeStamp);
 		final Map<String, Object> params = new HashMap<String, Object>();
 		params.put("naBzplc", naBzplc);
-		params.put("timeStamp", timeStamp);
+		params.put("aucDt", aucDt);
+		if (!"".equals(timeStamp)) {
+			params.put("timeStamp", timeStamp);
+		}
 		final List<Map<String, Object>> list = daemonApiService.selectIndvs(params);
 
 		return this.createResultSetListData(list);
 	}
 
 	@GetMapping("/indvs2/{naBzplc}/{timestamp}")
+	@Deprecated
 	public ResponseEntity<Map<String, Object>> indvs2(@PathVariable("naBzplc") long naBzplc
 													, @PathVariable("timestamp") long timestamp) {
 		Map<String, Object> returnMap = new HashMap<String, Object>();
