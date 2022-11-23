@@ -38,8 +38,8 @@ public class DaemonApiController {
 	 * @throws SQLException 
 	 */
 	@GetMapping("/indvs/{naBzplc}/{aucDt}")
-	public Map<String, Object> indvs(@PathVariable("naBzplc") long naBzplc
-									, @PathVariable("aucDt") long aucDt
+	public Map<String, Object> indvs(@PathVariable("naBzplc") String naBzplc
+									, @PathVariable("aucDt") String aucDt
 									, @RequestParam(name = "timeStamp", required = false) String timeStamp) throws SQLException {
 		
 		log.info("{} : {} : {}", naBzplc, aucDt, timeStamp);
