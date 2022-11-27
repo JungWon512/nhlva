@@ -26,3 +26,4 @@
 <script src="/static/js/upload/load-image-iptc.js"></script>
 <script src="/static/js/upload/load-image-iptc-map.js"></script>
 <script src="/static/js/upload/vendor/jquery.Jcrop.js"></script>
+<script src="/static/js/upload/demo/demo.js"></script>
