@@ -18,7 +18,25 @@
 		};
 		
 		var fnSave = function() {
-			
+			var drawCanvas = $("#result").find("canvas")[0];
+			console.log({imgUpload:drawCanvas.toDataURL('image/png')});
+			$.ajax({
+				url: '/office/task/uploadImageAjax',
+				type: 'POST',
+				data : JSON.stringify({imgUpload:drawCanvas.toDataURL('image/png')}),
+				dataType: 'json',
+				beforeSend: function (xhr) {
+					xhr.setRequestHeader("Accept", "application/json");
+					xhr.setRequestHeader("Content-Type", "application/json");
+				},
+				success : function() {
+				},
+				error: function(xhr, status, error) {
+					console.log(xhr, status, error);
+				}
+			}).done(function (body) {
+				console.log(body);
+			});
 		};
 		
 		
