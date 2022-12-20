@@ -66,4 +66,22 @@ public class SessionUtill {
 		}
 		return null;
 	}
+	
+	public String getNaBzplc() {
+		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+		
+		if (auth == null) return null;
+		
+		Collection<? extends GrantedAuthority> auths = auth.getAuthorities();
+		if(auths.contains(new SimpleGrantedAuthority(UserRole.ROLE_BIDDER))) {
+			return ((BidUserDetails)auth.getPrincipal()).getNaBzplc();
+		}
+		else if(auths.contains(new SimpleGrantedAuthority(UserRole.ROLE_ADMIN))){
+			return ((AdminUserDetails)auth.getPrincipal()).getNaBzplc();
+		}
+		else if(auths.contains(new SimpleGrantedAuthority(UserRole.ROLE_FARM))){
+			return ((FarmUserDetails)auth.getPrincipal()).getNaBzplc();
+		}
+		return null;
+	}
 }

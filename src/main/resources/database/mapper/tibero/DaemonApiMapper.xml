@@ -2,9 +2,46 @@
 <!DOCTYPE mapper PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="DaemonApiMapper">
 
-	<select id="selectIndvs" parameterType="hashMap" resultType="hashMap">
+	<!-- 경매 차수 정보 리스트 -->
+	<select id="selectAucQcnList" parameterType="hashMap" resultType="hashMap">
 		SELECT A.*
-			 , MAX(TO_CHAR(LSCHG_DTM, 'YYYYMMDDHH24MISS')) OVER(PARTITION BY NA_BZPLC) AS TIMESTAMP
+			 , MAX(TO_CHAR(A.LSCHG_DTM, 'YYYYMMDDHH24MISS')) OVER(PARTITION BY NA_BZPLC) AS TIMESTAMP
+		  FROM TB_LA_IS_MH_AUC_QCN A
+		 WHERE A.NA_BZPLC = #{naBzplc}
+		   AND A.AUC_DT = #{aucDt}
+		<if test="chgDtm != null and chgDtm != ''">
+		   AND TO_CHAR(A.LSCHG_DTM, 'YYYYMMDDHH24MISS') > #{chgDtm}
+		</if>
+	</select>
+	
+	<!-- 출장우 정보 리스트 -->
+	<select id="selectSogCowList" parameterType="hashMap" resultType="hashMap">
+		SELECT A.*
+			 , MAX(TO_CHAR(A.LSCHG_DTM, 'YYYYMMDDHH24MISS')) OVER(PARTITION BY NA_BZPLC) AS TIMESTAMP
+		  FROM TB_LA_IS_MH_SOG_COW A
+		 WHERE A.NA_BZPLC = #{naBzplc}
+		   AND A.AUC_DT = #{aucDt}
+		<if test="chgDtm != null and chgDtm != ''">
+		   AND TO_CHAR(A.LSCHG_DTM, 'YYYYMMDDHH24MISS') > #{chgDtm}
+		</if>
+	</select>
+	
+	<!-- 송아지 정보 리스트 -->
+	<select id="selectCalfList" parameterType="hashMap" resultType="hashMap">
+		SELECT A.*
+			 , MAX(TO_CHAR(A.LSCHG_DTM, 'YYYYMMDDHH24MISS')) OVER(PARTITION BY NA_BZPLC) AS TIMESTAMP
+		  FROM TB_LA_IS_MH_CALF A
+		 WHERE A.NA_BZPLC = #{naBzplc}
+		   AND A.AUC_DT = #{aucDt}
+		<if test="chgDtm != null and chgDtm != ''">
+		   AND TO_CHAR(A.LSCHG_DTM, 'YYYYMMDDHH24MISS') > #{chgDtm}
+		</if>
+	</select>
+
+	<!-- 개체 정보 리스트 -->
+	<select id="selectIndvList" parameterType="hashMap" resultType="hashMap">
+		SELECT A.*
+			 , MAX(TO_CHAR(A.LSCHG_DTM, 'YYYYMMDDHH24MISS')) OVER(PARTITION BY NA_BZPLC) AS TIMESTAMP
 		  FROM TB_LA_IS_MM_INDV A
 		 WHERE NA_BZPLC = #{naBzplc}
 		    AND EXISTS ( 
@@ -16,9 +53,252 @@
 					   AND B.SRA_INDV_AMNNO = A.SRA_INDV_AMNNO
 					   AND B.SRA_SRS_DSC = A.SRA_SRS_DSC
 			 )
-		<if test="timeStamp != null and timeStamp != ''">
-		   AND TO_CHAR(LSCHG_DTM, 'YYYYMMDDHH24MISS') > #{timeStamp}
+		<if test="chgDtm != null and chgDtm != ''">
+		   AND TO_CHAR(A.LSCHG_DTM, 'YYYYMMDDHH24MISS') > #{chgDtm}
 		</if>
 		 ORDER BY LSCHG_DTM ASC
+	</select>
+	
+	<!-- 경매 참가자 정보 리스트 -->
+	<select id="selectAucEntrList" parameterType="hashMap" resultType="hashMap">
+		SELECT A.*
+			 , MAX(TO_CHAR(A.LSCHG_DTM, 'YYYYMMDDHH24MISS')) OVER(PARTITION BY NA_BZPLC) AS TIMESTAMP
+		  FROM TB_LA_IS_MH_AUC_ENTR A
+		 WHERE A.NA_BZPLC = #{naBzplc}
+		   AND A.AUC_DT = #{aucDt}
+		<if test="chgDtm != null and chgDtm != ''">
+		   AND TO_CHAR(A.LSCHG_DTM, 'YYYYMMDDHH24MISS') > #{chgDtm}
+		</if>
+	</select>
+	
+	<!-- 경매 수수료 정보 리스트 -->
+	<select id="selectFeeList" parameterType="hashMap" resultType="hashMap">
+		SELECT A.*
+		  FROM TB_LA_IS_MH_FEE A
+		 WHERE A.NA_BZPLC = #{naBzplc}
+		   AND A.AUC_OBJ_DSC = '1'
+		   AND A.DEL_YN = '0'
+		   AND A.APL_DT = (
+							SELECT MAX(APL_DT)
+							  FROM TB_LA_IS_MH_FEE
+							 WHERE NA_BZPLC = A.NA_BZPLC
+							   AND AUC_OBJ_DSC = A.AUC_OBJ_DSC
+							   AND APL_DT <![CDATA[<=]]> #{aucDt}
+							   AND DEL_YN = '0'
+						)
+		UNION
+		SELECT A.*
+		  FROM TB_LA_IS_MH_FEE A
+		 WHERE A.NA_BZPLC = #{naBzplc}
+		   AND A.AUC_OBJ_DSC = '2'
+		   AND A.DEL_YN = '0'
+		   AND A.APL_DT = (
+							SELECT MAX(APL_DT)
+							  FROM TB_LA_IS_MH_FEE
+							 WHERE NA_BZPLC = A.NA_BZPLC
+							   AND AUC_OBJ_DSC = A.AUC_OBJ_DSC
+							   AND APL_DT <![CDATA[<=]]> #{aucDt}
+							   AND DEL_YN = '0'
+						)
+		UNION
+		SELECT A.*
+		  FROM TB_LA_IS_MH_FEE A
+		 WHERE A.NA_BZPLC = #{naBzplc}
+		   AND A.AUC_OBJ_DSC = '3'
+		   AND A.DEL_YN = '0'
+		   AND A.APL_DT = (
+							SELECT MAX(APL_DT)
+							  FROM TB_LA_IS_MH_FEE
+							 WHERE NA_BZPLC = A.NA_BZPLC
+							   AND AUC_OBJ_DSC = A.AUC_OBJ_DSC
+							   AND APL_DT <![CDATA[<=]]> #{aucDt}
+							   AND DEL_YN = '0'
+						)
+	</select>
+	
+	<!-- 출하주 정보 리스트 -->
+	<select id="selectFhsList" parameterType="hashMap" resultType="hashMap">
+		SELECT A.*
+			 , MAX(TO_CHAR(A.LSCHG_DTM, 'YYYYMMDDHH24MISS')) OVER(PARTITION BY NA_BZPLC) AS TIMESTAMP
+		  FROM TB_LA_IS_MM_FHS A
+		 WHERE A.NA_BZPLC = #{naBzplc}
+		   AND EXISTS (
+						SELECT 1
+						  FROM TB_LA_IS_MH_SOG_COW B
+						 WHERE B.NA_BZPLC = #{naBzplc}
+						   AND B.AUC_DT = #{aucDt}
+						   AND B.NA_BZPLC = A.NA_BZPLC
+						   AND B.FHS_ID_NO = A.FHS_ID_NO
+						   AND B.FARM_AMNNO = A.FARM_AMNNO
+			 )
+		<if test="chgDtm != null and chgDtm != ''">
+		   AND TO_CHAR(A.LSCHG_DTM, 'YYYYMMDDHH24MISS') > #{chgDtm}
+		</if>
+	</select>
+	
+	<!-- 중도매인 정보 리스트 -->
+	<select id="selectMwmnList" parameterType="hashMap" resultType="hashMap">
+		SELECT A.*
+			 , MAX(TO_CHAR(A.LSCHG_DTM, 'YYYYMMDDHH24MISS')) OVER(PARTITION BY NA_BZPLC) AS TIMESTAMP
+		  FROM TB_LA_IS_MM_MWMN A
+		 WHERE A.NA_BZPLC = #{naBzplc}
+		   AND EXISTS ( 
+						SELECT 1
+						  FROM TB_LA_IS_MH_AUC_ENTR B
+						 WHERE B.NA_BZPLC = #{naBzplc}
+						   AND B.AUC_DT = #{aucDt}
+						   AND B.NA_BZPLC = A.NA_BZPLC
+						   AND B.TRMN_AMNNO = A.TRMN_AMNNO
+			 )
+		<if test="chgDtm != null and chgDtm != ''">
+		   AND TO_CHAR(A.LSCHG_DTM, 'YYYYMMDDHH24MISS') > #{chgDtm}
+		</if>	
+	</select>
+	
+	<!-- 출장우 낙/유찰 정보 수정 -->
+	<update id="updSogcow" parameterType="hashMap">
+		UPDATE TB_LA_IS_MH_SOG_COW
+		   SET TRMN_AMNNO = #{TRMN_AMNNO}
+			 , LVST_AUC_PTC_MN_NO = #{LVST_AUC_PTC_MN_NO}
+			 , SRA_INDV_AMNNO = #{SRA_INDV_AMNNO}
+			 , SRA_SRS_DSC = #{SRA_SRS_DSC}
+			 , COW_SOG_WT = #{COW_SOG_WT}
+			 , FIR_LOWS_SBID_LMT_AM = #{FIR_LOWS_SBID_LMT_AM}
+			 , LOWS_SBID_LMT_AM = #{LOWS_SBID_LMT_AM}
+			 , SRA_SBID_AM = #{SRA_SBID_AM}
+			 , SRA_SBID_UPR = #{SRA_SBID_UPR}
+			 , SEL_STS_DSC = #{SEL_STS_DSC}
+			 , BRCL_ISP_CTFW_SMT_YN = #{BRCL_ISP_CTFW_SMT_YN}
+			 , BRCL_ISP_DT = #{BRCL_ISP_DT}
+			 , LWPR_CHG_NT = #{LWPR_CHG_NT}
+			 , VACN_DT = #{VACN_DT}
+			 , LVST_MKT_TRPL_AMNNO = #{LVST_MKT_TRPL_AMNNO}
+			 , MT12_OVR_YN = #{MT12_OVR_YN}
+			 , PPGCOW_FEE_DSC = #{PPGCOW_FEE_DSC}
+			 , PRNY_JUG_YN = #{PRNY_JUG_YN}
+			 , PRNY_YN = #{PRNY_YN}
+			 , NCSS_JUG_YN = #{NCSS_JUG_YN}
+			 , NCSS_YN = #{NCSS_YN}
+			 , TRPCS_PY_YN = #{TRPCS_PY_YN}
+			 , SRA_TRPCS = #{SRA_TRPCS}
+			 , SRA_PYIVA = #{SRA_PYIVA}
+			 , SRA_FED_SPY_AM = #{SRA_FED_SPY_AM}
+			 , TD_RC_CST = #{TD_RC_CST}
+			 , MT12_OVR_FEE = #{MT12_OVR_FEE}
+			 , AFISM_MOD_DT = #{AFISM_MOD_DT}
+			 , PRNY_MTCN = #{PRNY_MTCN}
+			 , AFISM_MOD_CTFW_SMT_YN = #{AFISM_MOD_CTFW_SMT_YN}
+			 , RMHN_YN = #{RMHN_YN}
+			 , SRA_PDMNM = #{SRA_PDMNM}
+			 , SRA_PD_RGNNM = #{SRA_PD_RGNNM}
+			 , RMK_CNTN = #{RMK_CNTN}
+			 , LSCHG_DTM = #{LSCHG_DTM}
+			 , LS_CMENO = #{LS_CMENO}
+		 WHERE NA_BZPLC = #{NA_BZPLC}
+		   AND AUC_OBJ_DSC = #{AUC_OBJ_DSC}
+		   AND AUC_DT = #{AUC_DT} 
+		   AND OSLP_NO = #{OSLP_NO}
+		   AND LED_SQNO = #{LED_SQNO}
+	</update>
+	
+	<!-- 낙/유찰 수수료 정보 수정 -->
+	<update id="updFeeImps" parameterType="hashMap">
+		MERGE INTO TB_LA_IS_MH_FEE_IMPS
+		USING DUAL
+		   ON (
+				NA_BZPLC = #{NA_BZPLC}
+				AND AUC_OBJ_DSC = #{AUC_OBJ_DSC}
+				AND AUC_DT = #{AUC_DT}
+				AND OSLP_NO = #{OSLP_NO}
+				AND LED_SQNO = #{LED_SQNO}
+				AND FEE_RG_SQNO = #{FEE_RG_SQNO}
+			)
+		 WHEN MATCHED THEN UPDATE
+		  SET APL_DT = #{APL_DT}
+			, NA_FEE_C = #{NA_FEE_C}
+			, FEE_APL_OBJ_C = #{FEE_APL_OBJ_C}
+			, ANS_DSC = #{ANS_DSC}
+			, SBID_YN = #{SBID_YN}
+			, SRA_TR_FEE = #{SRA_TR_FEE}
+			, TMS_YN = #{TMS_YN}
+		 WHEN NOT MATCHED THEN INSERT (
+			NA_BZPLC
+			, AUC_OBJ_DSC
+			, AUC_DT
+			, OSLP_NO
+			, LED_SQNO
+			, FEE_RG_SQNO
+			, APL_DT
+			, NA_FEE_C
+			, FEE_APL_OBJ_C
+			, ANS_DSC
+			, SBID_YN
+			, SRA_TR_FEE
+			, TMS_YN
+		 ) VALUES (
+			#{NA_BZPLC}
+			, #{AUC_OBJ_DSC}
+			, #{AUC_DT}
+			, #{OSLP_NO}
+			, #{LED_SQNO}
+			, #{FEE_RG_SQNO}
+			, #{APL_DT}
+			, #{NA_FEE_C}
+			, #{FEE_APL_OBJ_C}
+			, #{ANS_DSC}
+			, #{SBID_YN}
+			, #{SRA_TR_FEE}
+			, #{TMS_YN}
+		 )
+	</update>
+	
+	<!-- 응찰 로그 저장 -->
+	<insert id="insAtdrLog" parameterType="hashMap">
+		INSERT INTO TB_LA_IS_MH_ATDR_LOG (
+			NA_BZPLC
+			, AUC_OBJ_DSC
+			, AUC_DT
+			, OSLP_NO
+			, RG_SQNO
+			, TRMN_AMNNO
+			, LVST_AUC_PTC_MN_NO
+			, ATDR_AM
+			, RMK_CNTN
+			, ATDR_DTM
+			, MMO_INP_YN
+			, AUC_PRG_SQ
+			, TMS_YN
+		) VALUES (
+			#{NA_BZPLC}
+			, #{AUC_OBJ_DSC}
+			, #{AUC_DT}
+			, #{OSLP_NO}
+			, #{RG_SQNO}
+			, #{TRMN_AMNNO}
+			, #{LVST_AUC_PTC_MN_NO}
+			, #{ATDR_AM}
+			, #{RMK_CNTN}
+			, TO_TIMESTAMP(#{ATDR_DTM})
+			, #{MMO_INP_YN}
+			, #{AUC_PRG_SQ}
+			, #{TMS_YN}
+		)
+	</insert>
+	
+	<!-- 낙/유찰 수수료 정보 저장(테스트용) -->
+	<select id="selectFeeImpsList" parameterType="hashMap" resultType="hashMap">
+		SELECT A.*
+		  FROM TB_LA_IS_MH_FEE_IMPS A
+		 WHERE A.NA_BZPLC = #{naBzplc}
+		   AND A.AUC_DT = #{aucDt}
+	</select>
+	
+	<!-- 응찰 정보 리스트 -->
+	<select id="selectAtdrLogList" parameterType="hashMap" resultType="hashMap">
+		SELECT A.*
+			 , TO_TIMESTAMP(A.ATDR_DTM) AS T_ATDR_DTM
+		  FROM TB_LA_IS_MH_ATDR_LOG A
+		 WHERE A.NA_BZPLC = #{naBzplc}
+		   AND A.AUC_DT = #{aucDt}
 	</select>
 </mapper>

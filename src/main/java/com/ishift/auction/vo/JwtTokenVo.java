@@ -4,9 +4,11 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import lombok.ToString;
 
 @Getter
 @Setter
+@ToString
 @NoArgsConstructor
 public class JwtTokenVo {
 	
@@ -44,10 +46,13 @@ public class JwtTokenVo {
 	@Deprecated
 	private String auctionType;
 	
+	// 통합회원코드
+	private String mbIntgNo;
+	
 	@Builder
 	public JwtTokenVo(String userName, String userBirthdate, int entryNum
 					, String auctionHouseCode, String deviceUUID, String userMemNum
-					, String userRole, String auctionClass, String auctionType) {
+					, String userRole, String auctionClass, String auctionType, String mbIntgNo) {
 //		this.userName = userName;
 //		this.userBirthdate = userBirthdate;
 //		this.entryNum = entryNum;
@@ -57,5 +62,6 @@ public class JwtTokenVo {
 		this.userRole = userRole;
 //		this.auctionClass = auctionClass;
 //		this.auctionType = auctionType;
+		this.mbIntgNo = mbIntgNo;
 	}	
 }

@@ -25,10 +25,11 @@ public interface Constants {
 
 		// Claim 관련
 		public static final String JWT_CLAIM_USER_MEM_NUM		= "userMemNum";				// 회원번호
-		public static final String JWT_CLAIM_USER_ID		= "userId";				// 회원번호
+		public static final String JWT_CLAIM_USER_ID			= "userId";					// 회원번호
 		public static final String JWT_CLAIM_AUCTION_HOUSE_CODE	= "auctionHouseCode";		// 조합코드
 		public static final String JWT_CLAIM_USER_ROLE			= "userRole";				// 사용자 권한(응찰, 농가, 일반, 관리자)
-		public static final String JWT_CLAIM_ISSUED_AT				= "issuedAt";
+		public static final String JWT_CLAIM_ISSUED_AT			= "issuedAt";
+		public static final String JWT_CLAIM_MB_INTG_NO			= "mbIntgNo";				// 통합회원번호
 
 		// 1차에서 제외 [s]
 		@Deprecated

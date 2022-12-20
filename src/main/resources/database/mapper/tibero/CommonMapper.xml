@@ -1,0 +1,788 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="commonMapper">
+	
+	<!-- 공통코드 조회 -->
+	<select id="getCommonCode" parameterType="map" resultType="map">
+		SELECT *
+		  FROM TB_LA_IS_MH_COMN_APL
+		 WHERE SIMP_TPC = #{simpTpc}
+		   AND SIMP_C_GRP_SQNO = NVL(#{simpCGrpSqno}, '1')
+		 ORDER BY SORT_SQ ASC
+	</select>
+	
+	<!-- 개체정보 저장 -->
+	<update id="updateIndvInfo" parameterType="hashMap">
+		 MERGE INTO TB_LA_IS_MM_INDV A
+		 USING DUAL
+			ON (
+				A.NA_BZPLC = #{NA_BZPLC}
+				AND
+				A.SRA_INDV_AMNNO = TRIM(#{SRA_INDV_AMNNO})
+				AND
+				A.SRA_SRS_DSC = #{SRA_SRS_DSC}
+			 )
+		  WHEN MATCHED THEN UPDATE
+		   SET FHS_ID_NO				= TRIM(#{FHS_ID_NO})
+			 , FARM_AMNNO               = TRIM(#{FARM_AMNNO})
+		<choose>
+		<when test="SRA_INDV_BIRTH != null and SRA_INDV_BIRTH != ''">
+			 , BIRTH                 = TRIM(#{SRA_INDV_BIRTH})
+		</when>
+		<otherwise>
+			 , BIRTH                 = REPLACE(TRIM(#{BIRTH}), '-', '')
+		</otherwise>
+		</choose>
+		<choose>
+		<when test="SRA_INDV_MCOW_BRDSRA_RG_DSC != null and SRA_INDV_MCOW_BRDSRA_RG_DSC != ''">
+			 , MCOW_DSC                 = TRIM(#{SRA_INDV_MCOW_BRDSRA_RG_DSC})
+		</when>
+		<otherwise>
+			 , MCOW_DSC                 = TRIM(#{MCOW_DSC})
+		</otherwise>
+		</choose>
+		<choose>
+		<when test="SRA_KPN_NO != null and SRA_KPN_NO != ''">
+			 , KPN_NO                 = TRIM(#{SRA_KPN_NO})
+		</when>
+		<otherwise>
+			 , KPN_NO                 = TRIM(#{KPN_NO})
+		</otherwise>
+		</choose>
+			 , INDV_SEX_C               = TRIM(#{INDV_SEX_C})
+		<choose>
+		<when test="MCOW_SRA_INDV_EART_NO != null and MCOW_SRA_INDV_EART_NO != ''">
+			 , MCOW_SRA_INDV_AMNNO                 = TRIM(#{MCOW_SRA_INDV_EART_NO})
+		</when>
+		<otherwise>
+			 , MCOW_SRA_INDV_AMNNO                 = TRIM(#{MCOW_SRA_INDV_AMNNO})
+		</otherwise>
+		</choose>
+		<choose>
+		<when test="SRA_INDV_MOTHR_MATIME != null and SRA_INDV_MOTHR_MATIME != ''">
+			 , MATIME                 = NVL(TRIM(#{SRA_INDV_MOTHR_MATIME}), 0)
+		</when>
+		<otherwise>
+			 , MATIME                 = NVL(TRIM(#{MATIME}), 0)
+		</otherwise>
+		</choose>
+			 , SRA_INDV_PASG_QCN        = NVL(TRIM(#{SRA_INDV_PASG_QCN}) , 0)
+		<choose>
+		<when test="KRBF_IPRV_RG_NO != null and KRBF_IPRV_RG_NO != ''">
+			 , INDV_ID_NO                 = TRIM(#{KRBF_IPRV_RG_NO})
+		</when>
+		<otherwise>
+			 , INDV_ID_NO                 = TRIM(#{INDV_ID_NO})
+		</otherwise>
+		</choose>
+		<choose>
+		<when test="SRA_INDV_BRDSRA_RG_DSC != null and SRA_INDV_BRDSRA_RG_DSC != ''">
+			 , RG_DSC                 = TRIM(#{SRA_INDV_BRDSRA_RG_DSC})
+		</when>
+		<otherwise>
+			 , RG_DSC                 = TRIM(#{RG_DSC})
+		</otherwise>
+		</choose>
+			 , SRA_INDV_BRDSRA_RG_NO	= TRIM(#{SRA_INDV_BRDSRA_RG_NO})
+			 , GRFA_SRA_KPN_NO 			= TRIM(#{GRFA_SRA_KPN_NO})				/* 조부 KPN */
+			 , GRFA_SRA_INDV_EART_NO	= TRIM(#{GRFA_SRA_INDV_EART_NO})		/* 조부 개체번호 */
+			 , GRMO_SRA_INDV_EART_NO	= TRIM(#{GRMO_SRA_INDV_EART_NO})		/* 조모 개체번호 */
+			 , MTGRFA_SRA_KPN_NO		= TRIM(#{MTGRFA_SRA_KPN_NO})			/* 외조부 KPN */
+			 , MTGRFA_SRA_INDV_EART_NO	= TRIM(#{MTGRFA_SRA_INDV_EART_NO})		/* 외조부 개체번호 */
+			 , MTGRMO_SRA_INDV_EART_NO	= TRIM(#{MTGRMO_SRA_INDV_EART_NO})		/* 외조모 개체번호 */
+			 , LSCHG_DTM                = SYSDATE
+			 , LS_CMENO                 = #{regUsrid}
+		  WHEN NOT MATCHED THEN INSERT
+		  (
+			NA_BZPLC
+			, SRA_INDV_AMNNO
+			, SRA_SRS_DSC
+			, FHS_ID_NO
+			, FARM_AMNNO
+			, BIRTH
+			, MCOW_DSC
+			, KPN_NO
+			, INDV_SEX_C
+			, MCOW_SRA_INDV_AMNNO
+			, MATIME
+			, SRA_INDV_PASG_QCN
+			, INDV_ID_NO
+			, SRA_INDV_BRDSRA_RG_NO
+			, RG_DSC
+			, ANW_YN
+			, FSRG_DTM
+			, FSRGMN_ENO
+			, LSCHG_DTM
+			, LS_CMENO
+			, GRFA_SRA_KPN_NO
+			, GRFA_SRA_INDV_EART_NO
+			, GRMO_SRA_INDV_EART_NO
+			, MTGRFA_SRA_KPN_NO
+			, MTGRFA_SRA_INDV_EART_NO
+			, MTGRMO_SRA_INDV_EART_NO
+		  ) VALUES (
+			#{NA_BZPLC}
+			, TRIM(#{SRA_INDV_AMNNO})
+			, TRIM(#{SRA_SRS_DSC})
+			, TRIM(#{FHS_ID_NO})
+			, TRIM(#{FARM_AMNNO})
+		<choose>
+		<when test="SRA_INDV_BIRTH != null and SRA_INDV_BIRTH != ''">
+			, TRIM(#{SRA_INDV_BIRTH})
+		</when>
+		<otherwise>
+			, TRIM(#{BIRTH})
+		</otherwise>
+		</choose>
+		<choose>
+		<when test="SRA_INDV_MCOW_BRDSRA_RG_DSC != null and SRA_INDV_MCOW_BRDSRA_RG_DSC != ''">
+			, TRIM(#{SRA_INDV_MCOW_BRDSRA_RG_DSC})
+		</when>
+		<otherwise>
+			, TRIM(#{MCOW_DSC})
+		</otherwise>
+		</choose>
+		<choose>
+		<when test="SRA_KPN_NO != null and SRA_KPN_NO != ''">
+			, TRIM(#{SRA_KPN_NO})
+		</when>
+		<otherwise>
+			, TRIM(#{KPN_NO})
+		</otherwise>
+		</choose>
+			, TRIM(#{INDV_SEX_C})
+		<choose>
+		<when test="MCOW_SRA_INDV_EART_NO != null and MCOW_SRA_INDV_EART_NO != ''">
+			, TRIM(#{MCOW_SRA_INDV_EART_NO})
+		</when>
+		<otherwise>
+			, TRIM(#{MCOW_SRA_INDV_AMNNO})
+		</otherwise>
+		</choose>
+		<choose>
+		<when test="SRA_INDV_MOTHR_MATIME != null and SRA_INDV_MOTHR_MATIME != ''">
+			, NVL(TRIM(#{SRA_INDV_MOTHR_MATIME}), 0)
+		</when>
+		<otherwise>
+			, NVL(TRIM(#{MATIME}), 0)
+		</otherwise>
+		</choose>
+			, NVL(TRIM(#{SRA_INDV_PASG_QCN}), '0')
+		<choose>
+		<when test="KRBF_IPRV_RG_NO != null and KRBF_IPRV_RG_NO != ''">
+			, TRIM(#{KRBF_IPRV_RG_NO})
+		</when>
+		<otherwise>
+			, TRIM(#{INDV_ID_NO})
+		</otherwise>
+		</choose>
+			, TRIM(#{SRA_INDV_BRDSRA_RG_NO})
+		<choose>
+		<when test="SRA_INDV_BRDSRA_RG_DSC != null and SRA_INDV_BRDSRA_RG_DSC != ''">
+			, TRIM(#{SRA_INDV_BRDSRA_RG_DSC})
+		</when>
+		<otherwise>
+			, TRIM(#{RG_DSC})
+		</otherwise>
+		</choose>
+			, '1'
+			, SYSDATE
+			, #{regUsrid}
+			, SYSDATE
+			, #{regUsrid}
+			, TRIM(#{GRFA_SRA_KPN_NO})
+			, TRIM(#{GRFA_SRA_INDV_EART_NO})
+			, TRIM(#{GRMO_SRA_INDV_EART_NO})
+			, TRIM(#{MTGRFA_SRA_KPN_NO})
+			, TRIM(#{MTGRFA_SRA_INDV_EART_NO})
+			, TRIM(#{MTGRMO_SRA_INDV_EART_NO})
+		  )
+	</update>
+
+	<!-- 개체 로그 저장 -->
+	<insert id="insertIndvLog" parameterType="hashMap" useGeneratedKeys="false">
+		INSERT INTO TB_LA_IS_MM_INDV_LOG (
+			   NA_BZPLC											/* 경제통합사업장코드                  */
+			 , SRA_INDV_AMNNO									/* 축산개체관리번호                    */
+			 , SRA_SRS_DSC										/* 축산축종구분코드                    */
+			 , FHS_ID_NO										/* 농가식별번호                        */
+			 , FARM_AMNNO										/* 농장관리번호                        */
+			 , BIRTH											/* 생년월일                            */
+			 , MCOW_DSC											/* 어미구분코드                        */
+			 , KPN_NO											/* KPN번호                             */
+			 , INDV_SEX_C										/* 개체성별코드                        */
+			 , MCOW_SRA_INDV_AMNNO								/* 어미소축산개체관리번호              */
+			 , MATIME											/* 산차                                */
+			 , SRA_INDV_PASG_QCN								/* 축산개체계대차수                    */
+			 , INDV_ID_NO										/* 개체식별번호                        */
+			 , SRA_INDV_BRDSRA_RG_NO							/* 축산개체종축등록번호                */
+			 , RG_DSC											/* 등록구분코드                        */
+			 , ANW_YN											/* 한우종합등록여부                    */
+			 , FSRG_DTM											/* 최초등록일시                        */
+			 , FSRGMN_ENO										/* 최초등록자개인번호                  */
+			 , LSCHG_DTM										/* 최종변경일시                        */
+			 , LS_CMENO											/* 최종변경자개인번호                  */
+			 , GRFA_SRA_KPN_NO									/* 조부 KPN                            */
+			 , GRFA_SRA_INDV_EART_NO							/* 조부 개체번호                       */
+			 , GRMO_SRA_INDV_EART_NO							/* 조모 개체번호                       */
+			 , MTGRFA_SRA_KPN_NO								/* 외조부 KPN                          */
+			 , MTGRFA_SRA_INDV_EART_NO							/* 외조부 개체번호                     */
+			 , MTGRMO_SRA_INDV_EART_NO							/* 외조모 개체번호                     */
+		)
+		SELECT A.NA_BZPLC										/* 경제통합사업장코드                  */
+			 , A.SRA_INDV_AMNNO									/* 축산개체관리번호                    */
+			 , A.SRA_SRS_DSC									/* 축산축종구분코드                    */
+			 , A.FHS_ID_NO										/* 농가식별번호                        */
+			 , A.FARM_AMNNO										/* 농장관리번호                        */
+			 , A.BIRTH											/* 생년월일                            */
+			 , A.MCOW_DSC										/* 어미구분코드                        */
+			 , A.KPN_NO											/* KPN번호                             */
+			 , A.INDV_SEX_C										/* 개체성별코드                        */
+			 , A.MCOW_SRA_INDV_AMNNO							/* 어미소축산개체관리번호              */
+			 , A.MATIME											/* 산차                                */
+			 , A.SRA_INDV_PASG_QCN								/* 축산개체계대차수                    */
+			 , A.INDV_ID_NO										/* 개체식별번호                        */
+			 , A.SRA_INDV_BRDSRA_RG_NO							/* 축산개체종축등록번호                */
+			 , A.RG_DSC											/* 등록구분코드                        */
+			 , A.ANW_YN											/* 축산축종구분코드                    */
+			 , A.FSRG_DTM										/* 최초등록일시                        */
+			 , A.FSRGMN_ENO 									/* 최초등록자개인번호                  */
+			 , A.LSCHG_DTM										/* 최종변경일시                        */
+			 , A.LS_CMENO										/* 최종변경자개인번호                  */
+			 , A.GRFA_SRA_KPN_NO								/* 조부 KPN                            */
+			 , A.GRFA_SRA_INDV_EART_NO							/* 조부 개체번호                       */
+			 , A.GRMO_SRA_INDV_EART_NO							/* 조모 개체번호                       */
+			 , A.MTGRFA_SRA_KPN_NO								/* 외조부 KPN                          */
+			 , A.MTGRFA_SRA_INDV_EART_NO						/* 외조부 개체번호                     */
+			 , A.MTGRMO_SRA_INDV_EART_NO						/* 외조모 개체번호                     */
+		  FROM TB_LA_IS_MM_INDV A
+		 WHERE A.NA_BZPLC			= #{NA_BZPLC}
+		   AND A.SRA_INDV_AMNNO		= TRIM(#{SRA_INDV_AMNNO})
+		   AND A.SRA_SRS_DSC		= TRIM(#{SRA_SRS_DSC})
+	</insert>
+	
+	<!-- 가축시장 사업장 정보 -->
+	<select id="getBzplcInfo" parameterType="hashMap" resultType="hashMap">
+		SELECT NA_BZPLC
+			 , NA_BZPLCNO
+			 , NA_BZPLCLOC
+			 , CLNTNM
+			 , AREAORD
+			 , AREANM
+			 , AUC_DSC
+			 , LAT
+			 , LNG
+			 , AUC_YN
+			 , DEL_YN
+			 , RMK_CNTN
+			 , TEL_NO
+			 , KKO_SVC_ID
+			 , KKO_SVC_KEY
+			 , KKO_SVC_CNT
+			 , FSRG_DTM
+			 , FSRGMN_ENO
+			 , LSCHG_DTM
+			 , LS_CMENO
+			 , NET_HOST
+			 , NET_PORT
+			 , WEB_PORT
+			 , SMS_AUTH_YN
+			 , SMS_BUFFER_2
+			 , SMS_BUFFER_1
+		  FROM TB_LA_IS_BM_BZLOC
+		 WHERE NA_BZPLC = #{na_bzplc}
+	</select>
+	
+	<!-- 농가코드로 통합회원코드 조회 -->
+	<select id="getFhsInfo" parameterType="hashMap" resultType="hashMap">
+		SELECT FHS_ID_NO
+			 , MIN(MB_INTG_NO) AS MB_INTG_NO
+		  FROM TB_LA_IS_MM_FHS A
+		WHERE FHS_ID_NO = TRIM(#{FHS_ID_NO})
+		GROUP BY FHS_ID_NO
+	</select>
+	
+	<!-- 통합회원 정보 조회 -->
+	<select id="getIntgNoInfo" parameterType="hashMap" resultType="hashMap">
+		SELECT MB_INTG_NO
+			 , MB_INTG_NM
+			 , MB_RLNO
+			 , OHSE_TELNO
+			 , MB_MPNO
+			 , DORMACC_YN
+			 , DORMACC_DT
+			 , DELACC_YN
+			 , DELACC_DT
+			 , MB_INTG_DT
+			 , TMS_YN
+			 , FNCON_DTM
+			 , FSRG_DTM
+			 , FSRGMN_ENO
+			 , LSCHG_DTM
+			 , LS_CMENO
+			 , MB_INTG_GB
+			 , DORMDUE_DT
+		  FROM TB_LA_IS_MM_MBINTG
+		 WHERE MB_INTG_GB = #{MB_INTG_GB}
+		   AND REPLACE(TRIM(MB_INTG_NM),' ','') = REPLACE(TRIM(#{MB_INTG_NM}),' ','')
+		   AND REGEXP_REPLACE(MB_MPNO, '[^0-9]') = REGEXP_REPLACE(#{MB_MPNO}, '[^0-9]')
+		   <if test="MB_RLNO != null and MB_RLNO != ''">
+		   AND MB_RLNO = #{MB_RLNO}
+		   </if>
+	</select>
+	
+	<!-- 통합회원 정보 조회 : 회원통합번호로 조회 -->
+	<select id="getIntgNoInfoForNum" parameterType="hashMap" resultType="hashMap">
+		SELECT MB_INTG_NO
+			 , MB_INTG_NM
+			 , MB_RLNO
+			 , OHSE_TELNO
+			 , MB_MPNO
+			 , DORMACC_YN
+			 , DORMACC_DT
+			 , DELACC_YN
+			 , DELACC_DT
+			 , MB_INTG_DT
+			 , TMS_YN
+			 , FNCON_DTM
+			 , FSRG_DTM
+			 , FSRGMN_ENO
+			 , LSCHG_DTM
+			 , LS_CMENO
+			 , MB_INTG_GB
+			 , DORMDUE_DT
+		  FROM TB_LA_IS_MM_MBINTG
+		 WHERE MB_INTG_NO = #{MB_INTG_NO}
+	</select>
+	
+	<!-- 통합회원 정보 저장 -->
+	<insert id="insertIntgInfo" parameterType="hashMap">
+		<selectKey keyProperty="MB_INTG_NO" resultType="String" order="BEFORE">
+			SELECT NVL(MAX(MB_INTG_NO) + 1, 1)
+			  FROM TB_LA_IS_MM_MBINTG
+			 WHERE MB_INTG_GB = #{MB_INTG_GB}
+		</selectKey>
+		INSERT INTO TB_LA_IS_MM_MBINTG (
+			MB_INTG_NO
+			, MB_INTG_NM
+			, MB_RLNO
+			, OHSE_TELNO
+			, MB_MPNO
+			, DORMACC_YN
+			, DELACC_YN
+			, MB_INTG_DT
+			, TMS_YN
+			, FNCON_DTM
+			, DORMDUE_DT
+			, FSRG_DTM
+			, FSRGMN_ENO
+			, LSCHG_DTM
+			, LS_CMENO
+			, MB_INTG_GB
+		) VALUES (
+			#{MB_INTG_NO}
+			, TRIM(#{MB_INTG_NM})
+			, TRIM(#{MB_RLNO})
+			, TRIM(#{OHSE_TELNO})
+			, TRIM(#{MB_MPNO})
+			, '0'
+			, '0'
+			, TO_CHAR(SYSDATE, 'YYYYMMDD')
+			, '1'
+			, SYSDATE
+			, TO_CHAR(SYSDATE + 365, 'YYYYMMDD')
+			, SYSDATE
+			, #{regUsrid}
+			, SYSDATE
+			, #{regUsrid}
+			, #{MB_INTG_GB}
+		)
+	</insert>
+	
+	<!-- 통합회원 정보 수정 -->
+	<update id="updateIntgInfo" parameterType="hashMap">
+		UPDATE TB_LA_IS_MM_MBINTG
+		   SET MB_INTG_NM = #{MB_INTG_NM}
+			 , OHSE_TELNO = #{OHSE_TELNO}
+			 , MB_MPNO = #{MB_MPNO}
+			 , FNCON_DTM = SYSDATE
+			 , DORMDUE_DT = TO_CHAR(SYSDATE + 365, 'YYYYMMDD')
+			 , LSCHG_DTM = SYSDATE
+			 , LS_CMENO = #{regUsrid}
+		 WHERE MB_INTG_NO = #{MB_INTG_NO}
+	</update>
+	
+	<!-- 출하주 정보 수정 -->
+	<update id="updateFhsInfo" parameterType="hashMap">
+		 MERGE INTO TB_LA_IS_MM_FHS A
+		 USING DUAL
+			ON (
+				A.NA_BZPLC = #{NA_BZPLC}
+				AND
+				A.FHS_ID_NO = TRIM(#{FHS_ID_NO})
+				AND
+				A.FARM_AMNNO = TO_NUMBER(NVL(TRIM(#{FARM_AMNNO}), '0'))
+			)
+		  WHEN MATCHED THEN UPDATE
+		   SET LSCHG_DTM                = SYSDATE
+			 , LS_CMENO                 = #{regUsrid}
+			 , FTSNM                    = #{SRA_FHSNM}
+			 , BIRTH                    = #{SRA_FHS_BIRTH}
+		<choose>
+		<when test="SMS_BUFFER_1 != null and SMS_BUFFER_1 != ''">
+			<if test="SMS_BUFFER_1.contains('AD'.toString())">
+			 , ZIP                       = TRIM(#{ZIP})
+			 , DONGUP                    = TRIM(#{SRA_FHS_DONGUP})
+			 , DONGBW                    = TRIM(#{SRA_FHS_DONGBW})
+			</if>
+			<if test="SMS_BUFFER_1.contains('T'.toString())">
+			 , OHSE_TELNO                = TRIM(#{OHSE_TELNO})
+			</if>
+			<if test="SMS_BUFFER_1.contains('H'.toString()) and MB_MPNO != null and MB_MPNO != ''">
+			 , CUS_MPNO                  = TRIM(#{MB_MPNO})
+			</if>
+			<if test="SMS_BUFFER_1.contains('AC'.toString()) and SRA_FARM_ACNO != null and SRA_FARM_ACNO != ''">
+			 , SRA_FARM_ACNO             = TRIM(#{SRA_FARM_ACNO})
+			 , NEW_SRA_FARM_ACNO         = TRIM(#{SRA_FARM_ACNO})
+			</if>
+		</when>
+		<otherwise>
+			 , ZIP                       = TRIM(#{ZIP})
+			 , DONGUP                    = TRIM(#{SRA_FHS_DONGUP})
+			 , DONGBW                    = TRIM(#{SRA_FHS_DONGBW})
+			 , OHSE_TELNO                = TRIM(#{OHSE_TELNO})
+			<if test="MB_MPNO != null and MB_MPNO != ''">
+			 , CUS_MPNO                  = TRIM(#{MB_MPNO})
+			</if>
+			<if test="SRA_FARM_ACNO != null and SRA_FARM_ACNO != ''">
+			 , SRA_FARM_ACNO             = TRIM(#{SRA_FARM_ACNO})
+			 , NEW_SRA_FARM_ACNO         = TRIM(#{SRA_FARM_ACNO})
+			</if>
+		</otherwise>
+		</choose>
+		<if test="MB_INTG_NO != null and MB_INTG_NO !=''">
+			, MB_INTG_NO                  = TRIM(#{MB_INTG_NO})
+		</if>
+		  WHEN NOT MATCHED THEN INSERT
+		  (
+			NA_BZPLC
+			, FHS_ID_NO
+			, FARM_AMNNO
+			, FARM_ID_NO
+			, NA_TRPL_C
+			, FTSNM
+			, ZIP
+			, DONGUP
+			, DONGBW
+			, OHSE_TELNO
+			, CUS_MPNO
+			, MACO_YN
+			, RMK_CNTN
+			, JRDWO_DSC
+			, DEL_YN
+			, ANW_YN
+			, SRA_FARM_ACNO
+			, NEW_SRA_FARM_ACNO
+			, MB_INTG_NO
+			, FSRG_DTM
+			, FSRGMN_ENO
+			, LSCHG_DTM
+			, LS_CMENO
+		  ) VALUES (
+			#{NA_BZPLC}
+			, TRIM(#{FHS_ID_NO})
+			, TRIM(#{FARM_AMNNO})
+			, TRIM(#{FARM_ID_NO})
+			, TRIM(#{NA_TRPL_C})
+			, TRIM(#{SRA_FHSNM})
+			, TRIM(#{ZIP})
+			, TRIM(#{SRA_FHS_DONGUP})
+			, TRIM(#{SRA_FHS_DONGBW})
+			, TRIM(#{OHSE_TELNO})
+			, TRIM(#{MB_MPNO})
+			, '0'
+			, TRIM(#{RMK_CNTN})
+			, '2'
+			, '0'
+			, '1'
+			, #{SRA_FARM_ACNO}
+			, #{SRA_FARM_ACNO}
+			, #{MB_INTG_NO}
+			, SYSDATE
+			, #{regUsrid}
+			, SYSDATE
+			, #{regUsrid}
+		  )
+	</update>
+	
+	<!-- 등록된 형매정보 삭제 -->
+	<delete id="deleteIndvSibinf" parameterType="hashMap">
+		DELETE TB_LA_IS_MM_INDV_SIBINF
+		 WHERE SRA_INDV_AMNNO = #{SRA_INDV_AMNNO}
+	</delete>
+	
+	<!-- 형매정보 저장 -->
+	<insert id="insertIndvSibinf" parameterType="hashMap">
+		INSERT INTO TB_LA_IS_MM_INDV_SIBINF (
+			SRA_INDV_AMNNO
+			, SIB_SRA_INDV_AMNNO
+			, MATIME
+			, SRA_INDV_PASG_QCN
+			, RG_DSC
+			, KPN_NO
+			, INDV_SEX_C
+			, BIRTH
+			, METRB_BBDY_WT
+			, METRB_METQLT_GRD
+			, MIF_BTC_DT
+			, FSRG_DTM
+			, FSRGMN_ENO
+		) VALUES (
+			#{SRA_INDV_AMNNO}
+			, #{SIB_SRA_INDV_AMNNO}
+			, #{MATIME}
+			, #{SRA_INDV_PASG_QCN}
+			, #{RG_DSC}
+			, #{KPN_NO}
+			, #{INDV_SEX_C}
+			, #{BIRTH}
+			, #{METRB_BBDY_WT}
+			, #{METRB_METQLT_GRD}
+			, #{MIF_BTC_DT}
+			, SYSDATE
+			, #{lsCmeno}
+		)
+	</insert>
+	
+	<!-- 등록된 후대정보 삭제 -->
+	<delete id="deleteIndvPostinf" parameterType="hashMap">
+		DELETE TB_LA_IS_MM_INDV_POSTINF
+		 WHERE SRA_INDV_AMNNO = #{SRA_INDV_AMNNO}
+	</delete>
+	
+	<!-- 형매정보 저장 -->
+	<insert id="insertIndvPostinf" parameterType="hashMap">
+		INSERT INTO TB_LA_IS_MM_INDV_POSTINF (
+			SRA_INDV_AMNNO
+			, POST_SRA_INDV_AMNNO
+			, MATIME
+			, SRA_INDV_PASG_QCN
+			, RG_DSC
+			, KPN_NO
+			, INDV_SEX_C
+			, BIRTH
+			, METRB_BBDY_WT
+			, METRB_METQLT_GRD
+			, MIF_BTC_DT
+			, FSRG_DTM
+			, FSRGMN_ENO
+		) VALUES (
+			#{SRA_INDV_AMNNO}
+			, #{POST_SRA_INDV_AMNNO}
+			, #{MATIME}
+			, #{SRA_INDV_PASG_QCN}
+			, #{RG_DSC}
+			, #{KPN_NO}
+			, #{INDV_SEX_C}
+			, #{BIRTH}
+			, #{METRB_BBDY_WT}
+			, #{METRB_METQLT_GRD}
+			, #{MIF_BTC_DT}
+			, SYSDATE
+			, #{lsCmeno}
+		)
+	</insert>
+	
+	<insert id="insertMbintgHistoryData" parameterType="hashMap" useGeneratedKeys="false">
+		/*CommonMapper.insertMbintgHistoryData_20221124_추가*/
+		INSERT INTO TB_LA_IS_MM_MBINTGHIS(
+			MB_INTG_NO
+			, MB_INTG_NM
+			, MB_RLNO
+			, OHSE_TELNO
+			, MB_MPNO
+			, DORMACC_YN
+			, DORMACC_DT
+			, DELACC_YN
+			, DELACC_DT
+			, MB_INTG_DT
+			, TMS_YN
+			, FNCON_DTM
+			, FSRG_DTM
+			, FSRGMN_ENO
+			, LSCHG_DTM
+			, LS_CMENO
+			, MB_INTG_GB
+			, DORMDUE_DT
+		)
+		SELECT MB_INTG_NO
+			, MB_INTG_NM
+			, MB_RLNO
+			, OHSE_TELNO
+			, MB_MPNO
+			, DORMACC_YN
+			, DORMACC_DT
+			, DELACC_YN
+			, DELACC_DT
+			, MB_INTG_DT
+			, TMS_YN
+			, FNCON_DTM
+			, FSRG_DTM
+			, FSRGMN_ENO
+			, LSCHG_DTM
+			, LS_CMENO
+			, MB_INTG_GB
+			, DORMDUE_DT
+		FROM TB_LA_IS_MM_MBINTG
+		WHERE MB_INTG_NO = #{MB_INTG_NO}
+	</insert>
+	
+	<insert id="insertMwmnHistoryData" parameterType="hashMap" useGeneratedKeys="false">
+		/*CommonMapper.insertMwmnHistoryData_20221124_추가*/
+		INSERT INTO TB_LA_IS_MI_MWMN(
+			NA_BZPLC
+			, TRMN_AMNNO
+			, MWMN_NA_TRPL_C
+			, SRA_MWMNNM
+			, FRLNO
+			, ZIP
+			, DONGUP
+			, DONGBW
+			, OHSE_TELNO
+			, CUS_MPNO
+			, MACO_YN
+			, JRDWO_DSC
+			, PSN_INF_OFR_AGR_YN
+			, TMS_YN
+			, DEL_YN
+			, RMK_CNTN
+			, CUS_RLNO
+			, FSRG_DTM
+			, FSRGMN_ENO
+			, LSCHG_DTM
+			, LS_CMENO
+			, SMS_NO
+			, SMS_YMD
+			, MB_INTG_NO
+		)
+		SELECT NA_BZPLC
+			, TRMN_AMNNO
+			, MWMN_NA_TRPL_C
+			, SRA_MWMNNM
+			, FRLNO
+			, ZIP
+			, DONGUP
+			, DONGBW
+			, OHSE_TELNO
+			, CUS_MPNO
+			, MACO_YN
+			, JRDWO_DSC
+			, PSN_INF_OFR_AGR_YN
+			, TMS_YN
+			, DEL_YN
+			, RMK_CNTN
+			, CUS_RLNO
+			, FSRG_DTM
+			, FSRGMN_ENO
+			, LSCHG_DTM
+			, LS_CMENO
+			, SMS_NO
+			, SMS_YMD
+			, MB_INTG_NO
+		FROM TB_LA_IS_MM_MWMN
+		WHERE MB_INTG_NO = #{MB_INTG_NO}
+	</insert>
+	
+	<update id="updateDormMbintgBackupData" parameterType="hashMap">
+		/*CommonMapper.updateDormMbintgBackupData_20221124_추가*/
+		MERGE INTO TB_LA_IS_MM_MBINTG MBT
+		USING TB_LA_IS_BK_DORM_MBINTG BDM
+		ON(MBT.MB_INTG_NO = BDM.MB_INTG_NO
+			AND BDM.MB_INTG_NO = #{MB_INTG_NO}
+		)
+		WHEN MATCHED THEN
+			UPDATE
+			SET MBT.DORMDUE_DT = TO_CHAR(SYSDATE + 365, 'YYYYMMDD')
+				, MBT.LSCHG_DTM = SYSDATE
+				, MBT.LS_CMENO = #{regUsrid}
+				, MBT.DORMACC_YN = '0'
+				, MBT.DORMACC_DT = ''
+				, MBT.MB_INTG_NM = BDM.MB_INTG_NM
+				, MBT.MB_RLNO = BDM.MB_RLNO
+				, MBT.OHSE_TELNO = BDM.OHSE_TELNO
+				, MBT.MB_MPNO = BDM.MB_MPNO
+	</update>
+	
+	<update id="updateDormMwmnBackupData" parameterType="hashMap">
+		/*LALM0117Mapper.LALM0117_updDormacMwmnClear_20221103_추가*/
+		MERGE INTO TB_LA_IS_MM_MWMN MWN
+		USING (
+			SELECT * 
+			FROM TB_LA_IS_BK_DORM_MWMN
+			WHERE MB_INTG_NO = #{MB_INTG_NO}
+		) BDM
+		ON(MWN.MB_INTG_NO = BDM.MB_INTG_NO
+			AND MWN.NA_BZPLC = BDM.NA_BZPLC 
+			AND MWN.TRMN_AMNNO = BDM.TRMN_AMNNO
+		)
+		WHEN MATCHED THEN
+			UPDATE
+			SET
+				MWN.LSCHG_DTM = SYSDATE
+				, MWN.LS_CMENO = #{regUsrid}
+				, MWN.SRA_MWMNNM = BDM.SRA_MWMNNM
+				, MWN.FRLNO = BDM.FRLNO
+				, MWN.ZIP = BDM.ZIP
+				, MWN.DONGUP = BDM.DONGUP
+				, MWN.DONGBW = BDM.DONGBW
+				, MWN.OHSE_TELNO = BDM.OHSE_TELNO
+				, MWN.CUS_MPNO = BDM.CUS_MPNO
+				, MWN.CUS_RLNO = BDM.CUS_RLNO
+				, MWN.RMK_CNTN = BDM.RMK_CNTN
+	</update>
+	
+	<update id="updateDormFhsBackupData" parameterType="hashMap">
+		/*CommonMapper.updateDormFhsBackupData_20221124_추가*/
+		MERGE INTO TB_LA_IS_MM_FHS FHS
+		USING (
+			SELECT * 
+			FROM TB_LA_IS_BK_DORM_FHS
+			WHERE MB_INTG_NO = #{MB_INTG_NO}
+		) BDF
+		ON(FHS.MB_INTG_NO = BDF.MB_INTG_NO
+			AND FHS.NA_BZPLC = BDF.NA_BZPLC
+			AND FHS.FHS_ID_NO = BDF.FHS_ID_NO
+			AND FHS.FARM_AMNNO = BDF.FARM_AMNNO
+		)	
+		WHEN MATCHED THEN 
+			UPDATE
+			SET FHS.FTSNM = BDF.FTSNM
+				, FHS.ZIP = BDF.ZIP
+				, FHS.DONGUP = BDF.DONGUP
+				, FHS.DONGBW = BDF.DONGBW
+				, FHS.OHSE_TELNO = BDF.OHSE_TELNO
+				, FHS.CUS_MPNO = BDF.CUS_MPNO
+				, FHS.RMK_CNTN = BDF.RMK_CNTN
+				, FHS.SRA_FARM_ACNO = BDF.SRA_FARM_ACNO
+				, FHS.NEW_SRA_FARM_ACNO = BDF.NEW_SRA_FARM_ACNO
+				, FHS.BIRTH = BDF.BIRTH
+				, FHS.LSCHG_DTM = SYSDATE
+				, FHS.LS_CMENO = #{regUsrid}
+	</update>
+	
+	<delete id="deleteDormMbintgBackupData" parameterType="hashMap">
+		DELETE FROM TB_LA_IS_BK_DORM_MBINTG
+		WHERE MB_INTG_NO = #{MB_INTG_NO}
+	</delete>
+	
+	<delete id="deleteDormMwmnBackupData" parameterType="hashMap">
+		DELETE FROM TB_LA_IS_BK_DORM_MWMN
+		WHERE MB_INTG_NO = #{MB_INTG_NO}
+	</delete>
+	
+	<delete id="deleteDormFhsBackupData" parameterType="hashMap">
+		DELETE FROM TB_LA_IS_BK_DORM_FHS
+		WHERE MB_INTG_NO = #{MB_INTG_NO}
+	</delete>
+</mapper>

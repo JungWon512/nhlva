@@ -1,16 +1,10 @@
 package com.ishift.auction.web;
 
-import java.io.ByteArrayInputStream;
-import java.io.File;
-import java.io.IOException;
-import java.io.InputStream;
 import java.sql.SQLException;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.apache.commons.codec.binary.Base64;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
@@ -22,24 +16,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
-import com.amazonaws.SdkClientException;
-import com.amazonaws.auth.AWSStaticCredentialsProvider;
-import com.amazonaws.auth.BasicAWSCredentials;
-import com.amazonaws.client.builder.AwsClientBuilder;
-import com.amazonaws.services.s3.AmazonS3;
-import com.amazonaws.services.s3.AmazonS3ClientBuilder;
-import com.amazonaws.services.s3.model.AmazonS3Exception;
-import com.amazonaws.services.s3.model.Bucket;
-import com.amazonaws.services.s3.model.CompleteMultipartUploadRequest;
-import com.amazonaws.services.s3.model.CompleteMultipartUploadResult;
-import com.amazonaws.services.s3.model.InitiateMultipartUploadRequest;
-import com.amazonaws.services.s3.model.InitiateMultipartUploadResult;
-import com.amazonaws.services.s3.model.ObjectMetadata;
-import com.amazonaws.services.s3.model.PartETag;
-import com.amazonaws.services.s3.model.PutObjectRequest;
-import com.amazonaws.services.s3.model.UploadPartRequest;
-import com.amazonaws.services.s3.model.UploadPartResult;
-import com.amazonaws.util.IOUtils;
 import com.ishift.auction.service.admin.AdminService;
 import com.ishift.auction.service.auction.AuctionService;
 import com.ishift.auction.util.SessionUtill;
@@ -80,8 +56,6 @@ public class AdminTaskController extends CommonController {
 			map.put("entryType", "B");
 			if(userVo != null) map.put("naBzPlcNo", userVo.getPlace());
 
-			final List<Map<String,Object>> dateList = auctionService.selectAucDateList(map);
-			mav.addObject("dateList", dateList);
 			mav.addObject("johapData", adminService.selectOneJohap(map));
 		}catch (RuntimeException re) {
 			log.error("AdminTaskController.main : {} ",re);
@@ -117,6 +91,26 @@ public class AdminTaskController extends CommonController {
 		return mav;
 	}
 	
+	@RequestMapping(value = "/office/task/menu",method = { RequestMethod.GET, RequestMethod.POST })
+	public ModelAndView menu(@RequestParam final Map<String, Object> params) {
+		final ModelAndView mav = new ModelAndView("admin/task/menu");
+		try {
+			final Map<String,Object> map = new HashMap<>();
+			final AdminUserDetails userVo = (AdminUserDetails)sessionUtill.getUserVo();
+			if(userVo != null) map.put("naBzPlcNo", userVo.getPlace());
+			mav.addObject("johapData", adminService.selectOneJohap(map));
+		}catch (RuntimeException re) {
+			log.error("AdminTaskController.select : {} ",re);
+			return makeMessageResult(mav, params, "/office/task/main", "", "경매 서비스 준비중입니다.", "pageMove('/office/task/main');");
+		} catch (SQLException se) {
+			log.error("AdminTaskController.select : {} ",se);
+			return makeMessageResult(mav, params, "/office/task/main", "", "경매 서비스 준비중입니다.", "pageMove('/office/task/main');");
+		}
+		mav.addObject("params", params);
+		mav.addObject("subheaderTitle", "작업선택");
+		return mav;
+	}
+	
 	/**
 	 * 관리자 > 경매업무 > 중량, 최저가, 계류대 입력
 	 * @param params
@@ -127,7 +121,19 @@ public class AdminTaskController extends CommonController {
 	@RequestMapping(value = "/office/task/entry", method = {RequestMethod.GET, RequestMethod.POST})
 	public ModelAndView entry(@RequestParam final Map<String, Object> params) {
 		final ModelAndView mav = new ModelAndView("admin/task/entry");
-		final Map<String, String> titleMap = new HashMap<String, String>() {{put("LW", "하한가/중량 등록");put("N", "계류대 변경");put("AW", "중량 일괄 등록");put("AL", "하한가 일괄 등록");put("SB", "낙찰결과 조회");put("SCOW", "출장우 리스트");put("SMCOW", "미감정 임신우");}};
+		final Map<String, String> titleMap = new HashMap<String, String>() {
+			{
+					put("LW", "중량/예정가 등록");
+					put("CM", "출장우 관리");
+					put("N", "계류대 변경");
+					put("AW", "중량 일괄 등록");
+					put("AL", "예정가 일괄 등록");
+					put("AWL", "일괄 등록");
+					put("SB", "낙찰결과 조회");
+					put("SCOW", "출장우 리스트");
+					put("SMCOW", "미감정 임신우");
+			}
+		};
 		try {			
 			final AdminUserDetails userVo = (AdminUserDetails)sessionUtill.getUserVo();
 			if(userVo != null) params.put("naBzPlcNo", userVo.getPlace());
@@ -156,6 +162,33 @@ public class AdminTaskController extends CommonController {
 		return mav;
 	}
 	
+	@ResponseBody
+	@PostMapping(value = "/office/task/entryInfo"
+				, consumes = MediaType.APPLICATION_JSON_VALUE
+				, produces = MediaType.APPLICATION_JSON_VALUE)
+	public Map<String, Object> entryInfo(@RequestBody final Map<String, Object> params) {
+		final Map<String, Object> result = new HashMap<String, Object>();
+		try {
+			final AdminUserDetails userVo = (AdminUserDetails)sessionUtill.getUserVo();
+			if(userVo != null) params.put("naBzPlcNo", userVo.getPlace());
+			result.put("johapData", adminService.selectOneJohap(params));
+			
+			if(userVo != null) params.put("naBzplc", userVo.getNaBzplc());
+
+			List<Map<String, Object>> entryList = auctionService.entrySelectList(params);
+			
+			result.put("entryList", entryList);
+		}
+		catch (RuntimeException | SQLException re) {
+			log.error("AdminTaskController.entry_ajax : {} ",re);
+			result.put("success", false);
+			result.put("message", "작업중 오류가 발생했습니다. 관리자에게 문의하세요.");
+			return result;
+		}
+		result.put("params", params);
+		return result;
+	}
+	
 	/**
 	 * 중량, 최저가, 계류대 수정을 위한 출장우 정보
 	 * @param params
@@ -181,10 +214,9 @@ public class AdminTaskController extends CommonController {
 				result.put("success", true);
 				result.put("message", "조회에 성공했습니다.");
 				result.put("cowInfo", cowInfo);
-				params.put("simpTpc", "PPGCOW_FEE_DSC");
-				result.put("ppgcowList", auctionService.selectCodeList(params));
-				params.put("simpTpc", "INDV_SEX_C");
-				result.put("indvList", auctionService.selectCodeList(params));
+				
+				result.put("ppgcowList", this.getCommonCode("PPGCOW_FEE_DSC", "1"));
+				result.put("indvList", this.getCommonCode("INDV_SEX_C", "1"));
 				result.put("vetList", auctionService.selectVetList(params));	// 수의사 리스트
 			}
 		}
@@ -198,6 +230,11 @@ public class AdminTaskController extends CommonController {
 		return result;
 	}
 	
+	private Object getCommonCode(String string, String string2) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
 	/**
 	 * 중량, 최저가, 계류대 정보 저장
 	 * @param params
@@ -215,11 +252,14 @@ public class AdminTaskController extends CommonController {
 			if(userVo != null) params.put("naBzplc", userVo.getNaBzplc());
 			if(params.get("aucDt") != null) params.put("searchDate", params.get("aucDt"));
 			
+			
+			//계류대 번호 변경
 			String regType = (String)params.getOrDefault("regType", "");
 			if("N".equals(regType)) {
 				auctionService.updateCowInfoForModlNo(params);
 			}
 
+			//참가번호 변경
 			String selStsDsc = (String)params.getOrDefault("selStsDsc", "");
 			if("S".equals(regType) && "22".equals(selStsDsc)) {
 				Map<String,Object> temp = new HashMap<>();
@@ -234,6 +274,7 @@ public class AdminTaskController extends CommonController {
 				params.put("trmnAmnno", mwmn.get("TRMN_AMNNO"));
 			}
 			
+			//정보 변경
 			final int cnt = auctionService.updateCowInfo(params);
 			if (cnt > 0) {
 				result.put("success", true);
@@ -256,49 +297,209 @@ public class AdminTaskController extends CommonController {
 		return result;
 	}
 	
-	@RequestMapping(value = "/office/task/uploadImage", method = {RequestMethod.GET, RequestMethod.POST})
-	public ModelAndView uploadImage(@RequestParam final Map<String, Object> params) {
+	/**
+	 * 관리자 > 출장우 조회
+	 * @param params
+	 * @return
+	 */
+	@RequestMapping(value = "/office/task/cowList", method = {RequestMethod.GET, RequestMethod.POST})
+	public ModelAndView cowList(@RequestParam final Map<String, Object> params) {
+		final ModelAndView mav = new ModelAndView("admin/task/cowList");
+		try {			
+			if(params.get("aucDt") != null) params.put("searchDate", params.get("aucDt"));
+			if(params.get("aucObjDsc") != null) params.put("searchAucObjDsc", params.get("aucObjDsc"));
+			
+			mav.addObject("entryList", auctionService.entrySelectList(params));
+		}
+		catch (RuntimeException re) {
+			log.error("AdminTaskController.entry : {} ",re);
+			return makeMessageResult(mav, params, "/office/task/main", "", "작업중 오류가 발생했습니다. 관리자에게 문의하세요.", "pageMove('/office/task/main');");
+		}
+		catch (SQLException se) {
+			log.error("AdminTaskController.entry : {} ",se);
+			return makeMessageResult(mav, params, "/office/task/main", "", "작업중 오류가 발생했습니다. 관리자에게 문의하세요.", "pageMove('/office/task/main');");
+		}
+		mav.addObject("params", params);
+		mav.addObject("subheaderTitle", "출장우 조회");
+		return mav;
+	}
+
+	/* ---------------------------------------------------------- 출장우 간편 등록 [s] ---------------------------------------------------------- */
+	
+	/**
+	 * 관리자 > 출장우 조회 > 개체 조회
+	 * @param params
+	 * @return
+	 * @throws SQLException
+	 */
+	@PostMapping(value = "/office/task/searchIndv")
+	public ModelAndView searchIndv(@RequestParam final Map<String, Object> params) throws SQLException {
+		final ModelAndView mav = new ModelAndView("admin/task/searchIndv");
+		mav.addObject("aucObjDscList", this.getCommonCode("AUC_OBJ_DSC", "1"));
+		mav.addObject("params", params);
+		mav.addObject("subheaderTitle", "개체 조회");
+		return mav;
+	}
+	
+	/**
+	 * 관리자 > 출장우 조회 > 개체 조회 > 개체 정보 조회(mca i/f)
+	 * @param params
+	 * @return
+	 */
+	@ResponseBody
+	@PostMapping(value = "/office/task/searchIndvAjax")
+	public Map<String, Object> searchIndvAjax(@RequestBody final Map<String, Object> params) {
+		Map<String, Object> result = new HashMap<String, Object>();
+		try {
+		}
+		catch (Exception e) {
+			e.printStackTrace();
+			result.put("success", false);
+			result.put("message", "개체 정보 조회중 오류가 발생했습니다.<br/>관리자에게 문의하세요.");
+			return result;
+		}
+		return result;
+	}
+	
+	/**
+	 * 관리자 > 출장우 조회 > 개체 조회 > 경매 차수 등록여부 확인
+	 * @param params
+	 * @return
+	 * @throws SQLException
+	 */
+	@ResponseBody
+	@PostMapping(value = "/office/task/checkAucDt")
+	public Map<String, Object> checkAucDt(@RequestBody final Map<String, Object> params) throws SQLException {
+		Map<String, Object> result = new HashMap<String, Object>();
+		try {
+		}
+		catch (Exception e) {
+			e.printStackTrace();
+			result.put("success", false);
+			result.put("message", "경매차수 조회중 오류가 발생했습니다.<br/>관리자에게 문의하세요.");
+			return result;
+		}
+		return result;
+	}
+	
+	/**
+	 * 관리자 > 출장우 조회 > 출장우 간편 등록
+	 * @param params
+	 * @return
+	 * @throws SQLException 
+	 */
+	@PostMapping(value = "/office/task/registCow")
+	public ModelAndView registCow(@RequestParam final Map<String, Object> params) throws SQLException {
+		final ModelAndView mav = new ModelAndView("admin/task/registCow");
+		
+		mav.addObject("aucObjDscList", this.getCommonCode("AUC_OBJ_DSC", "1"));				// 경매대상 구분코드
+		mav.addObject("indvSexCList", this.getCommonCode("INDV_SEX_C", ""));				// 개체성별 코드
+		mav.addObject("rgDscList", this.getCommonCode("SRA_INDV_BRDSRA_RG_DSC", ""));		// 등록구분 코드
+		mav.addObject("ppgcowFeeDscList", this.getCommonCode("PPGCOW_FEE_DSC", ""));		// 번식우수수료 구분코드
+		mav.addObject("params", params);
+		mav.addObject("subheaderTitle", "출장우 간편 등록");
+		return mav;
+	}
+	
+	/**
+	 * 관리자 > 출장우 조회 > 출장우 간편 등록 > 출장우 정보 저장
+	 * @param params
+	 * @return
+	 * @throws SQLException 
+	 */
+	@ResponseBody
+	@PostMapping(value = "/office/task/registCowAjax")
+	public Map<String, Object> registCowAjax(@RequestBody final Map<String, Object> params) {
+		Map<String, Object> result = new HashMap<String, Object>();
+		try {
+		}
+		catch (Exception e) {
+			e.printStackTrace();
+			result.put("success", false);
+			result.put("message", "저장중 오류가 발생했습니다.<br/>관리자에게 문의하세요.");
+			return result;
+		}
+		return result;
+	}
+	
+	/* ---------------------------------------------------------- 출장우 간편 등록 [e] ---------------------------------------------------------- */
+	
+	/* ---------------------------------------------------------- 경매내역 변경 [s] ---------------------------------------------------------- */
+	
+	/**
+	 * 관리자 > 출장우 조회 > 출장우 간편 등록 > 경매내역 변경을 위한 출장우/출장우 로그 조회
+	 * @param params
+	 * @return
+	 * @throws SQLException 
+	 */
+	@ResponseBody
+	@PostMapping(value = "/office/task/searchSogCowAjax")
+	public Map<String, Object> searchSogCowAjax(@RequestBody final Map<String, Object> params) {
+		Map<String, Object> result = new HashMap<String, Object>();
+		try {
+		}
+		catch (Exception e) {
+			e.printStackTrace();
+			result.put("success", false);
+			result.put("message", "저장중 오류가 발생했습니다.<br/>관리자에게 문의하세요.");
+			return result;
+		}
+		return result;
+	}
+	
+	/**
+	 * 관리자 > 출장우 조회 > 출장우 간편 등록 > 변경된 경매내역 저장
+	 * @param params
+	 * @return
+	 * @throws SQLException 
+	 */
+	@ResponseBody
+	@PostMapping(value = "/office/task/updateResultAjax")
+	public Map<String, Object> updateResultAjax(@RequestBody final Map<String, Object> params) {
+		Map<String, Object> result = new HashMap<String, Object>();
+		try {
+		}
+		catch (Exception e) {
+			e.printStackTrace();
+			result.put("success", false);
+			result.put("message", "저장중 오류가 발생했습니다.<br/>관리자에게 문의하세요.");
+			return result;
+		}
+		return result;
+	}
+	
+	
+	/* ---------------------------------------------------------- 경매내역 변경 [e] ---------------------------------------------------------- */
+	
+	/* ---------------------------------------------------------- 출장우 이미지 업로드 [s] ---------------------------------------------------------- */
+	/**
+	 * 관리자 > 경매업무 > 출장우 간편 등록 페이지
+	 * @param params
+	 * @return
+	 * @throws SQLException 
+	 */
+	@PostMapping(value = "/office/task/uploadImage")
+	public ModelAndView uploadImage(@RequestParam final Map<String, Object> params) throws SQLException {
 		final ModelAndView mav = new ModelAndView("admin/task/uploadImage");
+		mav.addObject("params", params);
+		mav.addObject("subheaderTitle", "이미지 등록");
 		return mav;
 	}
 	
 	@ResponseBody
-	@RequestMapping(value = "/office/task/uploadImageAjax", method = {RequestMethod.GET, RequestMethod.POST})
-	public Map<String, Object> uploadImageAjax(@RequestBody final Map<String, Object> params) throws IOException {
-		final Map<String, Object> result = new HashMap<String, Object>();
-		final String endPoint = "https://kr.object.ncloudstorage.com";
-		final String regionName = "kr-standard";
-		final String accessKey = "loqHvgq2A4WGx0D7feer";
-		final String secretKey = "yrmIJmsF37g1BExQXk5CIhrMn1EG1h32qJyaTvzF";
-
-//		// S3 client
-		final AmazonS3 s3 = AmazonS3ClientBuilder.standard()
-												 .withEndpointConfiguration(new AwsClientBuilder.EndpointConfiguration(endPoint, regionName))
-												 .withCredentials(new AWSStaticCredentialsProvider(new BasicAWSCredentials(accessKey, secretKey)))
-												 .build();
-
-		String bucketName = "test-tt12";
-		String folderName = "sample-folder2/";
-		
-		String imgUplad = params.getOrDefault("imgUpload", ",").toString();
-		String[] base64Arr = imgUplad.split(",");
-		byte[] imgByte = Base64.decodeBase64(base64Arr[1]);
-		InputStream bis = new ByteArrayInputStream(imgByte);
-		
-		ObjectMetadata imageObjectMetadata = new ObjectMetadata();
-		imageObjectMetadata.setContentLength(imgByte.length);
-		imageObjectMetadata.setContentType(MediaType.IMAGE_PNG_VALUE);
-		PutObjectRequest imgputObjectRequest = new PutObjectRequest(bucketName, folderName + "test.png", bis, imageObjectMetadata);
-
+	@PostMapping(value = "/office/task/uploadImageAjax")
+	public Map<String, Object> uploadImageAjax(@RequestBody final Map<String, Object> params) {
+		Map<String, Object> result = new HashMap<String, Object>();
 		try {
-			s3.putObject(imgputObjectRequest);
-		} catch (AmazonS3Exception e) {
-			e.printStackTrace();
-		} catch(SdkClientException e) {
-			e.printStackTrace();
 		}
-
+		catch (Exception e) {
+			e.printStackTrace();
+			result.put("success", false);
+			result.put("message", "저장중 오류가 발생했습니다.<br/>관리자에게 문의하세요.");
+			return result;
+		}
 		return result;
 	}
-	
+	/* ---------------------------------------------------------- 출장우 이미지 업로드 [e] ---------------------------------------------------------- */
+
 }

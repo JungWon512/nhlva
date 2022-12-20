@@ -107,6 +107,8 @@ public class JwtFarmAuthenticationFilter extends OncePerRequestFilter {
 			|| uri.startsWith("/office")
 			|| uri.startsWith("/api")
 			|| uri.startsWith("/batch")
-			|| uri.startsWith("/daemon/api");
+			|| uri.startsWith("/daemon/api")
+			|| uri.startsWith("/kiosk/api")
+			;
 	}
 }

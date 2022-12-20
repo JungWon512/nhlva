@@ -1,0 +1,240 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="KioskApiMapper">
+
+	<select id="selectMwmnInfo" parameterType="hashMap" resultType="hashMap">
+		SELECT A.NA_BZPLC
+			 , A.TRMN_AMNNO
+			 , A.MWMN_NA_TRPL_C
+			 , NVL(B.SRA_MWMNNM, A.SRA_MWMNNM) AS SRA_MWMNNM
+			 , A.FRLNO
+			 , A.ZIP
+			 , A.DONGUP
+			 , A.DONGBW
+			 , NVL(B.OHSE_TELNO, A.OHSE_TELNO) AS OHSE_TELNO
+			 , NVL(B.CUS_MPNO, A.CUS_MPNO) AS CUS_MPNO
+			 , A.MACO_YN
+			 , A.JRDWO_DSC
+			 , A.PSN_INF_OFR_AGR_YN
+			 , A.TMS_YN
+			 , A.DEL_YN
+			 , A.RMK_CNTN
+			 , NVL(B.CUS_RLNO, A.CUS_RLNO) AS CUS_RLNO
+			 , A.LSCHG_DTM
+			 , A.LS_CMENO
+			 , A.FSRG_DTM
+			 , A.FSRGMN_ENO
+			 , NVL(A.MB_INTG_NO, '') AS MB_INTG_NO
+			 , NVL((SELECT DORMACC_YN FROM TB_LA_IS_MM_MBINTG C WHERE C.MB_INTG_NO = A.MB_INTG_NO), '0') AS DORMACC_YN
+		  FROM TB_LA_IS_MM_MWMN A
+		  LEFT OUTER JOIN TB_LA_IS_BK_DORM_MWMN B
+			ON (
+				A.NA_BZPLC = B.NA_BZPLC
+				AND
+				A.TRMN_AMNNO = B.TRMN_AMNNO
+			 )
+		 WHERE A.NA_BZPLC = #{naBzplc}
+		   AND A.DEL_YN = '0'
+		   AND (
+					(
+						REPLACE(TRIM(A.SRA_MWMNNM),' ','') = REPLACE(TRIM(#{sraMwmnnm}),' ','')
+						AND
+						REPLACE(TRIM(A.CUS_RLNO),' ','') = REPLACE(TRIM(#{cusRlno}),' ','')
+						AND
+						REGEXP_REPLACE(A.CUS_MPNO, '[^0-9]') = REGEXP_REPLACE(#{cusMpno}, '[^0-9]')
+					)
+					OR
+					(
+						REPLACE(TRIM(NVL(B.SRA_MWMNNM, '')),' ','') = REPLACE(TRIM(#{sraMwmnnm}),' ','')
+						AND
+						REPLACE(TRIM(NVL(B.CUS_RLNO, '')),' ','') = REPLACE(TRIM(#{cusRlno}),' ','')
+						AND
+						REGEXP_REPLACE(B.CUS_MPNO, '[^0-9]') = REGEXP_REPLACE(#{cusMpno}, '[^0-9]')
+					)
+			 )
+	</select>
+
+	<!-- 출장우 정보 리스트 -->
+	<select id="selectSogCowList" parameterType="hashMap" resultType="hashMap">
+		SELECT A.NA_BZPLC
+			 , A.AUC_PRG_SQ
+			 , A.FHS_ID_NO
+			 , A.FARM_AMNNO
+			 , B.DONGUP
+			 , B.DONGBW
+			 , B.FTSNM
+			 , A.AUC_OBJ_DSC
+			 , G.SIMP_CNM AS AUC_OBJ_DSCNM
+			 , A.SRA_INDV_AMNNO
+			 , F.SIMP_CNM AS INDV_SEX_C_NM
+			 , TO_CHAR(TO_DATE(C.BIRTH,'YYYYMMDD'),'YYYY-MM-DD') BIRTH_STR
+			 , CASE WHEN TRUNC(MONTHS_BETWEEN(A.AUC_DT, C.BIRTH)) +1 <![CDATA[<=]]> 4 AND A.NA_BZPLC NOT IN ('8808990656199', '8808990656434') THEN 4
+					ELSE TRUNC(MONTHS_BETWEEN(A.AUC_DT, C.BIRTH)) +1
+				END AS MTCN
+			 , A.PRNY_JUG_YN
+			 , A.PRNY_YN
+			 , A.NCSS_JUG_YN
+			 , A.NCSS_YN
+			 , A.RMHN_YN
+			 , REGEXP_REPLACE(C.KPN_NO, '[^0-9]') AS KPN_NO
+			 , C.MATIME
+			 , C.SRA_INDV_PASG_QCN
+			 , NVL(A.COW_SOG_WT, 0) AS COW_SOG_WT
+			 , A.RMK_CNTN
+			 , C.RG_DSC
+			 , D.SIMP_CNM AS RG_DSCNM
+			 , C.MCOW_DSC
+			 , E.SIMP_CNM AS MCOW_DSCNM
+			 , C.MCOW_SRA_INDV_AMNNO
+		  FROM TB_LA_IS_MH_SOG_COW A
+		  LEFT OUTER JOIN TB_LA_IS_MM_FHS B
+			ON (
+				A.NA_BZPLC = B.NA_BZPLC
+				AND A.FHS_ID_NO  = B.FHS_ID_NO
+				AND A.FARM_AMNNO  = B.FARM_AMNNO
+			 )
+		  LEFT OUTER JOIN TB_LA_IS_MM_INDV C
+			ON (
+				A.NA_BZPLC = C.NA_BZPLC
+				AND A.SRA_INDV_AMNNO = C.SRA_INDV_AMNNO
+				AND A.SRA_SRS_DSC  = C.SRA_SRS_DSC
+			 )
+		  LEFT OUTER JOIN (
+							SELECT SIMP_C, SIMP_CNM
+							  FROM TB_LA_IS_MH_COMN_APL
+							 WHERE SIMP_TPC = 'SRA_INDV_BRDSRA_RG_DSC'
+			 ) D
+			ON C.RG_DSC = D.SIMP_C 
+		  LEFT OUTER JOIN (
+							SELECT SIMP_C, SIMP_CNM
+							  FROM TB_LA_IS_MH_COMN_APL
+							 WHERE SIMP_TPC = 'SRA_INDV_BRDSRA_RG_DSC'
+			 ) E
+			ON C.MCOW_DSC = E.SIMP_C
+		  LEFT OUTER JOIN (
+							SELECT SIMP_C, SIMP_CNM
+							  FROM TB_LA_IS_MH_COMN_APL
+							 WHERE SIMP_TPC = 'INDV_SEX_C'
+			 ) F
+			ON C.INDV_SEX_C = F.SIMP_C
+		  LEFT OUTER JOIN (
+							SELECT SIMP_C, SIMP_CNM
+							  FROM TB_LA_IS_MH_COMN_APL
+							 WHERE SIMP_TPC = 'AUC_OBJ_DSC'
+							   AND SIMP_C_GRP_SQNO = '1'
+			 ) G
+			ON A.AUC_OBJ_DSC = G.SIMP_C
+		  LEFT OUTER JOIN TB_LA_IS_MM_ENV_EST J
+			ON ( A.NA_BZPLC = J.NA_BZPLC )
+		 WHERE A.NA_BZPLC = #{naBzplc}
+		   AND A.AUC_DT  = #{aucDt}
+		   AND A.AUC_OBJ_DSC = CASE WHEN #{aucObjDsc} = '0' THEN A.AUC_OBJ_DSC ELSE #{aucObjDsc} END
+		   AND A.DEL_YN = '0'
+		<if test="selStsDsc != null and selStsDsc != ''">
+		   AND A.SEL_STS_DSC = #{selStsDsc}
+		</if>
+		<choose>
+		<when test='indvSexC != null and "1".equals(indvSexC)'>
+		   AND C.INDV_SEX_C IN ('1', '4', '6')
+		</when>
+		<otherwise>
+		   AND C.INDV_SEX_C NOT IN ('1', '4', '6')
+		</otherwise>
+		</choose>
+		 ORDER BY AUC_PRG_SQ
+	</select>
+
+	<!-- 키오스크 인증번호로 중도매인정보 조회 -->
+	<select id="selectAuthNoInfo" parameterType="hashMap" resultType="hashMap">
+		SELECT NA_BZPLC
+			 , TRMN_AMNNO
+			 , MWMN_NA_TRPL_C
+			 , SRA_MWMNNM
+			 , FRLNO
+			 , ZIP
+			 , DONGUP
+			 , DONGBW
+			 , OHSE_TELNO
+			 , CUS_MPNO
+			 , MACO_YN
+			 , JRDWO_DSC
+			 , PSN_INF_OFR_AGR_YN
+			 , TMS_YN
+			 , DEL_YN
+			 , RMK_CNTN
+			 , CUS_RLNO
+			 , FSRG_DTM
+			 , FSRGMN_ENO
+			 , LSCHG_DTM
+			 , LS_CMENO
+			 , SMS_NO
+			 , SMS_YMD
+			 , MB_INTG_NO
+			 , AUTH_NO
+			 , AUTH_YMD
+		  FROM TB_LA_IS_MM_MWMN
+		 WHERE NA_BZPLC = #{naBzplc}
+		   AND AUTH_NO = #{authNo}
+		   AND AUTH_YMD <![CDATA[>=]]> TO_CHAR(SYSDATE, 'YYYYMMDDHH24MISS')
+	</select>
+	
+	<select id="selectEntryList" parameterType="hashMap" resultType="hashMap">
+		SELECT NA_BZPLC
+			 , AUC_DT
+			 , AUC_OBJ_DSC
+			 , LVST_AUC_PTC_MN_NO
+			 , TRMN_AMNNO
+			 , TR_DFN_YN
+			 , AUC_ENTR_GRN_AM
+			 , RTRN_YN
+			 , TMS_YN
+			 , DEL_YN
+			 , FSRG_DTM
+			 , FSRGMN_ENO
+			 , LSCHG_DTM
+			 , LS_CMENO
+			 , ATTC_NO
+		  FROM TB_LA_IS_MH_AUC_ENTR
+		 WHERE NA_BZPLC = #{naBzplc}
+		   AND AUC_DT = TO_CHAR(SYSDATE, 'YYYYMMDD')
+		   AND TRMN_AMNNO = #{trmnAmnno}
+		   AND DEL_YN = '0'
+	</select>
+	
+	<insert id="insertEntryInfo" parameterType="hashMap">
+		<selectKey keyColumn="lvstAucPtcMnNo" keyProperty="lvstAucPtcMnNo" resultType="String" order="BEFORE">
+			SELECT NVL(MAX(LVST_AUC_PTC_MN_NO)+1, 1000)
+			  FROM TB_LA_IS_MH_AUC_ENTR
+			 WHERE NA_BZPLC = #{naBzplc}
+			   AND AUC_DT = TO_CHAR(SYSDATE, 'YYYYMMDD')
+			   AND FSRGMN_ENO = 'KIOSK'
+		</selectKey>
+		INSERT INTO TB_LA_IS_MH_AUC_ENTR
+		SELECT A.NA_BZPLC
+			 , A.AUC_DT
+			 , A.AUC_OBJ_DSC
+			 , #{lvstAucPtcMnNo}
+			 , #{trmnAmnno}
+			 , '0'
+			 , 0
+			 , '0'
+			 , '0'
+			 , '0'
+			 , SYSDATE
+			 , 'KIOSK'
+			 , SYSDATE
+			 , 'KIOSK'
+			 , NULL
+		  FROM TB_LA_IS_MH_AUC_QCN A
+		 WHERE A.NA_BZPLC = #{naBzplc}
+		   AND A.AUC_DT = TO_CHAR(SYSDATE, 'YYYYMMDD')
+		   AND A.DEL_YN = '0'
+		   AND NOT EXISTS ( 
+							SELECT 1
+							  FROM TB_LA_IS_MH_AUC_ENTR B
+							 WHERE B.NA_BZPLC = A.NA_BZPLC
+							   AND B.AUC_OBJ_DSC = A.AUC_OBJ_DSC
+							   AND B.AUC_DT = A.AUC_DT
+							   AND B.TRMN_AMNNO = #{trmnAmnno})
+	</insert>
+</mapper>

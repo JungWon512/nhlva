@@ -133,6 +133,12 @@ public class JwtTokenUtil {
 					, 59);
 			date = calendar.getTime();
 		}
+		else {
+			Calendar calendar = Calendar.getInstance();
+			calendar.add(Calendar.MINUTE, 3);
+			date = calendar.getTime();
+		}
+		log.debug("{} expire {} ", tokenType, date);
 		return date;
 	}
 	
@@ -235,14 +241,16 @@ public class JwtTokenUtil {
 		}
 		else {
 			return JwtTokenVo.builder()
-					.auctionHouseCode(this.getValue(token, Constants.JwtConstants.JWT_CLAIM_AUCTION_HOUSE_CODE))
-					.userMemNum(this.getValue(token, Constants.JwtConstants.JWT_CLAIM_USER_MEM_NUM))
-					.userRole(this.getValue(token, Constants.JwtConstants.JWT_CLAIM_USER_ROLE))
-					.build();
+							.auctionHouseCode(this.getValue(token, Constants.JwtConstants.JWT_CLAIM_AUCTION_HOUSE_CODE))
+							.userMemNum(this.getValue(token, Constants.JwtConstants.JWT_CLAIM_USER_MEM_NUM))
+							.userRole(this.getValue(token, Constants.JwtConstants.JWT_CLAIM_USER_ROLE))
+							.mbIntgNo(this.getValue(token, Constants.JwtConstants.JWT_CLAIM_MB_INTG_NO))
+							.build();
 		}
 	}
 	
 	public String generateToken(AdminJwtTokenVo jwtTokenVo, String tokenType) {
+		// TODO Auto-generated method stub
 		Date now = new Date();
 		JwtBuilder builder = Jwts.builder()
 								.setHeader(createHeader())

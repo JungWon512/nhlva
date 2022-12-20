@@ -86,7 +86,7 @@ public class JwtAdminAuthenticationFilter extends OncePerRequestFilter {
 		String uri = request.getRequestURI();
 		return uri.startsWith("/static/")
 			|| uri.startsWith("/office/user")
-			|| !(uri.startsWith("/office") || uri.startsWith("/api"))
+			|| !(uri.startsWith("/office") || uri.startsWith("/api") || uri.startsWith("/daemon/api") || uri.startsWith("/kiosk/api"))
 			|| uri.endsWith("/login");
 	}
 }
