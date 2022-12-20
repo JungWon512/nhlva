@@ -1,10 +1,16 @@
 package com.ishift.auction.web;
 
+import java.io.ByteArrayInputStream;
+import java.io.File;
+import java.io.IOException;
+import java.io.InputStream;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.commons.codec.binary.Base64;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
@@ -16,6 +22,24 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
+import com.amazonaws.SdkClientException;
+import com.amazonaws.auth.AWSStaticCredentialsProvider;
+import com.amazonaws.auth.BasicAWSCredentials;
+import com.amazonaws.client.builder.AwsClientBuilder;
+import com.amazonaws.services.s3.AmazonS3;
+import com.amazonaws.services.s3.AmazonS3ClientBuilder;
+import com.amazonaws.services.s3.model.AmazonS3Exception;
+import com.amazonaws.services.s3.model.Bucket;
+import com.amazonaws.services.s3.model.CompleteMultipartUploadRequest;
+import com.amazonaws.services.s3.model.CompleteMultipartUploadResult;
+import com.amazonaws.services.s3.model.InitiateMultipartUploadRequest;
+import com.amazonaws.services.s3.model.InitiateMultipartUploadResult;
+import com.amazonaws.services.s3.model.ObjectMetadata;
+import com.amazonaws.services.s3.model.PartETag;
+import com.amazonaws.services.s3.model.PutObjectRequest;
+import com.amazonaws.services.s3.model.UploadPartRequest;
+import com.amazonaws.services.s3.model.UploadPartResult;
+import com.amazonaws.util.IOUtils;
 import com.ishift.auction.service.admin.AdminService;
 import com.ishift.auction.service.auction.AuctionService;
 import com.ishift.auction.util.SessionUtill;
@@ -236,6 +260,45 @@ public class AdminTaskController extends CommonController {
 	public ModelAndView uploadImage(@RequestParam final Map<String, Object> params) {
 		final ModelAndView mav = new ModelAndView("admin/task/uploadImage");
 		return mav;
+	}
+	
+	@ResponseBody
+	@RequestMapping(value = "/office/task/uploadImageAjax", method = {RequestMethod.GET, RequestMethod.POST})
+	public Map<String, Object> uploadImageAjax(@RequestBody final Map<String, Object> params) throws IOException {
+		final Map<String, Object> result = new HashMap<String, Object>();
+		final String endPoint = "https://kr.object.ncloudstorage.com";
+		final String regionName = "kr-standard";
+		final String accessKey = "loqHvgq2A4WGx0D7feer";
+		final String secretKey = "yrmIJmsF37g1BExQXk5CIhrMn1EG1h32qJyaTvzF";
+
+//		// S3 client
+		final AmazonS3 s3 = AmazonS3ClientBuilder.standard()
+												 .withEndpointConfiguration(new AwsClientBuilder.EndpointConfiguration(endPoint, regionName))
+												 .withCredentials(new AWSStaticCredentialsProvider(new BasicAWSCredentials(accessKey, secretKey)))
+												 .build();
+
+		String bucketName = "test-tt12";
+		String folderName = "sample-folder2/";
+		
+		String imgUplad = params.getOrDefault("imgUpload", ",").toString();
+		String[] base64Arr = imgUplad.split(",");
+		byte[] imgByte = Base64.decodeBase64(base64Arr[1]);
+		InputStream bis = new ByteArrayInputStream(imgByte);
+		
+		ObjectMetadata imageObjectMetadata = new ObjectMetadata();
+		imageObjectMetadata.setContentLength(imgByte.length);
+		imageObjectMetadata.setContentType(MediaType.IMAGE_PNG_VALUE);
+		PutObjectRequest imgputObjectRequest = new PutObjectRequest(bucketName, folderName + "test.png", bis, imageObjectMetadata);
+
+		try {
+			s3.putObject(imgputObjectRequest);
+		} catch (AmazonS3Exception e) {
+			e.printStackTrace();
+		} catch(SdkClientException e) {
+			e.printStackTrace();
+		}
+
+		return result;
 	}
 	
 }
