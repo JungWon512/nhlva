@@ -1,13 +1,20 @@
 package com.ishift.auction.web;
 
+import java.io.ByteArrayInputStream;
+import java.io.InputStream;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.UUID;
 
+import org.apache.commons.codec.binary.Base64;
+import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
+import org.springframework.util.ObjectUtils;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -16,6 +23,18 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
+import com.amazonaws.SdkClientException;
+import com.amazonaws.auth.AWSStaticCredentialsProvider;
+import com.amazonaws.auth.BasicAWSCredentials;
+import com.amazonaws.client.builder.AwsClientBuilder;
+import com.amazonaws.services.s3.AmazonS3;
+import com.amazonaws.services.s3.AmazonS3ClientBuilder;
+import com.amazonaws.services.s3.model.AccessControlList;
+import com.amazonaws.services.s3.model.AmazonS3Exception;
+import com.amazonaws.services.s3.model.GroupGrantee;
+import com.amazonaws.services.s3.model.ObjectMetadata;
+import com.amazonaws.services.s3.model.Permission;
+import com.amazonaws.services.s3.model.PutObjectRequest;
 import com.ishift.auction.service.admin.AdminService;
 import com.ishift.auction.service.auction.AuctionService;
 import com.ishift.auction.util.SessionUtill;
@@ -29,6 +48,7 @@ import lombok.extern.slf4j.Slf4j;
  */
 @Slf4j
 @Controller
+@SuppressWarnings("unchecked")
 public class AdminTaskController extends CommonController {
 	
 	@Autowired
@@ -478,7 +498,7 @@ public class AdminTaskController extends CommonController {
 	 * @return
 	 * @throws SQLException 
 	 */
-	@PostMapping(value = "/office/task/uploadImage")
+	@RequestMapping(value = "/office/task/uploadImage", method = {RequestMethod.GET, RequestMethod.POST})
 	public ModelAndView uploadImage(@RequestParam final Map<String, Object> params) throws SQLException {
 		final ModelAndView mav = new ModelAndView("admin/task/uploadImage");
 		mav.addObject("params", params);
@@ -487,16 +507,54 @@ public class AdminTaskController extends CommonController {
 	}
 	
 	@ResponseBody
-	@PostMapping(value = "/office/task/uploadImageAjax")
+	@RequestMapping(value = "/office/task/uploadImageAjax", method = {RequestMethod.POST})
 	public Map<String, Object> uploadImageAjax(@RequestBody final Map<String, Object> params) {
-		Map<String, Object> result = new HashMap<String, Object>();
-		try {
-		}
-		catch (Exception e) {
-			e.printStackTrace();
-			result.put("success", false);
-			result.put("message", "저장중 오류가 발생했습니다.<br/>관리자에게 문의하세요.");
-			return result;
+		final Map<String, Object> result = new HashMap<String, Object>();
+		final String endPoint = "https://kr.object.ncloudstorage.com";
+		final String regionName = "kr-standard";
+		final String accessKey = "loqHvgq2A4WGx0D7feer";
+		final String secretKey = "yrmIJmsF37g1BExQXk5CIhrMn1EG1h32qJyaTvzF";
+
+		// S3 client
+		final AmazonS3 s3 = AmazonS3ClientBuilder.standard()
+												 .withEndpointConfiguration(new AwsClientBuilder.EndpointConfiguration(endPoint, regionName))
+												 .withCredentials(new AWSStaticCredentialsProvider(new BasicAWSCredentials(accessKey, secretKey)))
+												 .build();
+		
+		AccessControlList accessControlList = new AccessControlList();
+		accessControlList.grantPermission(GroupGrantee.AllUsers, Permission.Read);
+
+		String bucketName = "test-tt12";
+		String folderName = "sample-folder2/";
+		
+		List<Map<String, Object>> files = (List<Map<String, Object>>)params.get("files");
+		System.out.println(files);
+		
+		if (!ObjectUtils.isEmpty(files)) {
+			for (Map<String, Object> file : files) {
+				if (ObjectUtils.isEmpty(file.get("origin"))) continue;
+					
+				String filename = UUID.randomUUID().toString();
+				
+				String origin = file.getOrDefault("origin", ",").toString();
+				String[] base64Arr = origin.split(",");
+				byte[] imgByte = Base64.decodeBase64(base64Arr[1]);
+				InputStream bis = new ByteArrayInputStream(imgByte);
+				
+				ObjectMetadata imageObjectMetadata = new ObjectMetadata();
+				imageObjectMetadata.setContentLength(imgByte.length);
+				imageObjectMetadata.setContentType(MediaType.IMAGE_PNG_VALUE);
+				PutObjectRequest imgputObjectRequest = new PutObjectRequest(bucketName, folderName + filename + ".png", bis, imageObjectMetadata);
+		
+				try {
+					imgputObjectRequest.setAccessControlList(accessControlList);
+					s3.putObject(imgputObjectRequest);
+				} catch (AmazonS3Exception e) {
+					e.printStackTrace();
+				} catch(SdkClientException e) {
+					e.printStackTrace();
+				}
+			}
 		}
 		return result;
 	}

@@ -103,10 +103,7 @@
 				</ul>
 			</div>
 			<div class="info_area">
-				<ul class="num_scr">
-					<li><input type="text" name="file_url" value="http://www.nhlva.co.kr/static/images/guide/pc_banner.jpg" /></li>
-					<li><input type="text" name="file_url" value="http://www.nhlva.co.kr/static/images/guide/new_mo_banner.jpg" /></li>
-				</ul>
+				<ul class="num_scr"></ul>
 			</div>
 			<input type="file" id="file-input" name="file-input" accept=".jpg, .png, .gif" multiple="multiple" max="5"/>
 			
