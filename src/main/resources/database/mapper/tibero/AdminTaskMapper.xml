@@ -670,4 +670,73 @@
 		 WHERE NA_BZPLC = #{naBzplc}
 		   AND AUC_DT = #{aucDt}
 	</insert>
+	
+	<!-- 출장우 이미지 정보 저장 -->
+	<insert id="insertCowImg" parameterType="hashMap">
+		INSERT INTO TB_LA_IS_MM_COW_IMG (
+			NA_BZPLC
+			, AUC_OBJ_DSC
+			, AUC_DT
+			, OSLP_NO
+			, LED_SQNO
+			, SRA_INDV_AMNNO
+			, IMG_SQNO
+			, FILE_PATH
+			, FILE_NM
+			, FILE_EXT_NM
+			, FSRG_DTM
+			, FSRGMN_ENO
+			, LSCHG_DTM
+			, LS_CMENO
+		) VALUES (
+			#{naBzplc}
+			, #{aucObjDsc}
+			, #{aucDt}
+			, #{oslpNo}
+			, #{ledSqno}
+			, #{sraIndvAmnno}
+			, #{imgSqno}
+			, #{filePath}
+			, #{fileNm}
+			, #{fileExtNm}
+			 , SYSDATE
+			 , #{lsCmeno}
+			 , SYSDATE
+			 , #{lsCmeno}
+		)
+	</insert>
+	
+	<!-- 출장우 이미지 조회 -->
+	<select id="selectCowImg" parameterType="hashMap" resultType="hashMap">
+		SELECT NA_BZPLC
+			 , AUC_OBJ_DSC
+			 , AUC_DT
+			 , OSLP_NO
+			 , LED_SQNO
+			 , SRA_INDV_AMNNO
+			 , IMG_SQNO
+			 , FILE_PATH
+			 , FILE_NM
+			 , FILE_EXT_NM
+			 , 'https://kr.object.ncloudstorage.com/test-tt12/'||FILE_PATH||FILE_NM||FILE_EXT_NM AS FILE_URL
+			 , 'https://kr.object.ncloudstorage.com/test-tt12/'||FILE_PATH||'thumb/'||FILE_NM||FILE_EXT_NM AS THUMB_FILE_URL
+			 , FSRG_DTM
+			 , FSRGMN_ENO
+			 , LSCHG_DTM
+			 , LS_CMENO
+		  FROM TB_LA_IS_MM_COW_IMG
+		 WHERE NA_BZPLC = #{na_bzplc}
+		   AND AUC_OBJ_DSC = #{auc_obj_dsc}
+		   AND AUC_DT = #{auc_dt}
+		   AND SRA_INDV_AMNNO = #{sra_indv_amnno}
+		 ORDER BY IMG_SQNO ASC
+	</select>
+	
+	<!-- 출장우 이미지 삭제 -->
+	<delete id="deleteCowImg" parameterType="hashMap">
+		DELETE TB_LA_IS_MM_COW_IMG
+		 WHERE NA_BZPLC = #{naBzplc}
+		   AND AUC_DT = #{aucDt}
+		   AND SRA_INDV_AMNNO = #{sraIndvAmnno}
+	</delete>
 </mapper>
