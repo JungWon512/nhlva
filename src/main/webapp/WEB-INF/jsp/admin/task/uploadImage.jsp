@@ -96,6 +96,12 @@
 			<input type="hidden" name="aucPrgSq" value="${sogCowInfo.AUC_PRG_SQ}" />
 			<input type="hidden" name="sraIndvAmnno" value="${sogCowInfo.SRA_INDV_AMNNO}" />
 			
+			<c:if test="${!empty imgList}">
+				<c:forEach items="${imgList}" var="ivo" varStatus="s">
+					<input type="hidden" name="file_url" value="${ivo.FILE_URL}" />
+				</c:forEach>
+			</c:if>
+			
 			<div class="info_area">
 				<ul class="num_scr">
 					<li><p>${sogCowInfo.AUC_OBJ_DSC} | ${sogCowInfo.INDV_SEX_C} | ${sogCowInfo.SRA_INDV_AMNNO}</p></li> 
@@ -109,30 +115,27 @@
 			
 			<div class="list_area">
 				<ul id="thumbnail_list" class="thumbnail_list">
-					<c:if test="${!empty imgList}">
+					<%--c:if test="${!empty imgList}">
 						<c:forEach items="${imgList}" var="ivo" varStatus="s">
 							<li class="image${s.index}">
 								<img src="${ivo.THUMB_FILE_URL}" />
 							</li>
 						</c:forEach>
-					</c:if>
+					</c:if --%>
 				</ul>
 			</div>
 			<div id="preview_area" class="preview_area">
 				<ul id="preview_list">
-					<c:if test="${!empty imgList}">
+					<%--c:if test="${!empty imgList}">
 						<c:forEach items="${imgList}" var="ivo" varStatus="s">
 							<li data-seqno="${s.index + 1}" class="image${s.index} ${s.first ? 'active' : ''}">
 								<input type="hidden" name="file_path" value="${ivo.FILE_PATH}" />
 								<input type="hidden" name="file_nm" value="${ivo.FILE_NM}" />
 								<input type="hidden" name="file_ext_nm" value="${ivo.FILE_EXT_NM}" />
-<%-- 								<input type="hidden" name="file_url" value="${ivo.FILE_URL}" /> --%>
-								<canvas>
-									<img src="${ivo.FILE_URL}" />
-								</canvas>
+								<input type="hidden" name="file_url" value="${ivo.FILE_URL}" />
 							</li>
 						</c:forEach>
-					</c:if>
+					</c:if --%>
 				</ul>
 			</div>
 			<div class="btn_area">

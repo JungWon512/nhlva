@@ -26,11 +26,17 @@ import com.amazonaws.services.s3.model.AccessControlList;
 import com.amazonaws.services.s3.model.AmazonS3Exception;
 import com.amazonaws.services.s3.model.BucketCrossOriginConfiguration;
 import com.amazonaws.services.s3.model.CORSRule;
+import com.amazonaws.services.s3.model.DeleteBucketRequest;
+import com.amazonaws.services.s3.model.DeleteObjectRequest;
 import com.amazonaws.services.s3.model.GroupGrantee;
 import com.amazonaws.services.s3.model.ObjectMetadata;
 import com.amazonaws.services.s3.model.Permission;
 import com.amazonaws.services.s3.model.PutObjectRequest;
+import com.amazonaws.services.s3.model.PutObjectResult;
+import com.amazonaws.services.s3.model.S3ObjectSummary;
 import com.ishift.auction.util.SessionUtill;
+
+import io.swagger.v3.oas.models.parameters.RequestBody;
 
 @Service
 @SuppressWarnings("unchecked")
@@ -50,8 +56,6 @@ public class AdminTaskServiceImpl implements AdminTaskService {
 	@Override
 	public Map<String, Object> uploadImageProc(Map<String, Object> params) throws SQLException {
 		final Map<String, Object> result = new HashMap<String, Object>();
-		
-		adminTaskDAO.deleteCowImg(params);
 		
 		final String endPoint = "https://kr.object.ncloudstorage.com";
 		final String regionName = "kr-standard";
@@ -91,6 +95,12 @@ public class AdminTaskServiceImpl implements AdminTaskService {
 		final String sraIndvAmnno = params.get("sraIndvAmnno").toString();
 		final String filePath = naBzplc + "/" + aucDt + "/" + sraIndvAmnno + "/";
 		final String fileExtNm = ".png";
+		
+		adminTaskDAO.deleteCowImg(params);
+		
+		for (S3ObjectSummary file : s3.listObjects(bucketName, filePath).getObjectSummaries()){
+			s3.deleteObject(bucketName, file.getKey());
+		}
 		
 		List<Map<String, Object>> files = (List<Map<String, Object>>)params.get("files");
 		int successCnt = 0;
