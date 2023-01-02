@@ -63,6 +63,7 @@
 		}
 		
 		function makeThumbnailImage() {
+			console.log(arguments);
 			var previewList = resultNode.find("li > canvas");
 			thumbNode.empty();
 			for (var img of previewList) {
@@ -79,6 +80,8 @@
 		 * @param {boolean} [keepMetaData] Keep meta data if true
 		 */
 		function updateResults(img, data, keepMetaData, node) {
+			console.log(img.toDataURL());
+			console.log(data.imageHead);
 			var orientation = -1;
 			var isCanvas = window.HTMLCanvasElement && img instanceof HTMLCanvasElement
 			if (!keepMetaData) {
@@ -104,15 +107,9 @@
 				node.children().replaceWith(img);
 			}
 			if (data.imageHead) {
-				if (data.exif) {
-					// Reset Exif Orientation data:
-					loadImage.writeExifData(data.imageHead, data, 'Orientation', 1)
-				}
 				img.toBlob(function (blob) {
 					if (!blob) return;
-					loadImage.replaceHead(blob, data.imageHead, function (newBlob) {
-	//					content.attr('src', loadImage.createObjectURL(newBlob)).attr('download', 'image.jpg');
-					})
+					loadImage.replaceHead(blob, data.imageHead);
 				}, 'image/jpeg')
 			}
 			
@@ -143,7 +140,7 @@
 		}
 	
 		/**
-		 * Handles drop and file selection change events
+		 * 파일 변경 이벤트
 		 * @param {event} event Drop or file selection change event
 		 */
 		function fileChangeHandler(e) {
@@ -189,7 +186,7 @@
 		}
 		
 		/**
-		 * Handles URL change events
+		 * 파일 URL 변경 이벤트
 		 */
 		function urlChangeHandler() {
 			var url = $(this).val();
@@ -199,6 +196,7 @@
 		var addBtnEvent = function(){
 			// 저장 이벤트
 			$(".btn_save").on('click', function(){
+				if ($(this).hasClass("disabled")) return;
 				fnSave();
 			});
 			
@@ -225,7 +223,8 @@
 							maxWidth: resultNode.width() * (window.devicePixelRatio || 1),
 							pixelRatio: window.devicePixelRatio,
 							orientation: Number(6) || true,
-							imageSmoothingEnabled: true
+							imageSmoothingEnabled: true,
+							crossOrigin : 'Anonymous'
 						}),
 						metaNode.data(),
 						true,
@@ -241,20 +240,34 @@
 		};
 		
 		var fnSave = function() {
+			$(".btn_save").addClass("disabled");
+			
 			var frm = $("form[name='frm']").serializeObject();
 			
 			var originFiles = [];
 
-			var originList = $("#preview_list").find("canvas");
+			var originList = $("#preview_list").find("canvas, img");
 			for (origin of originList) {
 				var obj = new Object();
 				var name = $(origin).parent().attr("class").split(" ")[0];
-				var thumbnail = $("#thumbnail_list").find("li." + name).find("canvas")[0];
 				obj["name"] = name;
-				obj["origin"] = origin.toDataURL();
-				obj["thumbnail"] = (thumbnail != undefined) ? thumbnail.toDataURL() : "";
-				originFiles.push(obj);
+				if (origin.tagName == "CANVAS") {
+					var thumbnail = $("#thumbnail_list").find("li." + name).find("canvas")[0];
+					obj["type"] = "canvas";
+					obj["origin"] = origin.toDataURL();
+					obj["thumbnail"] = (thumbnail != undefined) ? thumbnail.toDataURL() : "";
+					originFiles.push(obj);
+				}
+				else {
+					obj["type"] = "image";
+					obj["name"] = name;
+					obj["filePath"] = $(origin).siblings("input[name='file_path']").val();
+					obj["fileNm"] = $(origin).siblings("input[name='file_nm']").val();
+					obj["fileExtNm"] = $(origin).siblings("input[name='file_ext_nm']").val();
+					originFiles.push(obj);
+				}
 			}
+
 			if (originFiles.length > 0) {
 				frm["files"] = originFiles;
 			}
@@ -270,6 +283,7 @@
 				}
 			}).done(function (body) {
 				modalAlert("", body.message);
+				$(".btn_save").removeClass("disabled");
 				return;
 			});
 		

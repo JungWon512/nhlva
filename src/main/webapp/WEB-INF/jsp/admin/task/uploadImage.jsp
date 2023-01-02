@@ -88,7 +88,7 @@
 	<!--  admin_regist_form [s] -->
 	<div class="admin_regist_form">
 		<form name="frm" action="" method="post" autocomplete="off">
-			<input type="hidden" name="aucDt" value="${params.aucDt}" />
+			<input type="hidden" name="aucDt" value="${sogCowInfo.AUC_DT}" />
 			<input type="hidden" name="naBzplc" value="<sec:authentication property="principal.naBzplc"/>" />
 			<input type="hidden" name="aucObjDsc" value="${sogCowInfo.AUC_OBJ_DSC}" />
 			<input type="hidden" name="oslpNo" value="${sogCowInfo.OSLP_NO}" />
@@ -105,13 +105,34 @@
 			<div class="info_area">
 				<ul class="num_scr"></ul>
 			</div>
-			<input type="file" id="file-input" name="file-input" accept=".jpg, .png, .gif" multiple="multiple" max="5"/>
+			<input type="file" id="file-input" name="file-input" accept=".jpg,.png,.gif" multiple="multiple" max="8" />
 			
 			<div class="list_area">
-				<ul id="thumbnail_list" class="thumbnail_list"></ul>
+				<ul id="thumbnail_list" class="thumbnail_list">
+					<c:if test="${!empty imgList}">
+						<c:forEach items="${imgList}" var="ivo" varStatus="s">
+							<li class="image${s.index}">
+								<img src="${ivo.THUMB_FILE_URL}" />
+							</li>
+						</c:forEach>
+					</c:if>
+				</ul>
 			</div>
 			<div id="preview_area" class="preview_area">
 				<ul id="preview_list">
+					<c:if test="${!empty imgList}">
+						<c:forEach items="${imgList}" var="ivo" varStatus="s">
+							<li data-seqno="${s.index + 1}" class="image${s.index} ${s.first ? 'active' : ''}">
+								<input type="hidden" name="file_path" value="${ivo.FILE_PATH}" />
+								<input type="hidden" name="file_nm" value="${ivo.FILE_NM}" />
+								<input type="hidden" name="file_ext_nm" value="${ivo.FILE_EXT_NM}" />
+<%-- 								<input type="hidden" name="file_url" value="${ivo.FILE_URL}" /> --%>
+								<canvas>
+									<img src="${ivo.FILE_URL}" />
+								</canvas>
+							</li>
+						</c:forEach>
+					</c:if>
 				</ul>
 			</div>
 			<div class="btn_area">
