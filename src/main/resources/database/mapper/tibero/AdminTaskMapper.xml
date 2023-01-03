@@ -117,6 +117,7 @@
 		SELECT A.NA_BZPLC
 			 , NVL(C.AUC_DT, #{auc_dt}) AS AUC_DT
 			 , NVL(C.AUC_OBJ_DSC, #{auc_obj_dsc}) AS AUC_OBJ_DSC
+			 , E.SIMP_CNM AS AUC_OBJ_DSCNM
 			 , C.OSLP_NO
 			 , C.LED_SQNO
 			 , NVL(C.AUC_PRG_SQ, (SELECT NVL(MAX(AUC_PRG_SQ)+1, 1) FROM TB_LA_IS_MH_SOG_COW WHERE NA_BZPLC = #{naBzplc} AND AUC_DT = #{aucDt})) AS AUC_PRG_SQ
@@ -128,6 +129,7 @@
 			 , A.MCOW_DSC
 			 , A.KPN_NO
 			 , A.INDV_SEX_C
+			 , F.SIMP_CNM AS INDV_SEX_CNM
 			 , A.MCOW_SRA_INDV_AMNNO
 			 , A.MATIME
 			 , A.SRA_INDV_PASG_QCN
@@ -203,6 +205,22 @@
 			ON (
 				A.NA_BZPLC = D.NA_BZPLC
 			 )
+		  LEFT OUTER JOIN TB_LA_IS_MH_COMN_APL E
+			ON (
+				E.SIMP_TPC = 'AUC_OBJ_DSC'
+				AND
+				E.SIMP_C_GRP_SQNO = '1'
+				AND
+				NVL(C.AUC_OBJ_DSC, #{auc_obj_dsc}) = E.SIMP_C
+			)
+		  LEFT OUTER JOIN TB_LA_IS_MH_COMN_APL F
+			ON (
+				F.SIMP_TPC = 'INDV_SEX_C'
+				AND
+				F.SIMP_C_GRP_SQNO = '1'
+				AND
+				A.INDV_SEX_C = F.SIMP_C
+			)
 		 WHERE A.NA_BZPLC = #{na_bzplc}
 		   AND A.SRA_INDV_AMNNO = #{sra_indv_amnno}
 	</select>

@@ -1,0 +1,20 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 32 32">
+    <defs>
+        <clipPath id="ne7liwtdna">
+            <path data-name="사각형 26" transform="translate(.017 .018)" style="fill:#007eff" d="M0 0h32v32H0z"/>
+        </clipPath>
+    </defs>
+    <g data-name="그룹 19759">
+        <g data-name="벡터 고급 개체">
+            <path data-name="패스 66" d="m16.718 10 7.982 8.009-7.986 8.009-1.872-1.877 6.114-6.132-6.114-6.132z" transform="translate(-2.974 -2.009)" style="fill:#1a1311"/>
+            <g data-name="그룹 51">
+                <g data-name="그룹 50" style="clip-path:url(#ne7liwtdna)" transform="translate(-.018 -.018)">
+                    <circle data-name="타원 1" cx="15" cy="15" r="15" transform="translate(1.018 1.018)" style="fill:#007eff"/>
+                </g>
+            </g>
+        </g>
+        <g data-name="벡터 고급 개체">
+            <path data-name="패스 78" d="M14.14 0 8.009 6.458 1.876 0 0 1.977l8.009 8.435 8.009-8.435z" style="fill:#fff" transform="rotate(-90 18.003 6.007)"/>
+        </g>
+    </g>
+</svg>

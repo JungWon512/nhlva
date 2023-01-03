@@ -5,114 +5,39 @@
 		var resultNode = $('#preview_list');
 		var metaNode = $('#meta');
 		var thumbNode = $('#thumbnail_list');
-		var actionsNode = $('#actions');
 		var orientationNode = $('#orientation');
 		var imageSmoothingNode = $('#image-smoothing');
 		var fileInputNode = $('#file-input');
-		var urlNode = $('#url');
-		var editNode = $('#edit');
-		var cropNode = $('#crop');
-		var cancelNode = $('#cancel');
-		var coordinates;
-		var jcropAPI;
+		var imgMaxCnt = 8;		// 업로드 가능 이미지 수
 	
-		/**
-		 * Displays tag data
-		 *
-		 * @param {*} node jQuery node
-		 * @param {object} tags Tags map
-		 * @param {string} title Tags title
-		 */
-		function displayTagData(node, tags, title) {
-			if (active != "prod") {
-				var table = $('<table></table>').css("width", "100%");
-				var row = $('<tr></tr>');
-				var cell = $('<td></td>');
-				var headerCell = $('<th colspan="2"></th>');
-				var prop;
-				table.append(row.clone().append(headerCell.clone().text(title)))
-				for (prop in tags) {
-					if (Object.prototype.hasOwnProperty.call(tags, prop)) {
-						if (typeof tags[prop] === 'object') {
-							displayTagData(node, tags[prop], prop);
-							continue;
-						}
-						table.append(row.clone().append(cell.clone().text(prop)).append(cell.clone().text(tags[prop])));
-					}
-				}
-				node.append(table).show();
-			}
-		}
-	
-		/**
-		 * Displays the thumbnal image
-		 *
-		 * @param {*} node jQuery node
-		 * @param {string} thumbnail Thumbnail URL
-		 * @param {object} [options] Options object
-		 */
-		function displayThumbnailImage(node, thumbnail, options) {
-			if (thumbnail) {
-				var link = $("<li></li>").appendTo(node);
-				loadImage(thumbnail, function (img) {
-						link.append(img);
-						node.show();
-					},
-					options);
-			}
-		}
-		
+		// 썸네일 이미지 생성
 		function makeThumbnailImage() {
-			console.log(arguments);
-			var previewList = resultNode.find("li > canvas");
-			thumbNode.empty();
+			var previewList = resultNode.find("div.item > canvas");
+			thumbNode.find(".add-item").not(".add-pic").remove();
 			for (var img of previewList) {
-				var thumbnail = loadImage.scale(img, {maxWidth:120});
-				var content = $("<li></li>").addClass($(img).parent().attr("class").split(" ")[0]).append(thumbnail);
+				var thumbnail = loadImage.scale(img, {maxWidth:100});
+				var content = $("<div class='add-item'></div>").addClass($(img).parent().attr("class").split(" ")[1]).append(thumbnail).append("<button type='button' class='btn-del'><span class='sr-only'>삭제</span></button>");
 				thumbNode.append(content);
 			};
+			var imgCnt = resultNode.find("div.item > canvas").length;
+			thumbNode.find(".num").text(`${imgCnt} / ${imgMaxCnt}`);
 		}
 	
 		/**
-		 * Updates the results view
+		 * 원본 이미지 
 		 * @param {*} img Image or canvas element
 		 * @param {object} [data] Metadata object
 		 * @param {boolean} [keepMetaData] Keep meta data if true
 		 */
 		function updateResults(img, data, keepMetaData, node) {
-			console.log(img.toDataURL());
-			console.log(data.imageHead);
-			var orientation = -1;
-			var isCanvas = window.HTMLCanvasElement && img instanceof HTMLCanvasElement
-			if (!keepMetaData) {
-				if (isCanvas) {
-					actionsNode.show();
-				}
-				else {
-					actionsNode.hide();
-				}
-			}
-	
-			if (!(isCanvas || img.src)) {
-				resultNode.children().replaceWith($('<span>Loading image file failed</span>'));
-				return;
-			}
-			
 			if(!node) {
-				var seqno = resultNode.find("li:last").length == 0 ? 0 : parseInt(resultNode.find("li:last").data("seqno"));
-				var content = $('<li></li>').attr("data-seqno", seqno + 1).addClass("image" + seqno).addClass(resultNode.find("li").length == 0 ? "active" : "").append(img);
+				var seqno = resultNode.find("div.item:last").length == 0 ? 0 : parseInt(resultNode.find("div.item:last").data("seqno"));
+				var content = $("<div class='item'></div>").attr("data-seqno", seqno + 1).addClass("image" + seqno).addClass(resultNode.find("div").length == 0 ? "active" : "").append(img);
 				resultNode.append(content);
 			}
 			else {
 				node.children().replaceWith(img);
 			}
-			if (data.imageHead) {
-				img.toBlob(function (blob) {
-					if (!blob) return;
-					loadImage.replaceHead(blob, data.imageHead);
-				}, 'image/jpeg')
-			}
-			
 			makeThumbnailImage();
 		}
 	
@@ -133,10 +58,7 @@
 				}
 			}
 			
-			if (!loadImage(file, updateResults, options)) {
-				removeMetaData();
-				resultNode.children().replaceWith($('<span>' + 'Your browser does not support the URL or FileReader API.' + '</span>'))
-			}
+			loadImage(file, updateResults, options);
 		}
 	
 		/**
@@ -153,21 +75,27 @@
 			}
 			var filesArr = Array.prototype.slice.call(files);
 			
+			if ($("#preview_list > div").length + filesArr.length > imgMaxCnt) {
+				modalAlert("", `이미지는 최대 ${imgMaxCnt} 장 까지<br/> 업로드 가능합니다.`);
+				fileInputNode.val("");
+				return;
+			}
+			
 			filesArr.forEach(function(f, index) {
 				var arrExt = ["jpg", "png", "gif", "jpeg"];
 				var fileName = fileInputNode.val();
 				var ext = fileName.slice(fileName.indexOf(".") + 1).toLowerCase();
-	 
 				if (!arrExt.includes(ext)) {
-					alert('이미지 파일만 업로드 가능합니다.');
+					modalAlert("", "이미지 파일만 업로드 가능합니다.");
 					fileInputNode.val("");
 					return;
 				}
+				
 				var reader = new FileReader();
 				reader.onload = function(e) {
 					var file = f;
 					var options = {
-						maxWidth: resultNode.width(),
+						maxWidth: resultNode.width() * 2,
 						canvas: true,
 						pixelRatio: window.devicePixelRatio,
 						downsamplingRatio: 0.5,
@@ -185,14 +113,6 @@
 			makeThumbnailImage();
 		}
 		
-		/**
-		 * 파일 URL 변경 이벤트
-		 */
-		function urlChangeHandler() {
-			var url = $(this).val();
-			if (url) displayImage(url);
-		}
-		
 		var addBtnEvent = function(){
 			// 저장 이벤트
 			$(".btn_save").on('click', function(){
@@ -205,10 +125,10 @@
 			});
 			
 			// 썸네일 클릭시 원본 이미지 보이기
-			$(document).on("click", "#thumbnail_list > li", function() {
-				var name = $(this).attr("class");
-				$("#preview_list > li").removeClass("active");
-				$("#preview_list > li." + name).addClass("active");
+			$(document).on("click", "#thumbnail_list > div:not(.add-pic)", function() {
+				var name = $(this).attr("class").split(" ")[1];
+				$("#preview_list > div").removeClass("active");
+				$("#preview_list > div." + name).addClass("active");
 			});
 			
 			// 파일 변경 이벤트
@@ -216,7 +136,7 @@
 			
 			// 이미지 회전
 			$(".btn_rotate").on("click", function() {
-				var img = resultNode.find('li.active > canvas')[0];
+				var img = resultNode.find('div.active > canvas')[0];
 				if (img) {
 					updateResults(
 						loadImage.scale(img, {
@@ -228,17 +148,35 @@
 						}),
 						metaNode.data(),
 						true,
-						resultNode.find("li.active")
+						resultNode.find("div.active")
 					)
 				}
 			});
 			
-			$("input[name='file_url']").on('change paste input', function(){
-				var url = $(this).val();
-				if (url) displayImage(url);
+			// 썸네일 삭제 이벤트(원본 이미지와 함께 삭제)
+			$(document).on("click", "#thumbnail_list .btn-del", function() {
+				var name = $(this).parent().attr("class").split(" ")[1];
+				modalComfirm(""
+				, "삭제하시겠습니까?<br/>저장 후 최종삭제됩니다."
+				, function(){
+					delImage(name);
+				});
+				return;
+			});
+			
+			// 원본 삭제 이벤트(썸네일 이미지와 함께 삭제)
+			$(".btn_delete").on("click", function() {
+				var name = $(resultNode).find(".active").attr("class").split(" ")[1];
+				modalComfirm(""
+				, "삭제하시겠습니까?<br/>저장 후 최종삭제됩니다."
+				, function(){
+					delImage(name);
+				});
+				return;
 			});
 		};
 		
+		// 이미지 저장
 		var fnSave = function() {
 			$(".btn_save").addClass("disabled");
 			
@@ -249,28 +187,17 @@
 			var originList = $("#preview_list").find("canvas, img");
 			for (origin of originList) {
 				var obj = new Object();
-				var name = $(origin).parent().attr("class").split(" ")[0];
+				var name = $(origin).parent().attr("class").split(" ")[1];
+				var thumbnail = thumbNode.find("div." + name).find("canvas")[0];
+				
 				obj["name"] = name;
-				if (origin.tagName == "CANVAS") {
-					var thumbnail = $("#thumbnail_list").find("li." + name).find("canvas")[0];
-					obj["type"] = "canvas";
-					obj["origin"] = origin.toDataURL();
-					obj["thumbnail"] = (thumbnail != undefined) ? thumbnail.toDataURL() : "";
-					originFiles.push(obj);
-				}
-				else {
-					obj["type"] = "image";
-					obj["name"] = name;
-					obj["filePath"] = $(origin).siblings("input[name='file_path']").val();
-					obj["fileNm"] = $(origin).siblings("input[name='file_nm']").val();
-					obj["fileExtNm"] = $(origin).siblings("input[name='file_ext_nm']").val();
-					originFiles.push(obj);
-				}
+				obj["type"] = "canvas";
+				obj["origin"] = origin.toDataURL();
+				obj["thumbnail"] = (thumbnail != undefined) ? thumbnail.toDataURL() : "";
+				originFiles.push(obj);
 			}
 
-			if (originFiles.length > 0) {
-				frm["files"] = originFiles;
-			}
+			frm["files"] = originFiles;
 			
 			$.ajax({
 				url : '/office/task/uploadImageAjax',
@@ -280,6 +207,9 @@
 				beforeSend: function (xhr) {
 					xhr.setRequestHeader("Accept", "application/json");
 					xhr.setRequestHeader("Content-Type", "application/json");
+				},
+				error:function(request,status,error){
+//					alert("code:"+request.status+"\n"+"message:"+request.responseText+"\n"+"error:"+error);
 				}
 			}).done(function (body) {
 				modalAlert("", body.message);
@@ -289,15 +219,26 @@
 		
 		};
 		
+		// 이미지 url 추가
 		var addImage = function() {
 			$("input[name='file_url']").each(function(){
 				var url = $(this).val();
 				if (url) displayImage(url);
 			});
 		};
+		
+		// 이미지 삭제
+		var delImage = function(name) {
+			thumbNode.find("div." + name).remove();
+			resultNode.find("div." + name).remove();
+			resultNode.find("div").removeClass("active");
+			resultNode.find("div:first").addClass("active");
+			
+			var imgCnt = resultNode.find("div.item > canvas").length;
+			thumbNode.find(".num").text(`${imgCnt} / ${imgMaxCnt}`);
+		}
 
 		return {
-			// public functions
 			init: function () {
 				addBtnEvent();
 				addImage();
