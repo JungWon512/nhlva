@@ -2,13 +2,15 @@
 // Class definition
 	var Entry = function () {
 		
-		var resultNode = $('#preview_list');
-		var metaNode = $('#meta');
-		var thumbNode = $('#thumbnail_list');
-		var orientationNode = $('#orientation');
-		var imageSmoothingNode = $('#image-smoothing');
-		var fileInputNode = $('#file-input');
-		var imgMaxCnt = 8;		// 업로드 가능 이미지 수
+		const resultNode = $('#preview_list');
+		const metaNode = $('#meta');
+		const thumbNode = $('#thumbnail_list');
+		const orientationNode = $('#orientation');
+		const imageSmoothingNode = $('#image-smoothing');
+		const fileInputNode = $('#file-input');
+		const imgMaxCnt = 8;							// 업로드 가능 이미지 수
+		const arrExt = ["jpg", "png", "gif", "jpeg"];	// 업로드 가능 확장자 리스트
+		const limitSize = 10 * 1024 * 1024; 			// TODO :: 업로드 가능한 파일 최대 크기를 적용할지?
 	
 		// 썸네일 이미지 생성
 		function makeThumbnailImage() {
@@ -82,7 +84,6 @@
 			}
 			
 			filesArr.forEach(function(f, index) {
-				var arrExt = ["jpg", "png", "gif", "jpeg"];
 				var fileName = fileInputNode.val();
 				var ext = fileName.slice(fileName.indexOf(".") + 1).toLowerCase();
 				if (!arrExt.includes(ext)) {
@@ -105,7 +106,7 @@
 					if (!file) {
 						return;
 					}
-					displayImage(file, options)
+					displayImage(file, options);
 				}
 				reader.readAsDataURL(f);
 			});
@@ -190,6 +191,7 @@
 				var name = $(origin).parent().attr("class").split(" ")[1];
 				var thumbnail = thumbNode.find("div." + name).find("canvas")[0];
 				
+				// canvas 이미지를 base64인코딩 후 서버 전송
 				obj["name"] = name;
 				obj["type"] = "canvas";
 				obj["origin"] = origin.toDataURL();
@@ -209,6 +211,8 @@
 					xhr.setRequestHeader("Content-Type", "application/json");
 				},
 				error:function(request,status,error){
+					modalAlert("", "이미지 저장에 실패했습니다.");
+//					console.log(arguments);
 //					alert("code:"+request.status+"\n"+"message:"+request.responseText+"\n"+"error:"+error);
 				}
 			}).done(function (body) {
@@ -219,7 +223,7 @@
 		
 		};
 		
-		// 이미지 url 추가
+		// 이미지 url로 canvas 추가
 		var addImage = function() {
 			$("input[name='file_url']").each(function(){
 				var url = $(this).val();

@@ -58,6 +58,14 @@ spring:
 mybatis:
   config-location: classpath:database/mybatis-config.xml
   mapper-locations: classpath:database/mapper/**/*Mapper.xml
+  
+ncloud:
+  storage:
+    end-point: https://kr.object.ncloudstorage.com
+    region-name: kr-standard
+    access-key: loqHvgq2A4WGx0D7feer
+    secret-key: yrmIJmsF37g1BExQXk5CIhrMn1EG1h32qJyaTvzF
+    bucket-name: test-tt12
 
 ---
 # local profile(개발자 환경)
