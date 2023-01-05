@@ -1,0 +1,142 @@
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
+<%@ include file="/WEB-INF/__system/taglibs.jsp" %>
+
+<input type="hidden" id="loginNo" name="loginNo" value="${inputParam.loginNo}"/>
+<input type="hidden" id="searchDate" value="${inputParam.searchDate}"/>
+<input type="hidden" id="stateFlag" value="${inputParam.stateFlag}"/>
+<input type="hidden" id="naBzPlcNo" value="${johapData.NA_BZPLCNO}"/>
+<input type="hidden" id="johpCd" value="${johapData.NA_BZPLC}"/>
+<div class="auction_list">
+	<h3>나의 경매내역</h3>
+	<div class="tab_area state">
+		<div class="list_search">
+			<ul class="radio_group">
+	            <li>
+	                <input type="radio" name="searchAucObjDsc" id="state1" value="0" <c:if test="${inputParam.searchAucObjDsc eq '0' || empty inputParam.searchAucObjDsc }">
+	                checked
+	                </c:if>/><label for="state1">전체</label>
+	            </li>
+	            <li>
+	                <input type="radio" name="searchAucObjDsc" id="state2" value="1" <c:if test="${inputParam.searchAucObjDsc eq '1'}">
+	                checked
+	                </c:if>/><label for="state2">송아지</label>
+	            </li>
+	            <li>
+	                <input type="radio" name="searchAucObjDsc" id="state3" value="2" <c:if test="${inputParam.searchAucObjDsc eq '2'}">
+	                       checked
+	                </c:if>/><label for="state3">비육우</label>
+	            </li>
+	            <li>
+	                <input type="radio" name="searchAucObjDsc" id="state4" value="3" <c:if test="${inputParam.searchAucObjDsc eq '3'}">
+	                       checked
+	                </c:if>/><label for="state4">번식우</label>
+	            </li>
+			</ul>
+			<ul class="sch_area">
+	            <div>
+	            	<dl>
+						<dd>조합명</dd>
+						<dd>${johapData.AREANM} 조합</dd>
+					</dl>
+	            	<dl>
+						<dd>경매일자</dd>
+						<dd>${inputParam.searchDate}</dd>
+					</dl>
+	            </div>
+			</ul>
+		</div>
+		<!-- //list_search e -->
+		<div class="list_table auction_result">
+			<div class="list_head">
+				<dl>
+					<dd>참가번호</dd>
+					<dd class="info no" style="text-align:left;">${ empty stateInfo.LVST_AUC_PTC_MN_NO ? '내용이 없습니다.' : stateInfo.LVST_AUC_PTC_MN_NO }</dd>
+				</dl>
+				<dl>
+					<dd>성명</dd>
+					<dd class="info nm" style="text-align:left;">${ empty stateInfo.USER_NM ? '내용이 없습니다.' : stateInfo.USER_NM }</dd>
+				</dl>
+				<dl>
+					<dd>주소</dd>
+					<dd class="info addr" style="text-align:left;">
+						${ empty stateInfo.USER_DONG_UP ? '' : stateInfo.USER_DONG_UP } ${ empty stateInfo.USER_DONG_BW ? '내용이 없습니다.' : stateInfo.USER_DONG_BW } 
+					</dd>
+				</dl>
+				<dl>
+					<dd>낙찰금액</dd>
+						<fmt:formatNumber value="${ stateTotPrice.SRA_SBID_AM }" type="number" var="SRA_SBID_AM"/>
+						<dd class="price bid" style="text-align:left;">${empty SRA_SBID_AM ? '0':SRA_SBID_AM} 원</dd>
+				</dl>
+				<dl>
+					<dd>총수수료</dd>
+					<fmt:formatNumber value="${ stateTotPrice.SRA_TR_FEE }" type="number" var="SRA_TR_FEE"/>
+					<dd class="price fee" style="text-align:left;">${empty SRA_TR_FEE ? '0':SRA_TR_FEE} 원</dd>
+				</dl>
+				<dl>
+					<dd>정산금액</dd>
+					<fmt:formatNumber value="${stateTotPrice.SRA_SBID_AM + stateTotPrice.SRA_TR_FEE}" type="number" var="TOT_BID_AM"/>
+					<dd class="price total" style="text-align:left;">${empty TOT_BID_AM ? '0':TOT_BID_AM} 원</dd>
+				</dl>
+			</div>
+		</div>
+		<!-- //auction_buy e -->
+		
+		<div>
+			<p>입금계좌: ${accountInfo.ACNO }</p>
+			<p>예금주: ${accountInfo.NA_BZPLNM } </p>
+		</div>
+		
+		<div class="sum_table state_sum_table">
+			<div>
+				<dl>
+					<dt><p>암</p></dt>
+					<dd>
+						<p class="stateCowCnt" id="W">
+						<c:choose>
+							<c:when test="${ stateBuyCnt.CNT_SEX_STATE_W == 0 }">0 두</c:when>
+							<c:otherwise>
+								<a href="javascript:;" style="color: #007eff;">${ stateBuyCnt.CNT_SEX_STATE_W }두</a>
+							</c:otherwise>
+						</c:choose>
+						</p>
+					</dd>
+				</dl>
+				<dl>
+					<dt><p>수</p></dt>
+					<dd>
+						<p class="stateCowCnt" id="M">
+						<c:choose>
+							<c:when test="${ stateBuyCnt.CNT_SEX_STATE_M == 0 }">0 두</c:when>
+							<c:otherwise>
+								<a href="javascript:;" style="color: #007eff;">${ stateBuyCnt.CNT_SEX_STATE_M }두</a>
+							</c:otherwise>
+						</c:choose>
+						</p>
+					</dd>
+				</dl>
+				<dl>
+					<dt><p>낙찰두수</p></dt>
+					<dd>
+						<p class="stateCowCnt" id="T">
+						<c:choose>
+							<c:when test="${ stateBuyCnt.CNT_SEX_STATE_W == 0 && stateBuyCnt.CNT_SEX_STATE_M == 0 }">0 두</c:when>
+							<c:otherwise>
+								<a href="javascript:;" style="color: #007eff;">${ stateBuyCnt.CNT_SEX_STATE_W + stateBuyCnt.CNT_SEX_STATE_M }두</a>
+							</c:otherwise>
+						</c:choose>
+						</p>
+					</dd>
+				</dl>
+			</div>
+			<div class="sumTxt">
+				<fmt:formatNumber value="${stateTotPrice.SRA_SBID_AM}" type="number" var="TOT_SRA_SBID_AM"/>
+				<p>총 금액 : ${empty TOT_SRA_SBID_AM ? '0':TOT_SRA_SBID_AM} 원</p>
+			</div>
+		</div>
+		<!-- //list_downs e -->
+		<div>
+			<p>입금은 영업일 3일 이내 입니다.</p>
+			<p>${johapData.CLNTNM} 이용문의) ${johapData.TEL_NO }</p>
+		</div>
+	</div>
+</div>

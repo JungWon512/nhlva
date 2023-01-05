@@ -9,7 +9,7 @@
 			
 			<c:choose>
 				<c:when test="${aucDate.size() > 0  }">
-					<p>${aucDate[0].AUC_MONTH }월 ${aucDate[0].AUC_DAY }일(${aucDate[0].AUC_WEEK_DAY }) ${aucDate[0].AUC_OBJ_DSC_NAME } 경매입니다.</p>			
+					<p>${aucDate[0].AUC_MONTH }월 ${aucDate[0].AUC_DAY }일(${aucDate[0].AUC_WEEK_DAY }) ${fn:replace(aucDate[0].AUC_OBJ_DSC_NAME,'일괄','번식우,송아지,비육우') } 경매입니다.</p>			
 				</c:when>
 				<c:otherwise>
 					<p>예정된 경매가 없습니다.</p>
@@ -55,7 +55,7 @@
 									<span>${vo.AUC_WEEK_DAY }요일</span>
 								</dt>
 								<dd>
-									<p class="date_tit">${vo.CLNTNM } ${vo.AUC_OBJ_DSC_NAME } 경매</p>	
+									<p class="date_tit">${vo.CLNTNM } ${fn:replace(vo.AUC_OBJ_DSC_NAME,'일괄','번식우,송아지,비육우') } 경매</p>	
 									<p class="date_time">${vo.AUC_YEAR }년 ${vo.AUC_MONTH }월 ${vo.AUC_DAY}일(${vo.AUC_WEEK_DAY })</p>
 								</dd>
 							</dl>

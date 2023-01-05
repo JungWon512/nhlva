@@ -5,7 +5,6 @@ import com.ishift.auction.service.login.LoginService;
 import com.ishift.auction.util.Constants;
 import com.ishift.auction.util.CookieUtil;
 import com.ishift.auction.util.JwtTokenUtil;
-import com.ishift.auction.util.PasswordEncoding;
 
 import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
@@ -36,9 +35,6 @@ public class LoginController {
 
 	@Autowired
 	private LoginService loginService;
-
-	@Autowired
-	private PasswordEncoding passwordEncoding;
 	
 	@Autowired
 	private JwtTokenUtil jwtTokenUtil;

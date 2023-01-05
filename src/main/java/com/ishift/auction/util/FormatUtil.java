@@ -1,20 +1,10 @@
 package com.ishift.auction.util;
 
 
-import com.ishift.auction.vo.JwtTokenVo;
-import io.jsonwebtoken.*;
-import java.io.IOException;
-import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
-import javax.annotation.PostConstruct;
-import javax.crypto.spec.SecretKeySpec;
-import java.security.Key;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.Map;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 
 /**
  * Format변환용 클래스

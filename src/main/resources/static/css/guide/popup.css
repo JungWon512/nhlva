@@ -985,6 +985,11 @@ Base styles: popup_layer css
 	font-weight: 700
 }
 
+.modal-wrap.pop_exit_cow .modal-content table td.tac {
+	text-align: center;
+	font-weight: 700
+}
+
 .modal-wrap.pop_exit_cow .modal-content table td.auc-num, .modal-wrap.pop_exit_cow .modal-content table td.name
 	{
 	font-size: 32px;
@@ -1234,7 +1239,7 @@ Base styles: popup_layer css
 		.modal-wrap.pop_mod_moorage .pop_ad_mod .modal-body .table-mod td {
 		font-size: 18px;
 		height: 40px;
-		padding: 10px 20px
+		padding: 5px 10px
 	}
 	.modal-wrap.pop_mod_weight .pop_ad_mod .modal-body .table-mod td.input-td input[type=text],
 		.modal-wrap.pop_mod_pay .pop_ad_mod .modal-body .table-mod td.input-td input[type=text],
@@ -2138,4 +2143,208 @@ Base styles: popup_layer css
 
 .message {
 	z-index: 10002;
+}
+
+/* 고도화 221109 */
+.modal-wrap.pop_schedule_map .modal-content {
+	max-width: 330px;
+	width: calc(100% - 20px);
+	padding: 17px 0 75px;
+	min-height: 273px;
+	border-radius: 20px;
+	overflow: hidden;
+	position: relative;
+}
+
+.modal-wrap.pop_schedule_map .name {
+	margin-top: 20px;
+	margin-bottom: 15px;
+	padding: 0 15px;
+	font-size: 20px;
+	line-height: 1.75;
+	letter-spacing: -1px;
+	font-weight: 700;
+	color: #1a1a1a;
+	text-align: center;
+}
+
+.modal-wrap.pop_schedule_map dl {
+	display: flex;
+	padding: 5px 15px;
+	font-size: 18px;
+	font-weight: 500;
+	line-height: 1.44;
+	letter-spacing: -0.45px;
+}
+
+.modal-wrap.pop_schedule_map dt {
+	position: relative;
+	padding-left: 17px;
+	padding-right: 13px;
+	flex-shrink: 0;
+}
+.modal-wrap.pop_schedule_map .tel:after {
+	display: inline-block;
+	margin-left: 4px;
+	width: 24px;
+	height: 29px;
+	background: url(/static/images/guide/v2/ico-phone-blue.png) no-repeat 50% 50%;
+	background-size: 24px auto;
+	vertical-align: middle;
+	content: '';
+}
+
+.modal-wrap.pop_schedule_map dt:before {
+	position: absolute;
+	left: 4px;
+	top: 0;
+	content: '•';
+}
+
+.modal-wrap.pop_schedule_map dt:after {
+	position: absolute;
+	right: 4px;
+	top: 0;
+	content: ':';
+}
+
+.modal-wrap.pop_schedule_map .btn_area {
+	position: absolute;
+	bottom: 0;
+	left: 0;
+	right: 0;
+	text-align: center;
+}
+
+.modal-wrap.pop_schedule_map .btn_ok {
+	display: block;
+	width: 100%;
+	height: 60px;
+	font-size: 18px;
+	font-weight: 700;
+	line-height: 1.07;
+	letter-spacing: -0.9px;
+	color: #fff;
+	background-color: #007eff;
+}
+.modal-wrap.pop_fee .modal-content {
+	max-width: 330px;
+	width: calc(100% - 20px);
+	padding: 17px 0 75px;
+	min-height: 273px;
+	border-radius: 20px;
+	overflow: hidden;
+	position: relative;
+}
+
+.modal-wrap.pop_fee .name {
+	margin-top: 20px;
+	margin-bottom: 15px;
+	padding: 0 15px;
+	font-size: 20px;
+	line-height: 1.75;
+	letter-spacing: -1px;
+	font-weight: 700;
+	color: #1a1a1a;
+	text-align: center;
+}
+
+.modal-wrap.pop_fee .cow-basic {
+	margin: 0 20px 20px;
+}
+
+.modal-wrap.pop_fee .cow-basic .ta-R {
+	text-align: right;
+}
+
+.modal-wrap.pop_fee .table-detail th, .modal-wrap.pop_fee .table-detail td {
+    padding: 7px 10px;
+	font-size: 16px;
+}
+
+.modal-wrap.pop_fee .btn_area {
+	position: absolute;
+	bottom: 0;
+	left: 0;
+	right: 0;
+	text-align: center;
+}
+
+.modal-wrap.pop_fee .btn_ok {
+	display: block;
+	width: 100%;
+	height: 60px;
+	font-size: 18px;
+	font-weight: 700;
+	line-height: 1.07;
+	letter-spacing: -0.9px;
+	color: #fff;
+	background-color: #007eff;
+}
+
+
+.modal-wrap.pop_Co_info .modal-content {
+	max-width: 330px;
+	width: calc(100% - 20px);
+	padding: 17px 0 95px;
+	min-height: 273px;
+	border-radius: 20px;
+	overflow: hidden;
+	position: relative;
+}
+
+.modal-wrap.pop_Co_info .name {
+	margin-top: 20px;
+	margin-bottom: 15px;
+	padding: 0 15px;
+	font-size: 20px;
+	line-height: 1.75;
+	letter-spacing: -1px;
+	font-weight: 700;
+	color: #1a1a1a;
+	text-align: center;
+}
+
+.modal-wrap.pop_Co_info dl {
+	display: flex;
+	padding: 5px 15px;
+	font-size: 16px;
+	font-weight: 500;
+	line-height: 1.63;
+	letter-spacing: -0.45px;
+}
+
+.modal-wrap.pop_Co_info dt {
+	position: relative;
+	padding-right: 16px;
+	font-size: 18px;
+	line-height: 1.44;
+	flex-shrink: 0;
+}
+
+.modal-wrap.pop_Co_info dt:after {
+	position: absolute;
+	right: 6px;
+	top: 0;
+	content: ':';
+}
+
+.modal-wrap.pop_Co_info .btn_area {
+	position: absolute;
+	bottom: 0;
+	left: 0;
+	right: 0;
+	text-align: center;
+}
+
+.modal-wrap.pop_Co_info .btn_ok {
+	display: block;
+	width: 100%;
+	height: 60px;
+	font-size: 18px;
+	font-weight: 700;
+	line-height: 1.07;
+	letter-spacing: -0.9px;
+	color: #fff;
+	background-color: #007eff;
 }

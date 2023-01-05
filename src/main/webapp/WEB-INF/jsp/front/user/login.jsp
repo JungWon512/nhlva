@@ -21,14 +21,19 @@
 			<ul class="agree_list">
 				<li>
 					<input type="checkbox" id="agree_chk1"><label for="agree_chk1">개인정보 이용약관 동의(체크)</label>
-					<a href="javascript:;" class="agree_info btn_agreement_pop">팝업</a>
+					<a href="#" onclick="window.open('/privacy', '개인정보 처리 방침', 'width=800, height=700, toolbar=no, menubar=no, scrollbars=no, resizable=yes' );return false;"  class="agree_info" >팝업</a>
+<!-- 					<a href="javascript:;" class="agree_info btn_privacy_pop">팝업</a> -->
 				</li>
 				<li>
 					<input type="checkbox" id="agree_chk2"><label for="agree_chk2">가축시장 시스템 이용약관 동의(체크)</label>
-					<a href="javascript:;" class="agree_info btn_privacy_pop">팝업</a>
+					<a href="#" onclick="window.open('/agreement/new', '이용약관', 'width=800, height=700, toolbar=no, menubar=no, scrollbars=no, resizable=yes' );return false;"  class="agree_info" >팝업</a>
+<!-- 					<a href="javascript:;" class="agree_info btn_agreement_pop">팝업</a> -->
 				</li>
 			</ul>
 			<a href="javascript:;" class="btn_login">로그인</a>
+			<div class="sns_login">
+				<a href="javascript:;" class="btn_kakao">카카오 로그인</a>
+			</div>	
 		</div>
 	</form>
 	<form name="frm_auth" id="frm_auth" method="post">
@@ -54,7 +59,7 @@
 		<div class="login_bottom">
 			<p class="login_info">${johapData.CLNTNM} 이용문의</p>
 			<p class="cs_phone">${johapData.TEL_NO }</p>
-			<p class="cs_clock">월-토 9:00~18:00<br>(점심 12:00~13:00)</p>
+			<p class="cs_clock">월-금 9:00~18:00<br>(점심 12:00~13:00)</p>
 		</div>
 		<!-- //login_bottom e -->
 	</form>
@@ -87,7 +92,7 @@
 					제4조 (경매)<br/>
 					① 경매는 공정하고 객관적인 가격이 형성될 수 있는 방법에 의하여야 한다.<br/>
 					② 경매사는 경매 실시 전 대상가축의 축주, 품종 등과 경락 후 경락사항 등을 경매에 참가한 모든 사람에게 공표하여야 한다.<br/>
-					③ 대상가축의 경락은 최고가격 응찰자로 한다. 다만, 가축시장 운영 특성에 따라 경매 시작 전매도인이 서면으로 거래 성립 최저가격을 제시한 경우에는 그 가격 미만으로 판매할 수 없다.<br/><br/>
+					③ 대상가축의 경락은 최고가격 응찰자로 한다. 다만, 가축시장 운영 특성에 따라 경매 시작 전매도인이 서면으로 거래 성립 예정가격을 제시한 경우에는 그 가격 미만으로 판매할 수 없다.<br/><br/>
 					
 					제5조 (예정가격 결정)<br/>
 					① 경매 예정가격 결정을 위하여 예정가격사정위원을 운용할 수 있다.<br/>

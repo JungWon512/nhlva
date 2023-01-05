@@ -95,4 +95,35 @@ public class LoginDAO {
 		return mainDao.update("LoginMapper.sendSms", params);
 	}
 
+	/**
+	 * 로그인 최종접속일시, 휴면예정일자 업데이트
+	 * 최종접속일시 SYSDATE, 휴면예정일자 TO_CHAR(SYSDATE + 365, 'YYYYMMDD')
+	 * @param params
+	 * @return
+	 * @throws SQLException
+	 */
+	public int updateMbintgConDormInfo(Map<String, Object> params) throws SQLException{
+		return mainDao.update("LoginMapper.updateMbintgConDormInfo", params);
+	}
+
+	/**
+	 * 회원통합번호를 중도매인 테이블 컬럼에 업데이트 
+	 * @param params
+	 * @return int
+	 * @throws SQLException
+	 */
+	public int updateMmMwmnMbintgNo(Map<String, Object> params) throws SQLException{
+		return mainDao.update("LoginMapper.updateMmMwmnMbintgNo", params);
+	}
+
+	/**
+	 * 회원통합번호를 출하주(농가) 테이블 컬럼에 업데이트
+	 * @param params
+	 * @return int
+	 * @throws SQLException
+	 */
+	public int updateMmFhsMbintgNo(Map<String, Object> params) throws SQLException{
+		return mainDao.update("LoginMapper.updateMmFhsMbintgNo", params);
+	}
+
 }

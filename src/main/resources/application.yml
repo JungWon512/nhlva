@@ -3,6 +3,13 @@ jwt:
 cript:
   key: aaaaaaaaaabbbbbb
   iv: aaaaaaaaaabbbbbb
+  
+# op
+# mca.ip=http://192.168.97.141:18211/http/lvaca-fmec
+# dev
+mca:
+  url: http://192.168.114.11:18211/http/lvaca-fmec
+  
 server:
   error:
     whitelabel:
@@ -58,7 +65,7 @@ spring:
 mybatis:
   config-location: classpath:database/mybatis-config.xml
   mapper-locations: classpath:database/mapper/**/*Mapper.xml
-  
+
 ncloud:
   storage:
     end-point: https://kr.object.ncloudstorage.com

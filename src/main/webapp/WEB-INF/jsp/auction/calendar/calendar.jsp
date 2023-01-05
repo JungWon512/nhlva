@@ -31,7 +31,7 @@
 								<span>${vo.AUC_WEEK_DAY }요일</span>
 							</dt>
 							<dd>
-								<p class="date_tit">${vo.CLNTNM } ${vo.AUC_OBJ_DSC_NAME } 경매</p>
+								<p class="date_tit">${vo.CLNTNM } ${fn:replace(vo.AUC_OBJ_DSC_NAME,'일괄','번식우,송아지,비육우') } 경매</p>
 								<p class="date_time">${vo.AUC_YEAR }년 ${vo.AUC_MONTH }월 ${vo.AUC_DAY}일(${vo.AUC_WEEK_DAY })</p>								
 							</dd>
 						</dl>

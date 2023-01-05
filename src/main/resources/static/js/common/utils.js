@@ -87,17 +87,18 @@ var goWatchApp = function() {
 			"url" : window.location.origin + '/watchApp' + window.location.search
 			, "watch_token" : getCookie('watch_token')
 		};
-		// 안드로이드
-		if (window.auctionBridge) {
-			window.auctionBridge.moveAuctionWatch(JSON.stringify(params));
-		}
-		// 아이폰
-		else if(isIos()) {
-			window.webkit.messageHandlers.moveAuctionWatch.postMessage(JSON.stringify(params));
-		}
-		else {
-			location.href = window.location.origin + '/watch' + window.location.search;
-		}
+		//		// 안드로이드
+		//		if (window.auctionBridge) {
+		//			window.auctionBridge.moveAuctionWatch(JSON.stringify(params));
+		//		}
+		//		// 아이폰
+		//		else if(isIos()) {
+		//			window.webkit.messageHandlers.moveAuctionWatch.postMessage(JSON.stringify(params));
+		//		}
+		//		else {
+		//			location.href = window.location.origin + '/watch' + window.location.search;
+		//		}
+		location.href = window.location.origin + '/watch' + window.location.search;
 	}
 	catch(e) {
 		location.href = window.location.origin + '/watch' + window.location.search;
@@ -196,6 +197,14 @@ var getTimeStr = function(gubun) {
 	var min = date.getMinutes().toString().padStart("2", "0");
 	var hour = date.getHours().toString().padStart("2", "0");
 	return hour+gubun+min;
+};
+
+var getTodayStrForStream = function() {
+	var date = new Date();
+	var gubun = gubun?gubun:'-';
+	var month = (date.getMonth() + 1).toString().padStart("2", "0");
+	var day = date.getDate().toString().padStart("2", "0")
+	return month+'월'+day+'일';
 };
 
 var getDateStr = function(date,gubun) {
@@ -354,6 +363,41 @@ function modalComfirm(title,content,succCallBack,failCallBack){
 		modalPopupClose('.popup .modal-wrap.confirm');
 	});
 }
+function modalBzInfo(){
+	modalPopupClose('.popup .modal-wrap.pop_Co_info');
+	$('.popup .modal-wrap.pop_Co_info').remove();
+	
+	var sHtml="";
+	
+	sHtml += ' <div id="" class="modal-wrap pop_Co_info open" style="overflow: auto; display: block;"> ';
+	sHtml += ' 	<div class="modal-content" style="margin-top: 310.5px;"> ';
+	sHtml += ' 		<p class="name">농협경제지주 주식회사(축산경제)</p> ';
+	sHtml += ' 		<dl> ';
+	sHtml += ' 			<dt>•  대표자</dt> ';
+	sHtml += ' 			<dd>안병우</dd> ';
+	sHtml += ' 		</dl> ';
+	sHtml += ' 		<dl> ';
+	sHtml += ' 			<dt>•  주소</dt> ';
+	sHtml += ' 			<dd>서울특별시 중구 새문안로 16, 8층 (충청로 1가, 농협중앙회 본관)</dd> ';
+	sHtml += ' 		</dl> ';
+	sHtml += ' 		<dl> ';
+	sHtml += ' 			<dt>•  사업자번호</dt> ';
+	sHtml += ' 			<dd>845-85-00512</dd> ';
+	sHtml += ' 		</dl> ';
+	sHtml += ' 		<div class="btn_area"> ';
+	sHtml += ' 			<button class="btn_ok" onclick="modalPopupClose(\'.pop_Co_info\');return false;">확인</button> ';
+	sHtml += ' 		</div> ';
+	sHtml += ' 	</div> ';
+	sHtml += ' </div> ';
+		
+	$('.popup').append($(sHtml));
+	modalPopup('.popup .modal-wrap.pop_Co_info');
+	
+	$('.popup .modal-wrap.pop_Co_info .btn_ok').click(function(){
+		modalPopupClose('.popup .modal-wrap.pop_Co_info');
+	});
+	
+}
 
 function modalAlert(title,content, succCallBack){
 	modalPopupClose('.popup .modal-wrap.message');
@@ -413,11 +457,11 @@ var addCalendarEvent = function(target) {
 	if (!target) target = $(".calendar");
 	
 	$(target).datepicker({
-		dateFormat: 'yy.mm.dd' //Input Display Format 변경
+		dateFormat: 'yy-mm-dd' //Input Display Format 변경
 		,showOtherMonths: true //빈 공간에 현재월의 앞뒤월의 날짜를 표시
 		,showMonthAfterYear:true //년도 먼저 나오고, 뒤에 월 표시
-//		,changeYear: true //콤보박스에서 년 선택 가능
-//		,changeMonth: true //콤보박스에서 월 선택 가능                
+		,changeYear: true //콤보박스에서 년 선택 가능
+		,changeMonth: true //콤보박스에서 월 선택 가능                
 //		,showOn: "both" //button:버튼을 표시하고,버튼을 눌러야만 달력 표시 ^ both:버튼을 표시하고,버튼을 누르거나 input을 클릭하면 달력 표시  
 //		,buttonImage: "http://jqueryui.com/resources/demos/datepicker/images/calendar.gif" //버튼 이미지 경로
 //		,buttonImageOnly: false //기본 버튼의 회색 부분을 없애고, 이미지만 보이게 함
@@ -427,9 +471,10 @@ var addCalendarEvent = function(target) {
 		,monthNames: ['1월','2월','3월','4월','5월','6월','7월','8월','9월','10월','11월','12월'] //달력의 월 부분 Tooltip 텍스트
 		,dayNamesMin: ['일','월','화','수','목','금','토'] //달력의 요일 부분 텍스트
 		,dayNames: ['일요일','월요일','화요일','수요일','목요일','금요일','토요일'] //달력의 요일 부분 Tooltip 텍스트
-		,minDate: "-1Y" //최소 선택일자(-1D:하루전, -1M:한달전, -1Y:일년전)
-		,maxDate: "0D" //최대 선택일자(+1D:하루후, -1M:한달후, -1Y:일년후) 
+		,minDate: "-20Y" //최소 선택일자(-1D:하루전, -1M:한달전, -1Y:일년전)
+		,maxDate: "+10Y" //최대 선택일자(+1D:하루후, -1M:한달후, -1Y:일년후) 
 	});
+	$(target).prop("readonly", true);
 };
 
 var onLocationPermissionsResult = function(permissionYn) {
@@ -529,5 +574,114 @@ var toast = function(string, sec, top) {
 }
 
 var fnSetComma = function(str) {
-	return (str != undefined && str.toString().replace(/[^0-9]/gi, '') != "") ? str.toString().replace(/[^0-9]/gi, '').replace(/\B(?=(\d{3})+(?!\d))/g, ",") : "0";
+	if (!str || str.toString().replace(/[^0-9]/gi, '') == "") {
+		return (str ? str : "0");
+	}
+	
+	const delim = str.toString().substring(0,1) == '-' ? '-' : '';
+	
+	return delim + str.toString().replace(/[^0-9]/gi, '').replace(/\B(?=(\d{3})+(?!\d))/g, ",") ;
 }
+
+var fnMcaInterface = function(strData, callback) {
+	$.ajax({
+		url : '/office/interface/mca',
+		data : strData,
+		type : 'POST',
+		dataType : 'json',
+		beforeSend: function (xhr) {
+			xhr.setRequestHeader("Accept", "application/json");
+			xhr.setRequestHeader("Content-Type", "application/json");
+		},
+		success : function() {
+		},
+		error: function(xhr, status, error) {
+		}
+	}).done(function (body) {
+		if (body && body.code == "C000") {
+			console.log(body.data);
+			callback(body);
+		}
+		else {
+			modalAlert("", body.message);
+		}
+	});
+}
+
+var setAuthNoCountDown = function(){
+	var countdown = $("#countdown");
+	var auth_no = $("input[name='auth_no']").val();
+	var auth_ymd = $("input[name='auth_ymd']").val();
+	
+	if(auth_no != null && auth_no != ""){
+		var countDownDate = new Date(auth_ymd.substr(0,4), auth_ymd.substr(4,2) - 1, auth_ymd.substr(6,2), auth_ymd.substr(8,2), auth_ymd.substr(10, 2), auth_ymd.substr(12, 2)).getTime();
+		var x = setInterval(function(){
+			var now = new Date().getTime();
+			var distance = countDownDate - now;
+			var days = Math.floor(distance / (1000 * 60 * 60 * 24));
+			var hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+			var minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+			var seconds = Math.floor((distance % (1000 * 60)) / 1000);
+			var arrHtml = [];
+			
+			if(distance < 0){
+				clearInterval(x);
+				$(".btn-re-auth").show();
+				$(".authNoArea").hide();
+			}else{
+				if(days > 0){
+					arrHtml.push(days + "일 ");
+				}
+				if(hours > 0){
+					if(hours < 10) hours = "0" + hours;
+					arrHtml.push(hours + ":");
+				}	
+				
+				if(minutes >= 0 && minutes < 10)	minutes = "0"  + minutes;
+				if(seconds >= 0 && seconds < 10)  seconds = "0"  + seconds;
+				arrHtml.push(minutes + ":" + seconds);
+				countdown.html(arrHtml.join(""));
+				
+				$(".btn-re-auth").hide();
+				$(".authNoArea").show();
+			}
+			
+		}, 1000);
+	}
+	else{
+		$(".btn-re-auth").show();
+	}
+}
+
+var fnIssueKioskAuthNum = function() {
+//	modalComfirm(""
+//		, "발급하시겠습니까?"
+//		, function(){
+		$.ajax({
+			url: '/my/myAuthNumIssue',
+			data: JSON.stringify($("form[name='frm_info']").serializeObject()),
+			type: 'POST',
+			dataType: 'json',
+			beforeSend: function (xhr) {
+				xhr.setRequestHeader("Accept", "application/json");
+				xhr.setRequestHeader("Content-Type", "application/json");
+			}
+		}).done(function (body) {
+			var success = body.success;
+			var message = body.message;
+			if (!success) {
+				modalAlert('', message);
+			}
+			else {	//인증번호 발급된 경우
+//				modalAlert('', message, 
+//				function(){
+				$("input[name='auth_no']").val(body.auth_no);
+				$("input[name='auth_ymd']").val(body.auth_ymd);
+				$(".authNoArea #authNo").text(body.auth_no);
+				setAuthNoCountDown();
+//				});
+			}
+		});
+//		});
+	return;
+};

@@ -59,8 +59,8 @@ public class AdminTaskController extends CommonController {
 			if(userVo != null) map.put("naBzPlc", userVo.getNaBzplc());
 			map.put("entryType", "B");
 			if(userVo != null) map.put("naBzPlcNo", userVo.getPlace());
-			
-			final List<Map<String,Object>> dateList = auctionService.selectAucDateList(map);
+
+			final List<Map<String,Object>> dateList = adminTaskService.selectAucDtList(map);
 			mav.addObject("dateList", dateList);
 			mav.addObject("johapData", adminService.selectOneJohap(map));
 		}catch (RuntimeException re) {
@@ -236,11 +236,6 @@ public class AdminTaskController extends CommonController {
 		return result;
 	}
 	
-	private Object getCommonCode(String string, String string2) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
 	/**
 	 * 중량, 최저가, 계류대 정보 저장
 	 * @param params
@@ -342,6 +337,7 @@ public class AdminTaskController extends CommonController {
 	public ModelAndView searchIndv(@RequestParam final Map<String, Object> params) throws SQLException {
 		final ModelAndView mav = new ModelAndView("admin/task/searchIndv");
 		mav.addObject("aucObjDscList", this.getCommonCode("AUC_OBJ_DSC", "1"));
+		mav.addObject("dateList", adminTaskService.selectAucDtList(params));
 		mav.addObject("params", params);
 		mav.addObject("subheaderTitle", "개체 조회");
 		return mav;
@@ -357,6 +353,7 @@ public class AdminTaskController extends CommonController {
 	public Map<String, Object> searchIndvAjax(@RequestBody final Map<String, Object> params) {
 		Map<String, Object> result = new HashMap<String, Object>();
 		try {
+			result = adminTaskService.searchIndvAmnno(params);
 		}
 		catch (Exception e) {
 			e.printStackTrace();
@@ -378,6 +375,7 @@ public class AdminTaskController extends CommonController {
 	public Map<String, Object> checkAucDt(@RequestBody final Map<String, Object> params) throws SQLException {
 		Map<String, Object> result = new HashMap<String, Object>();
 		try {
+			result = adminTaskService.checkAucDt(params);
 		}
 		catch (Exception e) {
 			e.printStackTrace();
@@ -402,6 +400,8 @@ public class AdminTaskController extends CommonController {
 		mav.addObject("indvSexCList", this.getCommonCode("INDV_SEX_C", ""));				// 개체성별 코드
 		mav.addObject("rgDscList", this.getCommonCode("SRA_INDV_BRDSRA_RG_DSC", ""));		// 등록구분 코드
 		mav.addObject("ppgcowFeeDscList", this.getCommonCode("PPGCOW_FEE_DSC", ""));		// 번식우수수료 구분코드
+		mav.addObject("sogCowInfo", adminTaskService.selectSogCowInfo(params));
+		mav.addObject("qcnInfo", adminTaskService.selectQcnInfo(params));
 		mav.addObject("params", params);
 		mav.addObject("subheaderTitle", "출장우 간편 등록");
 		return mav;
@@ -418,6 +418,7 @@ public class AdminTaskController extends CommonController {
 	public Map<String, Object> registCowAjax(@RequestBody final Map<String, Object> params) {
 		Map<String, Object> result = new HashMap<String, Object>();
 		try {
+			result = adminTaskService.registSogCow(params);
 		}
 		catch (Exception e) {
 			e.printStackTrace();
@@ -443,6 +444,7 @@ public class AdminTaskController extends CommonController {
 	public Map<String, Object> searchSogCowAjax(@RequestBody final Map<String, Object> params) {
 		Map<String, Object> result = new HashMap<String, Object>();
 		try {
+			result = adminTaskService.searchSogCow(params);
 		}
 		catch (Exception e) {
 			e.printStackTrace();
@@ -464,6 +466,7 @@ public class AdminTaskController extends CommonController {
 	public Map<String, Object> updateResultAjax(@RequestBody final Map<String, Object> params) {
 		Map<String, Object> result = new HashMap<String, Object>();
 		try {
+			result = adminTaskService.updateResult(params);
 		}
 		catch (Exception e) {
 			e.printStackTrace();

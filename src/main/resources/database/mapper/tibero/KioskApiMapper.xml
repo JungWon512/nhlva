@@ -66,26 +66,29 @@
 			 , A.AUC_OBJ_DSC
 			 , G.SIMP_CNM AS AUC_OBJ_DSCNM
 			 , A.SRA_INDV_AMNNO
-			 , F.SIMP_CNM AS INDV_SEX_C_NM
-			 , TO_CHAR(TO_DATE(C.BIRTH,'YYYYMMDD'),'YYYY-MM-DD') BIRTH_STR
+			 , C.INDV_SEX_C
+			 , F.SIMP_CNM AS INDV_SEX_CNM
+			 , TO_CHAR(TO_DATE(C.BIRTH,'YYYYMMDD'),'YYYY-MM-DD') BIRTH
 			 , CASE WHEN TRUNC(MONTHS_BETWEEN(A.AUC_DT, C.BIRTH)) +1 <![CDATA[<=]]> 4 AND A.NA_BZPLC NOT IN ('8808990656199', '8808990656434') THEN 4
 					ELSE TRUNC(MONTHS_BETWEEN(A.AUC_DT, C.BIRTH)) +1
 				END AS MTCN
-			 , A.PRNY_JUG_YN
-			 , A.PRNY_YN
-			 , A.NCSS_JUG_YN
-			 , A.NCSS_YN
-			 , A.RMHN_YN
+			 , NVL(A.PRNY_JUG_YN, '0') AS PRNY_JUG_YN
+			 , NVL(A.PRNY_YN, '0') AS PRNY_YN
+			 , NVL(A.NCSS_JUG_YN, '0') AS NCSS_JUG_YN
+			 , NVL(A.NCSS_YN, '0') AS NCSS_YN
+			 , NVL(A.RMHN_YN, '0') AS RMHN_YN
 			 , REGEXP_REPLACE(C.KPN_NO, '[^0-9]') AS KPN_NO
 			 , C.MATIME
 			 , C.SRA_INDV_PASG_QCN
 			 , NVL(A.COW_SOG_WT, 0) AS COW_SOG_WT
-			 , A.RMK_CNTN
 			 , C.RG_DSC
 			 , D.SIMP_CNM AS RG_DSCNM
+			 , A.LOWS_SBID_LMT_AM
+			 , A.PRNY_MTCN
+			 , A.RMK_CNTN
+			 , C.MCOW_SRA_INDV_AMNNO
 			 , C.MCOW_DSC
 			 , E.SIMP_CNM AS MCOW_DSCNM
-			 , C.MCOW_SRA_INDV_AMNNO
 		  FROM TB_LA_IS_MH_SOG_COW A
 		  LEFT OUTER JOIN TB_LA_IS_MM_FHS B
 			ON (
@@ -133,14 +136,16 @@
 		<if test="selStsDsc != null and selStsDsc != ''">
 		   AND A.SEL_STS_DSC = #{selStsDsc}
 		</if>
-		<choose>
-		<when test='indvSexC != null and "1".equals(indvSexC)'>
-		   AND C.INDV_SEX_C IN ('1', '4', '6')
-		</when>
-		<otherwise>
-		   AND C.INDV_SEX_C NOT IN ('1', '4', '6')
-		</otherwise>
-		</choose>
+		<if test="indvSexC != null and indvSexC != ''">
+			<choose>
+			<when test='"1".equals(indvSexC)'>
+			   AND C.INDV_SEX_C IN ('1', '4', '6')
+			</when>
+			<otherwise>
+			   AND C.INDV_SEX_C NOT IN ('1', '4', '6')
+			</otherwise>
+			</choose>
+		</if>
 		 ORDER BY AUC_PRG_SQ
 	</select>
 
@@ -148,6 +153,7 @@
 	<select id="selectAuthNoInfo" parameterType="hashMap" resultType="hashMap">
 		SELECT NA_BZPLC
 			 , TRMN_AMNNO
+			 , TRMN_AMNNO AS USER_MEM_NUM
 			 , MWMN_NA_TRPL_C
 			 , SRA_MWMNNM
 			 , FRLNO
@@ -178,6 +184,46 @@
 		   AND AUTH_YMD <![CDATA[>=]]> TO_CHAR(SYSDATE, 'YYYYMMDDHH24MISS')
 	</select>
 	
+	<!-- 키오스크 인증번호로 출하주정보 조회 -->
+	<select id="selectFhsAuthNoInfo" parameterType="hashMap" resultType="hashMap">
+		SELECT NA_BZPLC
+			 , FHS_ID_NO
+			 , FARM_AMNNO
+			 , FHS_ID_NO||'-'||FARM_AMNNO AS USER_MEM_NUM
+			 , FARM_ID_NO
+			 , NA_TRPL_C
+			 , FTSNM
+			 , ZIP
+			 , DONGUP
+			 , DONGBW
+			 , OHSE_TELNO
+			 , CUS_MPNO
+			 , MACO_YN
+			 , RMK_CNTN
+			 , JRDWO_DSC
+			 , DEL_YN
+			 , ANW_YN
+			 , HDWK_RG_YN
+			 , SRA_FARM_ACNO
+			 , NEW_SRA_FARM_ACNO
+			 , SRA_FED_SPY_YN
+			 , BIRTH
+			 , FSRG_DTM
+			 , FSRGMN_ENO
+			 , LSCHG_DTM
+			 , LS_CMENO
+			 , MB_INTG_NO
+			 , SMS_NO
+			 , SMS_YMD
+			 , AUTH_NO
+			 , AUTH_YMD
+		  FROM TB_LA_IS_MM_FHS
+		 WHERE NA_BZPLC = #{naBzplc}
+		   AND AUTH_NO = #{authNo}
+		   AND AUTH_YMD <![CDATA[>=]]> TO_CHAR(SYSDATE, 'YYYYMMDDHH24MISS')
+	</select>
+	
+	<!-- 참가 등록된 중도매인 조회 -->
 	<select id="selectEntryList" parameterType="hashMap" resultType="hashMap">
 		SELECT NA_BZPLC
 			 , AUC_DT
@@ -201,6 +247,7 @@
 		   AND DEL_YN = '0'
 	</select>
 	
+	<!-- 중도매인 참가등록 -->
 	<insert id="insertEntryInfo" parameterType="hashMap">
 		<selectKey keyColumn="lvstAucPtcMnNo" keyProperty="lvstAucPtcMnNo" resultType="String" order="BEFORE">
 			SELECT NVL(MAX(LVST_AUC_PTC_MN_NO)+1, 1000)
@@ -237,4 +284,558 @@
 							   AND B.AUC_DT = A.AUC_DT
 							   AND B.TRMN_AMNNO = #{trmnAmnno})
 	</insert>
+	
+	<!-- 경매차수 정보 -->
+	<select id="selectAucQcnInfo" parameterType="hashMap" resultType="hashMap">
+		SELECT A.NA_BZPLC
+			 , A.AUC_DT
+			 , A.AUC_OBJ_DSC
+			 , B.SIMP_CNM AS AUC_OBJ_DSCNM
+			 , A.QCN
+		  FROM TB_LA_IS_MH_AUC_QCN A
+		  LEFT OUTER JOIN TB_LA_IS_MH_COMN_APL B
+			ON (
+				B.SIMP_TPC = 'AUC_OBJ_DSC'
+				AND
+				A.AUC_OBJ_DSC = B.SIMP_C 
+				AND
+				B.SIMP_C_GRP_SQNO = '2'
+			 )
+		 WHERE A.NA_BZPLC = #{naBzplc}
+		   AND A.AUC_DT = NVL(#{aucDt}, TO_CHAR(SYSDATE, 'YYYYMMDD'))
+		   AND A.AUC_OBJ_DSC = #{aucObjDsc}
+		   AND A.DEL_YN = '0'
+	</select>
+	
+	<!-- 경매 참가정보 -->
+	<select id="selectEntrInfo" parameterType="hashMap" resultType="hashMap">
+		SELECT A.NA_BZPLC
+			 , A.AUC_DT
+			 , A.AUC_OBJ_DSC
+			 , A.TRMN_AMNNO
+			 , A.LVST_AUC_PTC_MN_NO
+			 , A.AUC_ENTR_GRN_AM
+			 , A.RTRN_YN
+			 , B.SRA_MWMNNM
+			 , B.ZIP
+			 , B.DONGUP
+			 , B.DONGBW
+		  FROM TB_LA_IS_MH_AUC_ENTR A
+		 INNER JOIN TB_LA_IS_MM_MWMN B
+			ON (
+				A.NA_BZPLC = B.NA_BZPLC
+				AND
+				A.TRMN_AMNNO = B.TRMN_AMNNO
+			 )
+		 WHERE A.NA_BZPLC = #{naBzplc}
+		   AND A.AUC_DT = NVL(#{aucDt}, TO_CHAR(SYSDATE, 'YYYYMMDD'))
+		   AND A.AUC_OBJ_DSC = #{aucObjDsc}
+		   AND A.TRMN_AMNNO = #{trmnAmnno}
+		   AND A.DEL_YN = '0'
+	</select>
+	
+	<!-- 낙찰 받은 출장우 리스트 -->
+	<select id="selectBuyList" parameterType="hashMap" resultType="hashMap">
+		SELECT A.NA_BZPLC
+			 , A.AUC_OBJ_DSC
+			 , G.SIMP_CNM AS AUC_OBJ_DSCNM
+			 , A.AUC_DT
+			 , A.AUC_PRG_SQ
+			 , A.SRA_INDV_AMNNO
+			 , B.INDV_SEX_C
+			 , E.SIMP_CNM AS INDV_SEX_CNM
+			 , TO_CHAR(TO_DATE(B.BIRTH, 'YYYYMMDD'), 'YYYY-MM-DD') AS BIRTH
+			 , A.COW_SOG_WT
+			 , B.KPN_NO
+			 , C.SRA_INDV_AMNNO AS CCOW_SRA_INDV_AMNNO
+			 , C.INDV_SEX_C AS CCOW_INDV_SEX_C
+			 , F.SIMP_CNM AS CCOW_INDV_SEX_CNM
+			 , C.BIRTH AS CCOW_BIRTH
+			 , A.PRNY_MTCN
+			 , A.SRA_SBID_AM
+			 , A.SRA_SBID_UPR
+			 , A.LOWS_SBID_LMT_AM
+			 , A.RMK_CNTN
+			 , NVL(D.SRA_TR_FEE, 0) AS SRA_TR_FEE
+		  FROM TB_LA_IS_MH_SOG_COW A
+		 INNER JOIN TB_LA_IS_MM_INDV B
+			ON (
+				A.NA_BZPLC = B.NA_BZPLC
+				AND
+				A.SRA_INDV_AMNNO = B.SRA_INDV_AMNNO
+				AND
+				A.SRA_SRS_DSC = B.SRA_SRS_DSC
+			 )
+		  LEFT OUTER JOIN TB_LA_IS_MH_CALF C
+			ON (
+				A.NA_BZPLC = C.NA_BZPLC
+				AND
+				A.AUC_OBJ_DSC = C.AUC_OBJ_DSC
+				AND
+				A.AUC_DT = C.AUC_DT
+				AND
+				A.OSLP_NO = C.OSLP_NO
+				AND
+				C.RG_SQNO = '1'
+			 )
+		  LEFT OUTER JOIN (
+				SELECT SUM(NVL(SRA_TR_FEE, 0)* DECODE(ANS_DSC, 1, 1, -1)) AS SRA_TR_FEE
+					 , NA_BZPLC
+					 , AUC_OBJ_DSC
+					 , AUC_DT
+					 , OSLP_NO
+					 , LED_SQNO
+				  FROM TB_LA_IS_MH_FEE_IMPS
+				 WHERE NA_BZPLC = #{naBzplc}
+				   AND AUC_DT = NVL(#{aucDt}, TO_CHAR(SYSDATE, 'YYYYMMDD'))
+				   AND AUC_OBJ_DSC = CASE WHEN #{aucObjDsc} = '0' THEN AUC_OBJ_DSC ELSE #{aucObjDsc} END
+				   AND FEE_APL_OBJ_C = '2'
+				 GROUP BY NA_BZPLC, AUC_OBJ_DSC, AUC_DT, OSLP_NO, LED_SQNO
+			 )D
+			ON (
+				A.NA_BZPLC = D.NA_BZPLC
+				AND
+				A.AUC_OBJ_DSC = D.AUC_OBJ_DSC
+				AND
+				A.AUC_DT = D.AUC_DT
+				AND
+				A.OSLP_NO = D.OSLP_NO
+				AND
+				A.LED_SQNO = D.LED_SQNO
+			 )
+		  LEFT OUTER JOIN TB_LA_IS_MH_COMN_APL E
+			ON (
+				E.SIMP_TPC = 'INDV_SEX_C'
+				AND
+				E.SIMP_C = B.INDV_SEX_C
+				AND
+				E.SIMP_C_GRP_SQNO = '1'
+			 )
+		  LEFT OUTER JOIN TB_LA_IS_MH_COMN_APL F
+			ON (
+				F.SIMP_TPC = 'INDV_SEX_C'
+				AND
+				F.SIMP_C = C.INDV_SEX_C
+				AND
+				F.SIMP_C_GRP_SQNO = '1'
+			 )
+		  LEFT OUTER JOIN TB_LA_IS_MH_COMN_APL G
+			ON (
+				G.SIMP_TPC = 'AUC_OBJ_DSC'
+				AND
+				G.SIMP_C = A.AUC_OBJ_DSC
+				AND
+				G.SIMP_C_GRP_SQNO = '1'
+			 )
+		 WHERE A.NA_BZPLC = #{naBzplc}
+		   AND A.AUC_DT = NVL(#{aucDt}, TO_CHAR(SYSDATE, 'YYYYMMDD'))
+		   AND A.AUC_OBJ_DSC = CASE WHEN #{aucObjDsc} = '0' THEN A.AUC_OBJ_DSC ELSE #{aucObjDsc} END
+		   AND A.TRMN_AMNNO = #{trmnAmnno}
+		   AND A.SEL_STS_DSC = '22'
+		<if test="indvSexC != null and indvSexC != ''">
+			<choose>
+			<when test='"1".equals(indvSexC)'>
+			   AND B.INDV_SEX_C IN ('1', '4', '6')
+			</when>
+			<otherwise>
+			   AND B.INDV_SEX_C NOT IN ('1', '4', '6')
+			</otherwise>
+			</choose>
+		</if>
+		 ORDER BY A.AUC_PRG_SQ
+	</select>
+	
+	<!--  가축시장 정보 -->
+	<select id="selectWmcInfo" parameterType="hashMap" resultType="hashMap">
+		SELECT A.NA_BZPLC
+			 , A.NA_BZPLNM
+			 , A.BRC
+			 , A.REP_BRC
+			 , A.BZNO
+			 , A.REPMNM
+			 , A.ZIP
+			 , A.DONGUP
+			 , A.DONGBW
+			 , A.TELNO
+			 , A.REP_BNK_C
+			 , B.SIMP_CNM AS REP_BNK_CNM
+			 , A.ACNO
+			 , A.RMK_CNTN
+			 , A.SEAL_IMG_CNTN
+		  FROM TB_LA_IS_MM_WMC A
+		  LEFT OUTER JOIN TB_LA_IS_MH_COMN_APL B
+			ON (
+				B.SIMP_TPC = 'REP_BNK_C'
+				AND
+				B.SIMP_C = A.REP_BNK_C
+				AND
+				B.SIMP_C_GRP_SQNO = '1'
+			 )
+		 WHERE A.NA_BZPLC = #{naBzplc}
+	</select>
+	
+	<!-- 낙찰 정산 상세 정보 -->
+	<select id="selectStatInfo" parameterType="hashMap" resultType="hashMap">
+		SELECT COUNT(*) AS SRA_AUC_SBID_HDCN												/* 축산경매낙찰두수 */
+			 , SUM(A.SRA_SBID_AM) AS SRA_SBID_AM											/* 축산낙찰금액 */
+			 , SUM(C.SRA_TR_FEE_011) AS SRA_TR_FEE_011										/* 축산판매수수료 */
+			 , SUM(C.SRA_TR_FEE_090) AS SRA_TR_FEE_090										/* 축산자조금 */
+			 , NVL(B.TOT_CSH_RV_AM, 0) AS TOT_CSH_RV_AM										/* 현금입금액 */
+			 , NVL(B.TOT_CK_RV_AM, 0) AS TOT_CK_RV_AM										/* 수표입금액 */
+			 , NVL(B.TOT_BB_RV_AM, 0) AS TOT_BB_RV_AM										/* 통장입금액 */
+			 , NVL(B.TOT_ETC_RV_AM, 0) AS TOT_ETC_RV_AM										/* 기타입금액 */
+			 , (SUM(A.SRA_SBID_AM) + SUM(NVL(C.SRA_TR_FEE_011, 0)) + SUM(NVL(C.SRA_TR_FEE_090, 0)) + SUM(NVL(C.SRA_ETC_CST, 0))) AS TOT_PYM_AM		/* 총납입할 금액 */
+			 , NVL(B.SRA_RV_AM, 0) AS SRA_RV_AM												/* 총입금액 */
+			 , (SUM(A.SRA_SBID_AM) + SUM(NVL(C.SRA_TR_FEE_011, 0)) + SUM(NVL(C.SRA_TR_FEE_090, 0)) + SUM(NVL(C.SRA_ETC_CST, 0)) - (NVL(B.SRA_RV_AM, 0))) AS TOT_NPYM_AM	/* 미납입금액    */
+			 , SUM(NVL(C.SRA_TR_FEE_020, 0)) AS SRA_TR_FEE_020									/* 조합출자금 */
+			 , SUM(NVL(C.SRA_TR_FEE_030, 0)) AS SRA_TR_FEE_030									/* 사고적립금 */
+			 , SUM(NVL(C.SRA_TR_FEE_040, 0)) AS SRA_TR_FEE_040									/* 운송비 */
+			 , SUM(NVL(C.SRA_TR_FEE_050, 0)) AS SRA_TR_FEE_050									/* 괴사감정료 */
+			 , SUM(NVL(C.SRA_TR_FEE_060, 0)) AS SRA_TR_FEE_060									/* 임신감정료 */
+			 , SUM(NVL(C.SRA_TR_FEE_070, 0)) AS SRA_TR_FEE_070									/* 검진비 */
+			 , SUM(NVL(C.SRA_TR_FEE_080, 0)) AS SRA_TR_FEE_080									/* 주사료 */
+			 , SUM(NVL(C.SRA_TR_FEE_100, 0)) AS SRA_TR_FEE_100									/* 혈통접수비 */
+			 , SUM(NVL(C.SRA_TR_FEE_110, 0)) AS SRA_TR_FEE_110									/* 제각수수료 */
+			 , SUM(NVL(C.SRA_TR_FEE_120, 0)) AS SRA_TR_FEE_120									/* 위탁수수료 */
+			 , SUM(C.SRA_TR_FEE_011) +  SUM(NVL(C.SRA_TR_FEE_090, 0)) + SUM(NVL(C.SRA_ETC_CST, 0)) AS SRA_FEE		/* 총 수수료 */
+			 , SUM(CASE WHEN D.INDV_SEX_C IN ('1', '4', '6') THEN 1 ELSE 0 END) AS SRA_AUC_SBID_HDCN_F				/* 암소 낙찰 두 수 */
+			 , SUM(CASE WHEN D.INDV_SEX_C NOT IN ('1', '4', '6') THEN 1 ELSE 0 END) AS SRA_AUC_SBID_HDCN_M			/* 수소 낙찰 두 수 */
+			 , SUM(CASE WHEN D.INDV_SEX_C IN ('1', '4', '6') THEN A.SRA_SBID_AM ELSE 0 END) AS SRA_SBID_AM_F		/* 암소 낙찰 금액 */
+			 , SUM(CASE WHEN D.INDV_SEX_C NOT IN ('1', '4', '6') THEN A.SRA_SBID_AM ELSE 0 END) AS SRA_SBID_AM_M	/* 암소 낙찰 금액 */
+		  FROM TB_LA_IS_MH_SOG_COW A
+		  LEFT OUTER JOIN (
+							SELECT NA_BZPLC
+								 , AUC_OBJ_DSC
+								 , AUC_DT
+								 , TRMN_AMNNO
+								 , SUM(CASE WHEN SRA_RV_TPC = '1' THEN SRA_RV_AM ELSE 0 END) AS TOT_CSH_RV_AM		/* 현금입금액 */
+								 , SUM(CASE WHEN SRA_RV_TPC = '2' THEN SRA_RV_AM ELSE 0 END) AS TOT_CK_RV_AM		/* 수표입금액 */
+								 , SUM(CASE WHEN SRA_RV_TPC = '3' THEN SRA_RV_AM ELSE 0 END) AS TOT_BB_RV_AM		/* 통장입금액 */
+								 , SUM(CASE WHEN SRA_RV_TPC = '4' THEN SRA_RV_AM ELSE 0 END) AS TOT_ETC_RV_AM		/* 기타입금액 */
+								 , SUM(SRA_RV_AM) AS SRA_RV_AM														/* 총 입금액 */
+							  FROM TB_LA_IS_MH_MWMN_ADJ
+							 WHERE NA_BZPLC				= #{naBzplc}
+							   AND AUC_OBJ_DSC			= #{aucObjDsc}
+							   AND AUC_DT				= NVL(#{aucDt}, TO_CHAR(SYSDATE, 'YYYYMMDD'))
+							   AND TRMN_AMNNO			= #{trmnAmnno}
+							   AND DEL_YN				= '0'
+							 GROUP BY NA_BZPLC, AUC_OBJ_DSC, AUC_DT, TRMN_AMNNO
+			 ) B
+			ON (
+				A.NA_BZPLC = B.NA_BZPLC
+				AND
+				A.AUC_OBJ_DSC = (CASE WHEN #{aucObjDsc} = '0' THEN A.AUC_OBJ_DSC ELSE B.AUC_OBJ_DSC END)
+				AND
+				A.AUC_DT = B.AUC_DT
+				AND A.TRMN_AMNNO = B.TRMN_AMNNO
+			 )
+		  LEFT OUTER JOIN (
+							SELECT NA_BZPLC
+								 , AUC_OBJ_DSC
+								 , AUC_DT
+								 , OSLP_NO
+								 , LED_SQNO
+								 , SUM((CASE WHEN NA_FEE_C = '011' THEN SRA_TR_FEE ELSE  0 END) *
+									   (CASE WHEN ANS_DSC  = '1'   THEN 1          ELSE - 1 END)) AS SRA_TR_FEE_011          /* 축산판매수수료           */
+								 , SUM((CASE WHEN NA_FEE_C = '090' THEN SRA_TR_FEE ELSE 0 END) *
+									   (CASE WHEN ANS_DSC  = '1'   THEN 1          ELSE - 1 END)) AS SRA_TR_FEE_090          /* 축산자조금               */
+								 , SUM((CASE WHEN NA_FEE_C = '020' THEN SRA_TR_FEE ELSE 0 END) *
+									   (CASE WHEN ANS_DSC  = '1'   THEN 1          ELSE - 1 END)) AS SRA_TR_FEE_020          /* 조합출자금               */
+								 , SUM((CASE WHEN NA_FEE_C = '030' THEN SRA_TR_FEE ELSE 0 END) *
+									   (CASE WHEN ANS_DSC  = '1'   THEN 1          ELSE - 1 END)) AS SRA_TR_FEE_030          /* 사고적립금               */
+								 , SUM((CASE WHEN NA_FEE_C = '040' THEN SRA_TR_FEE ELSE 0 END) *
+									   (CASE WHEN ANS_DSC  = '1'   THEN 1          ELSE - 1 END)) AS SRA_TR_FEE_040          /* 운송비                   */
+								 , SUM((CASE WHEN NA_FEE_C = '050' THEN SRA_TR_FEE ELSE 0 END) *
+									   (CASE WHEN ANS_DSC  = '1'   THEN 1          ELSE - 1 END)) AS SRA_TR_FEE_050          /* 괴사감정료               */
+								 , SUM((CASE WHEN NA_FEE_C = '060' THEN SRA_TR_FEE ELSE 0 END) *
+									   (CASE WHEN ANS_DSC  = '1'   THEN 1          ELSE - 1 END)) AS SRA_TR_FEE_060          /* 임신감정료               */
+								 , SUM((CASE WHEN NA_FEE_C = '070' THEN SRA_TR_FEE ELSE 0 END) *
+									   (CASE WHEN ANS_DSC  = '1'   THEN 1          ELSE - 1 END)) AS SRA_TR_FEE_070          /* 검진비                   */
+								 , SUM((CASE WHEN NA_FEE_C = '080' THEN SRA_TR_FEE ELSE 0 END) *
+									   (CASE WHEN ANS_DSC  = '1'   THEN 1          ELSE - 1 END)) AS SRA_TR_FEE_080          /* 주사료                   */
+								 , SUM((CASE WHEN NA_FEE_C = '100' THEN SRA_TR_FEE ELSE 0 END) *
+									   (CASE WHEN ANS_DSC  = '1'   THEN 1          ELSE - 1 END)) AS SRA_TR_FEE_100          /* 혈통접수비               */
+								 , SUM((CASE WHEN NA_FEE_C = '110' THEN SRA_TR_FEE ELSE 0 END) *
+									   (CASE WHEN ANS_DSC  = '1'   THEN 1          ELSE - 1 END)) AS SRA_TR_FEE_110          /* 제각수수료               */
+								 , SUM((CASE WHEN NA_FEE_C = '120' THEN SRA_TR_FEE ELSE 0 END) *
+									   (CASE WHEN ANS_DSC  = '1'   THEN 1          ELSE - 1 END)) AS SRA_TR_FEE_120          /* 위탁수수료               */
+								 , SUM((CASE WHEN NA_FEE_C != '011' AND NA_FEE_C != '090' THEN SRA_TR_FEE ELSE 0 END) *
+									   (CASE WHEN ANS_DSC  = '1'   THEN 1          ELSE - 1 END)) AS SRA_ETC_CST             /* 축산기타비용             */
+							  FROM TB_LA_IS_MH_FEE_IMPS
+							 WHERE NA_BZPLC				= #{naBzplc}
+							  AND AUC_DT				= NVL(#{aucDt}, TO_CHAR(SYSDATE, 'YYYYMMDD'))
+							  AND AUC_OBJ_DSC			= CASE WHEN #{aucObjDsc} = '0' THEN AUC_OBJ_DSC ELSE #{aucObjDsc} END
+							  AND FEE_APL_OBJ_C			= '2'
+							  GROUP BY NA_BZPLC, AUC_OBJ_DSC, AUC_DT, OSLP_NO, LED_SQNO
+			 ) C
+			ON (
+				A.NA_BZPLC = C.NA_BZPLC
+				AND
+				A.AUC_OBJ_DSC = C.AUC_OBJ_DSC
+				AND
+				A.AUC_DT = C.AUC_DT
+				AND
+				A.OSLP_NO = C.OSLP_NO
+				AND
+				A.LED_SQNO = C.LED_SQNO
+			 )
+		  LEFT OUTER JOIN TB_LA_IS_MM_INDV D
+			ON ( 
+					A.NA_BZPLC = D.NA_BZPLC
+					AND
+					A.SRA_INDV_AMNNO = D.SRA_INDV_AMNNO
+					AND
+					A.SRA_SRS_DSC = D.SRA_SRS_DSC
+			 )
+		 WHERE A.NA_BZPLC				= #{naBzplc}
+		   AND A.AUC_OBJ_DSC			= CASE WHEN #{aucObjDsc} = '0' THEN A.AUC_OBJ_DSC ELSE #{aucObjDsc} END
+		   AND A.AUC_DT					= NVL(#{aucDt}, TO_CHAR(SYSDATE, 'YYYYMMDD'))
+		   AND A.LED_SQNO				= 1
+		   AND A.TRMN_AMNNO				= #{trmnAmnno}
+		   AND A.SEL_STS_DSC			= '22'
+		<if test="indvSexC != null and indvSexC != ''">
+			<choose>
+			<when test='"1".equals(indvSexC)'>
+			   AND D.INDV_SEX_C IN ('1', '4', '6')
+			</when>
+			<otherwise>
+			   AND D.INDV_SEX_C NOT IN ('1', '4', '6')
+			</otherwise>
+			</choose>
+		</if>
+		 GROUP BY A.NA_BZPLC, A.AUC_DT, A.TRMN_AMNNO, B.TOT_CSH_RV_AM, B.TOT_CK_RV_AM, B.TOT_BB_RV_AM, B.TOT_ETC_RV_AM, B.SRA_RV_AM
+	</select>
+	
+	<!-- 송아지, 비육우, 번식우 출하자 정보 -->
+	<select id="selectAucObjDecList" parameterType="hashMap" resultType="hashMap">
+		SELECT DISTINCT A.AUC_DT
+			 , A.AUC_OBJ_DSC
+			 , C.SIMP_CNM AS AUC_OBJ_DSCNM
+			 , B.FHS_ID_NO || '-' || B.FARM_AMNNO AS FHS_ID_NO
+			 , B.FTSNM
+			 , B.DONGUP
+			 , B.DONGBW
+		  FROM TB_LA_IS_MH_SOG_COW  A
+		 INNER JOIN TB_LA_IS_MM_FHS B
+			ON (
+				A.NA_BZPLC = B.NA_BZPLC
+				AND
+				A.FHS_ID_NO = B.FHS_ID_NO
+				AND
+				A.FARM_AMNNO = B.FARM_AMNNO
+			 )
+		  LEFT OUTER JOIN TB_LA_IS_MH_COMN_APL C
+			ON (
+				C.SIMP_TPC = 'AUC_OBJ_DSC'
+				AND
+				A.AUC_OBJ_DSC = C.SIMP_C 
+				AND
+				C.SIMP_C_GRP_SQNO = '1'
+			 )
+		 WHERE A.NA_BZPLC			= #{naBzplc}
+		   AND A.AUC_DT				= NVL(#{aucDt}, TO_CHAR(SYSDATE, 'YYYYMMDD'))
+		   AND A.AUC_OBJ_DSC		= CASE WHEN #{aucObjDsc} = '0' THEN AUC_OBJ_DSC ELSE #{aucObjDsc} END
+		   AND A.DEL_YN				= '0'
+		   AND A.LED_SQNO			= 1
+		   AND A.LOWS_SBID_LMT_AM	<![CDATA[>]]> 0	
+		   AND A.FHS_ID_NO			= #{fhsIdNo}
+		   AND A.FARM_AMNNO			= #{farmAmnno}
+		 ORDER BY A.AUC_OBJ_DSC
+	</select>
+	
+	<!-- 송아지, 비육우, 번식우별 출하 상세 리스트 -->
+	<select id="selectSelList" parameterType="hashMap" resultType="hashMap">
+		SELECT A.AUC_DT
+			 , A.AUC_OBJ_DSC
+			 , A.AUC_PRG_SQ
+			 , SUBSTR(A.SRA_INDV_AMNNO, 4, 3) || '-' ||  SUBSTR(A.SRA_INDV_AMNNO, 7, 9)		AS SRA_INDV_AMNNO
+			 , C.INDV_SEX_C
+			 , D.SIMP_CNM AS INDV_SEX_CNM
+			 , A.COW_SOG_WT
+			 , REPLACE(RTRIM(C.KPN_NO), 'KPN', '') AS KPN_NO
+			 , A.LOWS_SBID_LMT_AM
+			 , CASE WHEN A.SEL_STS_DSC = '22' THEN A.SRA_SBID_UPR ELSE 0 END AS SRA_SBID_UPR
+			 , CASE WHEN A.SEL_STS_DSC = '22' THEN A.SRA_SBID_AM ELSE 0 END AS SRA_SBID_AM
+			 , B.SRA_TR_FEE_010
+			 , NVL(B.SRA_TR_FEE_020, 0) + NVL(A.SRA_PYIVA, 0)	AS SRA_TR_FEE_020
+			 , B.SRA_TR_FEE_030
+			 , NVL(B.SRA_TR_FEE_040, 0) + NVL(A.SRA_TRPCS, 0)	AS SRA_TR_FEE_040
+			 , B.SRA_TR_FEE_050
+			 , B.SRA_TR_FEE_060
+			 , B.SRA_TR_FEE_070
+			 , B.SRA_TR_FEE_080
+			 , B.SRA_TR_FEE_090
+			 , B.SRA_TR_FEE_100
+			 , B.SRA_TR_FEE_110
+			 , B.SRA_TR_FEE_120
+			 , A.SRA_FED_SPY_AM
+			 , A.TD_RC_CST
+			 , A.MT12_OVR_FEE
+			 , NVL(B.SRA_TR_FEE_030, 0) + NVL(B.SRA_TR_FEE_050, 0) + NVL(B.SRA_TR_FEE_060, 0) + NVL(B.SRA_TR_FEE_070, 0) + NVL(B.SRA_TR_FEE_090, 0) + NVL(B.SRA_TR_FEE_100, 0) + 
+			   NVL(B.SRA_TR_FEE_110, 0) + NVL(B.SRA_TR_FEE_120, 0) + NVL(A.SRA_FED_SPY_AM, 0) + NVL(A.TD_RC_CST, 0) + NVL(A.MT12_OVR_FEE, 0) AS TOT_ETC_FEE
+			 , NVL((CASE WHEN A.SEL_STS_DSC = '22' THEN A.SRA_SBID_AM ELSE 0 END), 0) - 
+			  (NVL(B.SRA_TR_FEE_010, 0) + (NVL(B.SRA_TR_FEE_020, 0) + NVL(A.SRA_PYIVA, 0)) + NVL(B.SRA_TR_FEE_030, 0) + (NVL(B.SRA_TR_FEE_040, 0) + NVL(A.SRA_TRPCS, 0)) + 
+			   NVL(B.SRA_TR_FEE_050, 0) + NVL(B.SRA_TR_FEE_060, 0) + NVL(B.SRA_TR_FEE_070, 0) + NVL(B.SRA_TR_FEE_080, 0) + NVL(B.SRA_TR_FEE_090, 0) + NVL(B.SRA_TR_FEE_100, 0) +
+			   NVL(B.SRA_TR_FEE_110, 0) + NVL(B.SRA_TR_FEE_120, 0) + NVL(A.SRA_FED_SPY_AM, 0) + NVL(A.TD_RC_CST, 0) + NVL(A.MT12_OVR_FEE, 0)) AS TOT_AM
+		  FROM TB_LA_IS_MH_SOG_COW A
+		  LEFT OUTER JOIN (
+				SELECT NA_BZPLC
+					 , AUC_OBJ_DSC
+					 , AUC_DT
+					 , OSLP_NO
+					 , LED_SQNO
+					 , SUM(CASE WHEN NA_FEE_C = '010' THEN (CASE WHEN ANS_DSC = '1' THEN 1 ELSE - 1 END) * SRA_TR_FEE ELSE 0 END) AS SRA_TR_FEE_010			/* 출하수수료 */
+					 , SUM(CASE WHEN NA_FEE_C = '011' THEN (CASE WHEN ANS_DSC = '1' THEN 1 ELSE - 1 END) * SRA_TR_FEE ELSE 0 END) AS SRA_TR_FEE_011			/* 판매수수료 */
+					 , SUM(CASE WHEN NA_FEE_C = '020' THEN (CASE WHEN ANS_DSC = '1' THEN 1 ELSE - 1 END) * SRA_TR_FEE ELSE 0 END) AS SRA_TR_FEE_020			/* 조합출자금 */
+					 , SUM(CASE WHEN NA_FEE_C = '030' THEN (CASE WHEN ANS_DSC = '1' THEN 1 ELSE - 1 END) * SRA_TR_FEE ELSE 0 END) AS SRA_TR_FEE_030			/* 사고적립금 */
+					 , SUM(CASE WHEN NA_FEE_C = '040' THEN (CASE WHEN ANS_DSC = '1' THEN 1 ELSE - 1 END) * SRA_TR_FEE ELSE 0 END) AS SRA_TR_FEE_040			/* 운송비 */
+					 , SUM(CASE WHEN NA_FEE_C = '050' THEN (CASE WHEN ANS_DSC = '1' THEN 1 ELSE - 1 END) * SRA_TR_FEE ELSE 0 END) AS SRA_TR_FEE_050			/* 괴사감정료 */
+					 , SUM(CASE WHEN NA_FEE_C = '060' THEN (CASE WHEN ANS_DSC = '1' THEN 1 ELSE - 1 END) * SRA_TR_FEE ELSE 0 END) AS SRA_TR_FEE_060			/* 임신감정료 */
+					 , SUM(CASE WHEN NA_FEE_C = '070' THEN (CASE WHEN ANS_DSC = '1' THEN 1 ELSE - 1 END) * SRA_TR_FEE ELSE 0 END) AS SRA_TR_FEE_070			/* 검진비 */
+					 , SUM(CASE WHEN NA_FEE_C = '080' THEN (CASE WHEN ANS_DSC = '1' THEN 1 ELSE - 1 END) * SRA_TR_FEE ELSE 0 END) AS SRA_TR_FEE_080			/* 주사료 */
+					 , SUM(CASE WHEN NA_FEE_C = '090' THEN (CASE WHEN ANS_DSC = '1' THEN 1 ELSE - 1 END) * SRA_TR_FEE ELSE 0 END) AS SRA_TR_FEE_090			/* 자조금 */
+					 , SUM(CASE WHEN NA_FEE_C = '100' THEN (CASE WHEN ANS_DSC = '1' THEN 1 ELSE - 1 END) * SRA_TR_FEE ELSE 0 END) AS SRA_TR_FEE_100			/* 혈통접수비 */
+					 , SUM(CASE WHEN NA_FEE_C = '110' THEN (CASE WHEN ANS_DSC = '1' THEN 1 ELSE - 1 END) * SRA_TR_FEE ELSE 0 END) AS SRA_TR_FEE_110			/* 제각수수료 */
+					 , SUM(CASE WHEN NA_FEE_C = '120' THEN (CASE WHEN ANS_DSC = '1' THEN 1 ELSE - 1 END) * SRA_TR_FEE ELSE 0 END) AS SRA_TR_FEE_120			/* 위탁수수료 */
+				  FROM TB_LA_IS_MH_FEE_IMPS
+				 WHERE NA_BZPLC			= #{naBzplc}
+				   AND AUC_DT			= #{aucDt}
+				   AND AUC_OBJ_DSC		= #{aucObjDsc}
+				   AND FEE_APL_OBJ_C	= '1'
+				 GROUP BY NA_BZPLC, AUC_OBJ_DSC , AUC_DT , OSLP_NO , LED_SQNO
+			 ) B
+			ON (
+				A.NA_BZPLC = B.NA_BZPLC
+				AND
+				A.AUC_OBJ_DSC = B.AUC_OBJ_DSC
+				AND
+				A.AUC_DT = B.AUC_DT
+				AND
+				A.OSLP_NO = B.OSLP_NO
+				AND
+				A.LED_SQNO = B.LED_SQNO
+			 )
+		  LEFT OUTER JOIN TB_LA_IS_MM_INDV C
+			ON (
+				A.NA_BZPLC = C.NA_BZPLC
+				AND
+				A.SRA_SRS_DSC = C.SRA_SRS_DSC
+				AND
+				A.SRA_INDV_AMNNO = C.SRA_INDV_AMNNO
+			 )
+		  LEFT OUTER JOIN (
+				SELECT SIMP_C, SIMP_CNM
+				  FROM TB_LA_IS_MH_COMN_APL
+				 WHERE SIMP_TPC = 'INDV_SEX_C'
+			 ) D
+			ON ( C.INDV_SEX_C = D.SIMP_C )
+		 WHERE A.NA_BZPLC			= #{naBzplc}
+		   AND A.AUC_DT				= #{aucDt}
+		   AND A.AUC_OBJ_DSC		= #{aucObjDsc}
+		   AND A.LED_SQNO			= 1
+		   AND A.DEL_YN				= '0'
+		   AND A.FHS_ID_NO			= #{fhsIdNo}
+		   AND A.FARM_AMNNO			= #{farmAmnno}
+		   AND A.LOWS_SBID_LMT_AM	<![CDATA[>]]> 0
+		ORDER BY A.AUC_PRG_SQ
+	</select>
+	
+	<!-- 송아지, 비육우, 번식우별 출하자 통계 -->
+	<select id="selectSelStatInfo" parameterType="hashMap" resultType="hashMap">
+		SELECT SUM(SRA_SBID_UPR)		AS SUM_SRA_SBID_UPR
+			 , SUM(SRA_SBID_AM)			AS SUM_SRA_SBID_AM
+			 , SUM(SRA_TR_FEE_010)		AS SUM_SRA_TR_FEE_010
+			 , SUM(SRA_TR_FEE_020)		AS SUM_SRA_TR_FEE_020
+			 , SUM(SRA_TR_FEE_030)		AS SUM_SRA_TR_FEE_030
+			 , SUM(SRA_TR_FEE_040)		AS SUM_SRA_TR_FEE_040
+			 , SUM(SRA_TR_FEE_050)		AS SUM_SRA_TR_FEE_050
+			 , SUM(SRA_TR_FEE_060)		AS SUM_SRA_TR_FEE_060
+			 , SUM(SRA_TR_FEE_070)		AS SUM_SRA_TR_FEE_070
+			 , SUM(SRA_TR_FEE_080)		AS SUM_SRA_TR_FEE_080
+			 , SUM(SRA_TR_FEE_090)		AS SUM_SRA_TR_FEE_090
+			 , SUM(SRA_TR_FEE_100)		AS SUM_SRA_TR_FEE_100
+			 , SUM(SRA_TR_FEE_110)		AS SUM_SRA_TR_FEE_110
+			 , SUM(SRA_TR_FEE_120)		AS SUM_SRA_TR_FEE_120
+			 , SUM(SRA_FED_SPY_AM)		AS SUM_SRA_FED_SPY_AM
+			 , SUM(TOT_ETC_FEE)			AS SUM_ETC_FEE
+			 , SUM(TOT_AM)				AS SUM_AM
+		  FROM (
+				SELECT A.AUC_DT
+					 , A.AUC_OBJ_DSC
+					 , A.AUC_PRG_SQ
+					 , SUBSTR(A.SRA_INDV_AMNNO, 4, 3) || '-' ||  SUBSTR(A.SRA_INDV_AMNNO, 7, 9)		AS SRA_INDV_AMNNO
+					 , A.COW_SOG_WT
+				 	 , A.LOWS_SBID_LMT_AM
+					 , CASE WHEN A.SEL_STS_DSC = '22' THEN A.SRA_SBID_UPR ELSE 0 END AS SRA_SBID_UPR
+					 , CASE WHEN A.SEL_STS_DSC = '22' THEN A.SRA_SBID_AM ELSE 0 END AS SRA_SBID_AM
+					 , B.SRA_TR_FEE_010
+					 , NVL(B.SRA_TR_FEE_020, 0) + NVL(A.SRA_PYIVA, 0)	AS SRA_TR_FEE_020
+					 , B.SRA_TR_FEE_030
+					 , NVL(B.SRA_TR_FEE_040, 0) + NVL(A.SRA_TRPCS, 0)	AS SRA_TR_FEE_040
+					 , B.SRA_TR_FEE_050
+					 , B.SRA_TR_FEE_060
+					 , B.SRA_TR_FEE_070
+					 , B.SRA_TR_FEE_080
+					 , B.SRA_TR_FEE_090
+					 , B.SRA_TR_FEE_100
+					 , B.SRA_TR_FEE_110
+					 , B.SRA_TR_FEE_120
+					 , A.SRA_FED_SPY_AM
+					 , A.TD_RC_CST
+					 , A.MT12_OVR_FEE
+				 	 , NVL(B.SRA_TR_FEE_030, 0) + NVL(B.SRA_TR_FEE_050, 0) + NVL(B.SRA_TR_FEE_060, 0) + NVL(B.SRA_TR_FEE_070, 0) + NVL(B.SRA_TR_FEE_090, 0) + NVL(B.SRA_TR_FEE_100, 0) + 
+					   NVL(B.SRA_TR_FEE_110, 0) + NVL(B.SRA_TR_FEE_120, 0) + NVL(A.SRA_FED_SPY_AM, 0) + NVL(A.TD_RC_CST, 0) + NVL(A.MT12_OVR_FEE, 0) AS TOT_ETC_FEE
+					 , NVL((CASE WHEN A.SEL_STS_DSC = '22' THEN A.SRA_SBID_AM ELSE 0 END), 0) - 
+					  (NVL(B.SRA_TR_FEE_010, 0) + (NVL(B.SRA_TR_FEE_020, 0) + NVL(A.SRA_PYIVA, 0)) + NVL(B.SRA_TR_FEE_030, 0) + (NVL(B.SRA_TR_FEE_040, 0) + NVL(A.SRA_TRPCS, 0)) + 
+					   NVL(B.SRA_TR_FEE_050, 0) + NVL(B.SRA_TR_FEE_060, 0) + NVL(B.SRA_TR_FEE_070, 0) + NVL(B.SRA_TR_FEE_080, 0) + NVL(B.SRA_TR_FEE_090, 0) + NVL(B.SRA_TR_FEE_100, 0) +
+					   NVL(B.SRA_TR_FEE_110, 0) + NVL(B.SRA_TR_FEE_120, 0) + NVL(A.SRA_FED_SPY_AM, 0) + NVL(A.TD_RC_CST, 0) + NVL(A.MT12_OVR_FEE, 0)) AS TOT_AM
+				  FROM TB_LA_IS_MH_SOG_COW  A
+				  LEFT OUTER JOIN (
+						SELECT NA_BZPLC
+							 , AUC_OBJ_DSC
+							 , AUC_DT
+							 , OSLP_NO
+							 , LED_SQNO
+							 , SUM(CASE WHEN NA_FEE_C = '010' THEN (CASE WHEN ANS_DSC = '1' THEN 1 ELSE - 1 END) * SRA_TR_FEE ELSE 0 END) AS SRA_TR_FEE_010			/* 출하수수료 */
+							 , SUM(CASE WHEN NA_FEE_C = '011' THEN (CASE WHEN ANS_DSC = '1' THEN 1 ELSE - 1 END) * SRA_TR_FEE ELSE 0 END) AS SRA_TR_FEE_011			/* 판매수수료 */
+							 , SUM(CASE WHEN NA_FEE_C = '020' THEN (CASE WHEN ANS_DSC = '1' THEN 1 ELSE - 1 END) * SRA_TR_FEE ELSE 0 END) AS SRA_TR_FEE_020			/* 조합출자금 */
+							 , SUM(CASE WHEN NA_FEE_C = '030' THEN (CASE WHEN ANS_DSC = '1' THEN 1 ELSE - 1 END) * SRA_TR_FEE ELSE 0 END) AS SRA_TR_FEE_030			/* 사고적립금 */
+							 , SUM(CASE WHEN NA_FEE_C = '040' THEN (CASE WHEN ANS_DSC = '1' THEN 1 ELSE - 1 END) * SRA_TR_FEE ELSE 0 END) AS SRA_TR_FEE_040			/* 운송비 */
+							 , SUM(CASE WHEN NA_FEE_C = '050' THEN (CASE WHEN ANS_DSC = '1' THEN 1 ELSE - 1 END) * SRA_TR_FEE ELSE 0 END) AS SRA_TR_FEE_050			/* 괴사감정료 */
+							 , SUM(CASE WHEN NA_FEE_C = '060' THEN (CASE WHEN ANS_DSC = '1' THEN 1 ELSE - 1 END) * SRA_TR_FEE ELSE 0 END) AS SRA_TR_FEE_060			/* 임신감정료 */
+							 , SUM(CASE WHEN NA_FEE_C = '070' THEN (CASE WHEN ANS_DSC = '1' THEN 1 ELSE - 1 END) * SRA_TR_FEE ELSE 0 END) AS SRA_TR_FEE_070			/* 검진비 */
+							 , SUM(CASE WHEN NA_FEE_C = '080' THEN (CASE WHEN ANS_DSC = '1' THEN 1 ELSE - 1 END) * SRA_TR_FEE ELSE 0 END) AS SRA_TR_FEE_080			/* 주사료 */
+							 , SUM(CASE WHEN NA_FEE_C = '090' THEN (CASE WHEN ANS_DSC = '1' THEN 1 ELSE - 1 END) * SRA_TR_FEE ELSE 0 END) AS SRA_TR_FEE_090			/* 자조금 */
+							 , SUM(CASE WHEN NA_FEE_C = '100' THEN (CASE WHEN ANS_DSC = '1' THEN 1 ELSE - 1 END) * SRA_TR_FEE ELSE 0 END) AS SRA_TR_FEE_100			/* 혈통접수비 */
+							 , SUM(CASE WHEN NA_FEE_C = '110' THEN (CASE WHEN ANS_DSC = '1' THEN 1 ELSE - 1 END) * SRA_TR_FEE ELSE 0 END) AS SRA_TR_FEE_110			/* 제각수수료 */
+							 , SUM(CASE WHEN NA_FEE_C = '120' THEN (CASE WHEN ANS_DSC = '1' THEN 1 ELSE - 1 END) * SRA_TR_FEE ELSE 0 END) AS SRA_TR_FEE_120			/* 위탁수수료 */
+					  FROM TB_LA_IS_MH_FEE_IMPS
+				 WHERE NA_BZPLC			= #{naBzplc}
+				   AND AUC_DT			= #{aucDt}
+				   AND AUC_OBJ_DSC		= #{aucObjDsc}
+				   AND FEE_APL_OBJ_C   = '1'
+				 GROUP BY NA_BZPLC, AUC_OBJ_DSC , AUC_DT , OSLP_NO , LED_SQNO
+					 ) B
+					ON (
+						A.NA_BZPLC = B.NA_BZPLC
+						AND
+						A.AUC_OBJ_DSC = B.AUC_OBJ_DSC
+						AND
+						A.AUC_DT = B.AUC_DT
+						AND
+						A.OSLP_NO = B.OSLP_NO
+						AND
+						A.LED_SQNO = B.LED_SQNO
+					 )
+				 WHERE A.NA_BZPLC			= #{naBzplc}
+				   AND A.AUC_DT				= #{aucDt}
+				   AND A.AUC_OBJ_DSC		= #{aucObjDsc}
+				   AND A.LED_SQNO			= 1
+				   AND A.DEL_YN				= '0'
+				   AND A.FHS_ID_NO			= #{fhsIdNo}
+				   AND A.FARM_AMNNO			= #{farmAmnno}
+				   AND A.LOWS_SBID_LMT_AM	<![CDATA[>]]> 0
+			)
+	</select>
+	
 </mapper>

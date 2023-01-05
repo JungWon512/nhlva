@@ -1,0 +1,184 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="myPage">
+
+	<!-- 나의 경매내역 > My 현황 > 연/월단위 기준 전체 낙찰두수, 송아지, 비육우, 번식우의 낙찰두수 -->
+	<select id="selectCowBidCnt" parameterType="map" resultType="map">
+		SELECT T.*
+		FROM (
+			SELECT A.NA_BZPLC
+					, A.AUC_OBJ_DSC
+					, SUM(NVL(A.SRA_SBID_AM, 0)) AS TOT_SRA_SBID_AM
+					, TO_CHAR(NVL( SUM(A.SRA_SBID_AM),0),'FM999,999,999,999') TOT_SRA_SBID_AM_FORMAT
+					, COUNT(*) AS TOT_COW_CNT
+					, GROUPING_ID(A.NA_BZPLC, A.AUC_OBJ_DSC) AS GROUPINGID
+			FROM TB_LA_IS_MH_SOG_COW A
+			LEFT JOIN TB_LA_IS_BM_BZLOC B ON A.NA_BZPLC = B.NA_BZPLC
+			WHERE 1=1
+					AND A.AUC_DT LIKE #{searchDateMy} ||'%'
+					<choose>
+						<when test="searchMbIntgNo != null and searchMbIntgNo != ''">
+							AND EXISTS (SELECT 1 FROM TB_LA_IS_MM_MWMN WHERE MB_INTG_NO = #{searchMbIntgNo} AND TRMN_AMNNO = A.TRMN_AMNNO AND NA_BZPLC = A.NA_BZPLC)
+						</when>
+						<otherwise>
+							AND A.TRMN_AMNNO = #{searchTrmnAmnNo}							
+						</otherwise>
+					</choose>
+					AND A.NA_BZPLC = #{searchNaBzplc}
+					AND A.SEL_STS_DSC = '22'
+			GROUP BY ROLLUP(A.NA_BZPLC, A.AUC_OBJ_DSC)
+			HAVING GROUPING_ID(A.NA_BZPLC, A.AUC_OBJ_DSC) IN ('0', '1')
+		) T
+		ORDER BY T.GROUPINGID DESC, T.AUC_OBJ_DSC
+	</select>
+	
+	<!-- 나의 경매내역 > My 현황 > 축종별 낙찰퍼센트 -->
+	<select id="selectCowBidPercent" parameterType="map" resultType="map">
+		SELECT T.*
+				, CASE WHEN TOT_ATDR_CNT !=0 THEN TRUNC((T.SEL_STS_CNT / T.TOT_ATDR_CNT) * 100, 0)
+						ELSE 0 END AS SEL_STS_PERCENT
+		FROM (
+				SELECT A.NA_BZPLC
+						, A.AUC_OBJ_DSC
+						, COUNT(DECODE(A.SEL_STS_DSC, '22', 1, NULL)) AS SEL_STS_CNT
+						, COUNT(CASE WHEN B.ATDR_CNT > 0 THEN 1 END) AS TOT_ATDR_CNT
+						, COUNT(*) AS TOT_COW_CNT
+						, GROUPING_ID(A.NA_BZPLC, A.AUC_OBJ_DSC) AS GROUPINGID
+				FROM TB_LA_IS_MH_SOG_COW A
+				LEFT OUTER JOIN (
+											SELECT NA_BZPLC
+													, AUC_OBJ_DSC
+													, AUC_DT
+													, OSLP_NO
+													, TRMN_AMNNO
+													, COUNT(*) ATDR_CNT
+											FROM TB_LA_IS_MH_ATDR_LOG
+											GROUP BY NA_BZPLC, AUC_OBJ_DSC, AUC_DT, OSLP_NO, TRMN_AMNNO
+				) B ON A.NA_BZPLC = B.NA_BZPLC
+					AND A.AUC_OBJ_DSC = B.AUC_OBJ_DSC
+					AND A.AUC_DT = B.AUC_DT
+					AND A.OSLP_NO = B.OSLP_NO
+					AND A.TRMN_AMNNO = B.TRMN_AMNNO
+				WHERE 1=1
+						AND A.AUC_DT LIKE #{searchDateMy} ||'%'
+						<choose>
+							<when test="searchMbIntgNo != null and searchMbIntgNo != ''">
+								AND EXISTS (SELECT 1 FROM TB_LA_IS_MM_MWMN WHERE MB_INTG_NO = #{searchMbIntgNo} AND TRMN_AMNNO = A.TRMN_AMNNO AND NA_BZPLC = A.NA_BZPLC)
+							</when>
+							<otherwise>
+								AND A.TRMN_AMNNO = #{searchTrmnAmnNo}							
+							</otherwise>
+						</choose>
+						AND A.NA_BZPLC = #{searchNaBzplc}
+					GROUP BY ROLLUP(A.NA_BZPLC, A.AUC_OBJ_DSC)
+					HAVING GROUPING_ID(A.NA_BZPLC, A.AUC_OBJ_DSC) IN ('0','1')
+		) T
+		ORDER BY T.GROUPINGID DESC, T.AUC_OBJ_DSC
+	</select>
+
+	<!-- 나의 경매내역 > My 현황 > 가축시장 나의 응찰 현황(전체조합별) -->
+	<select id="selectListAucBidCntAll" parameterType="map" resultType="map">
+		SELECT T.*
+				, DECODE(C.CLNTNM, NULL, '전체', C.CLNTNM) CLNTNM
+		FROM (
+					SELECT A.NA_BZPLC
+							, COUNT(*) AS TOT_COW_CNT
+							, COUNT(DECODE(A.SEL_STS_DSC, '22', 1, NULL)) AS SBID_COW_CNT
+							, COUNT(CASE WHEN B.ATDR_CNT > 0 THEN 1 END) AS TOT_ATDR_CNT
+					FROM TB_LA_IS_MH_SOG_COW A
+					LEFT OUTER JOIN (
+									SELECT NA_BZPLC
+											, AUC_OBJ_DSC
+											, AUC_DT
+											, OSLP_NO
+											, TRMN_AMNNO
+											, COUNT(*) ATDR_CNT
+									FROM TB_LA_IS_MH_ATDR_LOG
+									GROUP BY NA_BZPLC, AUC_OBJ_DSC, AUC_DT, OSLP_NO, TRMN_AMNNO
+							) B ON A.NA_BZPLC = B.NA_BZPLC
+								AND A.AUC_OBJ_DSC = B.AUC_OBJ_DSC
+								AND A.AUC_DT = B.AUC_DT
+								AND A.OSLP_NO = B.OSLP_NO
+								AND A.TRMN_AMNNO = B.TRMN_AMNNO
+					WHERE 1=1
+							AND A.AUC_DT LIKE #{searchDateMy} ||'%'
+							<choose>
+								<when test="searchMbIntgNo != null and searchMbIntgNo != ''">
+									AND EXISTS (SELECT 1 FROM TB_LA_IS_MM_MWMN WHERE MB_INTG_NO = #{searchMbIntgNo} AND TRMN_AMNNO = A.TRMN_AMNNO AND NA_BZPLC = A.NA_BZPLC)
+								</when>
+								<otherwise>
+									AND A.TRMN_AMNNO = #{searchTrmnAmnNo}							
+								</otherwise>
+							</choose>
+					GROUP BY ROLLUP(A.NA_BZPLC)
+					HAVING GROUPING_ID(A.NA_BZPLC) IN ('0', '1')
+		) T
+		LEFT JOIN TB_LA_IS_BM_BZLOC C ON T.NA_BZPLC = C.NA_BZPLC
+		WHERE 1=1
+		ORDER BY T.NA_BZPLC DESC
+	</select>
+	
+	<!-- 나의 출장우 > My 현황 > 연/월단위 기준 전체 출장두수, 송아지, 비육우, 번식우의 낙찰두수 -->
+	<!-- 유찰 두수를 '23'이 아니라 != '22'로 설정한 이유는 유찰이지만 유찰상태가 안된 출장우도 있기 때문 -->
+	<select id="selectCowEntryCnt" parameterType="map" resultType="map">
+		SELECT A.NA_BZPLC 
+			, A.AUC_OBJ_DSC
+			, COUNT(*) AS TOT_ENTRY_CNT
+			<choose>
+				<when test="searchMbIntgNo != null and searchMbIntgNo != ''">
+					, COUNT(CASE WHEN (A.FHS_ID_NO,A.FARM_AMNNO) IN (SELECT FHS_ID_NO,FARM_AMNNO FROM TB_LA_IS_MM_FHS WHERE MB_INTG_NO = #{searchMbIntgNo}) THEN 1 END) AS TOT_MY_ENTRY_CNT
+					, COUNT(CASE WHEN A.SEL_STS_DSC = '22' AND (A.FHS_ID_NO,A.FARM_AMNNO) IN (SELECT FHS_ID_NO,FARM_AMNNO FROM TB_LA_IS_MM_FHS	WHERE MB_INTG_NO = #{searchMbIntgNo}) THEN 1 END) AS TOT_SBID_CNT
+					, COUNT(CASE WHEN A.SEL_STS_DSC != '22' AND (A.FHS_ID_NO,A.FARM_AMNNO) IN (SELECT FHS_ID_NO,FARM_AMNNO FROM TB_LA_IS_MM_FHS	WHERE MB_INTG_NO = #{searchMbIntgNo}) THEN 1 END) AS TOT_FBID_CNT
+					, TRUNC(AVG(CASE WHEN A.SEL_STS_DSC = '22' AND (A.FHS_ID_NO,A.FARM_AMNNO) IN (SELECT FHS_ID_NO,FARM_AMNNO FROM TB_LA_IS_MM_FHS	WHERE MB_INTG_NO = #{searchMbIntgNo}) THEN A.SRA_SBID_AM END)) AS AVG_MY_SBID_AM
+					, TO_CHAR(NVL(TRUNC(AVG(CASE WHEN A.SEL_STS_DSC = '22' AND (A.FHS_ID_NO,A.FARM_AMNNO) IN (SELECT FHS_ID_NO,FARM_AMNNO FROM TB_LA_IS_MM_FHS	WHERE MB_INTG_NO = #{searchMbIntgNo}) THEN A.SRA_SBID_AM END)),0),'FM999,999,999,999') AS AVG_MY_SBID_AM_FORMAT
+					, TRUNC(SUM(CASE WHEN A.SEL_STS_DSC = '22' AND (A.FHS_ID_NO,A.FARM_AMNNO) IN (SELECT FHS_ID_NO,FARM_AMNNO FROM TB_LA_IS_MM_FHS	WHERE MB_INTG_NO = #{searchMbIntgNo}) THEN A.SRA_SBID_AM END)) AS SUM_MY_SBID_AM
+					, TO_CHAR(NVL(TRUNC(SUM(CASE WHEN A.SEL_STS_DSC = '22' AND (A.FHS_ID_NO,A.FARM_AMNNO) IN (SELECT FHS_ID_NO,FARM_AMNNO FROM TB_LA_IS_MM_FHS	WHERE MB_INTG_NO = #{searchMbIntgNo}) THEN A.SRA_SBID_AM END)),0),'FM999,999,999,999') AS SUM_MY_SBID_AM_FORMAT
+				</when>
+				<otherwise>
+					, COUNT(CASE WHEN A.FHS_ID_NO = #{searchFhsIdNo}	AND A.FARM_AMNNO = '1' THEN 1 END) AS TOT_MY_ENTRY_CNT
+					, COUNT(CASE WHEN A.SEL_STS_DSC = '22' AND A.FHS_ID_NO = #{searchFhsIdNo} AND A.FARM_AMNNO = #{searchFarmAmnno} THEN 1 END) AS TOT_SBID_CNT
+					, COUNT(CASE WHEN A.SEL_STS_DSC != '22' AND A.FHS_ID_NO = #{searchFhsIdNo} AND A.FARM_AMNNO = #{searchFarmAmnno} THEN 1 END) AS TOT_FBID_CNT
+					, TRUNC(AVG(CASE WHEN A.SEL_STS_DSC = '22' AND A.FHS_ID_NO = #{searchFhsIdNo} 	AND A.FARM_AMNNO = #{searchFarmAmnno} THEN A.SRA_SBID_AM END)) AS AVG_MY_SBID_AM
+					, TO_CHAR(NVL(TRUNC(AVG(CASE WHEN A.SEL_STS_DSC = '22' AND A.FHS_ID_NO = #{searchFhsIdNo} 	AND A.FARM_AMNNO = #{searchFarmAmnno} THEN A.SRA_SBID_AM END)),0),'FM999,999,999,999') AS AVG_MY_SBID_AM_FORMAT
+					, TRUNC(SUM(CASE WHEN A.SEL_STS_DSC = '22' AND A.FHS_ID_NO = #{searchFhsIdNo} AND A.FARM_AMNNO = #{searchFarmAmnno} THEN A.SRA_SBID_AM END)) AS SUM_MY_SBID_AM
+					, TO_CHAR(NVL(TRUNC(SUM(CASE WHEN A.SEL_STS_DSC = '22' AND A.FHS_ID_NO = #{searchFhsIdNo} AND A.FARM_AMNNO = #{searchFarmAmnno} THEN A.SRA_SBID_AM END)),0),'FM999,999,999,999') AS SUM_MY_SBID_AM_FORMAT
+				</otherwise>
+			</choose>
+			, TRUNC(AVG(DECODE(A.SEL_STS_DSC, '22', A.SRA_SBID_AM))) AS AVG_SBID_AM
+			, TO_CHAR(NVL(TRUNC(AVG(DECODE(A.SEL_STS_DSC, '22', A.SRA_SBID_AM))),0),'FM999,999,999,999') AS AVG_SBID_AM_FORMAT
+			, GROUPING_ID(A.NA_BZPLC, A.AUC_OBJ_DSC) AS GROUPINGID
+		 FROM TB_LA_IS_MH_SOG_COW A
+		 WHERE 1=1
+				AND A.NA_BZPLC = #{searchNaBzplc}
+				AND A.AUC_DT LIKE #{searchDateMy} ||'%'
+		GROUP BY ROLLUP(A.NA_BZPLC, A.AUC_OBJ_DSC)
+		HAVING GROUPING_ID(A.NA_BZPLC, A.AUC_OBJ_DSC) IN ('0','3')
+		ORDER BY GROUPINGID DESC, A.AUC_OBJ_DSC
+	</select>
+
+	<!-- 나의 출장우 > My 현황 > 가축시장 나의 출장우 현황(전체조합별) -->
+	<select id="selectListAucEntryCntAll" parameterType="map" resultType="map">
+		SELECT A.NA_BZPLC 
+			, DECODE(B.CLNTNM, NULL, '전체', B.CLNTNM) CLNTNM
+			<choose>
+				<when test="searchMbIntgNo != null and searchMbIntgNo != ''">
+					, COUNT(CASE WHEN (A.FHS_ID_NO,A.FARM_AMNNO) IN (SELECT FHS_ID_NO,FARM_AMNNO FROM TB_LA_IS_MM_FHS WHERE MB_INTG_NO = #{searchMbIntgNo}) THEN 1 END) AS TOT_MY_ENTRY_CNT
+					, COUNT(CASE WHEN A.SEL_STS_DSC = '22' AND (A.FHS_ID_NO,A.FARM_AMNNO) IN (SELECT FHS_ID_NO,FARM_AMNNO FROM TB_LA_IS_MM_FHS	WHERE MB_INTG_NO = #{searchMbIntgNo}) THEN 1 END) AS TOT_SBID_CNT
+					, COUNT(CASE WHEN A.SEL_STS_DSC != '22' AND (A.FHS_ID_NO,A.FARM_AMNNO) IN (SELECT FHS_ID_NO,FARM_AMNNO FROM TB_LA_IS_MM_FHS	WHERE MB_INTG_NO = #{searchMbIntgNo}) THEN 1 END) AS TOT_FBID_CNT
+				</when>
+				<otherwise>
+					, COUNT(CASE WHEN A.FHS_ID_NO = #{searchFhsIdNo}	AND A.FARM_AMNNO = '1' THEN 1 END) AS TOT_MY_ENTRY_CNT
+					, COUNT(CASE WHEN A.SEL_STS_DSC = '22' AND A.FHS_ID_NO = #{searchFhsIdNo} AND A.FARM_AMNNO = #{searchFarmAmnno} THEN 1 END) AS TOT_SBID_CNT
+					, COUNT(CASE WHEN A.SEL_STS_DSC != '22' AND A.FHS_ID_NO = #{searchFhsIdNo} AND A.FARM_AMNNO = #{searchFarmAmnno} THEN 1 END) AS TOT_FBID_CNT
+				</otherwise>
+			</choose>
+		 FROM TB_LA_IS_MH_SOG_COW A
+		 LEFT JOIN TB_LA_IS_BM_BZLOC B ON A.NA_BZPLC = B.NA_BZPLC
+		 WHERE 1=1
+				AND A.AUC_DT LIKE #{searchDateMy} ||'%'
+		GROUP BY ROLLUP(A.NA_BZPLC, B.CLNTNM)
+		HAVING GROUPING_ID(A.NA_BZPLC, B.CLNTNM) IN ('0','3')
+		ORDER BY A.NA_BZPLC DESC
+	</select>
+</mapper>

@@ -15,7 +15,7 @@
 			// 메뉴 선택 이벤트
 			$(".btn_move").on(clickEvent, function() {
 				$("input[name='regType']").val($(this).data("type"));
-				$("form[name='frm_select']").attr("action", "/office/task/entry").submit();;
+				$("form[name='frm_select']").attr("action", "/office/task/entry").submit();
 			});
 			
 			// 유형 선택 화면으로 이동
@@ -165,6 +165,11 @@
 			$(document).on(clickEvent, ".modal-wrap.status_change .btn_save", function(){
 				fnStatusSave();
 			});
+			
+			// 출장우 관리 페이지 이동
+			$(document).on(clickEvent, ".btn_cow_list", function(){
+				$("form[name='frm_select']").attr("action", "/office/task/cowList").submit();
+			});
 		};
 		
 		// 큰소 정보 입력 팝업
@@ -239,6 +244,7 @@
 				popHtml.push('								<option value="7">7개월</option>');
 				popHtml.push('								<option value="8">8개월</option>');
 				popHtml.push('								<option value="9">9개월</option>');
+				popHtml.push('								<option value="10">10개월</option>');
 				popHtml.push('							</select>');
 				popHtml.push('						</td>');
 				popHtml.push('					</tr>');
@@ -277,17 +283,17 @@
 				popHtml.push('						</td>');
 				popHtml.push('					</tr>');
 				popHtml.push('					<tr>');
-				popHtml.push('						<th>비고</th>');
-				popHtml.push('						<td class="input-td">');
-				popHtml.push('							<input type="text" name="rmkCntn" id="rmkCntn" value="" alt="비고" />');
+				//popHtml.push('						<th>비고</th>');
+				popHtml.push('						<td class="input-td" colspan="2">');
+				popHtml.push('							<input type="text" name="rmkCntn" id="rmkCntn" value="" alt="비고" placeholder="비고" />');
 				popHtml.push('						</td>');
 				popHtml.push('					</tr>');
 				
 			}else if(className =='status_change'){
 				popHtml.push('					<tr>');
-				popHtml.push('						<th>하한가</th>');
+				popHtml.push('						<th>예정가</th>');
 				popHtml.push('						<td class="input-td">');
-				popHtml.push('							<input type="text" name="lowsSbidLmtAm" id="lowsSbidLmtAm" value="" alt="하한가" disabled="disabled"/>');
+				popHtml.push('							<input type="text" name="lowsSbidLmtAm" id="lowsSbidLmtAm" value="" alt="예정가" disabled="disabled"/>');
 				popHtml.push('						</td>');
 				popHtml.push('					</tr>');
 				popHtml.push('					<tr>');
@@ -456,7 +462,7 @@
 		// 큰소 구분, 임신 개월, 송아지 정보 변경에 따라 비고내용 자동완성
 		var fnSetRmkCntn = function() {
 			// 어미소 정규식 패턴
-			var mcowPattern = /임신[0-9]{1,2}개월/gi;
+			var mcowPattern = /임신[0-9]{1,2}개월|만삭/gi;
 			// 송아지 정규식 패턴
 			var ccowPattern = /[암|수|거세|미경산|비거세|프리마틴|공통]{0,4}송아지[0-9]{1,2}개월/gi;
 			
@@ -467,7 +473,8 @@
 			
 			var mcowText = "";
 			if ((ppgcowFeeDsc == "1" || ppgcowFeeDsc == "3") && prnyMtcn > 0) {
-				mcowText = "임신 " + prnyMtcn + "개월"
+				if(prnyMtcn > 9)mcowText = "만삭";
+				else mcowText = "임신 " + prnyMtcn + "개월";
 			}
 			
 			var ccowText = "";
@@ -583,7 +590,7 @@
 					$("input[name='lvstAucPtcMnNo']", $("form[name='frm_cow_info']")).prop("disabled", true);
 					$("input[name='sraSbidUpr']", $("form[name='frm_cow_info']")).prop("disabled", true);
 					$("input[name='lvstAucPtcMnNo']", $("form[name='frm_cow_info']")).val('');
-					$("input[name='sraSbidUpr']", $("form[name='frm_cow_info']")).val('');							
+					$("input[name='sraSbidUpr']", $("form[name='frm_cow_info']")).val('');
 				}
 				
 				$("select").selectric("refresh");

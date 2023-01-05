@@ -17,6 +17,8 @@ import org.springframework.stereotype.Service;
 
 import com.ishift.auction.service.admin.AdminService;
 import com.ishift.auction.service.auction.AuctionDAO;
+import com.ishift.auction.service.common.CommonDAO;
+import com.ishift.auction.service.common.CommonService;
 import com.ishift.auction.util.Constants;
 import com.ishift.auction.util.HttpUtils;
 import com.ishift.auction.util.JwtTokenUtil;
@@ -42,6 +44,13 @@ public class LoginServiceImpl implements LoginService {
 	
 	@Autowired
 	private AdminService adminService;
+	
+	@Autowired
+	private CommonService commonService;
+	
+	@Autowired
+	private CommonDAO commonDao;
+	
 	
 	@Value("${spring.profiles.active}")
 	private String profile;
@@ -101,18 +110,75 @@ public class LoginServiceImpl implements LoginService {
 	public Map<String, Object> loginProc(final Map<String, Object> params) throws SQLException, RuntimeException {
 		final Map<String, Object> returnMap = new HashMap<String, Object>();
 		String token = "";
+		String mb_intg_no = "";
 		
 		// 로그인 유형 > 0 : 중도매인, 1 : 출하주
 		final String type = params.getOrDefault("type", "0").toString();
-
+		
+		// 통합회원 구분 코드 > 01 : 중도매인, 02 : 출하주(농가)
+		final String intg_gubun = "0".equals(type) ? "01" : "02";
+				
 		// 중도매인, 출하주 검색 (같은 사업장에 이름과 생년월일이 같은 사람이 있을지도?)
 		final List<Map<String, Object>> list = "0".equals(type) ? this.selectWholesalerList(params) : this.selectFarmUserList(params);
-
+		
 		if (list.size() > 0) {
+			
+			//[s] gypark : 회원통합 확인 로직
+			params.put("regUsrid", "SYSTEM");
+			params.put("MB_INTG_GB", intg_gubun);	//통합회원구분
+			params.put("MB_INTG_NM", "01".equals(intg_gubun) ? list.get(0).get("SRA_MWMNNM") : list.get(0).get("FTSNM"));	//회원명
+			params.put("MB_RLNO", "01".equals(intg_gubun) ? list.get(0).get("CUS_RLNO") : list.get(0).get("BIRTH"));	//생년월일
+			params.put("OHSE_TELNO", list.get(0).get("OHSE_TELNO"));		//자택전화번호
+			params.put("MB_MPNO", list.get(0).get("CUS_MPNO"));		//휴대전화번호
+			// 통합회원 테이블에서 이름, 생년월일, 휴대전화번호로 통합회원 정보 조회
+			final Map<String, Object> mbIntgNoInfo = commonDao.getIntgNoInfo(params);
+			
+			if(list.get(0).get("MB_INTG_NO") != null && !"".equals(list.get(0).get("MB_INTG_NO"))) {
+				mb_intg_no = list.get(0).get("MB_INTG_NO").toString();
+				params.put("MB_INTG_NO", mb_intg_no);
+				final Map<String, Object> intgNumInfo = commonDao.getIntgNoInfoForNum(params);
+				//휴면회원이면
+				if("1".equals(intgNumInfo.get("DORMACC_YN").toString()) && "0".equals(intgNumInfo.get("DELACC_YN").toString())){
+					//휴면해제 프로세스
+					commonService.updateDormcUserFhsClear(params);
+				}
+				
+				//최종접속일자, 휴면예정일자 update
+				loginDAO.updateMbintgConDormInfo(params);
+				
+			}else {
+				//중도매인 이름, 생년월일 or 출하주 이름, 연락처로 통합회원 조회 했을 때도 데이터가 없는 경우 => 신규가입
+				if(mbIntgNoInfo == null || mbIntgNoInfo.isEmpty()) {
+					//회원 통합 데이터 insert
+					if (!"".equals(params.get("MB_INTG_NM")) && !"".equals(params.get("MB_RLNO")) && !"".equals(params.get("MB_MPNO"))) {
+						int mb_intg_no_i = commonDao.insertIntgInfo(params);
+						mb_intg_no = String.valueOf(mb_intg_no_i);
+					}
+				}
+				else {  //다른 조합에서 가입한 통합회원 정보가 있으면 해당 회원통합번호만 업데이트 
+					mb_intg_no = mbIntgNoInfo.get("MB_INTG_NO").toString();
+				}
+				
+				//중도매인 or 출하주 회원통합번호 update
+				if(!"".equals(mb_intg_no)) {
+					params.put("MB_INTG_NO", mb_intg_no);
+					if("01".equals(params.get("MB_INTG_GB"))) {
+						loginDAO.updateMmMwmnMbintgNo(params);
+					}else {
+						loginDAO.updateMmFhsMbintgNo(params);
+					}
+					
+					//최종접속일자, 휴면예정일자 update
+					loginDAO.updateMbintgConDormInfo(params);
+				}
+			}
+			//[e] gypark : 회원통합 확인 로직
+			
 			JwtTokenVo jwtTokenVo = JwtTokenVo.builder()
 												.auctionHouseCode(list.get(0).get("NA_BZPLC").toString())
 												.userMemNum(list.get(0).get("TRMN_AMNNO").toString())
 												.userRole("0".equals(type) ? Constants.UserRole.BIDDER : Constants.UserRole.FARM)
+												.mbIntgNo(mb_intg_no)			//회원통합번호 추가
 												.build();
 
 			token = jwtTokenUtil.generateToken(jwtTokenVo, Constants.JwtConstants.ACCESS_TOKEN);
@@ -123,6 +189,7 @@ public class LoginServiceImpl implements LoginService {
 			params.put("naBzPlcNo", params.get("place"));
 			final Map<String, Object> branchInfo = adminService.selectOneJohap(params);
 			returnMap.put("branchInfo", branchInfo);
+			
 		}
 		else {
 			returnMap.put("message", "로그인 정보를 확인해주세요.");

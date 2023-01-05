@@ -7,7 +7,6 @@ import com.ishift.auction.service.auction.AuctionService;
 import com.ishift.auction.util.Constants;
 import com.ishift.auction.util.CookieUtil;
 import com.ishift.auction.util.JwtTokenUtil;
-import com.ishift.auction.util.RSACriptoConfig;
 import com.ishift.auction.util.SessionUtill;
 import com.ishift.auction.vo.AdminJwtTokenVo;
 import com.ishift.auction.vo.AdminUserDetails;
@@ -64,8 +63,6 @@ public class AdminController {
 	@Autowired
 	private CookieUtil cookieUtil;
 
-	@Autowired
-	private RSACriptoConfig rsaCriptoConfig;
 	@Autowired
 	private PasswordEncoder passwordEncoder;
 
@@ -234,6 +231,7 @@ public class AdminController {
 				map.put("delYn", "0");
 				if(userVo.getPlace() != null) map.put("naBzPlcNo", userVo.getPlace());
 				String usrid = userVo.getUsrid();
+				map.put("aucDscFlag", "Y");
 				Map<String,Object> johap = adminService.selectOneJohap(map);
 				String aucGubun = (String) johap.getOrDefault("AUC_DSC","");
 				
@@ -325,7 +323,6 @@ public class AdminController {
 	public Map<String, Object> getCowList(@RequestParam Map<String, Object> params) {
 		
 		final Map<String, Object> result = new HashMap<String, Object>();
-		StringBuffer sb = new StringBuffer();
 		try {
 
 	        LocalDateTime date = LocalDateTime.now();
@@ -488,6 +485,36 @@ public class AdminController {
 		mav.addObject("subheaderTitle", "방송");
 		return mav;
 	}
+	
+	@PreAuthorize("hasRole('ROLE_ADMIN')")
+	@RequestMapping(value = "/office/auction/stream_2" ,method = { RequestMethod.GET, RequestMethod.POST })
+	public ModelAndView streamPage2() throws Exception{
+		final ModelAndView mav = new ModelAndView();
+		final Map<String,Object> map = new HashMap<>();
+		map.put("delYn", "0");
+		final AdminUserDetails userVo = (AdminUserDetails)sessionUtill.getUserVo();
+        String today = LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyyMMdd"));
+        
+		if(userVo != null) map.put("naBzPlcNo", userVo.getPlace());
+		
+		Map<String,Object> johap  = adminService.selectOneJohap(map);
+        JwtTokenVo jwtTokenVo = JwtTokenVo.builder()
+				.auctionHouseCode(johap.get("NA_BZPLC").toString())
+				.userMemNum("WATCHER")
+				.userRole(Constants.UserRole.WATCHER)
+				.build();
+        String token = jwtTokenUtil.generateToken(jwtTokenVo, Constants.JwtConstants.ACCESS_TOKEN);
+
+		map.put("searchDate", today);
+		Map<String,Object> count =auctionService.selectCountEntry(map);
+
+		mav.addObject("johapData", johap);
+        mav.addObject("token",token);
+        mav.addObject("count",count);
+		mav.setViewName("admin/auction/stream/stream_2");
+		mav.addObject("subheaderTitle", "방송");
+		return mav;
+	}
 		
 	@RequestMapping(value = "/office/auction/videoStream" ,method = { RequestMethod.GET, RequestMethod.POST })
 	public ModelAndView streamOnlyVideo(final HttpServletResponse response
@@ -554,8 +581,6 @@ public class AdminController {
 			SecurityContextHolder.getContext().setAuthentication(authentication);
 
 			AdminUserDetails adminUserDetails = (AdminUserDetails)authentication.getPrincipal();
-			String usrid = adminUserDetails.getUsrid();
-			String naBzPlc = adminUserDetails.getNaBzplc();
 			if (adminUserDetails != null) {
 //				final JwtTokenVo jwtTokenVo = JwtTokenVo.builder()
 //														.userMemNum(usrid)
@@ -592,7 +617,6 @@ public class AdminController {
 	@ResponseBody
 	@RequestMapping(value = "/office/monster/getBidderCnt" ,method = { RequestMethod.GET, RequestMethod.POST })
 	public Map<String, Object> getBidderCnt(@RequestParam Map<String,Object> param) throws Exception{
-		final Map<String,Object> map = new HashMap<>();
 		final Map<String,Object> result = new HashMap<>();
 		try {
 			if(null == param.get("searchDate") || "".equals(param.get("searchDate"))) {
@@ -616,7 +640,6 @@ public class AdminController {
 	public Map<String, Object> getStnInfo(@RequestParam Map<String, Object> params) {
 		
 		final Map<String, Object> result = new HashMap<String, Object>();
-		StringBuffer sb = new StringBuffer();
 		try {
 	        LocalDateTime date = LocalDateTime.now();
 	        Map<String,Object> temp = new HashMap<String,Object>();

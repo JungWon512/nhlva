@@ -27,7 +27,7 @@
 				<dd class="pd_kg">중량<span class="w_view_in">(kg)</span></dd>
 				<dd class="pd_kpn">KPN</dd>
 				<dd class="pd_num1">계대</dd>
-				<dd class="pd_pay1">최저가</dd>
+				<dd class="pd_pay1">예정가</dd>
 				<dd class="pd_pay2">낙찰가</dd>
 				<dd class="pd_state">경매결과</dd>
 				<dd class="pd_etc">비고</dd>

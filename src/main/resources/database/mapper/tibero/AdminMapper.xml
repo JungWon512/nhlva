@@ -4,39 +4,49 @@
 <mapper namespace="admin">
  	<select id="selectOneJohap" parameterType="map" resultType="map">
  		SELECT			
-			NA_BZPLCNO
-			, NA_BZPLCLOC
-			, CLNTNM
-			, NA_BZPLC
-			, AREAORD
-			, AREANM
-			, AUC_DSC	/* 경매 구분 (1:단일, 2:일괄) */
-			, LAT
-			, LNG
-			, AUC_YN	/* 경매 여부 */
-			, DEL_YN
-			, FSRG_DTM
-			, FSRGMN_ENO
-			, LSCHG_DTM
-			, LS_CMENO
-			, RMK_CNTN
-			, TEL_NO
-			, KKO_SVC_ID
-			, KKO_SVC_KEY
-			, KKO_SVC_CNT
-			, NET_HOST
-			, NET_PORT
-			, WEB_PORT
-			, SMS_AUTH_YN
-			, SMS_BUFFER_1
-			, SMS_BUFFER_2
- 		FROM TB_LA_IS_BM_BZLOC
+			A.NA_BZPLCNO
+			, A.NA_BZPLCLOC
+			, A.CLNTNM
+			, A.NA_BZPLC
+			, A.AREAORD
+			, A.AREANM
+			, A.LAT
+			, A.LNG
+			, A.AUC_YN	/* 경매 여부 */
+			, A.DEL_YN
+			, A.FSRG_DTM
+			, A.FSRGMN_ENO
+			, A.LSCHG_DTM
+			, A.LS_CMENO
+			, A.RMK_CNTN
+			, A.TEL_NO
+			, A.KKO_SVC_ID
+			, A.KKO_SVC_KEY
+			, A.KKO_SVC_CNT
+			, A.NET_HOST
+			, A.NET_PORT
+			, A.WEB_PORT
+			, A.SMS_AUTH_YN
+			<choose>
+				<when test="aucDscFlag != null and aucDscFlag != ''">
+				, (SELECT NVL(B.AUC_DSC,A.AUC_DSC) FROM TB_LA_IS_MH_AUC_QCN B
+							WHERE A.NA_BZPLC = B.NA_BZPLC
+								AND B.AUC_DT = TO_CHAR(SYSDATE, 'YYYYMMDD')
+								AND ROWNUM = 1
+					) AS AUC_DSC	/* 경매 구분 (1:단일, 2:일괄) */
+				</when>
+				<otherwise>
+				, A.AUC_DSC /* 경매 구분 (1:단일, 2:일괄) */
+				</otherwise>
+			</choose>
+			, A.KIOSK_YN
+ 		FROM TB_LA_IS_BM_BZLOC A
  		WHERE 1=1
 		<if test="naBzPlcNo != null and naBzPlcNo != ''">
- 			AND NA_BZPLCNO = #{naBzPlcNo}
+ 			AND A.NA_BZPLCNO = #{naBzPlcNo}
  		</if>
 		<if test="naBzplc != null and naBzplc != ''">
- 			AND NA_BZPLC = #{naBzplc}
+ 			AND A.NA_BZPLC = #{naBzplc}
  		</if>
     </select>
         

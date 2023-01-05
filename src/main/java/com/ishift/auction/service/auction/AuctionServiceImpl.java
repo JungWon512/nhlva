@@ -1,14 +1,24 @@
 package com.ishift.auction.service.auction;
 
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
+import java.sql.SQLException;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Random;
 
 import javax.annotation.Resource;
 
-import java.sql.SQLException;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Map;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import com.ishift.auction.util.SessionUtill;
+import com.ishift.auction.vo.FarmUserDetails;
 
 @Service("auctionService")
 @Transactional(transactionManager = "txManager", rollbackFor = Exception.class)
@@ -16,6 +26,9 @@ public class AuctionServiceImpl implements AuctionService {
 
 	@Resource(name = "auctionDAO")
 	AuctionDAO auctionDAO;
+	
+	@Autowired
+    private SessionUtill sessionUtill;
 	
 	@Override
 	public List<Map<String,Object>> noticeSelectList(Map<String, Object> reqMap)throws SQLException {
@@ -28,7 +41,17 @@ public class AuctionServiceImpl implements AuctionService {
 	}
 	@Override
 	public List<Map<String, Object>> entrySelectList(Map<String, Object> reqMap) throws SQLException{
-		return auctionDAO.entrySelectList(reqMap);
+		List<Map<String, Object>> result = null;
+		
+		String str = (String) reqMap.get("indvSexC");
+		
+		if (str != null && !"".equals(str) ) {
+			String[] list = str.split(",");
+			reqMap.put("indvSexC", list);
+		}
+		
+		result = auctionDAO.entrySelectList(reqMap) ; 
+		return result;
 	}
 	@Override
 	public Map<String, Object> selectNearAucDate(Map<String, Object> reqMap) throws SQLException{
@@ -398,8 +421,8 @@ public class AuctionServiceImpl implements AuctionService {
 			return cnt;
 		}
 		else {
-			// 업데이트 유형이 중량 등록(W), 중량 일괄 등록(AW)이고 비육우인 경우 낙찰 금액을 다시 계산해준다.
-			if (("W".equals(params.get("regType")) || "AW".equals(params.get("regType")) || "LW".equals(params.get("regType")))
+			// 업데이트 유형이 중량 등록(W), 중량 일괄 등록(AW), 중량 일괄 등록(AWL)이고 비육우인 경우 낙찰 금액을 다시 계산해준다.
+			if (("W".equals(params.get("regType")) || "AW".equals(params.get("regType")) || "AWL".equals(params.get("regType")) || "LW".equals(params.get("regType")))
 			  && "2".equals(params.get("aucObjDsc")) 
 			  || "S".equals(params.get("regType"))) {
 
@@ -474,10 +497,13 @@ public class AuctionServiceImpl implements AuctionService {
 	 */
 	@Override
 	public Map<String, Object> updateAuctionResultMap(final Map<String, Object> params) throws SQLException {
+		
+		final Map<String, Object> result = new HashMap<String, Object>();
+		
 		params.put("naBzplc", params.get("naBzPlc"));
 		
 		// 1. 필수 인자 체크
-		if (params.get("naBzPlc") == null
+		if ((params.get("naBzPlc") == null && params.get("naBzplc") == null)
 		 || params.get("aucObjDsc") == null
 		 || params.get("aucDt") == null
 		 || params.get("oslpNo") == null
@@ -562,8 +588,8 @@ public class AuctionServiceImpl implements AuctionService {
 		
 		// 5. 경매결과 업데이트
 		int cnt = auctionDAO.updateAuctionResult(params);
-		params.put("chg_pgid", "API");
-		params.put("chg_rmk_cntn", "API 경매결과 변경");
+		params.put("chg_pgid", params.getOrDefault("chg_pgid", "API"));
+		params.put("chg_rmk_cntn", params.getOrDefault("chg_rmk_cntn", "API 경매결과 변경"));
 		auctionDAO.insertSogCowLog(params);
 		if (cnt == 0) {
 			// 실패한 정보를 다시 return
@@ -676,6 +702,7 @@ public class AuctionServiceImpl implements AuctionService {
 									feeAmt += Long.parseLong(auctionInfo.getOrDefault("BLOOD_AM", "0").toString());
 								}
 								
+								// 영주축협 친자 검사 수수료
 								if ("8808990687094".equals(params.get("naBzPlc"))) {
 									// 친자 검사 여부(DNA_YN_CHK) 수수료
 									if ("1".equals(auctionInfo.get("DNA_YN_CHK"))) {
@@ -774,7 +801,10 @@ public class AuctionServiceImpl implements AuctionService {
 		}
 		// 수수료 정보 저장 [e]
 		
-		return null;
+		result.put("success", true);
+		result.put("message", "경매내역 변경에 성공했습니다.");
+		
+		return result;
 	}
 
 	/**
@@ -1248,14 +1278,27 @@ public class AuctionServiceImpl implements AuctionService {
 	public int updateAppVersion(Map<String, Object> params) throws SQLException {
 		return auctionDAO.updateAppVersion(params);
 	}
-	
+
+	/**
+	 * 계류대번호 업데이트
+	 * @param params
+	 * @return
+	 * @throws SQLException
+	 */
 	@Override
 	public int updateCowInfoForModlNo(Map<String, Object> params) throws SQLException{
 		return auctionDAO.updateCowInfoForModlNo(params);
 	}
+	
+	/**
+	 * 경매구간정보
+	 * @param params
+	 * @return
+	 * @throws SQLException
+	 */
 	@Override
 	public Map<String, Object> getStnInfo(Map<String, Object> params) throws SQLException{
-		return auctionDAO.getStnInfo(params);		
+		return auctionDAO.getStnInfo(params);
 	}
 
 	/**
@@ -1278,5 +1321,338 @@ public class AuctionServiceImpl implements AuctionService {
 	@Override
 	public Map<String, Object> selectAuctMwmn(Map<String, Object> params) throws SQLException{
 		return auctionDAO.selectAuctMwmn(params);
+	}
+	
+	/**
+	 * 매수인 정산서 - 리스트 조회
+	 * @param params
+	 * @return
+	 * @throws SQLException
+	 */
+	@Override
+	public List<Map<String,Object>> entryStateSelectList(Map<String, Object> reqMap)throws SQLException {
+		return auctionDAO.entryStateSelectList(reqMap);
+	}
+	
+	/**
+	 * 매수인 정산서 - 매수인 정보 조회
+	 * @param params
+	 * @return
+	 * @throws SQLException
+	 */
+	@Override
+	public Map<String,Object> selectStateInfo(Map<String, Object> reqMap)throws SQLException {
+		Map<String,Object> map = new HashMap<>();
+		
+		if ("buy".equals(reqMap.get("stateFlag"))) {
+			map = auctionDAO.selectBuyStateInfo(reqMap);
+		} else {
+			map = auctionDAO.selectEntryStateInfo(reqMap);
+		}
+		
+		return map;
+	}
+	
+	/**
+	 * 매수인 정산서 - 낙찰금액 조회
+	 * @param params
+	 * @return
+	 * @throws SQLException
+	 */
+	@Override
+	public Map<String,Object> selectTotSoldPriceAndFee(Map<String, Object> reqMap)throws SQLException {
+		return auctionDAO.selectTotSoldPriceAndFee(reqMap);
+	}
+	
+	/**
+	 * 매수인 정산서 - 조합 입금정보 조회
+	 * @param params
+	 * @return
+	 * @throws SQLException
+	 */
+	@Override
+	public Map<String,Object> selectJohapAccInfo(Map<String, Object> reqMap)throws SQLException {
+		return auctionDAO.selectJohapAccInfo(reqMap);
+	}
+	
+	/**
+	 * 매수인 정산서 - 수수료 상세 조회
+	 * @param params
+	 * @return
+	 * @throws SQLException
+	 */
+	@Override
+	public List<Map<String,Object>> myFeeStateList(Map<String, Object> reqMap)throws SQLException {
+		return auctionDAO.myFeeStateList(reqMap);
+	}
+	
+	/**
+	 * 정산서 리스트 조회
+	 * @param params
+	 * @return
+	 * @throws SQLException
+	 */
+	@Override
+	public List<Map<String,Object>> selectStateList(Map<String, Object> reqMap)throws SQLException {
+		List<Map<String, Object>> list = new ArrayList<>();
+		
+		if ("buy".equals(reqMap.get("stateFlag"))) {
+			list = auctionDAO.selectStateBuyList(reqMap); 
+		} else {
+			list = auctionDAO.selectStateEntryList(reqMap);
+		}
+		
+		return list;
+	}
+	
+	/**
+	 * 개체형매 정보 조회
+	 * @param params
+	 * @return
+	 * @throws SQLException
+	 */
+	@Override
+	public List<Map<String, Object>> selectListIndvSib(Map<String, Object> param) throws SQLException{
+		return auctionDAO.selectListIndvSib(param);
+	}
+	
+	/**
+	 * 개체 이미지 조회
+	 * @param params
+	 * @return
+	 * @throws SQLException
+	 */
+	@Override
+	public List<Map<String, Object>> selectListCowImg(Map<String, Object> param) throws SQLException{
+		return auctionDAO.selectListCowImg(param);
+	}
+	
+	/**
+	 * 개체 이동 정보 조회
+	 * @param params
+	 * @return
+	 * @throws SQLException
+	 */
+	@Override
+	public List<Map<String, Object>> selectListIndvMove(Map<String, Object> paramMap) throws SQLException{
+		return auctionDAO.selectListIndvMove(paramMap);
+	}
+	
+	/**
+	 * 출장우 상세 탭 리스트
+	 * @param params
+	 * @return
+	 * @throws SQLException
+	 */
+	@Override
+	public List<Map<String, Object>> selectListExpitemSet(Map<String, Object> map) throws SQLException{
+		return auctionDAO.selectListExpitemSet(map);
+	}
+
+	/**
+	 * 가축시장 경매일정
+	 * @param param
+	 * @return
+	 * @throws SQLException
+	 */
+	@Override
+	public List<Map<String, Object>> selectcheduleList(Map<String, Object> param) throws SQLException {
+		return auctionDAO.selectcheduleList(param);
+	}
+
+	/**
+	 * 후대정보 조회
+	 * @param param
+	 * @return
+	 * @throws SQLException
+	 */	
+	@Override
+	public List<Map<String, Object>> selectListIndvPost(Map<String, Object> param) throws SQLException{
+		return auctionDAO.selectListIndvPost(param);
+	}
+
+	/**
+	 * 개체번호 기준으로 경매정보 조회
+	 * @param param
+	 * @return
+	 * @throws SQLException
+	 */
+	@Override
+	public Map<String, Object> selectIndvDataInfo(Map<String, Object> param) throws SQLException{
+		return auctionDAO.selectIndvDataInfo(param);
+	}
+
+	/**
+	 * 분만정보 조회
+	 * @param param
+	 * @return
+	 * @throws SQLException
+	 */
+	@Override
+	public List<Map<String, Object>> selectListIndvChildBirth(Map<String, Object> param) throws SQLException{
+		return auctionDAO.selectListIndvChildBirth(param);		
+	}
+
+	/**
+	 * 이용해지 신청 데이터 있는지 조회
+	 * @param params
+	 * @return
+	 * @throws SQLException
+	 */
+	@Override
+	public Map<String, Object> selectMySecAplyInfo(Map<String, Object> params) throws SQLException {
+		return auctionDAO.selectMySecAplyInfo(params);
+	}
+
+	/**
+	 * 이용해지 신청 데이터 insert
+	 * @param params
+	 * @throws SQLException
+	 */
+	@Override
+	public void insertMySecAplyInfo(Map<String, Object> params) throws SQLException {
+		auctionDAO.insertMySecAplyInfo(params);
+	}
+
+	/**
+	 * 이용해지 신청 데이터 delete (해지 철회할 때)
+	 * @param params
+	 * @throws SQLException
+	 */
+	@Override
+	public void deleteMySecAplyInfo(Map<String, Object> params) throws SQLException {
+		auctionDAO.deleteMySecAplyInfo(params);
+	}
+
+	/**
+	 * 키오스크 인증번호 확인 (중도매인)
+	 * @param map
+	 * @return
+	 * @throws SQLException
+	 */
+	@Override
+	public Map<String, Object> selectMwmnAuthNoYmdInfo(Map<String, Object> map) throws SQLException {
+		return auctionDAO.selectMwmnAuthNoYmdInfo(map);
+	}
+
+	/**
+	 * 키오스크 인증번호 확인 (출하주)
+	 * @param map
+	 * @return
+	 * @throws SQLException
+	 */
+	@Override
+	public Map<String, Object> selectFhsAuthNoYmdInfo(Map<String, Object> map) throws SQLException {
+		return auctionDAO.selectFhsAuthNoYmdInfo(map);
+	}
+
+	/**
+	 * 키오스크 발급된 인증번호 업데이트 (중도매인)
+	 * @param params
+	 * @throws SQLException
+	 */
+	@Override
+	public void updateMwmnAuthNoYmdInfo(Map<String, Object> params) throws SQLException {
+		auctionDAO.updateMwmnAuthNoYmdInfo(params);
+	}
+
+	/**
+	 * 키오스크 발급된 인증번호 업데이트 (출하주)
+	 * @param params
+	 * @throws SQLException
+	 */
+	@Override
+	public void updateFhsAuthNoYmdInfo(Map<String, Object> params) throws SQLException {
+		auctionDAO.updateFhsAuthNoYmdInfo(params);
+	}
+
+	/**
+	 * 키오스크 인증번호 발급하기
+	 */
+	@Override
+	public Map<String, Object> myAuthNumIssue(Map<String, Object> params) throws SQLException {
+		
+		Map<String, Object> result = new HashMap<String, Object>();
+		if(sessionUtill.getNaBzplc() != null) params.put("naBzPlc", sessionUtill.getNaBzplc());
+		if(sessionUtill.getUserId() != null) params.put("loginNo", sessionUtill.getUserId());
+		
+		//로그인된 역할 확인하여 각 테이블 조회
+		Map<String, Object> authNoYmd = null;
+		if(sessionUtill.getRoleConfirm() != null) {
+			if("ROLE_BIDDER".equals(sessionUtill.getRoleConfirm())) {
+				authNoYmd = this.selectMwmnAuthNoYmdInfo(params);
+			}
+			else if("ROLE_FARM".equals(sessionUtill.getRoleConfirm())) {
+				if(sessionUtill.getUserVo() != null) {
+					FarmUserDetails userVo = (FarmUserDetails)sessionUtill.getUserVo();
+					params.put("farmAmnno", userVo.getFarmAmnno());
+				}
+				authNoYmd = this.selectFhsAuthNoYmdInfo(params);
+			}
+		}
+		
+		if(authNoYmd == null) {
+			result.put("success", false);
+			result.put("type", "isNotLogin");
+			result.put("message", "로그인 정보를 확인해주세요.");
+			return result;
+		}
+		else{
+			
+			if(authNoYmd.get("AUTH_YMD") != null) {
+				Date date = new Date();
+				SimpleDateFormat dt = new SimpleDateFormat("yyyyMMddHHmmss");
+				
+				Date ymd;
+				try {
+					ymd = dt.parse(authNoYmd.get("AUTH_YMD").toString());
+					Long gap = ymd.getTime() - date.getTime();
+					int days = (int) Math.floor(gap / (1000 * 60 * 60 * 24));
+					int hours = (int) Math.floor((gap % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+					int minutes = (int) Math.floor((gap % (1000 * 60 * 60)) / (1000 * 60));
+					int seconds = (int) Math.floor((gap % (1000 * 60)) / 1000);
+					
+					//혹시 아직 유효한 인증번호가 있는지 확인? 유효기간이 10분 이내로 남은 것이 있는 경우
+					if(authNoYmd.get("AUTH_YMD") != null && days <= 0 && hours <= 0 && (minutes >= 0 && minutes < 10) && seconds > 0){
+						result.put("success", true);
+						result.put("type", "existNum");
+						result.put("auth_no", authNoYmd.get("AUTH_NO").toString());
+						result.put("auth_ymd", authNoYmd.get("AUTH_YMD").toString());
+						result.put("message", "유효한 인증번호가 존재합니다. 확인 부탁드립니다.");
+						return result;
+					}
+				} catch (ParseException e) {
+					e.printStackTrace();
+				}
+			}
+			
+			//유효시간이 지났거나, 인증번호 발급받은 적이 없으면 인증번호 6자리 발급
+			Random random = new Random();
+			random.setSeed(System.currentTimeMillis());
+			String authNo = String.format("%06d", random.nextInt(1000000));
+			
+			params.put("auth_no", authNo);
+			if("ROLE_BIDDER".equals(sessionUtill.getRoleConfirm())) {
+				this.updateMwmnAuthNoYmdInfo(params);
+				authNoYmd = this.selectMwmnAuthNoYmdInfo(params);
+			}
+			else if("ROLE_FARM".equals(sessionUtill.getRoleConfirm())) {
+				this.updateFhsAuthNoYmdInfo(params);
+				authNoYmd = this.selectFhsAuthNoYmdInfo(params);
+			}
+			
+			result.put("success", true);
+			result.put("type", "issueNum");
+			result.put("auth_no", authNo);
+			result.put("auth_ymd", authNoYmd.get("AUTH_YMD").toString());
+			result.put("message", "인증번호가 발급되었습니다.");
+		}
+		
+		return result;
+	}
+
+	@Override
+	public Map<String, Object> selectStateEntryCntFhs(Map<String, Object> params) throws SQLException {
+		return auctionDAO.selectStateEntryCntFhs(params);
 	}
 }

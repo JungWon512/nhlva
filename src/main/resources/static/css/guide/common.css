@@ -1,3 +1,4 @@
+
 @charset "UTF-8";
 @import url("normalize.css");
 @import url("notosanskr.css");
@@ -1156,7 +1157,7 @@ Base styles: contents layer
 	margin-top: 40px;
 }
 
-.chk_step1 h2 {
+.chk_step1:not(.dash-tit) h2 {
 	font-size: 36px;
 	text-align: center;
 	color: #1a1a1a;
@@ -1255,7 +1256,7 @@ Base styles: contents layer
 		padding: 0 24px;
 		margin-top: 21px
 	}
-	.chk_step1 h2 {
+	.chk_step1:not(.dash-tit) h2 {
 		font-size: 20px;
 		margin-bottom: 30px
 	}
@@ -1553,7 +1554,7 @@ Base styles: contents layer
 	width: 25px;
 	height: 25px;
 	text-indent: -9999px;
-	background: url(/static/images/guide/ico_move.svg) no-repeat 0 0;
+	background: url(/static/images/guide/ico_move.png) no-repeat 0 0;
 	background-size: 25px 25px;
 }
 
@@ -1832,6 +1833,37 @@ Base styles: contents layer
 	box-shadow: 0px 0 20px 5px rgba(0, 0, 0, 0.25)
 }
 
+.auction_choice .kiosk_btn {
+	width: 100%;
+	min-height: 120px;
+	display: block;
+	text-align: center;
+	border-radius: 20px;
+	background: #fefefe;
+	line-height: 120px;
+	color: #555;
+	font-size: 36px;
+	font-family: "Noto Sans KR", "Roboto", "AppleGothic", "sans-serif";
+	font-weight: 700;
+	letter-spacing: -0.9px;
+	-webkit-box-shadow: 0px 0 20px 5px rgba(0, 0, 0, 0.25);
+	box-shadow: 0px 0 20px 5px rgba(0, 0, 0, 0.25)
+}
+
+.auction_choice .btn-re-auth {
+	width: 90%;
+	height: 50px;
+	display: block;
+	line-height: 50px;
+	border-radius: 5px;
+	text-align: center;
+	font-size: 18px;
+	color: #fff;
+	/* background-color: #007eff; */
+	background-color:#444;
+	margin: 0 auto;
+}
+
 @media only all and (max-width: 1024px) {
 	.auction_choice .auction_btn {
 		margin-bottom: 55px;
@@ -1848,6 +1880,14 @@ Base styles: contents layer
 	}
 	.auction_choice .auction_btn .auction_see {
 		height: 80px;
+		border-radius: 10px;
+		line-height: 80px;
+		font-size: 24px;
+		letter-spacing: -1.2px;
+	}
+	
+	.auction_choice .kiosk_btn {
+		min-height: 80px;
 		border-radius: 10px;
 		line-height: 80px;
 		font-size: 24px;
@@ -3018,6 +3058,7 @@ Base styles: contents layer
 	display: table-cell;
 	padding: 20px 1px;
 	text-align: center;
+	vertical-align: middle;
 }
 
 @media only all and (max-width: 1024px) {
@@ -3044,7 +3085,7 @@ Base styles: contents layer
 	width: 25px;
 	height: 25px;
 	display: inline-block;
-	background: url(/static/images/guide/ico_move.svg) no-repeat 0 0;
+	background: url(/static/images/guide/ico_move.png) no-repeat 0 0;
 	background-size: 25px 25px;
 	position: absolute;
 	right: 0;
@@ -3923,6 +3964,9 @@ Base styles: contents layer
 	.auction_result .list_head dl dd.pd_sex, .auction_result .list_body dl dd.pd_sex
 		{
 		width: 10%;
+		text-overflow: ellipsis;
+	    overflow: hidden;
+	    white-space: nowrap;
 	}
 	.auction_result .list_head dl dd.pd_kg, .auction_result .list_body dl dd.pd_kg
 		{
@@ -4280,9 +4324,22 @@ Base styles: contents layer
 	width: 50%;
 }
 
-.tab_list ul li {
+.tab_list ul.buy_3 li {
 	float: left;
-	width: 50%;
+	width: 33% !important;
+}
+.tab_list ul.buy_4 li {
+	float: left;
+	width: 25% !important;
+}
+
+.tab_list ul.entry_2 li {
+	float: left;
+	width: 50% !important;
+}
+.tab_list ul.entry_3 li {
+	float: left;
+	width: 33% !important;
 }
 
 .tab_list ul.tab_2 li {
@@ -8076,6 +8133,37 @@ div.list_txts {
 	white-space: nowrap;
 }
 
+/* .modal-content .tag { */
+/* 	margin: -14px -4px 16px; */
+/* 	font-size: 0; */
+/* } */
+
+.modal-content a.tag {
+	display: inline-block;
+	margin: 4px;
+	padding: 5px 10px;
+	border-radius: 5px;
+	background-color: #f5f5f5;
+	font-size: 16px;
+	font-weight: 500;
+	line-height: 1.2;
+}
+
+/* .winpop_reg .tagBox {   */
+/* 	font-size: 25px; */
+/* 	font-weight: 700; */
+/* 	line-height: 1.44; */
+/* } */
+
+.modal-content .btn_tag_reset {
+	float: right;
+    width: 30px;
+    height: 37px;
+    background: url(/static/images/guide/v2/ico-input-del.svg) no-repeat 50% 50%;
+    background-size: 20px auto;
+}
+
+
 /* sum_table 수정 12-24 [s] */
 .sum_table {
   margin: 0px 0px 20px 0px;
@@ -8254,3 +8342,14 @@ div.search.sum_table{display:none;}
 	    border-left: 1px solid #ccc;
 	}
 }
+
+/*이용해지 신청, 철회 페이지 CSS*/
+.div_na_bzplc{width: 90%;margin: 0 auto;}
+.div_na_bzplc .mt30{margin-top:30px;}
+.div_na_bzplc .txt_blue{color: #007eff;}
+.div_na_bzplc p.title_text{font-family:'Noto Sans KR'; font-weight:700; font-size:18px;margin-bottom:10px;color:#000;}
+.div_na_bzplc li.select_na_bzplc{display:inline-block;width:48%;margin-top:5px;}
+.div_na_bzplc .btn_area .btn_apply{width: 100%;height: 46px;display: block;line-height: 46px;background: #007eff;border-radius: 5px;text-align: center;color: #ffffff;font-family: "Noto Sans KR", "Roboto", "AppleGothic", "sans-serif";font-weight: 700;font-size: 18px;margin: 30px auto 20px;}
+@media only all and (max-width: 1024px) {.div_na_bzplc .btn_area .btn_apply{height: 50px;line-height: 50px;border-radius: 5px;font-size: 18px;margin: 25px auto 20px;}}
+.div_na_bzplc .btn_area .btn_withdraw{width: 100%;height: 46px;display: block;line-height: 46px;background: #007eff;border-radius: 5px;text-align: center;color: #ffffff;font-family: "Noto Sans KR", "Roboto", "AppleGothic", "sans-serif";font-weight: 700;font-size: 18px;margin: 30px auto 20px;}
+@media only all and (max-width: 1024px) {.div_na_bzplc .btn_area .btn_withdraw{height: 50px;line-height: 50px;border-radius: 5px;font-size: 18px;margin: 25px auto 20px;}}

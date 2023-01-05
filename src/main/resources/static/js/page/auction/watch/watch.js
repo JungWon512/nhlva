@@ -1,6 +1,7 @@
 $(function() {    
 	
     var setLayout = function() {		
+    	$('.seeBox_slick ul.slider li.video_item').height($('.seeBox_slick ul.slider li.boarder').height());
 		$(".seeBox_slick ul.slider").slick({
 			dots: true
 			//,adaptiveHeight: true
@@ -70,6 +71,10 @@ $(function() {
 			}
 			
 			$(".m_sound").toggleClass('off');
+		});
+		
+		$("button.btn_reload").click(function(){
+			location.reload();
 		});
 		
 		if($('#aucDate').val() != getTodayStr().replaceAll('-','')){
@@ -197,6 +202,11 @@ var messageHandler = function(data) {
 					if($('#aucDsc').val() == '1') changeTrRow(tr);
 					calcPiePercent();					
 				});
+			}else if($('#aucDsc').val() == '1'){
+				var tr = getTrRow(auctionConfig.asData.curAucSeq);
+				tr.find('dl dd.lowsSbidLmtAm').text(fnSetComma(Math.round(tmpAsDAta.lowsSbidLmtAm))+'');
+				changeTrRow(tr);
+				calcPiePercent();					
 			}
 		break;	
 		case "SC" : //현재 출품정보
@@ -255,7 +265,7 @@ var getTrRow = function(curAucSeq) {
 
 function calcPiePercent(){
 	var totCnt = $('.tblAuction li').length; //table 전체 row 수
-	var stantNotCnt = $('.tblAuction li').filter(function(i,obj){var text = $(obj).find('.selSts').text(); if(text !='대기') return obj;}).length; //table 대기 상태가아닌 row수
+	var stantNotCnt = $('.tblAuction li:not(.noInfo)').filter(function(i,obj){var text = $(obj).find('.selSts').text(); if(text !='대기') return obj;}).length; //table 대기 상태가아닌 row수
 	var stantCnt = $('.tblAuction li').filter(function(i,obj){var text = $(obj).find('.selSts').text(); if(text =='대기') return obj;}).length; //table 대기 상태인 row 수
 	var result = new Number(stantNotCnt)/new Number(totCnt) *100;
 	result = result.toFixed(0);
@@ -264,6 +274,10 @@ function calcPiePercent(){
 	$('.chart dl dt').text(result+'%');
 	$('.chart dl dd.bid span').text(stantNotCnt);
 	$('.chart').data('easyPieChart').update(result);
+	
+
+	$('div.stats-box div.num.stand span').text(stantCnt);
+	$('div.stats-box div.num.bid span').text(stantNotCnt);
 }
 
 //remon 영성 관련 로직

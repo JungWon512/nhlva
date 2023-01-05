@@ -100,10 +100,10 @@
 		 AND A.SEL_STS_DSC = #{mAuctionResult}
 		</if>
 		<if test="aucYn != null and aucYn != ''">
-<!-- 		   AND A.AUC_YN = #{aucYn} -->
-			AND A.LOWS_SBID_LMT_AM <![CDATA[>]]> 0
-			AND A.SEL_STS_DSC != '22'
-			AND A.DEL_YN = '0'
+		   AND A.AUC_YN = #{aucYn}
+<!-- 			AND A.LOWS_SBID_LMT_AM <![CDATA[>]]> 0 -->
+<!-- 			AND A.SEL_STS_DSC != '22' -->
+<!-- 			AND A.DEL_YN = '0' -->
 		</if>
 		<if test="ddlQcn != null and ddlQcn != ''">
 		   AND A.SEL_STS_DSC <![CDATA[<>]]> '22'
@@ -136,8 +136,8 @@
 				A.AUC_YN,                      /* 경매진행여부 */
 			<choose>
 			<when test="aucYn != null and aucYn != ''">
-<!-- 				CASE WHEN #{aucYn} = '1' THEN '11' ELSE SEL_STS_DSC END AS SEL_STS_DSC, -->
-				CASE WHEN A.LOWS_SBID_LMT_AM <![CDATA[>]]> 0 AND A.SEL_STS_DSC != '22' AND A.DEL_YN = '0' THEN '11' ELSE SEL_STS_DSC END AS SEL_STS_DSC,
+				CASE WHEN #{aucYn} = '1' THEN '11' ELSE SEL_STS_DSC END AS SEL_STS_DSC,
+<!-- 				CASE WHEN A.LOWS_SBID_LMT_AM <![CDATA[>]]> 0 AND A.SEL_STS_DSC != '22' AND A.DEL_YN = '0' THEN '11' ELSE SEL_STS_DSC END AS SEL_STS_DSC, -->
 			</when>
 			<otherwise>
 				A.SEL_STS_DSC,                   <!-- 판매상태구분코드  -->
@@ -264,10 +264,10 @@
 			   AND A.SEL_STS_DSC = #{mAuctionResult}
 			</if>
 			<if test="aucYn != null and aucYn != ''">
-<!-- 			   AND A.AUC_YN = #{aucYn} -->
-				AND A.LOWS_SBID_LMT_AM <![CDATA[>]]> 0
-				AND A.SEL_STS_DSC != '22'
-				AND A.DEL_YN = '0'
+			   AND A.AUC_YN = #{aucYn}
+<!-- 				AND A.LOWS_SBID_LMT_AM <![CDATA[>]]> 0 -->
+<!-- 				AND A.SEL_STS_DSC != '22' -->
+<!-- 				AND A.DEL_YN = '0' -->
 			</if>
 			<if test="ddlQcn != null and ddlQcn != ''">
 			   AND A.SEL_STS_DSC <![CDATA[<>]]> '22'
@@ -393,7 +393,7 @@
 		   #{lvstAucPtcMnNo},
 		   #{atdrAm},
 		   #{rmkCntn},
-		   SYSDATE,
+		   SYSTIMESTAMP,
 		   #{aucPrgSq},
 		   '0',  <!-- 수기입력여부  -->
 		   '0' <!-- 전송여부  -->

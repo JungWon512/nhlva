@@ -11,6 +11,31 @@ $(function() {
     };
 
     var setBinding = function() {
+		setAuthNoCountDown();
+		
+		$(".kiosk_btn").unbind("click").click(function(e){
+			e.preventDefault();
+			//키오스크 인증번호 확인하기
+			if($(".kiosk_num_area").css("display") == "none"){
+				$(".kiosk_num_area").show();
+				$(".kiosk_toggle_btn").removeClass("on");
+				$(".kiosk_toggle_btn").addClass("off");
+			}else{
+				$(".kiosk_num_area").hide();
+				$(".kiosk_toggle_btn").removeClass("off");
+				$(".kiosk_toggle_btn").addClass("on");
+			}
+		});
+		
+		$(".auth_num_issue").unbind("click").click(function(e){
+			e.stopPropagation();
+			fnIssueKioskAuthNum();
+		});
+		
+		$(".login_confirm").unbind("click").click(function(e){
+			e.stopPropagation();
+			goLoginPage();
+		});
     };
 
     setLayout();    

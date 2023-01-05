@@ -130,7 +130,7 @@
 						   AND B.NA_BZPLC = A.NA_BZPLC
 						   AND B.FHS_ID_NO = A.FHS_ID_NO
 						   AND B.FARM_AMNNO = A.FARM_AMNNO
-			 )
+			)
 		<if test="chgDtm != null and chgDtm != ''">
 		   AND TO_CHAR(A.LSCHG_DTM, 'YYYYMMDDHH24MISS') > #{chgDtm}
 		</if>

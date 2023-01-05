@@ -1,6 +1,6 @@
 package com.ishift.auction.web;
 
-import java.sql.SQLException;
+import java.sql.SQLException; 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
@@ -8,12 +8,13 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import com.ishift.auction.util.FormatUtil;
+import com.ishift.auction.util.HttpUtils;
 import com.ishift.auction.vo.BidUserDetails;
+import com.ishift.auction.vo.FarmUserDetails;
 import com.ishift.auction.vo.JwtTokenVo;
 
 import lombok.extern.slf4j.Slf4j;
@@ -35,12 +36,11 @@ import org.springframework.web.servlet.ModelAndView;
 import com.ishift.auction.service.admin.AdminService;
 import com.ishift.auction.service.auction.AuctionService;
 import com.ishift.auction.util.Constants;
-import com.ishift.auction.util.CookieUtil;
 import com.ishift.auction.util.JwtTokenUtil;
 import com.ishift.auction.util.SessionUtill;
 
 @Slf4j
-@RestController
+@RestController 
 public class AuctionController extends CommonController {
 	private static final Logger LOGGER = LoggerFactory.getLogger(AuctionController.class);
 	
@@ -60,40 +60,53 @@ public class AuctionController extends CommonController {
 	private FormatUtil formatUtil;
 	
 	@Autowired
-	private CookieUtil cookieUtil;
+	HttpUtils httpUtils;
 	
 	@RequestMapping(value = "/results",method = { RequestMethod.GET, RequestMethod.POST })	
-	public ModelAndView results(
-			@RequestParam Map<String, Object> param
-			) throws Exception {		
+	public ModelAndView results(@RequestParam Map<String, Object> param) throws Exception {		
 		// 경매결과목록
-		
 		LOGGER.debug("start of results.do");
 		ModelAndView mav = new ModelAndView();
         Map<String,Object> map = new HashMap<>();
         map.put("naBzPlcNo", param.get("place"));
-        
         Map<String, Object> johap = adminService.selectOneJohap(map);
-
 		map.put("naBzPlc", johap.get("NA_BZPLC"));
 		map.put("naBzplc", johap.get("NA_BZPLC"));
 		map.put("entryType", "A");
-		List<Map<String,Object>> datelist=auctionService.selectAucDateList(map);
+		
+		LocalDateTime date = LocalDateTime.now();
+		String today = date.format(DateTimeFormatter.ofPattern("yyyyMMdd")); 
+
+		/* 20221125 jjw : 출장우 조회시(경매 예정)
+		 * 최대일자 현재일자 +7에서 벗어나지않도록수정
+		 */
+		map.put("searchDate", today); 
+		map.put("entryType", "A");
+		Map<String, Object> nearAucDate =auctionService.selectNearAucDate(map);
+  
+		List<Map<String,Object>> datelist=auctionService.selectAucDateList(map); 
 		if(param.get("searchDate") != null && param != null) {
-			map.put("searchDate", param.get("searchDate"));			
+			map.put("searchDate", param.get("searchDate"));
+		}else if(nearAucDate != null){ 
+			map.put("searchDate", nearAucDate.get("AUC_DT"));  
 		}else {
 			map.put("searchDate",datelist.size() > 0 ? datelist.get(0).get("AUC_DT") :null);
 		}
-		if(param.get("searchOrder") != null) map.put("searchOrder", param.get("searchOrder"));
-		if(param.get("searchAucObjDsc") != null) map.put("searchAucObjDsc", param.get("searchAucObjDsc"));
-		if(param.get("searchTxt") != null) map.put("searchTxt", param.get("searchTxt"));
 		
+		if(map.get("searchDate") != null) param.put("searchDate", map.get("searchDate")); 
+		
+		if(param.get("searchLowsAm") != null) map.put("searchLowsAm", param.get("searchLowsAm"));
+		if(param.get("searchBidAm") != null) map.put("searchBidAm", param.get("searchBidAm"));
+		if(param.get("searchBirthDay") != null) map.put("searchBirthDay", param.get("searchBirthDay"));
+		
+		map.putAll(param);		
+	
 		List<Map<String,Object>> list=auctionService.entrySelectList(map);
-		if(map.get("searchDate") != null) param.put("searchDate", map.get("searchDate"));
 		
+		mav.addObject("inputParam", param);
 		mav.addObject("johapData", johap);
-		mav.addObject("paramVo", param);
 		mav.addObject("dateList",datelist);
+		mav.addObject("resultList",list); 
 		mav.addObject("resultList",list);
 		mav.addObject("buyCnt",auctionService.selectCountEntry(map));
 		mav.addObject("subheaderTitle","경매결과 조회");
@@ -103,53 +116,60 @@ public class AuctionController extends CommonController {
 	}
 
 	@RequestMapping(value = "/sales",method = { RequestMethod.GET, RequestMethod.POST })
-	public ModelAndView entry(@RequestParam Map<String,Object> param) throws Exception {
+	public ModelAndView sales(@RequestParam Map<String,Object> param) throws Exception {
 		// 경매예정목록
-		String place = (String) param.get("place");
-		LOGGER.debug("start of sales.do");
+		String place = (String) param.get("place"); 
+		LOGGER.debug("start of sales.do"); 
 		ModelAndView mav = new ModelAndView();
         Map<String,Object> map = new HashMap<>();
-        map.put("naBzPlcNo", place);
+        map.put("naBzPlcNo", place); 
 
 		Map<String,Object> johap = adminService.selectOneJohap(map);
 
 		LocalDateTime date = LocalDateTime.now();
-		String today = date.format(DateTimeFormatter.ofPattern("yyyyMMdd"));
+		String today = date.format(DateTimeFormatter.ofPattern("yyyyMMdd")); 
 
-		map.put("searchDate", today);
-		Map<String, Object> nearAucDate =auctionService.selectNearAucDate(map);
-		
-		map.put("naBzPlc", johap.get("NA_BZPLC"));
-		map.put("naBzplc", johap.get("NA_BZPLC"));
+		/* 20221125 jjw : 출장우 조회시(경매 예정)
+		 * 최대일자 현재일자 +7에서 벗어나지않도록수정
+		 */
+		map.put("searchDate", today); 
 		map.put("entryType", "B");
+		Map<String, Object> nearAucDate =auctionService.selectNearAucDate(map);
+  
+		map.put("naBzPlc", johap.get("NA_BZPLC")); 
+		map.put("naBzplc", johap.get("NA_BZPLC"));
 		
 		//sysdate로 쿼리 조회하기에 searchDate바라보지 않음.
 		//searchDate기준 검색시 쿼리수정 필요
-		List<Map<String,Object>> datelist=auctionService.selectAucDateList(map);
+		List<Map<String,Object>> datelist=auctionService.selectAucDateList(map); 
 		if(param.get("searchDate") != null && param != null) {
-			map.put("searchDate", param.get("searchDate"));			
-		}else if(nearAucDate != null){
-			map.put("searchDate", nearAucDate.get("AUC_DT"));
+			map.put("searchDate", param.get("searchDate"));
+		}else if(nearAucDate != null){ 
+			map.put("searchDate", nearAucDate.get("AUC_DT"));  
 		}else {
 			map.put("searchDate",datelist.size() > 0 ? datelist.get(0).get("AUC_DT") :null);
 		}
 		
-		if(map.get("searchDate") != null) param.put("searchDate", map.get("searchDate"));
-		map.put("naBzPlcNo", place);
-		if(param.get("searchOrder") != null) map.put("searchOrder", param.get("searchOrder"));
-		if(param.get("searchTxt") != null) map.put("searchTxt", param.get("searchTxt"));
-		if(param.get("searchAucObjDsc") != null) map.put("searchAucObjDsc", param.get("searchAucObjDsc"));
-		map.put("loginNo", sessionUtill.getUserId());
+		if(map.get("searchDate") != null) param.put("searchDate", map.get("searchDate")); 
+		
+		if(param.get("searchLowsAm") != null) map.put("searchLowsAm", param.get("searchLowsAm"));
+		if(param.get("searchBidAm") != null) map.put("searchBidAm", param.get("searchBidAm"));
+		if(param.get("searchBirthDay") != null) map.put("searchBirthDay", param.get("searchBirthDay"));
+		
+		// 출장우 조회 파라미터
+		map.putAll(param); 
+		
+		map.put("loginNo", sessionUtill.getUserId()); 
 		List<Map<String,Object>> list=auctionService.entrySelectList(map);
 
 //		for(Map<String,Object> entry : list) {
 //			String birthMonth = this.getConvertBirthDay(this.getStringValue(entry.get("BIRTH")));
 //			entry.put("BIRTH_MONTH", birthMonth);
-//		}
+//		} 
 		if(sessionUtill.getUserId() != null) param.put("loginNo", sessionUtill.getUserId());
 		mav.addObject("johapData", johap);
 		mav.addObject("subheaderTitle","출장우 조회");
-		mav.addObject("dateList",datelist);
+		mav.addObject("dateList",datelist); 
 		mav.addObject("salesList",list);
 		mav.addObject("inputParam", param);
 		mav.addObject("buyCnt",auctionService.selectCountEntry(map));
@@ -160,7 +180,7 @@ public class AuctionController extends CommonController {
 	}
 
 	@RequestMapping(value = "/calendar",method = { RequestMethod.GET, RequestMethod.POST })
-	public ModelAndView schedule(@RequestParam Map<String,Object> param) throws Exception {
+	public ModelAndView calendar(@RequestParam Map<String,Object> param) throws Exception {
 		// 경매일정
 		LOGGER.debug("start of calendar.do");        
 		ModelAndView mav = new ModelAndView();
@@ -172,13 +192,13 @@ public class AuctionController extends CommonController {
 	        if("next".equals(param.get("flag"))) {
 		        yyyyMM = date.plusMonths(1).format(format);
 	        }else if("prev".equals(param.get("flag"))) {
-		        yyyyMM = date.minusMonths(1).format(format);	        	
+		        yyyyMM = date.minusMonths(1).format(format);
 	        }else {
 		        yyyyMM = date.format(format);
 	        }
 			Map<String,Object> map = new HashMap<>();
 			map.put("naBzPlcNo", param.get("place"));
-			map.put("yyyymm", yyyyMM);
+			map.put("searchAucDt", yyyyMM);
 			List<Map<String,Object>> list = auctionService.selectCalendarList(map);
 			mav.addObject("resultList",list);
 			param.put("searchYm", yyyyMM);
@@ -186,9 +206,9 @@ public class AuctionController extends CommonController {
 			mav.addObject("paramVo",param);
 			mav.addObject("title",formatUtil.dateAddDotLenSix(yyyyMM));
 		}catch (RuntimeException re) {
-			log.error("AuctionController.schedule : {} ",re);
+			log.error("AuctionController.calendar : {} ",re);
 		}catch (SQLException se) {
-			log.error("AuctionController.schedule : {} ",se);
+			log.error("AuctionController.calendar : {} ",se);
 		}
 		mav.addObject("subheaderTitle","경매일정");
 		mav.setViewName("auction/calendar/calendar");
@@ -303,7 +323,7 @@ public class AuctionController extends CommonController {
 	
 	
 	@RequestMapping(value = "/main",method = { RequestMethod.GET, RequestMethod.POST })	
-	public ModelAndView submain(@RequestParam(name = "place", required = false) String place
+	public ModelAndView main(@RequestParam(name = "place", required = false) String place
 							   , HttpServletRequest req
 							   , HttpServletResponse res) throws Exception {
 		// 조합메인(main)
@@ -341,31 +361,41 @@ public class AuctionController extends CommonController {
 		}
 		
 		if(bizList.size() <= 0 || aucYn < 1 ) {
-			//경매진행중
+			//경매를 안하는 곳이면
 			mav.setViewName("auction/info/noinfo");
 			mav.addObject("subheaderTitle","경매안내");
 		}
 		else if(dateVo != null && today.equals(dateVo.get("AUC_DT")) && aucCnt > 0){
-			// 경매진행중인 경우 관전토큰 생성 후 쿠키에 저장
-			// 20220210 jjw - Watch token SessionContextInterceptor 생성
-			//JwtTokenVo jwtTokenVo = JwtTokenVo.builder()
-			//		.auctionHouseCode(johapData.get("NA_BZPLC").toString())
-			//		.userMemNum("WATCHER")
-			//		.userRole(Constants.UserRole.WATCHER)
-			//		.build();
-			//String token = jwtTokenUtil.generateToken(jwtTokenVo, Constants.JwtConstants.ACCESS_TOKEN);
-			//Cookie cookie = cookieUtil.createCookie("watch_token", token);
-			//res.addCookie(cookie);
-			
 			//경매진행중
 			mav.setViewName("auction/main/main");
 			mav.addObject("subheaderTitle","경매참여");
+			
+			//로그인된 역할 확인하여 각 테이블 조회
+			Map<String, Object> authNoYmd = new HashMap<String, Object>(); 
+			if(sessionUtill.getNaBzplc() != null) map.put("naBzPlc", sessionUtill.getNaBzplc());
+			if(sessionUtill.getUserId() != null) map.put("loginNo", sessionUtill.getUserId());
+			if(sessionUtill.getRoleConfirm() != null) {
+				if("ROLE_BIDDER".equals(sessionUtill.getRoleConfirm())) {
+					authNoYmd = auctionService.selectMwmnAuthNoYmdInfo(map);
+				}
+				else if("ROLE_FARM".equals(sessionUtill.getRoleConfirm())) {
+					if(sessionUtill.getUserVo() != null) {
+						FarmUserDetails userVo = (FarmUserDetails)sessionUtill.getUserVo();
+						map.put("farmAmnno", userVo.getFarmAmnno());
+					}
+					authNoYmd = auctionService.selectFhsAuthNoYmdInfo(map);
+				}
+			}
+			mav.addObject("authNoYmd", authNoYmd);
+			mav.addObject("naBzPlcNo", place);
+			String todayHms = date.format(DateTimeFormatter.ofPattern("yyyyMMddhhmmss"));
+			mav.addObject("today", todayHms);
 		}
 		else {
-			//경매
+			//경매는 하는 조합이지만 오늘이 아닌 경우
 			Map<String,Object> tempMap = new HashMap<>();
 			tempMap.put("naBzPlcNo", place);
-			tempMap.put("yyyymm", date.format(DateTimeFormatter.ofPattern("yyyyMM")));
+			tempMap.put("searchAucDt", date.format(DateTimeFormatter.ofPattern("yyyyMM")));
 			List<Map<String,Object>> dateList = auctionService.selectCalendarList(tempMap);
 			mav.addObject("dateList",dateList);
 			
@@ -393,6 +423,7 @@ public class AuctionController extends CommonController {
 			String today = date.format(DateTimeFormatter.ofPattern("yyyyMMdd"));
 			params.put("searchDate", today);
 			params.put("naBzPlcNo", place);
+			params.put("aucDscFlag", "Y");
 			Map<String,Object> johap = adminService.selectOneJohap(params);
 			
 			
@@ -408,6 +439,7 @@ public class AuctionController extends CommonController {
 			
 			// 3. 경매 유형(단일, 일괄) 체크
 			final String aucDsc = johap.getOrDefault("AUC_DSC", "9").toString();
+			
 			// 단일 경매
 			if ("1".equals(aucDsc)) {
 				mav.setViewName("auction/bid/singleBid");
@@ -439,7 +471,7 @@ public class AuctionController extends CommonController {
 	 * @return
 	 * @throws Exception
 	 */
-	@PostMapping(path = "/pop/entryList", produces = MediaType.APPLICATION_JSON_VALUE)
+	@PostMapping(path = "/pop/entryList")
 	public ModelAndView entryListPopUp(@RequestBody final Map<String, Object> params) {
 		ModelAndView mav = new ModelAndView("pop/modal/entryList");
 		List<Map<String,Object>> list = null;
@@ -542,23 +574,29 @@ public class AuctionController extends CommonController {
 	        if(param.get("naBzplc") != null) map.put("naBzPlc", param.get("naBzplc"));
 			if(param.get("loginNo") != null)map.put("loginNo", param.get("loginNo"));
 			if(param.get("date") != null) map.put("searchDate", param.get("date"));
-			else map.put("searchDate", today);
+			else {
+				param.put("date", today);
+				map.put("searchDate", today);
+			}
 			
 			//map.put("searchDate", param.get("date"));
 			Map<String,Object> johap=adminService.selectOneJohap(map);
-			List<Map<String,Object>> list=auctionService.entrySelectList(map);
-			if(param.get("loginNo") != null) map.put("searchTrmnAmnNo", param.get("loginNo"));
-			List<Map<String,Object>> soldList = auctionService.entrySelectList(map);
-			map.put("aucYn", "1");
-			List<Map<String,Object>> bidList = auctionService.selectBidLogList(map);
+			//List<Map<String,Object>> list=auctionService.entrySelectList(map);
+			//if(param.get("loginNo") != null) map.put("searchTrmnAmnNo", param.get("loginNo"));
+			//List<Map<String,Object>> soldList = auctionService.entrySelectList(map);
+			//map.put("aucYn", "1");
+			//List<Map<String,Object>> bidList = auctionService.selectBidLogList(map);
+			map.put("entryType", "A");
+			List<Map<String,Object>> datelist=auctionService.selectAucDateList(map);
 			
+			mav.addObject("dateList", datelist);
 			mav.addObject("johapData", johap);
-			mav.addObject("aucList", list);
-			mav.addObject("soldList", soldList);
-			mav.addObject("bidList", bidList);
-			mav.addObject("bidCnt", auctionService.selectBidLogListCnt(map));
-			mav.addObject("buyCnt",auctionService.selectCountEntry(map));
-			mav.addObject("totPrice", auctionService.selectTotSoldPrice(map));
+			//mav.addObject("aucList", list);
+			//mav.addObject("soldList", soldList);
+			//mav.addObject("bidList", bidList);
+			//mav.addObject("bidCnt", auctionService.selectBidLogListCnt(map));
+			//mav.addObject("buyCnt",auctionService.selectCountEntry(map));
+			//mav.addObject("totPrice", auctionService.selectTotSoldPrice(map));
 			mav.addObject("inputParam", param);
 		}catch (RuntimeException re) {
 			log.error("AuctionController.entryListApiPopUp : {} ",re);
@@ -678,7 +716,6 @@ public class AuctionController extends CommonController {
 	public Map<String, Object> getCowList(@RequestParam Map<String, Object> params) {
 		
 		final Map<String, Object> result = new HashMap<String, Object>();
-		StringBuffer sb = new StringBuffer();
 		try {
 
 	        LocalDateTime date = LocalDateTime.now();
@@ -718,5 +755,273 @@ public class AuctionController extends CommonController {
 		}
 		return result;
 	}
+	
 
+	@RequestMapping(value = "/cowDetail",method = { RequestMethod.GET, RequestMethod.POST })	
+	public ModelAndView cowDetail(@RequestParam Map<String, Object> param) throws Exception {		
+		LOGGER.debug("start of cowDetail.do");
+		ModelAndView mav = new ModelAndView();
+        Map<String,Object> map = new HashMap<>();
+		Map<String, Object> cowInfo = null;
+        map.put("naBzPlcNo", param.get("place"));
+        
+        Map<String, Object> johap = adminService.selectOneJohap(map);
+        map.put("naBzplc", param.get("naBzplc"));
+        map.put("searchAucObjDsc", param.get("aucObjDsc"));
+        map.put("searchAucPrgSq", param.get("aucPrgSq"));
+        map.put("searchDate", param.get("aucDt"));
+        map.put("sraIndvAmnno", param.get("sraIndvAmnno"));
+		List<Map<String,Object>> list=auctionService.entrySelectList(map);
+		if(list != null && list.size() >0) {
+			cowInfo  = list.get(0);
+		}
+
+		//출장우 상세 tab항목 표기
+        map.put("simpCGrpSqno", "1");
+		List<Map<String,Object>> tabList =auctionService.selectListExpitemSet(map);
+
+		mav.addObject("infoData",cowInfo);
+		mav.addObject("tabList",tabList);
+		
+		mav.addObject("johapData",johap);
+		mav.addObject("subheaderTitle","출장우 상세");
+		//mav.setViewName("auction/sales/cowDetail");
+		mav.addObject("inputParam", param);		
+		mav.setViewName("pop/cowDetail");
+		return mav;
+	}	
+
+	@RequestMapping(value = "/info/getCowInfo",method = { RequestMethod.GET, RequestMethod.POST })	
+	public ModelAndView getCowInfo(@RequestParam Map<String, Object> param) throws Exception {		
+		LOGGER.debug("start of results.do");
+		String tabId = (String) param.getOrDefault("tabId","");
+		ModelAndView mav = new ModelAndView("pop/modal/info/cowInfo_tab_"+tabId);
+		Map<String, Object> cowInfo = null;
+		Map<String, Object> paramMap = new HashMap<String,Object>();
+		//String naBzplc = (String) param.get("naBzplc");
+		paramMap.put("naBzplc", param.get("naBzplc"));
+		paramMap.put("naBzPlcNo", param.get("place"));
+        paramMap.put("searchAucObjDsc", param.get("aucObjDsc"));
+        paramMap.put("searchAucPrgSq", param.get("aucPrgSq"));
+        paramMap.put("searchDate", param.get("aucDt"));
+		List<Map<String,Object>> cowList = auctionService.entrySelectList(paramMap);
+		if(cowList != null && cowList.size() >0) {
+			cowInfo  = cowList.get(0);
+		}
+		mav.addObject("infoData",cowInfo);
+		mav.addObject("inputParam", param);		
+		try {
+			switch(tabId) {
+				case "0":
+					paramMap.put("naBzplc", param.get("naBzplc"));
+					paramMap.put("sraIndvAmnno", param.get("sraIndvAmnno"));
+					List<Map<String,Object>> moveList = auctionService.selectListIndvMove(paramMap);
+					List<Map<String,Object>> childBirthList = auctionService.selectListIndvChildBirth(paramMap);
+					mav.addObject("childBirthList",childBirthList);
+					mav.addObject("moveList",moveList);
+				break;
+				case "1":					
+					paramMap.put("naBzplc", param.get("naBzplc"));
+					paramMap.put("sraIndvAmnno", param.get("sraIndvAmnno"));
+					List<Map<String,Object>> postList = auctionService.selectListIndvPost(paramMap);
+					List<Map<String,Object>> sibList = auctionService.selectListIndvSib(paramMap);
+					mav.addObject("sibList",sibList);
+					mav.addObject("postList",postList);
+				break;
+				case "3": //thumnail만 조회
+					paramMap.put("naBzplc", param.get("naBzplc"));
+					paramMap.put("sraIndvAmnno", param.get("sraIndvAmnno"));
+					paramMap.put("aucObjDsc", param.get("aucObjDsc"));
+					paramMap.put("aucDt", param.get("aucDt"));
+					paramMap.put("oslpNo", param.get("oslpNo"));
+					paramMap.put("ledSqNo", param.get("ledSqNo"));
+					List<Map<String,Object>> imgList = auctionService.selectListCowImg(paramMap);
+					mav.addObject("imgList",imgList);
+				break;
+			}			
+		}catch(SQLException |RuntimeException  e) {
+			log.error("AuctionController.getCowInfo : {} ",e);			
+		}
+		return mav;
+	}
+
+	@RequestMapping(value = "/info/cowImageDetail",method = { RequestMethod.GET, RequestMethod.POST })	
+	public ModelAndView cowImageDetail(@RequestParam Map<String, Object> param) throws Exception {
+		//이미지 원본만 조회
+		LOGGER.debug("start of cowImageDetail");
+		String tabId = (String) param.getOrDefault("tabId","");
+		ModelAndView mav = new ModelAndView("pop/cowImageDetail");
+		Map<String, Object> paramMap = new HashMap<String,Object>();
+		try {
+			paramMap.put("naBzplc", param.get("naBzplc"));
+			paramMap.put("sraIndvAmnno", param.get("sraIndvAmnno"));
+			paramMap.put("aucObjDsc", param.get("aucObjDsc"));
+			paramMap.put("aucDt", param.get("aucDt"));
+			paramMap.put("oslpNo", param.get("oslpNo"));
+			paramMap.put("ledSqNo", param.get("ledSqNo"));
+			List<Map<String,Object>> imgList = auctionService.selectListCowImg(paramMap);
+			mav.addObject("imgList",imgList);			
+		}catch(SQLException |RuntimeException  e) {
+			log.error("AuctionController.cowImageDetail : {} ",e);			
+		}
+		return mav;
+	}
+	
+	@ResponseBody
+	@RequestMapping(value = "/inf/getMcaInfo",method = { RequestMethod.GET, RequestMethod.POST })	
+	public Map<String, Object> getMcaInfo(@RequestParam Map<String, Object> param) throws Exception {		
+		Map<String, Object> result = new HashMap<>();
+		result.put("success", true);
+		String ctgrmCd = (String) param.getOrDefault("ctgrmCd","");
+		String recvMsg = httpUtils.sendPostJson(param, ctgrmCd);
+		log.info("recvMsg : " + recvMsg);
+
+		result.put("data", recvMsg);
+		if(recvMsg != null && "".equals(recvMsg)) {
+			result.put("success", false);		
+		}		
+		return result;
+	}
+
+	@RequestMapping(value = "/info/getBidPopupDetail",method = { RequestMethod.GET, RequestMethod.POST })	
+	public ModelAndView bidPopupDetail(@RequestParam Map<String, Object> param) throws Exception {		
+		LOGGER.debug("start of bidPopupDetail.do");
+		String tabId = (String) param.getOrDefault("tabId","");
+		ModelAndView mav = new ModelAndView("pop/modal/detail/bidPop_tab_"+tabId);
+		Map<String, Object> cowInfo = null;
+		Map<String, Object> paramMap = new HashMap<String,Object>();
+		LocalDateTime date = LocalDateTime.now();
+		String today = date.format(DateTimeFormatter.ofPattern("yyyyMMdd"));		
+		param.put("entryType", "A");		
+		if(param.get("loginNo") != null) param.put("searchTrmnAmnNo", param.get("loginNo"));
+
+		List<Map<String,Object>> datelist=auctionService.selectAucDateList(param);
+		if(param != null && param.get("searchDate") != null &&  !"".equals(param.get("searchDate"))) {
+			param.put("searchDate", param.get("searchDate"));			
+		}else {
+			String tempDate= datelist.size() > 0 ? (String)datelist.get(0).get("AUC_DT") :null;
+			param.put("searchDate",tempDate);
+		}
+		try {
+			switch(tabId) {
+				case "auc":
+					//중도매인번호 초기화(출장우내역시에 미사용)
+					param.put("searchTrmnAmnNo", "");
+					List<Map<String,Object>> list = auctionService.entrySelectList(param);
+					mav.addObject("aucList", list);
+				break;
+				case "sold":
+					List<Map<String,Object>> soldList = auctionService.entrySelectList(param);
+					mav.addObject("soldList", soldList);
+					mav.addObject("buyCnt",auctionService.selectCountEntry(param));
+				break;
+				case "bid": 
+					List<Map<String,Object>> bidList = auctionService.selectBidLogList(param);
+					mav.addObject("bidList", bidList);
+					mav.addObject("bidCnt", auctionService.selectBidLogListCnt(param));
+				break;
+			}
+			mav.addObject("dateList", datelist);
+			mav.addObject("inputParam", param);		
+		}catch(SQLException |RuntimeException  e) {
+			log.error("AuctionController.bidPopupDetail : {} ",e);			
+		}
+		return mav;
+	}
+	
+	//DB 데이터를 조회할것인지 인터페이스후 값만 뿌릴것인지?
+	@RequestMapping(value = "/cowDetailFull",method = { RequestMethod.GET, RequestMethod.POST })	
+	public ModelAndView cowDetailFull(@RequestParam Map<String, Object> param) throws Exception {		
+		LOGGER.debug("start of cowDetailFull.do");
+		ModelAndView mav = new ModelAndView();
+        Map<String,Object> map = new HashMap<>();
+        map.put("naBzPlcNo", param.get("place"));        
+        Map<String, Object> johap = adminService.selectOneJohap(map);
+        //map.put("naBzplc", param.get("naBzplc"));
+        //map.put("sraIndvAmnno", param.get("sraIndvAmnno"));
+		//Map<String,Object> indvData=auctionService.selectIndvDataInfo(map);
+		//map.put("sraIndvAmnno", param.get("sraIndvAmnno"));
+		
+		//List<Map<String,Object>> moveList = auctionService.selectListIndvMove(map);
+		//List<Map<String,Object>> postList = auctionService.selectListIndvPost(map);
+		//List<Map<String,Object>> sibList = auctionService.selectListIndvSib(map);
+		
+		//mav.addObject("moveList",moveList);
+		//mav.addObject("sibList",sibList);
+		//mav.addObject("postList",postList);
+
+		//출장우 상세 tab항목 표기
+        map.put("simpCGrpSqno", "1");
+        map.put("indvPopYn", "Y");
+		mav.addObject("tabList",auctionService.selectListExpitemSet(map));
+
+		//mav.addObject("infoData",indvData);		
+		mav.addObject("johapData",johap);
+		mav.addObject("subheaderTitle",(param.get("title"))+"개체 상세");
+		mav.addObject("inputParam", param);		
+		mav.setViewName("pop/cowDetailFull");
+		return mav;
+	}
+	
+	@RequestMapping(value = "/cowDetailFull_Temp",method = { RequestMethod.GET, RequestMethod.POST })	
+	public ModelAndView cowDetailFull_Temp(@RequestParam Map<String, Object> param) throws Exception {		
+		LOGGER.debug("start of cowDetailFull.do");
+		ModelAndView mav = new ModelAndView();
+        Map<String,Object> map = new HashMap<>();
+                
+        map.put("SRA_INDV_AMNNO", param.get("sraIndvAmnno"));
+		Map<String, Object> indvData = httpUtils.sendPostJsonToMap(map, "4700");
+		mav.addObject("infoData",indvData);
+		
+		Map<String,Object> sibList = httpUtils.sendPostJsonToMap(map, "4900");
+		mav.addObject("sibList",sibList);
+
+		Map<String,Object> openData = httpUtils.getOpenApiAnimalTraceToMap(map);
+		mav.addObject("moveList",openData.get("moveList"));
+		mav.addObject("vacnInfo",openData.get("vacnInfo"));
+		
+		map.put("SRA_INDV_AMNNO", indvData.get("MCOW~"));
+		Map<String,Object> postList = httpUtils.sendPostJsonToMap(map, "4900");
+		mav.addObject("postList",postList);
+
+		//출장우 상세 tab항목 표기
+        map.put("simpCGrpSqno", "1");
+        map.put("indvPopYn", "Y");
+		mav.addObject("tabList",auctionService.selectListExpitemSet(map));
+
+		mav.addObject("subheaderTitle",(param.get("title"))+"개체 상세");
+		mav.addObject("inputParam", param);		
+		mav.setViewName("pop/cowDetailFull");
+		return mav;
+	}
+	@ResponseBody
+	@PostMapping(path = "/auction/api/getInfMca", produces = MediaType.APPLICATION_JSON_VALUE)
+    Map<String, Object> getInfCowDetailFull(@RequestBody Map<String,Object> param) {
+        Map<String, Object> result = new HashMap<>();
+        Map<String,Object> map = new HashMap<>();
+        try {
+        	result.put("success", true);
+        	String cgtrmCd = (String)param.get("cgtrmCd");
+	        //map.put("SRA_INDV_AMNNO", param.get("sraIndvAmnno"));
+        	result.put("data", httpUtils.sendPostJson(param, cgtrmCd));
+		}catch (Exception se) {
+			log.debug("ApiController.getInfCowDetailFull : {} ",se);
+			result.put("success", false);
+            result.put("message", "작업중 에러가 발생하였습니다.");
+		}
+        return result;
+    }
+	
+	@ResponseBody
+	@RequestMapping(value = "/info/getIndvInfo",method = { RequestMethod.GET, RequestMethod.POST })	
+	public Map<String, Object> getIndvInfo(@RequestParam Map<String, Object> param) throws Exception {		
+		Map<String, Object> result = new HashMap<>();
+		result.put("success", true);
+		Map<String,Object> indvMap = auctionService.selectIndvDataInfo(param);
+		result.put("data", indvMap);
+		if(indvMap == null || indvMap.isEmpty()) {
+			result.put("success", false);		
+		}		
+		return result;
+	}
 }

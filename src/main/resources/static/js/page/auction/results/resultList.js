@@ -9,6 +9,8 @@
 		$('.list_table .list_body li dd span').each(function(){
 			if(!$(this).text()) $(this).text('-');
 		});
+		
+		$(".btn_del").hide();
     };
 
     var setBinding = function() {
@@ -62,100 +64,285 @@
       	$(document).on("click",".list_body .pd_ea a", function(){			
 			var pdEa = new String($(this).find('span').attr('fullstr'));	
 			var tr = $(this).closest('li');
+			$("form[name='frm_select'] input[name='naBzplc']").val(tr.find('.naBzPlc').val());
+			$("form[name='frm_select'] input[name='aucDt']").val(tr.find('.aucDt').val());
+			$("form[name='frm_select'] input[name='aucObjDsc']").val(tr.find('.aucObjDsc').val());
+			$("form[name='frm_select'] input[name='oslpNo']").val(tr.find('.oslpNo').val());
+			$("form[name='frm_select'] input[name='oslpNo']").val(tr.find('.oslpNo').val());
+			$("form[name='frm_select'] input[name='sraIndvAmnno']").val(pdEa);
+			$("form[name='frm_select'] input[name='aucPrgSq']").val(tr.find('.aucPrgSq').val());
+			$("form[name='frm_select'] input[name='ledSqno']").val(tr.find('.ledSqno').val());
 			
-			modalPopupClose('.popup .modal-wrap.pop_exit_cow');
-			$('.popup .modal-wrap.pop_exit_cow').remove();
-			var sHtml=''; 
+			var temp = window.location.search.split("&");
+			var params = temp.filter(function(el) {return el != "type=0" && el != "type=1"});
+			var target = 'cowDetail';
 			
-			sHtml += '  <div id="" class="modal-wrap pop_exit_cow">                                                                                        ';
-			sHtml += '  	<div class="modal-content">                                                                                                    ';
-			sHtml += '  		<button class="modal_popup_close" onclick="modalPopupClose(\'.pop_exit_cow\');return false;">닫기</button>                   ';
-			sHtml += '  		<h3>경매결과 상세</h3>                                                                                                       ';
-			sHtml += '  		<div class="cow-table">                                                                                                    ';
-			sHtml += '  			<table>                                                                                                                ';
-			sHtml += '  				<colgroup>                                                                                                         ';
-			sHtml += '  					<col width="20%">                                                                                              ';
-			sHtml += '  					<col width="30%">                                                                                              ';
-			sHtml += '  					<col width="20%">                                                                                              ';
-			sHtml += '  					<col width="*">                                                                                                ';
-			sHtml += '  				</colgroup>                                                                                                        ';
-			sHtml += '  				<tr>                                                                                                               ';
-			sHtml += '  					<th>경매<br>번호</th>                                                                                          ';
-			sHtml += '  					<td class="auc-num">'+tr.find('.aucPrgSq').val()+'</td>                                                                                   ';
-			sHtml += '  					<th>출하주</th>                                                                                                  ';
-			sHtml += '  					<td class="name">'+tr.find('.sraPdmNm').val()+'</td>                                                                                   ';
-			sHtml += '  				</tr>                                                                                                              ';
-			sHtml += '  				<tr>                                                                                                               ';
-			sHtml += '  					<th>지역</th>                                                                                                  ';
-			sHtml += '  					<td colspan="3" class="tal">'+tr.find('.sraPdRgnnm').val()+'</td>                                                             ';
-			sHtml += '  				</tr>                                                                                                              ';
-			sHtml += '  				<tr>                                                                                                               ';
-			sHtml += '  					<th>생년<br/>월일</th>                                                                                              ';
-			sHtml += '  					<td colspan="3" class="tal">'+convertStrDate(tr.find('.birthMonth').val())+'</td>                                                           ';
-			sHtml += '  				</tr>                                                                                                              ';
-			sHtml += '  				<tr>                                                                                                               ';
-			sHtml += '  					<th>개체<br/>번호</th>                                                                                              ';
-			sHtml += '  					<td colspan ="3" class="num tal">'+pdEa.substring(6,10)+' <span>'+pdEa.substring(10,14)+'</span> '+pdEa.substring(14,15)+'</td>                                                              ';
-			sHtml += '  				</tr>                                                                                                              ';
-			sHtml += '  				<tr>                                                                                                               ';
-			sHtml += '  					<th>KPN</th>                                                                                                   ';
-			sHtml += '  					<td colspan="3" class="fwb tal">'+tr.find('.kpnNoStr').val()+'</td>                                                                                      ';
-			sHtml += '  				</tr>                                                                                                                        ';
-			sHtml += '  				<tr>                                                                                                               ';
-			sHtml += '  					<th>중량</th>                                                                                                  ';
-			sHtml += '  					<td class="tal">'+fnSetComma(tr.find('.cowSogWt').val())+'kg</td>                                                                                     ';
-			sHtml += '  					<th>성별</th>                                                                                                  ';
-			sHtml += '  					<td class="sex">'+tr.find('.indvSexCName').val()+'</td>                                                                                        ';			
-			sHtml += '  				</tr>                                                                                                    ';
-			sHtml += '  				<tr>                                                                                                               ';
-			sHtml += '  					<th>최저가</th>                                                                                                ';
-			sHtml += '  					<td class="tal">'+fnSetComma(tr.find('.lowsSbidLmtUpr').val())+'</td>                                                                                  ';
-			sHtml += '  					<th>어미</th>                                                                                                  ';
-			sHtml += '  					<td class="fwb">'+tr.find('.mcowDsc').val()+'</td>                                                                                      ';
-			sHtml += '  				</tr>                                                                                                              ';
-			sHtml += '  				<tr>                                                                                                                                      ';
-			sHtml += '  					<th>산차</th>                                                                                                  ';
-			sHtml += '  					<td class="fwb">'+tr.find('.matime').val()+'</td>';
-			sHtml += '  					<th>계대</th>                                                                                                  ';
-			sHtml += '  					<td class="fwb">'+tr.find('.sraIndvPasgQcn').val()+'</td>                                                                                         ';                                                               
-			sHtml += '  				</tr>                                                                                                              ';
-			sHtml += '  				<tr>                                                                                                               ';
-			sHtml += '  					<th>낙찰자</th>                                                                                                  ';
-			if (tr.find('.lvstAucPtcMnNo').val() != "") {
-				sHtml += '  					<td class="tal">'+tr.find('.lvstAucPtcMnNo').val()+' 번</td>                                                                                         ';
-			}
-			else {
-				sHtml += '  					<td class="tal">-</td>                                                                                         ';
-			}
-			sHtml += '  					<th>낙찰가</th>                                                                                                  ';
-			sHtml += '  					<td class="tal">'+fnSetComma(tr.find('.sraSbidUpr').val())+'</td>                                                                                         ';
-			sHtml += '  				</tr>                                                                                                              ';
-			sHtml += '  				<tr>                                                                                                               ';
-			sHtml += '  					<th class="vtt">특이<br/>사항</th>                                                                                  ';
-			sHtml += '  					<td colspan="3" class="tal vtt">'+tr.find('.rmkCntn').val()+'</td>                                                                          ';
-			sHtml += '  				</tr>                                                                                                              ';
-			sHtml += '  			</table>                                                                                                               ';
-			sHtml += '  		</div>                                                                                                                     ';
-			sHtml += '  	</div>                                                                                                                         ';
-			sHtml += '  </div>                                                                                                                             ';
+			//$("form[name='frm_select']").attr("action", "/cowDetail"+params.join("&")).submit();
+			window.open('',target, 'width=600, height=800, toolbar=no, menubar=no, scrollbars=no, resizable=yes');
+			var form = document.frm_select;
+			form.action = "/cowDetail";
+			form.target=target;
+			form.submit();
 			
-							
-			$('.popup').append($(sHtml));
-			$('.cow-table td').each(function(){
-				if(!$(this).text()) $(this).text('-');
-			});
-			modalPopup('.popup .modal-wrap.pop_exit_cow');
+			return;
       	});
       	
+      	//-------------------------------------
+        //          필터 관련 이벤트
+        //-------------------------------------
+        
+        // 필터 활성
+        $(document).on("click",".btn-filter", function(){
+			if($(".filter-box").hasClass("active")){
+				$(".filter-box ").removeClass("active");
+			}else {
+				$(".filter-box").addClass("active");
+			}
+        });
+        
+        // 성별활성시 삭제버튼 생성 
+         $(document).on("click",".indvSexC", function(){
+			$('.sexBtn').show();
+		});
+		        
+        // 활성중인 필터 삭제 & 초기화
+        $(document).on("click",".del_btn", function(){
+			$(this).hide();
+			if( $(this).text() == "검색" ) {
+					$(".btn_del").hide();
+					$(".searchTxt").val('');
+			}
+			if( $(this).text() == "성별" ) {
+					$("input[name=indvSexC]:checked").prop("checked", false);
+			}
+			if( $(this).text() == "중량" ) {
+			   		$("#startKg").val('');
+					$("#endKg").val('');
+					$("span.rangeKg").html( "0 ~ 1000kg" );
+					rangeSetKg();
+			}
+			if( $(this).text() == "예정가" ) {
+					$("#lowPrice").val('');
+					$("#highPrice").val('');
+					$("span.rangePrice").html( "0 ~ 1000만 원" );
+					rangeSetPrice();
+			}
+        });
+        
+        $(document).on("keyup",".searchTxt", function(){
+			$(".searchTxt").not($(this)).val($(this).val());
+			if( $(this).val().length != 0) {
+				$(".btn_del").show();
+				$('.searchBtn').show();
+			} else {
+				$(".btn_del").hide();
+			}
+		});
+        
+        // 인풋검색 초기화
+        $(document).on("click",".btn_del", function(){
+			$('.searchBtn').hide();
+			$(".btn_del").hide();
+			$(".searchTxt").val('');
+        });
+        
+        // 성별 초기화
+        $(document).on("change","input[name=indvSexC]", function(){
+			if ($("input[name=indvSexC]:checked").length === 0) {
+				$('.sexBtn').hide();
+			} 
+        });
+        
+        // 필터옵션 초기화
+        $(document).on("click",".btn-initial",function(){
+			filterInit();	 
+			$(".del_btn").hide();
+		});
+		
+		// 날짜선택
+	   $(document).on("change","#searchDate", function(){
+			if(flag == 'mo'){
+				fnSearch();
+			}
+        });
+		// 경매대상선택
+	   $(document).on("change","#searchAucObjDsc", function(){
+			if(flag == 'mo'){
+				fnSearch();
+			}
+        });
+        
+		// 적용하기 버튼 클릭. (txt / 중량 / 예정가)
+	   $(document).on("click",".btn-apply", function(){
+			fnSearch();
+        });
+		
+		// 결과조회 오름차순, 내림차순 
+	   $(document).on("click",".btn-sort", function(){
+			$('.btn-sort').not($(this)).removeClass();
+			if($(this).hasClass('is-down') ){
+				$(this).removeClass('is-down');
+				$(this).addClass('is-up');  
+				if( $(this).hasClass('birthUpDown')){
+					$('#birthUpDown').val('2');
+					$('#upDownFlag').val('birth');
+					
+					$('#priceUpDown').val('');
+					$('#numUpDown').val('');
+				} 
+				if( $(this).hasClass('priceUpDown')){
+					$('#priceUpDown').val('2');
+					$('#upDownFlag').val('price');
+					
+					$('#birthUpDown').val('');
+					$('#numUpDown').val('');
+				}
+				if( $(this).hasClass('numUpDown')){
+					$('#numUpDown').val('1');
+					$('#upDownFlag').val('num');
+					
+					$('#birthUpDown').val('');
+					$('#priceUpDown').val('');
+				}
+			} else { 
+				$(this).removeClass('is-up');
+				$(this).addClass('is-down'); 
+				if( $(this).hasClass('birthUpDown') ){
+					$('#birthUpDown').val('1');
+					$('#upDownFlag').val('birth');
+					
+					$('#priceUpDown').val('');
+					$('#numUpDown').val('');
+				}
+				if( $(this).hasClass('priceUpDown') ){
+					$('#priceUpDown').val('1');
+					$('#upDownFlag').val('price');
+					
+					$('#birthUpDown').val('');
+					$('#numUpDown').val('');
+				}
+				if( $(this).hasClass('numUpDown') ){
+					$('#numUpDown').val('2');
+					$('#upDownFlag').val('num');
+					
+					$('#birthUpDown').val('');
+					$('#priceUpDown').val('');
+				}
+			}
+			fnSearch();
+        });
     };
+    // 모바일 화면과 웹화면에서 fn_Search의 이벤트가 다르다
+	let flag = "";
+    
+    var webApp = function(){
+	// Not web 일때, 필터 가림.
+    	if(isApp() || chkOs() == 'web'){
+			$(".filter-box ").addClass("active"); // 검색 실행 후 active 관련
+	        //  비활성 필터  숨겨버리기
+	        $(".del_btn").hide();
+	        flag = 'web';
+        } else {
+	        flag = 'mo';
+			$(".del_btn").hide();
+		}
+	}
+	
+	var filterInit = function(){
+		$("input[name=indvSexC]:checked").prop("checked", false);
+		$(".searchTxt").val('');
+		$(".btn_del").hide();
+		$(".del_btn").hide();
+		
+		 $("#startKg").val('');
+		 $("#endKg").val('');
+		$("span.rangeKg").html("0 ~ 1000kg");
+		rangeSetKg();		
+		
+		$('#lowPrice').val('');
+		$('#highPrice').val('');
+		$("span.rangePrice").html("0 ~ 1000만 원");
+		rangeSetPrice();		
+	}
+	
+	var filterDelBtnView = function() {
+		if($('#searchTxt').val() != '' ) {
+			$(".btn_del").css('display','inline-block');
+			$('.searchBtn').css('display','inline-block');
+		}
+		if( $("input[name=indvSexC]:checked").val() != null ) {
+			$('.sexBtn').css('display','inline-block');
+		}
+		if($('#startKg').val() != '' ) {
+			$('.kgBtn').css('display','inline-block');
+		}
+		if($('#lowPrice').val() != '' ) {
+			$('.priceBtn').css('display','inline-block');
+		}
+	}
+	
+	var rangeSetKg = function() {
+		let stKg =$("#startKg").val();
+		let enKg =$("#endKg").val();
+		
+		stKg = stKg == '' ? 0 : stKg; 
+		enKg = enKg == '' ? 1000 : enKg;
+		  
+		$("span.rangeKg").html(stKg +"~"+ enKg + "kg");
+		
+		$( "#filterKg" ).slider({
+			range: true,
+			min: 0, 
+			max: 1000,
+			values: [ stKg, enKg ],
+			slide : function(event , ui) {
+				let startKg =  $("#startKg").val(ui.values[0]);
+				let endKg = $("#endKg").val(ui.values[1])
+				$("span.rangeKg").html(startKg.val() +"~"+ endKg.val() + "kg");
+				if (startKg[0].defaultValue == '0' && endKg[0].defaultValue == '1000') {
+					$('.kgBtn').hide();
+				} else {
+					$('.kgBtn').show();
+				}
+			}
+		});
+	}
+	var rangeSetPrice = function() {
+		let loPrice = $('#lowPrice').val();
+		let hiPrice = $('#highPrice').val();
+		
+		loPrice = loPrice == '' ? 0 : loPrice; 
+		hiPrice = hiPrice == '' ? 1000 : hiPrice; 
+		$("span.rangePrice").html(loPrice +"~"+ hiPrice + "만원");
+		
+		$( "#filterPrice" ).slider({
+			range: true,
+			min: 0,
+			max: 1000,
+			values: [ loPrice, hiPrice ], 
+			slide : function(event , ui) {
+				const startPrice = $("#lowPrice").val(ui.values[0]);
+				const endPrice = $("#highPrice").val(ui.values[1])
+				$("span.rangePrice").html(startPrice.val() +"~"+ endPrice.val() + "만원");
+				if (startPrice[0].defaultValue == '0' && endPrice[0].defaultValue == '1000') {
+					$('.priceBtn').hide();
+				} else {
+					$('.priceBtn').show();
+				}
+			}
+		});
+	}
 
     var namespace = win.auction;
     var __COMPONENT_NAME = "RESULT_LIST";
     namespace[__COMPONENT_NAME] = (function () {
         var init = function(){
             setLayout();
-
             setBinding();
+            webApp();
+        	rangeSetKg();
+			rangeSetPrice();
+			filterDelBtnView();
         };
         return {
             init: init
@@ -167,14 +354,35 @@
 })(jQuery, window, document);
 
 var fnSearch = function(){	
+	var temp = new Map();
+	temp.set("1", ["1", "4", "6"]);
+	temp.set("2", ["0", "2", "5", "9"]);
+	temp.set("3", ["3"]);
+	
+	var chkArr = [];
+	$("input[name=indvSexC]:checked").each(function(){
+	    chkArr.push(...temp.get($(this).val()));
+	});
+	
 	var form = $('<form></form>');
 	form.attr('action', '/results'+window.location.search);
 	form.attr('method', 'post');
 	form.appendTo('body');			
-	form.append($("<input type='hidden' value="+$('input[name=searchTxt]').val()+" name='searchTxt'>"));
-	form.append($("<input type='hidden' value="+$('input[name=searchAucObjDsc]:checked').val()+" name='searchAucObjDsc'>"));
+	
+	form.append($("<input type='hidden' value="+$("#searchAucObjDsc").val()+" name='searchAucObjDsc'>"));
 	form.append($("<input type='hidden' value="+$('select[name=searchType]').val()+" name='searchType'>"));
 	form.append($("<input type='hidden' value="+$('select[name=searchOrder]').val()+" name='searchOrder'>"));
 	form.append($("<input type='hidden' value="+$('select[name=searchDate]').val()+" name='searchDate'>"));
+	form.append($("<input type='hidden' value="+ chkArr.join(",") +" name='indvSexC'>"));
+	form.append($("<input type='hidden' value="+ $(".searchTxt").val() +" name='searchTxt'>"));
+	form.append($("<input type='hidden' value="+ $("#startKg").val() +" name='startKg'>"));
+	form.append($("<input type='hidden' value="+ $("#endKg").val() +" name='endKg'>"));
+	form.append($("<input type='hidden' value="+ $("#lowPrice").val() +" name='lowPrice'>"));
+	form.append($("<input type='hidden' value="+ $("#highPrice").val() +" name='highPrice'>"));
+	form.append($("<input type='hidden' value="+ $("#birthUpDown").val() +" name='birthUpDown'>"));
+	form.append($("<input type='hidden' value="+ $("#priceUpDown").val() +" name='priceUpDown'>"));
+	form.append($("<input type='hidden' value="+ $("#numUpDown").val() +" name='numUpDown'>"));
+	form.append($("<input type='hidden' value="+ $("#upDownFlag").val() +" name='upDownFlag'>"));
+	
 	form.submit();
 }

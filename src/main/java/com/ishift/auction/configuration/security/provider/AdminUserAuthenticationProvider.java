@@ -30,7 +30,7 @@ public class AdminUserAuthenticationProvider implements AuthenticationProvider {
 	
 	@Autowired
 	private PasswordEncoder passwordEncoder;
-	
+
 	@Value("${spring.profiles.service-name:nhlva}")
 	private String serviceName;
 
@@ -48,17 +48,17 @@ public class AdminUserAuthenticationProvider implements AuthenticationProvider {
 		if (authentication.getCredentials() == null || "".equals(authentication.getCredentials())) {
 			throw new BadCredentialsException("패스워드를 입력해주세요.");
 		}
-		
+
 		AdminUserDetails adminUserDetails = null;
 
-		final String password = authentication.getCredentials() == null ? "" : authentication.getCredentials().toString();
+		final String password = authentication.getCredentials() == null ? "" : authentication.getCredentials().toString();		
 		if ("tibero".equals(serviceName)) {
 			adminUserDetails = (AdminUserDetails)adminUserDetailsService.loadUserByUsername(authentication.getName());
-
-			if (adminUserDetails == null) {
-				throw new InternalAuthenticationServiceException("아이디 또는 패스워드를 확인해주세요.");
-			}
-
+		
+		if (adminUserDetails == null) {
+			throw new InternalAuthenticationServiceException("아이디 또는 패스워드를 확인해주세요.");
+		}
+		
 			log.debug("encode pw : {}", passwordEncoder.encode(password));
 			if (!passwordEncoder.matches(password, adminUserDetails.getPw())) {
 				throw new BadCredentialsException("아이디 또는 패스워드를 확인해주세요.");

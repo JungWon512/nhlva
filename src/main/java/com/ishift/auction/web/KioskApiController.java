@@ -100,8 +100,8 @@ public class KioskApiController<T> {
 			result.put("code", "C" + HttpStatus.OK.value());
 			result.put("message", "토큰 발급 성공했습니다.");
 
-			data.put("accessToken", jwtTokenUtil.generateToken(jwtTokenVo, Constants.JwtConstants.ACCESS_TOKEN));
-			data.put("naBzplc", adminUserDetails.getNaBzplc());
+			data.put("ACCESS_TOKEN", jwtTokenUtil.generateToken(jwtTokenVo, Constants.JwtConstants.ACCESS_TOKEN));
+			data.put("NA_BZPLC", adminUserDetails.getNaBzplc());
 			result.put("data", data);
 			return result;
 		}
@@ -140,7 +140,8 @@ public class KioskApiController<T> {
 				, produces = MediaType.APPLICATION_JSON_VALUE)
 	public Map<String, Object> mwmnAuthNum(@RequestBody Map<String, Object> params) {
 		try {
-			final Map<String, Object> result = kioskApiService.mwmnAuthNumProc(params);
+			params.put("userRole", Constants.UserRole.BIDDER);
+			final Map<String, Object> result = kioskApiService.authNumChkProc(params);
 			return this.createResultCUD(result);
 		}
 		catch (RuntimeException | SQLException e) {
@@ -159,7 +160,6 @@ public class KioskApiController<T> {
 	public Map<String, Object> mwmnEntry(@RequestBody Map<String, Object> params) {
 		try {
 			final Map<String, Object> result = kioskApiService.mwmnRegEntryProc(params);
-			log.debug("result : {}", result);
 			return this.createResultCUD(result);
 		}
 		catch (RuntimeException | SQLException e) {
@@ -175,19 +175,54 @@ public class KioskApiController<T> {
 	@PostMapping(value = "/{version}/mwmn/state-acc"
 				, consumes = MediaType.APPLICATION_JSON_VALUE
 				, produces = MediaType.APPLICATION_JSON_VALUE)
-	public Map<String, Object> stateAcc(@RequestParam Map<String, Object> params) {
+	public Map<String, Object> mwmnStateAcc(@RequestBody Map<String, Object> params) {
 		try {
-			final Map<String, Object> info = kioskApiService.selectStateAccInfo(params);
+			final Map<String, Object> info = kioskApiService.selectMwmnStateAccInfo(params);
 			return this.createResultSetMapData(info);
 		}
 		catch (RuntimeException | SQLException e) {
+			e.printStackTrace();
 			return this.createResultSetMapData(null);
 		}
 	}
 	
-	// TODO :: 출하주 로그인 + 휴대전화 인증번호 발송(1회용)
-	// TODO :: 인증번호 확인
-	// TODO :: 출하주 정산서
+	/**
+	 * 출하주 인증번호(6자리) 확인
+	 * @param params
+	 * @return
+	 */
+	@PostMapping(value = "/{version}/fhs/auth-num"
+				, consumes = MediaType.APPLICATION_JSON_VALUE
+				, produces = MediaType.APPLICATION_JSON_VALUE)
+	public Map<String, Object> fhsAuthNum(@RequestBody Map<String, Object> params) {
+		try {
+			params.put("userRole", Constants.UserRole.FARM);
+			final Map<String, Object> result = kioskApiService.authNumChkProc(params);
+			return this.createResultCUD(result);
+		}
+		catch (RuntimeException | SQLException e) {
+			return this.createResultCUD(null);
+		}
+	}
+	
+	/**
+	 * 출하주 정산 정보
+	 * @param params
+	 * @return
+	 */
+	@PostMapping(value = "/{version}/fhs/state-acc"
+				, consumes = MediaType.APPLICATION_JSON_VALUE
+				, produces = MediaType.APPLICATION_JSON_VALUE)
+	public Map<String, Object> fhsStateAcc(@RequestBody Map<String, Object> params) {
+		try {
+			final Map<String, Object> info = kioskApiService.selectFhsStateAccInfo(params);
+			return this.createResultSetMapData(info);
+		}
+		catch (RuntimeException | SQLException e) {
+			e.printStackTrace();
+			return this.createResultSetMapData(null);
+		}
+	}
 	
 	/************************************************************************ 공통 함수 [s] ************************************************************************/
 	
@@ -252,6 +287,9 @@ public class KioskApiController<T> {
 		reMap.put("status", HttpStatus.OK.value());
 		reMap.put("code", "C" + HttpStatus.OK.value());
 		reMap.put("message", "조회에 성공했습니다.");
+		if (!ObjectUtils.isEmpty(map.get("data"))) {
+			reMap.put("data", map.get("data"));
+		}
 		
 		return reMap;
 	}

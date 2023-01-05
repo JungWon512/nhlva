@@ -1,12 +1,12 @@
 package com.ishift.auction.web;
 
+import java.sql.SQLException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -14,71 +14,125 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.ishift.auction.service.auction.AuctionService;
+import com.ishift.auction.service.front.FrontService;
 
 @RestController
 public class FrontController {
-	private static final Logger LOGGER = LoggerFactory.getLogger(FrontController.class);
+	
 	@Autowired
 	AuctionService auctionService;
 	
-	@RequestMapping(value="/",method = { RequestMethod.GET, RequestMethod.POST }) 	
+	@Autowired
+	FrontService frontService;
+
+	@RequestMapping(value = "/", method = { RequestMethod.GET, RequestMethod.POST })
 	public ModelAndView init() throws Exception {
-		// 전국지도 - 8개군에서 선택 
-		LOGGER.debug("start of main.do");
+		// 전국지도 - 8개군에서 선택
 		ModelAndView mav = new ModelAndView();
-		mav.setViewName("redirect:/home");		
+		mav.setViewName("redirect:/home");
 		return mav;
-	}	
-	
-	@RequestMapping(value = "/home",method = { RequestMethod.GET, RequestMethod.POST })
+	}
+
+	@RequestMapping(value = "/home", method = { RequestMethod.GET, RequestMethod.POST })
 	public ModelAndView main() throws Exception {
-		// 전국지도 - 8개군에서 선택 
-		LOGGER.debug("start of main.do");
+		// 전국지도 - 8개군에서 선택
 		ModelAndView mav = new ModelAndView();
-		Map<String,Object>  map = new HashMap<>();
+		Map<String, Object> map = new HashMap<>();
 		mav.addObject("bizList", auctionService.selectBizList(map));
 		mav.setViewName("front/user/home");
 		return mav;
 	}
 	
-	@RequestMapping(value = "/district",method = { RequestMethod.GET, RequestMethod.POST })
-	public ModelAndView area(
-		@RequestParam(name = "loc", required = false) String loc
-		,@RequestParam(name = "auctingYn", required = false) String auctingYn
-	) throws Exception {
-		// 전국지도 - 시/군 선택
-		LOGGER.debug("start of district.do");
+	@RequestMapping(value = "/dashboard",method = { RequestMethod.GET, RequestMethod.POST })
+	public ModelAndView dashboard(@RequestParam Map<String, Object> params) throws Exception {
+		// 메인화면 현황
+		ModelAndView mav = new ModelAndView("front/user/dashboard");
+		
+		Map<String, Object> paramMap = new HashMap<>();
+		paramMap.putAll(params);
+		
+		// 1. 최근 가축시장 시세 조회 
+		mav.addObject("cowPriceList", frontService.findCowPriceList(paramMap));
+		// 1. 최근 가축시장 시세 조회 
+		mav.addObject("avgPlaceBidAmList", frontService.findAvgPlaceBidAmList(paramMap));
+		// 1. 최근 가축시장 시세 조회 
+		mav.addObject("recentDateTopLIst", frontService.findRecentDateTopList(paramMap));
+
+		mav.addObject("inputParam", params);
+		
+		return mav;
+	}
+	
+	@RequestMapping(value = "/filter",method = { RequestMethod.GET, RequestMethod.POST })
+	public ModelAndView filter() throws Exception {
+		// 메인화면 현황
 		ModelAndView mav = new ModelAndView();
-		Map<String,Object>  map = new HashMap<>();
+		mav.setViewName("pop/filter");
+		return mav;
+	}
+	
+	@RequestMapping(value = "/district", method = { RequestMethod.GET, RequestMethod.POST })
+	public ModelAndView area(@RequestParam(name = "loc", required = false) String loc,
+							 @RequestParam(name = "auctingYn", required = false) String auctingYn) throws Exception {
+		// 전국지도 - 시/군 선택
+		ModelAndView mav = new ModelAndView();
+		Map<String, Object> map = new HashMap<>();
 		map.put("naBzPlcLoc", loc);
 		map.put("auctingYn", auctingYn);
-		List<Map<String,Object>> list = auctionService.selectBizLocList(map);
+		List<Map<String, Object>> list = auctionService.selectBizLocList(map);
 		mav.addObject("locList", list);
 		mav.setViewName("front/user/district");
 		return mav;
 	}
+
+	@RequestMapping(value = "/index", method = { RequestMethod.GET, RequestMethod.POST })
+	public ModelAndView login() {
+		ModelAndView mav = new ModelAndView();
+		mav.setViewName("front/user/index");
+		return mav;
+	}
+
+	@RequestMapping(value = "/privacy", method = { RequestMethod.GET, RequestMethod.POST })
+	public ModelAndView privacy() {
+		ModelAndView mav = new ModelAndView();
+		mav.setViewName("pop/privacy");
+		return mav;
+	}
+
+	// 이용약관 old ver
+//	@RequestMapping(value = "/agreement", method = { RequestMethod.GET, RequestMethod.POST })
+//	public ModelAndView agreement() {
+//		ModelAndView mav = new ModelAndView();
+//		mav.setViewName("pop/agreement_bak");
+//		return mav;
+//	}
 	
-    @RequestMapping(value="/index",method = { RequestMethod.GET, RequestMethod.POST })
-    public ModelAndView login() {
-        LOGGER.debug("start of index");
-        ModelAndView mav = new ModelAndView();
-        mav.setViewName("front/user/index");
-        return mav;
-    }
+	// 이용약관 new ver
+	@RequestMapping(value =  {"/agreement/{date}"}, method = { RequestMethod.GET, RequestMethod.POST })
+	public ModelAndView agreement(@PathVariable String date) {
+		ModelAndView mav = new ModelAndView();
+		
+		if("new".equals(date)) {
+			mav.setViewName("front/user/agreement");
+			mav.setViewName("pop/agreement"); // 팝업용
+		} else {
+			mav.setViewName("front/user/agreement"+date);
+			mav.addObject("subheaderTitle","이용약관"); // 뒤로가기용
+		}
+		return mav;
+	}
 	
-    @RequestMapping(value="/privacy",method = { RequestMethod.GET, RequestMethod.POST })
-    public ModelAndView privacy() {
-        LOGGER.debug("start of index");
-        ModelAndView mav = new ModelAndView();
-        mav.setViewName("pop/privacy");
-        return mav;
-    }
-	
-    @RequestMapping(value="/agreement",method = { RequestMethod.GET, RequestMethod.POST })
-    public ModelAndView agreement() {
-        LOGGER.debug("start of index");
-        ModelAndView mav = new ModelAndView();
-        mav.setViewName("pop/agreement");
-        return mav;
-    }
+	/**
+	 * 전국 가축시장 경매안내 페이지
+	 * @return
+	 * @throws SQLException 
+	 */
+	@RequestMapping(value = "/schedule", method = { RequestMethod.GET, RequestMethod.POST })
+	public ModelAndView schedule(@RequestParam Map<String, Object> params) throws SQLException {
+		ModelAndView mav = new ModelAndView();
+		mav.setViewName("front/user/schedule");
+		mav.addObject("scheduleList", auctionService.selectcheduleList(params));
+		mav.addObject("params", params);
+		return mav;
+	}
 }

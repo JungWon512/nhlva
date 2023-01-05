@@ -1,0 +1,16 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="290" height="110" viewBox="0 0 290 110">
+    <defs>
+        <filter id="y6q5gk57va" x="0" y="0" width="290" height="110" filterUnits="userSpaceOnUse">
+            <feOffset dx="2"/>
+            <feGaussianBlur stdDeviation="5" result="blur"/>
+            <feFlood flood-opacity=".2"/>
+            <feComposite operator="in" in2="blur"/>
+            <feComposite in="SourceGraphic"/>
+        </filter>
+    </defs>
+    <g data-name="그룹 19755">
+        <g style="filter:url(#y6q5gk57va)" data-name="그룹 19756">
+            <path data-name="패스 7826" d="M260 80H0V17.553C0 7.859 8.257 0 18.441 0h183.383a24.946 24.946 0 0 1 22.051 12.834z" transform="translate(13 15)" style="fill:#29b5ff"/>
+        </g>
+    </g>
+</svg>

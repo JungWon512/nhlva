@@ -99,7 +99,7 @@
 									</li>
 									<li>
 										<dl>
-											<dt>최저가</dt>
+											<dt>예정가</dt>
 											<dd class="lowsSbidLmtAm">
 												<fmt:formatNumber value="${watchList[0].LOWS_SBID_LMT_AM <= 0 ? '0' : fn:split(watchList[0].LOWS_SBID_LMT_UPR,'.')[0]}" type="number" />
 											</dd>
@@ -173,7 +173,7 @@
 									</li>
 									<li class="harf-list">
 										<dl>
-											<dt>최저가</dt>
+											<dt>예정가</dt>
 											<dd class="lowsSbidLmtAm">
 												<fmt:formatNumber value="${watchList[0].LOWS_SBID_LMT_AM <= 0 ? '0' : fn:split(watchList[0].LOWS_SBID_LMT_UPR,'.')[0]}" type="number" />
 											</dd>
@@ -212,6 +212,11 @@
 					</div>
 				</div>
 			</div>		
+			<div class="stats-box">
+				<div class="num stand"><i class="off"></i>대기 <span>${watchCount.CNT_STAND }</span></div>
+				<div class="num bid"><i class="on"></i>완료 <span>${watchCount.CNT_BID }</span></div>
+				<div><button type="button" class="btn_reload btn-f5">새로고침</button></div>
+			</div>
 	</div>
 	<!-- //auction_seeBox e -->
 	<div class="list_table auction_see tblAuction">
@@ -225,7 +230,7 @@
 				<dd class="pd_kg">중량<span class="w_view_in">(kg)</span></dd>
 				<dd class="pd_kpn">KPN</dd>
 				<dd class="pd_num1">계대</dd>
-				<dd class="pd_pay1">최저가</dd>
+				<dd class="pd_pay1">예정가</dd>
 				<dd class="pd_pay2">낙찰가</dd>
 				<dd class="pd_state">경매결과</dd>
 				<dd class="pd_etc">비고</dd>
@@ -234,7 +239,7 @@
 		<div class="list_body">
 			<ul class="mCustomScrollBox">
                	<c:if test="${ watchList.size() <= 0 }">
-					<li>
+					<li class="noInfo">
 						<dl>
 							<dd>경매관전 자료가 없습니다.</dd>
 						</dl>
