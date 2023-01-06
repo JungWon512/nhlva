@@ -100,7 +100,6 @@ public interface AdminTaskService {
 	 */
 	List<Map<String, Object>> selectSogCowLogList(Map<String, Object> params) throws SQLException;
 
-	
 	/**
 	 * 변경한 경매내역 저장
 	 * @param params
@@ -108,13 +107,6 @@ public interface AdminTaskService {
 	 * @throws SQLException
 	 */
 	Map<String, Object> updateResult(Map<String, Object> params) throws SQLException;
-
-	/**
-	 * 이미지 업로드
-	 * @param params
-	 * @return
-	 */
-	Map<String, Object> uploadImage(Map<String, Object> params) throws SQLException;
 
 	/**
 	 * 출장우 이미지 업로드

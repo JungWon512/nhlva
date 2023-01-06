@@ -331,36 +331,6 @@ public class AdminTaskServiceImpl implements AdminTaskService {
 
 		return result;
 	}
-
-	/**
-	 * 이미지 업로드
-	 * @param params
-	 * @return
-	 */
-	@Override
-	public Map<String, Object> uploadImage(Map<String, Object> params) {
-		final Map<String, Object> result		= new HashMap<String, Object>();
-		final List<Map<String, Object>> files	= (List<Map<String, Object>>)params.get("files");	// 원본, 썸네일
-		final String uploadPath					= "C:\\workspace\\nh_adv\\upload\\";				// 업로드 경로
-		
-		
-		
-		for (Map<String, Object> file : files) {
-			String origin		= file.getOrDefault("origin", ",").toString();
-			String thumbnail	= file.getOrDefault("thumbnail", ",").toString();
-			
-			// 파일명 생성
-			String filename		= UUID.randomUUID().toString();
-			if (this.makeImage(origin.split(",")[1], uploadPath, filename, "png") && this.makeImage(thumbnail.split(",")[1], uploadPath, filename + "_thumb", "png")) {
-				// TODO :: TB_LA_IS_MM_COW_IMG에 정보 저장
-			}
-		}
-		
-		result.put("success", true);
-		result.put("message", "저장되었습니다.");
-		return result;
-	}
-	
 	
 	/**
 	 * base64 인코딩한 이미지 파일로 변환
@@ -395,6 +365,12 @@ public class AdminTaskServiceImpl implements AdminTaskService {
 		}
 	}
 	
+	/**
+	 * 출장우 이미지 업로드
+	 * @param params
+	 * @return
+	 * @throws SQLException 
+	 */
 	@Override
 	public Map<String, Object> uploadImageProc(Map<String, Object> params) throws SQLException {
 		final Map<String, Object> result = new HashMap<String, Object>();
@@ -424,7 +400,7 @@ public class AdminTaskServiceImpl implements AdminTaskService {
 		final String naBzplc = params.getOrDefault("naBzplc", sessionUtil.getNaBzplc()).toString();
 		final String aucDt = params.get("aucDt").toString();
 		final String sraIndvAmnno = params.get("sraIndvAmnno").toString();
-		final String filePath = naBzplc + "/" + aucDt + "/" + sraIndvAmnno + "/";
+		final String filePath = naBzplc + "/" + sraIndvAmnno + "/";
 		final String fileExtNm = ".png";
 		
 		// 해당 path에 있는 이미지 삭제 : 이미지 저장에 실패했을때 transaction은 어떤 방식으로 처리할 지....

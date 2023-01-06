@@ -137,7 +137,7 @@ public class ApiController {
 					info.put("version", version);
 					try {
 						Map<String, Object> resultMap = auctionService.updateAuctionResultMap(info);
-						if (resultMap != null) {
+						if (resultMap != null && !(boolean)resultMap.getOrDefault("success", false)) {
 							failList.add(resultMap);
 						}
 					}catch (RuntimeException re) {
@@ -209,7 +209,7 @@ public class ApiController {
 					info.put("version", version);
 					try {
 						Map<String, Object> resultMap = auctionService.updateAuctionResultMap(info);
-						if (resultMap != null) {
+						if (resultMap != null && !(boolean)resultMap.getOrDefault("success", false)) {
 							failList.add(resultMap);
 						}
 					}catch (RuntimeException re) {

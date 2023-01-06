@@ -199,7 +199,7 @@
 				originFiles.push(obj);
 			}
 
-				frm["files"] = originFiles;
+			frm["files"] = originFiles;
 			
 			$.ajax({
 				url : '/office/task/uploadImageAjax',
