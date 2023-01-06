@@ -14,6 +14,7 @@ import org.codehaus.jettison.json.JSONException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.ishift.auction.service.admin.AdminService;
 import com.ishift.auction.service.auction.AuctionDAO;
@@ -28,6 +29,7 @@ import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 @Service("LoginService")
+@Transactional
 public class LoginServiceImpl implements LoginService {
 
 	@Resource(name = "loginDAO")

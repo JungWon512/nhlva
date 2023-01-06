@@ -100,7 +100,7 @@ public class CommonDAO {
 	 */
 	public int insertIntgInfo(Map<String, Object> params) throws SQLException {
 		mainDao.insert("commonMapper.insertIntgInfo", params);
-		return (int) params.get("MB_INTG_NO");
+		return Integer.parseInt(params.get("MB_INTG_NO").toString());
 	}
 
 	/**
