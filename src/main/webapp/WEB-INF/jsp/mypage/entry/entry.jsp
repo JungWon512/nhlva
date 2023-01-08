@@ -31,9 +31,3 @@
 		<%@ include file="/WEB-INF/jsp/mypage/entry/entry_tab_2.jsp" %>
 	</div>
 </div>
-<!-- //auction_list e -->
-<script src="/static/js/common/chart/chart.js"></script>
-<script type="text/javascript">
-var doughChart;
-var barChart;
-</script>

@@ -57,10 +57,10 @@ public class DateUtil {
     public static String addSlashYYYYMMDD(String YYYYYMMDD){
         String returnValue = YYYYYMMDD;
         try{
-            if(YYYYYMMDD.length()<8){
+            if(YYYYYMMDD.length() < 8){
                 returnValue = "2020/01/01";
             } else {
-                returnValue = YYYYYMMDD.substring(0,4)+"/"+YYYYYMMDD.substring(5,6)+"/"+YYYYYMMDD.substring(7,8);
+                returnValue = YYYYYMMDD.substring(0,4)+"/"+YYYYYMMDD.substring(4,6)+"/"+YYYYYMMDD.substring(6,8);
             }
 
         }catch (RuntimeException re) {

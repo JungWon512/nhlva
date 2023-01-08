@@ -151,7 +151,7 @@
 						</div>
 						<div class="pd_pav">
 							<input type="hidden" class="sbidUpr" name="sbidUpr_${st.index }" value="${fn:split(vo.SBID_UPR,'.')[0]}"/>
-							<c:if test="${inputParam.loginNo != null && inputParam.loginNo != '' }">
+							<c:if test="${inputParam.authRole eq 'ROLE_BIDDER' && inputParam.loginNo != null && inputParam.loginNo != '' }">
 	                            <a href="javascript:;" class="${(vo.SBID_UPR eq '' || vo.SBID_UPR eq null )?'':'act'}">
 		                            <span class="ico_pav">                            
 			                        	<c:choose>

@@ -1457,7 +1457,11 @@ public class AuctionServiceImpl implements AuctionService {
 	 */
 	@Override
 	public List<Map<String, Object>> selectcheduleList(Map<String, Object> param) throws SQLException {
-		return auctionDAO.selectcheduleList(param);
+		if("today".equals(param.get("type")) || "tomorrow".equals(param.get("type"))) {
+			return auctionDAO.selectScheduleListQcn(param);			
+		}else {
+			return auctionDAO.selectcheduleList(param);			
+		}
 	}
 
 	/**

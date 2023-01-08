@@ -39,9 +39,3 @@
 		<%@ include file="/WEB-INF/jsp/mypage/buy/buy_tab_3.jsp" %>
 	</div>
 </div>
-
-<script src="/static/js/common/chart/chart.js"></script>
-<script type="text/javascript">
-var doughChart;
-var barChart;
-</script>

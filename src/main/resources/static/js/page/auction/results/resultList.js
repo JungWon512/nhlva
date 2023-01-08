@@ -115,11 +115,11 @@
 			if( $(this).text() == "성별" ) {
 					$("input[name=indvSexC]:checked").prop("checked", false);
 			}
-			if( $(this).text() == "중량" ) {
-			   		$("#startKg").val('');
-					$("#endKg").val('');
-					$("span.rangeKg").html( "0 ~ 1000kg" );
-					rangeSetKg();
+			if( $(this).text() == "월령" ) {
+			   		$("#startDate").val('');
+					$("#endDate").val('');
+					$("span.rangeDate").html( "0 ~ 10개월" );
+					rangeSetDate();
 			}
 			if( $(this).text() == "예정가" ) {
 					$("#lowPrice").val('');
@@ -254,10 +254,10 @@
 		$(".btn_del").hide();
 		$(".del_btn").hide();
 		
-		 $("#startKg").val('');
-		 $("#endKg").val('');
-		$("span.rangeKg").html("0 ~ 1000kg");
-		rangeSetKg();		
+		$("#startDate").val('');
+		$("#endDate").val('');
+		$("span.rangeDate").html("0 ~ 10개월");
+		rangeSetDate();		
 		
 		$('#lowPrice').val('');
 		$('#highPrice').val('');
@@ -273,36 +273,36 @@
 		if( $("input[name=indvSexC]:checked").val() != null ) {
 			$('.sexBtn').css('display','inline-block');
 		}
-		if($('#startKg').val() != '' ) {
-			$('.kgBtn').css('display','inline-block');
+		if($('#startDate').val() != '' ) {
+			$('.dateBtn').css('display','inline-block');
 		}
 		if($('#lowPrice').val() != '' ) {
 			$('.priceBtn').css('display','inline-block');
 		}
 	}
 	
-	var rangeSetKg = function() {
-		let stKg =$("#startKg").val();
-		let enKg =$("#endKg").val();
+	var rangeSetDate = function() {
+		let stDate =$("#startDate").val();
+		let enDate =$("#endDate").val();
 		
-		stKg = stKg == '' ? 0 : stKg; 
-		enKg = enKg == '' ? 1000 : enKg;
+		stDate = stDate == '' ? 0 : stDate; 
+		enDate = enDate == '' ? 10 : enDate;
 		  
-		$("span.rangeKg").html(stKg +"~"+ enKg + "kg");
+		$("span.rangeDate").html(stDate +"~"+ enDate + "개월");
 		
-		$( "#filterKg" ).slider({
+		$( "#filterDate" ).slider({
 			range: true,
 			min: 0, 
-			max: 1000,
-			values: [ stKg, enKg ],
+			max: 10,
+			values: [ stDate, enDate ],
 			slide : function(event , ui) {
-				let startKg =  $("#startKg").val(ui.values[0]);
-				let endKg = $("#endKg").val(ui.values[1])
-				$("span.rangeKg").html(startKg.val() +"~"+ endKg.val() + "kg");
-				if (startKg[0].defaultValue == '0' && endKg[0].defaultValue == '1000') {
-					$('.kgBtn').hide();
-				} else {
-					$('.kgBtn').show();
+				let startDate =  $("#startDate").val(ui.values[0]);
+				let endDate = $("#endDate").val( ui.values[1])
+				$("span.rangeDate").html(startDate.val() +"~"+ endDate.val() + "개월");
+				if (startDate[0].defaultValue == '0' && endDate[0].defaultValue == '10') {
+					$('.dateBtn').hide();
+				}  else {
+					$('.dateBtn').show();
 				}
 			}
 		});
@@ -340,7 +340,7 @@
             setLayout();
             setBinding();
             webApp();
-        	rangeSetKg();
+        	rangeSetDate();
 			rangeSetPrice();
 			filterDelBtnView();
         };
@@ -375,8 +375,8 @@ var fnSearch = function(){
 	form.append($("<input type='hidden' value="+$('select[name=searchDate]').val()+" name='searchDate'>"));
 	form.append($("<input type='hidden' value="+ chkArr.join(",") +" name='indvSexC'>"));
 	form.append($("<input type='hidden' value="+ $(".searchTxt").val() +" name='searchTxt'>"));
-	form.append($("<input type='hidden' value="+ $("#startKg").val() +" name='startKg'>"));
-	form.append($("<input type='hidden' value="+ $("#endKg").val() +" name='endKg'>"));
+	form.append($("<input type='hidden' value="+ $("#startDate").val() +" name='startDate'>"));
+	form.append($("<input type='hidden' value="+ $("#endDate").val() +" name='endDate'>"));
 	form.append($("<input type='hidden' value="+ $("#lowPrice").val() +" name='lowPrice'>"));
 	form.append($("<input type='hidden' value="+ $("#highPrice").val() +" name='highPrice'>"));
 	form.append($("<input type='hidden' value="+ $("#birthUpDown").val() +" name='birthUpDown'>"));

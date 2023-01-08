@@ -227,13 +227,35 @@
 		   AND TRMN_AMNNO = #{trmnAmnno}
 	</select>
 	
-	<!-- 새로 받급받은 인증번호 저장 -->
+	<!-- 인증번호 정보 조회 -->
+	<select id="selectAuthFhsNumberInfo" parameterType="map" resultType="map">
+		SELECT SMS_YMD
+			 , SMS_NO
+			 , CUS_MPNO
+			 , FTSNM 	AS SRA_MWMNNM
+		  FROM TB_LA_IS_MM_FHS
+		 WHERE NA_BZPLC = #{naBzplc}
+		   AND FHS_ID_NO = #{fhsIdNo}
+		   AND FARM_AMNNO = #{farmAmnno}
+	</select>
+	
+	<!-- 새로 받급받은 인증번호 저장 (중도매인) -->
 	<update id="updateAuthNumber" parameterType="map">
 		UPDATE TB_LA_IS_MM_MWMN
 		   SET SMS_YMD = TO_CHAR(SYSDATE, 'YYYYMMDD')
 			 , SMS_NO = #{smsNo}
 		 WHERE NA_BZPLC = #{naBzplc}
 		   AND TRMN_AMNNO = #{trmnAmnno}
+	</update>
+	
+	<!-- 새로 받급받은 인증번호 저장 (출하주) -->
+	<update id="updateAuthFhsNumber" parameterType="map">
+		UPDATE TB_LA_IS_MM_FHS
+		   SET SMS_YMD = TO_CHAR(SYSDATE, 'YYYYMMDD')
+			 , SMS_NO = #{smsNo}
+		 WHERE NA_BZPLC = #{naBzplc}
+		   AND FHS_ID_NO = #{fhsIdNo}
+		   AND FARM_AMNNO = #{farmAmnno}
 	</update>
 	
 	<insert id="sendSms" parameterType="map">
@@ -341,4 +363,40 @@
 				, FHS.MB_INTG_NO =#{MB_INTG_NO}	
 	</update>
 	
+	<insert id="insertMmConnHistory" parameterType="map">
+		/*LoginMapper.insertMmConnHistory_20230104_추가*/
+		<selectKey keyProperty="connSeq" resultType="int" order="BEFORE">
+			SELECT NVL(MAX(CONN_SEQ) + 1, 1)
+			  FROM TB_LA_IS_MM_CONN_HIST
+			  WHERE CONN_DT = TO_CHAR(SYSDATE, 'YYYYMMDD')
+		</selectKey>
+		INSERT INTO TB_LA_IS_MM_CONN_HIST(
+			CONN_DT
+			, CONN_SEQ
+			, CONN_GBCD
+			, NA_BZPLC
+			, LOGIN_ID
+			<if test="mbIntgNo != null and mbIntgNo != ''">
+			, MB_INTG_NO
+			</if>
+			, CONN_CHN
+			, INOUT_GB
+			, CONN_IP
+			, INOUT_DTM
+		)
+		VALUES(
+			TO_CHAR(SYSDATE, 'YYYYMMDD')
+			, #{connSeq}
+			, #{connGbcd}
+			, #{naBzPlc}
+			, #{loginId}
+			<if test="mbIntgNo != null and mbIntgNo != ''">
+			, #{mbIntgNo}
+			</if>
+			, #{connChannel}
+			, #{inOutGb}
+			, #{connIP}
+			, SYSDATE
+		)
+	</insert>
 </mapper>

@@ -9,7 +9,7 @@
 				<dl>
 					<dt>${ title }</dt>
 					<dd id="prev" class="btn_chg btn_prev"><a href="javascript:;">이전</a></dd>
-					<dd id="next" class="btn_chg btn_next"><a href="javascript:;">다음</a></dd>
+					<dd id="next" class="btn_chg btn_next disabled"><a href="javascript:;">다음</a></dd>
 				</dl>
 			</dl>
 			<div class="btns">

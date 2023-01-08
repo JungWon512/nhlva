@@ -52,9 +52,9 @@
 			</tr>
 			<tr>
 				<th>체장</th>
-				<td class="ta-C">${infoData.BDLN_VAL }</td>
+				<td class="ta-C bdr-y">${infoData.BDLN_VAL }</td>
 				<th>체고</th>
-				<td class="ta-C bdr-y">${infoData.BDHT_VAL }</td>
+				<td class="ta-C">${infoData.BDHT_VAL }</td>
 			</tr>
 			<tr>
 				<th>계대</th>

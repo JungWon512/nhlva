@@ -67,16 +67,18 @@
         });
         // 정산서 날짜 변경 버튼
         $(document).on('click','.btn_chg',function(){
-			const params = {
-				flag: $(this).attr("id")
-				, searchFlag: $(".btn_flag.act").attr("id")
-				, searchDateState: $('input[name=searchDateState]').val()
-				, loginNo: $('input[name=loginNo]').val()
-				, naBzPlcNo: $('input[name=naBzPlcNo]').val()
-				, johpCd: $('input[name=johpCd]').val()
-				, place: $("#naBzPlcNo").val()
+			if(!$(this).hasClass("disabled")){
+				const params = {
+					flag: $(this).attr("id")
+					, searchFlag: $(".btn_flag.act").attr("id")
+					, searchDateState: $('input[name=searchDateState]').val()
+					, loginNo: $('input[name=loginNo]').val()
+					, naBzPlcNo: $('input[name=naBzPlcNo]').val()
+					, johpCd: $('input[name=johpCd]').val()
+					, place: $("#naBzPlcNo").val()
+				}
+				fnSetStateList(params);
 			}
-			fnSetStateList(params);
 		});
 		// 정산서 상세 버튼
 		$(document).on('click','.move_info',function(){	
@@ -158,6 +160,12 @@
     
     // 정산서 조회
     var fnSetStateList = function(params){	
+		//조회 기간을 현재 월 기준 최대 6개월까지 제한
+		var flag = params.flag;
+		var searchMonth = new Date(params.searchDateState.substr(0,4), params.searchDateState.substr(4,2) - 1, "01");
+		var now = new Date();
+		var monthDiff = now.getMonth() - searchMonth.getMonth() + (12 * (now.getFullYear() - searchMonth.getFullYear()));
+		
 		COMMONS.callAjax("/auction/api/select/entryList", "post", params, 'application/json', 'json'
 		, function(data){
 			if(data && !data.success){
@@ -173,8 +181,8 @@
 			sHtml += '	<dl class="date_top">';
 			sHtml += '		<dl>';
 			sHtml += '			<dt>'+ data.title +'</dt>';
-			sHtml += '			<dd id="prev" class="btn_chg btn_prev"><a href="javascript:;">이전</a></dd>';
-			sHtml += '			<dd id="next" class="btn_chg btn_next"><a href="javascript:;">다음</a></dd>';
+			sHtml += '			<dd id="prev" class="btn_chg btn_prev '+(flag == "prev" && monthDiff >= 4 ? 'disabled' : "")+'"><a href="javascript:;">이전</a></dd>';
+			sHtml += '			<dd id="next" class="btn_chg btn_next '+(flag == "next" && monthDiff <= 1 ? 'disabled' : "")+'"><a href="javascript:;">다음</a></dd>';
 			sHtml += '		</dl>';
 			sHtml += '	</dl>';
 			sHtml += '	<div class="btns">';
@@ -265,6 +273,9 @@
     
     // My 현황 탭
 	var setChart =  function(entryList) {
+		var doughChart;
+		var barChart;
+		
 	    // 송아지 낙찰평균 및 평균시세
 	    var barData1 = "";
 	    var barData2 = "";

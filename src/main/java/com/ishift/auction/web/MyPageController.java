@@ -82,6 +82,7 @@ public class MyPageController {
 		paramMap.put("searchDate", datelist.size() > 0 ? datelist.get(0).get("AUC_DT") : null);
 		paramMap.put("searchTrmnAmnNo", userVo.getTrmnAmnno());
 		paramMap.put("searchMbIntgNo", userVo.getMbIntgNo());
+		paramMap.put("stateFlag", "buy");
 		
 		// 0. 나의 경매내역 > 구매내역
 		mav.addObject("buyCnt",auctionService.selectCountEntry(paramMap));
@@ -92,7 +93,6 @@ public class MyPageController {
 		mav.addObject("bidList", auctionService.selectBidLogList(paramMap));
 		
 		// 2. 나의 경매내역 > 정산서
-		paramMap.put("stateFlag", "buy");
 		paramMap.put("searchDateState", today);
 		
 		mav.addObject("calendarList", auctionService.selectStateList(paramMap));
@@ -501,12 +501,12 @@ public class MyPageController {
 		paramMap.put("searchFarmAmnno", userVo.getFarmAmnno());
 		
 		paramMap.putAll(params);
+		paramMap.put("stateFlag", "entry");
 		
 		// 0. 나의 출장우 > 출장우
 		mav.addObject("myEntryList", auctionService.entrySelectList(paramMap));
 		
 		// 1. 나의 출장우 > 정산서
-		paramMap.put("stateFlag", "entry");
 		paramMap.put("searchDateState", today);
 		
 		mav.addObject("calendarList", auctionService.selectStateList(paramMap));
@@ -725,7 +725,11 @@ public class MyPageController {
         map.put("flagAplyConfirm", "Y");
         if(sessionUtill.getNaBzplc() != null) map.put("naBzPlc", sessionUtill.getNaBzplc());
 		if(sessionUtill.getUserId() != null) map.put("loginNo", sessionUtill.getUserId());
-		Map<String, Object> aplyInfo = auctionService.selectMySecAplyInfo(map);
+		Map<String, Object> aplyInfo = null;
+		
+		if("ROLE_BIDDER".equals(sessionUtill.getRoleConfirm())) {
+			aplyInfo = auctionService.selectMySecAplyInfo(map);
+		}
 		
 		if (aplyInfo == null) {
 			mav.addObject("secAplyPossible", "Y");

@@ -88,7 +88,7 @@ public class AuctionController extends CommonController {
 		if(param.get("searchDate") != null && param != null) {
 			map.put("searchDate", param.get("searchDate"));
 		}else if(nearAucDate != null){ 
-			map.put("searchDate", nearAucDate.get("AUC_DT"));  
+			map.put("searchDate", nearAucDate.get("AUC_DT"));
 		}else {
 			map.put("searchDate",datelist.size() > 0 ? datelist.get(0).get("AUC_DT") :null);
 		}
@@ -167,6 +167,7 @@ public class AuctionController extends CommonController {
 //			entry.put("BIRTH_MONTH", birthMonth);
 //		} 
 		if(sessionUtill.getUserId() != null) param.put("loginNo", sessionUtill.getUserId());
+		param.put("authRole", sessionUtill.getRoleConfirm());
 		mav.addObject("johapData", johap);
 		mav.addObject("subheaderTitle","출장우 조회");
 		mav.addObject("dateList",datelist); 
@@ -907,10 +908,12 @@ public class AuctionController extends CommonController {
 				case "auc":
 					//중도매인번호 초기화(출장우내역시에 미사용)
 					param.put("searchTrmnAmnNo", "");
+					param.put("authRole", sessionUtill.getRoleConfirm());
 					List<Map<String,Object>> list = auctionService.entrySelectList(param);
 					mav.addObject("aucList", list);
 				break;
 				case "sold":
+					param.put("authRole", sessionUtill.getRoleConfirm());
 					List<Map<String,Object>> soldList = auctionService.entrySelectList(param);
 					mav.addObject("soldList", soldList);
 					mav.addObject("buyCnt",auctionService.selectCountEntry(param));

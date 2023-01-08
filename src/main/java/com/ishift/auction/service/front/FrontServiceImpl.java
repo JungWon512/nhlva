@@ -27,5 +27,4 @@ public class FrontServiceImpl implements FrontService {
 	public List<Map<String, Object>> findRecentDateTopList(Map<String, Object> reqMap) throws SQLException {
 		return frontDAO.findRecentDateTopList(reqMap);
 	}
-
 }

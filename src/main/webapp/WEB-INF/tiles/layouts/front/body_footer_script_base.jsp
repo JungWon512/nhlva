@@ -14,4 +14,6 @@
 
 <script type="text/javascript" src="/static/js/guide/default.js"></script>
 <script src="/static/js/common/commons.js"></script>
-<script src="/static/js/common/utils.js"></script>
+<script src="/static/js/common/utils.js?ver=20230105"></script>
+<script src="/static/js/common/chart/chart.js"></script>
+

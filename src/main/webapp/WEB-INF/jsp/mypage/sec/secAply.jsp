@@ -18,7 +18,7 @@
     </ul>
 	<p class="title_text mt30"><span class="txt_blue">*</span> 이용해지 신청 사유</p>
 	<div class="inp">
-		<textarea name="sec_reason"></textarea>
+		<textarea name="sec_reason" maxLength="50"></textarea>
 	</div>
 	<div class="btn_area">
 		<a href="javascript:;" class="btn_apply">신청하기</a>

@@ -3,18 +3,110 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="front">
 	<select id="findCowPriceList" parameterType="map" resultType="map">
-		SELECT
-            A.NA_BZPLC
-        FROM  TB_LA_IS_BM_NOTI A
+	/* FrontMapper.findCowPriceList  */
+		SELECT B.LOCNM
+				, A.MONTH_OLD_C
+				, CASE WHEN A.MONTH_OLD_C = '01' THEN '4~5개월'
+						WHEN A.MONTH_OLD_C = '02' THEN '6~7개월'
+						WHEN A.MONTH_OLD_C = '03' THEN '8개월 이상'
+						WHEN A.MONTH_OLD_C = '11' THEN '400kg 미만'
+						WHEN A.MONTH_OLD_C = '12' THEN '400kg 이상'
+						ELSE '전체' END AS MONTH_OLD_C_NM 
+				, SUM(NVL(A.TOT_SBID_CNT,0)) SUM_SBID_CNT
+				, NVL(TRUNC((DECODE(SUM(A.TOT_SBID_CNT),0,0,(SUM(A.MAX_SBID_UPR) / SUM(A.TOT_SBID_CNT))))),0) AS AVG_SBID_AM
+		FROM TB_LA_IS_MM_DB_SUM A
+		LEFT JOIN TB_LA_IS_BM_BZLOC B ON A.NA_BZPLC = B.NA_BZPLC
+		WHERE 1=1
+			<if test="searchAucObjDsc != null and searchAucObjDsc != ''">
+				AND A.AUC_OBJ_DSC = #{searchAucObjDsc}
+			</if>
+			<if test="searchPlace != null and searchPlace != ''"> 
+				AND B.NA_BZPLCLOC = #{searchPlace}
+			</if>
+	        <choose>
+				<when test='"range20".equals(searchRaDate)'>
+					AND A.AUC_DT BETWEEN TO_CHAR(SYSDATE - 30, 'YYYYMMDD') AND TO_CHAR(SYSDATE, 'YYYYMMDD')
+				</when>
+				<when test='"range30".equals(searchRaDate)'>
+					AND A.AUC_DT BETWEEN TO_CHAR(SYSDATE - 20, 'YYYYMMDD') AND TO_CHAR(SYSDATE, 'YYYYMMDD')
+				</when>
+				<otherwise>
+					AND A.AUC_DT BETWEEN TO_CHAR(SYSDATE - 10, 'YYYYMMDD') AND TO_CHAR(SYSDATE, 'YYYYMMDD')
+				</otherwise>
+			</choose>
+		GROUP BY A.MONTH_OLD_C, B.LOCNM
+		ORDER BY A.MONTH_OLD_C
 	</select>
+	
 	<select id="findAvgPlaceBidAmList" parameterType="map" resultType="map">
-		SELECT
-            A.NA_BZPLC
-        FROM  TB_LA_IS_BM_NOTI A
+	/* FrontMapper.findAvgPlaceBidAmList  */
+		SELECT A.NA_BZPLCLOC
+				, A.LOCNM
+				, NVL(TRUNC((DECODE(SUM(B.TOT_SBID_CNT),0,0,(SUM(B.SBID_SUM_AMT) / SUM(B.TOT_SBID_CNT))))),0) AS AVG_SBID_AM
+		FROM TB_LA_IS_BM_BZLOC A <!-- 모든 지역 노출 위한 메인테이블 변경 -->
+		LEFT JOIN TB_LA_IS_MM_DB_SUM B ON A.NA_BZPLC = B.NA_BZPLC 
+		<if test="searchPlace != null and searchPlace != ''"> 
+			AND A.NA_BZPLCLOC = #{searchPlace}
+		</if>
+		<if test="searchMonthOldC != null and searchMonthOldC != ''"> 
+			AND B.MONTH_OLD_C = #{searchMonthOldC}
+		</if>
+		<if test="searchAucObjDsc != null and searchAucObjDsc != ''"> 
+			AND B.AUC_OBJ_DSC = #{searchAucObjDsc}
+		</if>
+		<choose>
+			<when test='"range20".equals(searchRaDate)'>
+				AND B.AUC_DT BETWEEN TO_CHAR(SYSDATE - 30, 'YYYYMMDD') AND TO_CHAR(SYSDATE, 'YYYYMMDD')
+			</when>
+			<when test='"range30".equals(searchRaDate)'>
+				AND B.AUC_DT BETWEEN TO_CHAR(SYSDATE - 20, 'YYYYMMDD') AND TO_CHAR(SYSDATE, 'YYYYMMDD')
+			</when>
+			<otherwise>
+				AND B.AUC_DT BETWEEN TO_CHAR(SYSDATE - 10, 'YYYYMMDD') AND TO_CHAR(SYSDATE, 'YYYYMMDD')
+			</otherwise>
+		</choose>
+		WHERE 1=1
+		GROUP BY A.NA_BZPLCLOC, A.LOCNM
 	</select>
+	
 	<select id="findRecentDateTopList" parameterType="map" resultType="map">
-		SELECT
-            A.NA_BZPLC
-        FROM  TB_LA_IS_BM_NOTI A
+		/* FrontMapper.findRecentDateTopList  */
+		SELECT T.*
+		FROM (
+				 SELECT A.NA_BZPLC
+				 			, C.CLNTNM
+							, A.SRA_INDV_AMNNO
+							, A.AUC_OBJ_DSC
+							, CASE WHEN A.AUC_OBJ_DSC = '1' THEN '송아지'
+									WHEN A.AUC_OBJ_DSC = '2' THEN '비육우'
+									WHEN A.AUC_OBJ_DSC = '3' THEN '번식우'
+									WHEN A.AUC_OBJ_DSC = '0' THEN '일괄'
+									ELSE '' END AS AUC_OBJ_DSC_NM
+							, A.INDV_SEX_C
+							, CASE WHEN A.INDV_SEX_C IN (1,4,6) THEN '암'
+												ELSE '숫'
+												END AS INDV_SEX_C_NM
+							, (SELECT TRUNC(MONTHS_BETWEEN(A.CR_DT,	B.BIRTH)) +1 FROM DUAL) AS MONTH_C
+							, A.SBID_AMT
+							, (A.AVG_SBID_AMT - A.SBID_AMT) AS AMT
+							, B.RG_DSC
+							, CASE WHEN B.RG_DSC = '01' THEN '기초'
+									WHEN B.RG_DSC = '02' THEN '혈통'
+									WHEN B.RG_DSC = '03' THEN '고등'
+									WHEN B.RG_DSC = '09' THEN '미등록우'
+									ELSE '없음' END AS RG_DSC_NAME
+							, ROW_NUMBER() OVER(ORDER BY NVL(A.SBID_AMT,0) DESC, B.BIRTH DESC) RANK_NO
+					FROM TB_LA_IS_MM_DB_BDPRTOP A
+					LEFT JOIN TB_LA_IS_MM_INDV B ON A.NA_BZPLC = B.NA_BZPLC AND A.SRA_INDV_AMNNO = B.SRA_INDV_AMNNO
+					INNER JOIN TB_LA_IS_BM_BZLOC C ON A.NA_BZPLC = C.NA_BZPLC
+					WHERE 1=1
+					<if test="searchFlag != null and searchFlag != ''">
+						AND C.NA_BZPLCLOC = #{searchPlace}
+					</if>
+						AND A.CR_DT BETWEEN TO_CHAR(SYSDATE-7, 'YYYYMMDD') AND TO_CHAR(SYSDATE-1, 'YYYYMMDD')
+		) T
+		WHERE 1=1
+			AND T.RANK_NO <![CDATA[<]]> 11
+		ORDER BY T.RANK_NO
 	</select>
 </mapper>

@@ -13,4 +13,5 @@ public interface FrontService {
 	
 	// 금주의 TOP3
 	List<Map<String,Object>> findRecentDateTopList(Map<String, Object> reqMap) throws SQLException;
+	
 }

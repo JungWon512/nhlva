@@ -1,14 +1,15 @@
 package com.ishift.auction.service.auction;
 
-import com.ishift.auction.base.dao.MainDao;
+import java.sql.SQLException;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Repository;
 
-import java.sql.SQLException;
-import java.util.List;
-import java.util.Map;
+import com.ishift.auction.base.dao.MainDao;
 
 
 /**
@@ -401,7 +402,7 @@ public class AuctionDAO {
 	}
 
 	public List<Map<String, Object>> selectAuctQcnForToday() throws SQLException {
-		return mainDao.selectList("ApiMapper.selectAuctQcnForToday", null);
+		return mainDao.selectList("ApiMapper.selectAuctQcnForToday", new HashMap<String, Object>());
 	}
 
 	public int updateNetPort(Map<String, Object> params) throws SQLException {
@@ -742,6 +743,10 @@ public class AuctionDAO {
 	 */
 	public void updateFhsAuthNoYmdInfo(Map<String, Object> params) throws SQLException{
 		mainDao.update("auction.updateFhsAuthNoYmdInfo", params);
+	}
+
+	public List<Map<String, Object>> selectScheduleListQcn(Map<String, Object> param) throws SQLException {
+		return mainDao.selectList("auction.selectScheduleListQcn", param);
 	}
 	
 }

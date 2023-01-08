@@ -235,7 +235,7 @@
 											</c:otherwise>
 										</c:choose>
 									</dd>
-									<dd class="pd_pav"><c:if test="${inputParam.loginNo != null && inputParam.loginNo != '' }">
+									<dd class="pd_pav"><c:if test="${inputParam.authRole eq 'ROLE_BIDDER' && inputParam.loginNo != null && inputParam.loginNo != '' }">
 										<a href="javascript:;"
 											class="${(item.SBID_UPR eq '' || item.SBID_UPR eq null )?'':'act'}">
 											<span class="ico_pav"> <c:choose>
@@ -258,7 +258,6 @@
 						</ul>
 					</div>
 				</div>
-				
 				
 				<!-- //list_table :: pc 전용 e -->
 				<div class="list_table schedule_tb_mo">
@@ -329,7 +328,7 @@
 								</div>
 								<div class="pd_pav">
 									<input type="hidden" class="sbidUpr" name="sbidUpr_${st.index }" value="${fn:split(item.SBID_UPR,'.')[0]}"/>
-	                            	<c:if test="${inputParam.loginNo != null && inputParam.loginNo != '' }">
+	                            	<c:if test="${inputParam.authRole eq 'ROLE_BIDDER' && inputParam.loginNo != null && inputParam.loginNo != '' }">
 			                            <a href="javascript:;" class="${(item.SBID_UPR eq '' || item.SBID_UPR eq null )?'':'act'}">
 				                            <span class="ico_pav">                            
 					                        	<c:choose>

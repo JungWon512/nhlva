@@ -34,6 +34,16 @@ var inputNumberVaild = function(el,len){
 }
 
 var fnSecApplyInfo = function() {
+	if($("textarea[name='sec_reason']").val() == ""){
+		modalAlert("", "신청사유를 작성해주세요.");
+		return ;
+	}
+	
+	if($("textarea[name='sec_reason']").val().length < 5){
+		modalAlert("", "신청사유를 5자 이상 적어주세요.");
+		return ;	
+	}
+		
 	modalComfirm(""
 		, "이용해지 신청 하시겠습니까?<br/>이용해지 시, 모든 회원정보가 삭제됩니다."
 		, function(){

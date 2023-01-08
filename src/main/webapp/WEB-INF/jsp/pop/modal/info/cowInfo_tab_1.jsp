@@ -159,12 +159,12 @@
 					<td rowspan="2" class="ta-C">${item.SIB_SRA_INDV_AMNNO_STR }</td>
 					<td class="ta-C">${item.RG_DSC_NAME }</td>
 					<td class="ta-C">${item.INDV_SEX_C_NAME }</td>
-					<td class="ta-C">${item.BIRTH_STR }</td>
+					<td class="ta-C">${not empty item.BIRTH_STR ? item.BIRTH_STR :'-' }</td>
 				</tr>
 				<tr>
-					<td class="ta-C">${item.METRB_METQLT_GRD ? item.METRB_METQLT_GRD :'-' }</td>
-					<td class="ta-C">${item.METRB_BBDY_WT ? item.METRB_BBDY_WT :'-' }</td>
-					<td class="ta-C">${item.MIF_BTC_DT}</td>
+					<td class="ta-C">${not empty item.METRB_METQLT_GRD ? item.METRB_METQLT_GRD :'-' }</td>
+					<td class="ta-C">${not empty item.METRB_BBDY_WT ? item.METRB_BBDY_WT :'-' }</td>
+					<td class="ta-C">${not empty item.MIF_BTC_DT ? item.MIF_BTC_DT : '-'}</td>
 				</tr>
 			</c:forEach>
 		</tbody>
@@ -206,12 +206,12 @@
 					<td rowspan="2" class="ta-C">${item.POST_SRA_INDV_AMNNO_STR }</td>
 					<td class="ta-C">${item.RG_DSC_NAME }</td>
 					<td class="ta-C">${item.INDV_SEX_C_NAME }</td>
-					<td class="ta-C">${item.BIRTH_STR }</td>
+					<td class="ta-C">${not empty item.BIRTH_STR ? item.BIRTH_STR :'-' }</td>
 				</tr>
 				<tr>
-					<td class="ta-C">${item.METRB_METQLT_GRD ? item.METRB_METQLT_GRD :'-' }</td>
-					<td class="ta-C">${item.METRB_BBDY_WT ? item.METRB_BBDY_WT :'-' }</td>
-					<td class="ta-C">${item.MIF_BTC_DT}</td>
+					<td class="ta-C">${not empty item.METRB_METQLT_GRD ? item.METRB_METQLT_GRD :'-' }</td>
+					<td class="ta-C">${not empty item.METRB_BBDY_WT ? item.METRB_BBDY_WT :'-' }</td>
+					<td class="ta-C">${not empty item.MIF_BTC_DT ? item.MIF_BTC_DT : '-'}</td>
 				</tr>
 			</c:forEach>
 		</tbody>

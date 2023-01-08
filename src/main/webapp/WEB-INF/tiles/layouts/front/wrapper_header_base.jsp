@@ -109,31 +109,42 @@
 </div>
 <!-- //w_header_inner e -->
 
-<div class="m_header">
-	<c:choose>
-		<c:when test="${subheaderTitle eq '' || subheaderTitle eq null }">
-			<h1 class="m_logo">
-				<span>온라인 스마트 경매</span>
-				가축시장.kr
-			</h1>
-		</c:when>
-		<c:otherwise>
-			<div class="m_backTit">
-				<a href="javascript:;" class="m_back"><h2 class="m_tit">${subheaderTitle}</h2></a>				
-			</div>
-			<c:if test="${requestPath eq '/bid'}">
-				<p class="join-box">참가번호:<b class="join-num"><span></span>번</b></p>
-			</c:if>
-			<c:if test="${(requestPath eq '/watch' or requestPath eq '/bid')}">
-				<a href="javascript:;" class="m_sound fix_right off">소리</a>
-			</c:if>
-		</c:otherwise>
-	</c:choose>
-	<c:if test="${requestPath ne '/bid' and requestPath ne '/home' and requestPath ne '/district' and requestPath ne '/schedule' and requestPath ne '/my/info' 
-													and !fn:contains( requestPath, 'agreement') }">
-		<a href="#menu-lnb" class="m_menu">메뉴</a>
-	</c:if>
-</div>
+<c:choose>
+	<c:when test="${dashheaderTitle ne '' && dashheaderTitle ne null }"> 
+	<div class="m_header ver-board">
+		<div class="m_backTit">
+			<a href="javascript:;" class="m_back"><h2 class="m_tit">${dashheaderTitle}</h2></a>				
+		</div>
+	</div>
+	</c:when>
+	<c:otherwise>
+	<div class="m_header" style="<c:if test="${subheaderTitle eq '' || subheaderTitle eq null }"> display: none;</c:if>">
+		<c:choose>
+			<c:when test="${subheaderTitle eq '' || subheaderTitle eq null }">
+				<h1 class="m_logo">
+					<span>온라인 스마트 경매</span>
+					가축시장.kr
+				</h1>
+			</c:when>
+			<c:otherwise>
+				<div class="m_backTit">
+					<a href="javascript:;" class="m_back"><h2 class="m_tit">${subheaderTitle}</h2></a>				
+				</div>
+				<c:if test="${requestPath eq '/bid'}">
+					<p class="join-box">참가번호:<b class="join-num"><span></span>번</b></p>
+				</c:if>
+				<c:if test="${(requestPath eq '/watch' or requestPath eq '/bid')}">
+					<a href="javascript:;" class="m_sound fix_right off">소리</a>
+				</c:if>
+			</c:otherwise>
+		</c:choose>
+		<c:if test="${requestPath ne '/bid' and requestPath ne '/home' and requestPath ne '/district' and requestPath ne '/schedule' and requestPath ne '/my/info' 
+														and !fn:contains( requestPath, 'agreement') }">
+			<a href="#menu-lnb" class="m_menu">메뉴</a>
+		</c:if>
+	</div>
+	</c:otherwise>
+</c:choose>
 <!-- //m_header e -->
 <c:if test="${requestPath ne '/home' and requestPath ne '/district' and requestPath ne '/schedule'}">
 	<nav id="menu-lnb">

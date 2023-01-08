@@ -16,8 +16,8 @@
 	</div>
 	<div class="tab_list item-4">
 		<ul>
-			<li><a href="javascript:;" class="${empty params.type ? 'act' : ''} btn_tab" data-type="">전체</a></li>
-			<li><a href="javascript:;" class="${params.type eq 'today' ? 'act' : ''} btn_tab" data-type="today">오늘경매</a></li>
+			<li><a href="javascript:;" class="${params.type eq 'all' ? 'act' : ''} btn_tab" data-type="all">전체</a></li>
+			<li><a href="javascript:;" class="${(params.type eq 'today' or empty params.type) ? 'act' : ''} btn_tab" data-type="today">오늘경매</a></li>
 			<li><a href="javascript:;" class="${params.type eq 'tomorrow' ? 'act' : ''} btn_tab" data-type="tomorrow">내일경매</a></li>
 			<li><a href="javascript:;" class="${params.type eq 'week' ? 'act' : ''} btn_tab" data-type="week">이번주</a></li>
 		</ul>

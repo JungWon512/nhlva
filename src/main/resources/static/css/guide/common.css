@@ -981,7 +981,7 @@ html.mm-opening .fixed_btn {
 }
 
 .footer {
-	padding: 20px 0;
+	padding: 10px 0;
 	text-align: center;
 }
 
@@ -3499,6 +3499,9 @@ Base styles: contents layer
 .auction_date .date_top dl dd.btn_prev a {
 	background-image: url(/static/images/guide/btn_prev.svg);
 }
+.auction_date .date_top dl dd.btn_prev.disabled a {
+	background-image: url(/static/images/guide/btn_prev_gray.png);
+}
 
 .auction_date .date_top dl dd.btn_next {
 	right: 0;
@@ -3506,6 +3509,9 @@ Base styles: contents layer
 
 .auction_date .date_top dl dd.btn_next a {
 	background-image: url(/static/images/guide/btn_next.svg);
+}
+.auction_date .date_top dl dd.btn_next.disabled a {
+	background-image: url(/static/images/guide/btn_next_gray.png);
 }
 @media only all and (max-width: 768px) {
 	.auction_date .date_top {

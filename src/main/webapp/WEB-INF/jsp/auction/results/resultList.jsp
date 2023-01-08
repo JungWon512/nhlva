@@ -16,8 +16,8 @@
 	</form>
 		
 		<!-- 필터 데이터 -->
-		<input type="hidden" class="kg" id="startKg" name="startKg"  value="${ inputParam.startKg }">
-		<input type="hidden" class="kg" id="endKg" name="endKg"  value="${inputParam.endKg }">
+		<input type="hidden" class="rDate"  id="startDate" name="startDate"  value="${ inputParam.startDate }">
+		<input type="hidden" class="rDate" id="endDate" name="endDate"  value="${inputParam.endDate }">
 		<input type="hidden" class="price"  id ="lowPrice" name="lowPrice"  value="${inputParam.lowPrice}">
 		<input type="hidden" class="price"  id ="highPrice" name="highPrice" value="${inputParam.highPrice}" >
 		<input type="hidden" id="searchTxt"  name="searchTxt"  value="${inputParam.searchTxt}"/>
@@ -83,12 +83,12 @@
 				</ul>
 			</div>
 			<div class="range-box">
-				<strong class="title">중량</strong>
-				<span class="txt rangeKg">0 ~ 1000kg</span>
-				<div id="filterKg"  >
+				<strong class="title">월령</strong>
+				<span class="txt rangeDate">0 ~ 10개월</span>
+				<div id="filterDate"  >
 					<span class="range-label label-0">0</span>
-					<span class="range-label label-50">500</span>
-					<span class="range-label label-100">1000kg</span>
+					<span class="range-label label-50">5개월</span>
+					<span class="range-label label-100">10개월</span>
 				</div>
 			</div>
 			<div class="range-box">
@@ -108,7 +108,7 @@
 		<div class="filter-opt active">
 			<button class="del_btn searchBtn">검색</button>
 			<button class="del_btn sexBtn">성별</button>
-			<button class="del_btn kgBtn">중량</button>
+			<button class="del_btn dateBtn">월령</button>
 			<button class="del_btn priceBtn">예정가</button>
 		</div>
 		<div class="sum_table">

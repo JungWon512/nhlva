@@ -9,12 +9,12 @@ import java.util.Map;
 import java.util.Random;
 
 import javax.annotation.Resource;
+import javax.servlet.http.HttpServletRequest;
 
 import org.codehaus.jettison.json.JSONException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 import com.ishift.auction.service.admin.AdminService;
 import com.ishift.auction.service.auction.AuctionDAO;
@@ -23,13 +23,14 @@ import com.ishift.auction.service.common.CommonService;
 import com.ishift.auction.util.Constants;
 import com.ishift.auction.util.HttpUtils;
 import com.ishift.auction.util.JwtTokenUtil;
+import com.ishift.auction.util.SessionUtill;
+import com.ishift.auction.util.Util;
 import com.ishift.auction.vo.JwtTokenVo;
 
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 @Service("LoginService")
-@Transactional
 public class LoginServiceImpl implements LoginService {
 
 	@Resource(name = "loginDAO")
@@ -53,6 +54,8 @@ public class LoginServiceImpl implements LoginService {
 	@Autowired
 	private CommonDAO commonDao;
 	
+	@Autowired
+	private SessionUtill sessionUtil;
 	
 	@Value("${spring.profiles.active}")
 	private String profile;
@@ -188,6 +191,8 @@ public class LoginServiceImpl implements LoginService {
 			returnMap.put("info", jwtTokenVo);
 			returnMap.put("token", token);
 			returnMap.put("returnUrl", "0".equals(type) ? "/main" : "/my/entry");
+			returnMap.put("type", type);
+			returnMap.put("place", params.get("place"));
 			params.put("naBzPlcNo", params.get("place"));
 			final Map<String, Object> branchInfo = adminService.selectOneJohap(params);
 			returnMap.put("branchInfo", branchInfo);
@@ -203,7 +208,7 @@ public class LoginServiceImpl implements LoginService {
 	}
 
 	/**
-	 * 인증번호 조회
+	 * 인증번호 조회 (중도매인)
 	 * @param params
 	 * @return
 	 * @throws SQLException
@@ -214,7 +219,18 @@ public class LoginServiceImpl implements LoginService {
 	}
 
 	/**
-	 * 새로 발급한 인증번호 저장
+	 * 인증번호 조회 (출하주)
+	 * @param params
+	 * @return
+	 * @throws SQLException
+	 */
+	@Override
+	public Map<String, Object> selectAuthFhsNumberInfo(Map<String, Object> params) throws SQLException{
+		return loginDAO.selectAuthFhsNumberInfo(params);
+	}
+	
+	/**
+	 * 새로 발급한 인증번호 저장 (중도매인)
 	 * @param params
 	 * @return
 	 * @throws SQLException
@@ -222,6 +238,17 @@ public class LoginServiceImpl implements LoginService {
 	@Override
 	public int updateAuthNumber(final Map<String, Object> params) throws SQLException {
 		return loginDAO.updateAuthNumber(params);
+	}
+	
+	/**
+	 * 새로 발급한 인증번호 저장 (출하주)
+	 * @param params
+	 * @return
+	 * @throws SQLException
+	 */
+	@Override
+	public int updateAuthFhsNumber(final Map<String, Object> params) throws SQLException {
+		return loginDAO.updateAuthFhsNumber(params);
 	}
 
 	/**
@@ -235,17 +262,25 @@ public class LoginServiceImpl implements LoginService {
 		final Map<String, Object> returnMap = new HashMap<String, Object>();
 		returnMap.putAll(params);
 		String smsNo = "";
-		
+		final String type = params.getOrDefault("type", "0").toString();
 		final String token = params.getOrDefault("token", "").toString();
 		params.put("naBzplc", jwtTokenUtil.getValue(token, Constants.JwtConstants.JWT_CLAIM_AUCTION_HOUSE_CODE));
-		params.put("trmnAmnno", jwtTokenUtil.getValue(token, Constants.JwtConstants.JWT_CLAIM_USER_MEM_NUM));
+		
+		String loginId = jwtTokenUtil.getValue(token, Constants.JwtConstants.JWT_CLAIM_USER_MEM_NUM);
+		if(Constants.UserRole.BIDDER.equals(jwtTokenUtil.getValue(token, Constants.JwtConstants.JWT_CLAIM_USER_ROLE))) {
+			params.put("trmnAmnno", loginId);
+		}else {
+			params.put("naBzplcno", params.get("place"));
+			params.put("fhsIdNo", loginId.split("-")[0]);
+			params.put("farmAmnno", loginId.split("-")[1]);
+		}
 
 		final Map<String, Object> branchInfo = adminService.selectOneJohap(params);
 		final List<Map<String, Object>> auctionList = auctionDAO.selectAuctQcnForToday();
-		final Map<String, Object> userInfo = this.selectWholesaler(params);
-
+		final Map<String, Object> userInfo = "0".equals(type) ? this.selectWholesaler(params) : this.selectFarmUser(params);
+		
 		// TB_LA_IS_MM_MWMN에 오늘 발급받은 인증번호가 있는지 조회
-		final Map<String, Object> authInfo = this.selectAuthNumberInfo(params);
+		final Map<String, Object> authInfo = "0".equals(type) ? this.selectAuthNumberInfo(params) : this.selectAuthFhsNumberInfo(params);	
 		if (authInfo != null) {
 			SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd");
 			String now = sdf.format(new Date());
@@ -263,7 +298,11 @@ public class LoginServiceImpl implements LoginService {
 				params.put("smsNo", smsNo);
 
 				// 인증번호 upate
-				this.updateAuthNumber(params);
+				if("0".equals(type)) {
+					this.updateAuthNumber(params);
+				}else {
+					this.updateAuthFhsNumber(params);
+				}
 			}
 		}
 		
@@ -271,7 +310,7 @@ public class LoginServiceImpl implements LoginService {
 		if (auctionList.size() > 0) aucObjDsc = auctionList.get(0).getOrDefault("AUC_OBJ_DSC", "0").toString();
 		// SMS 발송 정보 저장
 		params.put("aucObjDsc", aucObjDsc);
-		params.put("rmsMnName", userInfo.get("SRA_MWMNNM"));
+		params.put("rmsMnName", "0".equals(type) ? userInfo.get("SRA_MWMNNM") : userInfo.get("FTSNM"));
 		params.put("smsRmsMpno", userInfo.get("CUS_MPNO"));
 		params.put("ioTrmsnm", branchInfo.get("CLNTNM"));
 		params.put("smsTrmsTelno", branchInfo.get("TEL_NO"));
@@ -296,6 +335,9 @@ public class LoginServiceImpl implements LoginService {
 				if(map != null) {
 					params.put("tmsYn", map.getOrDefault("RZTC","0"));
 					
+					if("1".equals(type)) {
+						params.put("trmnAmnno", params.get("fhsIdNo"));
+					}
 					loginDAO.sendSms(params);
 					returnMap.put("success", true);
 					returnMap.put("message", "인증번호 발송에 성공했습니다.");
@@ -334,8 +376,16 @@ public class LoginServiceImpl implements LoginService {
 		}
 		
 		// 인증번호 조회
-		params.put("trmnAmnno", jwtTokenUtil.getValue(token, Constants.JwtConstants.JWT_CLAIM_USER_MEM_NUM));
-		final Map<String, Object> authInfo = this.selectAuthNumberInfo(params);
+		String loginId = jwtTokenUtil.getValue(token, Constants.JwtConstants.JWT_CLAIM_USER_MEM_NUM);
+		if(Constants.UserRole.BIDDER.equals(jwtTokenUtil.getValue(token, Constants.JwtConstants.JWT_CLAIM_USER_ROLE))) {
+			params.put("trmnAmnno", loginId);
+		}else {
+			params.put("naBzplcno", params.get("place"));
+			params.put("fhsIdNo", loginId.split("-")[0]);
+			params.put("farmAmnno", loginId.split("-")[1]);
+		}
+		
+		final Map<String, Object> authInfo = "0".equals(params.get("type")) ? this.selectAuthNumberInfo(params) : this.selectAuthFhsNumberInfo(params);	
 		if (authInfo == null) {
 			returnMap.put("success", false);
 			returnMap.put("message", "인증번호 정보가 없습니다.");
@@ -358,5 +408,40 @@ public class LoginServiceImpl implements LoginService {
 		returnMap.put("message", "인증에 성공했습니다.");
 		return returnMap;
 	}
-	
+
+	/**
+	 * 로그인 이력 저장하기
+	 * @param request, params, inOutGb
+	 * @return
+	 * @throws SQLException
+	 * @throws RuntimeException
+	 */
+	@Override
+	public void insertLoginConnHistory(HttpServletRequest request, Map<String, Object> params) throws SQLException, RuntimeException {
+		
+		final JwtTokenVo tokenVo = jwtTokenUtil.getTokenVo(params.get("token").toString());
+		String inOutGb = params.get("inOutGb").toString();		//앞에서 들어옴
+		
+		//TODO : 경제지주, 축산담당 -> 대시보드 로그인 때 들어올 가능성 있음, 추후 작업 필요하면 추가할 예정 
+		//접속자구분 : CONN_GBCD (중도매인 : 1, 농가 : 2, 경제지주 : 3, 축산담당 : 4, 기타 : 5)
+		switch(tokenVo.getUserRole()) {
+			case Constants.UserRole.BIDDER : 
+				params.put("connGbcd", "1");		
+				break;
+			case Constants.UserRole.FARM : 
+				params.put("connGbcd", "2");	
+				break;
+			default :
+				params.put("connGbcd", "5");	
+				break;
+		}
+		
+		params.put("mbIntgNo", tokenVo.getMbIntgNo());		//회원통합번호 
+		params.put("loginId", tokenVo.getUserMemNum());		//LOGIN_ID (중도매인 : TRMN_AMNNO, 농가 : FHS_ID_NO, 축산/경제지주 : 사번 또는 부여코드)
+		params.put("naBzPlc", tokenVo.getAuctionHouseCode());	//NA_BZPLC
+		params.put("inOutGb", inOutGb);	//로그인, 로그아웃 구분코드 (로그인 : 1, 로그아웃 : 2)
+		params.put("connIP", Util.getClientIP(request));		//접속자 IP
+		loginDAO.insertMmConnHistory(params);
+	}
+
 }

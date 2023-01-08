@@ -1,9 +1,12 @@
 var sFlag=false;
 // 페이지 이동 함수
-var pageMove = function(uri,chkSearch) {
+var pageMove = function(uri, chkSearch, addParam) {
 	
 	var temp = !chkSearch ? window.location.search.split("&") : [];
 	var params = temp.filter(function(el) {return el != "type=0" && el != "type=1"});
+	if(addParam != undefined){
+		params.push(addParam);
+	}
 	
 	var url = (uri == "/home" || uri == "/district") ? window.location.origin + uri : window.location.origin + uri + params.join("&");
 	
@@ -116,10 +119,11 @@ var goLoginPage = function() {
 
 var logoutProc = function() {
 	$("nav#menu-lnb").data( "mmenu" ).close();
+	var token = getCookie('access_token');
 	modalComfirm(""
 				, "로그아웃 하시겠습니까?"
 				, function(){
-					pageMove('/user/logoutProc');
+					pageMove('/user/logoutProc', false, 'connChannel=' + connChannel() + '&token=' + token);
 				});
 	return;
 };
@@ -684,4 +688,24 @@ var fnIssueKioskAuthNum = function() {
 		});
 //		});
 	return;
+};
+
+var connChannel = function(){
+	try{
+		if(isApp()){
+			if(isIos())	
+				return "IOS";
+			if(isAnd())	
+				return "AOS";
+		}
+		else{
+			if($("#deviceMode").val() == "MOBILE")	
+				return "MWEB";
+			else 
+				return "PC";	
+		}
+		
+	}catch(e){
+		debugConsole(e);
+	}
 };
