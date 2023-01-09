@@ -95,4 +95,15 @@ public class LoginDAO {
 		return mainDao.update("LoginMapper.sendSms", params);
 	}
 
+	/**
+	 * @methodName    : updateKkoRefreshToekn
+	 * @author        : Jung JungWon
+	 * @return 
+	 * @date          : 2022.11.04
+	 * @Comments      : 
+	 */
+	public int updateKkoRefreshToekn(Map<String, Object> params) throws SQLException {
+		return mainDao.update("LoginMapper.updateKkoRefreshToekn", params);		
+	}
+
 }

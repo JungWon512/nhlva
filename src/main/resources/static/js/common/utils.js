@@ -87,17 +87,18 @@ var goWatchApp = function() {
 			"url" : window.location.origin + '/watchApp' + window.location.search
 			, "watch_token" : getCookie('watch_token')
 		};
-		// 안드로이드
-		if (window.auctionBridge) {
-			window.auctionBridge.moveAuctionWatch(JSON.stringify(params));
-		}
-		// 아이폰
-		else if(isIos()) {
-			window.webkit.messageHandlers.moveAuctionWatch.postMessage(JSON.stringify(params));
-		}
-		else {
-			location.href = window.location.origin + '/watch' + window.location.search;
-		}
+//		// 안드로이드
+//		if (window.auctionBridge) {
+//			window.auctionBridge.moveAuctionWatch(JSON.stringify(params));
+//		}
+//		// 아이폰
+//		else if(isIos()) {
+//			window.webkit.messageHandlers.moveAuctionWatch.postMessage(JSON.stringify(params));
+//		}
+//		else {
+//			location.href = window.location.origin + '/watch' + window.location.search;
+//		}
+		location.href = window.location.origin + '/watch' + window.location.search;
 	}
 	catch(e) {
 		location.href = window.location.origin + '/watch' + window.location.search;
@@ -531,3 +532,16 @@ var toast = function(string, sec, top) {
 var fnSetComma = function(str) {
 	return (str != undefined && str.toString().replace(/[^0-9]/gi, '') != "") ? str.toString().replace(/[^0-9]/gi, '').replace(/\B(?=(\d{3})+(?!\d))/g, ",") : "0";
 }
+
+var findGetParameter = function(paramName) {
+    var result = null,
+        tmp = [];
+    var items = location.search.substr(1).split("&");
+    for (var index = 0; index < items.length; index++) {
+        tmp = items[index].split("=");
+        if (tmp[0] === paramName) result = decodeURIComponent(tmp[1]);
+    }
+    return result;
+}
+
+Kakao.init('bcc997fd4a44d8ab7eff284d32f83f59');

@@ -4,17 +4,22 @@ import java.io.BufferedReader;
 import java.io.DataOutputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.io.OutputStreamWriter;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Random;
 
 import org.codehaus.jettison.json.JSONException;
+import org.json.JSONArray;
+import org.json.JSONObject;
+import org.json.XML;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Component;
@@ -228,4 +233,161 @@ public class HttpUtils {
         
         return map;
     }
+
+    public String callApiKauth(String hostUrl,String type,String jsonMessage) {
+        try {
+            //get 요청할 url을 적어주시면 됩니다. 형태를 위해 저는 그냥 아무거나 적은 겁니다.
+//            URL url = new URL("https://kauth.kakao.com"+hostUrl);
+            URL url = new URL("https://kauth.kakao.com/oauth/token");
+            
+            HttpURLConnection con = (HttpURLConnection) url.openConnection();
+            con.setConnectTimeout(5000); //서버에 연결되는 Timeout 시간 설정
+            con.setReadTimeout(5000); // InputStream 읽어 오는 Timeout 시간 설정
+            con.setRequestMethod(type);
+            //charset=utf-8
+            con.setRequestProperty(HttpHeaders.CONTENT_TYPE, "application/x-www-form-urlencoded");
+
+            if("GET".equals(type)) {
+                con.setDoOutput(false);            	
+            }else {
+                con.setDoInput(true);
+                con.setDoOutput(true); //POST 데이터를 OutputStream으로 넘겨 주겠다는 설정
+                con.setUseCaches(false);
+                con.setDefaultUseCaches(false);
+                OutputStreamWriter wr = new OutputStreamWriter(con.getOutputStream());
+                wr.write(jsonMessage); //json 형식의 message 전달
+                wr.flush();            	
+            }
+            log.info(jsonMessage);
+            StringBuilder sb = new StringBuilder();
+            int responseCode = con.getResponseCode();
+            if (responseCode == HttpURLConnection.HTTP_OK) {
+                BufferedReader br = new BufferedReader(new InputStreamReader(con.getInputStream(), "utf-8"));
+                String line;
+                while ((line = br.readLine()) != null) {
+                    sb.append(line).append("\n");
+                }
+                br.close();
+                log.info("callApi "+hostUrl+" : "+sb.toString());
+                return sb.toString();
+            }else {
+                //InputStream eror = con.getErrorStream();
+                BufferedReader br = new BufferedReader(new InputStreamReader(con.getErrorStream(), "utf-8"));
+                String line;
+                while ((line = br.readLine()) != null) {
+                    sb.append(line).append("\n");
+                }
+                br.close();
+                log.info("callApi "+hostUrl+" : "+sb.toString());
+            	
+            }
+
+        } catch (Exception e) {
+            System.out.println(e.toString());
+        }
+        return null;
+    }
+
+
+	/**
+	 * @methodName    : callApiKakaoTokenInfo
+	 * @author        : Jung JungWon
+	 * @date          : 2022.10.19
+	 * @Comments      : 
+	 */
+	public String callApiKakaoTokenInfo(String type, String accessToken) {
+        try {
+            //get 요청할 url을 적어주시면 됩니다. 형태를 위해 저는 그냥 아무거나 적은 겁니다.
+            URL url = new URL("https://kapi.kakao.com/v2/user/me");
+            HttpURLConnection con = (HttpURLConnection) url.openConnection();
+            con.setConnectTimeout(5000); //서버에 연결되는 Timeout 시간 설정
+            con.setReadTimeout(5000); // InputStream 읽어 오는 Timeout 시간 설정
+            con.setRequestMethod(type);
+			con.setRequestProperty(HttpHeaders.AUTHORIZATION, "Bearer " + accessToken);
+            con.setDoOutput(false);    
+
+            StringBuilder sb = new StringBuilder();
+            if (con.getResponseCode() == HttpURLConnection.HTTP_OK) {
+                BufferedReader br = new BufferedReader(new InputStreamReader(con.getInputStream(), "utf-8"));
+                String line;
+                while ((line = br.readLine()) != null) {
+                    sb.append(line).append("\n");
+                }
+                br.close();
+                log.info("callApiKakaoTokenInfo : "+sb.toString());
+                return sb.toString();
+            } else {
+                System.out.println(con.getResponseMessage());
+            }
+
+        } catch (Exception e) {
+            System.err.println(e.toString());
+        }
+        return null;
+	}
+	public Map<String, Object> getOpenDataApi(String url,Map<String, Object> map) {
+		// TODO Auto-generated method stub
+
+		Map<String, Object> nodeMap      = new HashMap<String, Object>();
+		String sendUrl = "http://data.ekape.or.kr/openapi-data/service/user/"+url;
+		sendUrl += "?serviceKey=" + map.get("serviceKey");
+		if("/mtrace/breeding/cattleMove".equals(url)) {
+			sendUrl += "&cattleNo="+map.get("sraIndvAmnno");
+		}else{
+			sendUrl += "&traceNo=" + map.get("sraIndvAmnno");//  "002125769192";
+		}
+        HttpURLConnection conn = null;
+		log.debug("sendUrl: " + sendUrl);
+		try {
+			StringBuilder urlBuilder = new StringBuilder(sendUrl);
+	        URL conUrl = new URL(urlBuilder.toString());
+				
+			
+			conn = (HttpURLConnection) conUrl.openConnection();
+			conn.setConnectTimeout(1000);
+			conn.setReadTimeout(1000);
+	        conn.setRequestMethod("GET");
+	        conn.setRequestProperty("Content-type", "application/json");
+	        log.debug("Response code: " + conn.getResponseCode());
+	        BufferedReader rd = null;
+	        
+	        if(conn.getResponseCode() >= 200 && conn.getResponseCode() <=300 ) {
+				rd = new BufferedReader(new InputStreamReader(conn.getInputStream()));
+			}else {
+				rd = new BufferedReader(new InputStreamReader(conn.getErrorStream()));
+			}
+	        
+	        StringBuilder sb = new StringBuilder();
+	        String line;
+	        while ((line = rd.readLine()) != null) {
+	            sb.append(line);
+	        }
+	        rd.close();
+	        conn.disconnect();
+	        log.debug(sb.toString());
+	        JSONObject json = XML.toJSONObject(sb.toString());
+	        
+	        if(json != null && json.getJSONObject("response") != null && json.getJSONObject("response").getJSONObject("body") !=null
+	        		&& json.getJSONObject("response").getJSONObject("body").getJSONObject("items") != null) {
+		        JSONArray jArr = json.getJSONObject("response").getJSONObject("body").getJSONObject("items").getJSONArray("item");
+		        for(Object item : jArr) {
+		        	JSONObject jItem = (JSONObject) item;
+		        	String infoType = jItem.get("infoType").toString();
+		        	if("5,6,7".indexOf(infoType)> -1) {
+		        		Iterator<String> it =jItem.keySet().iterator();
+		        		while(it.hasNext()) {
+		        			String key = (String) it.next();
+			        		nodeMap.put(key, jItem.get(key));			        			
+		        		}
+		        		
+		        	}
+		        }	        	
+	        }	        
+		} catch (Exception e) {
+        	nodeMap = null;
+        } finally {
+            if (conn!= null) conn.disconnect();
+        }
+		return nodeMap;
+	}
 }

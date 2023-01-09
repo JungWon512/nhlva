@@ -189,6 +189,12 @@
 		 WHERE NA_BZPLC = #{naBzplc}
 		   AND TRMN_AMNNO = #{trmnAmnno}
 	</update>
+	<update id="updateKkoRefreshToekn" parameterType="map">
+		UPDATE TB_LA_IS_MM_MWMN SET 
+			KKO_TOKEN = #{kkoToken} 
+		 WHERE NA_BZPLC = #{naBzplc}
+		   AND TRMN_AMNNO = #{trmnAmnno}
+	</update>
 	
 	<insert id="sendSms" parameterType="map">
 		<selectKey keyProperty="smsFwdgSqno" resultType="int" order="BEFORE">

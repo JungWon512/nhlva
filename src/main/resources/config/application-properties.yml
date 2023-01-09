@@ -1,7 +1,6 @@
 
 # profile(로컬 서버 환경)
 spring.profiles: properties-local
-
 logging:
   level:
     org.hibernate.type.descriptor.sql.BasicBinder: trace
@@ -9,6 +8,18 @@ logging:
   file:
     name: logExample
     path: ./data/logs
+
+kko:
+  login:
+    auth.url: https://kauth.kakao.com
+    api.url: https://kapi.kakao.com
+    redirect.url: http://localhost:8080/user/oauth
+    client:
+      id:
+        api: 005918c16a55cafd5746f248a883e97e
+        app: 61fffa1e49ffaf03502a46d4147bae4f
+        admin: 8ac2e503fa077f39a312b2586f28c39b
+        javascript: bcc997fd4a44d8ab7eff284d32f83f59    
 ---
 # profile(개발 서버 환경)
 spring.profiles: properties-develop
@@ -22,6 +33,18 @@ logging:
 #    path: /logs/nhlva/nhlva
     name: logExample
     path: /home/phps/data/logs
+
+kko:
+  login:
+    auth.url: https://kauth.kakao.com
+    api.url: https://kapi.kakao.com
+    redirect.url: http://192.168.124.32:8080/user/oauth
+    client:
+      id:
+        api: 005918c16a55cafd5746f248a883e97e
+        app: 61fffa1e49ffaf03502a46d4147bae4f
+        admin: 8ac2e503fa077f39a312b2586f28c39b
+        javascript: bcc997fd4a44d8ab7eff284d32f83f59   
 ---
 # profile(상용 서버 환경)
 spring.profiles: properties-production
@@ -35,4 +58,16 @@ logging:
     path: /home/phps/data/logs
 #    name: NHLVA_LOG
 #    path: /logs/nhlva/nhlva
+
+kko:
+  login:
+    auth.url: https://kauth.kakao.com
+    api.url: https://kapi.kakao.com
+    redirect.url: http://192.168.124.32:8080/user/oauth
+    client:
+      id:
+        api: 005918c16a55cafd5746f248a883e97e
+        app: 61fffa1e49ffaf03502a46d4147bae4f
+        admin: 8ac2e503fa077f39a312b2586f28c39b
+        javascript: bcc997fd4a44d8ab7eff284d32f83f59   
   

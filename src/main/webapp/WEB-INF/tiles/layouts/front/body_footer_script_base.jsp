@@ -15,5 +15,7 @@
 <script type="text/javascript" src="/static/js/guide/jquery.easypiechart.js"></script>
 
 <script type="text/javascript" src="/static/js/guide/default.js?v=${version}"></script>
+
+<script src="https://t1.kakaocdn.net/kakao_js_sdk/2.0.0/kakao.min.js" integrity="sha384-PFHeU/4gvSH8kpvhrigAPfZGBDPs372JceJq3jAXce11bVA6rMvGWzvP4fMQuBGL" crossorigin="anonymous"></script>
 <script src="/static/js/common/commons.js?v=${version}"></script>
 <script src="/static/js/common/utils.js?v=${version}"></script>

@@ -200,5 +200,21 @@
 
 	jQuery(document).ready(function () {
 		Login.init();
+		if($('input[name=kkoLoginResult]').val()){
+				modalAlert('', $('input[name=kkoLoginResultMsg]').val());
+		}
 	});
 })(window, window.jQuery);
+  function loginWithKakao() {
+	//window.open('/agreement', '이용약관', 'width=800, height=700, toolbar=no, menubar=no, scrollbars=no, resizable=yes' );
+    Kakao.Auth.authorize({
+      state : location.search.substr(1)
+      ,throughTalk : true
+//      ,prompts : 'none'
+      ,serviceTerms:'name,birthyear'	
+      ,redirectUri: 'http://localhost:8080/user/oauth'
+    });
+//	var url = 'https://kauth.kakao.com/oauth/authorize?client_id=005918c16a55cafd5746f248a883e97e&redirect_uri=http://localhost:8080/user/oauth&response_type=code&state='+location.search.substr(1);
+//	console.log(url);
+//    location.href=url;
+  }

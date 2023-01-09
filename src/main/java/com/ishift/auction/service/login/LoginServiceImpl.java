@@ -109,9 +109,21 @@ public class LoginServiceImpl implements LoginService {
 		final List<Map<String, Object>> list = "0".equals(type) ? this.selectWholesalerList(params) : this.selectFarmUserList(params);
 
 		if (list.size() > 0) {
+			String kkoToken = params.getOrDefault("kkoRefreshToken","").toString();
+			Map<String, Object> user = list.get(0);
+//			if(!"".equals(kkoToken)) {
+//				if("0".equals(type)) {
+//					Map<String, Object> temp = new HashMap<>();					
+//					temp.put("trmnAmnno",user.get("TRMN_AMNNO"));
+//					temp.put("naBzplc",user.get("NA_BZPLC"));
+//					//temp.put("kkoToken",kkoToken);
+//					loginDAO.updateKkoRefreshToekn(temp);
+//				}
+//			}
+			
 			JwtTokenVo jwtTokenVo = JwtTokenVo.builder()
-												.auctionHouseCode(list.get(0).get("NA_BZPLC").toString())
-												.userMemNum(list.get(0).get("TRMN_AMNNO").toString())
+												.auctionHouseCode(user.get("NA_BZPLC").toString())
+												.userMemNum(user.get("TRMN_AMNNO").toString())
 												.userRole("0".equals(type) ? Constants.UserRole.BIDDER : Constants.UserRole.FARM)
 												.build();
 

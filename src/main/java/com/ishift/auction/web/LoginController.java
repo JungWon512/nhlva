@@ -4,16 +4,20 @@ import com.ishift.auction.service.admin.AdminService;
 import com.ishift.auction.service.login.LoginService;
 import com.ishift.auction.util.Constants;
 import com.ishift.auction.util.CookieUtil;
+import com.ishift.auction.util.HttpUtils;
+import com.ishift.auction.util.JsonUtils;
 import com.ishift.auction.util.JwtTokenUtil;
 import com.ishift.auction.util.PasswordEncoding;
 
 import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
 
+import org.json.simple.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.ui.ModelMap;
+import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
@@ -49,6 +53,12 @@ public class LoginController {
 	@Autowired
 	private AdminService adminService;
 
+	@Autowired
+	private AuctionController auctionController;
+
+	@Autowired
+	private HttpUtils httpUtils;
+
 	/**
 	 * 로그인 페이지
 	 * @param request
@@ -58,6 +68,122 @@ public class LoginController {
 	 * @return
 	 * @throws Exception 
 	 */
+	@RequestMapping(value="/user/oauth",method = { RequestMethod.GET, RequestMethod.POST })
+	public ModelAndView oauth(HttpServletRequest request
+							, HttpServletResponse response
+							, @RequestParam final Map<String,Object> params
+							, ModelMap model) throws Exception {
+		ModelAndView mav = new ModelAndView();
+		mav.setViewName("front/user/oauth");
+		
+		String code = (String)params.getOrDefault("code","");
+		String state = (String)params.getOrDefault("state","");
+		
+		String kakaoRefreshToken = cookieUtil.getCookieValue(request, "nhlva_k_r_token");
+		String redirect_url = "http://localhost:8080/user/oauth";
+		String url = "/oauth/token";
+		String tempParm = "&grant_type=authorization_code&code="+code+"&redirect_uri="+redirect_url;
+		String apiResult="";
+		JSONObject json=null;
+		if(!StringUtils.isEmpty(kakaoRefreshToken)) {
+			tempParm="&grant_type=refresh_token&refresh_token="+kakaoRefreshToken;		
+			apiResult = httpUtils.callApiKauth(url, "POST", "client_id=005918c16a55cafd5746f248a883e97e"+tempParm);
+			if(apiResult != null) {
+				json = JsonUtils.getJsonObjectFromString(apiResult);
+				if(json.get("error_code") != null) {
+					apiResult = httpUtils.callApiKauth(url, "POST", "client_id=005918c16a55cafd5746f248a883e97e"+"&grant_type=authorization_code&redirect_uri="+redirect_url+"&code="+code);
+					json = JsonUtils.getJsonObjectFromString(apiResult);
+					
+					String aToken = (String) json.get("access_token");
+					String rToken = (String) json.get("refresh_token");
+					log.info("KAKAO ACCESS : TOKEN : "+aToken);
+					log.info("KAKAO REFRESH : TOKEN : "+rToken);
+					String tokenData= httpUtils.callApiKakaoTokenInfo("GET", aToken);
+					if(tokenData != null) {
+						//mav.addObject("tokenData",tokenData);
+						String place="";
+						String[] stateArr = ((String)params.get("state")).split("&");
+						for(String param : stateArr) {
+							String key = param.split("=")[0];
+							String value = param.split("=")[1];
+							if("place".equals(key)){
+								place = value;
+								break;
+							}
+						}
+						//loginService.upd
+						params.put("userName", "홍길동1");
+						params.put("birthDate", "090101");
+						params.put("place", place);
+						params.put("type", "0");
+						Map<String, Object> result = this.loginProc(request, response, params, model);
+						if((boolean) result.get("success")) {
+							mav.addObject("loginResult",result);
+							//this.login(request,response,params,mav.getModelMap());
+							//return auctionController.submain(place, request, response,mav.getModelMap());
+							mav.setViewName("redirect:/main?"+state);						
+						}else {
+							request.getSession().setAttribute("kkoLoginResult", result.get("success"));
+							request.getSession().setAttribute("kkoLoginResultMsg", result.get("message"));
+							mav.setViewName("redirect:/user/login?"+state);
+						}
+						return mav;
+					}
+				}
+			}
+		}else{
+			apiResult = httpUtils.callApiKauth(url, "POST", "client_id=005918c16a55cafd5746f248a883e97e"+tempParm);
+			if(apiResult != null) {
+				json = JsonUtils.getJsonObjectFromString(apiResult);
+				
+				String aToken = (String) json.get("access_token");
+				String rToken = (String) json.get("refresh_token");
+				log.info("KAKAO ACCESS : TOKEN : "+aToken);
+				log.info("KAKAO REFRESH : TOKEN : "+rToken);
+				String tokenData= httpUtils.callApiKakaoTokenInfo("GET", aToken);
+				if(tokenData != null) {
+					//mav.addObject("tokenData",tokenData);
+					String place="";
+					String[] stateArr = ((String)params.get("state")).split("&");
+					for(String param : stateArr) {
+						String key = param.split("=")[0];
+						String value = param.split("=")[1];
+						if("place".equals(key)){
+							place = value;
+							break;
+						}
+					}
+					//loginService.upd
+					params.put("userName", "홍길동1");
+					params.put("birthDate", "090101");
+					params.put("place", place);
+					params.put("type", "0");
+					Map<String, Object> result = this.loginProc(request, response, params, model);
+					if((boolean) result.get("success")) {
+						mav.addObject("loginResult",result);
+						//this.login(request,response,params,mav.getModelMap());
+						//return auctionController.submain(place, request, response,mav.getModelMap());
+						mav.setViewName("redirect:/main?"+state);						
+					}else {
+						request.getSession().setAttribute("kkoLoginResult", result.get("success"));
+						request.getSession().setAttribute("kkoLoginResultMsg", result.get("message"));
+						mav.setViewName("redirect:/user/login?"+state);
+					}
+					return mav;
+				}
+			}
+		}		
+		mav.setViewName("redirect:/user/login?"+state);
+
+//		mav.addObject("state", state);
+//		mav.addObject("tokenData", tokenData);
+//		System.out.println(obj);
+		// 로그인 페이지에 다시 접근 할 경우 access_token 삭제
+//		response.addCookie(cookieUtil.deleteCookie(request, Constants.JwtConstants.ACCESS_TOKEN));
+//		if(params.get("error") != null) mav.setViewName("redirect:/user/login"+state);
+//		else mav.setViewName("redirect:/main"+state);
+		return mav;
+	}
 	@RequestMapping(value="/user/login",method = { RequestMethod.GET, RequestMethod.POST })
 	public ModelAndView login(HttpServletRequest request
 							, HttpServletResponse response
@@ -72,6 +198,11 @@ public class LoginController {
         map.put("naBzPlcNo", params.get("place"));
         mav.addObject("subheaderTitle","로그인");
         mav.addObject("johapData", adminService.selectOneJohap(map));
+        mav.addObject("kkoLoginResult", request.getSession().getAttribute("kkoLoginResult"));
+        mav.addObject("kkoLoginResultMsg", request.getSession().getAttribute("kkoLoginResultMsg"));
+		request.getSession().setAttribute("kkoLoginResult", "");
+		request.getSession().setAttribute("kkoLoginResultMsg", "");
+        
 		mav.addAllObjects(params);
 		return mav;
 	}
