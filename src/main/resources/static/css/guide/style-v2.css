@@ -2803,6 +2803,158 @@ input[type="number"]::-webkit-inner-spin-button {
 	background-size: 10px auto;
 }
 
+.youtube-view.youtube-v2 {
+    min-width: 960px;
+    min-height: 540px;
+}
+
+.youtube-view.youtube-v2 table.youtube-table td {
+	height: 20%;
+}
+
+.youtube-view.youtube-v2 table td p {
+	font-weight: 400;
+}
+
+.youtube-view.youtube-v2 table td p.fz64 {
+	font-size: 64px;
+}
+
+.youtube-view.youtube-v2 table td p.fz96 {
+	font-size: 96px;
+	font-weight: 700;
+}
+
+.youtube-view.youtube-v2 table td.seller {
+	padding: 4px;
+	border-radius: 0;
+	line-height: 1;
+}
+
+.youtube-view.youtube-v2 table td p.txt-red {
+	color: #f22800;
+	letter-spacing: -2.8px
+}
+.admin_pic_reg * {
+	touch-action: auto;
+}
+
+.admin_pic_reg .save-box {
+	display: flex;
+	justify-content: space-between;
+    align-items: center;
+	padding: 10px 0 20px;
+	font-size: 18px;
+}
+
+.admin_pic_reg .save-box .info em {
+	color: #1a1a1a;
+	font-weight: 700;
+}
+
+.admin_pic_reg .save-box .btn-save {
+	width: 100px;
+	height: 50px;
+	background-color: #007eff;
+	color: #fff;
+	border-radius: 3px;
+}
+
+.admin_pic_reg .file-add-box {
+    padding: 0 10px;
+    margin: 0 -10px;
+	overflow-x: auto;
+	white-space: nowrap;
+	font-size: 0;
+}
+
+.admin_pic_reg .file-add-box .add-item {
+	display: inline-block;
+	position: relative;
+	width: 100px;
+	height: 100px;
+	vertical-align: top;
+}
+
+.admin_pic_reg .file-add-box .add-item ~ .add-item {
+	margin-left: 10px;
+}
+
+.admin_pic_reg .file-add-box .add-item:last-child {
+	margin-right: 10px;
+}
+
+.admin_pic_reg .file-add-box .add-item img {
+	width: 100px;
+	height: 100px;
+}
+
+.admin_pic_reg .file-add-box .add-item .btn-del {
+	position: absolute;
+	right: 0;
+	top: 0;
+	width: 32px;
+	height: 32px;
+	background: url(/static/images/guide/v2/ico-del.svg) no-repeat 50% 50%;
+	background-size: 20px 20px;
+}
+
+.admin_pic_reg .file-add-box .add-pic {
+	overflow: hidden;
+	position: relative;
+}
+
+.admin_pic_reg .file-add-box input {
+	position: absolute;
+	left: -9999px;
+}
+
+.admin_pic_reg .file-add-box .add-pic label {
+	display: inline-flex;
+    flex-wrap: wrap;
+    align-content: center;
+    justify-content: center;
+	width: 100px;
+	height: 100px;
+	background-color: #767676;
+	color: #fff;
+	font-size: 18px;
+	font-weight: 700;
+	text-align: center;
+}
+
+.admin_pic_reg .file-add-box .add-pic .num {
+	display: block;
+	margin-top: 8px;
+	width: 60px;
+	height: 30px;
+	line-height: 30px;
+	font-size: 16px;
+	font-weight: 400;
+	background-color: #999;
+	border-radius: 15px;
+}
+
+@media only all and (max-width: 1600px) {
+
+	.youtube-view.youtube-v2 table td p.fz40 {
+		font-size: 20px;
+	}
+	
+	.youtube-view.youtube-v2 table td p.fz64 {
+		font-size: 32px;
+	}
+	
+	.youtube-view.youtube-v2 table td p.fz96 {
+		font-size: 48px;
+	}
+	
+	.youtube-view.youtube-v2 table td.seller {
+		padding: 2px;
+	}
+
+}
+
 @media only all and (max-width: 1024px) {
 
 	.chk_step1 {
@@ -4051,6 +4203,10 @@ input[type="number"]::-webkit-inner-spin-button {
 
 	.search-area .filter-opt.active {
 		display: none;
+	}
+
+	.search-area .filter-box .filter-check-box .title {
+		display: block;
 	}
 
 	.admin_new_reg .inp input {
