@@ -66,7 +66,7 @@ public class LoginDAO {
 	}
 
 	/**
-	 * 인증번호 조회
+	 * 인증번호 조회 (중도매인)
 	 * @param params
 	 * @return
 	 * @throws SQLException
@@ -76,7 +76,7 @@ public class LoginDAO {
 	}
 
 	/**
-	 * 새로 발급한 인증번호 저장
+	 * 새로 발급한 인증번호 저장 (중도매인)
 	 * @param params
 	 * @return
 	 * @throws SQLException
@@ -96,6 +96,66 @@ public class LoginDAO {
 	}
 
 	/**
+	 * 로그인 최종접속일시, 휴면예정일자 업데이트
+	 * 최종접속일시 SYSDATE, 휴면예정일자 TO_CHAR(SYSDATE + 365, 'YYYYMMDD')
+	 * @param params
+	 * @return
+	 * @throws SQLException
+	 */
+	public int updateMbintgConDormInfo(Map<String, Object> params) throws SQLException{
+		return mainDao.update("LoginMapper.updateMbintgConDormInfo", params);
+	}
+
+	/**
+	 * 회원통합번호를 중도매인 테이블 컬럼에 업데이트 
+	 * @param params
+	 * @return int
+	 * @throws SQLException
+	 */
+	public int updateMmMwmnMbintgNo(Map<String, Object> params) throws SQLException{
+		return mainDao.update("LoginMapper.updateMmMwmnMbintgNo", params);
+	}
+
+	/**
+	 * 회원통합번호를 출하주(농가) 테이블 컬럼에 업데이트
+	 * @param params
+	 * @return int
+	 * @throws SQLException
+	 */
+	public int updateMmFhsMbintgNo(Map<String, Object> params) throws SQLException{
+		return mainDao.update("LoginMapper.updateMmFhsMbintgNo", params);
+	}
+
+	/**
+	 * 로그인 이력 저장하기
+	 * @param params
+	 * @throws SQLException
+	 */
+	public void insertMmConnHistory(Map<String, Object> params) throws SQLException{
+		mainDao.insert("LoginMapper.insertMmConnHistory", params);
+	}
+
+	/**
+	 * 인증번호 조회 (출하주)
+	 * @param params
+	 * @return
+	 * @throws SQLException
+	 */
+	public Map<String, Object> selectAuthFhsNumberInfo(Map<String, Object> params) throws SQLException{
+		return mainDao.selectOne("LoginMapper.selectAuthFhsNumberInfo", params);
+	}
+
+	/**
+	 * 새로 발급한 인증번호 저장 (출하주)
+	 * @param params
+	 * @return
+	 * @throws SQLException
+	 */
+	public int updateAuthFhsNumber(Map<String, Object> params) throws SQLException{
+		return mainDao.update("LoginMapper.updateAuthFhsNumber", params);
+	}
+
+	/**
 	 * @methodName    : updateKkoRefreshToekn
 	 * @author        : Jung JungWon
 	 * @return 
@@ -105,5 +165,6 @@ public class LoginDAO {
 	public int updateKkoRefreshToekn(Map<String, Object> params) throws SQLException {
 		return mainDao.update("LoginMapper.updateKkoRefreshToekn", params);		
 	}
+
 
 }
