@@ -919,11 +919,6 @@
 			, SRA_SBID_AM = #{sraSbidAm} /* 낙찰 금액 */
 			, SRA_SBID_UPR = #{sraSbidUpr} /* 낙찰 단가 */
 			, SEL_STS_DSC = #{selStsDsc} /* 판매상태 구분 코드 */
-			<if test="lowsSbidLmtAm != null and lowsSbidLmtAm != ''">
-				, LOWS_SBID_LMT_AM = #{lowsSbidLmtAm}
-				, FIR_LOWS_SBID_LMT_AM = DECODE(FIR_LOWS_SBID_LMT_AM, '0',
-				#{lowsSbidLmtAm}, FIR_LOWS_SBID_LMT_AM)
-			</if>
 			<if test="maxDdlQcn != null and maxDdlQcn != ''">
 				, DDL_QCN = #{maxDdlQcn} + 1
 			</if>
