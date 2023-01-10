@@ -181,9 +181,72 @@ public class FrontController {
 	public ModelAndView dashboard_parti_status(@RequestParam Map<String, Object> params) throws Exception {
 		// 가축시장 참가현황
 		ModelAndView mav = new ModelAndView("front/user/dashboard_parti_status");
+		
+		this.setDayToSearchMonth(params);
+		Map<String, Object> bidderInfo = frontService.findPartiBidderInfo(params);
+		List<Map<String, Object>> bidderPerList = frontService.findPartiBidderPerList(params);
+		
+		mav.addObject("bidderInfo", bidderInfo);
+		mav.addObject("bidderPerList", bidderPerList);
 		mav.addObject("dashheaderTitle", "참가(응찰)현황");
+		mav.addObject("searchMonTxt", params.get("searchMonTxt"));
+		mav.addObject("inputParam", params);	
 		return mav;
 	}
+	
+	@PostMapping(value = "/dashboard_parti_status_ajax", produces = MediaType.APPLICATION_JSON_VALUE)
+	public Map<String, Object> dashboard_parti_status_ajax(@RequestBody Map<String, Object> params) throws Exception{
+		// 가축시장 참가현황
+		Map<String, Object> resultMap = new HashMap<>();
+		this.setDayToSearchMonth(params);
+		
+		try {
+			Map<String, Object> bidderInfo = frontService.findPartiBidderInfo(params);
+			List<Map<String, Object>> bidderPerList = frontService.findPartiBidderPerList(params);
+			
+			resultMap.put("bidderInfo", bidderInfo);
+			resultMap.put("bidderPerList", bidderPerList);
+			resultMap.put("success", true);
+			resultMap.put("inputParam", params);
+			
+		}catch(SQLException | RuntimeException re) {
+			resultMap.put("success", false);
+			resultMap.put("message", "작업중 오류가 발생했습니다. 관리자에게 문의하세요.");
+			return resultMap;
+		}
+		return resultMap;
+	}
+	
+	/**
+	 * 대시보드 기본 월 설정하는 메소드
+	 * 오늘 날짜가 월의 10일 이전이면 전월 데이터를 기본으로 보여주기
+	 * 10일 이후면 현재 월 데이터 보여주기
+	 * @param params
+	 */
+	private void setDayToSearchMonth(Map<String, Object> params) {
+		String searchMonth = params.getOrDefault("searchMonth", "").toString();
+		if("".equals(searchMonth)) {
+			int dayOfMonth = LocalDate.now().getDayOfMonth();
+			if(dayOfMonth < 10) {	//오늘 날짜가 월의 10일 이전이면 전월 데이터를 기본으로 보여주기
+				searchMonth = LocalDate.now().minusMonths(1).format(DateTimeFormatter.ofPattern("yyyyMM"));
+			}else {
+				searchMonth = LocalDate.now().format(DateTimeFormatter.ofPattern("yyyyMM"));
+			}
+			params.put("searchMonth", searchMonth);
+		}
+		else {	//param으로 넘어올 때
+			String pnFlag = params.get("searchFlag").toString();
+			LocalDate date = LocalDate.parse(searchMonth+"01", DateTimeFormatter.ofPattern("yyyyMMdd"));
+			if("prev".equals(pnFlag)) {
+				searchMonth = date.minusMonths(1).format(DateTimeFormatter.ofPattern("yyyyMM"));
+			}else if("next".equals(pnFlag)) {
+				searchMonth = date.plusMonths(1).format(DateTimeFormatter.ofPattern("yyyyMM"));
+			}
+			params.put("searchMonth", searchMonth);
+		}
+		params.put("searchMonTxt", searchMonth.substring(0, 4) + "년 "  + searchMonth.substring(4, 6) + "월");
+	}
+
 	@RequestMapping(value = "/dashboard_sbid_status",method = { RequestMethod.GET, RequestMethod.POST })
 	public ModelAndView dashboard_sbid_status(@RequestParam Map<String, Object> params) throws Exception {
 		// 낙찰시세

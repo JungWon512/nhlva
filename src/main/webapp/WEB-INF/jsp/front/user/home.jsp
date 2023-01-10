@@ -7,7 +7,7 @@
 		<c:set var="aucCnt" value="${aucCnt + vo.CUR_AUC_CNT}" />
 	</c:if>
 </c:forEach>
-<div class="chk_step1">
+<div class="chk_step1 pc-mt0">
 	<div class="main-tab">
 		<ul>
 			<li class="on">

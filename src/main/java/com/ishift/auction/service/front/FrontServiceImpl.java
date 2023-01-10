@@ -27,4 +27,14 @@ public class FrontServiceImpl implements FrontService {
 	public List<Map<String, Object>> findRecentDateTopList(Map<String, Object> reqMap) throws SQLException {
 		return frontDAO.findRecentDateTopList(reqMap);
 	}
+
+	@Override
+	public Map<String, Object> findPartiBidderInfo(Map<String, Object> params) throws SQLException {
+		return frontDAO.findPartiBidderInfo(params);
+	}
+
+	@Override
+	public List<Map<String, Object>> findPartiBidderPerList(Map<String, Object> params) throws SQLException {
+		return frontDAO.findPartiBidderPerList(params);
+	}
 }

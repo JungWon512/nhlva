@@ -2,6 +2,7 @@
 <%@ include file="/WEB-INF/__system/taglibs.jsp" %>
 
 <link rel="stylesheet" type="text/css" href="/static/css/guide/common.css?version=20211108" />
+<link rel="stylesheet" type="text/css" href="/static/css/guide/style-v2.css?version=20211108" />
 <!-- <link rel="stylesheet" type="text/css" href="/static/css/guide/jquery-ui.css"> -->
 <link rel="stylesheet" type="text/css" href="/static/css/guide/popup.css">
 <link rel="stylesheet" type="text/css" href="/static/css/guide/slick.css">

@@ -18,11 +18,12 @@
 	<script src="<tiles:getAsString name="page_footer_script"/>" type="text/javascript"></script>
 </head>
 <!-- body [s] -->
+<c:set var="requestPath" value="${requestScope['javax.servlet.forward.request_uri']}"/>
 <body style="background-color: #fff;">
 	<!-- wrap [s] -->
 	<div id="wrap">
 		<!-- admin_area [s] -->
-		<section class="youtube-view">			
+		<section class="youtube-view ${requestPath eq '/office/auction/stream_2'? 'youtube-v2' :'' }">
 			<tiles:insertAttribute name="content"/>	
 			
 			<tiles:insertAttribute name="body_footer_script"/>			

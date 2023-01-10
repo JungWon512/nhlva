@@ -29,4 +29,12 @@ public class FrontDAO {
 	public List<Map<String, Object>> findRecentDateTopList(Map<String, Object> reqMap) throws SQLException {
 		return mainDao.selectList("front.findRecentDateTopList", reqMap);
 	}
+
+	public Map<String, Object> findPartiBidderInfo(Map<String, Object> params) throws SQLException{
+		return mainDao.selectOne("front.findPartiBidderInfo", params);
+	}
+
+	public List<Map<String, Object>> findPartiBidderPerList(Map<String, Object> params) throws SQLException{
+		return mainDao.selectList("front.findPartiBidderPerList", params);
+	}
 }

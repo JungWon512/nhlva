@@ -24,7 +24,7 @@
 			<div class="cow-board-top v2">
 				<strong>25,690 두</strong>  <span class="fc-red"> ▲ 1,500두</span>
 			</div>
-			<div style="margin: 0 auto;max-width:500px;">
+			<div style="margin: 20px auto;max-width:500px;">
 				<canvas id="myPieSample1"></canvas>
 			</div>
 			<div class="table-simple m-0">
@@ -162,6 +162,14 @@ new Chart(ctx1, {
 		labels: ['1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12'],
 		datasets: [
 			{
+				label: '전년도 출장우',
+				data: [35, 49, 79, 92, 76, 80, 60, 37, 62, 50, 93, 88],
+				borderColor: '#37a2eb',
+				background:'',
+				type: 'line',
+				order: 0
+			},
+			{
 				label: '출장우',
 				data: [65, 59, 80, 82, 56, 55, 40, 22, 57, 70, 103, 110],
 				borderColor: '#ffb1c1',
@@ -169,13 +177,6 @@ new Chart(ctx1, {
 				type: 'bar',
 				borderWidth: 0,
 				order: 1
-			},
-			{
-				label: '전년도 출장우',
-				data: [35, 49, 79, 92, 76, 80, 60, 37, 62, 50, 93, 88],
-				borderColor: '#37a2eb',
-				type: 'line',
-				order: 0
 			}
 		]
 	},
@@ -196,7 +197,7 @@ new Chart(ctx2, {
 		labels: ['송아지', '비육우', '번식우'],
 		datasets: [
 			{
-				data: ['30','20','50'],
+				data: ['50','20','30'],
 				borderColor: ['#ffcd56','#ff9f40','#ff4069'],
 				backgroundColor: ['#ffcd56','#ff9f40','#ff4069'],
 				borderWidth: 0,

@@ -3,39 +3,80 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="front">
 	<select id="findCowPriceList" parameterType="map" resultType="map">
-	/* FrontMapper.findCowPriceList  */
-		SELECT B.LOCNM
-				, A.MONTH_OLD_C
-				, CASE WHEN A.MONTH_OLD_C = '01' THEN '4~5개월'
-						WHEN A.MONTH_OLD_C = '02' THEN '6~7개월'
-						WHEN A.MONTH_OLD_C = '03' THEN '8개월 이상'
-						WHEN A.MONTH_OLD_C = '11' THEN '400kg 미만'
-						WHEN A.MONTH_OLD_C = '12' THEN '400kg 이상'
-						ELSE '전체' END AS MONTH_OLD_C_NM 
-				, SUM(NVL(A.TOT_SBID_CNT,0)) SUM_SBID_CNT
-				, NVL(TRUNC((DECODE(SUM(A.TOT_SBID_CNT),0,0,(SUM(A.MAX_SBID_UPR) / SUM(A.TOT_SBID_CNT))))),0) AS AVG_SBID_AM
-		FROM TB_LA_IS_MM_DB_SUM A
-		LEFT JOIN TB_LA_IS_BM_BZLOC B ON A.NA_BZPLC = B.NA_BZPLC
+		/* FrontMapper.findCowPriceList  */
+		SELECT T.MONTH_OLD_C
+				, CASE WHEN T.MONTH_OLD_C = '01' THEN '4~5개월'
+						WHEN T.MONTH_OLD_C = '02' THEN '6~7개월'
+						WHEN T.MONTH_OLD_C = '03' THEN '8개월 이상'
+						WHEN T.MONTH_OLD_C = '11' THEN '400kg 미만'
+						WHEN T.MONTH_OLD_C = '12' THEN '400kg 이상'
+						ELSE '전체' END AS MONTH_OLD_C_NM 	
+				, (SUM(CASE WHEN T.WEEK_FLAG = 'PRE' THEN T.SUM_SBID_CNT END)) AS PRE_SUM_SBID_CNT
+				, (SUM(CASE WHEN T.WEEK_FLAG = 'THIS' THEN T.SUM_SBID_CNT END)) AS THIS_SUM_SBID_CNT
+				, (SUM(CASE WHEN T.WEEK_FLAG = 'PRE' THEN T.AVG_SBID_AM END)) AS PRE_AVG_SBID_AM
+				, (SUM(CASE WHEN T.WEEK_FLAG = 'THIS' THEN T.AVG_SBID_AM END)) AS THIS_AVG_SBID_AM
+				, DECODE(SUM(CASE WHEN T.WEEK_FLAG = 'PRE' THEN T.SUM_SBID_CNT END), 0, 0, ROUND(((SUM(CASE WHEN T.WEEK_FLAG = 'THIS' THEN T.SUM_SBID_CNT END) - SUM(CASE WHEN T.WEEK_FLAG = 'PRE' THEN T.SUM_SBID_CNT END)) / SUM(CASE WHEN T.WEEK_FLAG = 'PRE' THEN T.SUM_SBID_CNT END) * 100), 2)) AS ACS_SBID_CNT
+				, DECODE(SUM(CASE WHEN T.WEEK_FLAG = 'PRE' THEN T.AVG_SBID_AM END), 0, 0, ROUND(((SUM(CASE WHEN T.WEEK_FLAG = 'THIS' THEN T.AVG_SBID_AM END) - SUM(CASE WHEN T.WEEK_FLAG = 'PRE' THEN T.AVG_SBID_AM END)) / SUM(CASE WHEN T.WEEK_FLAG = 'PRE' THEN T.AVG_SBID_AM END) * 100), 2)) AS ACS_SBID_AM
+				, GROUPING_ID(T.MONTH_OLD_C) AS GROUPINGID
+		FROM
+		 (
+			SELECT 'PRE' AS WEEK_FLAG
+					, A.MONTH_OLD_C
+					, SUM(NVL(A.TOT_SBID_CNT,0)) SUM_SBID_CNT
+					, NVL(TRUNC((DECODE(SUM(A.TOT_SBID_CNT),0,0,(SUM(A.MAX_SBID_UPR) / SUM(A.TOT_SBID_CNT))))),0) AS AVG_SBID_AM
+			FROM TB_LA_IS_MM_DB_SUM A
+			LEFT JOIN TB_LA_IS_BM_BZLOC B ON A.NA_BZPLC = B.NA_BZPLC
+			WHERE 1=1
+					<if test="searchAucObjDsc != null and searchAucObjDsc != ''">
+						AND A.AUC_OBJ_DSC = #{searchAucObjDsc}
+					</if>
+					<if test="searchPlace != null and searchPlace != ''"> 
+						AND B.NA_BZPLCLOC = #{searchPlace}
+					</if>
+			        <choose>
+						<when test='"range20".equals(searchRaDate)'>
+							AND A.AUC_DT BETWEEN TO_CHAR(SYSDATE - 30, 'YYYYMMDD') AND TO_CHAR(SYSDATE, 'YYYYMMDD')
+						</when>
+						<when test='"range30".equals(searchRaDate)'>
+							AND A.AUC_DT BETWEEN TO_CHAR(SYSDATE - 20, 'YYYYMMDD') AND TO_CHAR(SYSDATE, 'YYYYMMDD')
+						</when>
+						<otherwise>
+							AND A.AUC_DT BETWEEN TO_CHAR(SYSDATE - 10, 'YYYYMMDD') AND TO_CHAR(SYSDATE, 'YYYYMMDD')
+						</otherwise>
+					</choose>
+			GROUP BY A.MONTH_OLD_C
+	
+			UNION ALL
+			
+			SELECT 'THIS' AS WEEK_FLAG
+					, A.MONTH_OLD_C
+					, SUM(NVL(A.TOT_SBID_CNT,0)) SUM_SBID_CNT
+					, NVL(TRUNC((DECODE(SUM(A.TOT_SBID_CNT),0,0,(SUM(A.MAX_SBID_UPR) / SUM(A.TOT_SBID_CNT))))),0) AS AVG_SBID_AM
+			FROM TB_LA_IS_MM_DB_SUM A
+			LEFT JOIN TB_LA_IS_BM_BZLOC B ON A.NA_BZPLC = B.NA_BZPLC
+			WHERE 1=1
+					<if test="searchAucObjDsc != null and searchAucObjDsc != ''">
+						AND A.AUC_OBJ_DSC = #{searchAucObjDsc}
+					</if>
+					<if test="searchPlace != null and searchPlace != ''"> 
+						AND B.NA_BZPLCLOC = #{searchPlace}
+					</if>
+			        <choose>
+						<when test='"range20".equals(searchRaDate)'>
+							AND A.AUC_DT BETWEEN TO_CHAR(SYSDATE - 30, 'YYYYMMDD') AND TO_CHAR(SYSDATE, 'YYYYMMDD')
+						</when>
+						<when test='"range30".equals(searchRaDate)'>
+							AND A.AUC_DT BETWEEN TO_CHAR(SYSDATE - 20, 'YYYYMMDD') AND TO_CHAR(SYSDATE, 'YYYYMMDD')
+						</when>
+						<otherwise>
+							AND A.AUC_DT BETWEEN TO_CHAR(SYSDATE - 10, 'YYYYMMDD') AND TO_CHAR(SYSDATE, 'YYYYMMDD')
+						</otherwise>
+					</choose>
+			GROUP BY A.MONTH_OLD_C
+		) T
 		WHERE 1=1
-			<if test="searchAucObjDsc != null and searchAucObjDsc != ''">
-				AND A.AUC_OBJ_DSC = #{searchAucObjDsc}
-			</if>
-			<if test="searchPlace != null and searchPlace != ''"> 
-				AND B.NA_BZPLCLOC = #{searchPlace}
-			</if>
-	        <choose>
-				<when test='"range20".equals(searchRaDate)'>
-					AND A.AUC_DT BETWEEN TO_CHAR(SYSDATE - 30, 'YYYYMMDD') AND TO_CHAR(SYSDATE, 'YYYYMMDD')
-				</when>
-				<when test='"range30".equals(searchRaDate)'>
-					AND A.AUC_DT BETWEEN TO_CHAR(SYSDATE - 20, 'YYYYMMDD') AND TO_CHAR(SYSDATE, 'YYYYMMDD')
-				</when>
-				<otherwise>
-					AND A.AUC_DT BETWEEN TO_CHAR(SYSDATE - 10, 'YYYYMMDD') AND TO_CHAR(SYSDATE, 'YYYYMMDD')
-				</otherwise>
-			</choose>
-		GROUP BY A.MONTH_OLD_C, B.LOCNM
-		ORDER BY A.MONTH_OLD_C
+		GROUP BY ROLLUP(T.MONTH_OLD_C)
+		ORDER BY GROUPINGID DESC, T.MONTH_OLD_C	
 	</select>
 	
 	<select id="findAvgPlaceBidAmList" parameterType="map" resultType="map">
@@ -114,5 +155,43 @@
 		WHERE 1=1
 			AND T.RANK_NO <![CDATA[<]]> 11
 		ORDER BY T.RANK_NO
+	</select>
+	
+	<select id="findPartiBidderInfo" parameterType="map" resultType="map">
+		SELECT SUBSTR(AUC_DT, 1, 6) AUC_MONTH 
+			, SUM(TOT_SOG_CNT) AS TOT_SOG_CNT
+			, SUM(TOT_SBID_CNT) AS TOT_SBID_CNT
+			, CASE WHEN SUM(TOT_SBID_CNT) = 0  THEN 0
+				ELSE ROUND(SUM(TOT_SBID_CNT)/ SUM(TOT_SOG_CNT),2) * 100
+				END SBID_PER
+		FROM TB_LA_IS_MM_DB_SUM
+		WHERE AUC_DT BETWEEN #{searchMonth} || '01' AND #{searchMonth} || '31'
+			<!-- AND NA_BZPLCLOC = #{searchPlace} -->
+		GROUP BY SUBSTR(AUC_DT, 1, 6)
+	</select>
+	
+	<select id="findPartiBidderPerList" parameterType="map" resultType="map">
+		SELECT BZ.NA_BZPLCLOC
+			, CASE WHEN BZ.NA_BZPLCLOC = 'A31' THEN '경기/인천'
+				WHEN BZ.NA_BZPLCLOC = 'A33' THEN '강원'
+				WHEN BZ.NA_BZPLCLOC = 'A41' THEN '충남'
+				WHEN BZ.NA_BZPLCLOC = 'A43' THEN '충북'
+				WHEN BZ.NA_BZPLCLOC = 'A52' THEN '울산'
+				WHEN BZ.NA_BZPLCLOC = 'A55' THEN '경남'
+				WHEN BZ.NA_BZPLCLOC = 'A54' THEN '경북'
+				WHEN BZ.NA_BZPLCLOC = 'A61' THEN '전남'
+				WHEN BZ.NA_BZPLCLOC = 'A63' THEN '전북'
+				WHEN BZ.NA_BZPLCLOC = 'A64' THEN '제주'
+			ELSE '' END NA_BZPLCLOC_NM
+			, SUM(NVL(TOT_SBID_CNT, 0)) TOT_SBID_CNT
+			, SUM(NVL(TOT_SOG_CNT, 0) - NVL(TOT_SBID_CNT,0)) MINUS_SOG_BID
+			, CASE WHEN SUM(NVL(TOT_SBID_CNT, 0)) = 0 THEN 0
+				ELSE ROUND(SUM(NVL(TOT_SBID_CNT, 0))/ SUM(NVL(TOT_SOG_CNT,0)), 2) * 100
+				END SBID_PER
+		FROM TB_LA_IS_MM_DB_SUM DS
+			INNER JOIN TB_LA_IS_BM_BZLOC BZ
+			ON(DS.NA_BZPLC = BZ.NA_BZPLC)
+		WHERE DS.AUC_DT BETWEEN #{searchMonth} || '01' AND #{searchMonth} || '31'
+		GROUP BY BZ.NA_BZPLCLOC
 	</select>
 </mapper>

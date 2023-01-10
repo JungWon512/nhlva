@@ -94,11 +94,21 @@
 				else if(backPathNm.indexOf(window.location.pathname) > -1){history.back(); return;}
 				pageMove('/main');    
 			});
+			
+			if(document.URL.indexOf('agreement') > 0){
+				if(document.URL.indexOf('new') < 0){
+					$('.hideFoot').hide();
+				} 
+			}
+			
         }
+        
         var init = function (data) {
             $(window).trigger('resize');
             setBinding();
         };
+        
+        
 
         return {
             init: init,

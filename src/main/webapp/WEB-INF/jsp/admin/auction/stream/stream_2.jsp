@@ -13,81 +13,75 @@
 <input type="hidden" id="listAucNum" value="${count.LIST_AUCNUM}" />
 <table class="youtube-table tblAuctionSt">
 	<colgroup>
-		<col width="16%">
-		<col width="16%">
-		<col width="16%">
-		<col width="16%">
-		<col width="16%">
-		<col width="16%">
+		<col width="17.5%">
+		<col width="17.5%">
+		<col width="17.5%">
+		<col width="17.5%">
+		<col width="15%">
+		<col width="15%">
 	</colgroup>
 	<tbody>
-		<tr class="st">
-			<td class="bg-red val">
+		<tr>
+			<td class="seller">
 				<p class="fz40">${johapData.CLNTNM}</p>
-				<p class="fz60 auctionNum"> - </p>
+				<p class="fz96 auctionNum"> - </p>
 			</td>
 			<td>
 				<p class="txt-green fz40">최저금액</p>
-				<p class="fz60 lowsSbidLmtAm"> - </p>
+				<p class="fz64 lowsSbidLmtAm"> - </p>
 			</td>
 			<td class="complate">
 				<p class="txt-green fz40">낙찰금액</p>
-				<p class="fz60 tdBiddAmt"> - </p>
+				<p class="fz64 tdBiddAmt"> - </p>
 			</td>
 			<td class="complate">
 				<p class="txt-green fz40">낙찰번호</p>
-				<p class="fz60 tdBiddNum"> - </p>
+				<p class="fz64 tdBiddNum">-</p>
 			</td>
-			<td class="count-td" colspan='2'>
-				<p class="txt-count">경매 대기중</p>
-			</td>
-		</tr>
-		<tr>
-			<td colspan='4' rowspan='6' style="background: transparent;">
+			<td class="auctionTxt" colspan="2">
+				<!-- <p class="txt-white fz96">유찰입니다</p> -->
+				<!-- <p class="txt-green fz96">경매 대기중</p> -->
+				<p class="txt-green fz96">경매 대기중</p>
 			</td>
 		</tr>
 		<tr>
+			<td colspan="4" rowspan="4" class="td_video">
+				<div class="bg_yotube">
+					<iframe width="100%" height="100%" src="https://www.youtube.com/embed/kTHYB632Uws?autoplay=1" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+				</div>
+			</td>
 			<td>
 				<p class="txt-green fz40">지역</p>
-				<p class="fz60 loc"> - </p>
+				<p class="fz64 loc"> - </p>
 			</td>
 			<td>
 				<p class="txt-green fz40">출하주</p>
-				<p class="fz60 ftsnm"> - </p>
+				<p class="fz64 ftsnm"> - </p>
 			</td>
 		</tr>
 		<tr>
 			<td>
 				<p class="txt-green fz40">성별</p>
-				<p class="fz60 sex"> - </p>
+				<p class="fz64 sex"> - </p>
 			</td>
 			<td>
 				<p class="txt-green fz40">어미</p>
-				<p class="fz60 mcowDsc"> - </p>
+				<p class="fz64 mcowDsc"> - </p>
 			</td>
 		</tr>
 		<tr>
 			<td>
-				<p class="txt-green fz40">중량</p>
-				<p class="fz60 cowSogWt"> - </p>
+				<p class="txt-green fz40">중량(Kg)</p>
+				<p class="fz64 cowSogWt"> - </p>
 			</td>
 			<td>
 				<p class="txt-green fz40">계대</p>
-				<p class="fz60 sraIndvPasgQcn"> - </p>
+				<p class="fz64 sraIndvPasgQcn"> - </p>
 			</td>
 		</tr>
 		<tr>
-			<td colspan='2'>
-				<p class="txt-green fz60 move-txt rmkCntn" style="width:80%"> - </p>
-			</td>
-		</tr>
-		<tr>
-			<td colspan='2'>
-				<p class="fz40 footerDate" style="font-size: 25px;font-weight: 200;letter-spacing: -1px;"> 
-					${johapData.CLNTNM}
-					<span class="txt-orange date" style="padding: 0 10px 0 10px;">00월 00일</span>
-					<span class="txt-orange time">00:00</span>
-				</p>
+			<td colspan="2">
+				<p class="fz64 move-txt rmkCntn" style="width:100%"> - </p>
 			</td>
 		</tr>
 	</tbody>

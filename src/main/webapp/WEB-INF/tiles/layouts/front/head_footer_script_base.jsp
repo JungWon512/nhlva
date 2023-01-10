@@ -5,10 +5,11 @@
 <!--begin::Fonts-->
 <!-- <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Poppins:300,400,500,600,700" /> -->
 <!--end::Fonts-->
+
 <!-- 20210805 jjw 퍼블리싱 css 및 js 추가 -->
 <link rel="stylesheet" type="text/css" href="/static/css/guide/common.css?v=${version}">
 <!-- 20221111 jjw 고도화 퍼블리싱 css 추가 -->
-<link rel="stylesheet" type="text/css" href="/static/css/guide/style-v2.css?ver=20230105">
+<link rel="stylesheet" type="text/css" href="/static/css/guide/style-v2.css?ver=${version}">
 <link rel="stylesheet" type="text/css" href="/static/css/guide/jquery-ui.css">
 <link rel="stylesheet" type="text/css" href="/static/css/guide/popup.css">
 <link rel="stylesheet" type="text/css" href="/static/css/guide/slick.css">

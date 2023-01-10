@@ -122,30 +122,28 @@ var searchAjax = function () {
 		let sHtml = [];
 		
 		if (data.cowPriceList.length > 0) {
-			sHtml.push('<li>');
-			sHtml.push('	<dl class="item dash-all">	');
-			sHtml.push('		<dt>전체</dt>	');
-			sHtml.push('		<dd>');
-			sHtml.push('			<div class="price">3,850,000 원 <span class="per fc-blue">▼ 0.1 %</span></div>');
-			sHtml.push('			<div class="num">2,753 두 <span class="per fc-red">▲ 0.1 %</span></div>');
-			sHtml.push('		</dd>');
-			sHtml.push('	</dl>');
-			sHtml.push('</li>');
-			
-			for (item of data.cowPriceList) {
-				sHtml.push('<li>');
+			data.cowPriceList.forEach((e,i) => {				
+				sHtml.push('<li class="row_'+ i +'">');
 				sHtml.push('	<dl class="item">');
-				sHtml.push('		<dt>'+item.MONTH_OLD_C_NM+'</dt>');
+				sHtml.push('		<dt>'+e.MONTH_OLD_C_NM+'</dt>');
 				sHtml.push('		<dd>');
-				sHtml.push('			<div class="price">'+ fnSetComma(item.AVG_SBID_AM) +' 원 <span class="per fc-blue">▼ 0.1 %</span></div>');
-				sHtml.push('			<div class="num">'+ fnSetComma(item.SUM_SBID_CNT) +' 두 <span class="per fc-red">▲ 0.1 %</span></div>');
+				if (e.ACS_SBID_AM > 0) {
+					sHtml.push('		<div class="price">'+ fnSetComma(e.THIS_AVG_SBID_AM || 0) +' 원 <span class="per fc-red">▲ '+ e.ACS_SBID_AM +' %</span></div>');					
+				} else {
+					sHtml.push('		<div class="price">'+ fnSetComma(e.THIS_AVG_SBID_AM || 0) +' 원 <span class="per fc-blue">▼ '+ e.ACS_SBID_AM +' %</span></div>');										
+				}
+				if (e.ACS_SBID_CNT > 0) {
+					sHtml.push('		<div class="num">'+ fnSetComma(e.THIS_SUM_SBID_CNT || 0) +' 두 <span class="per fc-red">▲ '+ e.ACS_SBID_CNT +' %</span></div>');
+				} else {
+					sHtml.push('		<div class="num">'+ fnSetComma(e.THIS_SUM_SBID_CNT || 0) +' 두 <span class="per fc-blue">▼ '+ e.ACS_SBID_CNT +' %</span></div>');
+				}
 				sHtml.push('		</dd>');
 				sHtml.push('	</dl>');
 				sHtml.push('</li>');
-			}
-		}
+			});
 		
-		$("ul.list-market").append(sHtml.join(" "));
+			$("ul.list-market").append(sHtml.join(" "));
+		}
 		
 		// 전국 TOP 3
 		$("ol.list-top10").empty();

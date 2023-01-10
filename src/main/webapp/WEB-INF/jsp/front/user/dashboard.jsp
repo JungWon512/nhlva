@@ -41,38 +41,11 @@
 		</div>
 		<ul class="list-market">
 			<li>
-				<dl class="item dash-all">
+				<dl class="item">
 					<dt>전체</dt>
 					<dd>
-						<div class="price">3,850,000 원 <span class="per fc-blue">▼ 0.1 %</span></div>
-						<div class="num">2,753 두 <span class="per fc-red">▲ 0.1 %</span></div>
-					</dd>
-				</dl>
-			</li>
-			<li>
-				<dl class="item">
-					<dt>4 ~ 5 개월</dt>
-					<dd>
-						<div class="price">3,850,000 원 <span class="per fc-blue">▼ 0.1 %</span></div>
-						<div class="num">2,753 두 <span class="per fc-red">▲ 0.1 %</span></div>
-					</dd>
-				</dl>
-			</li>
-			<li>
-				<dl class="item">
-					<dt>6 ~ 7 개월</dt>
-					<dd>
-						<div class="price">3,850,000 원 <span class="per fc-blue">▼ 0.1 %</span></div>
-						<div class="num">2,753 두 <span class="per fc-red">▲ 0.1 %</span></div>
-					</dd>
-				</dl>
-			</li>
-			<li>
-				<dl class="item">
-					<dt>8개월 이상</dt>
-					<dd>
-						<div class="price">3,850,000 원 <span class="per fc-blue">▼ 0.1 %</span></div>
-						<div class="num">2,753 두 <span class="per fc-red">▲ 0.1 %</span></div>
+						<div class="price"></div>
+						<div class="num"></div>
 					</dd>
 				</dl>
 			</li>

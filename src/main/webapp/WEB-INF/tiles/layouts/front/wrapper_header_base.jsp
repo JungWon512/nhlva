@@ -3,7 +3,7 @@
 <!--begin::Header Menu-->
 <c:set var="requestPath" value="${requestScope['javax.servlet.forward.request_uri']}"/> 
 <div class="w_header_inner">
-	<div class="w_header">
+	<div class="w_header ${requestPath eq '/home' or fn:contains( requestPath, 'dashboard') ? 'has-main-tab' :''}">
 		<a href="javascript:pageMove('/home');" class="logo">
 			<h1>
 				<span>온라인 스마트 경매</span>
@@ -11,8 +11,27 @@
 			</h1>
 		</a>
 		<c:choose>
-			<c:when test="${requestPath eq '/home' or requestPath eq '/district' or requestPath eq '/schedule' or  fn:contains( requestPath, 'agreement') }">
-																																													
+			<c:when test="${requestPath eq '/home' or requestPath eq '/district' or fn:contains( requestPath, 'dashboard')}">
+				<div class="side_menu">
+					<ul>
+						<li class="home"><a href="javascript:pageMove('/home');">지역선택</a></li>
+						<li class="guide"><a href="javascript:pageMove('/guide');">이용안내</a></li>
+					</ul>
+				</div>
+				<c:if test ="${requestPath eq '/home' or fn:contains( requestPath, 'dashboard')}">
+					<div class="main-tab-pc">
+						<ul>
+							<li class="${requestPath eq '/home' ? 'on' :''}">
+								<a href="javascript:pageMove('/home');">경매<span class="sub-txt">인터넷 <br>스마트 경매</span></a>
+							</li>
+							<li class="${fn:contains( requestPath, 'dashboard') ? 'on' :''}">
+								<a href="javascript:pageMove('/dashboard');">현황<span class="sub-txt">전국 <br>가축시장현황</span></a>
+							</li>
+						</ul>
+					</div>
+				</c:if>
+			</c:when>
+			<c:when test="${requestPath eq '/schedule' or  fn:contains( requestPath, 'agreement') }">
 			</c:when>
 			<c:when test="${param.aucYn eq 'N'}">
 				<div class="side_menu">
