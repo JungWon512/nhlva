@@ -70,20 +70,6 @@
 												value="${inputParam.searchTxt }"  </c:if> placeholder="출하주/KPN/개체번호/경매번호" /> 
 						<button class="btn_del"></button>
 					</div>
-					<ul class="filter-check">
-						<li>
-							<input type="checkbox" id="filter_chk1" name="indvSexC" class="indvSexC" value="1" <c:if test="${fn:contains(inputParam.indvSexC, '1,4,6')}">
-	           					    checked </c:if> ><label for="filter_chk1">암</label>
-						</li>
-						<li>
-							<input type="checkbox" id="filter_chk2" name="indvSexC"  class="indvSexC" value="2"  <c:if test="${fn:contains(inputParam.indvSexC,'0,2,5,9')}">
-	           					    checked </c:if> ><label for="filter_chk2">수</label>
-						</li>
-						<li>
-							<input type="checkbox" id="filter_chk3" name="indvSexC"  class="indvSexC" value="3"  <c:if test="${fn:contains(inputParam.indvSexC, '3')}">
-	           					    checked </c:if> ><label for="filter_chk3">거세</label>
-						</li>
-					</ul>
 					<div class="filter-check-box">
 						<strong class="title">성별</strong>
 						<ul class="filter-check">

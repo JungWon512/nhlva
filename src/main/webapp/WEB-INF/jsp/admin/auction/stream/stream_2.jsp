@@ -46,8 +46,10 @@
 		</tr>
 		<tr>
 			<td colspan="4" rowspan="4" class="td_video">
-				<div class="bg_yotube">
+				<!--<div class="bg_yotube">
 					<iframe width="100%" height="100%" src="https://www.youtube.com/embed/kTHYB632Uws?autoplay=1" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+				</div>-->
+				<div class="">
 				</div>
 			</td>
 			<td>

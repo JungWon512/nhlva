@@ -437,7 +437,7 @@ public class AuctionServiceImpl implements AuctionService {
 					params.put("lvstAucPtcMnNo", cowInfo.get("LVST_AUC_PTC_MN_NO"));
 					
 					final Map<String, Object> returnMap = this.updateAuctionResultMap(params);
-					if (returnMap != null) {
+					if (returnMap != null && !(boolean)returnMap.getOrDefault("success", false)) {
 						throw new SQLException("출장우 정보 업데이트에 실패했습니다.");
 					}
 				}
