@@ -154,7 +154,16 @@
 			// 변경내용 저장
 			$(document).on("click", ".btn_save", function(){
 				var regType = $("input[name='regType']").val();
-				var regTypeNm = regType == "W" ? "중량" : regType == "N" ? "계류대 번호" : "예정가"; 
+				var regTypeNm = "";
+				if (regType == "W") {
+					regTypeNm = "중량";
+				} else if (regType == "N") {
+					regTypeNm = "계류대 번호";
+				} else if (regType == "LW") {
+					regTypeNm = "중량/예정가";
+				} else {
+					regTypeNm = "예정가";
+				}
 				if ($("input.required").val() == "") {
 					modalAlert("", regTypeNm + "을(를) 입력하세요");
 					return;
