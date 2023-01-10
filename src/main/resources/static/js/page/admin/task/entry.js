@@ -34,10 +34,10 @@
 			});
 			// 초기화 이벤트
 			$(document).on("click", ".admin_new_reg .btn_input_reset", function(e){
-				$(this).siblings("input").val(0);			
+				$(this).siblings("input").val("");			
 			});
 			$(document).on("click", ".admin_new_reg .btn_tag_reset", function(e){
-				$('textarea[name=rmkCntn]').val('');
+				$('textarea[name=rmkCntn]').val("");
 			});
 			
 			// 검색어 영역 focus

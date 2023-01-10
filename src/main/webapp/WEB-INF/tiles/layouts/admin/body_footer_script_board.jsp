@@ -11,6 +11,7 @@
 <script type="text/javascript" src="/static/js/guide/jquery.mCustomScrollbar.js"></script>
 <script type="text/javascript" src="/static/js/guide/jquery.selectric.min.js"></script>
 <script type="text/javascript" src="/static/js/guide/jquery.easypiechart.js"></script>
+<script type="text/javascript" src="/static/js/guide/jquery.ui.touch-punch.js"></script>
 <script src="/static/js/socket.io/socket.io.js"></script>
 <script type="text/javascript" src="/static/js/guide/default.js"></script>
 <script src="/static/js/common/utils.js"></script>

@@ -8,8 +8,10 @@
 	<input type="hidden" name="searchPlace" 				id="searchPlace" 					value="${inputParam.searchPlace}">
 	<input type="hidden" name="searchAucObjDsc" 		id="searchAucObjDsc" 			value="${inputParam.searchAucObjDsc}">
 	<input type="hidden" name="searchMonthOldC" 		id="searchMonthOldC" 			value="${inputParam.searchMonthOldC}">
+	<input type="hidden" name="placeNm" 					id="placeNm" 						value="${inputParam.placeNm}">
 </form>
-<div class="chk_step1 dash-tit">
+	
+<div class="chk_step1 pc-mt0 dash-tit">
 	<div class="main-tab">
 		<ul>
 			<li>
@@ -59,6 +61,15 @@
 			<li>
 				<dl class="item">
 					<dt>6 ~ 7 개월</dt>
+					<dd>
+						<div class="price">3,850,000 원 <span class="per fc-blue">▼ 0.1 %</span></div>
+						<div class="num">2,753 두 <span class="per fc-red">▲ 0.1 %</span></div>
+					</dd>
+				</dl>
+			</li>
+			<li>
+				<dl class="item">
+					<dt>8개월 이상</dt>
 					<dd>
 						<div class="price">3,850,000 원 <span class="per fc-blue">▼ 0.1 %</span></div>
 						<div class="num">2,753 두 <span class="per fc-red">▲ 0.1 %</span></div>

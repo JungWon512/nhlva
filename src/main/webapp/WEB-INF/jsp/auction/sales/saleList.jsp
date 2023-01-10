@@ -70,9 +70,21 @@
 												value="${inputParam.searchTxt }"  </c:if> placeholder="출하주/KPN/개체번호/경매번호" /> 
 						<button class="btn_del"></button>
 					</div>
-					
-<!-- 					<li><strong class="title">월령</strong></li> -->
-					<div class="filter-checkBox">
+					<ul class="filter-check">
+						<li>
+							<input type="checkbox" id="filter_chk1" name="indvSexC" class="indvSexC" value="1" <c:if test="${fn:contains(inputParam.indvSexC, '1,4,6')}">
+	           					    checked </c:if> ><label for="filter_chk1">암</label>
+						</li>
+						<li>
+							<input type="checkbox" id="filter_chk2" name="indvSexC"  class="indvSexC" value="2"  <c:if test="${fn:contains(inputParam.indvSexC,'0,2,5,9')}">
+	           					    checked </c:if> ><label for="filter_chk2">수</label>
+						</li>
+						<li>
+							<input type="checkbox" id="filter_chk3" name="indvSexC"  class="indvSexC" value="3"  <c:if test="${fn:contains(inputParam.indvSexC, '3')}">
+	           					    checked </c:if> ><label for="filter_chk3">거세</label>
+						</li>
+					</ul>
+					<div class="filter-check-box">
 						<strong class="title">성별</strong>
 						<ul class="filter-check">
 							<li>
@@ -177,7 +189,7 @@
 						</dl>
 					</div>
 					<div class="list_body">
-						<ul class="">
+						<ul class="mCustomScrollBox">
 						<c:if test="${salesList.size() <= 0}">
 							<li>
 								<dl>
@@ -235,7 +247,7 @@
 											</c:otherwise>
 										</c:choose>
 									</dd>
-									<dd class="pd_pav"><c:if test="${inputParam.authRole eq 'ROLE_BIDDER' && inputParam.loginNo != null && inputParam.loginNo != '' }">
+									<dd class="pd_pav"><c:if test="${inputParam.loginNo != null && inputParam.loginNo != '' }">
 										<a href="javascript:;"
 											class="${(item.SBID_UPR eq '' || item.SBID_UPR eq null )?'':'act'}">
 											<span class="ico_pav"> <c:choose>
@@ -258,6 +270,7 @@
 						</ul>
 					</div>
 				</div>
+				
 				
 				<!-- //list_table :: pc 전용 e -->
 				<div class="list_table schedule_tb_mo">
@@ -283,7 +296,7 @@
 						<c:forEach items="${ salesList }" var="item" varStatus="st">
 							<li>
 								<input type="hidden" class="naBzPlc" name="naBzPlc_${st.index }" value="${item.NA_BZPLC}"/>
-			                   	<input type="hidden" class="aucDt" name="aucDt_${st.index }" value="${item.AUC_DT}"/>
+			                   	<input type="hidden" class="acDt" name="aucDt_${st.index }" value="${item.AUC_DT}"/>
 			                   	<input type="hidden" class="aucObjDsc" name="aucObjDsc_${st.index }" value="${item.AUC_OBJ_DSC}"/>
 			                   	<input type="hidden" class="oslpNo" name="oslpNo_${st.index }" value="${item.OSLP_NO}"/>
 			                   	<input type="hidden" class="sbidUpr" name="sbidUpr_${st.index }" value="${fn:split(item.SBID_UPR,'.')[0]}"/>
@@ -328,7 +341,7 @@
 								</div>
 								<div class="pd_pav">
 									<input type="hidden" class="sbidUpr" name="sbidUpr_${st.index }" value="${fn:split(item.SBID_UPR,'.')[0]}"/>
-	                            	<c:if test="${inputParam.authRole eq 'ROLE_BIDDER' && inputParam.loginNo != null && inputParam.loginNo != '' }">
+	                            	<c:if test="${inputParam.loginNo != null && inputParam.loginNo != '' }">
 			                            <a href="javascript:;" class="${(item.SBID_UPR eq '' || item.SBID_UPR eq null )?'':'act'}">
 				                            <span class="ico_pav">                            
 					                        	<c:choose>

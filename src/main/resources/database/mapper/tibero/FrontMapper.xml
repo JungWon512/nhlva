@@ -74,36 +74,42 @@
 		SELECT T.*
 		FROM (
 				 SELECT A.NA_BZPLC
-				 			, C.CLNTNM
-							, A.SRA_INDV_AMNNO
-							, A.AUC_OBJ_DSC
-							, CASE WHEN A.AUC_OBJ_DSC = '1' THEN '송아지'
-									WHEN A.AUC_OBJ_DSC = '2' THEN '비육우'
-									WHEN A.AUC_OBJ_DSC = '3' THEN '번식우'
-									WHEN A.AUC_OBJ_DSC = '0' THEN '일괄'
-									ELSE '' END AS AUC_OBJ_DSC_NM
-							, A.INDV_SEX_C
-							, CASE WHEN A.INDV_SEX_C IN (1,4,6) THEN '암'
-												ELSE '숫'
-												END AS INDV_SEX_C_NM
-							, (SELECT TRUNC(MONTHS_BETWEEN(A.CR_DT,	B.BIRTH)) +1 FROM DUAL) AS MONTH_C
-							, A.SBID_AMT
-							, (A.AVG_SBID_AMT - A.SBID_AMT) AS AMT
-							, B.RG_DSC
-							, CASE WHEN B.RG_DSC = '01' THEN '기초'
-									WHEN B.RG_DSC = '02' THEN '혈통'
-									WHEN B.RG_DSC = '03' THEN '고등'
-									WHEN B.RG_DSC = '09' THEN '미등록우'
-									ELSE '없음' END AS RG_DSC_NAME
-							, ROW_NUMBER() OVER(ORDER BY NVL(A.SBID_AMT,0) DESC, B.BIRTH DESC) RANK_NO
-					FROM TB_LA_IS_MM_DB_BDPRTOP A
-					LEFT JOIN TB_LA_IS_MM_INDV B ON A.NA_BZPLC = B.NA_BZPLC AND A.SRA_INDV_AMNNO = B.SRA_INDV_AMNNO
-					INNER JOIN TB_LA_IS_BM_BZLOC C ON A.NA_BZPLC = C.NA_BZPLC
-					WHERE 1=1
-					<if test="searchFlag != null and searchFlag != ''">
-						AND C.NA_BZPLCLOC = #{searchPlace}
-					</if>
-						AND A.CR_DT BETWEEN TO_CHAR(SYSDATE-7, 'YYYYMMDD') AND TO_CHAR(SYSDATE-1, 'YYYYMMDD')
+			 			, C.CLNTNM
+						, A.SRA_INDV_AMNNO
+						, A.AUC_OBJ_DSC
+						, CASE WHEN A.AUC_OBJ_DSC = '1' THEN '송아지'
+								WHEN A.AUC_OBJ_DSC = '2' THEN '비육우'
+								WHEN A.AUC_OBJ_DSC = '3' THEN '번식우'
+								WHEN A.AUC_OBJ_DSC = '0' THEN '일괄'
+								ELSE '' END AS AUC_OBJ_DSC_NM
+						, A.INDV_SEX_C
+						, CASE WHEN A.INDV_SEX_C IN (1,4,6) THEN '암'
+											ELSE '숫'
+											END AS INDV_SEX_C_NM
+						, (SELECT TRUNC(MONTHS_BETWEEN(A.CR_DT,	B.BIRTH)) +1 FROM DUAL) AS MONTH_C
+						, A.SBID_AMT
+						, (A.AVG_SBID_AMT - A.SBID_AMT) AS AMT
+						, B.RG_DSC
+						, CASE WHEN B.RG_DSC = '01' THEN '기초'
+								WHEN B.RG_DSC = '02' THEN '혈통'
+								WHEN B.RG_DSC = '03' THEN '고등'
+								WHEN B.RG_DSC = '09' THEN '미등록우'
+								ELSE '없음' END AS RG_DSC_NAME
+						, ROW_NUMBER() OVER(ORDER BY NVL(A.SBID_AMT,0) DESC, B.BIRTH DESC) RANK_NO
+				FROM TB_LA_IS_MM_DB_BDPRTOP A
+				LEFT JOIN TB_LA_IS_MM_INDV B ON A.NA_BZPLC = B.NA_BZPLC AND A.SRA_INDV_AMNNO = B.SRA_INDV_AMNNO
+				INNER JOIN TB_LA_IS_BM_BZLOC C ON A.NA_BZPLC = C.NA_BZPLC
+				WHERE 1=1
+				<if test='"R".equals(searchFlag) and (searchPlace != null and searchPlace != "")'>
+					AND C.NA_BZPLCLOC = #{searchPlace}
+				</if>
+				<if test="searchAucObjDsc != null and searchAucObjDsc != ''">
+					AND A.AUC_OBJ_DSC = #{searchAucObjDsc}
+				</if>
+				<if test="searchMonthOldC != null and searchMonthOldC != ''">
+					AND A.MONTH_OLD_C = #{searchMonthOldC}
+				</if>
+					AND A.CR_DT BETWEEN TO_CHAR(SYSDATE-7, 'YYYYMMDD') AND TO_CHAR(SYSDATE-1, 'YYYYMMDD')
 		) T
 		WHERE 1=1
 			AND T.RANK_NO <![CDATA[<]]> 11

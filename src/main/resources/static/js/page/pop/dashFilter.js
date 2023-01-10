@@ -15,7 +15,8 @@
 			const params = {
 				searchRaDate: $("input[name='radioG1']:checked").val(),
 				searchFlag : $("input[name='radioG2']:checked").val(),
-				searchPlace : $("input[name='radioG3']:checked").val()
+				searchPlace : $("input[name='radioG2']:checked").val() == 'A' ? '' : $("input[name='radioG3']:checked").val(),
+				placeNm : $("input[name=radioG3]:checked")[0].className
 			}
         	opener.filterCallBack(JSON.stringify(params));
         	window.close();

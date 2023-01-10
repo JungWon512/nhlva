@@ -65,7 +65,7 @@
 				<button class="btn_del"></button>
 			</div>
 			
-			<div class="filter-checkBox">
+			<div class="filter-check-box">
 				<strong class="title">성별</strong>
 				<ul class="filter-check">
 					<li>

@@ -3091,10 +3091,12 @@ Base styles: contents layer
 	right: 0;
 	top: -2px;
 }
-
 @media only all and (max-width: 740px) {
 	.list_table .list_body dl dd.pd_ea {
 		text-align: center;
+	}
+	.list_table .list_body dl dd.pd_ea a .ico_move:after {
+		display:none;
 	}
 }
 

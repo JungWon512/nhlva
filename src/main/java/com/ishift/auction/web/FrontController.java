@@ -130,10 +130,6 @@ public class FrontController {
 	public ModelAndView dashboard(@RequestParam Map<String, Object> params) throws Exception {
 		// 메인화면 현황
 		ModelAndView mav = new ModelAndView("front/user/dashboard");
-		Map<String, Object> paramMap = new HashMap<>();		
-		paramMap.putAll(params);
-		// 금주의 TOP 10
-		mav.addObject("recentDateTopList", frontService.findRecentDateTopList(paramMap));
 		return mav;
 	}
 	@PostMapping(value = "/dashboard_ajax", produces = MediaType.APPLICATION_JSON_VALUE)
@@ -146,7 +142,7 @@ public class FrontController {
 			
 			String searchDate = LocalDate.now().format(DateTimeFormatter.ofPattern("yyyyMMdd"));
 			String searchPreDate = LocalDate.now().minusDays(range).format(DateTimeFormatter.ofPattern("yyyyMMdd"));
-			String title = "최근 " + range + "일 (" + DateUtil.addSlashYYYYMMDD(searchPreDate) + " ~ " + DateUtil.addSlashYYYYMMDD(searchDate) + ")";
+			String title = "최근 " + range + "일 (" + DateUtil.addSlashYYYYMMDD(searchPreDate) + " ~ " + DateUtil.addSlashYYYYMMDD(searchDate) + " 까지)";
 			
 			// 1. 최근 가축시장 시세 조회 
 			resultMap.put("cowPriceList", frontService.findCowPriceList(params));
