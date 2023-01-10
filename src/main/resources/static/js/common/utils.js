@@ -721,5 +721,3 @@ var findGetParameter = function(paramName) {
     }
     return result;
 }
-
-Kakao.init('bcc997fd4a44d8ab7eff284d32f83f59');

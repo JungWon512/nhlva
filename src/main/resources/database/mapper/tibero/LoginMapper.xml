@@ -36,7 +36,7 @@
 		 WHERE (
 			 	(
 				 	REPLACE(TRIM(A.SRA_MWMNNM),' ','') = REPLACE(TRIM(#{userName}),' ','')
-		   AND REPLACE(TRIM(A.CUS_RLNO),' ','') = REPLACE(TRIM(#{birthDate}),' ','')
+				    AND REPLACE(TRIM(A.CUS_RLNO),' ','') = REPLACE(TRIM(#{birthDate}),' ','')
 			 	)
 			 	OR
 			 	(
@@ -134,10 +134,10 @@
 		 	) 
 		   AND (
 		   		(
-				REGEXP_REPLACE(A.OHSE_TELNO, '[^0-9]') = REGEXP_REPLACE(#{telNo}, '[^0-9]')
-				OR
-				REGEXP_REPLACE(A.CUS_MPNO, '[^0-9]') = REGEXP_REPLACE(#{telNo}, '[^0-9]')
-			 )
+					REGEXP_REPLACE(A.OHSE_TELNO, '[^0-9]') = REGEXP_REPLACE(#{telNo}, '[^0-9]')
+					OR
+					REGEXP_REPLACE(A.CUS_MPNO, '[^0-9]') = REGEXP_REPLACE(#{telNo}, '[^0-9]')
+		   		)
 		   		OR
 		   		(
 			   		REGEXP_REPLACE(NVL(B.OHSE_TELNO, ''), '[^0-9]') = REGEXP_REPLACE(#{telNo}, '[^0-9]')
