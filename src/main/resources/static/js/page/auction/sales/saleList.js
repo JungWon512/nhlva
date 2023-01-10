@@ -481,6 +481,8 @@
 				let endDate = $("#endDate").val( ui.values[1])
 				$("span.rangeDate").html(startDate.val() +"~"+ endDate.val() + "개월");
 				if (startDate[0].defaultValue == '0' && endDate[0].defaultValue == '10') {
+					$("#startDate").val('');
+					$("#endDate").val('');
 					$('.dateBtn').hide();
 				}  else {
 					$('.dateBtn').show();
@@ -507,6 +509,8 @@
 				$("span.rangePrice").html(startPrice.val() +"~"+ endPrice.val() + "만원");
 					if (startPrice[0].defaultValue == '0' && endPrice[0].defaultValue == '1000') {
 					$('.priceBtn').hide();
+					$("#highPrice").val('');
+					$("#lowPrice").val('');
 				} else {
 					$('.priceBtn').show();
 				}
