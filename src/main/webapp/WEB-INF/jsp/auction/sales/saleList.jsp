@@ -282,7 +282,7 @@
 						<c:forEach items="${ salesList }" var="item" varStatus="st">
 							<li>
 								<input type="hidden" class="naBzPlc" name="naBzPlc_${st.index }" value="${item.NA_BZPLC}"/>
-			                   	<input type="hidden" class="acDt" name="aucDt_${st.index }" value="${item.AUC_DT}"/>
+			                   	<input type="hidden" class="aucDt" name="aucDt_${st.index }" value="${item.AUC_DT}"/>
 			                   	<input type="hidden" class="aucObjDsc" name="aucObjDsc_${st.index }" value="${item.AUC_OBJ_DSC}"/>
 			                   	<input type="hidden" class="oslpNo" name="oslpNo_${st.index }" value="${item.OSLP_NO}"/>
 			                   	<input type="hidden" class="sbidUpr" name="sbidUpr_${st.index }" value="${fn:split(item.SBID_UPR,'.')[0]}"/>
