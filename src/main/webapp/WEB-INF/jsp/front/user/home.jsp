@@ -8,6 +8,16 @@
 	</c:if>
 </c:forEach>
 <div class="chk_step1">
+	<div class="main-tab">
+		<ul>
+			<li class="on">
+				<a href="javascript:pageMove('/home')">경매<span class="sub-txt">인터넷 <br>스마트 경매</span></a>
+			</li>
+			<li>
+				<a href="javascript:pageMove('/dashboard')">현황<span class="sub-txt">전국 <br>가축시장현황</span></a>
+			</li>
+		</ul>
+	</div>
 	<div class="banner_box">
 		<ul>
 			<li>
@@ -39,11 +49,6 @@
 				<c:set var="aucCnt" value="${aucCnt+1}" />
 			</c:if>
 		</c:forEach>
-		
-		
-		<!-- UI 판 LAYOUT -->
-<!-- 		<li><a href="javascript:pageMove('/district');" class="act"><span>경매중</span>활성화 :: class 확인</a></li> -->
-<!-- 		<li><a href="javascript:pageMove('/district');"><span>경매중</span>정적</a></li> -->
-<!-- 		<li><a href="javascript:pageMove('/district');"><span class="heart-eft">경매중</span>깜빡깜빡</a></li> -->
 	</ul>
+	<div class="bottom-link"><a href="javascript:pageMove('/schedule');">전국 가축시장 경매안내</a></div>
 </div>

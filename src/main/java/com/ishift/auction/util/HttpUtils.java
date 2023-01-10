@@ -4,10 +4,14 @@ import java.io.BufferedReader;
 import java.io.DataOutputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.io.UnsupportedEncodingException;
 import java.io.OutputStreamWriter;
 import java.net.HttpURLConnection;
+import java.net.SocketTimeoutException;
 import java.net.URL;
+import java.net.UnknownHostException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
@@ -20,6 +24,7 @@ import org.codehaus.jettison.json.JSONException;
 import org.json.JSONArray;
 import org.json.JSONObject;
 import org.json.XML;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Component;
@@ -32,6 +37,12 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 @Component
 public class HttpUtils {
+	@Value("${mca.url}")
+	String mcaUrl;
+	@Value("${open.api.url}")
+	String openApiUrl;
+	@Value("${open.api.serviceKey}")
+	String openApiServiceKey;
 	
 	public void postRequest() {
 		String apiUrl = "https://kakaoi-newtone-openapi.kakao.com/v1/synthesize";
@@ -80,7 +91,7 @@ public class HttpUtils {
 	}
 	
 	
-	public String setJsonData(Map<String, Object> params) {
+	public String setJsonData(Map<String, Object> params) throws UnsupportedEncodingException {
 		String recPhoneNum = (String)params.getOrDefault("smsRmsMpno", "");
 		recPhoneNum = recPhoneNum.replaceAll("-", "");
         Calendar calendar = Calendar.getInstance();
@@ -118,15 +129,10 @@ public class HttpUtils {
 	}
 	
 	public String sendPostJson(Map<String, Object> param) throws Exception{
-
-    	//개발
-        //URL url = new URL("http://192.168.114.11:18211/http/lvaca-fmec");
-    	//운영
-    	URL url = new URL("http://192.168.97.141:18211/http/lvaca-fmec");
+    	URL url = new URL(mcaUrl);
         HttpURLConnection con = (HttpURLConnection) url.openConnection();
         String responseBody = "";
         String jsonValue = setJsonData(param);
-        boolean result = true;
         try {
             
             log.debug("REST API START");
@@ -182,16 +188,56 @@ public class HttpUtils {
         return responseBody;
     }
 
-	public String padLeftBlank(String inputString, int length) {
+	//공백 제로
+	public String padLeftZero(String inputString, int length) throws UnsupportedEncodingException {		
+		if(inputString == null) {
+			inputString = "";
+		}		
+		byte[] inputByte=inputString.getBytes("EUC-KR");
+			
+		int byteLen = inputByte.length;
+		if(byteLen == length) {
+			return inputString;
+		}else if(byteLen > length) {
+			StringBuilder stringBuilder = new StringBuilder(length);
+			int nCnt = 0;
+			for(char ch:inputString.toCharArray()){
+				nCnt += String.valueOf(ch).getBytes("EUC-KR").length;
+				if(nCnt > length) break;
+				stringBuilder.append(ch);
+			}
+			return stringBuilder.toString();
+		}		
+		StringBuilder sb = new StringBuilder();		
+		//while(sb.length() < length - inputString.length()) {
+		while(sb.toString().getBytes("EUC-KR").length < length - byteLen) {
+			sb.append("0");
+		}
+		sb.append(inputString);
+		return sb.toString();
+	}
+	public String padLeftBlank(String inputString, int length) throws UnsupportedEncodingException {
 		if(inputString == null) {
 			inputString = "";
 		}
-		if(inputString.length() >= length) {
+		byte[] inputByte=inputString.getBytes("EUC-KR");
+			
+		int byteLen = inputByte.length;
+		if(byteLen == length) {
 			return inputString;
+		}else if(byteLen > length) {
+			StringBuilder stringBuilder = new StringBuilder(length);
+			int nCnt = 0;
+			for(char ch:inputString.toCharArray()){
+				nCnt += String.valueOf(ch).getBytes("EUC-KR").length;
+				if(nCnt > length) break;
+				stringBuilder.append(ch);
+			}
+			return stringBuilder.toString();
 		}
 		StringBuilder sb = new StringBuilder();
 		sb.append(inputString);
-		while(sb.length() < length - inputString.length()) {
+		while(sb.toString().getBytes("EUC-KR").length < length) {
 			sb.append(" ");
 		}
 		return sb.toString();
@@ -214,17 +260,10 @@ public class HttpUtils {
         }
         
         int cnt = 0;
-        
-        if(jsonData.containsKey("IO_ROW_CNT")) {
-            cnt  = (int)(double)jsonData.get("IO_ROW_CNT");
-        }
-        
         log.info("mca receive >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>"+jsonObj);
         log.info("mca receive data to map >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>");
         log.info("jsonHeader : " + jsonHeader.toString());
-        log.info("dataCnt : "    + cnt);
         log.info("jsonData : "   + jsonData.toString());
-        log.info("mca receive data to map <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<");
         
         map.put("jsonHeader", jsonHeader);
         map.put("dataCnt", cnt);
@@ -233,6 +272,248 @@ public class HttpUtils {
         
         return map;
     }
+    
+
+	public String setJsonData(Map<String, Object> params,String ctgrmCd) throws UnsupportedEncodingException {
+        Calendar calendar = Calendar.getInstance();
+        Date calcDate = calendar.getTime();
+		StringBuffer sb = new StringBuffer();
+        Random r = new Random();
+        r.setSeed(new Date().getTime());  
+        String ctrnCd = "";
+        if(ctgrmCd != null) {
+        	ctrnCd="IFLM00"+ctgrmCd.substring(0,2);
+        }
+		StringBuilder data = new StringBuilder();
+        switch(ctgrmCd) {
+        	case "3100":
+        		String recPhoneNum = (String)params.getOrDefault("smsRmsMpno", "");
+        		recPhoneNum = recPhoneNum.replaceAll("-", "");
+        		data.append("\"INQ_CN\":1");
+        		data.append(",\"RPT_DATA\" : [{");
+        		data.append("\"NA_BZPLC\":\""+padLeftBlank((String)params.getOrDefault("naBzplc", ""),13)+"\" ");//13
+        		data.append(",\"MPNO\":\""+padLeftBlank(recPhoneNum,11)+"\" ");//11
+        		data.append(",\"USRNM\":\""+padLeftBlank((String)params.getOrDefault("rmsMnName", ""),20)+"\" ");//20
+        		data.append(",\"MSG_CNTN\":\""+padLeftBlank((String)params.getOrDefault("smsFwdgCntn", ""),200)+"\"");//200       
+        		data.append("}]"); 		
+        	break;
+        	case "4600":
+            	data.append("\"IN_SQNO\":\""    + padLeftZero(""+(int)params.get("IN_SQNO"),7)    + "\"");
+                data.append(",\"IN_REC_CN\":\"" + padLeftZero((String)params.get("IN_REC_CN"), 4) + "\"");
+                data.append(",\"NA_BZPLC\":\""  + padLeftBlank((String)params.get("NA_BZPLC"),13) + "\"");
+                data.append(",\"INQ_ST_DT\":\"" + padLeftBlank((String)params.get("INQ_ST_DT"),8) + "\"");
+                data.append(",\"INQ_ED_DT\":\"" + padLeftBlank((String)params.get("INQ_ED_DT"),8) + "\"");
+            break;
+        	case "4700":
+        	case "4900":
+            	data.append("\"SRA_INDV_AMNNO\":\"" + padLeftBlank((String)params.get("SRA_INDV_AMNNO"),20)    + "\"");
+        	break;
+        	case "4800":
+            	data.append("\"SRA_INDV_AMNNO\":\"" + padLeftBlank((String)params.get("SRA_INDV_AMNNO"),20)    + "\"");
+                data.append(",\"MCOW_SRA_INDV_AMNNO\":\""  + padLeftBlank((String)params.get("MCOW_SRA_INDV_AMNNO"),20)  + "\"");
+        	default:break;
+        }
+		
+		sb.append("{");
+		sb.append("\"header\":{");
+        sb.append("\"CSTX\":\"\\u0002\"");
+        sb.append(",\"CTGRM_CD\":\""+ctgrmCd+"\"");
+		sb.append(",\"CTGRM_CHSNB\":\"00FD68_" + String.format("%08d", r.nextInt(99999999))+"\"");
+		sb.append(",\"CCRT_DATE\":\""+new SimpleDateFormat("yyyyMMdd").format(calcDate)+"\"");
+		sb.append(",\"CCRT_TIME\":\""+new SimpleDateFormat("HHmmss").format(calcDate) +"\"");
+		sb.append(",\"CORG_CD\":\"NHAH\"");
+		sb.append(",\"CBSN_CD\":\"FD68\"");
+		sb.append(",\"CCLS_CD\":\"0200\"");
+		sb.append(",\"CTRN_CD\":\""+ctrnCd+"\"");
+		sb.append(",\"CSPR_CD\":\"I\"");   //CTSPR_CD
+		sb.append(",\"CTGRM_TRNSM_DATETIME\":\""+new SimpleDateFormat("yyyyMMddHHmmss").format(calcDate)+"\"");
+		sb.append(",\"CTGRM_RSP_CD\":\"0000\"");
+		if("4700".equals(ctgrmCd)) {
+			sb.append(",\"CRSRVD\":\"                       0\"");			
+		}else {
+			sb.append(",\"CRSRVD\":\"                        \"");			
+		}
+		sb.append("}");
+		sb.append(",\"data\":{");
+		sb.append(data.toString());
+		sb.append("}");
+		sb.append("}");
+		log.info(sb.toString());
+		return sb.toString();
+	}
+	
+	public String sendPostJson(Map<String, Object> param,String ctgrmCd) throws Exception{
+
+    	//개발
+        URL url = new URL(mcaUrl);
+        HttpURLConnection con = (HttpURLConnection) url.openConnection();
+        String responseBody = "";
+        String jsonValue = setJsonData(param,ctgrmCd);
+        
+        try {
+            
+            log.debug("REST API START");
+            
+            byte[] sendData = jsonValue.getBytes("UTF-8");
+
+            con.setDoOutput(true);
+            con.setRequestMethod("POST");
+            con.setRequestProperty("Cache-Control", "no-cache");
+            con.setRequestProperty("Pragma", "no-cache");
+            con.setRequestProperty("Content-Type", "application/json");
+            con.setRequestProperty("Accept-Charset", "UTF-8");
+            con.setRequestProperty("Content-Length", String.valueOf(sendData.length));
+            con.setConnectTimeout(5000);//서버 접속시 연결시간
+            con.setReadTimeout(30000);//Read시 연결시간
+            con.getOutputStream().write(sendData);
+            con.getOutputStream().flush();
+            con.connect();
+
+            int responseCode = con.getResponseCode();
+            String responseMessage = con.getResponseMessage();
+
+            log.debug("REST API responseCode : " + responseCode);
+            log.debug("REST API responseMessage : " + responseMessage);
+            log.debug("REST API Error Stream : " + con.getErrorStream());
+            
+            if(con.getResponseCode() == 301 || con.getResponseCode() == 302 || con.getResponseCode() == 307) // 300번대 응답은 redirect
+            {
+            }else {
+                StringBuffer sb = new StringBuffer();
+                BufferedReader reader = new BufferedReader(new InputStreamReader(con.getInputStream(), "UTF-8"));
+                for(String line; (line = reader.readLine()) != null; )
+                {
+                    sb.append(line).append("\n");
+                }
+                responseBody = sb.toString();
+            }
+            
+            con.disconnect();
+            
+            log.debug("REST API END"); 
+            
+        } catch (RuntimeException | SocketTimeoutException e) {
+        	log.error(e.getMessage() ,e);
+            throw new RuntimeException("서버 수행중 오류가 발생하였습니다.");
+        } catch (Exception e) {
+        	log.error(e.getMessage(),e);
+            throw new Exception("서버 수행중 오류가 발생하였습니다.");
+        } finally {
+            if (con!= null) con.disconnect();
+        }
+        
+        return responseBody;
+    }
+	
+	
+	public String getOpenApiAnimalTrace(Map<String, Object> map) throws Exception {		
+		String sendUrl = openApiUrl+"/animalTrace/traceNoSearch";
+		sendUrl += "?serviceKey=" + openApiServiceKey;
+		sendUrl += "&traceNo=" + map.get("SRA_INDV_AMNNO");
+		log.debug("sendUrl: " + sendUrl);
+		StringBuilder urlBuilder = new StringBuilder(sendUrl);
+        URL url = new URL(urlBuilder.toString());
+        HttpURLConnection conn = null;
+        String result = "";
+				
+		try {
+			
+			conn = (HttpURLConnection) url.openConnection();
+	        conn.setRequestMethod("GET");
+	        conn.setRequestProperty("Content-type", "application/json");
+			conn.setConnectTimeout(5000);
+			conn.setReadTimeout(5000);
+	        log.debug("Response code: " + conn.getResponseCode());
+	        BufferedReader rd = null;
+	        
+	        if(conn.getResponseCode() >= 200 && conn.getResponseCode() <=300 ) {
+				rd = new BufferedReader(new InputStreamReader(conn.getInputStream()));
+			}else {
+				rd = new BufferedReader(new InputStreamReader(conn.getErrorStream()));
+			}
+	        
+	        StringBuilder sb = new StringBuilder();
+	        String line;
+	        while ((line = rd.readLine()) != null) {
+	            sb.append(line);
+	        }
+	        rd.close();
+	        conn.disconnect();
+	        log.debug(sb.toString());
+	        result = sb.toString();
+	       
+			
+		} catch (UnknownHostException | RuntimeException | SocketTimeoutException e) {
+        	log.error(e.getMessage() ,e);
+            throw new Exception("서버 수행중 오류가 발생하였습니다.");			
+        } catch (Exception e) {
+        	log.error(e.getMessage() ,e);
+            throw new RuntimeException("서버 수행중 오류가 발생하였습니다.");        	
+        } finally {
+            if (conn!= null) conn.disconnect();
+        }
+		 	
+        return result;
+    }
+
+
+	public Map<String, Object> sendPostJsonToMap(Map<String, Object> param, String str) {
+		// TODO Auto-generated method stub
+		String json ="";
+		try {
+			json = sendPostJson(param,str);
+			if(json.length() > 0) {
+				return this.getMapFromJsonObject(json);
+			}
+		}catch (Exception e) {
+			log.debug("MCA 통신중 ERROR",e);
+		}
+		return null;
+	}
+
+	public Map<String, Object> getOpenApiAnimalTraceToMap(Map<String, Object> param) {
+		// TODO Auto-generated method stub
+		String response ="";
+		Map<String, Object> nodeMap      = new HashMap<String, Object>();
+		Map<String, Object> moveMap      = new HashMap<String, Object>();
+		Map<String, Object> vacnMap      = new HashMap<String, Object>();
+		List<Map<String, Object>> moveList      = new ArrayList<>();
+		try {
+			response = getOpenApiAnimalTrace(param);
+			if(response.length() > 0) {
+				JSONObject json = XML.toJSONObject(response);
+		        
+		        if(json != null && json.getJSONObject("response") != null && json.getJSONObject("response").getJSONObject("body") !=null
+		        		&& json.getJSONObject("response").getJSONObject("body").getJSONObject("items") != null) {
+			        JSONArray jArr = json.getJSONObject("response").getJSONObject("body").getJSONObject("items").getJSONArray("item");
+			        for(Object item : jArr) {
+			        	JSONObject jItem = (JSONObject) item;
+			        	String infoType = jItem.get("infoType").toString();
+			        	if("5,6,7".indexOf(infoType)> -1) {
+			        		Iterator<String> it =jItem.keySet().iterator();
+			        		while(it.hasNext()) {
+			        			String key = (String) it.next();
+			        			vacnMap.put(key, jItem.get(key));			        			
+			        		}
+			        	}else if("2".equals(infoType)){
+			        		Iterator<String> it =jItem.keySet().iterator();
+			        		while(it.hasNext()) {
+			        			String key = (String) it.next();
+				        		moveMap.put(key, jItem.get(key));			        			
+			        		}
+			        		nodeMap.put("sra_indv_amnno", param.get("trace_no"));			
+			        		moveList.add(moveMap);
+			        	}
+			        }
+		        }
+		        nodeMap.put("moveList", moveList);
+		        nodeMap.put("vacnInfo", vacnMap);
+			}
+		}catch (Exception e) {
+			log.debug("OPEN API 통신중 ERROR",e);
+		}
+		return nodeMap;
+	}
 
     public String callApiKauth(String hostUrl,String type,String jsonMessage) {
         try {

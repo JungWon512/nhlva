@@ -23,12 +23,12 @@ public interface KioskApiService {
 	List<Map<String, Object>> selectSogCowList(Map<String, Object> params) throws SQLException;
 
 	/**
-	 * 중도매인 인증번호 확인 프로세스
+	 * 인증번호 확인 프로세스
 	 * @param params
 	 * @return
 	 * @throws SQLException 
 	 */
-	Map<String, Object> mwmnAuthNumProc(Map<String, Object> params) throws SQLException;
+	Map<String, Object> authNumChkProc(Map<String, Object> params) throws SQLException;
 
 	/**
 	 * 중도매인 경매 참가등록 프로세스
@@ -43,6 +43,14 @@ public interface KioskApiService {
 	 * @return
 	 * @throws SQLException
 	 */
-	Map<String, Object> selectStateAccInfo(Map<String, Object> params) throws SQLException;
+	Map<String, Object> selectMwmnStateAccInfo(Map<String, Object> params) throws SQLException;
+	
+	/**
+	 * 출하주 정산내역
+	 * @param params
+	 * @return
+	 * @throws SQLException
+	 */
+	Map<String, Object> selectFhsStateAccInfo(Map<String, Object> params) throws SQLException;
 
 }

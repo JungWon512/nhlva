@@ -95,16 +95,27 @@ $(function() {
 		
 		// 경매 예정, 결과, 응찰내역 조회 팝업
 		$(".btn_popup").on(clickEvent, function(){
-			COMMONS.callAjax("/pop/entryList"
-							, "post"
-							, {naBzPlcNo : $("#naBzPlcNo").val(), place : $("#naBzPlcNo").val()}
-							, 'application/json'
-							, 'html'
-							, function(data){
-								$(".pop_auction").html("");
-								$(data).appendTo($(".pop_auction"));
-								modalPopup('.pop_auction');
-							});	
+			//COMMONS.callAjax("/pop/entryList"
+			//				, "post"
+			//				, {naBzPlcNo : $("#naBzPlcNo").val(), place : $("#naBzPlcNo").val()}
+			//				, 'application/json'
+			//				, 'html'
+			//				, function(data){
+			//					$(".pop_auction").html("");
+			//					$(data).appendTo($(".pop_auction"));
+			//					modalPopup('.pop_auction');
+			//				});	
+			
+			$("form[name='frm_select'] input[name='naBzplc']").val($('#naBzPlc').val());
+			$("form[name='frm_select'] input[name='loginNo']").val($('#trmnAmnno').val());
+			$("form[name='frm_select'] input[name='bidPopYn']").val('Y');
+			var target = 'bidPopUp';
+			
+			window.open('',target, 'width=600, height=800, toolbar=no, menubar=no, scrollbars=no, resizable=yes');
+			var form = document.frm_select;
+			form.action = "/auction/api/entryListApi";
+			form.target=target;
+			form.submit();
 		});
 		
 		// 경매 예정, 결과, 응찰내역 탭 이동
@@ -153,7 +164,7 @@ $(function() {
 			sHtml += '			<input type="hidden" name="oldJjimPrice" value="'+jjim_price+'"/> ';
 			sHtml += '			<dl class="jjim_dl">';
 			sHtml += '				<dt>';
-			sHtml += '					<p>경매번호 : ' + aucPrgSq + '번 <span>|</span>최저가 : ' + fnSetComma(lowsSbidLmtUpr) + '</p>';
+			sHtml += '					<p>경매번호 : ' + aucPrgSq + '번 <span>|</span>예정가 : ' + fnSetComma(lowsSbidLmtUpr) + '</p>';
 			sHtml += '				</dt>';
 			sHtml += '				<dd>';
 			sHtml += '					<input type="text" name="inputUpr" id="inputUpr" oninput="inputNumberVaild(this, 5)" value="'+jjim_price+'" placeholder="찜가격 입력" pattern="\d*" inputmode="numeric" />';
@@ -206,7 +217,7 @@ $(function() {
 				return;
 			}
 			else {
-				modalAlert("", "최저가 이상의 가격을 입력해주세요.");
+				modalAlert("", "예정가 이상의 가격을 입력해주세요.");
 				return;
 			}
 		});
@@ -582,7 +593,7 @@ var messageHandler = function(data) {
 				$('dd.mcowDsc', $(".seeBox_slick_inner, .mo_seeBox")).text(dataArr[14]);		// 어미
 				$('dd.sraIndvPasgQcn', $(".seeBox_slick_inner, .mo_seeBox")).text(dataArr[18]);	// 계대
 				$('dd.kpnNo', $(".seeBox_slick_inner, .mo_seeBox")).text(dataArr[11] && dataArr[12].replace('KPN',''));	// KPN번호
-				$('dd.lowsSbidLmtAm', $(".seeBox_slick_inner, .mo_seeBox")).text(fnSetComma(dataArr[27])); // 최저가 > 24 :최초낙찰 ,25:최저낙찰
+				$('dd.lowsSbidLmtAm', $(".seeBox_slick_inner, .mo_seeBox")).text(fnSetComma(dataArr[27])); // 예정가 > 24 :최초낙찰 ,25:최저낙찰
 				$('dd.rmkCntn, p.rmkCntn', $(".seeBox_slick_inner, .mo_seeBox")).text(dataArr[28]);			// 비고
 				$('dd.sraPdRgnnm, p.sraPdRgnnm', $(".seeBox_slick_inner, .mo_seeBox")).text(dataArr[22]);	// 지역명
 				$('dd.dnaYn', $(".seeBox_slick_inner, .mo_seeBox")).text(dataArr[23]);			// 친자여부

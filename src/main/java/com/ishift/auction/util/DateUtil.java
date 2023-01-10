@@ -38,13 +38,29 @@ public class DateUtil {
         return new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS").format(new Date());
     }
 
+
+    public String addDelimDate(String date){
+    	return addDelimDate(date,"-");
+    }
+    public String addDelimDate(String date, String delim){
+    	try{
+    		if(date.length()< 8){
+    			return "";
+    		} else {
+    			return date.substring(0,4)+delim+date.substring(4,6)+delim+date.substring(6,8);
+    		}
+    		
+    	}catch (RuntimeException re) {
+    		return "";
+    	}
+    }
     public static String addSlashYYYYMMDD(String YYYYYMMDD){
         String returnValue = YYYYYMMDD;
         try{
-            if(YYYYYMMDD.length()<8){
+            if(YYYYYMMDD.length() < 8){
                 returnValue = "2020/01/01";
             } else {
-                returnValue = YYYYYMMDD.substring(0,4)+"/"+YYYYYMMDD.substring(5,6)+"/"+YYYYYMMDD.substring(7,8);
+                returnValue = YYYYYMMDD.substring(0,4)+"/"+YYYYYMMDD.substring(4,6)+"/"+YYYYYMMDD.substring(6,8);
             }
 
         }catch (RuntimeException re) {

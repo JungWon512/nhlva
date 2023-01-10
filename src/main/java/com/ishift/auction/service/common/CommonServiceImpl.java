@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.google.common.base.CaseFormat;
+import com.ishift.auction.util.McaUtil;
 import com.ishift.auction.util.SessionUtill;
 
 import lombok.extern.slf4j.Slf4j;
@@ -21,6 +22,9 @@ public class CommonServiceImpl implements CommonService {
 
 	@Autowired
 	private CommonDAO commonDao;
+	
+	@Autowired
+	private McaUtil mcaUtil;
 	
 	@Autowired
 	private SessionUtill sessionUtil;
@@ -46,7 +50,44 @@ public class CommonServiceImpl implements CommonService {
 		
 		final Map<String, Object> result = new HashMap<String, Object>();
 		
-		try {}
+		try {
+			// 1. 한우종합에서 개체정보 조회
+			final Map<String, Object> mcaMap4700	= mcaUtil.tradeMcaMsg("4700", params);				// mca 응답 전문
+			final Map<String, Object> dataMap4700	= (Map<String, Object>) mcaMap4700.get("jsonData");	// 한우종합 개체정보 데이터
+			
+			// 2. 조회된 개체가 없는 경우 이 후 프로세스 필요x
+			if (dataMap4700 == null || "0".equals(dataMap4700.getOrDefault("INQ_CN", "0"))) {
+				result.put("success", false);
+				result.put("message", "개체정보가 없습니다.");
+				return result;
+			}
+			
+			dataMap4700.putAll(params);
+			Iterator<String> keys = dataMap4700.keySet().iterator();
+			while(keys.hasNext()) {
+				String key = keys.next();
+				log.debug("{} : {}", key, dataMap4700.get(key).toString().trim());
+			}
+			
+			// 3. 조회 된 개체정보 저장
+			dataMap4700.put("NA_BZPLC", sessionUtil.getNaBzplc());
+			dataMap4700.put("regUsrid", "MCA4800");
+			this.updateIndvInfo(dataMap4700);
+
+			// 4. 출하주 정보 저장
+			this.updateFhsInfo(dataMap4700);
+			
+			params.put("SRA_INDV_AMNNO", params.get("sra_indv_amnno"));
+			// 5. 형매정보 저장
+			// 조회한 개체정보에 어미소 개체번호가 있는 경우
+			if (!"".equals(dataMap4700.getOrDefault("MCOW_SRA_INDV_EART_NO", "").toString().trim())) {
+				params.put("MCOW_SRA_INDV_AMNNO", dataMap4700.get("MCOW_SRA_INDV_EART_NO"));
+				this.updateIndvSibInfo(params);
+			}
+			
+			// 6. 후대정보 저장
+			this.updateIndvPostInfo(params);
+		}
 		catch(Exception e) {
 			e.printStackTrace();
 			result.put("success", false);
@@ -143,7 +184,24 @@ public class CommonServiceImpl implements CommonService {
 	 * @param params
 	 * @throws Exception
 	 */
-	public void updateIndvSibInfo(Map<String, Object> params) throws Exception {}
+	public void updateIndvSibInfo(Map<String, Object> params) throws Exception {
+		// 1. 형매정보 mca 호출
+		final Map<String, Object> mcaMap			= mcaUtil.tradeMcaMsg("4800", params);						// mca 응답 전문
+		final List<Map<String, Object>> dataList	= (List<Map<String, Object>>)mcaMap.get("jsonList");		// 형매정보 데이터
+		
+		if (Integer.parseInt(mcaMap.getOrDefault("dataCnt", "0").toString()) > 0 && dataList.size() > 0) {
+			
+			this.paramLog(params);
+			// 2. 저장 전 데이터 삭제
+			commonDao.deleteIndvSibinf(params);
+			
+			for (Map<String, Object> dataMap : dataList) {
+				dataMap.put("SIB_SRA_INDV_AMNNO", dataMap.get("SRA_INDV_AMNNO"));
+				dataMap.put("SRA_INDV_AMNNO", params.get("SRA_INDV_AMNNO"));
+				commonDao.insertIndvSibinf(dataMap);
+			}
+		}
+	}
 	
 	
 	/**
@@ -151,7 +209,24 @@ public class CommonServiceImpl implements CommonService {
 	 * @param params
 	 * @throws Exception
 	 */
-	public void updateIndvPostInfo(Map<String, Object> params) throws Exception {}
+	public void updateIndvPostInfo(Map<String, Object> params) throws Exception {
+		// 1. 후대정보 mca 호출
+		final Map<String, Object> mcaMap			= mcaUtil.tradeMcaMsg("4900", params);						// mca 응답 전문
+		final List<Map<String, Object>> dataList	= (List<Map<String, Object>>)mcaMap.get("jsonList");		// 형매정보 데이터
+		
+		if (Integer.parseInt(mcaMap.getOrDefault("dataCnt", "0").toString()) > 0 && dataList.size() > 0) {
+			
+			this.paramLog(params);
+			// 2. 저장 전 데이터 삭제
+			commonDao.deleteIndvPostinf(params);
+			
+			for (Map<String, Object> dataMap : dataList) {
+				dataMap.put("POST_SRA_INDV_AMNNO", dataMap.get("SRA_INDV_AMNNO"));
+				dataMap.put("SRA_INDV_AMNNO", params.get("SRA_INDV_AMNNO"));
+				commonDao.insertIndvPostinf(dataMap);
+			}
+		}
+	}
 	
 	/**
 	 * 휴면회원 해제

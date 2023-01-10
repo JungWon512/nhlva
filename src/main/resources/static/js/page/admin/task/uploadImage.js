@@ -11,7 +11,7 @@
 		const imgMaxCnt = 8;							// 업로드 가능 이미지 수
 		const arrExt = ["jpg", "png", "gif", "jpeg"];	// 업로드 가능 확장자 리스트
 		const limitSize = 10 * 1024 * 1024; 			// TODO :: 업로드 가능한 파일 최대 크기를 적용할지?
-	
+		
 		// 썸네일 이미지 생성
 		function makeThumbnailImage() {
 			var previewList = resultNode.find("div.item > canvas");
@@ -86,12 +86,12 @@
 			filesArr.forEach(function(f, index) {
 				var fileName = fileInputNode.val();
 				var ext = fileName.slice(fileName.indexOf(".") + 1).toLowerCase();
+	 
 				if (!arrExt.includes(ext)) {
 					modalAlert("", "이미지 파일만 업로드 가능합니다.");
 					fileInputNode.val("");
 					return;
 				}
-				
 				var reader = new FileReader();
 				reader.onload = function(e) {
 					var file = f;
@@ -230,7 +230,7 @@
 				if (url) displayImage(url);
 			});
 		};
-		
+
 		// 이미지 삭제
 		var delImage = function(name) {
 			thumbNode.find("div." + name).remove();

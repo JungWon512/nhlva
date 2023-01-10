@@ -4,10 +4,10 @@
 <html>
 <head>
 	<meta charset="utf-8"/>
-	<title>${johapData.CLNTNM} - ${subheaderTitle}</title>
-	<meta property="og:title" content="${johapData.CLNTNM} - ${subheaderTitle}">
-	<meta property="og:description" content="${johapData.CLNTNM} - ${subheaderTitle}" />
-	<meta name="description" content="${johapData.CLNTNM} - ${subheaderTitle}" />
+	<title><sec:authentication property="principal.naBzplNm"/> - ${subheaderTitle}</title>
+	<meta property="og:title" content="<sec:authentication property="principal.naBzplNm"/> - ${subheaderTitle}">
+	<meta property="og:description" content="<sec:authentication property="principal.naBzplNm"/> - ${subheaderTitle}" />
+	<meta name="description" content="<sec:authentication property="principal.naBzplNm"/> - ${subheaderTitle}" />
 	<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no, maximum-scale=1.0, user-scalable=0">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge" />
 	<tiles:insertAttribute name="head_footer_script"/>
@@ -21,6 +21,7 @@
 			<tiles:insertAttribute name="content"/>
 		</section>
 		<!-- admin_area [e] -->
+		<button id="btn_top_move"><span class="sr-only">TOP</span></button>
 	</div>
 	<!-- wrap [e] -->
 	<tiles:insertAttribute name="body_footer_script"/>

@@ -380,4 +380,179 @@ public interface AuctionService {
 	 * @throws SQLException
 	 */
 	Map<String, Object> selectAuctMwmn(Map<String, Object> params) throws SQLException;
+
+	
+	/**
+	 * 매수인 정산서(전체)
+	 * @param params
+	 * @return
+	 * @throws SQLException
+	 */
+	List<Map<String, Object>> entryStateSelectList(Map<String, Object> params) throws SQLException;
+	
+	/**
+	 * 매수인 정산- 매수인 정보
+	 * @param params
+	 * @return
+	 * @throws SQLException
+	 */
+	Map<String, Object> selectStateInfo(Map<String, Object> params) throws SQLException;
+	
+	/**
+	 * 매수인 정산서 - 낙찰가 조회
+	 * @param params
+	 * @return
+	 * @throws SQLException
+	 */
+	Map<String, Object> selectTotSoldPriceAndFee(Map<String, Object> params) throws SQLException;
+	Map<String, Object> selectStateEntryCntFhs(Map<String, Object> params) throws SQLException;
+	
+	/**
+	 * 매수인 정산서 - 조합 입금정보 조회
+	 * @param params
+	 * @return
+	 * @throws SQLException
+	 */
+	Map<String, Object> selectJohapAccInfo(Map<String, Object> params) throws SQLException;
+	
+	/**
+	 * 매수인 정산서 - 수수료 상세 조회
+	 * @param params
+	 * @return
+	 * @throws SQLException
+	 */
+	List<Map<String, Object>> myFeeStateList(Map<String, Object> params) throws SQLException;
+
+	/**
+	 * 정산서 리스트 조회
+	 * @param params
+	 * @return
+	 * @throws SQLException
+	 */
+	List<Map<String, Object>> selectStateList(Map<String, Object> params) throws SQLException;
+
+	/**
+	 * 형매정보
+	 * @param param
+	 * @return
+	 * @throws SQLException
+	 */
+	List<Map<String, Object>> selectListIndvSib(Map<String, Object> param) throws SQLException;
+
+	/**
+	 * 출장우 이미지
+	 * @param param
+	 * @return
+	 * @throws SQLException
+	 */
+	List<Map<String, Object>> selectListCowImg(Map<String, Object> param) throws SQLException;
+
+	/**
+	 * 이동정보
+	 * @param paramMap
+	 * @return
+	 * @throws SQLException
+	 */
+	List<Map<String, Object>> selectListIndvMove(Map<String, Object> paramMap) throws SQLException;
+
+	/**
+	 * 노출정보 조회
+	 * @param map
+	 * @return
+	 * @throws SQLException
+	 */
+	List<Map<String, Object>> selectListExpitemSet(Map<String, Object> map) throws SQLException;
+
+	/**
+	 * 후대정보 조회
+	 * @param map
+	 * @return
+	 * @throws SQLException
+	 */
+	List<Map<String, Object>> selectListIndvPost(Map<String, Object> param) throws SQLException;
+	
+	/**
+	 * 가축시장 경매일정
+	 * @param param
+	 * @return
+	 * @throws SQLException
+	 */
+	List<Map<String, Object>> selectcheduleList(Map<String, Object> param) throws SQLException;
+
+	/**
+	 * 개체번호 기준 경매정보 조회
+	 * @param param
+	 * @return
+	 * @throws SQLException
+	 */
+	Map<String, Object> selectIndvDataInfo(Map<String, Object> map) throws SQLException;
+
+	/**
+	 * 분만정보 조회
+	 * @param param
+	 * @return
+	 * @throws SQLException
+	 */
+	List<Map<String, Object>> selectListIndvChildBirth(Map<String, Object> paramMap) throws SQLException;
+
+	/**
+	 * 이용해지 신청 데이터 있는지 조회
+	 * @param params
+	 * @return
+	 * @throws SQLException
+	 */
+	Map<String, Object> selectMySecAplyInfo(Map<String, Object> params) throws SQLException;
+
+	/**
+	 * 이용해지 신청 데이터 insert
+	 * @param params
+	 * @throws SQLException
+	 */
+	void insertMySecAplyInfo(Map<String, Object> params) throws SQLException;
+
+	/**
+	 * 이용해지 신청 데이터 delete (해지 철회할 때)
+	 * @param params
+	 * @throws SQLException
+	 */
+	void deleteMySecAplyInfo(Map<String, Object> params) throws SQLException;
+
+	/**
+	 * 키오스크 인증번호 확인 (중도매인)
+	 * @param map
+	 * @return
+	 * @throws SQLException
+	 */
+	Map<String, Object> selectMwmnAuthNoYmdInfo(Map<String, Object> map) throws SQLException;
+
+	/**
+	 * 키오스크 인증번호 확인 (출하주)
+	 * @param map
+	 * @return
+	 * @throws SQLException
+	 */
+	Map<String, Object> selectFhsAuthNoYmdInfo(Map<String, Object> map) throws SQLException;
+
+	/**
+	 * 키오스크 발급된 인증번호 업데이트 (중도매인)
+	 * @param params
+	 * @throws SQLException
+	 */
+	void updateMwmnAuthNoYmdInfo(Map<String, Object> params) throws SQLException;
+
+	/**
+	 * 키오스크 발급된 인증번호 업데이트 (출하주)
+	 * @param params
+	 * @throws SQLException
+	 */
+	void updateFhsAuthNoYmdInfo(Map<String, Object> params) throws SQLException;
+
+	/**
+	 * 키오스크 인증번호 발급하기
+	 * @param params
+	 * @return
+	 * @throws SQLException
+	 */
+	Map<String, Object> myAuthNumIssue(Map<String, Object> params) throws SQLException;
+	
 }

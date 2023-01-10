@@ -82,6 +82,9 @@
     <definition name="pop/modal/*" extends="popup-modal-layout">
         <put-attribute name="content" value="/WEB-INF/jsp/pop/modal/{1}.jsp"/>
     </definition>
+    <definition name="pop/modal/*/*" extends="popup-modal-layout">
+        <put-attribute name="content" value="/WEB-INF/jsp/pop/modal/{1}/{2}.jsp"/>
+    </definition>
     <definition name="pop/*" extends="popup-layout">
         <put-attribute name="content" value="/WEB-INF/jsp/pop/{1}.jsp"/>
         <put-attribute name="page_footer_script" value="/static/js/page/pop/{1}.js" />

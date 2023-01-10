@@ -54,10 +54,10 @@
 			// 이미지 업로드 페이지 이동
 			$(".btn_image").on(clickEvent, function(){
 				var params = {
-				aucDt : $("input[name='aucDt']").val(),
-				aucObjDsc : $(this).data("aucObjDsc").toString(),
-				oslpNo : $(this).data("oslpNo").toString(),
-				sraIndvAmnno : $(this).data("amnno").toString()
+					aucDt : $("input[name='aucDt']").val(),
+					aucObjDsc : $(this).data("aucObjDsc").toString(),
+					oslpNo : $(this).data("oslpNo").toString(),
+					sraIndvAmnno : $(this).data("amnno").toString()
 				};
 				appendFormSubmit("frm_main", "/office/task/uploadImage", params);
 			});

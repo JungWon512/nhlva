@@ -49,6 +49,7 @@ public class BidUserDetails implements UserDetails{
 	private LocalDateTime fsrgDtm;		// 최초 등록 일시
 	private LocalDateTime lschgDtm;		// 최종 변경 일시
 	private String place;				// 조합 번호(TB_LA_IS_BM_BZLOC 참조)
+	private String mbIntgNo;		// 회원통합번호
 
 	@Builder
 	public BidUserDetails(String naBzplc, Long trmnAmnno, String mwmnNaTrplC, String sraMwmnnm
@@ -56,7 +57,7 @@ public class BidUserDetails implements UserDetails{
 						, String ohseTelno, String cusMpno, String macoYn, String jrdwoDsc
 						, String psnInfOfrAgrYn, String tmsYn, String delYn, String rmkCntn
 						, String cusRlno, String fsrgmnEno, String lsCmeno
-						, LocalDateTime fsrgDtm, LocalDateTime lschgDtm, String place) {
+						, LocalDateTime fsrgDtm, LocalDateTime lschgDtm, String place, String mbIntgNo) {
 		this.naBzplc = naBzplc;
 		this.trmnAmnno = trmnAmnno;
 		this.mwmnNaTrplC = mwmnNaTrplC;
@@ -79,6 +80,7 @@ public class BidUserDetails implements UserDetails{
 		this.fsrgDtm = fsrgDtm;
 		this.lschgDtm = lschgDtm;
 		this.place = place;
+		this.mbIntgNo = mbIntgNo;
 	}
 	
 	// 중도매인 기본 역할은 BIDDER

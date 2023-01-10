@@ -46,6 +46,14 @@
 			</a>
 		</li>
 		<li class="menu_item">
+			<a href="javascript:pageMove('/office/auction/stream_2');">
+				<span class="ico">
+					<img src="/static/images/guide/ico_admin_menu_04.svg" alt="">
+				</span>
+				유투브방송
+			</a>
+		</li>
+		<li class="menu_item">
 			<a href="javascript:pageMove('/office/auction/bidInfo');">
 				<span class="ico">
 					<img src="/static/images/guide/ico_admin_menu_04.svg" alt="">

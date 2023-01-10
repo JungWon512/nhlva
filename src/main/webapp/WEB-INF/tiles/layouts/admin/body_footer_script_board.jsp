@@ -4,7 +4,7 @@
 <script type="text/javascript" src="/static/js/guide/jquery-1.12.4.js"></script>
 <script type="text/javascript" src="/static/js/guide/jquery-migrate-1.2.1.min.js"></script>
 <script type="text/javascript" src="/static/js/guide/jquery.easing.1.3.min.js"></script>
-<!-- <script type="text/javascript" src="/static/js/guide/jquery-ui.js"></script> -->
+<script type="text/javascript" src="/static/js/guide/jquery-ui.js"></script>
 <script type="text/javascript" src="/static/js/guide/jquery.mmenu.min.all.js"></script>
 <script type="text/javascript" src="/static/js/guide/slick.js"></script>
 <script type="text/javascript" src="/static/js/guide/jquery.placeholder.ls.js"></script>
@@ -15,7 +15,9 @@
 <script type="text/javascript" src="/static/js/guide/default.js"></script>
 <script src="/static/js/common/utils.js"></script>
 <script src="/static/js/common/commons.js"></script>
+<script src="/static/js/common/dayjs.min.js"></script>
 
+<script src="/static/js/upload/vendor/canvas-to-blob.js"></script>
 <script src="/static/js/upload/load-image.js"></script>
 <script src="/static/js/upload/load-image-scale.js"></script>
 <script src="/static/js/upload/load-image-meta.js"></script>
@@ -26,4 +28,4 @@
 <script src="/static/js/upload/load-image-iptc.js"></script>
 <script src="/static/js/upload/load-image-iptc-map.js"></script>
 <script src="/static/js/upload/vendor/jquery.Jcrop.js"></script>
-<script src="/static/js/upload/demo/demo.js"></script>
+<script src="/static/js/common/chart/chart.js"></script>

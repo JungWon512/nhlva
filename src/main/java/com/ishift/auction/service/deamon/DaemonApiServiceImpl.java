@@ -162,7 +162,7 @@ public class DaemonApiServiceImpl implements DaemonApiService {
 			insertNum += daemonApiDAO.insAtdrLog(info);
 		}
 		
-		rtnMap.put("insertNum", insertNum);
+		rtnMap.put("updateNum", insertNum);
 		return rtnMap;
 	}
 

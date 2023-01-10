@@ -1,14 +1,15 @@
 package com.ishift.auction.service.auction;
 
-import com.ishift.auction.base.dao.MainDao;
+import java.sql.SQLException;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Repository;
 
-import java.sql.SQLException;
-import java.util.List;
-import java.util.Map;
+import com.ishift.auction.base.dao.MainDao;
 
 
 /**
@@ -28,6 +29,10 @@ public class AuctionDAO {
 
 	public Map<String, Object> selectOneNotice(Map<String, Object> map) throws SQLException {
 		return mainDao.selectOne("auction.selectOneNotice", map);
+	}
+	
+	public Map<String, Object> selectStateEntryCntFhs(Map<String, Object> map) throws SQLException {
+		return mainDao.selectOne("auction.selectStateEntryCntFhs", map);
 	}
 
 	public List<Map<String, Object>> entrySelectList(Map<String, Object> reqMap) throws SQLException {
@@ -397,7 +402,7 @@ public class AuctionDAO {
 	}
 
 	public List<Map<String, Object>> selectAuctQcnForToday() throws SQLException {
-		return mainDao.selectList("ApiMapper.selectAuctQcnForToday", null);
+		return mainDao.selectList("ApiMapper.selectAuctQcnForToday", new HashMap<String, Object>());
 	}
 
 	public int updateNetPort(Map<String, Object> params) throws SQLException {
@@ -514,4 +519,234 @@ public class AuctionDAO {
 		// TODO Auto-generated method stub
 		return mainDao.insert("auction.insertSogCowLog", params);
 	}
+	
+	/**
+	 * 정산서(전체) 리스트
+	 * @param params
+	 * @return
+	 * @throws SQLException
+	 */
+	public List<Map<String, Object>> entryStateSelectList(Map<String, Object> params) throws SQLException {
+		return mainDao.selectList("auction.entryStateSelectList", params);
+	}
+	
+	/**
+	 * 매수인 정산서- 매수인 정보
+	 * @param params
+	 * @return
+	 * @throws SQLException
+	 */
+	public Map<String, Object> selectBuyStateInfo(Map<String, Object> params) throws SQLException {
+		return mainDao.selectOne("auction.selectBuyStateInfo", params);
+	}
+	
+	/**
+	 * 출하우 정산서- 매수인 정보
+	 * @param params
+	 * @return
+	 * @throws SQLException
+	 */
+	public Map<String, Object> selectEntryStateInfo(Map<String, Object> params) throws SQLException {
+		return mainDao.selectOne("auction.selectEntryStateInfo", params);
+	}
+	
+	/**
+	 * 정산서 - 낙찰가 조회
+	 * @param params
+	 * @return
+	 * @throws SQLException
+	 */
+	public Map<String, Object> selectTotSoldPriceAndFee(Map<String, Object> params) throws SQLException {
+		return mainDao.selectOne("auction.selectTotSoldPriceAndFee", params);	
+	}
+	
+	/**
+	 * 정산서 - 조합 입금정보 조회
+	 * @param params
+	 * @return
+	 * @throws SQLException
+	 */
+	public Map<String, Object> selectJohapAccInfo(Map<String, Object> params) throws SQLException {
+		return mainDao.selectOne("auction.selectJohapAccInfo", params);	
+	}
+	/**
+	 * 정산서 - 수수료 상세 조회
+	 * @param params
+	 * @return
+	 * @throws SQLException
+	 */
+	public List<Map<String, Object>> myFeeStateList(Map<String, Object> params) throws SQLException {
+		return mainDao.selectList("auction.myFeeStateList", params);	
+	}
+	/**
+	 * 정산서 리스트 조회
+	 * @param params
+	 * @return
+	 * @throws SQLException
+	 */
+	public List<Map<String, Object>> selectStateBuyList(Map<String, Object> params) throws SQLException {
+		return mainDao.selectList("auction.selectStateBuyList", params);	
+	}
+	/**
+	 * 정산서 리스트 조회
+	 * @param params
+	 * @return
+	 * @throws SQLException
+	 */
+	public List<Map<String, Object>> selectStateEntryList(Map<String, Object> params) throws SQLException {
+		return mainDao.selectList("auction.selectStateEntryList", params);	
+	}
+
+	/**
+	 * 형매정보
+	 * @param param
+	 * @return
+	 * @throws SQLException
+	 */
+	public List<Map<String, Object>> selectListIndvSib(Map<String, Object> param) throws SQLException {
+		return mainDao.selectList("auction.selectListIndvSib", param);
+	}
+
+	/**
+	 * 출장우 이미지
+	 * @param param
+	 * @return
+	 * @throws SQLException
+	 */
+	public List<Map<String, Object>> selectListCowImg(Map<String, Object> param) throws SQLException {
+		return mainDao.selectList("auction.selectListCowImg", param);
+	}
+
+	/**
+	 * 개체 이동정보
+	 * @param param
+	 * @return
+	 * @throws SQLException
+	 */
+	public List<Map<String, Object>> selectListIndvMove(Map<String, Object> param) throws SQLException {
+		return mainDao.selectList("auction.selectListIndvMove", param);
+	}
+
+	/**
+	 * 출장우 상세 페이지 노출 탭 리스트
+	 * @param map
+	 * @return
+	 * @throws SQLException
+	 */
+	public List<Map<String, Object>> selectListExpitemSet(Map<String, Object> map) throws SQLException {
+		return mainDao.selectList("auction.selectListExpitemSet", map);
+	}
+
+
+	/**
+	 * 후대정보
+	 * @param param
+	 * @return
+	 * @throws SQLException
+	 */
+	public List<Map<String, Object>> selectListIndvPost(Map<String, Object> param) throws SQLException {
+		return mainDao.selectList("auction.selectListIndvPost", param);
+	}
+
+	/**
+	 * 가축시장 경매일정
+	 * @param param
+	 * @return
+	 * @throws SQLException
+	 */
+	public List<Map<String, Object>> selectcheduleList(Map<String, Object> param) throws SQLException {
+		return mainDao.selectList("auction.selectcheduleList", param);
+	}
+
+	/**
+	 * 개체번호 기준으로 경매정보 조회
+	 * @param param
+	 * @return
+	 * @throws SQLException
+	 */
+	public Map<String, Object> selectIndvDataInfo(Map<String, Object> param) throws SQLException {
+		return mainDao.selectOne("auction.selectIndvDataInfo", param);
+	}
+
+
+	/**
+	 * 개체번호로 분만정보 조회
+	 * @param param
+	 * @return
+	 * @throws SQLException
+	 */
+	public List<Map<String, Object>> selectListIndvChildBirth(Map<String, Object> param) throws SQLException {
+		return mainDao.selectList("auction.selectListIndvChildBirth", param);
+	}
+
+	/**
+	 * 이용해지 신청 데이터 있는지 조회
+	 * @param params
+	 * @return
+	 * @throws SQLException
+	 */
+	public Map<String, Object> selectMySecAplyInfo(Map<String, Object> params) throws SQLException{
+		return mainDao.selectOne("auction.selectMySecAplyInfo", params);
+	}
+
+	/**
+	 * 이용해지 신청 데이터 insert
+	 * @param params
+	 * @throws SQLException
+	 */
+	public void insertMySecAplyInfo(Map<String, Object> params) throws SQLException{
+		mainDao.insert("auction.insertMySecAplyInfo", params);
+	}
+
+	/**
+	 * 이용해지 신청 데이터 delete (해지 철회할 때)
+	 * @param params
+	 * @throws SQLException
+	 */
+	public void deleteMySecAplyInfo(Map<String, Object> params) throws SQLException{
+		mainDao.delete("auction.deleteMySecAplyInfo", params);
+	}
+
+	/**
+	 * 키오스크 인증번호 확인 (중도매인)
+	 * @param map
+	 * @return
+	 * @throws SQLException
+	 */
+	public Map<String, Object> selectMwmnAuthNoYmdInfo(Map<String, Object> map) throws SQLException{
+		return mainDao.selectOne("auction.selectMwmnAuthNoYmdInfo", map);
+	}
+
+	/**
+	 * 키오스크 인증번호 확인 (출하주)
+	 * @param map
+	 * @return
+	 * @throws SQLException
+	 */
+	public Map<String, Object> selectFhsAuthNoYmdInfo(Map<String, Object> map) throws SQLException{
+		return mainDao.selectOne("auction.selectFhsAuthNoYmdInfo", map);
+	}
+
+	/**
+	 * 키오스크 발급된 인증번호 업데이트 (중도매인)
+	 * @param params
+	 * @throws SQLException
+	 */
+	public void updateMwmnAuthNoYmdInfo(Map<String, Object> params) throws SQLException{
+		mainDao.update("auction.updateMwmnAuthNoYmdInfo", params);
+	}
+
+	/**
+	 * 키오스크 발급된 인증번호 업데이트 (출하주)
+	 * @param params
+	 * @throws SQLException
+	 */
+	public void updateFhsAuthNoYmdInfo(Map<String, Object> params) throws SQLException{
+		mainDao.update("auction.updateFhsAuthNoYmdInfo", params);
+	}
+
+	public List<Map<String, Object>> selectScheduleListQcn(Map<String, Object> param) throws SQLException {
+		return mainDao.selectList("auction.selectScheduleListQcn", param);
+	}
+	
 }

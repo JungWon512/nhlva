@@ -155,6 +155,7 @@ var messageHandler = function(data) {
 					data: params,
 					type: 'POST',
 					dataType: 'json',
+					async: false,
 					success : function() {
 					},
 					error: function(xhr, status, error) {

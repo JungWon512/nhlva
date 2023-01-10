@@ -27,9 +27,7 @@ public class MainDao {
 
     public int insert(String queryID, Map<String, Object> map) throws SQLException {
         LOGGER.info("##### queryID : " + queryID);
-        map.put("regUsrid",sessionUtill.getUserId());
-    	map.put("uptUsrid",sessionUtill.getUserId());
-    	map.put("lsCmeno",sessionUtill.getEno());
+        this.setDefaultValue(map);
         return sqlSession.insert(queryID, map);
     }
 
@@ -50,6 +48,7 @@ public class MainDao {
 
     public List<Map<String,Object>> selectList(String queryID, Map<String, Object> map) throws SQLException {
         LOGGER.info("##### queryID : " + queryID);
+        this.setDefaultValue(map);
         return sqlSession.selectList(queryID, map);
     }
     
@@ -60,6 +59,7 @@ public class MainDao {
 
     public Map<String, Object> selectOne(String queryID, Map<String, Object> map) throws SQLException {
         LOGGER.info("##### queryID : " + queryID);
+        this.setDefaultValue(map);
         return sqlSession.selectOne(queryID, map);
     }
     
@@ -71,9 +71,7 @@ public class MainDao {
 
     public int update(String queryID, Map<String, Object> map) throws SQLException {
         LOGGER.info("##### queryID : " + queryID);
-        map.put("regUsrid",sessionUtill.getUserId());
-    	map.put("uptUsrid",sessionUtill.getUserId());
-    	map.put("lsCmeno",sessionUtill.getEno());
+        this.setDefaultValue(map);
         return sqlSession.update(queryID, map);
     }
     
@@ -94,9 +92,7 @@ public class MainDao {
     
     public int delete(String queryID, Map<String, Object> map) throws SQLException {
         LOGGER.info("##### queryID : " + queryID);
-        map.put("regUsrid",sessionUtill.getUserId());
-    	map.put("uptUsrid",sessionUtill.getUserId());
-    	map.put("lsCmeno",sessionUtill.getEno());
+        this.setDefaultValue(map);
         return sqlSession.delete(queryID, map);
     }
     
@@ -117,11 +113,20 @@ public class MainDao {
     
     public int count(String queryID, Map<String, Object> map) throws SQLException {
         LOGGER.info("##### queryID : " + queryID);
+        this.setDefaultValue(map);
         return sqlSession.selectOne(queryID, map);
     }
     
     public int countVO(String queryID, Object object) throws SQLException {
         LOGGER.info("##### queryID : " + queryID);
         return sqlSession.selectOne(queryID, object);
+    }
+    
+    public void setDefaultValue(Map<String, Object> map) {
+        map.put("regUsrid", map.getOrDefault("regUsrid", sessionUtill.getUserId()));
+    	map.put("uptUsrid", map.getOrDefault("uptUsrid", sessionUtill.getUserId()));
+    	map.put("lsCmeno", sessionUtill.getEno());
+    	map.put("authRole", sessionUtill.getRoleConfirm());
+    	map.put("naBzplc", map.getOrDefault("naBzplc", sessionUtill.getNaBzplc()));
     }
 }

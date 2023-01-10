@@ -135,7 +135,11 @@ var messageHandler = function(data) {
 					tr.find('dl dd.lowsSbidLmtAm').text(fnSetComma(Math.round(tmpAsDAta.lowsSbidLmtAm))+'');
 					if($('#aucDsc').val() == '1') changeTrRow(tr);					
 				});
-			};
+			}else if($('#aucDsc').val() == '1'){
+				var tr = getTrRow(auctionConfig.asData.curAucSeq);
+				tr.find('dl dd.lowsSbidLmtAm').text(fnSetComma(Math.round(tmpAsDAta.lowsSbidLmtAm))+'');
+				changeTrRow(tr);
+			}
 			
 
 		break;	

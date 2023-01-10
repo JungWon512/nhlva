@@ -9,8 +9,9 @@ import com.ishift.auction.util.JsonUtils;
 import com.ishift.auction.util.JwtTokenUtil;
 import com.ishift.auction.util.PasswordEncoding;
 
-import io.swagger.annotations.ApiOperation;
-import lombok.extern.slf4j.Slf4j;
+import javax.servlet.http.Cookie;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
 import org.json.simple.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,17 +19,26 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.ui.ModelMap;
 import org.springframework.util.StringUtils;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.context.request.RequestContextHolder;
+import org.springframework.web.context.request.ServletRequestAttributes;
 import org.springframework.web.servlet.ModelAndView;
 
-import javax.servlet.http.Cookie;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
+import com.ishift.auction.service.admin.AdminService;
+import com.ishift.auction.service.login.LoginService;
+import com.ishift.auction.util.Constants;
+import com.ishift.auction.util.CookieUtil;
+import com.ishift.auction.util.JwtTokenUtil;
 
-import java.io.IOException;
-import java.sql.SQLException;
-import java.util.HashMap;
-import java.util.Map;
+import io.swagger.annotations.ApiOperation;
+import lombok.extern.slf4j.Slf4j;
 
 /**
  * 로그인 관련 프로세스를 처리하는 컨트롤러
@@ -257,13 +267,12 @@ public class LoginController {
 										, ModelMap model) throws RuntimeException, SQLException {
 
 		final Map<String, Object> result = loginService.loginProc(params);
-		final String type = params.getOrDefault("type", "0").toString();
 		String token = "";
 		if ((boolean)result.get("success")) {
 			final Map<String, Object> branchInfo = (Map<String, Object>)result.get("branchInfo");
 			
 			// 로그인 유형이 중도매인이고 조합에서 SMS인증을 사용하는 경우 SMS를 발송한다.
-			if ("0".equals(type) && "1".equals(branchInfo.get("SMS_AUTH_YN"))) {
+			if ("1".equals(branchInfo.get("SMS_AUTH_YN"))) {		/*"0".equals(type) && */
 				final Map<String, Object> sendResult = loginService.sendSmsProc(result);
 				return sendResult;
 			}
@@ -273,6 +282,10 @@ public class LoginController {
 				response.addCookie(cookie);
 				response.setHeader(HttpHeaders.AUTHORIZATION, Constants.JwtConstants.BEARER + token);
 				result.put(Constants.JwtConstants.ACCESS_TOKEN, token);
+				
+				params.put("token", token);
+				params.put("inOutGb", "1");
+				loginService.insertLoginConnHistory(request, params);		//로그인 이력 남기기
 			}
 		}
 		return result;
@@ -299,6 +312,11 @@ public class LoginController {
 				response.addCookie(cookie);
 				response.setHeader(HttpHeaders.AUTHORIZATION, Constants.JwtConstants.BEARER + token);
 				chkResult.put(Constants.JwtConstants.ACCESS_TOKEN, token);
+				
+				HttpServletRequest request = ((ServletRequestAttributes)RequestContextHolder.currentRequestAttributes()).getRequest();
+				params.put("token", token);
+				params.put("inOutGb", "1");
+				loginService.insertLoginConnHistory(request, params);		//로그인 이력 남기기
 			}
 			return chkResult;
 		}
@@ -336,14 +354,22 @@ public class LoginController {
 	 * @param request
 	 * @param response
 	 * @return
+	 * @throws SQLException 
 	 */
 	@GetMapping(path = "/user/logoutProc")
 	public void logoutProc(HttpServletRequest request
-						 , HttpServletResponse response) {
+						 , HttpServletResponse response) throws IOException {
 		try {
+			Map<String, Object> params = new HashMap<String, Object>();
+			params.put("connChannel", request.getParameter("connChannel"));
+			params.put("token", request.getParameter("token"));
+			params.put("inOutGb", "2");
+			loginService.insertLoginConnHistory(request, params);		//로그아웃 이력 남기기
+			
 			response.addCookie(cookieUtil.deleteCookie(request, Constants.JwtConstants.ACCESS_TOKEN));
 			response.sendRedirect("/home");
-		} catch (IOException | RuntimeException re) {
+			
+		} catch (RuntimeException | SQLException re) {
 			log.error("LoginController.logoutProc : {} ", re);
 		}
 	}

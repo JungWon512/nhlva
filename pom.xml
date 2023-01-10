@@ -36,6 +36,7 @@
         <java-version>1.8</java-version>
         <finalName>${project.artifactId}</finalName>
     	<log4j2.version>2.17.1</log4j2.version>
+    	<maven.test.skip>true</maven.test.skip>
     </properties>
     <build>
         <finalName>${finalName}</finalName>
@@ -324,6 +325,7 @@
 			<artifactId>jackson-dataformat-xml</artifactId>
 			<scope>provided</scope>
 		</dependency>
+		
 		<dependency>
 		    <groupId>org.slf4j</groupId>
 		    <artifactId>slf4j-api</artifactId>

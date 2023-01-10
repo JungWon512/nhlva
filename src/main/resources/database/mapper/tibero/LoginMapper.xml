@@ -5,30 +5,45 @@
 
 	<!-- 로그인 중도매인 리스트 조회 -->
 	<select id="selectWholesalerList" parameterType="map" resultType="map">
+		/*LoginMapper.selectWholesalerList_20221122_수정*/
 		SELECT A.NA_BZPLC
 			 , A.TRMN_AMNNO
 			 , A.MWMN_NA_TRPL_C
-			 , A.SRA_MWMNNM
+			 , DECODE(A.SRA_MWMNNM, '***', B.SRA_MWMNNM, A.SRA_MWMNNM) AS SRA_MWMNNM
 			 , A.FRLNO
 			 , A.ZIP
 			 , A.DONGUP
 			 , A.DONGBW
-			 , A.OHSE_TELNO
-			 , A.CUS_MPNO
+			 , DECODE(A.OHSE_TELNO, '***', B.OHSE_TELNO, A.OHSE_TELNO) AS OHSE_TELNO
+			 , DECODE(A.CUS_MPNO, '***', B.CUS_MPNO, A.CUS_MPNO) AS CUS_MPNO
 			 , A.MACO_YN
 			 , A.JRDWO_DSC
 			 , A.PSN_INF_OFR_AGR_YN
 			 , A.TMS_YN
 			 , A.DEL_YN
 			 , A.RMK_CNTN
-			 , A.CUS_RLNO
+			 , DECODE(A.CUS_RLNO, '***', B.CUS_RLNO, A.CUS_RLNO) AS CUS_RLNO
 			 , A.LSCHG_DTM
 			 , A.LS_CMENO
 			 , A.FSRG_DTM
 			 , A.FSRGMN_ENO
+			 , NVL(A.MB_INTG_NO, '') AS MB_INTG_NO
 		  FROM TB_LA_IS_MM_MWMN A
-		 WHERE REPLACE(TRIM(A.SRA_MWMNNM),' ','') = REPLACE(TRIM(#{userName}),' ','')
+		 	LEFT OUTER JOIN TB_LA_IS_BK_DORM_MWMN B
+		 	ON(A.NA_BZPLC = B.NA_BZPLC
+				AND A.TRMN_AMNNO = B.TRMN_AMNNO
+			)
+		 WHERE (
+			 	(
+				 	REPLACE(TRIM(A.SRA_MWMNNM),' ','') = REPLACE(TRIM(#{userName}),' ','')
 		   AND REPLACE(TRIM(A.CUS_RLNO),' ','') = REPLACE(TRIM(#{birthDate}),' ','')
+			 	)
+			 	OR
+			 	(
+			 		REPLACE(TRIM(NVL(B.SRA_MWMNNM, '')),' ','') = REPLACE(TRIM(#{userName}),' ','')
+				    AND REPLACE(TRIM(NVL(B.CUS_RLNO, '')),' ','') = REPLACE(TRIM(#{birthDate}),' ','')
+			 	)
+   			)
 		   AND A.DEL_YN = '0'
 		   AND EXISTS (
 				SELECT 1 FROM TB_LA_IS_BM_BZLOC B WHERE B.NA_BZPLC = A.NA_BZPLC AND B.NA_BZPLCNO = #{place}
@@ -47,7 +62,12 @@
 			 , A.DONGUP
 			 , A.DONGBW
 			 , A.OHSE_TELNO
-			 , A.CUS_MPNO
+			 , CASE WHEN A.CUS_MPNO IS NULL THEN ''
+			   ELSE 
+				 	CASE WHEN INSTR(A.CUS_MPNO, '-') <![CDATA[>]]> 0 THEN A.CUS_MPNO
+				 	ELSE REGEXP_REPLACE(TRIM(A.CUS_MPNO), '(.{3})(.+)(.{4})', '\1-\2-\3') 
+				   	END 
+			   END CUS_MPNO
 			 , A.MACO_YN
 			 , A.JRDWO_DSC
 			 , A.PSN_INF_OFR_AGR_YN
@@ -61,6 +81,7 @@
 			 , A.FSRGMN_ENO
 			 , A.SMS_YMD
 			 , A.SMS_NO
+			 , NVL(A.MB_INTG_NO, '') AS MB_INTG_NO
 		  FROM TB_LA_IS_MM_MWMN A
 		  LEFT OUTER JOIN TB_LA_IS_BM_BZLOC B
 		    ON ( A.NA_BZPLC = B.NA_BZPLC )
@@ -74,17 +95,18 @@
 	
 	<!-- 로그인 출하주 정보 조회 -->
 	<select id="selectFarmUserList" parameterType="map" resultType="map">
+		/*LoginMapper.selectFarmUserList_20221122_수정*/
 		SELECT A.NA_BZPLC
 			 , A.FHS_ID_NO ||  '-' || A.FARM_AMNNO AS TRMN_AMNNO
 			 , A.FHS_ID_NO
 			 , A.FARM_AMNNO
 			 , A.NA_TRPL_C
-			 , A.FTSNM
+			 , DECODE(A.FTSNM, '***', B.FTSNM, A.FTSNM) AS FTSNM
 			 , A.ZIP
 			 , A.DONGUP
 			 , A.DONGBW
-			 , A.OHSE_TELNO
-			 , A.CUS_MPNO
+			 , DECODE(A.OHSE_TELNO, '***', B.OHSE_TELNO, A.OHSE_TELNO) AS OHSE_TELNO
+			 , DECODE(A.CUS_MPNO, '***', B.CUS_MPNO, A.CUS_MPNO) AS CUS_MPNO
 			 , A.MACO_YN
 			 , A.RMK_CNTN
 			 , A.JRDWO_DSC
@@ -94,22 +116,40 @@
 			 , A.SRA_FARM_ACNO
 			 , A.NEW_SRA_FARM_ACNO
 			 , A.SRA_FED_SPY_YN
-			 , A.BIRTH
+			 , DECODE(A.BIRTH, '***', B.BIRTH, A.BIRTH) AS BIRTH
 			 , A.FSRG_DTM
 			 , A.FSRGMN_ENO
 			 , A.LSCHG_DTM
 			 , A.LS_CMENO
+			 , NVL(A.MB_INTG_NO, '') AS MB_INTG_NO
 		  FROM TB_LA_IS_MM_FHS A
-		 WHERE REPLACE(TRIM(A.FTSNM),' ','') = REPLACE(TRIM(#{userName}),' ','')
+		 	LEFT OUTER JOIN TB_LA_IS_BK_DORM_FHS B
+		 	ON(A.NA_BZPLC = B.NA_BZPLC
+		  		AND A.FHS_ID_NO = B.FHS_ID_NO
+		  		AND A.FARM_AMNNO = B.FARM_AMNNO
+	  		)
+		 WHERE (
+		 		REPLACE(TRIM(A.FTSNM),' ','') = REPLACE(TRIM(#{userName}),' ','')
+		 		OR REPLACE(TRIM(NVL(B.FTSNM,'')),' ','') = REPLACE(TRIM(#{userName}),' ','')
+		 	) 
 		   AND (
+		   		(
 				REGEXP_REPLACE(A.OHSE_TELNO, '[^0-9]') = REGEXP_REPLACE(#{telNo}, '[^0-9]')
 				OR
 				REGEXP_REPLACE(A.CUS_MPNO, '[^0-9]') = REGEXP_REPLACE(#{telNo}, '[^0-9]')
 			 )
-		   AND DEL_YN = '0'
-		   AND EXISTS (
-				SELECT 1 FROM TB_LA_IS_BM_BZLOC B WHERE B.NA_BZPLC = A.NA_BZPLC AND B.NA_BZPLCNO = #{place}
+		   		OR
+		   		(
+			   		REGEXP_REPLACE(NVL(B.OHSE_TELNO, ''), '[^0-9]') = REGEXP_REPLACE(#{telNo}, '[^0-9]')
+					OR
+					REGEXP_REPLACE(NVL(B.CUS_MPNO, ''), '[^0-9]') = REGEXP_REPLACE(#{telNo}, '[^0-9]')
+		   		)
 			 )
+		   AND A.DEL_YN = '0'
+		   AND EXISTS (
+				SELECT 1 FROM TB_LA_IS_BM_BZLOC C WHERE C.NA_BZPLC = A.NA_BZPLC AND C.NA_BZPLCNO = #{place}
+			 )
+		ORDER BY A.ANW_YN ASC	 
 	</select>
 	
 	<!-- 조합코드(NA_BZPLC)와 농가 식별번호(FHS_ID_NO)로 출하주 조회 -->
@@ -125,7 +165,12 @@
 			 , A.DONGUP
 			 , A.DONGBW
 			 , A.OHSE_TELNO
-			 , A.CUS_MPNO
+			 , CASE WHEN A.CUS_MPNO IS NULL THEN ''
+			   ELSE 
+				 	CASE WHEN INSTR(A.CUS_MPNO, '-') <![CDATA[>]]> 0 THEN A.CUS_MPNO
+				 	ELSE REGEXP_REPLACE(TRIM(A.CUS_MPNO), '(.{3})(.+)(.{4})', '\1-\2-\3') 
+				   	END 
+			   END CUS_MPNO
 			 , A.MACO_YN
 			 , A.RMK_CNTN
 			 , A.JRDWO_DSC
@@ -140,6 +185,7 @@
 			 , A.FSRGMN_ENO
 			 , A.LSCHG_DTM
 			 , A.LS_CMENO
+			 , NVL(A.MB_INTG_NO, '') AS MB_INTG_NO
 		  FROM TB_LA_IS_MM_FHS A
 		  LEFT OUTER JOIN TB_LA_IS_BM_BZLOC B
 			ON ( A.NA_BZPLC = B.NA_BZPLC )
@@ -181,7 +227,19 @@
 		   AND TRMN_AMNNO = #{trmnAmnno}
 	</select>
 	
-	<!-- 새로 받급받은 인증번호 저장 -->
+	<!-- 인증번호 정보 조회 -->
+	<select id="selectAuthFhsNumberInfo" parameterType="map" resultType="map">
+		SELECT SMS_YMD
+			 , SMS_NO
+			 , CUS_MPNO
+			 , FTSNM 	AS SRA_MWMNNM
+		  FROM TB_LA_IS_MM_FHS
+		 WHERE NA_BZPLC = #{naBzplc}
+		   AND FHS_ID_NO = #{fhsIdNo}
+		   AND FARM_AMNNO = #{farmAmnno}
+	</select>
+	
+	<!-- 새로 받급받은 인증번호 저장 (중도매인) -->
 	<update id="updateAuthNumber" parameterType="map">
 		UPDATE TB_LA_IS_MM_MWMN
 		   SET SMS_YMD = TO_CHAR(SYSDATE, 'YYYYMMDD')
@@ -194,6 +252,16 @@
 			KKO_TOKEN = #{kkoToken} 
 		 WHERE NA_BZPLC = #{naBzplc}
 		   AND TRMN_AMNNO = #{trmnAmnno}
+	</update>
+	
+	<!-- 새로 받급받은 인증번호 저장 (출하주) -->
+	<update id="updateAuthFhsNumber" parameterType="map">
+		UPDATE TB_LA_IS_MM_FHS
+		   SET SMS_YMD = TO_CHAR(SYSDATE, 'YYYYMMDD')
+			 , SMS_NO = #{smsNo}
+		 WHERE NA_BZPLC = #{naBzplc}
+		   AND FHS_ID_NO = #{fhsIdNo}
+		   AND FARM_AMNNO = #{farmAmnno}
 	</update>
 	
 	<insert id="sendSms" parameterType="map">
@@ -245,25 +313,96 @@
 		
 	</insert>
 	
+	<update id="updateMbintgConDormInfo" parameterType="map">
+		/*LoginMapper.updateMbintgConDormInfo_20221122_추가*/
+		UPDATE TB_LA_IS_MM_MBINTG
+		SET FNCON_DTM = SYSDATE
+			, DORMDUE_DT = TO_CHAR(SYSDATE + 365, 'YYYYMMDD')
+		WHERE MB_INTG_NO = #{MB_INTG_NO}
+	</update>
 	
+	<update id="updateMmMwmnMbintgNo" parameterType="hashMap">
+		/*LoginMapper.updateMmMwmnMbintgNo_20221125_추가*/
+		MERGE INTO TB_LA_IS_MM_MWMN MWN
+		USING (
+			SELECT NA_BZPLC
+				, TRMN_AMNNO
+			FROM TB_LA_IS_MM_MWMN
+			WHERE REPLACE(TRIM(SRA_MWMNNM),' ','') = REPLACE(TRIM(#{MB_INTG_NM}),' ','')
+				AND REGEXP_REPLACE(CUS_MPNO, '[^0-9]') = REGEXP_REPLACE(#{MB_MPNO}, '[^0-9]')
+				AND CUS_RLNO = #{MB_RLNO}
+				AND MB_INTG_NO IS NULL
+		) TBL
+		ON(
+			MWN.NA_BZPLC = TBL.NA_BZPLC
+			AND MWN.TRMN_AMNNO = TBL.TRMN_AMNNO
+		)
+		WHEN MATCHED THEN
+			UPDATE
+			SET MWN.LSCHG_DTM = SYSDATE 
+				, MWN.MB_INTG_NO =#{MB_INTG_NO}
+	</update>
 	
+	<update id="updateMmFhsMbintgNo" parameterType="hashMap">
+		/*LoginMapper.updateMmFhsMbintgNo_20221125_추가*/
+		MERGE INTO TB_LA_IS_MM_FHS FHS
+		USING (
+			SELECT NA_BZPLC
+				, FHS_ID_NO
+				, FARM_AMNNO
+			FROM TB_LA_IS_MM_FHS
+			WHERE REPLACE(TRIM(FTSNM),' ','') = REPLACE(TRIM(#{MB_INTG_NM}),' ','')
+				AND REGEXP_REPLACE(CUS_MPNO, '[^0-9]') = REGEXP_REPLACE(#{MB_MPNO}, '[^0-9]')
+				<if test="MB_RLNO != null and MB_RLNO != ''">
+				AND BIRTH = #{MB_RLNO}
+				</if>
+				AND MB_INTG_NO IS NULL
+		) TBL
+		ON(
+			FHS.NA_BZPLC = TBL.NA_BZPLC
+			AND FHS.FHS_ID_NO = TBL.FHS_ID_NO
+			AND FHS.FARM_AMNNO = TBL.FARM_AMNNO
+		)
+		WHEN MATCHED THEN
+			UPDATE
+			SET FHS.LSCHG_DTM = SYSDATE 
+				, FHS.MB_INTG_NO =#{MB_INTG_NO}	
+	</update>
 	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
+	<insert id="insertMmConnHistory" parameterType="map">
+		/*LoginMapper.insertMmConnHistory_20230104_추가*/
+		<selectKey keyProperty="connSeq" resultType="int" order="BEFORE">
+			SELECT NVL(MAX(CONN_SEQ) + 1, 1)
+			  FROM TB_LA_IS_MM_CONN_HIST
+			  WHERE CONN_DT = TO_CHAR(SYSDATE, 'YYYYMMDD')
+		</selectKey>
+		INSERT INTO TB_LA_IS_MM_CONN_HIST(
+			CONN_DT
+			, CONN_SEQ
+			, CONN_GBCD
+			, NA_BZPLC
+			, LOGIN_ID
+			<if test="mbIntgNo != null and mbIntgNo != ''">
+			, MB_INTG_NO
+			</if>
+			, CONN_CHN
+			, INOUT_GB
+			, CONN_IP
+			, INOUT_DTM
+		)
+		VALUES(
+			TO_CHAR(SYSDATE, 'YYYYMMDD')
+			, #{connSeq}
+			, #{connGbcd}
+			, #{naBzPlc}
+			, #{loginId}
+			<if test="mbIntgNo != null and mbIntgNo != ''">
+			, #{mbIntgNo}
+			</if>
+			, #{connChannel}
+			, #{inOutGb}
+			, #{connIP}
+			, SYSDATE
+		)
+	</insert>
 </mapper>

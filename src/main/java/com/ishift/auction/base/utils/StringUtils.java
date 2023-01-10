@@ -1,6 +1,17 @@
 package com.ishift.auction.base.utils;
 
+import java.io.BufferedInputStream;
+import java.io.IOException;
+import java.sql.Blob;
+import java.sql.SQLException;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.util.Base64Utils;
+
 public class StringUtils<T> {
+	
+	private static Logger log = LoggerFactory.getLogger(StringUtils.class);
 	
 	public static String getStringValue(Object obj) {
 		return obj == null ? "" : obj.toString();
@@ -62,5 +73,47 @@ public class StringUtils<T> {
 		}catch (RuntimeException re) {
 			return "";
 		}
+	}
+	
+	/**
+	 * blobToBytes
+	 * Blob를 Byte로 변환
+	 * @return byte
+	 */
+	
+	public static byte[] blobToBytes(Blob blob) {
+		BufferedInputStream is = null;
+		byte[] bytes = null;
+		try {
+			is = new BufferedInputStream(blob.getBinaryStream());
+			bytes = new byte[(int)blob.length()];
+			int len = bytes.length;
+			int offset = 0;
+			int read = 0;
+			
+			while(offset < len && ( read = is.read(bytes, offset, len - offset)) >= 0) {
+				offset += read;
+			}
+		}
+		catch(RuntimeException | IOException | SQLException e) {
+			log.info("동작중 오류가 발생하였습니다.");
+		}
+		return bytes;
+	}
+	
+
+	/**
+	 * byteToBase64
+	 * Byte를 Base64로 변환
+	 * @return String
+	 */
+	public static String byteToBase64(byte[] arr) {
+		String result = "";
+		try {
+			result = Base64Utils.encodeToString(arr);
+		}catch(RuntimeException e) {
+			log.info("동작중 오류가 발생하였습니다.");
+		}
+		return result;
 	}
 }

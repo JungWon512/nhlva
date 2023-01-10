@@ -1,6 +1,5 @@
 package com.ishift.auction.web;
 
-import java.sql.SQLException;
 import java.security.KeyFactory;
 import java.security.KeyPair;
 import java.security.KeyPairGenerator;
@@ -148,6 +147,11 @@ public class AdminLoginController {
 			AdminUserDetails adminUserDetails = (AdminUserDetails)authentication.getPrincipal();
 			
 			if (adminUserDetails != null) {
+//				JwtTokenVo jwtTokenVo = JwtTokenVo.builder()
+//						.userMemNum(adminUserDetails.getUsrid())
+//						.auctionHouseCode(adminUserDetails.getNaBzplc())
+//						.userRole(Constants.UserRole.ADMIN)
+//						.build();
 				AdminJwtTokenVo jwtTokenVo = AdminJwtTokenVo.builder()
 													.userMemNum(adminUserDetails.getUsername())
 													.auctionHouseCode(adminUserDetails.getNaBzplc())

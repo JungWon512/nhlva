@@ -84,9 +84,15 @@
         })
 
         var setBinding = function(){
-            $(document).on('click','.m_header .m_backTit',function(){				 
-				if(window.location.pathname == '/main'){pageMove('/home'); return;}
-				pageMove('/main');
+            $(document).on('click','.m_header .m_backTit',function(){
+				//history back 해야하는 pathname (, 하고 추가하기)
+				var backPathNm = "/my/buyInfo, /my/entryInfo, /cowDetail, /my/secAply, /my/secWithdraw";
+				
+				if(window.location.pathname.indexOf('/agreement') > -1){pageMove('/agreement/new'); return;} 
+				if(window.location.pathname.indexOf('/dashboard') > -1 || window.location.search.indexOf('dashYn') > -1){pageMove('/dashboard'); return;} 
+				if(window.location.pathname == '/main'){pageMove('/home'); return;} 
+				else if(backPathNm.indexOf(window.location.pathname) > -1){history.back(); return;}
+				pageMove('/main');    
 			});
         }
         var init = function (data) {

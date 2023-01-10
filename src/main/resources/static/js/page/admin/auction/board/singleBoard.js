@@ -163,7 +163,7 @@ var scLoad = function(dataArr){
 	$('table.tblBoard tbody tr.title td p.auctionNum').text(dataArr[2]);	//경매번호
 	$('table.tblBoard tbody tr.val td p.ftsnm').html(nameEnc(dataArr[9],"●")); //출하주
 	$('table.tblBoard tbody tr.val td p.cowSogWt').text(fnSetComma(dataArr[25])); //중량
-	$('table.tblBoard tbody tr.val td p.lowsSbidLmtAm').text(fnSetComma(Math.round(parseInt(dataArr[27])))); //최저가
+	$('table.tblBoard tbody tr.val td p.lowsSbidLmtAm').text(fnSetComma(Math.round(parseInt(dataArr[27])))); //예정가
 	// $('table.tblBoard tbody tr.val td p.prnyMtcn').text(Math.round(parseInt(dataArr[17]))); //임신
 	$('table.tblBoard tbody tr.val td p.sraIndvPasgQcn').text(dataArr[18]); //계대
 	$('table.tblBoard tbody tr.val td p.kpnNo').text(dataArr[11]&&dataArr[12].replace('KPN','')); //kpn

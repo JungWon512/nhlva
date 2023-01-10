@@ -12,6 +12,11 @@
 		.draggable {min-height:243px !important; }
 	}
 </style>
+<form name="frm_select" action="" method="post">
+	<input type="hidden" name="naBzplc" value="" />
+	<input type="hidden" name="loginNo" value="" />
+	<input type="hidden" name="bidPopYn" value="" />
+</form>
 <!-- //auction_list s : 경매 응찰 본 화면 -->
 <div class="auction_list has_auction_see">
 	<input type="hidden" id="naBzPlc"	value="${johapData.NA_BZPLC}" />
@@ -95,7 +100,7 @@
 									</li>
 									<li>
 										<dl>
-											<dt>최저가</dt>
+											<dt>예정가</dt>
 											<dd class="lowsSbidLmtAm"></dd>
 										</dl>
 									</li>
@@ -167,7 +172,7 @@
 									</li>
 									<li>
 										<dl>
-											<dt>최저가</dt>
+											<dt>예정가</dt>
 											<dd class="lowsSbidLmtAm"></dd>
 										</dl>
 									</li>
@@ -268,7 +273,7 @@
 					<dd class="pd_kg">중량<span class="w_view_in">(kg)</span></dd>
 					<dd class="pd_kpn">KPN</dd>
 					<dd class="pd_num1">계대</dd>
-					<dd class="pd_pay1">최저가</dd>
+					<dd class="pd_pay1">예정가</dd>
 					<dd class="pd_pay2">낙찰가</dd>
 					<dd class="pd_state">경매결과</dd>
 					<dd class="pd_etc">비고</dd>
@@ -298,7 +303,7 @@
 						</c:forEach>
 					</c:when>
 					<c:otherwise>
-						<li><dl><dd>경매 출품 정보가 없습니다.</dd></dl></li>
+						<li><dl><dd>경매 출장우 정보가 없습니다.</dd></dl></li>
 					</c:otherwise>
 				</c:choose>
 				</ul>

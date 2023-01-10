@@ -80,10 +80,11 @@
 					"type" : $("input[name='type']").val(),
 					"userName" : $("input[name='userName']").val(),
 					"birthDate" : $("input#password").val(),
-					"telNo" : $("input#password").val().replace(reg, "")
+					"telNo" : $("input#password").val().replace(reg, ""),
 //						"userName" : hex_sha512($("input[name='userName']").val()).toString(),
 //						"birthDate" : hex_sha512($("input#password").val()).toString(),
 //						"telNo" : hex_sha512($("input#password").val().replace(reg, "")).toString()
+					"connChannel" : connChannel()
 				}),
 				type: 'POST',
 				dataType: 'json',
@@ -98,11 +99,12 @@
 					modalAlert('', message);
 				}
 				else {
-					if (body.branchInfo && body.branchInfo.SMS_AUTH_YN == '1' && $("input[name='type']").val() == '0') {
+					if (body.branchInfo && body.branchInfo.SMS_AUTH_YN == '1') {	/*&& $("input[name='type']").val() == '0' */
 						$("#login_info").hide();
 						$("#login_sms_auth").show();
 						$("input[name='naBzplc']", $("form[name='frm_auth']")).val(body.branchInfo.NA_BZPLC);
 						$("input[name='token']", $("form[name='frm_auth']")).val(body.token);
+						$("input[name='connChannel']", $("form[name='frm_auth']")).val(connChannel());
 						if (body.smsNo != undefined) $("input#authNumber").val(body.smsNo);
 					}
 					else {
@@ -187,8 +189,7 @@
 			catch(e) {
 				debugConsole(e);
 			}
-		};
-
+		}
 		return {
 			// public functions
 			init: function () {

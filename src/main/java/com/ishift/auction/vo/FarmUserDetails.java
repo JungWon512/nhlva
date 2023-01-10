@@ -48,6 +48,7 @@ public class FarmUserDetails implements UserDetails {
 	private LocalDateTime lschgDtm;		// 최종변경일시
 	private String lsCmeno;				// 최초변경자개인번호
 	private String place;				// 조합 번호(TB_LA_IS_BM_BZLOC 참조)
+	private String mbIntgNo;		// 회원통합번호
 	
 	@Builder
 	public FarmUserDetails(String naBzplc, String fhsIdNo, Long farmAmnno, String naTrplC
@@ -55,7 +56,7 @@ public class FarmUserDetails implements UserDetails {
 						, String ohseTelno, String cusMpno, String macoYn, String rmkCntn
 						, String jrdwoDsc, String delYn, String anwYn, String hdwkRgYn
 						, String sraFarmAcno, String newSraFarmAcno, String sraFedSpyYn, String birth
-						, String fsrgmnEno, String lsCmeno, LocalDateTime fsrgDtm, LocalDateTime lschgDtm, String place) {
+						, String fsrgmnEno, String lsCmeno, LocalDateTime fsrgDtm, LocalDateTime lschgDtm, String place, String mbIntgNo) {
 		this.naBzplc = naBzplc;
 		this.fhsIdNo = fhsIdNo;
 		this.farmAmnno = farmAmnno;
@@ -81,6 +82,7 @@ public class FarmUserDetails implements UserDetails {
 		this.fsrgDtm = fsrgDtm;
 		this.lschgDtm = lschgDtm;
 		this.place = place;
+		this.mbIntgNo = mbIntgNo;
 	}
 
 	// 중도매인 기본 역할은 BIDDER

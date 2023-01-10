@@ -8,7 +8,11 @@ logging:
   file:
     name: logExample
     path: ./data/logs
-
+mca:
+  url: http://192.168.114.11:18211/http/lvaca-fmec
+open.api: 
+  url: http://data.ekape.or.kr/openapi-data/service/user
+  serviceKey: 7vHI8ukF3BjfpQW8MPs9KtxNwzonZYSbYq6MVPIKshJNeQHkLqxsqd1ru5btfLgIFuLRCzCLJDLYkHp%2FvI6y0A%3D%3D
 kko:
   login:
     auth.url: https://kauth.kakao.com
@@ -33,7 +37,11 @@ logging:
 #    path: /logs/nhlva/nhlva
     name: logExample
     path: /home/phps/data/logs
-
+mca:
+  url: http://192.168.114.11:18211/http/lvaca-fmec
+open.api: 
+  url: http://data.ekape.or.kr/openapi-data/service/user
+  serviceKey: 7vHI8ukF3BjfpQW8MPs9KtxNwzonZYSbYq6MVPIKshJNeQHkLqxsqd1ru5btfLgIFuLRCzCLJDLYkHp%2FvI6y0A%3D%3D
 kko:
   login:
     auth.url: https://kauth.kakao.com
@@ -58,7 +66,11 @@ logging:
     path: /home/phps/data/logs
 #    name: NHLVA_LOG
 #    path: /logs/nhlva/nhlva
-
+mca:
+  url: http://192.168.97.141:18211/http/lvaca-fmec
+open.api: 
+  url: http://data.ekape.or.kr/openapi-data/service/user
+  serviceKey: 7vHI8ukF3BjfpQW8MPs9KtxNwzonZYSbYq6MVPIKshJNeQHkLqxsqd1ru5btfLgIFuLRCzCLJDLYkHp%2FvI6y0A%3D%3D
 kko:
   login:
     auth.url: https://kauth.kakao.com

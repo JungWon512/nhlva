@@ -83,7 +83,7 @@
 					<dd class="pd_sex">성별</dd>
 					<dd class="pd_kg">중량(kg)</dd>
 					<dd class="pd_kpn">KPN</dd>
-					<dd class="pd_pay1">최저가</dd>
+					<dd class="pd_pay1">예정가</dd>
 					<dd class="pd_pay2">낙찰가</dd>
 					<dd class="pd_state">낙찰자</dd>
 				</dl>

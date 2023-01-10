@@ -61,7 +61,7 @@
 					<p class="fz100 matime">-</p>
 				</td>
 				<td>
-					<p class="txt-green fz60">최저가</p>
+					<p class="txt-green fz60">예정가</p>
 					<p class="fz100 lowsSbidLmtAm">-</p>
 				</td>
 				<td colspan="2">

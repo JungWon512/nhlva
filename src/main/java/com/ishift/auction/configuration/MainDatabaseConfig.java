@@ -36,7 +36,6 @@ public class MainDatabaseConfig {
 		JndiDataSourceLookup lookup = new JndiDataSourceLookup();
 		lookup.setResourceRef(true);
 		DataSource ds = lookup.getDataSource("jdbc/nhlva");
-		
 		return ds;
 	}
     /**

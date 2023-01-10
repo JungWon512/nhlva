@@ -571,7 +571,7 @@
 				 , TO_CHAR(LSCHG_DTM, 'HH24:MI') AS CHG_HM
 			  FROM TB_LA_IS_MH_SOG_COW_LOG A
 			 WHERE NA_BZPLC = #{naBzplc}
-			   AND AUC_OBJ_DSC = '1'
+			   AND AUC_OBJ_DSC = #{aucObjDsc}
 			   AND AUC_DT = #{aucDt}
 			   AND OSLP_NO = #{oslpNo}
 			   AND LED_SQNO = '1'

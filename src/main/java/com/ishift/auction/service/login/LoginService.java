@@ -4,6 +4,8 @@ import java.sql.SQLException;
 import java.util.List;
 import java.util.Map;
 
+import javax.servlet.http.HttpServletRequest;
+
 public interface LoginService {
 	
 	/**
@@ -53,7 +55,7 @@ public interface LoginService {
 	Map<String, Object> selectFarmUser(Map<String, Object> params) throws SQLException;
 
 	/**
-	 * 인증번호 조회
+	 * 인증번호 조회 (중도매인)
 	 * @param params
 	 * @return
 	 * @throws SQLException
@@ -61,12 +63,28 @@ public interface LoginService {
 	Map<String, Object> selectAuthNumberInfo(Map<String, Object> params) throws SQLException;
 
 	/**
-	 * 새로 발급한 인증번호 저장
+	 * 인증번호 조회 (출하주)
+	 * @param params
+	 * @return
+	 * @throws SQLException
+	 */
+	Map<String, Object> selectAuthFhsNumberInfo(Map<String, Object> params) throws SQLException;
+	
+	/**
+	 * 새로 발급한 인증번호 저장 (중도매인)
 	 * @param params
 	 * @return
 	 * @throws SQLException
 	 */
 	int updateAuthNumber(Map<String, Object> params) throws SQLException;
+	
+	/**
+	 * 새로 발급한 인증번호 저장 (출하주)
+	 * @param params
+	 * @return
+	 * @throws SQLException
+	 */
+	int updateAuthFhsNumber(Map<String, Object> params) throws SQLException;
 
 	/**
 	 * 로그인 인증번호 발송
@@ -84,6 +102,15 @@ public interface LoginService {
 	 * @throws RuntimeException
 	 */
 	Map<String, Object> loginAuthProc(Map<String, Object> params) throws SQLException, RuntimeException;
+
+	/**
+	 * 로그인 이력 저장하기
+	 * @param params
+	 * @param inOutGb
+	 * @throws SQLException
+	 * @throws RuntimeException
+	 */
+	void insertLoginConnHistory(HttpServletRequest request, Map<String, Object> params) throws SQLException, RuntimeException;
 
 
 }

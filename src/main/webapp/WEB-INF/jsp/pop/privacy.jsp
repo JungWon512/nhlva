@@ -1,13 +1,19 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
 <%@ include file="/WEB-INF/__system/taglibs.jsp" %>
 
-<div id="" class="modal-wrap terms open" style="overflow: auto; display: block;">
+
+<div id="" class="modal-wrap terms open"
+	style="overflow: auto; display: block;">
 	<div class="modal-content">
-		<button class="modal_popup_close right_70" onclick="window.close();return false;">닫기</button>
-		<h3 style="font-weight:700;font-size: 20px;">개인정보 처리방침</h3><br/>
-		<div class="termsBox mCustomScrollBox">
-			<p>
-제1조 (개인정보의 처리 목적)<br/>
+		<h3 style="margin: 0px 24px; font-weight: 700; font-size: 20px;">개인정보 처리방침</h3>
+		<br />
+		<button class="modal_popup_close right_70"
+			onclick="window.close();return false;">닫기</button>
+		<section class="contents">
+			<div class="termsBox mCustomScrollBox "
+				style="margin: 0px 24px; overflow: hidden auto; height: 700px; min-height: 70px; background: #f1f1f1; !important;">
+				<p>
+					제1조 (개인정보의 처리 목적)<br/>
 개인정보를 다음의 목적을 위해 처리합니다. 처리한 개인정보는 다음의 목적 이외의 용도로는 사용되지 않으며 이용 목적이 변경될 시에는 사전 동의를 구할 예정입니다.<br/>
 당 플랫폼은 서비스 제공을 목적으로 “이용약관”에 제시하는 내용에 따라 최소한의 개인정보를 수집합니다.<br/>
 각 정보는 플랫폼을 통해 수집하며 수집목적은 다음과 같습니다.<br/>
@@ -98,8 +104,8 @@
 제11조 (개인정보 처리방침 변경)<br/>
 이 개인정보처리방침은 2021년 10월 8일로부터 적용되며, 법령 및 방침에 따른 변경내용의 추가, 삭제 및 정정이 있는 경우에는 변경사항의 시행 7일 전부터 공지사항을 통하여 고지할 것입니다.<br/><br/>
 개정일자 : 2021년 10월 7일
-			</p>
-		</div>
+				</p>
+			</div>
+		</section>
 	</div>
-	<!-- //modal-content e -->
 </div>

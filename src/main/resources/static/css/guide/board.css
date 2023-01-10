@@ -1314,7 +1314,7 @@ Base styles: contents layer
   width: 25px;
   height: 25px;
   text-indent: -9999px;
-  background: url(/static/images/guide/ico_move.svg) no-repeat 0 0;
+  background: url(/static/images/guide/ico_move.png) no-repeat 0 0;
   background-size: 25px 25px;
 }
 @media only all and (max-width: 1024px) {
@@ -2511,7 +2511,7 @@ Base styles: contents layer
   width: 25px;
   height: 25px;
   display: inline-block;
-  background: url(/static/images/guide/ico_move.svg) no-repeat 0 0;
+  background: url(/static/images/guide/ico_move.png) no-repeat 0 0;
   background-size: 25px 25px;
   position: absolute;
   right: 0;
