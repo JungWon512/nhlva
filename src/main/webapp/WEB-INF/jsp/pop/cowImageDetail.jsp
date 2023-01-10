@@ -9,12 +9,7 @@
 	<div class="cow-imgBox">
 	
 		<c:forEach items="${ imgList }" var="item" varStatus="st">
-			<div class="item" name="${item.NA_BZPLC}_${item.OSLP_NO}"><img src="${item.FILE_PATH}"/"${ item.FILE_NM}"."${item.FILE_EXT_NM }" alt=""></div>
+			<div class="item" name="${item.NA_BZPLC}_${item.OSLP_NO}"><img src="${item.FILE_URL}" alt=""></div>
 		</c:forEach>
 	</div>
 </div>
-<script>
-	$(function(){
-		$('input, textarea').placeholder();
-	});
-</script>

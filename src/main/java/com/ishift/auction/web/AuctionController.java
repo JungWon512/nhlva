@@ -835,7 +835,7 @@ public class AuctionController extends CommonController {
 					paramMap.put("aucObjDsc", param.get("aucObjDsc"));
 					paramMap.put("aucDt", param.get("aucDt"));
 					paramMap.put("oslpNo", param.get("oslpNo"));
-					paramMap.put("ledSqNo", param.get("ledSqNo"));
+					paramMap.put("ledSqNo", param.get("ledSqno"));
 					List<Map<String,Object>> imgList = auctionService.selectListCowImg(paramMap);
 					mav.addObject("imgList",imgList);
 				break;
@@ -859,7 +859,7 @@ public class AuctionController extends CommonController {
 			paramMap.put("aucObjDsc", param.get("aucObjDsc"));
 			paramMap.put("aucDt", param.get("aucDt"));
 			paramMap.put("oslpNo", param.get("oslpNo"));
-			paramMap.put("ledSqNo", param.get("ledSqNo"));
+			paramMap.put("ledSqNo", param.get("ledSqno"));
 			List<Map<String,Object>> imgList = auctionService.selectListCowImg(paramMap);
 			mav.addObject("imgList",imgList);			
 		}catch(SQLException |RuntimeException  e) {

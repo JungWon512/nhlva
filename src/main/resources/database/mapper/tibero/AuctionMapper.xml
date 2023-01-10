@@ -2537,33 +2537,31 @@
 	</select>
 
 	<!-- 출장우 이미지 -->
-	<select id="selectListCowImg" parameterType="map"
-		resultType="map">
+	<select id="selectListCowImg" parameterType="map" resultType="map">
 		SELECT
-		A.NA_BZPLC
-		, A.AUC_OBJ_DSC
-		, A.AUC_DT
-		, A.OSLP_NO
-		, A.LED_SQNO
-		, A.SRA_INDV_AMNNO
-		, A.IMG_SQNO
-		, A.FILE_PATH
-		, A.FILE_NM
-		, A.FILE_EXT_NM
-		, A.FSRG_DTM
-		, A.FSRGMN_ENO
-		, A.LSCHG_DTM
-		, A.LS_CMENO
+			A.NA_BZPLC
+			, A.AUC_OBJ_DSC
+			, A.AUC_DT
+			, A.OSLP_NO
+			, A.LED_SQNO
+			, A.SRA_INDV_AMNNO
+			, A.IMG_SQNO
+			, A.FILE_PATH
+			, A.FILE_NM
+			, A.FILE_EXT_NM
+			, A.FSRG_DTM
+			, A.FSRGMN_ENO
+			, A.LSCHG_DTM
+			, A.LS_CMENO
+			 , 'https://kr.object.ncloudstorage.com/test-tt12/'||FILE_PATH||FILE_NM||FILE_EXT_NM AS FILE_URL
+			 , 'https://kr.object.ncloudstorage.com/test-tt12/'||FILE_PATH||'thumb/'||FILE_NM||FILE_EXT_NM AS THUMB_FILE_URL
 		FROM TB_LA_IS_MM_COW_IMG A
 		WHERE A.NA_BZPLC = #{naBzplc}
-		AND
-		A.SRA_INDV_AMNNO = #{sraIndvAmnno}
+		AND A.SRA_INDV_AMNNO = #{sraIndvAmnno}
 		AND A.AUC_DT = #{aucDt}
-		AND
-		A.AUC_OBJ_DSC = #{aucObjDsc}
+		AND A.AUC_OBJ_DSC = #{aucObjDsc}
 		AND A.OSLP_NO = #{oslpNo}
-		AND A.LED_SQNO =
-		#{ledSqNo}
+		AND A.LED_SQNO = #{ledSqNo}
 
 	</select>
 

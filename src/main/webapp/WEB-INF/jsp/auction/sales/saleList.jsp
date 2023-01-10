@@ -8,6 +8,7 @@
 	<input type="hidden" name="aucObjDsc" value="" />
 	<input type="hidden" name="sraIndvAmnno" value="" />
 	<input type="hidden" name="aucPrgSq" value="" />
+	<input type="hidden" name="oslpNo" value="" />
 	<input type="hidden" name="ledSqno" value="" />
 </form>
 
@@ -191,6 +192,7 @@
 			                   	<input type="hidden" class="oslpNo" name="oslpNo_${st.index }" value="${item.OSLP_NO}"/>
 			                   	<input type="hidden" class="sbidUpr" name="sbidUpr_${st.index }" value="${fn:split(item.SBID_UPR,'.')[0]}"/>
 			                   	<input type="hidden" class="aucPrgSq" name="aucPrgSq_${st.index }" value="${item.AUC_PRG_SQ}"/>
+			                   	<input type="hidden" class="ledSqno" name="ledSqno_${st.index }" value="${item.LED_SQNO}"/>
 			                   	<input type="hidden" class="lowsSbidLmtUpr" name="lowsSbidLmtUpr_${st.index }" value="${item.LOWS_SBID_LMT_AM <= 0 ? '0' : fn:split(item.LOWS_SBID_LMT_UPR,'.')[0]}"/>
 			                   	
 			                   	
@@ -285,6 +287,7 @@
 			                   	<input type="hidden" class="aucDt" name="aucDt_${st.index }" value="${item.AUC_DT}"/>
 			                   	<input type="hidden" class="aucObjDsc" name="aucObjDsc_${st.index }" value="${item.AUC_OBJ_DSC}"/>
 			                   	<input type="hidden" class="oslpNo" name="oslpNo_${st.index }" value="${item.OSLP_NO}"/>
+			                   	<input type="hidden" class="ledSqno" name="ledSqno_${st.index }" value="${item.LED_SQNO}"/>
 			                   	<input type="hidden" class="sbidUpr" name="sbidUpr_${st.index }" value="${fn:split(item.SBID_UPR,'.')[0]}"/>
 			                   	<input type="hidden" class="aucPrgSq" name="aucPrgSq_${st.index }" value="${item.AUC_PRG_SQ}"/>
 			                   	<input type="hidden" class="lowsSbidLmtUpr" name="lowsSbidLmtUpr_${st.index }" value="${item.LOWS_SBID_LMT_AM <= 0 ? '0' : fn:split(item.LOWS_SBID_LMT_UPR,'.')[0]}"/>

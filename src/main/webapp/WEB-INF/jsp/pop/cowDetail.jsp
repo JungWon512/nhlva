@@ -4,14 +4,14 @@
 <!--${data} -->
 <!--end::Container-->
 <form name="frm" action="" method="post">
-	<input type="hidden" name="place" value="${param.place}" />
-	<input type="hidden" name="naBzplc" value="${param.naBzplc}" />
-	<input type="hidden" name="aucDt" value="${param.aucDt}" />
-	<input type="hidden" name="aucObjDsc" value="${param.aucObjDsc}" />
-	<input type="hidden" name="sraIndvAmnno" value="${param.sraIndvAmnno}" />
-	<input type="hidden" name="aucPrgSq" value="${param.aucPrgSq}" />
-	<input type="hidden" name="oslpNo" value="${param.oslpNo}" />
-	<input type="hidden" name="ledSqno" value="${param.ledSqno}" />
+	<input type="hidden" name="place" value="${inputParam.place}" />
+	<input type="hidden" name="naBzplc" value="${inputParam.naBzplc}" />
+	<input type="hidden" name="aucDt" value="${inputParam.aucDt}" />
+	<input type="hidden" name="aucObjDsc" value="${inputParam.aucObjDsc}" />
+	<input type="hidden" name="sraIndvAmnno" value="${inputParam.sraIndvAmnno}" />
+	<input type="hidden" name="aucPrgSq" value="${inputParam.aucPrgSq}" />
+	<input type="hidden" name="oslpNo" value="${inputParam.oslpNo}" />
+	<input type="hidden" name="ledSqno" value="${inputParam.ledSqno}" />
 	<input type="hidden" name="bidPopYn" value="${inputParam.bidPopYn}" />
 </form>
 <form name="frmDetail" action="" method="post">

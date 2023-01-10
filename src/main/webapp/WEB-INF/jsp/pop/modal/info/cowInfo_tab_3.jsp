@@ -9,7 +9,7 @@
 			<div class="item" name="sample_0"><img src="/static/images/guide/v2/sample01.jpg" alt=""></div>
         </c:if>
 		<c:forEach items="${ imgList }" var="item" varStatus="st">
-			<div class="item" name="${item.NA_BZPLC}_${item.OSLP_NO}"><img src="${item.FILE_PATH}"/"${ item.FILE_NM}"."${item.FILE_EXT_NM }" alt=""></div>
+			<div class="item" name="${item.NA_BZPLC}_${item.OSLP_NO}_${item.IMG_SQNO}"><img src="${item.FILE_URL}" alt=""></div>
 		</c:forEach>
 	</div>
 	<span class="slideNumber"></span>
