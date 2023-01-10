@@ -159,8 +159,8 @@
 				modalAlert("", "예정가가 최고 응찰 한도금액을 </br>초과 하였습니다.", function(){$("input[name='firLowsSbidLmtAmTmp']").focus()});
 				return false;
 			}
-			$("input[name='firLowsSbidLmtAm']").val(parseInt(firLowsSbidLmtAm) * parseInt(divisionPrice));
-			$("input[name='lowsSbidLmtAm']").val(parseInt(firLowsSbidLmtAm) * parseInt(divisionPrice));
+			$("input[name='firLowsSbidLmtAm']").val(parseInt(firLowsSbidLmtAm) * parseInt(divisionPrice||'0'));
+			$("input[name='lowsSbidLmtAm']").val(parseInt(firLowsSbidLmtAm) * parseInt(divisionPrice||'0'));
 			
 			return true;
 		}
