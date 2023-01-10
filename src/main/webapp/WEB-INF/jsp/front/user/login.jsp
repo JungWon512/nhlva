@@ -1,6 +1,8 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ include file="/WEB-INF/__system/taglibs.jsp"%>
 
+<input type="hidden" name="kkoLoginResult" value="${kkoLoginResult}" />
+<input type="hidden" name="kkoLoginResultMsg" value="${kkoLoginResultMsg}" />
 <div class="login_area sms_authentication">
 	<form name="frm" id="frm" method="post">
 		<input type="hidden" name="place" value="${place}" />
@@ -29,6 +31,10 @@
 				</li>
 			</ul>
 			<a href="javascript:;" class="btn_login">로그인</a>
+			<a id="kakao-login-btn" href="javascript:loginWithKakao()">
+			  <img src="https://k.kakaocdn.net/14/dn/btroDszwNrM/I6efHub1SN5KCJqLm1Ovx1/o.jpg" width="222"
+			    alt="카카오 로그인 버튼" />
+			</a>
 		</div>
 	</form>
 	<form name="frm_auth" id="frm_auth" method="post">
