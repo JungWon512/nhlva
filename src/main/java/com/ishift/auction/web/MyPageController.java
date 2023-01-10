@@ -59,7 +59,7 @@ public class MyPageController {
 	private DateUtil dateUtil;
 	
 	/**
-	 * �굹�쓽 寃쎈ℓ�궡�뿭
+	 * 나의 경매내역
 	 * @param params
 	 * @return
 	 * @throws Exception
@@ -84,21 +84,21 @@ public class MyPageController {
 		paramMap.put("searchMbIntgNo", userVo.getMbIntgNo());
 		paramMap.put("stateFlag", "buy");
 		
-		// 0. �굹�쓽 寃쎈ℓ�궡�뿭 > 援щℓ�궡�뿭
+		// 0. 나의 경매내역 > 구매내역
 		mav.addObject("buyCnt",auctionService.selectCountEntry(paramMap));
 		mav.addObject("buyList", auctionService.entrySelectList(paramMap));		
 		
-		// 1. �굹�쓽 寃쎈ℓ�궡�뿭 > �쓳李곕궡�뿭
+		// 1. 나의 경매내역 > 응찰내역
 		mav.addObject("bidCnt", auctionService.selectBidLogListCnt(paramMap));
 		mav.addObject("bidList", auctionService.selectBidLogList(paramMap));
 		
-		// 2. �굹�쓽 寃쎈ℓ�궡�뿭 > �젙�궛�꽌
+		// 2. 나의 경매내역 > 정산서
 		paramMap.put("searchDateState", today);
 		
 		mav.addObject("calendarList", auctionService.selectStateList(paramMap));
 		mav.addObject("title",formatUtil.dateAddDotLenSix(today));
 		
-		//異쒖옣�슦 �긽�꽭 tab�빆紐� �몴湲�
+		//출장우 상세 tab항목 표기
 		paramMap.put("simpCGrpSqno", "2");
 		mav.addObject("tabList",auctionService.selectListExpitemSet(paramMap));
 		
@@ -107,12 +107,12 @@ public class MyPageController {
  		mav.addObject("johapData", johap);
 		mav.addObject("dateList",datelist);
 		mav.addObject("inputParam", params);
-		mav.addObject("subheaderTitle","�굹�쓽 寃쎈ℓ�궡�뿭");
+		mav.addObject("subheaderTitle","나의 경매내역");
  		
 		return mav;
 	}
 	/**
-	 * �굹�쓽 寃쎈ℓ�궡�뿭 - �젙�궛�꽌 由ъ뒪�듃 議고쉶
+	 * 나의 경매내역 - 정산서 리스트 조회
 	 * @param params
 	 * @return
 	 * @throws Exception
@@ -127,7 +127,7 @@ public class MyPageController {
 			
 			Map<String,Object> johap = adminService.selectOneJohap(paramMap);
 			
-			// 寃��깋�븷 �궇吏� 怨꾩궛泥섎━
+			// 검색할 날짜 계산처리
 			String yyyyMM = "";
 	        DateTimeFormatter format = DateTimeFormatter.ofPattern("yyyyMM");
 	     	String searchYm = paramMap.get("searchDateState").toString();
@@ -153,11 +153,11 @@ public class MyPageController {
 			
 			if (calendarList != null) {
 				result.put("success", true);
-				result.put("message", "議고쉶�뿉 �꽦怨듯뻽�뒿�땲�떎.");
+				result.put("message", "조회에 성공했습니다.");
 				result.put("info", calendarList);
 			} else {
 				result.put("success", false);
-				result.put("message", "�젙�궛�궡�뿭�씠 �뾾�뒿�땲�떎.");
+				result.put("message", "정산내역이 없습니다.");
 			}
 			
 			result.put("inputParam",params);
@@ -166,13 +166,13 @@ public class MyPageController {
 		} catch (Exception e) {
 			log.error("MyPageController.buyList : {}", e);
 			result.put("success", false);
-			result.put("message", "�옉�뾽以� �삤瑜섍� 諛쒖깮�뻽�뒿�땲�떎. 愿�由ъ옄�뿉寃� 臾몄쓽�븯�꽭�슂.");
+			result.put("message", "작업중 오류가 발생했습니다. 관리자에게 문의하세요.");
 		}
 		
 		return result;
 	}
 	/**
-	 * �굹�쓽 寃쎈ℓ�궡�뿭 - �젙�궛�꽌 �긽�꽭 �럹�씠吏�
+	 * 나의 경매내역 - 정산서 상세 페이지
 	 * @param params
 	 * @return
 	 * @throws Exception
@@ -196,30 +196,30 @@ public class MyPageController {
 		
 		params.put("aucDt", dateUtil.addDelimDate(params.get("searchDate").toString()));
 
-		//留ㅼ닔�씤�젙�궛�꽌 flag insert
+		//매수인정산서 flag insert
 		params.put("stateFlag", "buy");
 		paramMap.put("stateFlag", "buy");
 		
-		//議고빀�젙蹂� 諛� 怨꾩쥖�젙蹂� 媛��졇�삤湲�
+		//조합정보 및 계좌정보 가져오기
 		mav.addObject("accountInfo", auctionService.selectJohapAccInfo(paramMap));		
-		//留ㅼ닔�씤 �젙蹂� 議고쉶
+		//매수인 정보 조회
 		mav.addObject("stateInfo", auctionService.selectStateInfo(paramMap));
-		//�굺李곌� 議고쉶
+		//낙찰가 조회
 		mav.addObject("stateTotPrice", auctionService.selectTotSoldPriceAndFee(paramMap));
-		//�굺李곗슦 �몢�닔 議고쉶
+		//낙찰우 두수 조회
 		mav.addObject("stateBuyCnt",auctionService.selectCountEntry(paramMap));
-		//�긽�꽭 議고쉶 由ъ뒪�듃
+		//상세 조회 리스트
 		mav.addObject("list", auctionService.entrySelectList(paramMap));
 		
 		mav.addObject("johapData", johap);
 		mav.addObject("inputParam", params);
-		mav.addObject("subheaderTitle", "�굹�쓽 寃쎈ℓ�궡�뿭");
+		mav.addObject("subheaderTitle", "나의 경매내역");
 		mav.setViewName("mypage/buy/buy_info");
 		
 		return mav;
 	}
 	/**
-	 * �굹�쓽 寃쎈ℓ�궡�뿭 - 援щℓ�궡�뿭 由ъ뒪�듃 議고쉶
+	 * 나의 경매내역 - 구매내역 리스트 조회
 	 * @param params
 	 * @return
 	 * @throws Exception
@@ -238,13 +238,13 @@ public class MyPageController {
             result.put("data", list);
         }catch (SQLException | RuntimeException re) {
             result.put("success", false);
-            result.put("message", "�옉�뾽以� �삤瑜섍� 諛쒖깮�뻽�뒿�땲�떎. 愿�由ъ옄�뿉寃� 臾몄쓽�븯�꽭�슂.");
+            result.put("message", "작업중 오류가 발생했습니다. 관리자에게 문의하세요.");
 			log.error("MyPageController.selectMyBuyList : {} ",re);
 		}
         return result;
     }
 	/**
-	 * �굹�쓽 寃쎈ℓ�궡�뿭 - �쓳李곕궡�뿭 由ъ뒪�듃 議고쉶
+	 * 나의 경매내역 - 응찰내역 리스트 조회
 	 * @param params
 	 * @return
 	 * @throws Exception
@@ -260,14 +260,14 @@ public class MyPageController {
             result.put("data", list);
         }catch (SQLException | RuntimeException re) {
             result.put("success", false);
-            result.put("message", "�옉�뾽以� �삤瑜섍� 諛쒖깮�뻽�뒿�땲�떎. 愿�由ъ옄�뿉寃� 臾몄쓽�븯�꽭�슂.");
+            result.put("message", "작업중 오류가 발생했습니다. 관리자에게 문의하세요.");
 			log.error("MyPageController.selectMyBuyList : {} ",re);
 		}
         return result;
     }
 	
 	/**
-	 * �젙�궛�꽌 �닔�닔猷� �긽�꽭 �뙘�뾽
+	 * 정산서 수수료 상세 팝업
 	 * @param params
 	 * @return
 	 * @throws Exception
@@ -301,18 +301,18 @@ public class MyPageController {
 			
 			paramMap.putAll(params);
 
-			//�닔�닔猷� �긽�꽭 議고쉶
+			//수수료 상세 조회
 			result.put("feeList", auctionService.myFeeStateList(paramMap));
 			
 		}catch (SQLException | RuntimeException re) {
 			result.put("success", false);
-			result.put("message", "�옉�뾽以� �삤瑜섍� 諛쒖깮�뻽�뒿�땲�떎. 愿�由ъ옄�뿉寃� 臾몄쓽�븯�꽭�슂.");
+			result.put("message", "작업중 오류가 발생했습니다. 관리자에게 문의하세요.");
 			log.error("MyPageController.myFeeStateInfo : {} ",re);
 		}
 		return result;
 	}
 	/**
-	 * �굹�쓽 寃쎈ℓ�궡�뿭 - �젙�궛�꽌 �긽�꽭 �젙蹂� 議고쉶
+	 * 나의 경매내역 - 정산서 상세 정보 조회
 	 * @param params
 	 * @return
 	 * @throws Exception
@@ -346,29 +346,29 @@ public class MyPageController {
 			
 			paramMap.putAll(params);
 			
-        	//留ㅼ닔�씤 �젙蹂� 議고쉶
+        	//매수인 정보 조회
         	result.put("stateInfo", auctionService.selectStateInfo(paramMap));
-        	//�굺李곌� 議고쉶
+        	//낙찰가 조회
         	result.put("stateTotPrice", auctionService.selectTotSoldPriceAndFee(paramMap));
-            //�굺李곗슦 �몢�닔 議고쉶
+            //낙찰우 두수 조회
         	if ("entry".equals(paramMap.get("stateFlag"))) {
         		result.put("stateBuyCnt",auctionService.selectStateEntryCntFhs(paramMap));
         	} else {
         		result.put("stateBuyCnt",auctionService.selectCountEntry(paramMap));
         	}
-            //�긽�꽭 議고쉶 由ъ뒪�듃
+            //상세 조회 리스트
             result.put("list", auctionService.entrySelectList(paramMap));
             
         }catch (SQLException | RuntimeException re) {
             result.put("success", false);
-            result.put("message", "�옉�뾽以� �삤瑜섍� 諛쒖깮�뻽�뒿�땲�떎. 愿�由ъ옄�뿉寃� 臾몄쓽�븯�꽭�슂.");
+            result.put("message", "작업중 오류가 발생했습니다. 관리자에게 문의하세요.");
 			log.error("MyPageController.myStateInfo : {} ",re);
 		}
         return result;
     }
 	
 	/**
-	 * My�쁽�솴 議고쉶
+	 * My현황 조회
 	 * @param params
 	 * @return
 	 * @throws Exception
@@ -381,7 +381,7 @@ public class MyPageController {
         try {        	
         	Map<String, Object> paramMap = new HashMap<>();
         	
-        	// 寃��깋�븷 �궇吏� 怨꾩궛泥섎━
+        	// 검색할 날짜 계산처리
 			String yyyyMM = "";
 			String searchYm = params.get("searchDate").toString();
 			DateTimeFormatter format = ("M".equals(params.get("ymFlag").toString())) 
@@ -423,7 +423,7 @@ public class MyPageController {
 			paramMap.putAll(params);
 			paramMap.put("searchDateMy", ("M".equals(params.get("ymFlag")) ? yyyyMM : yyyyMM.substring(0, 4)));
 			
-			// �떎瑜� 議고빀 寃��깋
+			// 다른 조합 검색
 			paramMap.put("searchNaBzplc", paramMap.get("naBzplc").toString() == params.get("johpCd").toString() ? paramMap.get("naBzplc").toString() : params.get("johpCd").toString());
 			Map<String, Object> johapTmpMap = new HashMap<>();
 			johapTmpMap.put("naBzplc", paramMap.get("searchNaBzplc"));
@@ -434,11 +434,11 @@ public class MyPageController {
 				paramMap.put("searchMbIntgNo", userVo.getMbIntgNo());
 	    		paramMap.put("searchTrmnAmnNo", sessionUtill.getUserId());
 	    		
-	    		// > �뿰/�썡�떒�쐞 湲곗� �쟾泥� �굺李곕몢�닔, �넚�븘吏�, 鍮꾩쑁�슦, 踰덉떇�슦�쓽 �굺李곕몢�닔
+	    		// > 연/월단위 기준 전체 낙찰두수, 송아지, 비육우, 번식우의 낙찰두수
 	    		result.put("cowBidCnt", myPageService.selectCowBidCnt(paramMap));
-	    		// > �궡媛� bid�븳 �궡�뿭�쓽 �닽�옄�� �굺李� �띁�꽱�듃 (寃쎈ℓ���긽蹂꾨줈)
+	    		// > 내가 bid한 내역의 숫자와 낙찰 퍼센트 (경매대상별로)
 	    		result.put("cowBidPercent", myPageService.selectCowBidPercent(paramMap));
-	    		// > �쟾泥� 議고빀�쓽 �굹�쓽 �쓳李� �쁽�솴
+	    		// > 전체 조합의 나의 응찰 현황
 	    		result.put("cowBidCntList", myPageService.selectListAucBidCntAll(paramMap));
 	    		
 			} else {
@@ -447,9 +447,9 @@ public class MyPageController {
 	    		paramMap.put("searchFhsIdNo", ((FarmUserDetails) sessionUtill.getUserVo()).getFhsIdNo());
 	    		paramMap.put("searchFarmAmnno", ((FarmUserDetails) sessionUtill.getUserVo()).getFarmAmnno());
 	    		
-	    		// > �뿰/�썡�떒�쐞 湲곗� �쟾泥� 異쒖옣�몢�닔, �넚�븘吏�, 鍮꾩쑁�슦, 踰덉떇�슦�쓽 �굺李곕몢�닔, �굺李고룊洹�, �룊洹좎떆�꽭
+	    		// > 연/월단위 기준 전체 출장두수, 송아지, 비육우, 번식우의 낙찰두수, 낙찰평균, 평균시세
 	    		result.put("cowEntryCnt", myPageService.selectCowEntryCnt(paramMap));
-	    		// > �쟾泥� 議고빀�쓽 �굹�쓽 異쒖옣�슦 �쁽�솴
+	    		// > 전체 조합의 나의 출장우 현황
 	    		result.put("cowEntryCntList", myPageService.selectListAucEntryCntAll(paramMap));
 			}
 			
@@ -457,7 +457,7 @@ public class MyPageController {
             
         }catch (SQLException | RuntimeException re) {
             result.put("success", false);
-            result.put("message", "�옉�뾽以� �삤瑜섍� 諛쒖깮�뻽�뒿�땲�떎. 愿�由ъ옄�뿉寃� 臾몄쓽�븯�꽭�슂.");
+            result.put("message", "작업중 오류가 발생했습니다. 관리자에게 문의하세요.");
 			log.error("MyPageController.myMenu : {} ",re);
 		}
         return result;
@@ -466,16 +466,16 @@ public class MyPageController {
 	@PreAuthorize("hasRole('ROLE_BIDDER')")
 	@RequestMapping(value = "/my/bid",method = { RequestMethod.GET, RequestMethod.POST })
 	public ModelAndView mybidding() throws Exception {
-		// �굹�쓽�쓳李곕궡�뿭
+		// 나의응찰내역
 		LOGGER.debug("start of bid.do");
 		ModelAndView mav = new ModelAndView();
-		mav.addObject("subheaderTitle","�쓳李곕궡�뿭");
+		mav.addObject("subheaderTitle","응찰내역");
 		mav.setViewName("mypage/bid/bid");
 		return mav;
 	}
 	
 	/**
-	 * �굹�쓽 異쒖옣�슦
+	 * 나의 출장우
 	 * @param params
 	 * @return
 	 * @throws Exception
@@ -503,15 +503,15 @@ public class MyPageController {
 		paramMap.putAll(params);
 		paramMap.put("stateFlag", "entry");
 		
-		// 0. �굹�쓽 異쒖옣�슦 > 異쒖옣�슦
+		// 0. 나의 출장우 > 출장우
 		mav.addObject("myEntryList", auctionService.entrySelectList(paramMap));
 		
-		// 1. �굹�쓽 異쒖옣�슦 > �젙�궛�꽌
+		// 1. 나의 출장우 > 정산서
 		paramMap.put("searchDateState", today);
 		
 		mav.addObject("calendarList", auctionService.selectStateList(paramMap));
 		
-		//異쒖옣�슦 �긽�꽭 tab�빆紐� �몴湲�
+		//출장우 상세 tab항목 표기
 		paramMap.put("simpCGrpSqno", "2");
 		mav.addObject("tabList",auctionService.selectListExpitemSet(paramMap));
 		
@@ -521,13 +521,13 @@ public class MyPageController {
 		mav.addObject("dateList",datelist);
 		mav.addObject("inputParam", params);
 		mav.addObject("title",formatUtil.dateAddDotLenSix(today));
-		mav.addObject("subheaderTitle","�굹�쓽 異쒖옣�슦");
+		mav.addObject("subheaderTitle","나의 출장우");
  		
 		return mav;
 	}
 	
 	/**
-	 * �굹�쓽 異쒖옣�슦 - 異쒖옣�슦 由ъ뒪�듃 議고쉶
+	 * 나의 출장우 - 출장우 리스트 조회
 	 * @param params
 	 * @return
 	 * @throws Exception
@@ -545,14 +545,14 @@ public class MyPageController {
             result.put("data", list);
         }catch (SQLException | RuntimeException re) {
             result.put("success", false);
-            result.put("message", "�옉�뾽以� �삤瑜섍� 諛쒖깮�뻽�뒿�땲�떎. 愿�由ъ옄�뿉寃� 臾몄쓽�븯�꽭�슂.");
+            result.put("message", "작업중 오류가 발생했습니다. 관리자에게 문의하세요.");
 			log.error("MyPageController.selectMyBuyList : {} ",re);
 		}
         return result;
     }
 	
 	/**
-	 * �굹�쓽 異쒖옣�슦 - �젙�궛�꽌 由ъ뒪�듃 議고쉶
+	 * 나의 출장우 - 정산서 리스트 조회
 	 * @param params
 	 * @return
 	 * @throws Exception
@@ -567,7 +567,7 @@ public class MyPageController {
 			
 			Map<String,Object> johap = adminService.selectOneJohap(paramMap);
 			
-			// 寃��깋�븷 �궇吏� 怨꾩궛泥섎━
+			// 검색할 날짜 계산처리
 			String yyyyMM = "";
 	        DateTimeFormatter format = DateTimeFormatter.ofPattern("yyyyMM");
 	     	String searchYm = paramMap.get("searchDateState").toString();
@@ -594,12 +594,12 @@ public class MyPageController {
 			List<Map<String,Object>> calendarList = auctionService.selectStateList(paramMap);
 			if (calendarList != null) {
 				result.put("success", true);
-				result.put("message", "議고쉶�뿉 �꽦怨듯뻽�뒿�땲�떎.");
+				result.put("message", "조회에 성공했습니다.");
 				result.put("info", calendarList);
 			}
 			else {
 				result.put("success", false);
-				result.put("message", "�젙�궛 �궡�뿭�씠 �뾾�뒿�땲�떎.");
+				result.put("message", "정산 내역이 없습니다.");
 			}
 			
 			result.put("inputParam",params);
@@ -608,13 +608,13 @@ public class MyPageController {
 		} catch (Exception e) {
 			log.error("MyPageController.buyList : {}", e);
 			result.put("success", false);
-			result.put("message", "�옉�뾽以� �삤瑜섍� 諛쒖깮�뻽�뒿�땲�떎. 愿�由ъ옄�뿉寃� 臾몄쓽�븯�꽭�슂.");
+			result.put("message", "작업중 오류가 발생했습니다. 관리자에게 문의하세요.");
 		}
 		return result;
 	}
 	
 	/**
-	 * �굹�쓽 異쒖옣�슦 - �젙�궛�꽌 �긽�꽭 �럹�씠吏�
+	 * 나의 출장우 - 정산서 상세 페이지
 	 * @param params
 	 * @return
 	 * @throws Exception
@@ -639,32 +639,32 @@ public class MyPageController {
 		map.put("searchFarmAmnno", userVo.getFarmAmnno());
 		
 		params.put("aucDt", dateUtil.addDelimDate(params.get("searchDate").toString()));
-		//異쒗븯�슦�젙�궛�꽌 flag insert
+		//출하우정산서 flag insert
 		params.put("stateFlag", "entry");
 		map.put("stateFlag", "entry");
 		map.put("feeFlag", "Y");
 		
-		//議고빀�젙蹂� 諛� 怨꾩쥖�젙蹂� 媛��졇�삤湲�
+		//조합정보 및 계좌정보 가져오기
 		mav.addObject("accountInfo", auctionService.selectJohapAccInfo(map));
-		//異쒗븯�슦 �젙蹂� 議고쉶
+		//출하우 정보 조회
 		mav.addObject("stateInfo", auctionService.selectStateInfo(map));
-		//�굺李곌� 議고쉶
+		//낙찰가 조회
 		mav.addObject("stateTotPrice", auctionService.selectTotSoldPriceAndFee(map));
-		//�굺李곗슦 �몢�닔 議고쉶
+		//낙찰우 두수 조회
 		mav.addObject("stateBuyCnt",auctionService.selectStateEntryCntFhs(map));			
-		//�긽�꽭 議고쉶 由ъ뒪�듃
+		//상세 조회 리스트
 		mav.addObject("list", auctionService.entrySelectList(map));
 
 		mav.addObject("johapData", johap);
 		mav.addObject("inputParam", params);
-		mav.addObject("subheaderTitle", "�굹�쓽 異쒖옣�슦");
+		mav.addObject("subheaderTitle", "나의 출장우");
 		mav.setViewName("mypage/entry/entry_info");
 		return mav;
 	}
 	
 	/**
-	 * 1. �떒�씪寃쎈ℓ�뿉�꽌 �샇異쒖떆 李� 媛�寃⑹쓣 議고쉶�븳�떎.
-	 * 2. �씪愿꾧꼍留ㅼ뿉�꽌 �샇異쒖떆 �씠�쟾 �쓳李� 媛�寃⑷낵 李� 媛�寃⑹쓣 �룞�떆�뿉 議고쉶�븳�떎. 
+	 * 1. 단일경매에서 호출시 찜 가격을 조회한다.
+	 * 2. 일괄경매에서 호출시 이전 응찰 가격과 찜 가격을 동시에 조회한다. 
 	 * @param params
 	 * @return
 	 * @throws Exception
@@ -689,24 +689,24 @@ public class MyPageController {
 			
 			if (favorite != null) {
 				result.put("success", true);
-				result.put("message", "議고쉶�뿉 �꽦怨듯뻽�뒿�땲�떎.");
+				result.put("message", "조회에 성공했습니다.");
 				result.put("info", favorite);
 			}
 			else {
 				result.put("success", false);
-				result.put("message", "�벑濡앺븳 李� �젙蹂닿� �뾾�뒿�땲�떎.");
+				result.put("message", "등록한 찜 정보가 없습니다.");
 			}
 			return result;
 		}catch (SQLException | RuntimeException re) {
 			log.error("MyPageController.myFavorite : {} ",re);
 			result.put("success", false);
-			result.put("message", "�옉�뾽以� �삤瑜섍� 諛쒖깮�뻽�뒿�땲�떎. 愿�由ъ옄�뿉寃� 臾몄쓽�븯�꽭�슂.");
+			result.put("message", "작업중 오류가 발생했습니다. 관리자에게 문의하세요.");
 			return result;
 		}
 	}
 
 	/**
-	 * �굹�쓽 �젙蹂� �럹�씠吏� - 濡쒓렇�씤 �썑 �젒洹쇳븯�뒗 �럹�씠吏�
+	 * 나의 정보 페이지 - 로그인 후 접근하는 페이지
 	 * @param params
 	 * @return
 	 * @throws Exception
@@ -738,7 +738,7 @@ public class MyPageController {
 			mav.addObject("secAplyPossible", "N");
 		}
 		
-		//濡쒓렇�씤�맂 �뿭�븷 �솗�씤�븯�뿬 媛� �뀒�씠釉� 議고쉶
+		//로그인된 역할 확인하여 각 테이블 조회
 		Map<String, Object> authNoYmd = new HashMap<String, Object>(); 
 		if(sessionUtill.getRoleConfirm() != null) {
 			if("ROLE_BIDDER".equals(sessionUtill.getRoleConfirm())) {
@@ -757,13 +757,13 @@ public class MyPageController {
 		LocalDateTime date = LocalDateTime.now();
 		String today = date.format(DateTimeFormatter.ofPattern("yyyyMMddhhmmss"));
 		mav.addObject("today", today);
-		mav.addObject("subheaderTitle","�굹�쓽�젙蹂�");
+		mav.addObject("subheaderTitle","나의정보");
 		mav.setViewName("mypage/info/myInfo");
 		return mav;
 	}
 	
 	/**
-	 * �빐�떦 議고빀�뿉 �씠�슜�빐吏� �떊泥��씠 �릺�뼱 �엳�뒗吏� 泥댄겕�븯�뒗 硫붿냼�뱶
+	 * 해당 조합에 이용해지 신청이 되어 있는지 체크하는 메소드
 	 * @param params
 	 * @return
 	 * @throws Exception
@@ -782,24 +782,24 @@ public class MyPageController {
 			
 			if (aplyInfo == null) {
 				result.put("success", true);
-				result.put("message", "�씠�슜�빐吏� 誘몄떊泥� �긽�깭�엯�땲�떎.");
+				result.put("message", "이용해지 미신청 상태입니다.");
 			}
 			else {
 				result.put("success", false);
-				result.put("message", "�씠誘� �씠�슜�빐吏� �떊泥��쓣 �븯�떊 �긽�깭�엯�땲�떎.");
+				result.put("message", "이미 이용해지 신청을 하신 상태입니다.");
 			}
 			return result;
 			
 		}catch (SQLException | RuntimeException re) {
 			log.error("MyPageController.mySecAplyCheck : {} ",re);
 			result.put("success", false);
-			result.put("message", "�옉�뾽以� �삤瑜섍� 諛쒖깮�뻽�뒿�땲�떎. 愿�由ъ옄�뿉寃� 臾몄쓽�븯�꽭�슂.");
+			result.put("message", "작업중 오류가 발생했습니다. 관리자에게 문의하세요.");
 			return result;
 		}
 	}
 	
 	/**
-	 * �씠�슜�빐吏� �떊泥� �럹�씠吏� 
+	 * 이용해지 신청 페이지 
 	 * @param params
 	 * @return
 	 * @throws Exception
@@ -819,13 +819,13 @@ public class MyPageController {
 		if(sessionUtill.getUserId() != null) params.put("loginNo", sessionUtill.getUserId());
 		mav.addObject("inputParam", params);
 
-		mav.addObject("subheaderTitle","�씠�슜�빐吏� �떊泥�");
+		mav.addObject("subheaderTitle","이용해지 신청");
  		mav.setViewName("mypage/sec/secAply");
 		return mav;
 	}
 	
 	/**
-	 * �씠�슜�빐吏� �뜲�씠�꽣 insert 
+	 * 이용해지 데이터 insert 
 	 * @param params
 	 * @return
 	 * @throws Exception
@@ -844,20 +844,20 @@ public class MyPageController {
 			
 			auctionService.insertMySecAplyInfo(params);
 			result.put("success", true);
-			result.put("message", "�씠�슜�빐吏� �떊泥��씠 �셿猷뚮릺�뿀�뒿�땲�떎.<br/>�빐�떦 議고빀 愿�由ъ옄�쓽 �솗�씤 �썑 理쒖쥌�쟻�쑝濡� �씠�슜�빐吏�媛� �씠琉꾩쭏 �삁�젙�엯�땲�떎.");
+			result.put("message", "이용해지 신청이 완료되었습니다.<br/>해당 조합 관리자의 확인 후 최종적으로 이용해지가 이뤄질 예정입니다.");
 			
 			return result;
 			
 		}catch (SQLException | RuntimeException re) {
 			log.error("MyPageController.mySecAplyCheck : {} ",re);
 			result.put("success", false);
-			result.put("message", "�옉�뾽以� �삤瑜섍� 諛쒖깮�뻽�뒿�땲�떎. 愿�由ъ옄�뿉寃� 臾몄쓽�븯�꽭�슂.");
+			result.put("message", "작업중 오류가 발생했습니다. 관리자에게 문의하세요.");
 			return result;
 		}
 	}
 	
 	/**
-	 * �씠�슜�빐吏� 泥좏쉶媛� 媛��뒫�븳 �긽�깭�씤吏� �솗�씤�븯�뒗 硫붿냼�뱶
+	 * 이용해지 철회가 가능한 상태인지 확인하는 메소드
 	 * @param params
 	 * @return
 	 * @throws Exception
@@ -876,15 +876,15 @@ public class MyPageController {
 			
 			if (aplyInfo == null) {
 				result.put("success", false);
-				result.put("message", "�씠�슜�빐吏� 誘몄떊泥� �긽�깭�엯�땲�떎.");
+				result.put("message", "이용해지 미신청 상태입니다.");
 			}
 			else {
 				if(!"0".equals(aplyInfo.get("MGR_APPR_YN"))) {
 					result.put("success", false);
-					result.put("message", "�씠誘� �씠�슜�빐吏� �떊泥��씠 �셿猷뚮릺�뼱 泥좏쉶 遺덇��뒫�븳 �긽�깭�엯�땲�떎.");
+					result.put("message", "이미 이용해지 신청이 완료되어 철회 불가능한 상태입니다.");
 				}else {
 					result.put("success", true);
-					result.put("message", "�씠�슜�빐吏� 泥좏쉶 媛��뒫�븳 �긽�깭�엯�땲�떎.");
+					result.put("message", "이용해지 철회 가능한 상태입니다.");
 				}
 			}
 			return result;
@@ -892,13 +892,13 @@ public class MyPageController {
 		}catch (SQLException | RuntimeException re) {
 			log.error("MyPageController.mySecAplyCheck : {} ",re);
 			result.put("success", false);
-			result.put("message", "�옉�뾽以� �삤瑜섍� 諛쒖깮�뻽�뒿�땲�떎. 愿�由ъ옄�뿉寃� 臾몄쓽�븯�꽭�슂.");
+			result.put("message", "작업중 오류가 발생했습니다. 관리자에게 문의하세요.");
 			return result;
 		}
 	}
 	
 	/**
-	 * �씠�슜�빐吏� �떊泥� 泥좏쉶 �럹�씠吏� 
+	 * 이용해지 신청 철회 페이지 
 	 * @param params
 	 * @return
 	 * @throws Exception
@@ -918,13 +918,13 @@ public class MyPageController {
 		if(sessionUtill.getUserId() != null) params.put("loginNo", sessionUtill.getUserId());
 		mav.addObject("inputParam", params);
 
-		mav.addObject("subheaderTitle","�씠�슜�빐吏� 泥좏쉶");
+		mav.addObject("subheaderTitle","이용해지 철회");
  		mav.setViewName("mypage/sec/secWithdraw");
 		return mav;
 	}
 	
 	/**
-	 * �씠�슜�빐吏� �떊泥� 泥좏쉶湲곕뒫 援ы쁽�쓣 �쐞�빐
+	 * 이용해지 신청 철회기능 구현을 위해
 	 * @param params
 	 * @return
 	 * @throws Exception
@@ -945,17 +945,17 @@ public class MyPageController {
 			
 			if (aplyInfo == null) {
 				result.put("success", false);
-				result.put("message", "�씠�슜�빐吏� 誘몄떊泥� �긽�깭�엯�땲�떎.");
+				result.put("message", "이용해지 미신청 상태입니다.");
 			}
 			else {
 				if(!"0".equals(aplyInfo.get("MGR_APPR_YN"))) {
 					result.put("success", false);
-					result.put("message", "�씠誘� �씠�슜�빐吏� �떊泥��씠 �셿猷뚮릺�뼱 泥좏쉶 遺덇��뒫�븳 �긽�깭�엯�땲�떎.");
+					result.put("message", "이미 이용해지 신청이 완료되어 철회 불가능한 상태입니다.");
 				}else {
-					//delete �빐�빞�븿
+					//delete 해야함
 					auctionService.deleteMySecAplyInfo(params);
 					result.put("success", true);
-					result.put("message", "�빐吏� �떊泥� 泥좏쉶媛� �셿猷뚮릺�뿀�뒿�땲�떎.");
+					result.put("message", "해지 신청 철회가 완료되었습니다.");
 				}
 			}
 			
@@ -964,13 +964,13 @@ public class MyPageController {
 		}catch (SQLException | RuntimeException re) {
 			log.error("MyPageController.del_mySecAply : {} ",re);
 			result.put("success", false);
-			result.put("message", "�옉�뾽以� �삤瑜섍� 諛쒖깮�뻽�뒿�땲�떎. 愿�由ъ옄�뿉寃� 臾몄쓽�븯�꽭�슂.");
+			result.put("message", "작업중 오류가 발생했습니다. 관리자에게 문의하세요.");
 			return result;
 		}
 	}
 	
 	/**
-	 * �궎�삤�뒪�겕 �씤利앸쾲�샇 諛쒓툒�븯湲�
+	 * 키오스크 인증번호 발급하기
 	 * @param params
 	 * @return
 	 * @throws Exception
@@ -987,7 +987,7 @@ public class MyPageController {
 		}catch (SQLException | RuntimeException re) {
 			log.error("MyPageController.myAuthNumIssue : {} ",re);
 			result.put("success", false);
-			result.put("message", "�옉�뾽以� �삤瑜섍� 諛쒖깮�뻽�뒿�땲�떎. 愿�由ъ옄�뿉寃� 臾몄쓽�븯�꽭�슂.");
+			result.put("message", "작업중 오류가 발생했습니다. 관리자에게 문의하세요.");
 			return result;
 		}
 	}
