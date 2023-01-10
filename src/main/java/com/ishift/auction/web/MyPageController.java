@@ -99,7 +99,7 @@ public class MyPageController {
 		mav.addObject("title",formatUtil.dateAddDotLenSix(today));
 		
 		//출장우 상세 tab항목 표기
-		paramMap.put("simpCGrpSqno", "3");
+		paramMap.put("simpCGrpSqno", "2");
 		mav.addObject("tabList",auctionService.selectListExpitemSet(paramMap));
 		
 		params.putAll(paramMap);
@@ -512,7 +512,7 @@ public class MyPageController {
 		mav.addObject("calendarList", auctionService.selectStateList(paramMap));
 		
 		//출장우 상세 tab항목 표기
-		paramMap.put("simpCGrpSqno", "3");
+		paramMap.put("simpCGrpSqno", "2");
 		mav.addObject("tabList",auctionService.selectListExpitemSet(paramMap));
 		
 		params.putAll(paramMap);
