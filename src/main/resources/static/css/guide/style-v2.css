@@ -1584,7 +1584,7 @@ input[type="number"]::-webkit-inner-spin-button {
 	padding: 0 10px;
 	margin: 0 8px;
 	height: 56px;
-	font-size: 32px;
+	font-size: 28px;
 	color: #515457;
 	background-color: #fff;
 	border: 1px solid #d9d9d9;
@@ -3581,7 +3581,7 @@ input[type="number"]::-webkit-inner-spin-button {
 		padding: 0 5px;
 		margin: 0 4px;
 		height: 28px;
-		font-size: 16px;
+		font-size: 13px;
 		border-radius: 15px;
 	}
 
