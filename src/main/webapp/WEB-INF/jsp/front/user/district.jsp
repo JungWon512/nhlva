@@ -2,7 +2,17 @@
 <%@ include file="/WEB-INF/__system/taglibs.jsp"%>
 
 <!--begin::Container-->
-<div class="chk_step2">
+<div class="chk_step2 pc-mt0">
+	<div class="main-tab">
+		<ul>
+			<li class="on">
+				<a href="javascript:pageMove('/home')">경매<span class="sub-txt">인터넷 <br>스마트 경매</span></a>
+			</li>
+			<li>
+				<a href="javascript:pageMove('/dashboard')">현황<span class="sub-txt">전국 <br>가축시장현황</span></a>
+			</li>
+		</ul>
+	</div>
 	<div class="back_area">
 		<a href="javascript:pageMove('/home');"><img src="/static/images/guide/ico_back.svg">전국 가축시장 보기</a>
 	</div>

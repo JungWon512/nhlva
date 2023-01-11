@@ -9,7 +9,18 @@
 		padding: 10px 0 !important;
 	}
 </style>
-
+<div class="chk_step1">
+	<div class="main-tab">
+		<ul>
+			<li class="on">
+				<a href="#">경매<span class="sub-txt">인터넷 <br>스마트 경매</span></a>
+			</li>
+			<li>
+				<a href="#">현황<span class="sub-txt">전국 <br>가축시장현황</span></a>
+			</li>
+		</ul>
+	</div>
+</div>
 <div class="schedule_v2">
 	<div class="back_area">
 		<a href="javascript:pageMove('/home')"><img src="/static/images/guide/ico_back.svg">메인 화면으로 가기</a>
