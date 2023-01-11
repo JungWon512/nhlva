@@ -20,7 +20,7 @@
 						<c:otherwise>
 							[KPN] ${infoData.KPN_NO } 
 							<br/>${infoData.MIF_FCOW_SRA_INDV_EART_NO_FORMAT }
-							<c:if test="${'Y' ne inputParam.bidPopYn }"> 
+							<c:if test="${'N' eq inputParam.bidPopYn }"> 
 								<button type="button" class="btn-search btnCowSearch" data-indv-no="${infoData.MIF_FCOW_SRA_INDV_EART_NO}"><span class="sr-only">검색</span></button>
 							</c:if>
 						</c:otherwise>
@@ -37,7 +37,7 @@
 						<c:otherwise>
 							[KPN] ${infoData.GRFA_SRA_KPN_NO }  
 							<br/>${infoData.GRFA_SRA_INDV_EART_NO_FORMAT }
-							<c:if test="${'Y' ne inputParam.bidPopYn }"> 
+							<c:if test="${'N' eq inputParam.bidPopYn }"> 
 								<button type="button" class="btn-search btnCowSearch" data-indv-no="${infoData.GRFA_SRA_INDV_EART_NO}"><span class="sr-only">검색</span></button>
 							</c:if>
 						</c:otherwise>
@@ -53,7 +53,7 @@
 						</c:when>
 						<c:otherwise>
 							${infoData.GRMO_SRA_INDV_EART_NO_FORMAT } 
-							<c:if test="${'Y' ne inputParam.bidPopYn }">
+							<c:if test="${'N' eq inputParam.bidPopYn }">
 								<button type="button" class="btn-search btnCowSearch" data-indv-no="${infoData.GRMO_SRA_INDV_EART_NO}"><span class="sr-only">검색</span></button>
 							</c:if>
 						</c:otherwise>
@@ -80,7 +80,7 @@
 						</c:when>
 						<c:otherwise>
 							${infoData.MCOW_SRA_INDV_AMNNO_FORMAT } 
-							<c:if test="${'Y' ne inputParam.bidPopYn }">
+							<c:if test="${'N' eq inputParam.bidPopYn }">
 								<button type="button" class="btn-search btnCowSearch" data-indv-no="${infoData.MCOW_SRA_INDV_AMNNO}"><span class="sr-only">검색</span></button>
 							</c:if>
 						</c:otherwise>
@@ -97,7 +97,7 @@
 						<c:otherwise>
 							[KPN] ${infoData.MTGRFA_SRA_KPN_NO } 
 							<br/>${infoData.MTGRFA_SRA_INDV_EART_NO_FORMAT } 
-							<c:if test="${'Y' ne inputParam.bidPopYn }">
+							<c:if test="${'N' eq inputParam.bidPopYn }">
 								<button type="button" class="btn-search btnCowSearch" data-indv-no="${infoData.MTGRFA_SRA_INDV_EART_NO}"><span class="sr-only">검색</span></button>
 							</c:if>
 						</c:otherwise>
@@ -113,7 +113,7 @@
 						</c:when>
 						<c:otherwise>
 							${infoData.MTGRMO_SRA_INDV_EART_NO_FORMAT } 
-							<c:if test="${'Y' ne inputParam.bidPopYn }">
+							<c:if test="${'N' eq inputParam.bidPopYn }">
 								<button type="button" class="btn-search btnCowSearch" data-indv-no="${infoData.MTGRMO_SRA_INDV_EART_NO}"><span class="sr-only">검색</span></button>
 							</c:if>
 						</c:otherwise>

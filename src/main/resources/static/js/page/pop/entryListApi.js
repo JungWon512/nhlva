@@ -5,6 +5,7 @@
     var setLayout = function() {
 		var tabId = $('div.tab_list li a.act').attr('data-tab-id');
 		$('div.tab_area.'+tabId).show();
+		$('div.winpop button.winpop_close').hide();
 		fn_Load(tabId);	
     };
     

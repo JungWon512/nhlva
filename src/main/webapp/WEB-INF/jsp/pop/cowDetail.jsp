@@ -23,12 +23,15 @@
 <div class="winpop cow-detail">
 	<button type="button" class="winpop_close"><span class="sr-only">윈도우 팝업 닫기</span></button>
 	<h2 class="winpop_tit">${subheaderTitle}</h2>
-	<div class="tab_list item-${tabList[0].TOT_CNT+1}">
+		<c:choose>
+			<c:when test="${inputParam.bidPopYn ne 'N'}"> <div class="tab_list item-${tabList[0].TOT_CNT}"> </c:when>
+			<c:otherwise> <div class="tab_list item-${tabList[0].TOT_CNT+1}"> </c:otherwise>
+		</c:choose>
 		<ul>
 			<li><a href="javascript:;" class="${param.tabId eq '0' or empty param.tabId ? 'act':'' }" data-tab-id="0">출장우</a></li>
 			<c:forEach items="${ tabList }" var="item" varStatus="st">
 				<c:if test="${item.VISIB_YN eq '1'}">
-					<c:if test="${!(item.SIMP_C eq '3' and inputParam.bidPopYn eq 'Y')}">
+					<c:if test="${!(item.SIMP_C eq '3' and inputParam.bidPopYn ne 'N')}">
 						<li><a href="javascript:;" class="${(param.tabId eq item.SIMP_C)?'act':'' }" data-tab-id="${item.SIMP_C }">${item.SIMP_CNM }</a></li>
 					</c:if>
 				</c:if>

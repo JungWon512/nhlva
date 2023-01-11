@@ -10,6 +10,7 @@
 	<input type="hidden" name="aucPrgSq" value="" />
 	<input type="hidden" name="oslpNo" value="" />
 	<input type="hidden" name="ledSqno" value="" />
+	<input type="hidden" id="bidPopYn" name="bidPopYn" value="N" />
 </form>
 
 <input type="hidden" name="loginNo" value="${inputParam.loginNo}"/>

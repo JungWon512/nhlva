@@ -1042,7 +1042,7 @@ html.mm-opening .fixed_btn {
 	.contents {
 		min-height: calc(100% - 106px);
 		max-width: 1020px;
-		padding: 20px 0;
+		padding: 20px 0 10px;
 	}
 }
 
@@ -1391,7 +1391,8 @@ Base styles: contents layer
 		margin-top: 21px
 	}
 	.chk_step2 .back_area {
-		margin-bottom: 25px
+		margin-bottom: 25px;
+		margin-top: 15px;
 	}
 	.chk_step2 .back_area a {
 		max-width: 580px;

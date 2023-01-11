@@ -14,6 +14,7 @@
 		<input type="hidden" name="oslpNo" value="" />
 		<input type="hidden" name="ledSqno" value="" />
 		<input type="hidden" name="johpCdVal" id="johpCdVal" value="${johapData.NA_BZPLCNO}"/>
+		<input type="hidden" id="bidPopYn" name="bidPopYn" value="N" />
 	</form>
 		
 		<!-- 필터 데이터 -->

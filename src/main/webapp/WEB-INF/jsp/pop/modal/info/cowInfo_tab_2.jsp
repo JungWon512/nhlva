@@ -94,7 +94,7 @@ $(document).ready(function(){
             		,fontSize : 14
             		, display: true
             		, callback : function(data, index){
-            			return (data == 4 ? 'A' :(data == 3? 'B' : (data == 2 ? 'C' : (data == 1 ? 'D' :'E'))));
+            			return (data == 4 ? 'A' :(data == 3? 'B' : (data == 2 ? 'C' : (data == 1 ? 'D' :''))));
             		}
 				}
             }
