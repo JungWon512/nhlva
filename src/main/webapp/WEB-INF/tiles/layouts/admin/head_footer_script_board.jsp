@@ -16,6 +16,10 @@
 <link rel="icon" type="image/png" sizes="32x32" href="/static/images/guide/favicon_admin32.png">  <!-- 32x32 적용필요-->
 
 <spring:eval expression="@environment.getProperty('spring.profiles.active')" var="ACTIVE" />
+<spring:eval expression="@environment.getProperty('kko.login.client.id.javascript')" var="kko_id_javascript" />
+<spring:eval expression="@environment.getProperty('kko.login.redirect.url')" var="kko_redirectUrl" />
 <script type="text/javascript">
 	var active = "${ACTIVE}";
+	var kko_redirect_url = "${kko_redirectUrl}";
+	var kko_id = "${kko_id_javascript}";
 </script>

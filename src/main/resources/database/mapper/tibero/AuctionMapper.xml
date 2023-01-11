@@ -3145,11 +3145,9 @@
 		</if>
 		) MWN
 		ON(SEC.MB_INTG_NO = MWN.MB_INTG_NO
-		<if test='selelctNaBzPlc != null and selelctNaBzPlc != "ALL"'>
 			AND SEC.NA_BZPLC = MWN.NA_BZPLC
 			AND SEC.TRMN_AMNNO =
 			MWN.TRMN_AMNNO
-		</if>
 		)
 		WHEN NOT MATCHED THEN
 		INSERT(

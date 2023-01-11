@@ -127,8 +127,8 @@ public class LoginController {
 							}
 						}
 						//loginService.upd
-						params.put("userName", "홍길동1");
-						params.put("birthDate", "090101");
+						params.put("userName", "홍길동");
+						params.put("birthDate", "711101");
 						params.put("place", place);
 						params.put("type", "0");
 						Map<String, Object> result = this.loginProc(request, response, params, model);
@@ -169,8 +169,8 @@ public class LoginController {
 						}
 					}
 					//loginService.upd
-					params.put("userName", "홍길동1");
-					params.put("birthDate", "090101");
+					params.put("userName", "홍길동");
+					params.put("birthDate", "711101");
 					params.put("place", place);
 					params.put("type", "0");
 					Map<String, Object> result = this.loginProc(request, response, params, model);

@@ -413,14 +413,14 @@
     
     var webApp = function(){
 	// Not web 일때, 필터 가림.
-    	if(isApp() || chkOs() == 'web'){
+    	if(isApp() || chkOs() != 'web'){
+	        flag = 'mo';
+			$(".del_btn").hide();
+        } else {
 			$(".filter-box ").addClass("active"); // 검색 실행 후 active 관련
 	        //  비활성 필터  숨겨버리기
 	        $(".del_btn").hide();
 	        flag = 'web';
-        } else {
-	        flag = 'mo';
-			$(".del_btn").hide();
 		}
 	}
 	

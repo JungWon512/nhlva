@@ -169,7 +169,7 @@ $(document).ready(function() {
 			$(document).on('click','div.winpop button.winpop_close',function(){
 				window.close();
 			});
-			
+			if(kko_id) Kakao.init(kko_id);
 		},
 		pdFav: function (e) {
 			$(".pd_pav a").on('click', function(e){ 
