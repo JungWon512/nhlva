@@ -11,6 +11,7 @@
 		<input type="hidden" name="aucObjDsc" value="" />
 		<input type="hidden" name="sraIndvAmnno" value="" />
 		<input type="hidden" name="aucPrgSq" value="" />
+		<input type="hidden" name="oslpNo" value="" />
 		<input type="hidden" name="ledSqno" value="" />
 		<input type="hidden" name="johpCdVal" id="johpCdVal" value="${johapData.NA_BZPLCNO}"/>
 	</form>
