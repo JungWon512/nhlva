@@ -39,7 +39,8 @@ $(function() {
 			$(".tblAuction .list_body ul li").removeClass('act');
 			$(document).on('click',".tblAuction .list_body ul li",function(){
 				$('.boarder ul li dd.auctionNum').text($(this).find('dd.aucPrgSq').text());
-				$('.boarder ul li dd.ftsnm').html($(this).find('dd.ftsnm').text());
+//				$('.boarder ul li dd.ftsnm').html(($(this).find('dd.ftsnm').text()||'').substring(0,3));
+				$('.boarder ul li dd.ftsnm').html(($(this).find('dd.ftsnm').text()||''));
 				$('.boarder ul li dd.sex').text($(this).find('dd.indvSexC').text());
 				$('.boarder ul li dd.cowSogWt').text(fnSetComma($(this).find('dd.cowSogWt').text()));
 				$('.boarder ul li dd.matime').text($(this).find('input.matime').val());	//산차

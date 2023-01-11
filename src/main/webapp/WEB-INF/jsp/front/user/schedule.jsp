@@ -13,10 +13,10 @@
 	<div class="main-tab">
 		<ul>
 			<li class="on">
-				<a href="#">경매<span class="sub-txt">인터넷 <br>스마트 경매</span></a>
+				<a href="javascript:pageMove('/home');">경매<span class="sub-txt">인터넷 <br>스마트 경매</span></a>
 			</li>
 			<li>
-				<a href="#">현황<span class="sub-txt">전국 <br>가축시장현황</span></a>
+				<a href="javascript:pageMove('/dashboard');">현황<span class="sub-txt">전국 <br>가축시장현황</span></a>
 			</li>
 		</ul>
 	</div>

@@ -193,12 +193,13 @@ $(document).ready(function() {
 						}else if(location.href.indexOf('/sales') > 0){
 							resultH= $('section.header').outerHeight() + ($('section.contents').outerHeight() - $('.list_table.schedule_tb_mo .list_body ul').outerHeight()) +$('section.footer').outerHeight() +1;
 						}else {
-							resultH= $('section.header').outerHeight() + ($('section.contents').outerHeight() - $('.list_table .list_body ul').outerHeight()) +$('section.footer').outerHeight() +1;
+							resultH= $('section.header').outerHeight() + ($('section.contents').outerHeight() - $('.list_table .list_body ul').outerHeight()) +$('section.footer').outerHeight() + 1;
 						}
 						resultH = $('body').outerHeight() - resultH;
 						//$(this).css('height','calc( 100vh -  '+resultH+'px)');
-						$(this).css('height','  '+(resultH + 1)+'px');
-						$(this).css('min-height','70px');
+//						$(this).css('height','  '+(resultH + 1)+'px');
+						$(this).css('height','  '+ (resultH<0?0:resultH) +'px');
+						$(this).css('min-height','120px');
 					});
 				}else{
 					$(".list_body ul").mCustomScrollbar({

@@ -1040,7 +1040,7 @@ html.mm-opening .fixed_btn {
 
 @media only all and (max-width: 1024px) {
 	.contents {
-		min-height: calc(100% - 106px);
+		min-height: calc(100% - 125px);
 		max-width: 1020px;
 		padding: 20px 0 10px;
 	}
@@ -4288,6 +4288,12 @@ Base styles: contents layer
 	.auction_see .list_body li:nth-child(even) {
 		background: #f5f5f5;
 	}
+	.auction_see .list_head dl dd.name, .auction_see .list_body dl dd.txtShort {
+		text-overflow: ellipsis;
+		width: 85px;
+		overflow: hidden;
+		white-space: nowrap;
+	}
 }
 
 @media only all and (min-width: 1025px) {
@@ -4742,7 +4748,7 @@ Base styles: contents layer
 .auction_seeBox .seeBox_bottom .seeBox_slick .mo_seeBox {
 	display: none;
 	background: #1a1a1a;
-	padding: 25px 30px 45px;
+	padding: 25px 30px 25px;
 }
 
 @media only all and (max-width: 640px) {
@@ -4786,6 +4792,13 @@ Base styles: contents layer
 	display: inline-block;
 	vertical-align: top;
 	padding: 2px 0;
+}
+
+.auction_seeBox .seeBox_bottom .seeBox_slick .mo_seeBox ul li dl dd.txtShort {
+	text-overflow: ellipsis;
+	width: 85px;
+	overflow: hidden;
+	white-space: nowrap;
 }
 
 .auction_seeBox .seeBox_bottom .seeBox_slick .mo_seeBox ul li.harf-list dd

@@ -717,7 +717,7 @@
 			 , A.NCSS_JUG_YN									/* 괴사감정여부 */
 			 , A.NCSS_YN										/* 괴사여부 */
 			 , A.RMHN_YN										/* 제각여부 */
-			 , A.BLOOD_AM										/* 송아지 혈통 수수료 */
+			 , NVL(A.BLOOD_AM,'0') BLOOD_AM						/* 송아지 혈통 수수료 */
 			 , C.SRA_FED_SPY_YN									/* 사료미사용 여부 */
 		  FROM TB_LA_IS_MH_SOG_COW A
 		  LEFT OUTER JOIN TB_LA_IS_MM_MWMN B
