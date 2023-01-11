@@ -36,10 +36,10 @@
 			<div id="thumbnail_list" class="inner">
 				<div class="add-item add-pic">
 					<label for="file-input">사진 추가 <span class="num">0 / 8</span></label>
-					<input id="file-input" type="file" accept=".jpg,.png,.gif" multiple="multiple" max="8" />
+					<input id="file-input" type="file" accept="image/*" capture="camera" multiple="multiple" max="8" />
+				</div>
 			</div>
-			</div>
-			</div>
+		</div>
 		<div id="preview_list" class="cow-imgBox"></div>
 		<div class="top-btns">
 			<button type="button" class="btn_delete">삭제</button>
