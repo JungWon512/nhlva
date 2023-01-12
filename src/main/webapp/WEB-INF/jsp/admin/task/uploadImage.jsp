@@ -8,6 +8,11 @@
 		width: 100% !important;
 	}
 </style>
+<script type="text/javascript">
+	let urls = [];
+	let requests;
+</script>
+
 <div class="admin_new_reg admin_pic_reg">
 	<c:if test="${!empty imgList}">
 		<c:forEach items="${imgList}" var="ivo" varStatus="s">
@@ -35,12 +40,28 @@
 		<div class="file-add-box">
 			<div id="thumbnail_list" class="inner">
 				<div class="add-item add-pic">
-					<label for="file-input">사진 추가 <span class="num">0 / 8</span></label>
+					<label for="file-input">사진 추가 <span class="num">${fn:length(imgList)} / 8</span></label>
 					<input id="file-input" type="file" accept="image/*" capture="camera" multiple="multiple" max="8" />
 				</div>
+				<c:if test="${!empty imgList}">
+					<c:forEach items="${imgList}" var="ivo" varStatus="s">
+						<div class="add-item image${s.index}">
+							<img src="${ivo.THUMB_FILE_URL}" />
+							<button type="button" class="btn-del"><span class="sr-only">삭제</span></button>
+						</div>
+					</c:forEach>
+				</c:if>
 			</div>
 		</div>
-		<div id="preview_list" class="cow-imgBox"></div>
+		<div id="preview_list" class="cow-imgBox">
+			<c:if test="${!empty imgList}">
+				<c:forEach items="${imgList}" var="ivo" varStatus="s">
+					<div class="item image${s.index} ${s.first ? 'active' : ''}" data-seqno="${s.count}">
+						<img src="${ivo.FILE_URL}" style="display:none;"/>
+					</div>
+				</c:forEach>
+			</c:if>
+		</div>
 		<div class="top-btns">
 			<button type="button" class="btn_delete">삭제</button>
 			<button type="button" class="btn_rotate">회전</button>

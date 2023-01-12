@@ -457,6 +457,13 @@ public class AdminTaskServiceImpl implements AdminTaskService {
 					if (!isSuccess) continue;
 					successCnt++;
 
+					params.put("imgSqno", imgSqno);
+					params.put("filePath", filePath);
+					params.put("fileNm", fileNm);
+					params.put("fileExtNm", fileExtNm);
+					adminTaskDAO.insertCowImg(params);
+					imgSqno++;
+
 					// 썸네일 파일이 없는 경우 or 값이 data:image로 시작하지 않는 경우 pass
 					if (ObjectUtils.isEmpty(file.get("thumbnail"))
 					|| !file.getOrDefault("thumbnail", ",").toString().startsWith("data:image")) continue;
@@ -482,13 +489,6 @@ public class AdminTaskServiceImpl implements AdminTaskService {
 						e.printStackTrace();
 					}
 				}
-
-				params.put("imgSqno", imgSqno);
-				params.put("filePath", filePath);
-				params.put("fileNm", fileNm);
-				params.put("fileExtNm", fileExtNm);
-				adminTaskDAO.insertCowImg(params);
-				imgSqno++;
 			}
 		}
 		

@@ -50,7 +50,7 @@
 		function displayImage(file , options) {
 			if (!options) {
 				options = {
-					maxWidth: resultNode.width(),
+					maxWidth: resultNode.width() * 2,
 					canvas: true,
 					pixelRatio: window.devicePixelRatio,
 					downsamplingRatio: 0.5,
@@ -72,18 +72,25 @@
 			var originalEvent = e.originalEvent;
 			var target = originalEvent.dataTransfer || originalEvent.target;
 			var files = target && target.files;
+			var currImgLength = $("#preview_list > div").length;
+			
 			if (!files) {
 				return;
 			}
 			var filesArr = Array.prototype.slice.call(files);
 			
-			if ($("#preview_list > div").length + filesArr.length > imgMaxCnt) {
-				modalAlert("", `이미지는 최대 ${imgMaxCnt} 장 까지<br/> 업로드 가능합니다.`);
-				fileInputNode.val("");
-				return;
-			}
+//			if (currImgLength + filesArr.length > imgMaxCnt) {
+//				modalAlert("", `이미지는 최대 ${imgMaxCnt} 장 까지<br/> 업로드 가능합니다.`);
+//				fileInputNode.val("");
+//				return;
+//			}
 			
 			filesArr.forEach(function(f, index) {
+				if(++currImgLength >= 9) {
+					modalAlert("", `이미지는 최대 ${imgMaxCnt} 장 까지<br/> 업로드 가능합니다.`);
+					return;
+				};
+				
 				var fileName = fileInputNode.val();
 				var ext = fileName.slice(fileName.indexOf(".") + 1).toLowerCase();
 	 
@@ -185,7 +192,7 @@
 			
 			var originFiles = [];
 
-			var originList = $("#preview_list").find("canvas, img");
+			var originList = $("#preview_list").find("canvas");
 			for (origin of originList) {
 				var obj = new Object();
 				var name = $(origin).parent().attr("class").split(" ")[1];
@@ -220,14 +227,41 @@
 				$(".btn_save").removeClass("disabled");
 				return;
 			});
-		
 		};
-		
+
 		// 이미지 url로 canvas 추가
 		var addImage = function() {
 			$("input[name='file_url']").each(function(){
-				var url = $(this).val();
-				if (url) displayImage(url);
+//				displayImage($(this).val());
+			});
+			
+			$("#preview_list > .item > img").each(function(){
+				var target = $(this).parent();
+				var image = new Image();
+				image.src = $(this).attr("src");
+				image.crossOrigin = 'Anonymous';
+				
+				image.onload = function(){
+					$(target).append(loadImage.scale(image, {
+															maxWidth: resultNode.width() * 2,
+															canvas: true,
+															pixelRatio: window.devicePixelRatio,
+															downsamplingRatio: 0.5,
+															orientation: true,
+															meta: true
+														}));
+				}
+			});
+			
+			$("#thumbnail_list > .add-item > img").each(function(){
+				var target = $(this).parent();
+				var image = new Image();
+				image.src = $(this).attr("src");
+				image.crossOrigin = 'Anonymous';
+				
+				image.onload = function(){
+					$(target).append(loadImage.scale(image, {maxWidth:100, canvas: true})).find("img").remove();
+				}
 			});
 		};
 
@@ -246,6 +280,7 @@
 			init: function () {
 				addBtnEvent();
 				addImage();
+//				new Promise(addImage).then(makeThumbnailImage);
 			}
 		};
 	}();

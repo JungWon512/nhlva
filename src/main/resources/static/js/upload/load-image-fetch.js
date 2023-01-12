@@ -33,29 +33,44 @@
     global.Response &&
     global.Response.prototype.blob
   ) {
-    loadImage.fetchBlob = function (url, callback, options) {
+    loadImage.fetchBlob = async function (urls, callback, options) {
       /**
        * Fetch response handler.
        *
        * @param {Response} response Fetch response
        * @returns {Blob} Fetched Blob.
        */
-      function responseHandler(response) {
-        return response.blob()
+      async function responseHandler(response) {
+        console.log(`responseHandler URL : ${response.url}, STATUS : ${response.status}`);
+        return await response.blob();
       }
       if (global.Promise && typeof callback !== 'function') {
-        return fetch(new Request(url, callback)).then(responseHandler)
+        const response_1 = await fetch(new Request(urls, callback))
+          return responseHandler(response_1)
       }
-      fetch(new Request(url, options))
-        .then(responseHandler)
-        .then(callback)
-        [
-          // Avoid parsing error in IE<9, where catch is a reserved word.
-          // eslint-disable-next-line dot-notation
-          'catch'
-        ](function (err) {
-          callback(null, err)
-        })
+      if (!isInstanceOf("Array", urls)) {
+        fetch(new Request(urls, options))
+          .then(responseHandler)
+          .then(callback)
+          [
+            // Avoid parsing error in IE<9, where catch is a reserved word.
+            // eslint-disable-next-line dot-notation
+            'catch'
+          ](function (err) {
+            callback(null, err)
+          });
+      }
+      else {
+        let requests = urls.map(url => fetch(url));
+        
+        Promise.all(requests)
+               .then(responses => Promise.all(responses.map(response => responseHandler(response)))
+               							 .then(blobs => {for (let blob of blobs) callback(blob);}));
+//               .then(blobs => {
+//				  for (let blob of blobs) callback(blob);
+//			   });
+//               .then(blobs => Promise.all(blobs.map(blob => callback(blob))));
+      }
     }
   } else if (
     global.XMLHttpRequest &&
@@ -102,5 +117,17 @@
       }
       return executor(callback, callback)
     }
+  }
+  
+    /**
+   * Cross-frame instanceof check.
+   *
+   * @param {string} type Instance type
+   * @param {object} obj Object instance
+   * @returns {boolean} Returns true if the object is of the given instance.
+   */
+  function isInstanceOf(type, obj) {
+    // Cross-frame instanceof check
+    return Object.prototype.toString.call(obj) === '[object ' + type + ']'
   }
 })

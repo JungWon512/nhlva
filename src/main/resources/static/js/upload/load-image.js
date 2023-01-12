@@ -100,6 +100,7 @@
    * @returns {HTMLImageElement|FileReader|Promise<Result>} Object
    */
   function loadImage(file, callback, options) {
+	console.log("loadImage");
     /**
      * Promise executor
      *
@@ -137,23 +138,26 @@
        * @param {Error} err Error object
        */
       function fetchBlobCallback(blob, err) {
+		console.log(blob);
         if (err && $.console) console.log(err) // eslint-disable-line no-console
         if (blob && isInstanceOf('Blob', blob)) {
           file = blob // eslint-disable-line no-param-reassign
-          url = createObjectURL(file)
+          url = createObjectURL(file);
         } else {
           url = file
           if (options && options.crossOrigin) {
             img.crossOrigin = options.crossOrigin
           }
         }
-        img.src = url
+        console.log(url);
+        img.src = url;
       }
       img.onerror = function (event) {
         revokeHelper(url, options)
         if (reject) reject.call(img, event)
       }
       img.onload = function () {
+		console.log("onload");
         revokeHelper(url, options)
         var data = {
           originalWidth: img.naturalWidth || img.width,
@@ -165,7 +169,7 @@
           if (reject) reject(error)
         }
       }
-      if (typeof file === 'string') {
+      if (typeof file === 'string' || isInstanceOf('Array', file)) {
         if (loadImage.requiresMetaData(options)) {
           loadImage.fetchBlob(file, fetchBlobCallback, options)
         } else {

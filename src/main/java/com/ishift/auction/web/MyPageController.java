@@ -9,12 +9,16 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import javax.annotation.security.PermitAll;
+
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -216,6 +220,32 @@ public class MyPageController {
 		mav.addObject("subheaderTitle", "나의 경매내역");
 		mav.setViewName("mypage/buy/buy_info");
 		
+		return mav;
+	}
+	
+	/**
+	 * 중도매인 정산 랜딩 페이지
+	 * @param params
+	 * @return
+	 */
+	@PermitAll
+	@GetMapping(value = "/state-acc/mwmn/{naBzplc}/{searchDate}/{searchMbIntgNo}")
+	public ModelAndView stateAccMwmn(@PathVariable Map<String, Object> params) {
+		final ModelAndView mav = new ModelAndView();
+		mav.setViewName("mypage/buy/buy_info");
+		return mav;
+	}
+	
+	/**
+	 * 출하주 정산 랜딩 페이지
+	 * @param params
+	 * @return
+	 */
+	@PermitAll
+	@GetMapping(value = "/state-acc/fhs/{naBzplc}/{searchDate}/{searchMbIntgNo}")
+	public ModelAndView stateAccFhs(@PathVariable Map<String, Object> params) {
+		final ModelAndView mav = new ModelAndView();
+		mav.setViewName("mypage/buy/buy_info");
 		return mav;
 	}
 	/**
