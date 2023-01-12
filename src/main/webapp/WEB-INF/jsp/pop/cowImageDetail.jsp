@@ -4,7 +4,7 @@
 <!--${data} -->
 <!--end::Container-->
 <div class="winpop">
-	<button type="button" class="winpop_close"><span class="sr-only">윈도우 팝업 닫기</span></button>
+	<button type="button" class="winpop_back"><span class="sr-only">윈도우 팝업 닫기</span></button>
 	<h2 class="winpop_tit">출장우 이미지</h2>
 	<div class="cow-imgBox">
 	

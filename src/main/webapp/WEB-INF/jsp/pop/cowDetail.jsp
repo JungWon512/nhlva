@@ -21,7 +21,7 @@
 	<input type="hidden" name="title" value="" />
 </form>
 <div class="winpop cow-detail">
-	<button type="button" class="winpop_close"><span class="sr-only">윈도우 팝업 닫기</span></button>
+	<button type="button" class="${inputParam.bidPopYn eq 'N' ? 'winpop_close' : 'winpop_back'}"><span class="sr-only">윈도우 팝업 닫기</span></button>
 	<h2 class="winpop_tit">${subheaderTitle}</h2>
 		<c:choose>
 			<c:when test="${inputParam.bidPopYn ne 'N'}"> <div class="tab_list item-${tabList[0].TOT_CNT}"> </c:when>

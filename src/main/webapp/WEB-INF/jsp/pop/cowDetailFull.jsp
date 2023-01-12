@@ -15,7 +15,7 @@
 	<input type="hidden" name="bidPopYn" value="${inputParam.bidPopYn}" />
 </form>
 <div class="winpop cow-detail">
-	<button type="button" class="winpop_close"><span class="sr-only">윈도우 팝업 닫기</span></button>
+	<button type="button" class="winpop_back"><span class="sr-only">윈도우 팝업 닫기</span></button>
 	<h2 class="winpop_tit">${subheaderTitle}</h2>
 	<div class="tab_list item-${tabList[0].TOT_CNT+1}" style="display:none;">
 		<ul>

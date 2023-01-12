@@ -44,11 +44,11 @@ $(function() {
 	$(document).on('click','.btnAllImage',function(e){
 		var total = $('#imgTotal').val();
 		if(total <= 0) return;
-		var target = 'cowImageDetail';			
-		window.open('',target, 'width=600, height=800, toolbar=no, menubar=no, scrollbars=no, resizable=yes');
+		//var target = 'cowImageDetail';			
+		//window.open('',target, 'width=600, height=800, toolbar=no, menubar=no, scrollbars=no, resizable=yes');
 		var form = document.frm;
 		form.action = "/info/cowImageDetail";
-		form.target=target;
+		//form.target=target;
 		form.submit();		
 	});
 });

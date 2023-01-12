@@ -4,9 +4,11 @@
 
 		var addEvent = function(){
 			$(".banner_box ul").slick({
-				dots: false,
+				dots: true,
 				adaptiveHeight: true,
-				arrows:false
+				arrows:false,
+			    autoplay: true,
+			    autoplaySpeed: 2000
 			});
 		};
 

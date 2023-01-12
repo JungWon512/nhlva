@@ -36,19 +36,19 @@
 			<dl>
 				<dt><p>암</p></dt>
 				<dd>
-					<p><span class="ea">${buyCnt.CNT_SEX_W}</span>두</p>
+					<p><span class="ea">${buyCnt.CNT_SEX_W_F}</span>두</p>
 				</dd>
 			</dl>
 			<dl>
 				<dt><p>수</p></dt>
 				<dd>
-					<p><span class="ea">${buyCnt.CNT_SEX_M}</span>두</p>
+					<p><span class="ea">${buyCnt.CNT_SEX_M_F}</span>두</p>
 				</dd>
 			</dl>
 			<dl>
 				<dt><p>기타</p></dt>
 				<dd>
-					<p><span class="ea">${buyCnt.CNT_SEX_ETC}</span>두</p>
+					<p><span class="ea">${buyCnt.CNT_SEX_ETC_F}</span>두</p>
 				</dd>
 			</dl>
 		</div>

@@ -166,8 +166,11 @@ $(document).ready(function() {
 				API.close();
 			});
 			$('body').append('<div class="popup"></div>');
-			$(document).on('click','div.winpop button.winpop_close',function(){
-				window.close();
+			$(document).on('click','div.winpop button.winpop_close',function(){				
+					window.close();
+			});
+			$(document).on('click','div.winpop button.winpop_back',function(){
+				history.back();
 			});
 			if(kko_id) Kakao.init(kko_id);
 		},
@@ -241,7 +244,9 @@ $(document).ready(function() {
 			}
 			$(window).on('resize load',(throttle(100, function(e) {
 				var winW = $(window).width();
-				if(winW < 1025 && $("div").is('.chk_step1') == true || winW < 1025 && $("div").is('.chk_step2') == true){
+				if((winW < 1025 && $("div").is('.chk_step1') == true || winW < 1025 && $("div").is('.chk_step2') == true)
+					&& (location.pathname != '/schedule')
+				){
 					$('body').addClass('bg-gray');
 				} else{
 					$('body').removeClass('bg-gray');

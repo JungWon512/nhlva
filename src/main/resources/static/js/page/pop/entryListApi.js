@@ -5,7 +5,7 @@
     var setLayout = function() {
 		var tabId = $('div.tab_list li a.act').attr('data-tab-id');
 		$('div.tab_area.'+tabId).show();
-		$('div.winpop button.winpop_close').hide();
+		if(isApp()) $('div.winpop button.winpop_close').hide();
 		fn_Load(tabId);	
     };
     
@@ -36,12 +36,12 @@
 			
 			var temp = window.location.search.split("&");
 			var params = temp.filter(function(el) {return el != "type=0" && el != "type=1"});
-			var target = 'cowDetail';
+			//var target = 'cowDetail';
 			
-			window.open('',target, 'width=600, height=800, toolbar=no, menubar=no, scrollbars=no, resizable=yes');
+			//window.open('',target, 'width=600, height=800, toolbar=no, menubar=no, scrollbars=no, resizable=yes');
 			var form = document.frm_select;
 			form.action = "/cowDetail"+params.join("&");
-			form.target=target;
+			//form.target=target;
 			form.submit();
 			
 			return;
