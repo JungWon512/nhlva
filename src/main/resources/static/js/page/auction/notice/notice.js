@@ -35,7 +35,7 @@
 					    	return p_str;
 					    }
 					}
-    				$('.notice_btn .readCnt.sqNo_'+param.blbdDsc+'_'+param.seqNo).text(data.data.BBRD_INQ_CN);
+    				//$('.notice_btn .readCnt.sqNo_'+param.blbdDsc+'_'+param.seqNo).text(data.data.BBRD_INQ_CN);
     				$('.notice_view.sqNo_'+param.blbdDsc+'_'+param.seqNo).html(fn_xxsDecode(data.data.BBRD_CNTN));
 		        });
 		        

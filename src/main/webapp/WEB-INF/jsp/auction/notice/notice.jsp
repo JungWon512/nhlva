@@ -15,7 +15,7 @@
 						<a href="javascript:;">
 							<dl>
 								<dt><c:out value="${vo.BBRD_TINM }" escapeXml="false" /></dt>
-								<dd>${vo.LSCHG_DTM } / 조회수 <span class="readCnt sqNo_${vo.BLBD_DSC}_${vo.BBRD_SQNO}">${vo.BBRD_INQ_CN }</span></dd>
+								<dd>${vo.LSCHG_DTM }</dd>
 							</dl>
 						</a>
 					</div>
