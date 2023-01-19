@@ -20,6 +20,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.json.simple.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.ui.ModelMap;
@@ -73,7 +74,6 @@ public class LoginController {
 
 	@Autowired
 	private HttpUtils httpUtils;
-
 	/**
 	 * 로그인 페이지
 	 * @param request
@@ -87,7 +87,10 @@ public class LoginController {
 	public ModelAndView oauth(HttpServletRequest request
 							, HttpServletResponse response
 							, @RequestParam final Map<String,Object> params
-							, ModelMap model) throws Exception {
+							, ModelMap model
+							, @Value("${kko.login.client.id.app}") String kkoClientIdApp
+							, @Value("${kko.login.redirect.url}") String kkoRedirectUrl
+	) throws Exception {
 		ModelAndView mav = new ModelAndView();
 		mav.setViewName("front/user/oauth");
 		
@@ -95,59 +98,33 @@ public class LoginController {
 		String state = (String)params.getOrDefault("state","");
 		
 		String kakaoRefreshToken = cookieUtil.getCookieValue(request, "nhlva_k_r_token");
-		String redirect_url = "http://localhost:8080/user/oauth";
 		String url = "/oauth/token";
-		String tempParm = "&grant_type=authorization_code&code="+code+"&redirect_uri="+redirect_url;
+		String tempParm = "&grant_type=authorization_code&code="+code+"&redirect_uri="+kkoRedirectUrl;
 		String apiResult="";
 		JSONObject json=null;
 		if(!StringUtils.isEmpty(kakaoRefreshToken)) {
 			tempParm="&grant_type=refresh_token&refresh_token="+kakaoRefreshToken;		
-			apiResult = httpUtils.callApiKauth(url, "POST", "client_id=005918c16a55cafd5746f248a883e97e"+tempParm);
+			apiResult = httpUtils.callApiKauth("POST", "client_id="+kkoClientIdApp+tempParm);
 			if(apiResult != null) {
 				json = JsonUtils.getJsonObjectFromString(apiResult);
 				if(json.get("error_code") != null) {
-					apiResult = httpUtils.callApiKauth(url, "POST", "client_id=005918c16a55cafd5746f248a883e97e"+"&grant_type=authorization_code&redirect_uri="+redirect_url+"&code="+code);
+					apiResult = httpUtils.callApiKauth( "POST", "client_id="+kkoClientIdApp+"&grant_type=authorization_code&redirect_uri="+kkoRedirectUrl+"&code="+code);
 					json = JsonUtils.getJsonObjectFromString(apiResult);
 					
 					String aToken = (String) json.get("access_token");
 					String rToken = (String) json.get("refresh_token");
 					log.info("KAKAO ACCESS : TOKEN : "+aToken);
 					log.info("KAKAO REFRESH : TOKEN : "+rToken);
-					String tokenData= httpUtils.callApiKakaoTokenInfo("GET", aToken);
-					if(tokenData != null) {
-						//mav.addObject("tokenData",tokenData);
-						String place="";
-						String[] stateArr = ((String)params.get("state")).split("&");
-						for(String param : stateArr) {
-							String key = param.split("=")[0];
-							String value = param.split("=")[1];
-							if("place".equals(key)){
-								place = value;
-								break;
-							}
-						}
-						//loginService.upd
-						params.put("userName", "홍길동");
-						params.put("birthDate", "711101");
-						params.put("place", place);
-						params.put("type", "0");
-						Map<String, Object> result = this.loginProc(request, response, params, model);
-						if((boolean) result.get("success")) {
-							mav.addObject("loginResult",result);
-							//this.login(request,response,params,mav.getModelMap());
-							//return auctionController.submain(place, request, response,mav.getModelMap());
-							mav.setViewName("redirect:/main?"+state);						
-						}else {
-							request.getSession().setAttribute("kkoLoginResult", result.get("success"));
-							request.getSession().setAttribute("kkoLoginResultMsg", result.get("message"));
-							mav.setViewName("redirect:/user/login?"+state);
-						}
-						return mav;
+					if(!StringUtils.isEmpty(rToken)) {
+						cookieUtil.createCookie("nhlva_k_r_token", rToken);
 					}
+					String tokenData= httpUtils.callApiKakaoTokenInfo("GET", aToken);
+					mav.addObject("tokenData", tokenData);
+					mav.addObject("kkoAccessToken", aToken);
 				}
 			}
 		}else{
-			apiResult = httpUtils.callApiKauth(url, "POST", "client_id=005918c16a55cafd5746f248a883e97e"+tempParm);
+			apiResult = httpUtils.callApiKauth("POST", "client_id="+kkoClientIdApp+tempParm);
 			if(apiResult != null) {
 				json = JsonUtils.getJsonObjectFromString(apiResult);
 				
@@ -155,50 +132,32 @@ public class LoginController {
 				String rToken = (String) json.get("refresh_token");
 				log.info("KAKAO ACCESS : TOKEN : "+aToken);
 				log.info("KAKAO REFRESH : TOKEN : "+rToken);
-				String tokenData= httpUtils.callApiKakaoTokenInfo("GET", aToken);
-				if(tokenData != null) {
-					//mav.addObject("tokenData",tokenData);
-					String place="";
-					String[] stateArr = ((String)params.get("state")).split("&");
-					for(String param : stateArr) {
-						String key = param.split("=")[0];
-						String value = param.split("=")[1];
-						if("place".equals(key)){
-							place = value;
-							break;
-						}
-					}
-					//loginService.upd
-					params.put("userName", "홍길동");
-					params.put("birthDate", "711101");
-					params.put("place", place);
-					params.put("type", "0");
-					Map<String, Object> result = this.loginProc(request, response, params, model);
-					if((boolean) result.get("success")) {
-						mav.addObject("loginResult",result);
-						//this.login(request,response,params,mav.getModelMap());
-						//return auctionController.submain(place, request, response,mav.getModelMap());
-						mav.setViewName("redirect:/main?"+state);						
-					}else {
-						request.getSession().setAttribute("kkoLoginResult", result.get("success"));
-						request.getSession().setAttribute("kkoLoginResultMsg", result.get("message"));
-						mav.setViewName("redirect:/user/login?"+state);
-					}
-					return mav;
+				if(!StringUtils.isEmpty(rToken)) {
+					cookieUtil.createCookie("nhlva_k_r_token", rToken);
 				}
+				String tokenData= httpUtils.callApiKakaoTokenInfo("GET", aToken);
+				mav.addObject("tokenData", tokenData);
+				mav.addObject("kkoAccessToken", aToken);
 			}
-		}		
-		mav.setViewName("redirect:/user/login?"+state);
-
-//		mav.addObject("state", state);
-//		mav.addObject("tokenData", tokenData);
-//		System.out.println(obj);
-		// 로그인 페이지에 다시 접근 할 경우 access_token 삭제
-//		response.addCookie(cookieUtil.deleteCookie(request, Constants.JwtConstants.ACCESS_TOKEN));
-//		if(params.get("error") != null) mav.setViewName("redirect:/user/login"+state);
-//		else mav.setViewName("redirect:/main"+state);
+		}
+		String place="";
+		String[] stateArr = ((String)params.get("state")).split("&");
+		for(String param : stateArr) {
+			String key = param.split("=")[0];
+			String value = param.split("=")[1];
+			if("place".equals(key)){
+				place = value;
+				break;
+			}
+		}
+		mav.addObject("inputParam", params);
+		mav.addObject("place", place);
+		
+		mav.setViewName("front/user/oauth");
+		//mav.setViewName("redirect:/user/login?"+state);
 		return mav;
-	}
+	}	
+	
 	@RequestMapping(value="/user/login",method = { RequestMethod.GET, RequestMethod.POST })
 	public ModelAndView login(HttpServletRequest request
 							, HttpServletResponse response
@@ -220,6 +179,39 @@ public class LoginController {
         
 		mav.addAllObjects(params);
 		return mav;
+	}
+
+	/**
+	 * 로그인 프로세스
+	 * @param request 
+	 * @param response
+	 * @param map
+	 * @param model
+	 * @return
+	 * @throws Exception
+	 */
+	@ResponseBody
+	@SuppressWarnings("unchecked")
+	@PostMapping(value="/user/kkologinProc", produces = MediaType.APPLICATION_JSON_VALUE)
+	public Map<String, Object> kkologinProc(HttpServletRequest request
+										, HttpServletResponse response
+										, @RequestBody final Map<String,Object> params
+										, ModelMap model) throws RuntimeException, SQLException {
+
+		final Map<String, Object> result = loginService.loginProc(params);
+		String token = "";
+		if ((boolean)result.get("success")) {
+			token = result.get("token").toString();
+			Cookie cookie = cookieUtil.createCookie(Constants.JwtConstants.ACCESS_TOKEN, token);
+			response.addCookie(cookie);
+			response.setHeader(HttpHeaders.AUTHORIZATION, Constants.JwtConstants.BEARER + token);
+			result.put(Constants.JwtConstants.ACCESS_TOKEN, token);
+			
+			params.put("token", token);
+			params.put("inOutGb", "1");
+			loginService.insertLoginConnHistory(request, params);		//로그인 이력 남기기
+		}
+		return result;
 	}
 	
 	/**

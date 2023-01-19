@@ -1304,11 +1304,19 @@ input[type="number"]::-webkit-inner-spin-button {
 }
 
 .admin_area .admin_new_reg2 .btn-reg-pic {
-	width: 60px;
+	width: 50px;
 	height: 30px;
 	border-radius: 3px;
 	background-color: #ffaf00;
     color: #1a1a1a;
+    font-weight: 500;
+}
+.admin_area .admin_new_reg2 .btn-reg-pic2 {
+	width: 50px;
+	height: 30px;
+	border-radius: 3px;
+	background-color: #007eff;
+    color: #fff;
     font-weight: 500;
 }
 

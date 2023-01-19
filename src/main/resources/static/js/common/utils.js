@@ -90,18 +90,17 @@ var goWatchApp = function() {
 			"url" : window.location.origin + '/watchApp' + window.location.search
 			, "watch_token" : getCookie('watch_token')
 		};
-		//		// 안드로이드
-		//		if (window.auctionBridge) {
-		//			window.auctionBridge.moveAuctionWatch(JSON.stringify(params));
-		//		}
-		//		// 아이폰
-		//		else if(isIos()) {
-		//			window.webkit.messageHandlers.moveAuctionWatch.postMessage(JSON.stringify(params));
-		//		}
-		//		else {
-		//			location.href = window.location.origin + '/watch' + window.location.search;
-		//		}
-		location.href = window.location.origin + '/watch' + window.location.search;
+		// 안드로이드
+		if (window.auctionBridge) {
+			window.auctionBridge.moveAuctionWatch(JSON.stringify(params));
+		}
+		// 아이폰
+		else if(isIos()) {
+			window.webkit.messageHandlers.moveAuctionWatch.postMessage(JSON.stringify(params));
+		}
+		else {
+			location.href = window.location.origin + '/watch' + window.location.search;
+		}
 	}
 	catch(e) {
 		location.href = window.location.origin + '/watch' + window.location.search;

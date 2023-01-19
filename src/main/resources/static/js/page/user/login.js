@@ -196,26 +196,61 @@
 				addEvent();
 				get_msg();
 			}
+			,sendUserInfo : sendUserInfo
 		};
 	}();
 
 	jQuery(document).ready(function () {
 		Login.init();
+		
+	    var namespace = win.auction;
+	    var __COMPONENT_NAME = "LOGIN";
+    	namespace[__COMPONENT_NAME] = Login;
 		if($('input[name=kkoLoginResult]').val()){
 				modalAlert('', $('input[name=kkoLoginResultMsg]').val());
 		}
 	});
 })(window, window.jQuery);
-  function loginWithKakao() {
-	//window.open('/agreement', '이용약관', 'width=800, height=700, toolbar=no, menubar=no, scrollbars=no, resizable=yes' );
-    Kakao.Auth.authorize({
-      state : location.search.substr(1)
-      ,throughTalk : true
-//      ,prompts : 'none'
-      ,serviceTerms:'name,birthyear'	
-      ,redirectUri: 'http://localhost:8080/user/oauth'
-    });
-//	var url = 'https://kauth.kakao.com/oauth/authorize?client_id=005918c16a55cafd5746f248a883e97e&redirect_uri=http://localhost:8080/user/oauth&response_type=code&state='+location.search.substr(1);
-//	console.log(url);
-//    location.href=url;
+function loginWithKakao() {
+	var url = 'https://kauth.kakao.com/oauth/authorize?';
+	url+='client_id='+kko_api_id;
+	url+='&redirect_uri'=kko_redirect_url;
+	url+='&response_type=code';
+	url+='&state='+location.search.substr(1);
+	window.open(url, '카카오 로그인', 'width=800, height=700, toolbar=no, menubar=no, scrollbars=no, resizable=yes' );
+//    Kakao.Auth.authorize({
+//      state : location.search.substr(1)
+//      ,throughTalk : true
+////      ,prompts : 'none'
+//      ,serviceTerms:'name,birthyear'	
+//      ,redirectUri: kko_redirect_url
+//    });
   }
+  
+function redirectKaKaoLogin(param){	
+	console.log(param);
+	var reg = /[\{\}\[\]\/?.,;:|\)*~`!^\-_+<>@\#$%&\\\=\(\'\"\s]/gi;
+	$.ajax({
+		url: '/user/loginProc',
+		data: JSON.stringify(param),
+		type: 'POST',
+		dataType: 'json',
+		beforeSend: function (xhr) {
+			xhr.setRequestHeader("Accept", "application/json");
+			xhr.setRequestHeader("Content-Type", "application/json");
+		}
+	}).done(function (body) {
+		var success = body.success;
+		var message = body.message;
+		if (!success) {
+			modalAlert('', message);
+		}
+		else {
+			var uri = body.returnUrl == null ? '/main' : body.returnUrl;
+			window.auction.LOGIN.sendUserInfo(body.access_token, body.info, body.branchInfo, uri);
+		}
+	});
+	
+};
+  
+  

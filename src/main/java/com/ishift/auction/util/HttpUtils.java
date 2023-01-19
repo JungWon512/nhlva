@@ -515,7 +515,7 @@ public class HttpUtils {
 		return nodeMap;
 	}
 
-    public String callApiKauth(String hostUrl,String type,String jsonMessage) {
+    public String callApiKauth(String type,String jsonMessage) {
         try {
             //get 요청할 url을 적어주시면 됩니다. 형태를 위해 저는 그냥 아무거나 적은 겁니다.
 //            URL url = new URL("https://kauth.kakao.com"+hostUrl);
@@ -549,7 +549,7 @@ public class HttpUtils {
                     sb.append(line).append("\n");
                 }
                 br.close();
-                log.info("callApi "+hostUrl+" : "+sb.toString());
+                log.info("callApi /oauth/token : "+sb.toString());
                 return sb.toString();
             }else {
                 //InputStream eror = con.getErrorStream();
@@ -559,7 +559,7 @@ public class HttpUtils {
                     sb.append(line).append("\n");
                 }
                 br.close();
-                log.info("callApi "+hostUrl+" : "+sb.toString());
+                log.info("callApi /oauth/token : "+sb.toString());
             	
             }
 

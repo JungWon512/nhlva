@@ -52,6 +52,50 @@
 			});
 			
 			// 이미지 업로드 페이지 이동
+			$(".btn_smart_entry").on(clickEvent, function(){
+				var sendMsg = "AV|";
+				sendMsg += ($('input[name=naBzplc]').val()+"|");
+				sendMsg += ($(this).data("aucPrgSq").toString()+"|");
+				sendMsg += ($(this).data("qcn").toString()+"|"); //경매 회차
+				sendMsg += ($(this).data("aucObjDsc").toString()+"|"); //경매대상구분코드
+				sendMsg += ($(this).data("ftsnm").toString()+"|"); //농가명
+				sendMsg += ($(this).data("amnno").toString()+"|"); //축산개체관리번호
+				sendMsg += ($(this).data("ftsnm").toString()+"|"); //축산축종구분코드
+				sendMsg += ($(this).data("indvSexC").toString()); //개체성별코드
+				/*
+				sendMsg += ($(this).data("fhsIdNo").toString()+"|"); //농가식별번호
+				sendMsg += ($(this).data("farmAmnno").toString()+"|"); //농장관리번호
+				sendMsg += ($(this).data("brandnm").toString()+"|"); //브랜드명
+				sendMsg += ($(this).data("birth").toString()+"|"); //생년월일
+				sendMsg += ($(this).data("kpnNo").toString()+"|"); //KPN번호
+				sendMsg += ($(this).data("mcowDsc").toString()+"|"); //어미소구분코드
+				sendMsg += ($(this).data("mcowSraIndvAmnno").toString()+"|"); //어미소축산개체관리번호
+				sendMsg += ($(this).data("matime").toString()+"|"); //산차
+				sendMsg += ($(this).data("prnyMtcn").toString()+"|"); //임신개월수
+				sendMsg += ($(this).data("sraIndvPasgQcn").toString()+"|"); //계대
+				sendMsg += ($(this).data("indvIdNo").toString()+"|"); //계체식별번호
+				sendMsg += ($(this).data("sraIndvBrdsraRgNo").toString()+"|"); //축산개체종축등록번호
+				sendMsg += ($(this).data("rgDsc").toString()+"|"); //등록구분번호
+				sendMsg += ($(this).data("sraPdRgnnm").toString()+"|"); //출하생산지역
+				
+				sendMsg += ($(this).data("dnaYn").toString()+"|"); //친자검사결과여부
+				sendMsg += ($(this).data("anwYn").toString()+"|"); //신규여부
+				sendMsg += ($(this).data("cowSogWt").toString()+"|"); //우출하중량
+				sendMsg += ($(this).data("firLowsSbidLmtAm").toString()+"|"); //최초최저낙찰한도금액
+				sendMsg += ($(this).data("lowsSbidLmtAm").toString()+"|"); //최저낙찰한도금액
+				sendMsg += ($(this).data("rmkCntn").toString()+"|"); //비고내용
+				sendMsg += ($(this).data("selStsDsc").toString()+"|"); //낙유찰결과
+				sendMsg += ($(this).data("lvstAucPtcMnNo").toString()+"|"); //낙찰자
+				sendMsg += ($(this).data("sraSbidUpr").toString()+"|"); //낙찰금액
+				sendMsg += ($(this).data("atdrDtm").toString()+"|"); //응찰일시
+				sendMsg += ("N|"); //마지막출품여부
+				sendMsg += ($(this).data("modlNo").toString()+"|"); //계류대번호
+				sendMsg += 'N'; //초과출장우여부
+				*/
+				console.log(sendMsg);
+				smartEntryHandler(sendMsg);
+			});
+			// 이미지 업로드 페이지 이동
 			$(".btn_image").on(clickEvent, function(){
 				var params = {
 					aucDt : $("input[name='aucDt']").val(),
@@ -428,6 +472,7 @@
 			// public functions
 			init: function () {
 				addEvent();
+				socketStart();
 			}
 		};
 	}();
@@ -442,3 +487,72 @@ var fnLayerClose = function(className){
 	$("." + className).remove();
 };
 
+
+//소켓통신 connect 및 이벤트 바인딩
+var socket=null,auctionConfig={};
+var socketStart = function(){
+	if(socket){ socket.connect(); return;}
+	var socketHost = (active == 'production')?"cowauction.kr":(active == 'develop')?"xn--e20bw05b.kr":"xn--e20bw05b.kr";
+	socketHost += ':9001';
+	socket = io.connect('https://'+socketHost+ '/6003' + '?auctionHouseCode='  + $('input[name=naBzplc]').val(), {secure:true});
+
+	socket.on('connect_error', connectErr);
+	socket.on('connect', connectHandler);
+	socket.on('disconnect', disconnectHandler);
+	socket.on('ResponseConnectionInfo', messageHandler);	
+	socket.on('SmartEntryInfo', smartEntryHandler);
+}
+var connectErr = function(){
+	socketDisconnect();
+	//modalAlert('','경매가 종료되었습니다.',function(){pageMove('/main', false);});	
+//	if(socket.connected) {clearInterval(socketConnectTimeInterval);}
+//	else socket.connect();
+}
+
+//소켓통신 disconnect Event
+var socketDisconnect = function(){
+	socket.disconnect();	
+}
+//소켓통신 connect시 Event
+var connectHandler = function() {
+	//구분자|조합구분코드|회원번호|인증토큰|접속요청채널|사용채널|관전자여부
+	$('#btnStop').prop('disabled',false);
+	$('#btnStart').prop('disabled',true);
+	//var token = getCookie('access_token');
+	var johapCd = $('input[name=naBzplc]').val();
+	var num = 'WATCHER';
+	var tmpToken = $('input[name=watchToken]').val();
+	var packet = 'AI|'+johapCd+'|'+num+'|'+tmpToken+'|6003|WEB'
+	socket.emit('packetData', packet);	
+}
+var smartEntryHandler = function(sendMsg) {
+	//구분자|조합구분코드|회원번호|인증토큰|접속요청채널|사용채널|관전자여부
+	console.log(sendMsg);
+	socket.emit('packetData', sendMsg);	
+}
+
+var disconnectHandler = function() {
+}
+
+//소켓통신 수신시 제어하는 로직
+/** 
+	AR : 경매상태정보
+	AS : 현재 경며정보
+	SC : 현재 출품정보
+	CF : 낙찰데이터 정보	
+**/
+var messageHandler = function(data) {
+	debugConsole(data);
+	var dataArr = data.split('|');
+	var gubun = dataArr[0];
+	                  
+	switch(gubun){
+		case "AR" :
+//			auctionConfig.status = dataArr[2]=='2000'?'succ':'fail';
+//			if(auctionConfig.status=='fail'){
+//				socketDisconnect();
+//			}
+		break;	
+		default:break;
+	}
+};

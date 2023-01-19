@@ -20,10 +20,10 @@ kko:
     redirect.url: http://localhost:8080/user/oauth
     client:
       id:
-        api: 005918c16a55cafd5746f248a883e97e
-        app: 61fffa1e49ffaf03502a46d4147bae4f
-        admin: 8ac2e503fa077f39a312b2586f28c39b
-        javascript: bcc997fd4a44d8ab7eff284d32f83f59    
+        api: 84f8f42509cbb535a8d8aab764296ae8
+        app: 98b88dbbe9f576a392d96526862ce6fa
+        admin: ffcc3e33c3798891876b84db9c5ea01b
+        javascript: ba05b23544eab23b018fe8eee6dac796    
 ---
 # profile(개발 서버 환경)
 spring.profiles: properties-develop
