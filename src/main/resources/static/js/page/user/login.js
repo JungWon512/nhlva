@@ -214,7 +214,7 @@
 function loginWithKakao() {
 	var url = 'https://kauth.kakao.com/oauth/authorize?';
 	url+='client_id='+kko_api_id;
-	url+='&redirect_uri'=kko_redirect_url;
+	url+='&redirect_uri='+kko_redirect_url;
 	url+='&response_type=code';
 	url+='&state='+location.search.substr(1);
 	window.open(url, '카카오 로그인', 'width=800, height=700, toolbar=no, menubar=no, scrollbars=no, resizable=yes' );
