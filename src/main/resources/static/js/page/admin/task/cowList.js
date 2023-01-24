@@ -60,7 +60,6 @@
 				sendMsg += ($(this).data("aucObjDsc").toString()+"|"); //경매대상구분코드
 				sendMsg += ($(this).data("ftsnm").toString()+"|"); //농가명
 				sendMsg += ($(this).data("amnno").toString()+"|"); //축산개체관리번호
-				sendMsg += ($(this).data("ftsnm").toString()+"|"); //축산축종구분코드
 				sendMsg += ($(this).data("indvSexC").toString()); //개체성별코드
 				/*
 				sendMsg += ($(this).data("fhsIdNo").toString()+"|"); //농가식별번호
