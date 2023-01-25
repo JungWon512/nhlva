@@ -249,7 +249,7 @@
 															downsamplingRatio: 0.5,
 															orientation: true,
 															meta: true
-														}));
+														})).find("img").remove();
 				}
 			});
 			
@@ -280,7 +280,7 @@
 			init: function () {
 				addBtnEvent();
 				addImage();
-				//new Promise(addImage).then(makeThumbnailImage);
+//				new Promise(addImage).then(makeThumbnailImage);
 			}
 		};
 	}();

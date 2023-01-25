@@ -99,8 +99,8 @@ public class MyPageController {
 		BidUserDetails userVo = (BidUserDetails) sessionUtill.getUserVo();
 		params.put("loginNo", userVo.getTrmnAmnno());
 		
-		Map<String,Object> paramMap = new HashMap<>();
-		paramMap.put("naBzPlcNo", params.get("place").toString());
+        Map<String,Object> paramMap = new HashMap<>();
+        paramMap.put("naBzPlcNo", params.get("place").toString());
 
 		Map<String,Object> johap = adminService.selectOneJohap(paramMap);
 		paramMap.put("naBzPlc", johap.get("NA_BZPLC"));
@@ -134,11 +134,11 @@ public class MyPageController {
 		
 		params.putAll(paramMap);
 		
-		mav.addObject("johapData", johap);
+ 		mav.addObject("johapData", johap);
 		mav.addObject("dateList",datelist);
 		mav.addObject("inputParam", params);
 		mav.addObject("subheaderTitle","나의 경매내역");
-		
+ 		
 		return mav;
 	}
 	/**
@@ -159,26 +159,26 @@ public class MyPageController {
 			
 			// 검색할 날짜 계산처리
 			String yyyyMM = "";
-			DateTimeFormatter format = DateTimeFormatter.ofPattern("yyyyMM");
-			String searchYm = paramMap.get("searchDateState").toString();
-			LocalDate date = ( searchYm == null || searchYm.isEmpty()) ? LocalDate.now() : LocalDate.parse(searchYm+"01",DateTimeFormatter.ofPattern("yyyyMMdd"));
-			if ("next".equals(paramMap.get("flag"))) {
-				yyyyMM = date.plusMonths(1).format(format);
-			}
-			else if("prev".equals(paramMap.get("flag"))) {
-				yyyyMM = date.minusMonths(1).format(format);
-			}
-			else {
-				yyyyMM = date.format(format);
-			}
-			
+	        DateTimeFormatter format = DateTimeFormatter.ofPattern("yyyyMM");
+	     	String searchYm = paramMap.get("searchDateState").toString();
+	     	LocalDate date = ( searchYm == null || searchYm.isEmpty()) ? LocalDate.now() : LocalDate.parse(searchYm+"01",DateTimeFormatter.ofPattern("yyyyMMdd"));
+	        if ("next".equals(paramMap.get("flag"))) {
+		        yyyyMM = date.plusMonths(1).format(format);
+	        }
+	        else if("prev".equals(paramMap.get("flag"))) {
+		        yyyyMM = date.minusMonths(1).format(format);	        	
+	        }
+	        else {
+		        yyyyMM = date.format(format);
+	        }
+	        
 			paramMap.put("stateFlag", "buy");
 			paramMap.put("searchMbIntgNo", ((BidUserDetails) sessionUtill.getUserVo()).getMbIntgNo());
 			paramMap.put("searchTrmnAmnNo", sessionUtill.getUserId());
 			
 			paramMap.put("searchDateState", yyyyMM);
 			params.put("searchDateState", yyyyMM);
-
+						
 			List<Map<String,Object>> calendarList = auctionService.selectStateList(paramMap);
 			
 			if (calendarList != null) {
@@ -217,7 +217,7 @@ public class MyPageController {
 		if(!ObjectUtils.isEmpty(flashMap) && flashMap.containsKey("params")) {
 			params.putAll((Map<String, Object>)flashMap.get("params"));
 		}
-		BidUserDetails userVo = (BidUserDetails)sessionUtill.getUserVo();
+		BidUserDetails userVo = (BidUserDetails) sessionUtill.getUserVo();
 		
 		Map<String,Object> paramMap = new HashMap<>();
 		paramMap.put("naBzPlcNo", params.get("searchnaBzPlcNo").toString());
@@ -238,7 +238,7 @@ public class MyPageController {
 		paramMap.put("stateFlag", "buy");
 		
 		//조합정보 및 계좌정보 가져오기
-		mav.addObject("accountInfo", auctionService.selectJohapAccInfo(paramMap));
+		mav.addObject("accountInfo", auctionService.selectJohapAccInfo(paramMap));		
 		//매수인 정보 조회
 		mav.addObject("stateInfo", auctionService.selectStateInfo(paramMap));
 		//낙찰가 조회
@@ -299,7 +299,6 @@ public class MyPageController {
 		mav.setView(new RedirectView("/my/entryInfo?place=" + johap.get("NA_BZPLCNO")));
 		return mav;
 	}
-
 	/**
 	 * 정산 페이지 접속을 위한 임시 로그인 처리
 	 * @param string
@@ -937,7 +936,7 @@ public class MyPageController {
 		Map<String,Object> johap = adminService.selectOneJohap(map);
 		mav.addObject("johapData", johap);
 		
-		if(sessionUtill.getUserId() != null) params.put("loginNo", sessionUtill.getUserId()); 
+		if(sessionUtill.getUserId() != null) params.put("loginNo", sessionUtill.getUserId());
 		if(sessionUtill.getUserId() != null) map.put("mbIntgNo", ((BidUserDetails) sessionUtill.getUserVo()).getMbIntgNo() ); 
 		
 		List<Map<String,Object>>  johqpList= auctionService.selectJohqpList(map);

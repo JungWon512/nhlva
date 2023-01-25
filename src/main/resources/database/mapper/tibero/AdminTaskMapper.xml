@@ -736,8 +736,8 @@
 			 , FILE_PATH
 			 , FILE_NM
 			 , FILE_EXT_NM
-			 , 'https://kr.object.ncloudstorage.com/test-tt12/'||FILE_PATH||FILE_NM||FILE_EXT_NM AS FILE_URL
-			 , 'https://kr.object.ncloudstorage.com/test-tt12/'||FILE_PATH||'thumb/'||FILE_NM||FILE_EXT_NM AS THUMB_FILE_URL
+			 , #{imgDomain}||FILE_PATH||FILE_NM||FILE_EXT_NM AS FILE_URL
+			 , #{imgDomain}||FILE_PATH||'thumb/'||FILE_NM||FILE_EXT_NM AS THUMB_FILE_URL
 			 , FSRG_DTM
 			 , FSRGMN_ENO
 			 , LSCHG_DTM
