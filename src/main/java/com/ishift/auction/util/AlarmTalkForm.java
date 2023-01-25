@@ -1,6 +1,5 @@
 package com.ishift.auction.util;
 
-import java.util.HashMap;
 import java.util.Map;
 
 import org.json.JSONObject;
@@ -14,7 +13,6 @@ public class AlarmTalkForm {
 
 	private static Logger log = LoggerFactory.getLogger(AlarmTalkForm.class);
 	
-	@SuppressWarnings("deprecation")
 	@Deprecated
 	public String getAlarmTalkTemplate(String templateCode, Map<String, Object> paramMap) {
 		StringBuffer sb = new StringBuffer();
@@ -145,19 +143,22 @@ public class AlarmTalkForm {
 		JSONObject jobj = new JSONObject();
 		
 		// java단에서 알람톡 템플릿을 사용하지않음
-//		jobj.put("msg_content", this.getAlarmTalkTemplate(templateCode, paramMap));
+		//jobj.put("msg_content", this.getAlarmTalkTemplate(templateCode, paramMap));
+		
 		jobj.put("msg_content", paramMap.get("MSG_CNTN"));
+		// NHKKO00259 : 출하주, NHKKO00260 : 중도매인
 		if ("NHKKO00259".equals(templateCode) || "NHKKO00260".equals(templateCode)) {
 			jobj.put("btn_name_1", paramMap.getOrDefault("BTN_NM","버튼명"));
 			jobj.put("btn_type_1", "AL");
 			
-			//[TO-DO] 버튼 URL 처리
-			jobj.put("btn_content_1", paramMap.getOrDefault("BTN_URL", "버튼URL"));			
+			String appLink = paramMap.getOrDefault("BTN_URL", "https://nhauction.page.link/JwzKzHb6hMzbEXk88").toString();
+			jobj.put("btn_content_1", appLink +"$|$" + appLink);
 		}
 		
 		log.debug(jobj.toString());
-		
-		return jobj.toString();
+		// gypark : 따옴표 앞에 역슬래쉬를 하나 더 추가해달라고 하셨음
+		// json 형태를 인터페이스 측에서 받을 수 없는 상황이라.. 구분자로 역슬래쉬 하나씩 더 추가해서 구분하여 받기로 함
+		return jobj.toString().replace("\"", "\\\"");
 	}
 
 	public String makeAlarmMsgCntn(Map<String, Object> item, String msgContent) throws Exception {
@@ -172,6 +173,7 @@ public class AlarmTalkForm {
 		msgContent = msgContent.replaceAll("#\\{출장우현황정보5\\}", item.getOrDefault("COW_INFO5","").toString());
 		msgContent = msgContent.replaceAll("#\\{조합전화번호\\}", item.getOrDefault("CLNT_TELNO","").toString());
 		msgContent = msgContent.replaceAll("#\\{전환예정일자\\}", item.getOrDefault("DORMDUE_DT","").toString());
+		msgContent = msgContent.replaceAll("#\\{인증번호\\}", item.getOrDefault("ATTC_NO","").toString());
 	
 		return msgContent;
 	}
