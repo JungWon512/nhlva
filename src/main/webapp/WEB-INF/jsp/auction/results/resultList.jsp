@@ -108,10 +108,10 @@
 			</div>
 		</div>
 		<div class="filter-opt active">
-			<button class="del_btn searchBtn">검색</button>
-			<button class="del_btn sexBtn">성별</button>
-			<button class="del_btn dateBtn">월령</button>
-			<button class="del_btn priceBtn">예정가</button>
+			<button class="del_btn searchBtn" style="display : none;">검색</button>
+			<button class="del_btn sexBtn" style="display : none;">성별</button>
+			<button class="del_btn dateBtn" style="display : none;">월령</button>
+			<button class="del_btn priceBtn" style="display : none;">예정가</button>
 		</div>
 		<div class="sum_table">
 			<div>

@@ -10,13 +10,19 @@ import java.util.List;
 import java.util.Map;
 
 import javax.annotation.security.PermitAll;
+import javax.annotation.security.RolesAllowed;
+import javax.servlet.http.Cookie;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.util.ObjectUtils;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -27,15 +33,23 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.ModelAndView;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+import org.springframework.web.servlet.support.RequestContextUtils;
+import org.springframework.web.servlet.view.RedirectView;
 
 import com.ishift.auction.service.admin.AdminService;
 import com.ishift.auction.service.auction.AuctionService;
+import com.ishift.auction.service.login.LoginService;
 import com.ishift.auction.service.mypage.MyPageService;
+import com.ishift.auction.util.Constants;
+import com.ishift.auction.util.CookieUtil;
 import com.ishift.auction.util.DateUtil;
 import com.ishift.auction.util.FormatUtil;
+import com.ishift.auction.util.JwtTokenUtil;
 import com.ishift.auction.util.SessionUtill;
 import com.ishift.auction.vo.BidUserDetails;
 import com.ishift.auction.vo.FarmUserDetails;
+import com.ishift.auction.vo.JwtTokenVo;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -62,6 +76,15 @@ public class MyPageController {
 	@Autowired
 	private DateUtil dateUtil;
 	
+	@Autowired
+	private LoginService loginService;
+	
+	@Autowired
+	private JwtTokenUtil jwtTokenUtil;
+	
+	@Autowired
+	private CookieUtil cookieUtil;
+	
 	/**
 	 * 나의 경매내역
 	 * @param params
@@ -76,11 +99,14 @@ public class MyPageController {
 		BidUserDetails userVo = (BidUserDetails) sessionUtill.getUserVo();
 		params.put("loginNo", userVo.getTrmnAmnno());
 		
-        Map<String,Object> paramMap = new HashMap<>();
-        paramMap.put("naBzPlcNo", params.get("place").toString());
+		Map<String,Object> paramMap = new HashMap<>();
+		paramMap.put("naBzPlcNo", params.get("place").toString());
 
 		Map<String,Object> johap = adminService.selectOneJohap(paramMap);
 		paramMap.put("naBzPlc", johap.get("NA_BZPLC"));
+		
+		// 20230113 :: 최근 4주이내 경매일만 검색하도록 변경
+		paramMap.put("entryType", "W");
 		
 		List<Map<String,Object>> datelist= auctionService.selectAucDateList(paramMap);
 		paramMap.put("searchDate", datelist.size() > 0 ? datelist.get(0).get("AUC_DT") : null);
@@ -108,11 +134,11 @@ public class MyPageController {
 		
 		params.putAll(paramMap);
 		
- 		mav.addObject("johapData", johap);
+		mav.addObject("johapData", johap);
 		mav.addObject("dateList",datelist);
 		mav.addObject("inputParam", params);
 		mav.addObject("subheaderTitle","나의 경매내역");
- 		
+		
 		return mav;
 	}
 	/**
@@ -133,26 +159,26 @@ public class MyPageController {
 			
 			// 검색할 날짜 계산처리
 			String yyyyMM = "";
-	        DateTimeFormatter format = DateTimeFormatter.ofPattern("yyyyMM");
-	     	String searchYm = paramMap.get("searchDateState").toString();
-	     	LocalDate date = ( searchYm == null || searchYm.isEmpty()) ? LocalDate.now() : LocalDate.parse(searchYm+"01",DateTimeFormatter.ofPattern("yyyyMMdd"));
-	        if ("next".equals(paramMap.get("flag"))) {
-		        yyyyMM = date.plusMonths(1).format(format);
-	        }
-	        else if("prev".equals(paramMap.get("flag"))) {
-		        yyyyMM = date.minusMonths(1).format(format);	        	
-	        }
-	        else {
-		        yyyyMM = date.format(format);
-	        }
-	        
+			DateTimeFormatter format = DateTimeFormatter.ofPattern("yyyyMM");
+			String searchYm = paramMap.get("searchDateState").toString();
+			LocalDate date = ( searchYm == null || searchYm.isEmpty()) ? LocalDate.now() : LocalDate.parse(searchYm+"01",DateTimeFormatter.ofPattern("yyyyMMdd"));
+			if ("next".equals(paramMap.get("flag"))) {
+				yyyyMM = date.plusMonths(1).format(format);
+			}
+			else if("prev".equals(paramMap.get("flag"))) {
+				yyyyMM = date.minusMonths(1).format(format);
+			}
+			else {
+				yyyyMM = date.format(format);
+			}
+			
 			paramMap.put("stateFlag", "buy");
 			paramMap.put("searchMbIntgNo", ((BidUserDetails) sessionUtill.getUserVo()).getMbIntgNo());
 			paramMap.put("searchTrmnAmnNo", sessionUtill.getUserId());
 			
 			paramMap.put("searchDateState", yyyyMM);
 			params.put("searchDateState", yyyyMM);
-						
+
 			List<Map<String,Object>> calendarList = auctionService.selectStateList(paramMap);
 			
 			if (calendarList != null) {
@@ -181,10 +207,17 @@ public class MyPageController {
 	 * @return
 	 * @throws Exception
 	 */
+	@SuppressWarnings("unchecked")
+	@PreAuthorize("hasRole('ROLE_BIDDER')")
 	@RequestMapping(value = "/my/buyInfo", method = { RequestMethod.GET, RequestMethod.POST })	
-	public ModelAndView buyInfo(@RequestParam Map<String,Object> params) throws Exception {
-		ModelAndView mav = new ModelAndView();
-		BidUserDetails userVo = (BidUserDetails) sessionUtill.getUserVo();
+	public ModelAndView buyInfo(@RequestParam Map<String,Object> params, HttpServletRequest request) throws Exception {
+		final ModelAndView mav = new ModelAndView();
+
+		Map<String, Object> flashMap = (Map<String, Object>)RequestContextUtils.getInputFlashMap(request);
+		if(!ObjectUtils.isEmpty(flashMap) && flashMap.containsKey("params")) {
+			params.putAll((Map<String, Object>)flashMap.get("params"));
+		}
+		BidUserDetails userVo = (BidUserDetails)sessionUtill.getUserVo();
 		
 		Map<String,Object> paramMap = new HashMap<>();
 		paramMap.put("naBzPlcNo", params.get("searchnaBzPlcNo").toString());
@@ -205,7 +238,7 @@ public class MyPageController {
 		paramMap.put("stateFlag", "buy");
 		
 		//조합정보 및 계좌정보 가져오기
-		mav.addObject("accountInfo", auctionService.selectJohapAccInfo(paramMap));		
+		mav.addObject("accountInfo", auctionService.selectJohapAccInfo(paramMap));
 		//매수인 정보 조회
 		mav.addObject("stateInfo", auctionService.selectStateInfo(paramMap));
 		//낙찰가 조회
@@ -227,12 +260,21 @@ public class MyPageController {
 	 * 중도매인 정산 랜딩 페이지
 	 * @param params
 	 * @return
+	 * @throws SQLException 
 	 */
 	@PermitAll
-	@GetMapping(value = "/state-acc/mwmn/{naBzplc}/{searchDate}/{searchMbIntgNo}")
-	public ModelAndView stateAccMwmn(@PathVariable Map<String, Object> params) {
+	@GetMapping(value = "/state-acc/mwmn/{naBzplc}/{searchDate}/{trmnAmnno}")
+	public ModelAndView stateAccMwmn(HttpServletRequest request
+									, HttpServletResponse response
+									, @PathVariable Map<String, Object> params
+									, RedirectAttributes redirect) throws SQLException {
 		final ModelAndView mav = new ModelAndView();
-		mav.setViewName("mypage/buy/buy_info");
+//		this.setTempLoginProc("mwmn", params, response);
+		final Map<String,Object> johap = adminService.selectOneJohap(params);
+		params.put("searchnaBzPlcNo", johap.get("NA_BZPLCNO"));
+//		redirect.addFlashAttribute("params", params);
+		redirect.mergeAttributes(params);
+		mav.setView(new RedirectView("/my/buyInfo?place=" + johap.get("NA_BZPLCNO")));
 		return mav;
 	}
 	
@@ -240,13 +282,51 @@ public class MyPageController {
 	 * 출하주 정산 랜딩 페이지
 	 * @param params
 	 * @return
+	 * @throws SQLException 
 	 */
 	@PermitAll
-	@GetMapping(value = "/state-acc/fhs/{naBzplc}/{searchDate}/{searchMbIntgNo}")
-	public ModelAndView stateAccFhs(@PathVariable Map<String, Object> params) {
+	@GetMapping(value = "/state-acc/fhs/{naBzplc}/{searchDate}/{fhsIdNo}")
+	public ModelAndView stateAccFhs(HttpServletRequest request
+									, HttpServletResponse response
+									, @PathVariable Map<String, Object> params
+									, RedirectAttributes redirect) throws SQLException {
 		final ModelAndView mav = new ModelAndView();
-		mav.setViewName("mypage/buy/buy_info");
+//		this.setTempLoginProc("fhs", params, response);
+		final Map<String,Object> johap = adminService.selectOneJohap(params);
+		params.put("searchnaBzPlcNo", johap.get("NA_BZPLCNO"));
+//		redirect.addFlashAttribute("params", params);
+		redirect.mergeAttributes(params);
+		mav.setView(new RedirectView("/my/entryInfo?place=" + johap.get("NA_BZPLCNO")));
 		return mav;
+	}
+
+	/**
+	 * 정산 페이지 접속을 위한 임시 로그인 처리
+	 * @param string
+	 * @param params
+	 * @throws SQLException 
+	 */
+	@SuppressWarnings("unused")
+	private void setTempLoginProc(String type, Map<String, Object> params, HttpServletResponse response) throws SQLException {
+		if ("fhs".equals(type)) {
+			String[] fhsIdNo = params.getOrDefault("fhsIdNo", "_").toString().split("_");
+			params.put("fhsIdNo", fhsIdNo[0]);
+			params.put("farmAmnno", fhsIdNo[1]);
+		}
+		
+		final Map<String, Object> info = "mwmn".equals(type) ? loginService.selectWholesaler(params) : loginService.selectFarmUser(params);
+		
+		JwtTokenVo jwtTokenVo = JwtTokenVo.builder()
+										.auctionHouseCode(info.get("NA_BZPLC").toString())
+										.userMemNum(info.get("TRMN_AMNNO").toString())
+										.userRole("mwmn".equals(type) ? Constants.UserRole.BIDDER : Constants.UserRole.FARM)
+										.mbIntgNo(info.getOrDefault("MB_INTG_NO", "").toString())			//회원통합번호 추가
+										.build();
+		
+		String token = jwtTokenUtil.generateToken(jwtTokenVo, Constants.JwtConstants.ACCESS_TOKEN);
+		Cookie cookie = cookieUtil.createCookie(Constants.JwtConstants.ACCESS_TOKEN, token);
+		response.addCookie(cookie);
+		response.setHeader(HttpHeaders.AUTHORIZATION, Constants.JwtConstants.BEARER + token);
 	}
 	/**
 	 * 나의 경매내역 - 구매내역 리스트 조회
@@ -524,6 +604,9 @@ public class MyPageController {
 		Map<String,Object> johap = adminService.selectOneJohap(paramMap);
 		paramMap.put("naBzPlc", johap.get("NA_BZPLC"));
 		
+		// 20230113 :: 최근 4주이내 경매일만 검색하도록 변경
+		paramMap.put("entryType", "W");
+		
 		List<Map<String,Object>> datelist= auctionService.selectAucDateList(paramMap);
 		paramMap.put("searchDate", datelist.size() > 0 ? datelist.get(0).get("AUC_DT") : null);
 		paramMap.put("searchMbIntgNo", userVo.getMbIntgNo());
@@ -649,9 +732,17 @@ public class MyPageController {
 	 * @return
 	 * @throws Exception
 	 */
+	@SuppressWarnings("unchecked")
+	@PreAuthorize("hasRole('ROLE_FARM')")
 	@RequestMapping(value = "/my/entryInfo",method = { RequestMethod.GET, RequestMethod.POST })	
-	public ModelAndView entryInfo(@RequestParam Map<String,Object> params) throws Exception {
-		ModelAndView mav = new ModelAndView();
+	public ModelAndView entryInfo(@RequestParam Map<String,Object> params, HttpServletRequest request) throws Exception {
+		final ModelAndView mav = new ModelAndView();
+		
+		Map<String, Object> flashMap = (Map<String, Object>)RequestContextUtils.getInputFlashMap(request);
+		if(!ObjectUtils.isEmpty(flashMap) && flashMap.containsKey("params")) {
+			params.putAll((Map<String, Object>)flashMap.get("params"));
+		}
+		
 		FarmUserDetails userVo = (FarmUserDetails)sessionUtill.getUserVo();
 		
 		Map<String,Object> map = new HashMap<>();
@@ -749,7 +840,7 @@ public class MyPageController {
 		Map<String, Object> map = new HashMap<String, Object>();
 		
 		String place = (String) params.get("place");
-        mav.addObject("naBzPlcNo", place);
+        mav.addObject("naBzPlcNo", place); // 쿼리스트링 의 지역번호 가져와서 셋팅.
         
         map.put("place", place);
         map.put("flagAplyConfirm", "Y");
@@ -846,7 +937,13 @@ public class MyPageController {
 		Map<String,Object> johap = adminService.selectOneJohap(map);
 		mav.addObject("johapData", johap);
 		
-		if(sessionUtill.getUserId() != null) params.put("loginNo", sessionUtill.getUserId());
+		if(sessionUtill.getUserId() != null) params.put("loginNo", sessionUtill.getUserId()); 
+		if(sessionUtill.getUserId() != null) map.put("mbIntgNo", ((BidUserDetails) sessionUtill.getUserVo()).getMbIntgNo() ); 
+		
+		List<Map<String,Object>>  johqpList= auctionService.selectJohqpList(map);
+		mav.addObject("johqpList", johqpList);
+
+		
 		mav.addObject("inputParam", params);
 
 		mav.addObject("subheaderTitle","이용해지 신청");

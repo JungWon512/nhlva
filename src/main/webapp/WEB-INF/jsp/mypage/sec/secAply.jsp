@@ -10,12 +10,17 @@
 	<p class="title_text"><span class="txt_blue">*</span> 이용해지 신청 대상</p>
 	<ul class="radio_group">
        <li class="select_na_bzplc">
-           <input type="radio" name="selelctNaBzPlc" id="all_bzplc" value="ALL" checked><label for="all_bzplc">전체 조합</label>
+           <input type="radio" name="selelctNaBzPlc" id="select_bzplc" value="${johapData.NA_BZPLC}" checked><label for="select_bzplc">해당 조합</label>
        </li>
        <li class="select_na_bzplc">
-           <input type="radio" name="selelctNaBzPlc" id="select_bzplc" value="${johapData.NA_BZPLC}"><label for="select_bzplc">해당 조합</label>
+           <input type="radio" name="selelctNaBzPlc" id="all_bzplc" value="ALL" ><label for="all_bzplc">전체 조합</label>
        </li>
     </ul>
+	    <dl id="selectBzplcList" class="secAplyDl"  >
+    <c:forEach items="${ johqpList }" var="list">
+		    <dd class="secAplyDD" >· ${list.CLNTNM} : ${list.SRA_MWMNNM}</dd>
+    </c:forEach>
+	    </dl>
 	<p class="title_text mt30"><span class="txt_blue">*</span> 이용해지 신청 사유</p>
 	<div class="inp">
 		<textarea name="sec_reason" maxLength="50"></textarea>

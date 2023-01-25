@@ -816,10 +816,13 @@ public class AuctionController extends CommonController {
 				case "0":
 					paramMap.put("naBzplc", param.get("naBzplc"));
 					paramMap.put("sraIndvAmnno", param.get("sraIndvAmnno"));
+					paramMap.put("simpCGrpSqno", "1");
 					List<Map<String,Object>> moveList = auctionService.selectListIndvMove(paramMap);
 					List<Map<String,Object>> childBirthList = auctionService.selectListIndvChildBirth(paramMap);
+					List<Map<String,Object>> tabList =auctionService.selectListExpitemSet(paramMap);
 					mav.addObject("childBirthList",childBirthList);
 					mav.addObject("moveList",moveList);
+					mav.addObject("tabList", tabList);
 				break;
 				case "1":					
 					paramMap.put("naBzplc", param.get("naBzplc"));

@@ -13,6 +13,7 @@
 				</dl>
 			</dl>
 			<div class="btns">
+				<p style="color:red; font-size:18px; margin-bottom: 10px;">*최근 6개월 내 정산서만 검색 가능합니다.</p>
 				<button type="button" id="johap" class="btn_flag act"><c:out value="${ johapData.AREANM }축협" /></button>
 				<button type="button" id="all" class="btn_flag">전체축협</button>
 			</div>

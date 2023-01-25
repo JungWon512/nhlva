@@ -6,7 +6,7 @@
 	<div class="w_header ${requestPath eq '/home' or requestPath eq '/district' or requestPath eq '/schedule' or fn:contains( requestPath, 'dashboard') ? 'has-main-tab' :''}">
 		<a href="javascript:pageMove('/home');" class="logo">
 			<h1>
-				<span>온라인 스마트 경매</span>
+				<span>농협경제지주</span>
 				가축시장.kr
 			</h1>
 		</a>
@@ -25,7 +25,7 @@
 								<a href="javascript:pageMove('/home');">경매<span class="sub-txt">인터넷 <br>스마트 경매</span></a>
 							</li>
 							<li class="${fn:contains( requestPath, 'dashboard') ? 'on' :''}">
-								<a href="javascript:pageMove('/dashboard');">현황<span class="sub-txt">전국 <br>가축시장현황</span></a>
+								<a href="javascript:pageMove('/dashboard/main');">현황<span class="sub-txt">전국 <br>가축시장현황</span></a>
 							</li>
 						</ul>
 					</div>

@@ -115,7 +115,7 @@ function modalPopup(target){
 				$(this).css('overflow-x','hidden');
 				var tmpDate = $(this).closest('.tab_area').get(0)?150:"watch".indexOf(location.pathname.replace('/',''))>-1?($('#aucDsc').val()==1?382:155):290;
 				var resultH= ( height-tmpDate)<=0?'450':height-tmpDate;											
-				$(this).css('height',resultH + 1+'px');						
+				$(this).css('height',resultH + 1+'px');
 				$(this).closest('div.tab_area').attr("style", preCss ? preCss : "");
 			});
 		}else{
@@ -172,7 +172,8 @@ $(document).ready(function() {
 			$(document).on('click','div.winpop button.winpop_back',function(){
 				history.back();
 			});
-			if(kko_id) Kakao.init(kko_id);
+//			if(kko_id) Kakao.init(kko_id);
+			if(kko_id) try{Kakao.init(kko_id)}catch(e){console.log(e);};
 		},
 		pdFav: function (e) {
 			$(".pd_pav a").on('click', function(e){ 
@@ -200,7 +201,7 @@ $(document).ready(function() {
 						}
 						resultH = $('body').outerHeight() - resultH;
 						//$(this).css('height','calc( 100vh -  '+resultH+'px)');
-//						$(this).css('height','  '+(resultH + 1)+'px');
+						// $(this).css('height','  '+(resultH + 1)+'px');
 						$(this).css('height','  '+ (resultH<0?0:resultH) +'px');
 						$(this).css('min-height','120px');
 					});

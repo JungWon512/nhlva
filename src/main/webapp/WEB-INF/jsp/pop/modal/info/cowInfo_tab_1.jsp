@@ -164,7 +164,7 @@
 				<tr>
 					<td class="ta-C">${not empty item.METRB_METQLT_GRD ? item.METRB_METQLT_GRD :'-' }</td>
 					<td class="ta-C">${not empty item.METRB_BBDY_WT ? item.METRB_BBDY_WT :'-' }</td>
-					<td class="ta-C">${not empty item.MIF_BTC_DT ? item.MIF_BTC_DT : '-'}</td>
+					<td class="ta-C">${not empty item.MIF_BTC_DT_STR ? item.MIF_BTC_DT_STR : '-'}</td>
 				</tr>
 			</c:forEach>
 		</tbody>
@@ -211,7 +211,7 @@
 				<tr>
 					<td class="ta-C">${not empty item.METRB_METQLT_GRD ? item.METRB_METQLT_GRD :'-' }</td>
 					<td class="ta-C">${not empty item.METRB_BBDY_WT ? item.METRB_BBDY_WT :'-' }</td>
-					<td class="ta-C">${not empty item.MIF_BTC_DT ? item.MIF_BTC_DT : '-'}</td>
+					<td class="ta-C">${not empty item.MIF_BTC_DT_STR ? item.MIF_BTC_DT_STR : '-'}</td>
 				</tr>
 			</c:forEach>
 		</tbody>

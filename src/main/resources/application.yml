@@ -70,9 +70,12 @@ ncloud:
   storage:
     end-point: https://kr.object.ncloudstorage.com
     region-name: kr-standard
-    access-key: loqHvgq2A4WGx0D7feer
-    secret-key: yrmIJmsF37g1BExQXk5CIhrMn1EG1h32qJyaTvzF
-    bucket-name: test-tt12
+    access-key: LBIYVr5QNEVHjiMOha3w
+    secret-key: NB06umoPLA89ODh48DlVs7n2OTlKjDs0c4IOArif
+    bucket-name: smartauction-storage
+#    access-key: loqHvgq2A4WGx0D7feer
+#    secret-key: yrmIJmsF37g1BExQXk5CIhrMn1EG1h32qJyaTvzF
+#    bucket-name: nhlva-img
 
 ---
 # local profile(개발자 환경)

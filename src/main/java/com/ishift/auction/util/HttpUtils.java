@@ -10,6 +10,11 @@ import java.net.HttpURLConnection;
 import java.net.SocketTimeoutException;
 import java.net.URL;
 import java.net.UnknownHostException;
+import java.security.KeyManagementException;
+import java.security.NoSuchAlgorithmException;
+import java.security.SecureRandom;
+import java.security.cert.CertificateException;
+import java.security.cert.X509Certificate;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -19,6 +24,13 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Random;
+
+import javax.net.ssl.HostnameVerifier;
+import javax.net.ssl.HttpsURLConnection;
+import javax.net.ssl.SSLContext;
+import javax.net.ssl.SSLSession;
+import javax.net.ssl.TrustManager;
+import javax.net.ssl.X509TrustManager;
 
 import org.codehaus.jettison.json.JSONException;
 import org.json.JSONArray;
@@ -670,5 +682,75 @@ public class HttpUtils {
             if (conn!= null) conn.disconnect();
         }
 		return nodeMap;
+	}
+	
+
+	public String callApiAiak(String barcode) {
+		BufferedReader br = null;
+		HttpURLConnection con = null;
+        try {
+        	
+            URL url = new URL("https://aiak.or.kr/ka_hims/hapcheon_auction.jsp?barcode="+barcode);
+            SSLVaildBypass();
+            
+            con = (HttpURLConnection) url.openConnection();
+            con.setConnectTimeout(5000); //서버에 연결되는 Timeout 시간 설정
+            con.setReadTimeout(5000); // InputStream 읽어 오는 Timeout 시간 설정
+            con.setRequestMethod("GET");
+            con.setDoOutput(false);    
+
+            StringBuilder sb = new StringBuilder();
+            log.info("callApiAiak resp code : "+con.getResponseCode());
+            if (con.getResponseCode() == HttpURLConnection.HTTP_OK) {
+                br = new BufferedReader(new InputStreamReader(con.getInputStream(), "utf-8"));
+                String line;
+                while ((line = br.readLine()) != null) {
+                    sb.append(line).append("\n");
+                }
+                log.info("callApiAiak : "+sb.toString());
+                return sb.toString();
+            } else {
+                log.error(con.getResponseMessage());
+            }
+
+        } catch (Exception e) {
+            log.error("https://aiak.or.kr 테스트 : ",e);
+        } finally {
+        	try {
+                if(con != null)con.disconnect();
+                if(br !=null) br.close();
+        	}catch(Exception e) {
+                log.error("https://aiak.or.kr 테스트 : ",e);        		
+        	}
+		}
+        return null;
+	}
+	
+	private void SSLVaildBypass() throws NoSuchAlgorithmException, KeyManagementException {
+        HostnameVerifier hv = new HostnameVerifier() {
+			@Override
+			public boolean verify(String arg0, SSLSession arg1) {
+				return true;
+			}
+		};
+    	TrustManager[] trustAllCerts = new TrustManager[] {
+    		new X509TrustManager() {					
+				@Override
+				public X509Certificate[] getAcceptedIssuers() {
+					return null;
+				}
+				
+				@Override
+				public void checkServerTrusted(X509Certificate[] arg0, String arg1) throws CertificateException {return;}
+				
+				@Override
+				public void checkClientTrusted(X509Certificate[] arg0, String arg1) throws CertificateException {return;}
+			}
+    	};
+    	
+    	SSLContext sc = SSLContext.getInstance("SSL");
+    	sc.init(null, trustAllCerts, new SecureRandom());
+    	HttpsURLConnection.setDefaultSSLSocketFactory(sc.getSocketFactory());
+    	HttpsURLConnection.setDefaultHostnameVerifier(hv);		
 	}
 }

@@ -16,6 +16,10 @@ import com.ishift.auction.base.dao.MainDao;
  * @author Yuchan
  *
  */
+/**
+ * @author 김줴
+ *
+ */
 @Repository("auctionDAO")
 public class AuctionDAO {
 	
@@ -745,8 +749,61 @@ public class AuctionDAO {
 		mainDao.update("auction.updateFhsAuthNoYmdInfo", params);
 	}
 
-	public List<Map<String, Object>> selectScheduleListQcn(Map<String, Object> param) throws SQLException {
-		return mainDao.selectList("auction.selectScheduleListQcn", param);
+	/**
+	 * @param param
+	 * @return
+	 * @throws SQLException
+	 */
+	public List<Map<String, Object>> selectScheduleListQcn(Map<String, Object> params) throws SQLException {
+		return mainDao.selectList("auction.selectScheduleListQcn", params);
+	}
+
+	/**
+	 * 이용해지 신청대상 해당 조합조회
+	 * @param params
+	 * @throws SQLException
+	 */
+	public List<Map<String, Object>> selectJohqpList(Map<String, Object> params) throws SQLException{
+		return mainDao.selectList("auction.selectJohqpList", params);
+	}
+
+	/**
+	 * 알림톡 아이디 채번
+	 * @param map
+	 * @return
+	 * @throws SQLException 
+	 */
+	public Map<String, Object> selelctMca5100AlarmTalkId(Map<String, Object> params) throws SQLException {
+		return mainDao.selectOne("auction.selelctMca5100AlarmTalkId", params);
+	}
+
+	/**
+	 * 알림톡 템플릿 정보 조회
+	 * @param params
+	 * @return
+	 * @throws SQLException
+	 */
+	public Map<String, Object> selectTemplateInfo(Map<String, Object> params) throws SQLException {
+		return mainDao.selectOne("auction.selectTemplateInfo", params);
+	}
+
+	/**
+	 * 알림톡에 포함 될 정보
+	 * @param auctionInfo
+	 * @return
+	 * @throws SQLException 
+	 */
+	public Map<String, Object> selectMsgCntnInfo(Map<String, Object> params) throws SQLException {
+		return mainDao.selectOne("auction.selectMsgCntnInfo", params);
+	}
+
+	/**
+	 * SMS 발송정보 저장
+	 * @param params
+	 * @throws SQLException
+	 */
+	public void insertSmsInfo(Map<String, Object> params) throws SQLException {
+		mainDao.insert("auction.insertSmsInfo", params);
 	}
 	
 }

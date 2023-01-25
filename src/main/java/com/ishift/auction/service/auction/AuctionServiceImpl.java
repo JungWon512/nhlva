@@ -7,16 +7,21 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Random;
+import java.util.Set;
 
 import javax.annotation.Resource;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.ObjectUtils;
 
+import com.ishift.auction.util.AlarmTalkForm;
+import com.ishift.auction.util.McaUtil;
 import com.ishift.auction.util.SessionUtill;
 import com.ishift.auction.vo.FarmUserDetails;
 
@@ -28,7 +33,13 @@ public class AuctionServiceImpl implements AuctionService {
 	AuctionDAO auctionDAO;
 	
 	@Autowired
-    private SessionUtill sessionUtill;
+	private SessionUtill sessionUtill;
+	
+	@Autowired
+	private AlarmTalkForm alarmTalkForm;
+	
+	@Autowired
+	private McaUtil mcaUtil;
 	
 	@Override
 	public List<Map<String,Object>> noticeSelectList(Map<String, Object> reqMap)throws SQLException {
@@ -798,6 +809,9 @@ public class AuctionServiceImpl implements AuctionService {
 			
 			params.put("feeInfoList", feeInfoList);
 			if(feeInfoList.size() >0) auctionDAO.insertFeeInfo(params);
+			
+			// TODO :: 경매 낙찰시 SMS 발송하도록 설정 한 경우 출하자에게 낙찰가 알림톡 전송
+			this.sendAlamTalkProc(bizAuctionInfo, auctionInfo);
 		}
 		// 수수료 정보 저장 [e]
 		
@@ -805,6 +819,100 @@ public class AuctionServiceImpl implements AuctionService {
 		result.put("message", "경매내역 변경에 성공했습니다.");
 		
 		return result;
+	}
+	
+	/**
+	 * 낙찰시 알림톡 발송
+	 * 대상 : 출하주
+	 * @param bizInfo
+	 * @param auctionInfo
+	 */
+	@SuppressWarnings("unchecked")
+	public boolean sendAlamTalkProc(final Map<String, Object> bizInfo, final Map<String, Object> auctionInfo) {
+		try {
+			if(!"1".equals(bizInfo.getOrDefault("SBID_SMS_YN", "0")) || !"22".equals(auctionInfo.getOrDefault("SEL_STS_DSC", ""))) return true;
+			
+			Map<String, Object> map = new HashMap<String, Object>();	
+			Map<String, Object> msgMap = new HashMap<String, Object>();	
+			Map<String, Object> mcaMap = null;
+			// 알림톡 전문키 생성 (YYMMDD + 연번4자리)
+			Map<String, Object> tempMap = auctionDAO.selelctMca5100AlarmTalkId(map);
+			msgMap.put("IO_TGRM_KEY", tempMap.get("IO_TGRM_KEY"));	// IO_TGRM_KEY (SEQ - 전문키 YYMMDD + 연번4자리)
+
+			// 알림톡 내용 조회
+			final String templateId = "NHKKO00252";
+			map.put("code", templateId);
+			tempMap = auctionDAO.selectTemplateInfo(map);
+			
+			final Map<String, Object> msgCntnInfo = auctionDAO.selectMsgCntnInfo(auctionInfo);
+
+			msgCntnInfo.put("MSG", " 낙찰내역을 ");
+			msgCntnInfo.put("REVE_USR_NM", auctionInfo.getOrDefault("FTSNM", "").toString().trim());
+			msgCntnInfo.put("COW_INFO1", "경매번호 : " + msgCntnInfo.get("AUC_PRG_SQ")+"번");
+			msgCntnInfo.put("COW_INFO2", "등록구분 : " + msgCntnInfo.get("AUC_OBJ_DSCNM")+"("+msgCntnInfo.get("INDV_SEX_CNM")+")");
+			msgCntnInfo.put("COW_INFO3", "개체번호 : " + msgCntnInfo.get("SRA_INDV_AMNNO_FORMAT"));
+			msgCntnInfo.put("COW_INFO4", "낙찰금액 : " + msgCntnInfo.get("SRA_SBID_AM_FORMAT")+"원");
+			
+			// SMS 로그테이블(TB_LA_IS_MM_SMS) 에 필요한 파라미터
+			msgMap.put("MSG_CNTN", alarmTalkForm.makeAlarmMsgCntn(msgCntnInfo, tempMap.get("TALK_CONTENT").toString()));
+			msgMap.put("AUC_OBJ_DSC", auctionInfo.get("AUC_OBJ_DSC"));		// 경매대상구분코드
+			msgMap.put("TRMN_AMNNO", auctionInfo.get("FHS_ID_NO"));			// 중도매인 코드 or 출하주 코드
+			msgMap.put("DPAMN_DSC", "2");									// 출하자, 응찰자 구분 : 새로운 코드
+			msgMap.put("SEL_STS_DSC", "02");								// 판매상태구분코드 : 새로운 코드
+			msgMap.put("RMS_MN_NAME", auctionInfo.get("FTSNM"));			// 수신자명 (중도매인명 or 출하주명)
+			msgMap.put("IO_TRMSNM", bizInfo.get("NA_BZPLNM"));				// 발신자명 (조합명)
+			msgMap.put("SMS_RMS_MPNO", auctionInfo.get("CUS_MPNO"));		// 수신자 전화번호	
+			msgMap.put("SMS_TRMS_TELNO", bizInfo.get("TELNO"));				// 발신자 전화번호
+			msgMap.put("SS_USERID", "BATCH");
+
+			// 인터페이스에 필요한 파라미터
+			msgMap.put("KAKAO_MSG_CNTN", alarmTalkForm.getAlarmTalkTemplateToJson(templateId, msgMap));
+			msgMap.put("KAKAO_TPL_C", templateId);								// 템플릿 코드
+			msgMap.put("ADJ_BRC", bizInfo.get("ADJ_BRC"));						// 사무소 코드 
+			msgMap.put("RLNO", sessionUtill.getEno());							// RLNO (사용자 사번)
+			msgMap.put("IO_TIT","");											// 제목 : 미사용이라 space로 채움
+			msgMap.put("IO_DPAMN_MED_ADR", auctionInfo.get("CUS_MPNO"));		// 수신 휴대폰번호
+			msgMap.put("IO_SDMN_MED_ADR", bizInfo.get("TELNO"));				// 발신 조합전화번호
+
+			// fail-back 필요 파라메터(알람톡 실패시 문자 전송)
+			msgMap.put("FBK_UYN", "Y");			//fail-back 사용여부
+			msgMap.put("FBK_TIT","");
+			msgMap.put("FBK_MSG_DSC","7");		//3:SMS, 7:LMS
+			msgMap.put("UMS_FWDG_CNTN", msgMap.getOrDefault("MSG_CNTN","").toString());	// UMS_FWDG_CNTN fail-back 메세지 내용
+			msgMap.put("IO_ATGR_ITN_TGRM_LEN", msgMap.getOrDefault("UMS_FWDG_CNTN","").toString().getBytes().length);	// IO_ATGR_ITN_TGRM_LEN (UMS_FWDG_CNTN의 바이트 수)
+			
+			mcaMap = mcaUtil.tradeMcaMsg("5100", msgMap);
+
+			final Map<String, Object> dataMap = (Map<String, Object>) mcaMap.get("jsonData");	
+			if (!ObjectUtils.isEmpty(dataMap)) {
+				//전송여부
+				msgMap = this.changeKeyUpper(msgMap);
+				msgMap.put("TMS_YN", dataMap.get("RZTC"));
+				msgMap.put("TMS_TYPE", "02");
+				msgMap.put("NA_BZPLC", bizInfo.get("NA_BZPLC"));				// 조합코드
+				msgMap.put("LS_CMENO", sessionUtill.getEno());					// 사용자 사번
+				
+				auctionDAO.insertSmsInfo(msgMap);
+			}
+		}
+		catch(Exception e) {
+			e.printStackTrace();
+			return false;
+		}
+		return true;
+	}
+
+	public Map<String, Object> changeKeyUpper(Map<String, Object> map){
+		final Map<String, Object> reMap = new HashMap<String, Object>();
+		//키 대문자로 변환
+		final Set<String> set = map.keySet();
+		final Iterator<String> e = set.iterator();
+		while(e.hasNext()){
+			String key = e.next();
+			Object value = (Object) map.get(key);
+			reMap.put(key.toUpperCase(), value);
+		}
+		return reMap;
 	}
 
 	/**
@@ -918,11 +1026,12 @@ public class AuctionServiceImpl implements AuctionService {
 				final String trmnMacoYn		= info.get("TRMN_MACO_YN").toString();				// 중도매인 조합원 여부 ( 0.비조합원, 1.조합원 )
 				final String fhsMacoYn		= info.get("FHS_MACO_YN").toString();				// 출하주 조합원 여부 ( 0.비조합원, 1.조합원 )
 				final String ppgcowFeeDsc	= info.getOrDefault("PPGCOW_FEE_DSC", "5").toString();			// 번식우 수수료 구분코드 > 1.임신우, 2.비임신우, 3.임신우+송아지, 4.비임신우+송아지,  5.해당없음
-				final String trmnAmnno		= info.get("TRMN_AMNNO").toString();				// 중도매인 번호
-				final String lvstAucPtcMnNo	= info.get("LVST_AUC_PTC_MN_NO").toString();		// 경매참가번호
+				final String trmnAmnno		= info.getOrDefault("TRMN_AMNNO", "0").toString();				// 중도매인 번호
+				final String lvstAucPtcMnNo	= info.getOrDefault("LVST_AUC_PTC_MN_NO", "0").toString();		// 경매참가번호
 				final String cowSogWt		= info.getOrDefault("COW_SOG_WT", "0").toString();
 				final String aucUprDsc		= bizAuctionInfo.getOrDefault("NBFCT_AUC_UPR_DSC", "1").toString();			// 비육우 경매단가 구분 코드 ( 1. kg 단위, 2. 두 단위 )
 				final String sgNoPrcDsc		= bizAuctionInfo.getOrDefault("SGNO_PRC_DSC", "1").toString();				// 절사구분 ( 1.소수점 이하 버림, 2. 소수점 이상 절상, 3. 반올림 )
+				final String selStsDsc		= info.getOrDefault("SEL_STS_DSC", "23").toString();						// 경매상태 
 				final int cutAm				= Integer.parseInt(bizAuctionInfo.getOrDefault("CUT_AM", "1").toString());	// 절사금액
 				long sraSbidUpr				= Long.parseLong(info.get("ATDR_AM").toString());							// 응찰금액
 				long sraSbidAm				= 0L;
@@ -935,47 +1044,51 @@ public class AuctionServiceImpl implements AuctionService {
 				info.put("ledSqno",			ledSqno);
 				info.put("trmnAmnno",		trmnAmnno);
 				info.put("lvstAucPtcMnNo",	lvstAucPtcMnNo);
-				info.put("selStsDsc",		"22");
-				info.put("lsCmeno",			"SYSTEM");
+				info.put("selStsDsc",		selStsDsc);
+				info.put("lsCmeno",			sessionUtill.getEno());
 				info.put("sraSbidUpr",		sraSbidUpr);
 
 				// 낙찰 금액 계산 [s]
 				// 경매 금액 단위 > 보통 10000원이지만 비육우인 경우 kg단위로 계산한다.
 				int aucAtdrUntAm			= 10000;
-				// 비육우 & 경매 단가가 kg인 경우
-				if ("2".equals(aucObjDsc) && "1".equals(aucUprDsc)) {
-					// 중량 정보가 없으면 낙찰가를 0으로 넣어준다.
-					if ("0".equals(cowSogWt)) {
-						info.put("sraSbidAm", 0);
+				if ("22".equals(selStsDsc)) {
+					// 비육우 & 경매 단가가 kg인 경우
+					if ("2".equals(aucObjDsc) && "1".equals(aucUprDsc)) {
+						// 중량 정보가 없으면 낙찰가를 0으로 넣어준다.
+						if ("0".equals(cowSogWt)) {
+							info.put("sraSbidAm", 0);
+						}
+						else {
+							aucAtdrUntAm = Integer.parseInt(bizAuctionInfo.getOrDefault("NBFCT_AUC_ATDR_UNT_AM", "1").toString());
+							double bidAmt = Double.parseDouble(cowSogWt) * sraSbidUpr * aucAtdrUntAm / cutAm;
+							if ("1".equals(sgNoPrcDsc)) {
+								sraSbidAm = (long)Math.floor(bidAmt) * cutAm;
+							}
+							else if ("2".equals(sgNoPrcDsc)) {
+								sraSbidAm = (long)Math.ceil(bidAmt) * cutAm;
+							}
+							else if ("3".equals(sgNoPrcDsc)) {
+								sraSbidAm = (long)Math.round(bidAmt) * cutAm;
+							}
+							info.put("sraSbidAm", sraSbidAm);
+						}
 					}
 					else {
-						aucAtdrUntAm = Integer.parseInt(bizAuctionInfo.getOrDefault("NBFCT_AUC_ATDR_UNT_AM", "1").toString());
-						double bidAmt = Double.parseDouble(cowSogWt) * sraSbidUpr * aucAtdrUntAm / cutAm;
-//						double bidAmt = Double.parseDouble(cowSogWt) * sraSbidUpr / cutAm;
-						if ("1".equals(sgNoPrcDsc)) {
-							sraSbidAm = (long)Math.floor(bidAmt) * cutAm;
+						if ("1".equals(aucObjDsc)) {
+							aucAtdrUntAm = Integer.parseInt(bizAuctionInfo.getOrDefault("CALF_AUC_ATDR_UNT_AM", "10000").toString());	// 송아지 경매 금액 단위
 						}
-						else if ("2".equals(sgNoPrcDsc)) {
-							sraSbidAm = (long)Math.ceil(bidAmt) * cutAm;
+						else if ("2".equals(aucObjDsc)) {
+							aucAtdrUntAm = Integer.parseInt(bizAuctionInfo.getOrDefault("NBFCT_AUC_ATDR_UNT_AM", "10000").toString());	// 비육우 경매 금액 단위
 						}
-						else if ("3".equals(sgNoPrcDsc)) {
-							sraSbidAm = (long)Math.round(bidAmt) * cutAm;
+						else if ("3".equals(aucObjDsc)) {
+							aucAtdrUntAm = Integer.parseInt(bizAuctionInfo.getOrDefault("PPGCOW_AUC_ATDR_UNT_AM", "10000").toString());	// 번식우 경매 금액 단위
 						}
+						sraSbidAm = sraSbidUpr * aucAtdrUntAm;
 						info.put("sraSbidAm", sraSbidAm);
 					}
 				}
 				else {
-					if ("1".equals(aucObjDsc)) {
-						aucAtdrUntAm = Integer.parseInt(bizAuctionInfo.getOrDefault("CALF_AUC_ATDR_UNT_AM", "10000").toString());	// 송아지 경매 금액 단위
-					}
-					else if ("2".equals(aucObjDsc)) {
-						aucAtdrUntAm = Integer.parseInt(bizAuctionInfo.getOrDefault("NBFCT_AUC_ATDR_UNT_AM", "10000").toString());	// 비육우 경매 금액 단위
-					}
-					else if ("3".equals(aucObjDsc)) {
-						aucAtdrUntAm = Integer.parseInt(bizAuctionInfo.getOrDefault("PPGCOW_AUC_ATDR_UNT_AM", "10000").toString());	// 번식우 경매 금액 단위
-					}
-					sraSbidAm = sraSbidUpr * aucAtdrUntAm;
-					info.put("sraSbidAm", sraSbidAm);
+					info.put("sraSbidAm", 0);
 				}
 				// 낙찰 금액 계산 [e]
 
@@ -1004,165 +1117,170 @@ public class AuctionServiceImpl implements AuctionService {
 					long feeAmt = 0L;
 					
 					// 낙찰인 경우만 수수료 정보를 저장하므로 SBID_YN이 0인(미낙찰) 수수료 정보의 금액은 0으로 넣어준다.
-					if ("0".equals(feeInfo.get("SBID_YN"))) {
+					if ("0".equals(feeInfo.get("SBID_YN")) && "23".equals(selStsDsc)) {
+						feeAmt = "0".equals(macoYn) ? Long.parseLong(feeInfo.getOrDefault("NMACO_FEE_UPR", "0").toString())
+													: Long.parseLong(feeInfo.getOrDefault("MACO_FEE_UPR", "0").toString());
 						feeInfo.put("SRA_TR_FEE", feeAmt);
 					}
-					else if ("5".equals(feeInfo.get("PPGCOW_FEE_DSC")) || ppgcowFeeDsc.equals(feeInfo.get("PPGCOW_FEE_DSC"))) {		// 출장우 정보의 번식우 구분코드와 수수료 정보의 번식우 구분코드가 일치하는 경우 
+					else if ("1".equals(feeInfo.get("SBID_YN")) && "22".equals(selStsDsc)) {
 						
-						// 수수료가 비율인 경우 TB_LA_IS_MH_FEE의 절사구분(SGNO_PRC_DSC)을 참조하여 처리한다.
-						// 1.소수점 이하 버림, 2. 소수점 이상 절상, 3. 반올림
-						if ("2".equals(feeInfo.get("AM_RTO_DSC"))) {
-							double feeUpr = "0".equals(macoYn) ? Double.parseDouble(feeInfo.getOrDefault("NMACO_FEE_UPR", "0").toString())
-															   : Double.parseDouble(feeInfo.getOrDefault("MACO_FEE_UPR", "0").toString());
-							if ("1".equals(feeInfo.get("SGNO_PRC_DSC"))) {
-								feeAmt = (long)Math.floor(feeUpr / 100 * sraSbidAm);
-							}
-							else if ("2".equals(feeInfo.get("SGNO_PRC_DSC"))) {
-								feeAmt = (long)Math.ceil(feeUpr / 100 * sraSbidAm);
-							}
-							else if ("3".equals(feeInfo.get("SGNO_PRC_DSC"))) {
-								feeAmt = (long)Math.round(feeUpr / 100 * sraSbidAm);
-							}
+						if("5".equals(feeInfo.get("PPGCOW_FEE_DSC")) || ppgcowFeeDsc.equals(feeInfo.get("PPGCOW_FEE_DSC"))) {		// 출장우 정보의 번식우 구분코드와 수수료 정보의 번식우 구분코드가 일치하는 경우 
 							
-							// 임신 감정료
-							if ("060".equals(feeInfo.get("NA_FEE_C"))) {
-								// 고창부안 : 8808990657189, 장흥 : 8808990656533, 보성 : 8808990656267, 화순 : 8808990661315, 곡성 : 8808990656717,순천광양 : 8808990658896, 영광 : 8808990811710, 장성 : 8808990817675
-								String[] arrNaBzplc = {"8808990657189", "8808990656533", "8808990656267", "8808990661315"
-													 , "8808990656717", "8808990658896", "8808990811710", "8808990817675"};
-								if (Arrays.asList(arrNaBzplc).contains(params.get("naBzPlc"))) {
-									// 출하자에게는 임신여부가 여(1)인 경우 수수료를 부과하지 않는다, 낙찰자에게는 임신여부가 부(0)인 경우 수수료를 부과하지 않는다.
-									if(("1".equals(feeInfo.get("FEE_APL_OBJ_C")) && "1".equals(info.get("PRNY_YN")))
-									|| (!"1".equals(feeInfo.get("FEE_APL_OBJ_C")) && "0".equals(info.get("PRNY_YN")))) {
-										feeAmt = 0L;
-									}
+							// 수수료가 비율인 경우 TB_LA_IS_MH_FEE의 절사구분(SGNO_PRC_DSC)을 참조하여 처리한다.
+							// 1.소수점 이하 버림, 2. 소수점 이상 절상, 3. 반올림
+							if ("2".equals(feeInfo.get("AM_RTO_DSC"))) {
+								double feeUpr = "0".equals(macoYn) ? Double.parseDouble(feeInfo.getOrDefault("NMACO_FEE_UPR", "0").toString())
+																   : Double.parseDouble(feeInfo.getOrDefault("MACO_FEE_UPR", "0").toString());
+								if ("1".equals(feeInfo.get("SGNO_PRC_DSC"))) {
+									feeAmt = (long)Math.floor(feeUpr / 100 * sraSbidAm);
 								}
-							}
-							// 괴사 감정료
-							else if ("050".equals(feeInfo.get("NA_FEE_C"))) {
-								// 장흥 : 8808990656533, 보성 : 8808990656267, 영광 : 8808990811710, 장성 : 8808990817675
-								String[] arrNaBzplc = {"8808990656533", "8808990656267", "8808990811710", "8808990817675"};
-								// 위의 조합은 괴사 감정을 
-								if (Arrays.asList(arrNaBzplc).contains(params.get("naBzPlc"))) {
-									// 출하자에게는 괴사여부가 부(0)인 경우 수수료를 부과하지 않는다, 낙찰자에게는 괴사여부가 여(1)인 경우 수수료를 부과하지 않는다.
-									if(("1".equals(feeInfo.get("FEE_APL_OBJ_C")) && "0".equals(info.get("NCSS_YN")))
-									|| (!"1".equals(feeInfo.get("FEE_APL_OBJ_C")) && "1".equals(info.get("NCSS_YN")))) {
-										feeAmt = 0L;
-									}
+								else if ("2".equals(feeInfo.get("SGNO_PRC_DSC"))) {
+									feeAmt = (long)Math.ceil(feeUpr / 100 * sraSbidAm);
 								}
-							}
-							else if ("010".equals(feeInfo.get("NA_FEE_C"))) {
-								// 출하수수료 수기등록(FEE_CHK_YN)인 경우 해당 금액(FEE_CHK_YN_FEE)을 출하수수료로 부과
-								if ("1".equals(info.getOrDefault("FEE_CHK_YN", "0"))) {
-									feeAmt = Long.parseLong(info.getOrDefault("FEE_CHK_YN_FEE", "0").toString());
-								}
-							}
-							else if ("011".equals(feeInfo.get("NA_FEE_C"))) {
-								// 판매수수료 수기등록(SELFEE_CHK_YN)인 경우 해당 금액(SELFEE_CHK_YN_FEE)을 출하수수료로 부과
-								if ("1".equals(info.getOrDefault("SELFEE_CHK_YN", "0"))) {
-									feeAmt = Long.parseLong(info.getOrDefault("SELFEE_CHK_YN_FEE", "0").toString());
-								}
-							}
-						}
-						else {
-						// 수수료가 금액인 경우
-							feeAmt = "0".equals(macoYn) ? Long.parseLong(feeInfo.getOrDefault("NMACO_FEE_UPR", "0").toString())
-														: Long.parseLong(feeInfo.getOrDefault("MACO_FEE_UPR", "0").toString());
-							
-							// 출하자 출하수수료
-							if ("010".equals(feeInfo.get("NA_FEE_C"))) {
-								// 수수료 부과 대상이 낙찰자인 경우 혈통 송아지 수수료를 추가한다 (BLOOD_AM)
-								if(!"1".equals(feeInfo.get("FEE_APL_OBJ_C"))) {
-									feeAmt += Long.parseLong(info.getOrDefault("BLOOD_AM", "0").toString());
+								else if ("3".equals(feeInfo.get("SGNO_PRC_DSC"))) {
+									feeAmt = (long)Math.round(feeUpr / 100 * sraSbidAm);
 								}
 								
-								if ("8808990687094".equals(params.get("naBzPlc"))) {
-									// 친자 검사 여부(DNA_YN_CHK) 수수료
-									if ("1".equals(info.get("DNA_YN_CHK"))) {
-										feeAmt += Long.parseLong(bizAuctionInfo.getOrDefault("FEE_CHK_DNA_YN_FEE", "0").toString());
+								// 임신 감정료
+								if ("060".equals(feeInfo.get("NA_FEE_C"))) {
+									// 고창부안 : 8808990657189, 장흥 : 8808990656533, 보성 : 8808990656267, 화순 : 8808990661315, 곡성 : 8808990656717,순천광양 : 8808990658896, 영광 : 8808990811710, 장성 : 8808990817675
+									String[] arrNaBzplc = {"8808990657189", "8808990656533", "8808990656267", "8808990661315"
+														 , "8808990656717", "8808990658896", "8808990811710", "8808990817675"};
+									if (Arrays.asList(arrNaBzplc).contains(params.get("naBzPlc"))) {
+										// 출하자에게는 임신여부가 여(1)인 경우 수수료를 부과하지 않는다, 낙찰자에게는 임신여부가 부(0)인 경우 수수료를 부과하지 않는다.
+										if(("1".equals(feeInfo.get("FEE_APL_OBJ_C")) && "1".equals(info.get("PRNY_YN")))
+										|| (!"1".equals(feeInfo.get("FEE_APL_OBJ_C")) && "0".equals(info.get("PRNY_YN")))) {
+											feeAmt = 0L;
+										}
 									}
 								}
-								
-								// 사료 미사용 추가 수수료 추가
-								if("0".equals(info.get("SRA_FED_SPY_YN"))) {
-									feeAmt += Long.parseLong(bizAuctionInfo.getOrDefault("SRA_FED_SPY_YN_FEE", "0").toString());
+								// 괴사 감정료
+								else if ("050".equals(feeInfo.get("NA_FEE_C"))) {
+									// 장흥 : 8808990656533, 보성 : 8808990656267, 영광 : 8808990811710, 장성 : 8808990817675
+									String[] arrNaBzplc = {"8808990656533", "8808990656267", "8808990811710", "8808990817675"};
+									// 위의 조합은 괴사 감정을 
+									if (Arrays.asList(arrNaBzplc).contains(params.get("naBzPlc"))) {
+										// 출하자에게는 괴사여부가 부(0)인 경우 수수료를 부과하지 않는다, 낙찰자에게는 괴사여부가 여(1)인 경우 수수료를 부과하지 않는다.
+										if(("1".equals(feeInfo.get("FEE_APL_OBJ_C")) && "0".equals(info.get("NCSS_YN")))
+										|| (!"1".equals(feeInfo.get("FEE_APL_OBJ_C")) && "1".equals(info.get("NCSS_YN")))) {
+											feeAmt = 0L;
+										}
+									}
 								}
-								
-								// 출하수수료 수기등록(FEE_CHK_YN)인 경우 해당 금액(FEE_CHK_YN_FEE)을 출하수수료로 부과
-								if ("1".equals(info.getOrDefault("FEE_CHK_YN", "0"))) {
-									feeAmt = Long.parseLong(info.getOrDefault("FEE_CHK_YN_FEE", "0").toString());
+								else if ("010".equals(feeInfo.get("NA_FEE_C"))) {
+									// 출하수수료 수기등록(FEE_CHK_YN)인 경우 해당 금액(FEE_CHK_YN_FEE)을 출하수수료로 부과
+									if ("1".equals(info.getOrDefault("FEE_CHK_YN", "0"))) {
+										feeAmt = Long.parseLong(info.getOrDefault("FEE_CHK_YN_FEE", "0").toString());
+									}
+								}
+								else if ("011".equals(feeInfo.get("NA_FEE_C"))) {
+									// 판매수수료 수기등록(SELFEE_CHK_YN)인 경우 해당 금액(SELFEE_CHK_YN_FEE)을 출하수수료로 부과
+									if ("1".equals(info.getOrDefault("SELFEE_CHK_YN", "0"))) {
+										feeAmt = Long.parseLong(info.getOrDefault("SELFEE_CHK_YN_FEE", "0").toString());
+									}
 								}
 							}
-							// 낙찰자 판매수수료
-							else if ("011".equals(feeInfo.get("NA_FEE_C"))) {
-								// 수수료 부과 대상이 낙찰자인 경우 혈통 송아지 수수료를 추가한다 (BLOOD_AM)
-								if(!"1".equals(feeInfo.get("FEE_APL_OBJ_C"))) {
-									feeAmt += Long.parseLong(info.getOrDefault("BLOOD_AM", "0").toString());
-								}
-
-								// 영주축협 송아지 12개월이상 수수료 적용
-								if ("8808990687094".equals(params.get("naBzPlc"))) {
-									if ("1".equals(info.get("MT12_OVR_YN"))) {
-										feeAmt += Long.parseLong(bizAuctionInfo.getOrDefault("MT12_OVR_FEE", "0").toString());
+							else {
+							// 수수료가 금액인 경우
+								feeAmt = "0".equals(macoYn) ? Long.parseLong(feeInfo.getOrDefault("NMACO_FEE_UPR", "0").toString())
+															: Long.parseLong(feeInfo.getOrDefault("MACO_FEE_UPR", "0").toString());
+								
+								// 출하자 출하수수료
+								if ("010".equals(feeInfo.get("NA_FEE_C"))) {
+									// 수수료 부과 대상이 낙찰자인 경우 혈통 송아지 수수료를 추가한다 (BLOOD_AM)
+									if(!"1".equals(feeInfo.get("FEE_APL_OBJ_C"))) {
+										feeAmt += Long.parseLong(info.getOrDefault("BLOOD_AM", "0").toString());
 									}
-									else if ("1".equals(info.get("DNA_YN_CHK"))) {
+									
+									if ("8808990687094".equals(params.get("naBzPlc"))) {
 										// 친자 검사 여부(DNA_YN_CHK) 수수료
-										feeAmt += Long.parseLong(bizAuctionInfo.getOrDefault("SELFEE_CHK_DNA_YN_FEE", "0").toString());
+										if ("1".equals(info.get("DNA_YN_CHK"))) {
+											feeAmt += Long.parseLong(bizAuctionInfo.getOrDefault("FEE_CHK_DNA_YN_FEE", "0").toString());
+										}
+									}
+									
+									// 사료 미사용 추가 수수료 추가
+									if("0".equals(info.get("SRA_FED_SPY_YN"))) {
+										feeAmt += Long.parseLong(bizAuctionInfo.getOrDefault("SRA_FED_SPY_YN_FEE", "0").toString());
+									}
+									
+									// 출하수수료 수기등록(FEE_CHK_YN)인 경우 해당 금액(FEE_CHK_YN_FEE)을 출하수수료로 부과
+									if ("1".equals(info.getOrDefault("FEE_CHK_YN", "0"))) {
+										feeAmt = Long.parseLong(info.getOrDefault("FEE_CHK_YN_FEE", "0").toString());
+									}
+								}
+								// 낙찰자 판매수수료
+								else if ("011".equals(feeInfo.get("NA_FEE_C"))) {
+									// 수수료 부과 대상이 낙찰자인 경우 혈통 송아지 수수료를 추가한다 (BLOOD_AM)
+									if(!"1".equals(feeInfo.get("FEE_APL_OBJ_C"))) {
+										feeAmt += Long.parseLong(info.getOrDefault("BLOOD_AM", "0").toString());
+									}
+	
+									// 영주축협 송아지 12개월이상 수수료 적용
+									if ("8808990687094".equals(params.get("naBzPlc"))) {
+										if ("1".equals(info.get("MT12_OVR_YN"))) {
+											feeAmt += Long.parseLong(bizAuctionInfo.getOrDefault("MT12_OVR_FEE", "0").toString());
+										}
+										else if ("1".equals(info.get("DNA_YN_CHK"))) {
+											// 친자 검사 여부(DNA_YN_CHK) 수수료
+											feeAmt += Long.parseLong(bizAuctionInfo.getOrDefault("SELFEE_CHK_DNA_YN_FEE", "0").toString());
+										}
+									}
+									
+									// 판매수수료 수기등록(SELFEE_CHK_YN)인 경우 해당 금액(SELFEE_CHK_YN_FEE)을 출하수수료로 부과
+									if ("1".equals(info.getOrDefault("SELFEE_CHK_YN", "0"))) {
+										feeAmt = Long.parseLong(info.getOrDefault("SELFEE_CHK_YN_FEE", "0").toString());
+									}
+								}
+								// 임신 감정료
+								else if ("060".equals(feeInfo.get("NA_FEE_C"))) {
+									// 고창부안 : 8808990657189, 장흥 : 8808990656533, 보성 : 8808990656267, 화순 : 8808990661315, 곡성 : 8808990656717,순천광양 : 8808990658896, 영광 : 8808990811710, 장성 : 8808990817675
+									String[] arrNaBzplc = {"8808990657189", "8808990656533", "8808990656267", "8808990661315"
+														 , "8808990656717", "8808990658896", "8808990811710", "8808990817675"};
+									if (Arrays.asList(arrNaBzplc).contains(params.get("naBzPlc"))) {
+										// 출하자에게는 임신여부가 여(1)인 경우 수수료를 부과하지 않는다, 낙찰자에게는 임신여부가 부(0)인 경우 수수료를 부과하지 않는다.
+										if(("1".equals(feeInfo.get("FEE_APL_OBJ_C")) && "1".equals(info.get("PRNY_YN")))
+										|| (!"1".equals(feeInfo.get("FEE_APL_OBJ_C")) && "0".equals(info.get("PRNY_YN")))) {
+											feeAmt = 0L;
+										}
+									}
+								}
+								// 괴사 감정료
+								else if ("050".equals(feeInfo.get("NA_FEE_C"))) {
+									// 장흥 : 8808990656533, 보성 : 8808990656267, 영광 : 8808990811710, 장성 : 8808990817675
+									String[] arrNaBzplc = {"8808990656533", "8808990656267", "8808990811710", "8808990817675"};
+									// 위의 조합은 괴사 감정을 
+									if (Arrays.asList(arrNaBzplc).contains(params.get("naBzPlc"))) {
+										// 출하자에게는 괴사여부가 부(0)인 경우 수수료를 부과하지 않는다, 낙찰자에게는 괴사여부가 여(1)인 경우 수수료를 부과하지 않는다.
+										if(("1".equals(feeInfo.get("FEE_APL_OBJ_C")) && "0".equals(info.get("NCSS_YN")))
+										|| (!"1".equals(feeInfo.get("FEE_APL_OBJ_C")) && "1".equals(info.get("NCSS_YN")))) {
+											feeAmt = 0L;
+										}
 									}
 								}
 								
-								// 판매수수료 수기등록(SELFEE_CHK_YN)인 경우 해당 금액(SELFEE_CHK_YN_FEE)을 출하수수료로 부과
-								if ("1".equals(info.getOrDefault("SELFEE_CHK_YN", "0"))) {
-									feeAmt = Long.parseLong(info.getOrDefault("SELFEE_CHK_YN_FEE", "0").toString());
-								}
 							}
-							// 임신 감정료
-							else if ("060".equals(feeInfo.get("NA_FEE_C"))) {
-								// 고창부안 : 8808990657189, 장흥 : 8808990656533, 보성 : 8808990656267, 화순 : 8808990661315, 곡성 : 8808990656717,순천광양 : 8808990658896, 영광 : 8808990811710, 장성 : 8808990817675
-								String[] arrNaBzplc = {"8808990657189", "8808990656533", "8808990656267", "8808990661315"
-													 , "8808990656717", "8808990658896", "8808990811710", "8808990817675"};
-								if (Arrays.asList(arrNaBzplc).contains(params.get("naBzPlc"))) {
-									// 출하자에게는 임신여부가 여(1)인 경우 수수료를 부과하지 않는다, 낙찰자에게는 임신여부가 부(0)인 경우 수수료를 부과하지 않는다.
-									if(("1".equals(feeInfo.get("FEE_APL_OBJ_C")) && "1".equals(info.get("PRNY_YN")))
-									|| (!"1".equals(feeInfo.get("FEE_APL_OBJ_C")) && "0".equals(info.get("PRNY_YN")))) {
-										feeAmt = 0L;
-									}
-								}
-							}
-							// 괴사 감정료
-							else if ("050".equals(feeInfo.get("NA_FEE_C"))) {
-								// 장흥 : 8808990656533, 보성 : 8808990656267, 영광 : 8808990811710, 장성 : 8808990817675
-								String[] arrNaBzplc = {"8808990656533", "8808990656267", "8808990811710", "8808990817675"};
-								// 위의 조합은 괴사 감정을 
-								if (Arrays.asList(arrNaBzplc).contains(params.get("naBzPlc"))) {
-									// 출하자에게는 괴사여부가 부(0)인 경우 수수료를 부과하지 않는다, 낙찰자에게는 괴사여부가 여(1)인 경우 수수료를 부과하지 않는다.
-									if(("1".equals(feeInfo.get("FEE_APL_OBJ_C")) && "0".equals(info.get("NCSS_YN")))
-									|| (!"1".equals(feeInfo.get("FEE_APL_OBJ_C")) && "1".equals(info.get("NCSS_YN")))) {
-										feeAmt = 0L;
-									}
-								}
-							}
-							
-						}
-						
-						// 운송비인 경우 TRPCS_PY_YN(운송비 지급 여부)가 1일 때는 수수를 부과하지 않는다.
-						if ("040".equals(feeInfo.get("NA_FEE_C")) && "1".equals(info.get("TRPCS_PY_YN"))) {
-							feeAmt = 0L;
-						}
-						// 임신감정 수수료인 경우 PRNY_JUG_YN(임신감정여부)가 0일 때는 수수료를 부과하지 않는다
-						if ("060".equals(feeInfo.get("NA_FEE_C")) && "0".equals(info.get("PRNY_JUG_YN"))) {
-							feeAmt = 0L;
-						}
-						// 괴사감정 수수료인 경우 NCSS_JUG_YN(괴사감정여부)가 0일 때는 수수료를 부과하지 않는다
-						if ("050".equals(feeInfo.get("NA_FEE_C")) && "0".equals(info.get("NCSS_JUG_YN"))) {
-							feeAmt = 0L;
-						}
-						// 제각수수료인 경우 경우 RMHN_YN(제각여부)가 0일 때는 수수료를 부과하지 않는다
-						if ("110".equals(feeInfo.get("NA_FEE_C")) && "0".equals(info.get("RMHN_YN"))) {
-							feeAmt = 0L;
 						}
 					}
 					else {
-						feeInfo.put("SRA_TR_FEE", 0);
+						feeInfo.put("SRA_TR_FEE", 0L);
+					}
+					
+					// 운송비인 경우 TRPCS_PY_YN(운송비 지급 여부)가 1일 때는 수수를 부과하지 않는다.
+					if ("040".equals(feeInfo.get("NA_FEE_C")) && "1".equals(info.get("TRPCS_PY_YN"))) {
+						feeAmt = 0L;
+					}
+					// 임신감정 수수료인 경우 PRNY_JUG_YN(임신감정여부)가 0일 때는 수수료를 부과하지 않는다
+					if ("060".equals(feeInfo.get("NA_FEE_C")) && "0".equals(info.get("PRNY_JUG_YN"))) {
+						feeAmt = 0L;
+					}
+					// 괴사감정 수수료인 경우 NCSS_JUG_YN(괴사감정여부)가 0일 때는 수수료를 부과하지 않는다
+					if ("050".equals(feeInfo.get("NA_FEE_C")) && "0".equals(info.get("NCSS_JUG_YN"))) {
+						feeAmt = 0L;
+					}
+					// 제각수수료인 경우 경우 RMHN_YN(제각여부)가 0일 때는 수수료를 부과하지 않는다
+					if ("110".equals(feeInfo.get("NA_FEE_C")) && "0".equals(info.get("RMHN_YN"))) {
+						feeAmt = 0L;
 					}
 					
 					feeInfo.put("SRA_TR_FEE", feeAmt);
@@ -1171,21 +1289,26 @@ public class AuctionServiceImpl implements AuctionService {
 				params.put("feeInfoList", feeInfoList);
 				
 				auctionDAO.insertFeeInfo(params);
+				
+				this.sendAlamTalkProc(bizAuctionInfo, info);
 			}
 		}
 		
 		// 10. 낙찰 상태가 아닌 출장우 로그 저장
+		params.put("chgPgid", "auctionFinish");
 		params.put("newCntAucYn", "Y");
 		params.put("soldChkYn", "N");
 		params.put("fsrgmnEno", "admin");
 		params.put("lsCmeno", "[LM0314]");
 		params.put("pdaId", "새 차수 경매 시작[성공]");
+		params.put("chgRmkCntn", "새 차수 경매 시작[성공]");
 		auctionDAO.insertAuctSogCowLog(params);
 
 		// 11. 낙찰 상태 출장우 로그 저장
 		params.put("newCntAucYn", "N");
 		params.put("soldChkYn", "Y");
 		params.put("pdaId", "경매종료[낙찰]");
+		params.put("chgRmkCntn", "경매종료[낙찰]");
 		auctionDAO.insertAuctSogCowLog(params);
 
 		// 12. 유찰 처리 ( 최저가가 등록되지 않은 출장우 중 SEL_STS_DSC가 '22'가 아닌 것 )
@@ -1193,12 +1316,10 @@ public class AuctionServiceImpl implements AuctionService {
 		params.put("lsCmeno", "SYSTEM");
 		auctionDAO.updateAuctSogCowFinish(params);
 		
-		// TODO :: 13. 유찰 수수료가 있는 경우 유찰 수수료 저장
-		
 		// 14. 유찰 상태 출장우 로그 저장
-		params.put("newCntAucYn", "N");
 		params.put("soldChkYn", "N");
 		params.put("pdaId", "경매종료[불낙]");
+		params.put("chgRmkCntn", "경매종료[불낙]");
 		auctionDAO.insertAuctSogCowLog(params);
 		
 		params.put("success", true);
@@ -1658,5 +1779,15 @@ public class AuctionServiceImpl implements AuctionService {
 	@Override
 	public Map<String, Object> selectStateEntryCntFhs(Map<String, Object> params) throws SQLException {
 		return auctionDAO.selectStateEntryCntFhs(params);
+	}
+
+	/**
+	 * 이용해지 해당조합 조회
+	 * @param params
+	 * @throws SQLException
+	 */
+	@Override
+	public List<Map<String, Object>>  selectJohqpList(Map<String, Object> map) throws SQLException {
+	return  auctionDAO.selectJohqpList(map);
 	}
 }

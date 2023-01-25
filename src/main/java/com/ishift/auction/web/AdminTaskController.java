@@ -1,5 +1,7 @@
 package com.ishift.auction.web;
 
+import java.security.KeyManagementException;
+import java.security.NoSuchAlgorithmException;
 import java.sql.SQLException;
 import java.util.HashMap;
 import java.util.List;
@@ -19,11 +21,8 @@ import org.springframework.web.servlet.ModelAndView;
 import com.ishift.auction.service.admin.AdminService;
 import com.ishift.auction.service.admin.task.AdminTaskService;
 import com.ishift.auction.service.auction.AuctionService;
-import com.ishift.auction.util.Constants;
-import com.ishift.auction.util.JwtTokenUtil;
 import com.ishift.auction.util.SessionUtill;
 import com.ishift.auction.vo.AdminUserDetails;
-import com.ishift.auction.vo.JwtTokenVo;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -46,9 +45,6 @@ public class AdminTaskController extends CommonController {
 	
 	@Autowired
 	private SessionUtill sessionUtill;
-	
-	@Autowired
-	private JwtTokenUtil jwtTokenUtil;
 
 	/**
 	 * 관리자 > 경매업무 > 메인화면
@@ -317,14 +313,6 @@ public class AdminTaskController extends CommonController {
 			if(params.get("aucObjDsc") != null) params.put("searchAucObjDsc", params.get("aucObjDsc"));
 			
 			mav.addObject("entryList", auctionService.entrySelectList(params));
-
-	        JwtTokenVo jwtTokenVo = JwtTokenVo.builder()
-					.auctionHouseCode(sessionUtill.getNaBzplc())
-					.userMemNum("WATCHER")
-					.userRole(Constants.UserRole.WATCHER)
-					.build();
-	        String token = jwtTokenUtil.generateToken(jwtTokenVo, Constants.JwtConstants.ACCESS_TOKEN);
-			mav.addObject("watchToken", token);
 		}
 		catch (RuntimeException re) {
 			log.error("AdminTaskController.entry : {} ",re);
@@ -513,7 +501,7 @@ public class AdminTaskController extends CommonController {
 	
 	@ResponseBody
 	@RequestMapping(value = "/office/task/uploadImageAjax", method = {RequestMethod.POST})
-	public Map<String, Object> uploadImageAjax(@RequestBody final Map<String, Object> params) throws SQLException {
+	public Map<String, Object> uploadImageAjax(@RequestBody final Map<String, Object> params) throws SQLException, KeyManagementException, NoSuchAlgorithmException {
 		return adminTaskService.uploadImageProc(params);
 	}
 	/* ---------------------------------------------------------- 출장우 이미지 업로드 [e] ---------------------------------------------------------- */

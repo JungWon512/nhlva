@@ -53,6 +53,7 @@
 		 WHERE A.NA_BZPLC = #{naBzplc}
 		   AND A.USRID = #{usrid}
 	</select>
+	
 	<select id="selectAdminInfoWherePw" parameterType="map" resultType="map">
 		SELECT A.NA_BZPLC
 			 , B.NA_BZPLCNO 
@@ -74,8 +75,7 @@
 		    ON ( A.NA_BZPLC = B.NA_BZPLC )
 		  LEFT OUTER JOIN TB_LA_IS_MM_WMC C ON ( A.NA_BZPLC = C.NA_BZPLC )
 		  LEFT OUTER JOIN TB_LA_IS_MM_GRP_USR D ON ( A.USRID = D.USRID )
-		 WHERE 1=1 
-		   AND A.USRID = #{usrid}
+		 WHERE A.USRID = #{usrid}
 		   AND A.PW = Damo.ENC_B64('KEY1', #{pw})
 	</select>
 	

@@ -33,7 +33,7 @@
 				</li>
 			</ul>
 			<a href="javascript:;" class="btn_login">로그인</a>
-			<div class="sns_login">
+			<div class="sns_login" style="display:none;">
 				<a href="javascript:loginWithKakao();" class="btn_kakao">카카오 로그인</a>
 			</div>
 		</div>

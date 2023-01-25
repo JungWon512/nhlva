@@ -25,7 +25,7 @@
 		<div class="white-box">
 			<h3 class="sub-tit fc-blue johapNm"><i class="dash searchYearMonth"></i></h3>
 			<div class="sub-link">
-				<i class="dot">●</i> <a href="javascript:pageMove('/dashboard')">전국가축시장</a> >>
+				<i class="dot">●</i> <a href="javascript:pageMove('/dashboard/main')">전국가축시장</a> >>
 			</div>
 			<div class="tit-area">
 				<h2 class="sec-tit">출장우현황</h2>
@@ -55,7 +55,7 @@
 	<div class="sec-board">
 		<div class="white-box">
 			<h2 class="sec-tit">축종별 나의 낙찰 현황</h2>
-			<div style="margin-top: 20px;">
+			<div class="barChart" style="margin-top: 20px;">
 				<canvas id="myChartSample4"></canvas>
 			</div>
 		</div>

@@ -21,7 +21,7 @@
 		<ul>
 			<c:forEach items="${ tabList }" var="item" varStatus="st">			
 				<c:if test="${item.VISIB_YN eq '1'}">
-					<li><a 0href="javascript:;" class="cowTab_${item.SIMP_C }" data-tab-id="${item.SIMP_C }">${item.SIMP_CNM }</a></li>
+					<li><a href="javascript:;" class="cowTab_${item.SIMP_C }" data-tab-id="${item.SIMP_C }">${item.SIMP_CNM }</a></li>
 				</c:if>
 			</c:forEach>
 		</ul>

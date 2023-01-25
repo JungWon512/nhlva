@@ -1,6 +1,9 @@
 ;(function (win, $,COMMONS) {
 // Class definition
-	var Login = function () {
+	var Login = function () {	
+		if($('input[name=type]').val() =='0' || !isIos()){
+			$('div.sns_login').show();
+		}
 		var get_msg = function(message) {
 			if(message!=undefined){
 				alert(message);

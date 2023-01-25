@@ -1,6 +1,13 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
 <%@ include file="/WEB-INF/__system/taglibs.jsp" %>
-			
+
+<c:set var="bdln_yn" value="0" />
+<c:forEach items="${tabList}" var="item" varStatus="st">
+<c:if test="${item.SIMP_C eq '4' && item.VISIB_YN eq '1'}">
+	<c:set var="bdln_yn" value="1" />
+</c:if>
+</c:forEach>
+
 <h3 class="tit">출장우</h3>
 <div class="cow-basic">
 	<table class="table-detail">
@@ -26,7 +33,7 @@
 			</tr>
 			<tr>
 				<th>개체번호</th>
-				<td colspan="3">${infoData.SRA_INDV_AMNNO_FORMAT }</td>
+				<td colspan="3">${infoData.SRA_INDV_AMNNO}</td>
 			</tr>
 			<tr>
 				<th>개월령</th>
@@ -50,12 +57,14 @@
 				<th>KPN</th>
 				<td class="ta-C">${infoData.KPN_NO }</td>
 			</tr>
+			<c:if test="${bdln_yn eq '1'}">
 			<tr>
 				<th>체장</th>
 				<td class="ta-C bdr-y">${infoData.BDLN_VAL }</td>
 				<th>체고</th>
 				<td class="ta-C">${infoData.BDHT_VAL }</td>
 			</tr>
+			</c:if>
 			<tr>
 				<th>계대</th>
 				<td class="ta-C bdr-y">${infoData.SRA_INDV_PASG_QCN }</td>
@@ -181,7 +190,7 @@
 				<th>브루셀라</th>
 				<td>
 					<c:if test="${not empty infoData.BRCL_ISP_DT_STR}">
-						${infoData.BRCL_ISP_DT_STR } 검사 <span class="c-blue">(${infoData.BRCL_ISP_RZT_C })</span>
+						${infoData.BRCL_ISP_DT_STR } 검사 <span class="c-blue">(${infoData.BRCL_ISP_RZT_C_NM })</span>
 					</c:if>
 				</td>
 			</tr>

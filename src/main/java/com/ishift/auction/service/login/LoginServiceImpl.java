@@ -143,7 +143,7 @@ public class LoginServiceImpl implements LoginService {
 				params.put("MB_INTG_NO", mb_intg_no);
 				final Map<String, Object> intgNumInfo = commonDao.getIntgNoInfoForNum(params);
 				//휴면회원이면
-				if("1".equals(intgNumInfo.get("DORMACC_YN").toString()) && "0".equals(intgNumInfo.get("DELACC_YN").toString())){
+				if("1".equals(intgNumInfo.get("DORMACC_YN")) && "0".equals(intgNumInfo.get("DELACC_YN"))){
 					//휴면해제 프로세스
 					commonService.updateDormcUserFhsClear(params);
 				}

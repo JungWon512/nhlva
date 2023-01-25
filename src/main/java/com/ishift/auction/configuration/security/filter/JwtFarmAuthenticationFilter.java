@@ -52,7 +52,7 @@ public class JwtFarmAuthenticationFilter extends OncePerRequestFilter {
 		req.setParam();
 		req.getReader();
 		HttpServletRequest tmpRequest = (HttpServletRequest) req.getRequest();
-		final String place = req.getParam("place");
+		final String place = req.getParam("place").split("&")[0];
 		final String cookieAccessToken = cookieUtil.getCookieValue(tmpRequest, Constants.JwtConstants.ACCESS_TOKEN);
 		final String headerAccessToken = tmpRequest.getHeader(HttpHeaders.AUTHORIZATION);
 
@@ -109,6 +109,7 @@ public class JwtFarmAuthenticationFilter extends OncePerRequestFilter {
 			|| uri.startsWith("/batch")
 			|| uri.startsWith("/daemon/api")
 			|| uri.startsWith("/kiosk/api")
+			|| uri.startsWith("/dashboard")
 			;
 	}
 }

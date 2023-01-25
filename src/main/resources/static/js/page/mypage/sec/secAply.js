@@ -3,9 +3,14 @@
     var COMMONS = win.auction["commons"];
 
     var setBinding = function() {
+				hiddenShowSelect();
+			$(".select_na_bzplc").unbind("click").click(function(){
+				hiddenShowSelect();
+			});
 		$(".btn_apply").unbind("click").click(function(e){
 			e.preventDefault();
 			fnSecApplyInfo();
+			console.log('call2')
 		});
         
     };
@@ -14,8 +19,10 @@
     var __COMPONENT_NAME = "AUCTION_LIST";
     namespace[__COMPONENT_NAME] = (function () {
         var init = function(){
+	
 			var showFlag = 
             setBinding();
+            console.log('call3')
         };
         return {
             init: init
@@ -26,6 +33,15 @@
     });
 	
 })(jQuery, window, document);
+
+		console.log('call1')
+var hiddenShowSelect = function() {
+	if(select_bzplc.checked == true){
+		$('#selectBzplcList').show();
+	} else {
+		$('#selectBzplcList').hide();
+	}
+}
 
 var inputNumberVaild = function(el,len){
 	if(el.value.length > len)  {

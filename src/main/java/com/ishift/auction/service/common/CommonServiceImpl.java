@@ -8,6 +8,7 @@ import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.util.ObjectUtils;
 
 import com.google.common.base.CaseFormat;
 import com.ishift.auction.util.McaUtil;
@@ -77,19 +78,19 @@ public class CommonServiceImpl implements CommonService {
 			// 4. 출하주 정보 저장
 			this.updateFhsInfo(dataMap4700);
 			
-			params.put("SRA_INDV_AMNNO", params.get("sra_indv_amnno"));
 			// 5. 형매정보 저장
 			// 조회한 개체정보에 어미소 개체번호가 있는 경우
 			if (!"".equals(dataMap4700.getOrDefault("MCOW_SRA_INDV_EART_NO", "").toString().trim())) {
-				params.put("MCOW_SRA_INDV_AMNNO", dataMap4700.get("MCOW_SRA_INDV_EART_NO"));
-				this.updateIndvSibInfo(params);
+				Map<String,Object> tempParam = new HashMap<>();				
+				tempParam.put("SRA_INDV_AMNNO", dataMap4700.getOrDefault("MCOW_SRA_INDV_EART_NO","").toString().trim());
+				this.updateIndvSibInfo(tempParam);
 			}
-			
+
+			params.put("SRA_INDV_AMNNO", params.get("sra_indv_amnno"));
 			// 6. 후대정보 저장
 			this.updateIndvPostInfo(params);
 		}
 		catch(Exception e) {
-			e.printStackTrace();
 			result.put("success", false);
 			result.put("message", e.getMessage());
 			return result;
@@ -150,7 +151,7 @@ public class CommonServiceImpl implements CommonService {
 		final Map<String, Object> fhsIntgNoInfo = commonDao.getIntgNoInfo(params);
 		
 		// 3. 농가 정보 테이블에 통합회원 코드가 있는 경우
-		if (fhsInfo != null && !fhsInfo.isEmpty() && !"".equals(fhsInfo.get("MB_INTG_NO"))) {
+		if (fhsInfo != null && !fhsInfo.isEmpty() && !"-1".equals(fhsInfo.get("MB_INTG_NO"))) {
 			params.put("MB_INTG_NO", fhsInfo.get("MB_INTG_NO"));
 			final Map<String, Object> fhsIntgNumInfo = commonDao.getIntgNoInfoForNum(params);
 			
@@ -186,11 +187,11 @@ public class CommonServiceImpl implements CommonService {
 	 */
 	public void updateIndvSibInfo(Map<String, Object> params) throws Exception {
 		// 1. 형매정보 mca 호출
-		final Map<String, Object> mcaMap			= mcaUtil.tradeMcaMsg("4800", params);						// mca 응답 전문
-		final List<Map<String, Object>> dataList	= (List<Map<String, Object>>)mcaMap.get("jsonList");		// 형매정보 데이터
+		final Map<String, Object> mcaMap			= mcaUtil.tradeMcaMsg("4900", params);		
+		Map<String, Object> mcaJson = (Map<String, Object>) mcaMap.get("jsonData");
+		final List<Map<String, Object>> dataList	= (List<Map<String, Object>>)mcaJson.get("RPT_DATA");			// 형매정보 데이터
 		
-		if (Integer.parseInt(mcaMap.getOrDefault("dataCnt", "0").toString()) > 0 && dataList.size() > 0) {
-			
+		if (!ObjectUtils.isEmpty(dataList)) {
 			this.paramLog(params);
 			// 2. 저장 전 데이터 삭제
 			commonDao.deleteIndvSibinf(params);
@@ -211,10 +212,11 @@ public class CommonServiceImpl implements CommonService {
 	 */
 	public void updateIndvPostInfo(Map<String, Object> params) throws Exception {
 		// 1. 후대정보 mca 호출
-		final Map<String, Object> mcaMap			= mcaUtil.tradeMcaMsg("4900", params);						// mca 응답 전문
-		final List<Map<String, Object>> dataList	= (List<Map<String, Object>>)mcaMap.get("jsonList");		// 형매정보 데이터
+		final Map<String, Object> mcaMap			= mcaUtil.tradeMcaMsg("4900", params);		
+		Map<String, Object> mcaJson = (Map<String, Object>) mcaMap.get("jsonData");
+		final List<Map<String, Object>> dataList	= (List<Map<String, Object>>)mcaJson.get("RPT_DATA");		// 형매정보 데이터
 		
-		if (Integer.parseInt(mcaMap.getOrDefault("dataCnt", "0").toString()) > 0 && dataList.size() > 0) {
+		if (!ObjectUtils.isEmpty(dataList)) {
 			
 			this.paramLog(params);
 			// 2. 저장 전 데이터 삭제

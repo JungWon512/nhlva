@@ -1,0 +1,947 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="dashboard">
+	<select id="findCowPriceList" parameterType="map" resultType="map">
+		/* FrontMapper.findCowPriceList  */
+		SELECT T.MONTH_OLD_C
+				, NVL((SELECT SIMP_CNM FROM TB_LA_IS_MH_COMN_APL WHERE SIMP_TPC = 'MONTH_OLD_C' AND SIMP_C = T.MONTH_OLD_C), '전체') AS MONTH_OLD_C_NM		 	
+				, NVL((SUM(CASE WHEN T.WEEK_FLAG = 'PRE' THEN T.SUM_SBID_CNT END)),0) AS PRE_SUM_SBID_CNT
+				, NVL((SUM(CASE WHEN T.WEEK_FLAG = 'THIS' THEN T.SUM_SBID_CNT END)),0) AS THIS_SUM_SBID_CNT
+				, NVL((SUM(CASE WHEN T.WEEK_FLAG = 'PRE' THEN T.AVG_SBID_AM END)),0) AS PRE_AVG_SBID_AM
+				, NVL((SUM(CASE WHEN T.WEEK_FLAG = 'THIS' THEN T.AVG_SBID_AM END)),0) AS THIS_AVG_SBID_AM
+				, NVL(DECODE(SUM(CASE WHEN T.WEEK_FLAG = 'PRE' THEN T.SUM_SBID_CNT END), 0, 0, ROUND(((SUM(CASE WHEN T.WEEK_FLAG = 'THIS' THEN T.SUM_SBID_CNT END) - SUM(CASE WHEN T.WEEK_FLAG = 'PRE' THEN T.SUM_SBID_CNT END)) / SUM(CASE WHEN T.WEEK_FLAG = 'PRE' THEN T.SUM_SBID_CNT END) * 100), 2)),0) AS ACS_SBID_CNT
+				, NVL(DECODE(SUM(CASE WHEN T.WEEK_FLAG = 'PRE' THEN T.AVG_SBID_AM END), 0, 0, ROUND(((SUM(CASE WHEN T.WEEK_FLAG = 'THIS' THEN T.AVG_SBID_AM END) - SUM(CASE WHEN T.WEEK_FLAG = 'PRE' THEN T.AVG_SBID_AM END)) / SUM(CASE WHEN T.WEEK_FLAG = 'PRE' THEN T.AVG_SBID_AM END) * 100), 2)),0) AS ACS_SBID_AM
+				, GROUPING_ID(T.MONTH_OLD_C) AS GROUPINGID
+		FROM
+		 (
+			SELECT 'PRE' AS WEEK_FLAG
+					, A.MONTH_OLD_C
+					, SUM(NVL(A.TOT_SBID_CNT,0)) SUM_SBID_CNT
+					, NVL(TRUNC((DECODE(SUM(A.TOT_SBID_CNT),0,0,(SUM(A.SBID_SUM_AMT) / SUM(A.TOT_SBID_CNT))))),0) AS AVG_SBID_AM
+			FROM TB_LA_IS_MM_DB_SUM A
+			WHERE 1=1
+				AND A.MONTH_SUM_YN = '0'
+					<if test="searchAucObjDsc != null and searchAucObjDsc != ''">
+						AND A.AUC_OBJ_DSC = #{searchAucObjDsc}
+					</if>
+					<if test="searchPlace != null and searchPlace != ''"> 
+						AND A.NA_BZPLCLOC = #{searchPlace}
+					</if>
+			        <choose>
+						<when test='"range20".equals(searchRaDate)'>
+							AND A.AUC_DT BETWEEN TO_CHAR(SYSDATE - 21, 'YYYYMMDD') AND TO_CHAR(SYSDATE-1, 'YYYYMMDD')
+						</when>
+						<when test='"range30".equals(searchRaDate)'>
+							AND A.AUC_DT BETWEEN TO_CHAR(SYSDATE - 31, 'YYYYMMDD') AND TO_CHAR(SYSDATE-1, 'YYYYMMDD')
+						</when>
+						<otherwise>
+							AND A.AUC_DT BETWEEN TO_CHAR(SYSDATE - 11, 'YYYYMMDD') AND TO_CHAR(SYSDATE-1, 'YYYYMMDD')
+						</otherwise>
+					</choose>
+			GROUP BY ROLLUP (A.MONTH_OLD_C)
+	
+			UNION ALL
+			
+			SELECT 'THIS' AS WEEK_FLAG
+					, A.MONTH_OLD_C
+					, SUM(NVL(A.TOT_SBID_CNT,0)) SUM_SBID_CNT
+					, NVL(TRUNC((DECODE(SUM(A.TOT_SBID_CNT),0,0,(SUM(A.SBID_SUM_AMT) / SUM(A.TOT_SBID_CNT))))),0) AS AVG_SBID_AM
+			FROM TB_LA_IS_MM_DB_SUM A
+			WHERE 1=1
+				AND A.MONTH_SUM_YN = '0'
+					<if test="searchAucObjDsc != null and searchAucObjDsc != ''">
+						AND A.AUC_OBJ_DSC = #{searchAucObjDsc}
+					</if>
+					<if test="searchPlace != null and searchPlace != ''"> 
+						AND A.NA_BZPLCLOC = #{searchPlace}
+					</if>
+			        <choose>
+						<when test='"range20".equals(searchRaDate)'>
+							AND A.AUC_DT BETWEEN TO_CHAR(SYSDATE - 20, 'YYYYMMDD') AND TO_CHAR(SYSDATE, 'YYYYMMDD')
+						</when>
+						<when test='"range30".equals(searchRaDate)'>
+							AND A.AUC_DT BETWEEN TO_CHAR(SYSDATE - 30, 'YYYYMMDD') AND TO_CHAR(SYSDATE, 'YYYYMMDD')
+						</when>
+						<otherwise>
+							AND A.AUC_DT BETWEEN TO_CHAR(SYSDATE - 10, 'YYYYMMDD') AND TO_CHAR(SYSDATE, 'YYYYMMDD')
+						</otherwise>
+					</choose>
+			GROUP BY ROLLUP (A.MONTH_OLD_C)
+		) T
+		WHERE 1=1
+		GROUP BY T.MONTH_OLD_C
+  		ORDER BY T.MONTH_OLD_C NULLS FIRST
+	</select>
+	
+	<select id="findAvgPlaceBidAmList" parameterType="map" resultType="map">
+		/* FrontMapper.findAvgPlaceBidAmList  */
+		SELECT A.LOCNM
+				, NVL(TRUNC((DECODE(SUM(B.TOT_SBID_CNT),0,0,(SUM(B.SBID_SUM_AMT) / SUM(B.TOT_SBID_CNT))))),0) AS AVG_SBID_AM
+		FROM TB_LA_IS_BM_BZLOC A <!-- 모든 지역 노출 위한 메인테이블 변경 -->
+		LEFT JOIN TB_LA_IS_MM_DB_SUM B ON A.NA_BZPLC = B.NA_BZPLC 
+		AND B.MONTH_SUM_YN = '0'
+		<if test="searchMonthOldC != null and searchMonthOldC != ''"> 
+			AND B.MONTH_OLD_C = #{searchMonthOldC}
+		</if>
+		<if test="searchAucObjDsc != null and searchAucObjDsc != ''"> 
+			AND B.AUC_OBJ_DSC = #{searchAucObjDsc}
+		</if>
+		<choose>
+			<when test='"range20".equals(searchRaDate)'>
+				AND B.AUC_DT BETWEEN TO_CHAR(SYSDATE - 20, 'YYYYMMDD') AND TO_CHAR(SYSDATE, 'YYYYMMDD')
+			</when>
+			<when test='"range30".equals(searchRaDate)'>
+				AND B.AUC_DT BETWEEN TO_CHAR(SYSDATE - 30, 'YYYYMMDD') AND TO_CHAR(SYSDATE, 'YYYYMMDD')
+			</when>
+			<otherwise>
+				AND B.AUC_DT BETWEEN TO_CHAR(SYSDATE - 10, 'YYYYMMDD') AND TO_CHAR(SYSDATE, 'YYYYMMDD')
+			</otherwise>
+		</choose>
+		WHERE 1=1
+		GROUP BY A.LOCNM, A.NA_BZPLCLOC
+  		ORDER BY A.NA_BZPLCLOC
+	</select>
+	
+	<select id="findRecentDateTopList" parameterType="map" resultType="map">
+		/* FrontMapper.findRecentDateTopList  */
+		SELECT T.*
+		FROM (
+				 SELECT A.NA_BZPLC
+			 			, C.CLNTNM
+						, A.SRA_INDV_AMNNO
+						, A.AUC_OBJ_DSC
+						, CASE WHEN A.AUC_OBJ_DSC = '1' THEN '송아지'
+								WHEN A.AUC_OBJ_DSC = '2' THEN '비육우'
+								WHEN A.AUC_OBJ_DSC = '3' THEN '번식우'
+								WHEN A.AUC_OBJ_DSC = '0' THEN '일괄'
+								ELSE '' END AS AUC_OBJ_DSC_NM
+						, A.INDV_SEX_C
+						, CASE WHEN A.INDV_SEX_C IN (1,4,6) THEN '암'
+											ELSE '숫'
+											END AS INDV_SEX_C_NM
+						, (SELECT TRUNC(MONTHS_BETWEEN(A.CR_DT,	B.BIRTH)) +1 FROM DUAL) AS MONTH_C
+						, A.SBID_AMT
+						, (A.SBID_AMT - A.AVG_SBID_AMT) AS AMT
+						, B.RG_DSC
+						, CASE WHEN B.RG_DSC = '01' THEN '기초'
+								WHEN B.RG_DSC = '02' THEN '혈통'
+								WHEN B.RG_DSC = '03' THEN '고등'
+								WHEN B.RG_DSC = '09' THEN '미등록우'
+								ELSE '없음' END AS RG_DSC_NAME
+						, ROW_NUMBER() OVER(ORDER BY NVL(A.SBID_AMT,0) DESC, B.BIRTH DESC) RANK_NO
+				FROM TB_LA_IS_MM_DB_BDPRTOP A
+				LEFT JOIN TB_LA_IS_MM_INDV B ON A.NA_BZPLC = B.NA_BZPLC AND A.SRA_INDV_AMNNO = B.SRA_INDV_AMNNO
+				INNER JOIN TB_LA_IS_BM_BZLOC C ON A.NA_BZPLC = C.NA_BZPLC
+				WHERE 1=1
+				<if test='"R".equals(searchFlag) and (searchPlace != null and searchPlace != "")'>
+					AND A.NA_BZPLCLOC = #{searchPlace}
+				</if>
+				<if test="searchAucObjDsc != null and searchAucObjDsc != ''">
+					AND A.AUC_OBJ_DSC = #{searchAucObjDsc}
+				</if>
+				<if test="searchMonthOldC != null and searchMonthOldC != ''">
+					AND A.MONTH_OLD_C = #{searchMonthOldC}
+				</if>
+					AND A.CR_DT BETWEEN TO_CHAR(SYSDATE-7, 'YYYYMMDD') AND TO_CHAR(SYSDATE-1, 'YYYYMMDD')
+		) T
+		WHERE 1=1
+			AND T.RANK_NO <![CDATA[<=]]> 10
+		ORDER BY T.RANK_NO
+	</select>
+	
+	<select id="findPartiBidderInfo" parameterType="map" resultType="map">
+		SELECT SUBSTR(AUC_DT, 1, 6) AUC_MONTH 
+			, SUM(TOT_SOG_CNT) AS TOT_SOG_CNT
+			, SUM(TOT_SBID_CNT) AS TOT_SBID_CNT
+			, CASE WHEN SUM(TOT_SBID_CNT) = 0  THEN 0
+				ELSE ROUND(SUM(TOT_SBID_CNT)/ SUM(TOT_SOG_CNT),2) * 100
+				END SBID_PER
+		FROM TB_LA_IS_MM_DB_SUM
+		WHERE AUC_DT BETWEEN #{searchMonth} || '01' AND #{searchMonth} || '31'
+			<if test="searchPlace != null and searchPlace != ''">
+			AND NA_BZPLCLOC = #{searchPlace}
+			</if>
+		GROUP BY SUBSTR(AUC_DT, 1, 6)
+	</select>
+	
+	<select id="findPartiBidderPerList" parameterType="map" resultType="map">
+		SELECT DS.NA_BZPLCLOC
+			, CASE WHEN DS.NA_BZPLCLOC = 'A31' THEN '경기/인천'
+				WHEN DS.NA_BZPLCLOC = 'A33' THEN '강원'
+				WHEN DS.NA_BZPLCLOC = 'A41' THEN '충남'
+				WHEN DS.NA_BZPLCLOC = 'A43' THEN '충북'
+				WHEN DS.NA_BZPLCLOC = 'A52' THEN '울산'
+				WHEN DS.NA_BZPLCLOC = 'A55' THEN '경남'
+				WHEN DS.NA_BZPLCLOC = 'A54' THEN '경북'
+				WHEN DS.NA_BZPLCLOC = 'A61' THEN '전남'
+				WHEN DS.NA_BZPLCLOC = 'A63' THEN '전북'
+				WHEN DS.NA_BZPLCLOC = 'A64' THEN '제주'
+			ELSE '' END NA_BZPLCLOC_NM
+			, SUM(NVL(TOT_SBID_CNT, 0)) TOT_SBID_CNT
+			, SUM(NVL(TOT_SOG_CNT, 0) - NVL(TOT_SBID_CNT,0)) MINUS_SOG_BID
+			, CASE WHEN SUM(NVL(TOT_SBID_CNT, 0)) = 0 THEN 0
+				ELSE ROUND(SUM(NVL(TOT_SBID_CNT, 0))/ SUM(NVL(TOT_SOG_CNT,0)), 2) * 100
+				END SBID_PER
+		FROM TB_LA_IS_MM_DB_SUM DS
+		WHERE DS.AUC_DT BETWEEN #{searchMonth} || '01' AND #{searchMonth} || '31'
+		GROUP BY DS.NA_BZPLCLOC
+	</select>
+	
+	<select id="getBtcAucDateInfo" parameterType="map" resultType="map">
+		/*FrontMapper.getBtcAucDateInfo*/
+		SELECT SBID_DT
+			, (SELECT MAX(SBID_DT) FROM TB_LA_IS_MM_DB_BTCAUC WHERE SBID_DT <![CDATA[<]]> M.SBID_DT AND INDV_SEX_TP = M.INDV_SEX_TP AND SRA_GRD_DSC = M.SRA_GRD_DSC) AS BEFORE_DT
+			, (SELECT MIN(SBID_DT) FROM TB_LA_IS_MM_DB_BTCAUC WHERE SBID_DT <![CDATA[>]]> M.SBID_DT AND INDV_SEX_TP = M.INDV_SEX_TP AND SRA_GRD_DSC = M.SRA_GRD_DSC) AS AFTER_DT
+		FROM (
+			SELECT ROW_NUMBER() OVER(ORDER BY SBID_DT ${sortCommand}, GRD_ORD.ORD_CNT ASC) AS N_NUM
+				, AUC.SBID_DT
+				, AUC.INDV_SEX_TP
+				, AUC.SRA_GRD_DSC
+				, GRD_ORD.ORD_CNT
+			FROM TB_LA_IS_MM_DB_BTCAUC AUC
+				INNER JOIN (
+					SELECT SRA_GRD_DSC
+						, CASE 
+							WHEN INSTR(SRA_GRD_DSC, '++') <![CDATA[>]]> 0 AND REGEXP_INSTR(SRA_GRD_DSC, '[A-Z]') <![CDATA[>]]> 0 THEN '1' || SRA_GRD_DSC
+							WHEN INSTR(SRA_GRD_DSC, '++') <![CDATA[>]]> 0  THEN '2' || SRA_GRD_DSC
+							WHEN INSTR(SRA_GRD_DSC, '+') <![CDATA[>]]> 0 AND REGEXP_INSTR(SRA_GRD_DSC, '[A-Z]') <![CDATA[>]]> 0 THEN '3' || SRA_GRD_DSC
+							WHEN INSTR(SRA_GRD_DSC, '+') <![CDATA[>]]> 0 THEN '4' || SRA_GRD_DSC
+							WHEN REGEXP_INSTR(SRA_GRD_DSC, '[가-힝]') <![CDATA[>]]> 0 THEN '9' || SRA_GRD_DSC
+							ELSE '5' || SRA_GRD_DSC
+						  END ORD_CNT
+						, LENGTH(SRA_GRD_DSC) LNTH_GRD   
+					FROM TB_LA_IS_MM_DB_BTCAUC
+					WHERE INDV_SEX_TP = #{searchIndvSexC}
+					GROUP BY SRA_GRD_DSC
+					ORDER BY ORD_CNT	
+				) GRD_ORD
+				ON(AUC.SRA_GRD_DSC = GRD_ORD.SRA_GRD_DSC)
+			WHERE AUC.INDV_SEX_TP = #{searchIndvSexC}
+				<choose>
+					<when test='SBID_DT != null and SBID_DT != "" and addFlag == "prev"'>
+					AND AUC.SBID_DT <![CDATA[<=]]> #{SBID_DT}				
+					</when>
+					<when test='SBID_DT != null and SBID_DT != "" and addFlag == "next"'>
+					AND AUC.SBID_DT <![CDATA[>=]]> #{SBID_DT}	 
+					</when>
+					<when test='SBID_DT != null and SBID_DT != "" and (addFlag == null or addFlag == "")'>
+					AND AUC.SBID_DT = #{SBID_DT}	
+					</when>
+					<when test='SBID_DT == null or SBID_DT == ""'>
+					AND AUC.SBID_DT BETWEEN #{searchMonth}|| '01' AND  #{searchMonth} || '31'
+					</when>
+				</choose>
+				<if test="SRA_GRD_DSC != null and SRA_GRD_DSC != ''">
+					AND AUC.SRA_GRD_DSC = #{SRA_GRD_DSC}
+				</if>
+			GROUP BY AUC.SBID_DT, AUC.INDV_SEX_TP, AUC.SRA_GRD_DSC, GRD_ORD.ORD_CNT	
+		) M
+		WHERE M.N_NUM = 1	
+	</select>
+	
+	<select id="getBtcAucGradeList" parameterType="map" resultType="map">
+		/*FrontMapper.getBtcAucGradeList*/
+		SELECT SRA_GRD_DSC
+			,CASE 
+					WHEN INSTR(SRA_GRD_DSC, '++') <![CDATA[>]]> 0 AND REGEXP_INSTR(SRA_GRD_DSC, '[A-Z]') <![CDATA[>]]> 0 THEN '1' || SRA_GRD_DSC
+					WHEN INSTR(SRA_GRD_DSC, '++') <![CDATA[>]]> 0  THEN '2' || SRA_GRD_DSC
+					WHEN INSTR(SRA_GRD_DSC, '+') <![CDATA[>]]> 0 AND REGEXP_INSTR(SRA_GRD_DSC, '[A-Z]') <![CDATA[>]]> 0 THEN '3' || SRA_GRD_DSC
+					WHEN INSTR(SRA_GRD_DSC, '+') <![CDATA[>]]> 0 THEN '4' || SRA_GRD_DSC
+					WHEN REGEXP_INSTR(SRA_GRD_DSC, '[가-힝]') <![CDATA[>]]> 0 THEN '9' || SRA_GRD_DSC
+					ELSE '5' || SRA_GRD_DSC
+				  END ORD_CNT 
+			, LENGTH(SRA_GRD_DSC) LNTH_GRD 	    
+		FROM TB_LA_IS_MM_DB_BTCAUC
+		WHERE INDV_SEX_TP = #{searchIndvSexC}
+			AND SBID_DT = #{SBID_DT}
+		GROUP BY SRA_GRD_DSC
+		ORDER BY ORD_CNT, LNTH_GRD DESC
+	</select>
+	
+	<select id="getBtcAucPriceAvgInfo" parameterType="map" resultType="map">
+		/*FrontMapper.getBtcAucPriceAvgInfo*/
+		SELECT M.*
+			, CASE WHEN M.AVG_SRA_SBID_UPR_B = 0 THEN 100 
+				ELSE ROUND((M.AVG_SRA_SBID_UPR - M.AVG_SRA_SBID_UPR_B) / M.AVG_SRA_SBID_UPR_B, 2) * 100 
+			  END AVG_CHG
+			, CASE WHEN M.MAX_SRA_SBID_UPR_B = 0  THEN 100 
+				ELSE ROUND((M.MAX_SRA_SBID_UPR - M.MAX_SRA_SBID_UPR_B) / M.MAX_SRA_SBID_UPR_B, 2) * 100 
+		      END MAX_CHG
+			, CASE WHEN M.MIN_SRA_SBID_UPR_B = 0  THEN 100 
+				ELSE ROUND((M.MIN_SRA_SBID_UPR - M.MIN_SRA_SBID_UPR_B) / M.MIN_SRA_SBID_UPR_B, 2) * 100 
+			  END MIN_CHG
+			, CASE WHEN M.BRC_HDCN_B = 0  THEN 100 
+				ELSE ROUND((M.BRC_HDCN - M.BRC_HDCN_B) / M.BRC_HDCN_B, 2) * 100 
+			  END BRC_CHG
+		FROM (
+			SELECT 
+				NVL(ROUND(SUM(DECODE(SBID_DT, #{SBID_DT},AVG_SRA_SBID_UPR,NULL)) / COUNT(DECODE(SBID_DT, #{SBID_DT},BRC_HDCN,NULL))),0) AVG_SRA_SBID_UPR
+				, NVL(ROUND(SUM(DECODE(SBID_DT, #{SBID_DT},MAX_SRA_SBID_UPR,NULL)) / COUNT(DECODE(SBID_DT, #{SBID_DT},BRC_HDCN,NULL))),0) MAX_SRA_SBID_UPR
+				, NVL(ROUND(SUM(DECODE(SBID_DT, #{SBID_DT},MIN_SRA_SBID_UPR,NULL)) / COUNT(DECODE(SBID_DT, #{SBID_DT},BRC_HDCN,NULL))),0) MIN_SRA_SBID_UPR
+				, NVL(SUM(DECODE(SBID_DT, #{SBID_DT},BRC_HDCN,NULL)),0) BRC_HDCN
+				, COUNT(DECODE(SBID_DT, #{SBID_DT},1,NULL)) TODAY_CNT
+				, NVL(ROUND(SUM(DECODE(SBID_DT, #{BEFORE_DT},AVG_SRA_SBID_UPR,NULL)) / COUNT(DECODE(SBID_DT, #{BEFORE_DT},BRC_HDCN,NULL))),0)  AVG_SRA_SBID_UPR_B
+				, NVL(ROUND(SUM(DECODE(SBID_DT, #{BEFORE_DT},MAX_SRA_SBID_UPR,NULL)) / COUNT(DECODE(SBID_DT, #{BEFORE_DT},BRC_HDCN,NULL))),0) MAX_SRA_SBID_UPR_B
+				, NVL(ROUND(SUM(DECODE(SBID_DT, #{BEFORE_DT},MIN_SRA_SBID_UPR,NULL)) / COUNT(DECODE(SBID_DT, #{BEFORE_DT},BRC_HDCN,NULL))),0) MIN_SRA_SBID_UPR_B
+				, NVL(SUM(DECODE(SBID_DT, #{BEFORE_DT},BRC_HDCN,NULL)),0) BRC_HDCN_B
+				, COUNT(DECODE(SBID_DT, #{BEFORE_DT},1,NULL)) BEFORE_CNT
+			FROM TB_LA_IS_MM_DB_BTCAUC
+			WHERE INDV_SEX_TP = #{searchIndvSexC}
+				AND SBID_DT IN (#{SBID_DT}, #{BEFORE_DT})
+				AND SRA_GRD_DSC = #{SRA_GRD_DSC}
+		)M
+	</select>
+	
+	<select id="getBtcAucAreaAvgList" parameterType="map" resultType="map">
+		/*FrontMapper.getBtcAucAreaAvgList*/
+		SELECT CLNTNM
+			, COUNT(*) AS BID_CNT
+			, ROUND(SUM(AVG_SRA_SBID_UPR) / COUNT(*)) AS AVG_SBID_PRC
+			, SUM(BRC_HDCN)	AS SUM_HDCN
+		FROM TB_LA_IS_MM_DB_BTCAUC
+		WHERE INDV_SEX_TP = #{searchIndvSexC}
+			AND SBID_DT = #{SBID_DT}
+			AND SRA_GRD_DSC = #{SRA_GRD_DSC}
+		GROUP BY CLNTNM
+	</select>
+	
+	<select id="getBtcAucAreaAvgSum" parameterType="map" resultType="map">
+		/*FrontMapper.getBtcAucAreaAvgSum*/
+		SELECT ROUND(SUM(AVG_SBID_PRC) / COUNT(*)) AS AVG_SBID_PRC
+			, ROUND(SUM(SUM_HDCN) / COUNT(*))	AS SUM_HDCN
+		FROM (
+			SELECT CLNTNM
+				, COUNT(*) AS BID_CNT
+				, ROUND(SUM(AVG_SRA_SBID_UPR) / COUNT(*)) AS AVG_SBID_PRC
+				, SUM(BRC_HDCN)	AS SUM_HDCN
+			FROM TB_LA_IS_MM_DB_BTCAUC
+			WHERE INDV_SEX_TP = #{searchIndvSexC}
+				AND SBID_DT = #{SBID_DT}
+				AND SRA_GRD_DSC = #{SRA_GRD_DSC}
+			GROUP BY CLNTNM
+		)
+	</select>
+	
+	<select id="findSbidPriceInfo" parameterType="map" resultType="map">
+		SELECT M.* 
+			, (M.TOT_SBID_CNT - M.TOT_SBID_CNT_B) AS TOT_SBID_CHG
+			, (M.MAX_SBID_UPR - M.MAX_SBID_UPR_B) AS MAX_SBID_CHG
+			, (M.MIN_SBID_UPR - M.MIN_SBID_UPR_B) AS MIN_SBID_CHG
+			, (M.AVG_SBID_UPR - M.AVG_SBID_UPR_B) AS AVG_SBID_CHG
+			, (M.SBID_SUM_AMT - M.SBID_SUM_AMT_B) AS SBID_SUM_CHG
+		FROM (
+			SELECT AUC_OBJ_DSC
+				, (SELECT SIMP_CNM FROM TB_LA_IS_MH_COMN_APL WHERE SIMP_TPC = 'AUC_OBJ_DSC' AND SIMP_C = AUC_OBJ_DSC AND SIMP_C_GRP_SQNO = '1') AS AUC_OBJ_DSC_NM
+				<if test="monthOldC != null and monthOldC != ''">
+				, MONTH_OLD_C
+				, (SELECT SIMP_CNM FROM TB_LA_IS_MH_COMN_APL WHERE SIMP_TPC = 'MONTH_OLD_C' AND SIMP_C = MONTH_OLD_C) AS MONTH_OLD_C_NM
+				</if>
+				<if test="searchPlace != null and searchPlace != ''">
+				, NA_BZPLCLOC
+				, (SELECT DISTINCT LOCNM FROM TB_LA_IS_BM_BZLOC WHERE NA_BZPLCLOC = DS.NA_BZPLCLOC) NA_BZPLCLOC_NM
+				</if>
+				, NVL(SUM(DECODE(AUC_DT, #{searchMonth}, TOT_SBID_CNT)), 0) AS TOT_SBID_CNT
+				, NVL(SUM(DECODE(AUC_DT, #{beforeMonth}, TOT_SBID_CNT)), 0) AS TOT_SBID_CNT_B
+				, NVL(MAX(DECODE(AUC_DT, #{searchMonth}, MAX_SBID_UPR)), 0) AS MAX_SBID_UPR
+				, NVL(MAX(DECODE(AUC_DT, #{beforeMonth}, MAX_SBID_UPR)), 0) AS MAX_SBID_UPR_B
+				, NVL(MIN(DECODE(AUC_DT, #{searchMonth}, MIN_SBID_UPR)), 0) AS MIN_SBID_UPR
+				, NVL(MIN(DECODE(AUC_DT, #{beforeMonth}, MIN_SBID_UPR)), 0) AS MIN_SBID_UPR_B
+				, NVL(SUM(DECODE(AUC_DT, #{searchMonth}, SBID_SUM_AMT)), 0) AS SBID_SUM_AMT
+				, NVL(SUM(DECODE(AUC_DT, #{beforeMonth}, SBID_SUM_AMT)), 0) AS SBID_SUM_AMT_B
+				, CASE 
+					WHEN SUM(DECODE(AUC_DT, #{searchMonth}, TOT_SBID_CNT, 0)) = 0  THEN 0 
+					ELSE 
+						NVL(ROUND(SUM(DECODE(AUC_DT, #{searchMonth}, SBID_SUM_AMT)) / SUM(DECODE(AUC_DT, #{searchMonth}, TOT_SBID_CNT))), 0)		
+					END  AVG_SBID_UPR
+				, CASE 
+					WHEN SUM(DECODE(AUC_DT, #{beforeMonth}, TOT_SBID_CNT, 0)) = 0  THEN 0 
+					ELSE 
+						NVL(ROUND(SUM(DECODE(AUC_DT, #{beforeMonth}, SBID_SUM_AMT)) / SUM(DECODE(AUC_DT, #{beforeMonth}, TOT_SBID_CNT))), 0)		
+					END  AVG_SBID_UPR_B
+				, CASE WHEN SUM(DECODE(AUC_DT, #{searchMonth}, TOT_SBID_CNT, 0)) = 0 THEN 0 
+					ELSE NVL(ROUND(SUM(DECODE(AUC_DT, #{searchMonth}, EXPRI_SBID_SUM_AMT))	 / SUM(DECODE(AUC_DT, #{searchMonth}, TOT_SBID_CNT))), 0) 
+					END EXPRI_SBID_SUM_AMT
+			FROM TB_LA_IS_MM_DB_SUM DS
+			WHERE AUC_DT IN(#{searchMonth} , #{beforeMonth})
+				AND AUC_OBJ_DSC = #{aucObjDsc}
+				AND MONTH_SUM_YN = '1'
+				<if test="monthOldC != null and monthOldC != ''">
+				AND MONTH_OLD_C = #{monthOldC}
+				</if>
+				<if test="searchPlace != null and searchPlace != ''">
+				AND NA_BZPLCLOC = #{searchPlace}
+				</if>
+			GROUP BY AUC_OBJ_DSC
+				<if test="monthOldC != null and monthOldC != ''">
+				, MONTH_OLD_C
+				</if>
+				<if test="searchPlace != null and searchPlace != ''">
+				, NA_BZPLCLOC
+				</if>
+		) M	
+	</select>
+	
+	<select id="findSogCowInfo" parameterType="map" resultType="map">
+		SELECT 
+			NVL(SUM(DECODE(A.AUC_DT, #{searchMonth}, A.TOT_SOG_CNT, NULL)),0) AS TOT_SOG_CNT
+			, (NVL(SUM(DECODE(A.AUC_DT, #{searchMonth}, A.TOT_SOG_CNT, NULL)),0) - NVL(SUM(DECODE(A.AUC_DT, #{beforeMonth}, A.TOT_SOG_CNT, NULL)),0)) AS ASC_SOG_CNT
+		FROM TB_LA_IS_MM_DB_SUM A
+		WHERE A.AUC_DT IN (#{beforeMonth}, #{searchMonth})
+			AND A.MONTH_SUM_YN = '1'
+			<if test="popupFlag != null and popupFlag != ''">
+				<if test="searchPlace != null and searchPlace != ''">
+				AND A.NA_BZPLCLOC = #{searchPlace}
+				</if>
+				<if test="aucObjDsc != null and aucObjDsc != ''">
+				AND AUC_OBJ_DSC = ${aucObjDsc}
+				</if>
+				<if test="monthOldC != null and monthOldC != ''">
+				AND MONTH_OLD_C = #{monthOldC}
+				</if>
+				<if test="indvSexC != null and indvSexC != ''">
+				AND INDV_SEX_C = #{indvSexC}
+				</if>
+			</if>
+		ORDER BY A.AUC_OBJ_DSC
+	</select>
+	
+	<select id="findSogCowInfoList" parameterType="map" resultType="map">
+		SELECT 
+			A.AUC_OBJ_DSC
+			, CASE
+				WHEN A.AUC_OBJ_DSC='1' THEN '송아지'
+				WHEN A.AUC_OBJ_DSC='2' THEN '비육우'
+				WHEN A.AUC_OBJ_DSC='3' THEN '번식우'
+				ELSE ''
+			END AUC_OBJ_DSC_NAME
+			, NVL(SUM(DECODE(A.AUC_DT, #{before2Month}, A.TOT_SOG_CNT, NULL)),0) AS CNT_1
+			, NVL(SUM(DECODE(A.AUC_DT, #{beforeMonth}, A.TOT_SOG_CNT, NULL)),0) AS CNT_2
+			, NVL(SUM(DECODE(A.AUC_DT, #{searchMonth}, A.TOT_SOG_CNT, NULL)),0) AS CNT_3
+		FROM TB_LA_IS_MM_DB_SUM A
+		WHERE A.AUC_DT IN (#{before2Month}, #{beforeMonth}, #{searchMonth})
+					AND A.MONTH_SUM_YN = '1'
+					<if test="searchPlace != null and searchPlace != ''">
+					AND A.NA_BZPLCLOC = #{searchPlace}
+					</if>
+		GROUP BY A.AUC_OBJ_DSC
+		ORDER BY A.AUC_OBJ_DSC
+	</select>
+	
+	<select id="findAreaSbidList" parameterType="map" resultType="map">
+		SELECT BZ.NA_BZPLCLOC
+			, BZ.LOCNM 	AS NA_BZPLCLOC_NM
+			, DECODE(SUM(DS.TOT_SOG_CNT), 0, 0, NVL(ROUND(SUM(DS.EXPRI_TOT_SUM_AMT) / SUM(DS.TOT_SOG_CNT)), 0)) AS AVG_EXPRI_UPR
+			, NVL(SUM(DS.TOT_SOG_CNT), 0) AS TOT_SOG_CNT
+			, DECODE(SUM(DS.TOT_SBID_CNT), 0, 0, NVL(ROUND(SUM(DS.SBID_SUM_AMT) / SUM(DS.TOT_SBID_CNT)), 0)) AS AVG_SBID_UPR
+			, NVL(SUM(DS.TOT_SBID_CNT), 0) AS TOT_SBID_CNT
+		FROM (
+				SELECT DISTINCT NA_BZPLCLOC, LOCNM
+   				FROM TB_LA_IS_BM_BZLOC
+			) BZ
+			LEFT OUTER JOIN TB_LA_IS_MM_DB_SUM DS
+			ON(BZ.NA_BZPLCLOC = DS.NA_BZPLCLOC
+				AND DS.MONTH_SUM_YN = '1'
+				AND DS.AUC_DT = #{searchMonth}
+				<if test="aucObjDsc != null and aucObjDsc != ''">
+				AND AUC_OBJ_DSC = ${aucObjDsc}
+				</if>
+				<if test="monthOldC != null and monthOldC != ''">
+				AND MONTH_OLD_C = #{monthOldC}
+				</if>
+				<if test="indvSexC != null and indvSexC != ''">
+				AND INDV_SEX_C = #{indvSexC}
+				</if>
+			)
+		GROUP BY BZ.NA_BZPLCLOC, BZ.LOCNM
+		ORDER BY BZ.NA_BZPLCLOC
+	</select>
+	
+	<select id="findMonthlySbidPriceList" parameterType="map" resultType="map">
+		SELECT M.CURR_MONTH AS AUC_DT 
+			, DECODE(SUM(DS.TOT_SBID_CNT), 0, 0, NVL(ROUND(SUM(DS.SBID_SUM_AMT) / SUM(DS.TOT_SBID_CNT)), 0)) AS AVG_SBID_UPR
+			, DECODE(SUM(DS.TOT_SBID_CNT), 0, 0 , NVL(ROUND(SUM(DS.EXPRI_SBID_SUM_AMT) / SUM(DS.TOT_SBID_CNT)), 0)) AS AVG_EXPRI_UPR
+		FROM (
+			SELECT LEVEL, TO_CHAR(ADD_MONTHS(TO_DATE(SUBSTR(#{searchMonth}, 1, 4) || '01', 'YYYYMM'), LEVEL - 1), 'YYYYMM') AS CURR_MONTH
+			 FROM DUAL
+			 CONNECT BY LEVEL <![CDATA[<=]]> 12
+			)M
+			LEFT OUTER JOIN TB_LA_IS_MM_DB_SUM DS
+			ON(M.CURR_MONTH = DS.AUC_DT
+				AND DS.MONTH_SUM_YN = '1'
+				<if test="searchPlace != null and searchPlace != ''">
+				AND DS.NA_BZPLCLOC = #{searchPlace}
+				</if>
+				<if test="aucObjDsc != null and aucObjDsc != ''">
+				AND DS.AUC_OBJ_DSC = ${aucObjDsc}
+				</if>
+				<if test="monthOldC != null and monthOldC != ''">
+				AND DS.MONTH_OLD_C = #{monthOldC}
+				</if>
+			)
+		GROUP BY M.CURR_MONTH
+		ORDER BY M.CURR_MONTH	
+	</select>
+	
+	<select id="findMonthlySogCowList" parameterType="map" resultType="map">
+		SELECT B.MONTH
+					,NVL(SUM(DECODE(SUBSTRING(A.AUC_DT,1,4),#{beforeYear},TOT_SOG_CNT )),0) PRE_COW_CNT
+					,NVL(SUM(DECODE(SUBSTRING(A.AUC_DT,1,4),#{searchYear},TOT_SOG_CNT )),0) THIS_COW_CNT
+		FROM (SELECT LPAD(LEVEL, 2, '0') MONTH FROM DUAL CONNECT BY LEVEL <![CDATA[<=]]> 12) B
+		LEFT JOIN TB_LA_IS_MM_DB_SUM A ON A.MONTH_SUM_YN = '1'
+				AND SUBSTRING(A.AUC_DT,5,2) = B.MONTH
+				AND SUBSTRING(A.AUC_DT,1,4) IN (#{beforeYear}, #{searchYear})
+		    	<if test="searchPlace != null and searchPlace != ''">
+					AND A.NA_BZPLCLOC = #{searchPlace}
+				</if>
+				<if test="aucObjDsc != null and aucObjDsc != ''">
+					AND A.AUC_OBJ_DSC = ${aucObjDsc}
+				</if>
+				<if test="indvSexC != null and indvSexC != ''">
+					AND A.INDV_SEX_C = ${indvSexC}
+				</if>
+				<if test="monthOldC != null and monthOldC != ''">
+					AND A.MONTH_OLD_C = #{monthOldC}
+				</if>
+		GROUP BY MONTH
+		ORDER BY MONTH
+	</select>
+	
+	<select id="selStaticInfo" parameterType="map" resultType="map">
+		SELECT 
+			SUM(QCN_CNT) QCN_CNT
+			, SUM(COW_CNT) COW_CNT
+			, SUM(BID_CNT) BID_CNT
+			, SUM(NO_BID_CNT) NO_BID_CNT
+			, SUM(ENTR_CNT) ENTR_CNT
+		FROM (
+			SELECT 
+				COUNT(*) QCN_CNT
+				, 0 COW_CNT
+				, 0 BID_CNT
+				, 0 NO_BID_CNT
+				, 0 ENTR_CNT
+			FROM TB_LA_IS_MH_AUC_QCN A
+			INNER JOIN TB_LA_IS_BM_BZLOC B ON A.NA_BZPLC = B.NA_BZPLC
+			WHERE 1=1
+			<if test="stSearchDt !=null and !stSearchDt.equals('') and edSearchDt !=null and !edSearchDt.equals('')">
+				AND A.AUC_DT <![CDATA[>=]]> #{stSearchDt}
+				AND A.AUC_DT <![CDATA[<=]]> #{edSearchDt}
+			</if>
+			<if test="aucObjDsc !='' and aucObjDsc != null">
+				AND A.AUC_OBJ_DSC = DECODE(A.AUC_OBJ_DSC,'0','0',#{aucObjDsc})
+			</if>
+			<if test="naBzplc !='' and naBzplc != null">
+				AND A.NA_BZPLC = #{naBzplc}
+			</if>
+			<if test="naBzplcloc !='' and naBzplcloc != null">
+				AND B.NA_BZPLCLOC = #{naBzplcloc}
+			</if>
+			UNION ALL
+			SELECT 
+				0 QCN_CNT
+				, COUNT(*) COW_CNT
+				, COUNT(DECODE(A.SEL_STS_DSC,'22',1)) 
+				, COUNT(DECODE(A.SEL_STS_DSC,'23',1)) 
+				, SUM(NVL(C.ATDR_CNT,0)) ENTR_CNT
+			FROM TB_LA_IS_MH_SOG_COW A
+			INNER JOIN TB_LA_IS_BM_BZLOC B ON A.NA_BZPLC = B.NA_BZPLC				
+			LEFT OUTER JOIN (
+				SELECT NA_BZPLC
+						, AUC_OBJ_DSC
+						, AUC_DT
+						, OSLP_NO
+						, TRMN_AMNNO
+						, COUNT(*) ATDR_CNT
+				FROM TB_LA_IS_MH_ATDR_LOG
+				GROUP BY NA_BZPLC, AUC_OBJ_DSC, AUC_DT, OSLP_NO, TRMN_AMNNO
+			) C ON A.NA_BZPLC = C.NA_BZPLC
+				AND A.AUC_OBJ_DSC = C.AUC_OBJ_DSC
+				AND A.AUC_DT = C.AUC_DT
+				AND A.OSLP_NO = C.OSLP_NO
+				AND A.TRMN_AMNNO = C.TRMN_AMNNO		
+			WHERE 1=1
+			<if test="stSearchDt !=null and !stSearchDt.equals('') and edSearchDt !=null and !edSearchDt.equals('')">
+				AND A.AUC_DT <![CDATA[>=]]> #{stSearchDt}
+				AND A.AUC_DT <![CDATA[<=]]> #{edSearchDt}
+			</if>
+			<if test="aucObjDsc !='' and aucObjDsc != null">
+				AND A.AUC_OBJ_DSC = #{aucObjDsc}
+			</if>
+			<if test="naBzplc !='' and naBzplc != null">
+				AND A.NA_BZPLC = #{naBzplc}
+			</if>
+			<if test="naBzplcloc !='' and naBzplcloc != null">
+				AND B.NA_BZPLCLOC = #{naBzplcloc}
+			</if>
+		)
+	</select>	
+	
+	<select id="selStaticList" parameterType="map" resultType="map">
+		SELECT T.*
+			, CASE 
+				WHEN ATDR_CNT = 0 THEN 0
+				ELSE ROUND(BID_ATDR_CNT/ ATDR_CNT, 3) * 100 
+			END ATDR_PER
+			, CASE 
+				WHEN COW_CNT = 0 THEN 0
+				ELSE ROUND(BID_COW_CNT/ COW_CNT, 3) * 100 
+			END COW_PER
+		FROM	
+		(	SELECT 
+				A.NA_BZPLC
+				, B.CLNTNM
+				, A.AUC_DT 
+				, COUNT(*) COW_CNT
+				, COUNT(DECODE(SEL_STS_DSC,'22',1)) BID_COW_CNT
+				, SUM(NVL(C.ATDR_CNT,0)) ATDR_CNT
+				, COUNT(DISTINCT DECODE(A.SEL_STS_DSC,'22',A.TRMN_AMNNO)) BID_ATDR_CNT
+			FROM TB_LA_IS_MH_SOG_COW A
+			INNER JOIN TB_LA_IS_BM_BZLOC B ON A.NA_BZPLC = B.NA_BZPLC			
+			LEFT OUTER JOIN (
+				SELECT NA_BZPLC
+						, AUC_OBJ_DSC
+						, AUC_DT
+						, OSLP_NO
+						, TRMN_AMNNO
+						, COUNT(*) ATDR_CNT
+				FROM TB_LA_IS_MH_ATDR_LOG
+				GROUP BY NA_BZPLC, AUC_OBJ_DSC, AUC_DT, OSLP_NO, TRMN_AMNNO
+			) C ON A.NA_BZPLC = C.NA_BZPLC
+				AND A.AUC_OBJ_DSC = C.AUC_OBJ_DSC
+				AND A.AUC_DT = C.AUC_DT
+				AND A.OSLP_NO = C.OSLP_NO
+				AND A.TRMN_AMNNO = C.TRMN_AMNNO
+			WHERE 1=1
+			<if test="stSearchDt !=null and !stSearchDt.equals('') and edSearchDt !=null and !edSearchDt.equals('')">
+				AND A.AUC_DT <![CDATA[>=]]> #{stSearchDt}
+				AND A.AUC_DT <![CDATA[<=]]> #{edSearchDt}
+			</if>
+			<if test="aucObjDsc !='' and aucObjDsc != null">
+				AND A.AUC_OBJ_DSC = #{aucObjDsc}
+			</if>
+			<if test="naBzplc !='' and naBzplc != null">
+				AND A.NA_BZPLC = #{naBzplc}
+			</if>
+			<if test="naBzplcloc !='' and naBzplcloc != null">
+				AND B.NA_BZPLCLOC = #{naBzplcloc}
+			</if>
+			GROUP BY  A.NA_BZPLC,B.CLNTNM, A.AUC_DT 
+		) T	
+	</select>
+	
+	<select id="selAucStaticInfo" parameterType="map" resultType="map">
+		SELECT T.*
+		FROM	
+		(	SELECT COUNT(*) COW_CNT
+				, SUM(DECODE(SEL_STS_DSC,'22',A.SRA_SBID_AM)) SUM_SRA_SBID_AM
+				, SUM(NVL(FEE_F.SRA_TR_FEE,0)) SUM_FHS_FEE
+				, SUM(NVL(FEE_M.SRA_TR_FEE,0)) SUM_MWMN_FEE
+			FROM TB_LA_IS_MH_SOG_COW A
+			INNER JOIN TB_LA_IS_BM_BZLOC B ON A.NA_BZPLC = B.NA_BZPLC
+			LEFT JOIN(			
+				SELECT
+					NA_BZPLC
+					, AUC_OBJ_DSC
+					, AUC_DT
+					, OSLP_NO
+					, LED_SQNO
+					, FEE_APL_OBJ_C
+					, SUM(NVL(SRA_TR_FEE, 0)* DECODE(ANS_DSC, 1, 1, -1) ) AS SRA_TR_FEE
+				FROM TB_LA_IS_MH_FEE_IMPS
+				WHERE 1=1
+				AND FEE_APL_OBJ_C = '1'
+				<if test="stSearchDt !=null and !stSearchDt.equals('') and edSearchDt !=null and !edSearchDt.equals('')">
+					AND AUC_DT <![CDATA[>=]]> #{stSearchDt}
+					AND AUC_DT <![CDATA[<=]]> #{edSearchDt}
+				</if>
+				<if test="aucObjDsc !='' and aucObjDsc != null">
+					AND AUC_OBJ_DSC = #{aucObjDsc}
+				</if>
+				<if test="naBzplc !='' and naBzplc != null">
+					AND NA_BZPLC = #{naBzplc}
+				</if>
+				GROUP BY NA_BZPLC, AUC_OBJ_DSC, AUC_DT, OSLP_NO, LED_SQNO, FEE_APL_OBJ_C
+			) FEE_F	ON A.NA_BZPLC = FEE_F.NA_BZPLC
+					AND A.AUC_OBJ_DSC = FEE_F.AUC_OBJ_DSC
+					AND A.AUC_DT = FEE_F.AUC_DT
+					AND A.OSLP_NO = FEE_F.OSLP_NO
+					AND A.LED_SQNO = FEE_F.LED_SQNO
+			LEFT JOIN(			
+				SELECT
+					NA_BZPLC
+					, AUC_OBJ_DSC
+					, AUC_DT
+					, OSLP_NO
+					, LED_SQNO
+					, FEE_APL_OBJ_C
+					, SUM(NVL(SRA_TR_FEE, 0)* DECODE(ANS_DSC, 1, 1, -1) ) AS SRA_TR_FEE
+				FROM TB_LA_IS_MH_FEE_IMPS
+				WHERE 1=1
+				AND FEE_APL_OBJ_C = '2'
+				<if test="stSearchDt !=null and !stSearchDt.equals('') and edSearchDt !=null and !edSearchDt.equals('')">
+					AND AUC_DT <![CDATA[>=]]> #{stSearchDt}
+					AND AUC_DT <![CDATA[<=]]> #{edSearchDt}
+				</if>
+				<if test="aucObjDsc !='' and aucObjDsc != null">
+					AND AUC_OBJ_DSC = #{aucObjDsc}
+				</if>
+				<if test="naBzplc !='' and naBzplc != null">
+					AND NA_BZPLC = #{naBzplc}
+				</if>
+				GROUP BY NA_BZPLC, AUC_OBJ_DSC, AUC_DT, OSLP_NO, LED_SQNO, FEE_APL_OBJ_C
+			) FEE_M ON A.NA_BZPLC = FEE_M.NA_BZPLC
+					AND A.AUC_OBJ_DSC = FEE_M.AUC_OBJ_DSC
+					AND A.AUC_DT = FEE_M.AUC_DT
+					AND A.OSLP_NO = FEE_M.OSLP_NO
+					AND A.LED_SQNO = FEE_M.LED_SQNO
+			WHERE 1=1
+			<if test="stSearchDt !=null and !stSearchDt.equals('') and edSearchDt !=null and !edSearchDt.equals('')">
+				AND A.AUC_DT <![CDATA[>=]]> #{stSearchDt}
+				AND A.AUC_DT <![CDATA[<=]]> #{edSearchDt}
+			</if>
+			<if test="aucObjDsc !='' and aucObjDsc != null">
+				AND A.AUC_OBJ_DSC = #{aucObjDsc}
+			</if>
+			<if test="naBzplc !='' and naBzplc != null">
+				AND A.NA_BZPLC = #{naBzplc}
+			</if>
+			<if test="naBzplcloc !='' and naBzplcloc != null">
+				AND B.NA_BZPLCLOC = #{naBzplcloc}
+			</if>
+			<if test="selStsDsc !='' and selStsDsc != null">
+				AND A.SEL_STS_DSC = #{selStsDsc}
+			</if>
+		) T	
+	</select>    
+    
+    <select id="selMhSogCowRowDataList" resultType="hashMap">
+    	SELECT SOG.AUC_DT 
+			, SOG.AUC_OBJ_DSC			
+			,CASE
+				WHEN SOG.AUC_OBJ_DSC='1' THEN '송아지'
+				WHEN SOG.AUC_OBJ_DSC='2' THEN '비육우'
+				WHEN SOG.AUC_OBJ_DSC='3' THEN '번식우'
+				WHEN SOG.AUC_OBJ_DSC='0' THEN '일괄'
+				ELSE ''
+			END AUC_OBJ_DSC_NM	
+			, SOG.AUC_PRG_SQ
+			, SUBSTR(FHS.FTSNM,1,1) || LPAD('*',LENGTH(FHS.FTSNM)-2, '*') || SUBSTR(FHS.FTSNM, LENGTH(FHS.FTSNM), 1) FTSNM
+			, FHS.ZIP
+			, FHS.DONGUP || ' ' || LPAD(' ', LENGTH(FHS.DONGBW), '*')  ADDRESS
+			, SOG.SRA_INDV_AMNNO
+			, INDV.BIRTH
+			, INDV.MATIME
+			, INDV.SRA_INDV_PASG_QCN
+			, INDV.KPN_NO
+			, INDV.RG_DSC
+			, CASE 
+				WHEN INDV.RG_DSC = '01' THEN '기초'
+				WHEN INDV.RG_DSC = '02' THEN '혈통'
+				WHEN INDV.RG_DSC = '03' THEN '고등'
+				WHEN INDV.RG_DSC = '09' THEN '미등록우'
+				ELSE ''
+			END AS RG_DSC_NM
+			, INDV.INDV_SEX_C
+			, CASE
+				WHEN INDV.INDV_SEX_C = 0 THEN '없음'
+				WHEN INDV.INDV_SEX_C = 1 THEN '암'
+				WHEN INDV.INDV_SEX_C = 2 THEN '수'
+				WHEN INDV.INDV_SEX_C = 3 THEN '거세'
+				WHEN INDV.INDV_SEX_C = 4 THEN '미경산'
+				WHEN INDV.INDV_SEX_C = 5 THEN '비거세'
+				WHEN INDV.INDV_SEX_C = 6 THEN '프리마틴'
+				WHEN INDV.INDV_SEX_C = 9 THEN '공통'
+				ELSE '없음'
+			END INDV_SEX_C_NAME
+			, INDV.MCOW_SRA_INDV_AMNNO
+			, INDV.MCOW_DSC 
+			, CASE
+				WHEN INDV.MCOW_DSC = '01' THEN '기초'
+				WHEN INDV.MCOW_DSC = '02' THEN '혈통'
+				WHEN INDV.MCOW_DSC = '03' THEN '고등'
+				WHEN INDV.MCOW_DSC = '09' THEN '미등록우'
+				ELSE '-'
+			END MCOW_DSC_NAME
+			, SOG.COW_SOG_WT
+			, SOG.LOWS_SBID_LMT_AM
+			, SOG.SRA_SBID_AM 
+			, SOG.SRA_SBID_UPR
+			, SOG.RMHN_YN
+			, VHC.VHC_DRV_CAFFNM
+			, SOG.LVST_AUC_PTC_MN_NO
+			, SUBSTR(MWN.SRA_MWMNNM,1,1) || LPAD('*',LENGTH(MWN.SRA_MWMNNM)-2, '*') || SUBSTR(MWN.SRA_MWMNNM, LENGTH(MWN.SRA_MWMNNM), 1) SRA_MWMNNM
+			, REGEXP_REPLACE(MWN.CUS_MPNO, '(.{3})(.*)(.{4})', '\1-****-\3') CUS_MPNO
+			, FEE_F.SRA_TR_FEE FHS_SRA_TR_FEE
+			, FEE_M.SRA_TR_FEE MWMN_SRA_TR_FEE
+			, LOC.CLNTNM
+			, FHS.FHS_ID_NO
+			, FHS.BIRTH FHS_BIRTH
+			, FHS.MACO_YN
+			, FHS.JRDWO_DSC
+			, SUBSTR(SOG.SRA_PDMNM,1,1) || LPAD('*',LENGTH(SOG.SRA_PDMNM)-2, '*') || SUBSTR(SOG.SRA_PDMNM, LENGTH(SOG.SRA_PDMNM), 1) SRA_PDMNM
+			, SOG.RC_DT
+			, SOG.SEL_STS_DSC
+			, CASE 
+				WHEN SOG.SEL_STS_DSC ='11' THEN '송장등록'
+				WHEN SOG.SEL_STS_DSC ='22' THEN '낙찰'
+				WHEN SOG.SEL_STS_DSC ='23' THEN '유찰'
+				ELSE '-'
+			END SEL_STS_DSC_NM
+			, SOG.TRPCS_PY_YN
+			, INDV.BIRTH
+			, TRUNC(MONTHS_BETWEEN(SOG.AUC_DT, INDV.BIRTH)) AS MTCN
+			, INDV.SRA_INDV_BRDSRA_RG_NO
+			, SUBSTR(TRPL.BRKR_NAME,1,1) || LPAD('*',LENGTH(TRPL.BRKR_NAME)-2, '*') || SUBSTR(TRPL.BRKR_NAME,LENGTH(TRPL.BRKR_NAME),1) BRKR_NAME
+			, SOG.BRCL_ISP_DT
+			, SOG.BRCL_ISP_CTFW_SMT_YN
+			, SOG.VACN_DT
+			, SOG.NCSS_JUG_YN
+			, SOG.NCSS_YN
+			, SOG.PRNY_JUG_YN
+			, SOG.PRNY_YN
+			, SOG.PPGCOW_FEE_DSC
+			, (SELECT SIMP_CNM FROM TB_LA_IS_MH_COMN_APL WHERE SIMP_TPC ='PPGCOW_FEE_DSC' AND SIMP_C = SOG.PPGCOW_FEE_DSC AND SIMP_C_GRP_SQNO ='1') PPGCOW_FEE_DSC_NM
+			, SOG.AFISM_MOD_DT
+			, SOG.MOD_KPN_NO
+			, SOG.PRNY_MTCN
+			, SOG.AFISM_MOD_CTFW_SMT_YN
+			, SOG.BOVINE_DT
+			, SOG.TMS_YN
+			, SOG.RMK_CNTN
+			, SOG.DNA_YN
+			, CASE
+				WHEN SOG.DNA_YN = '1' THEN '일치'
+				WHEN SOG.DNA_YN = '2' THEN '완전불일치'
+				WHEN SOG.DNA_YN = '3' THEN '없음'
+				WHEN SOG.DNA_YN = '4' THEN '부불일치'
+				WHEN SOG.DNA_YN = '5' THEN '모불일치'
+				WHEN SOG.DNA_YN = '6' THEN '부or모 불일치'
+			END DNA_YN_NM
+			, SOG.DNA_YN_CHK
+			, FHS.SRA_FED_SPY_YN
+			, SOG.SRA_TRPCS
+			, SOG.SRA_FED_SPY_AM
+			, SOG.TD_RC_CST
+			, SOG.BRANDNM
+			, SOG.PDA_ID
+			, SOG.EPD_YN
+			, SOG.SPAY_YN
+			, SOG.FSRG_DTM
+			, USR.USRNM
+			, FHS.SRA_FARM_ACNO
+			, SOG.SRA_PYIVA
+			, CALF.SRA_INDV_AMNNO INDV_AMNNO
+			, SOG.CASE_COW
+		FROM TB_LA_IS_MH_SOG_COW SOG
+			LEFT OUTER JOIN TB_LA_IS_MM_FHS FHS
+			ON(SOG.NA_BZPLC = FHS.NA_BZPLC
+				AND SOG.FHS_ID_NO = FHS.FHS_ID_NO
+				AND SOG.FARM_AMNNO = FHS.FARM_AMNNO
+			)
+			LEFT OUTER JOIN TB_LA_IS_MM_INDV INDV
+			ON(SOG.NA_BZPLC = INDV.NA_BZPLC
+				AND SOG.SRA_INDV_AMNNO = INDV.SRA_INDV_AMNNO
+				AND SOG.SRA_SRS_DSC = INDV.SRA_SRS_DSC
+			)
+			LEFT OUTER JOIN TB_LA_IS_MM_MWMN MWN
+			ON(SOG.NA_BZPLC = MWN.NA_BZPLC
+				AND SOG.TRMN_AMNNO = MWN.TRMN_AMNNO
+			)
+			LEFT OUTER JOIN TB_LA_IS_MM_VHC VHC
+		    ON(SOG.NA_BZPLC = VHC.NA_BZPLC
+		    	AND SOG.VHC_SHRT_C = VHC.VHC_SHRT_C
+		    )
+			LEFT OUTER JOIN TB_LA_IS_MM_TRPL TRPL
+	        ON( SOG.NA_BZPLC            = TRPL.NA_BZPLC
+		        AND SOG.LVST_MKT_TRPL_AMNNO = TRPL.LVST_MKT_TRPL_AMNNO
+		        AND TRPL.LVST_MKT_TRPL_DSC   = '1'	  
+	        )      
+			LEFT OUTER JOIN TB_LA_IS_MH_CALF  CALF
+	        ON SOG.NA_BZPLC            =  CALF.NA_BZPLC
+	        AND( SOG.AUC_OBJ_DSC         = CALF.AUC_OBJ_DSC
+		        AND SOG.AUC_DT              = CALF.AUC_DT
+		        AND SOG.OSLP_NO             = CALF.OSLP_NO
+		        AND CALF.DEL_YN              = '0'
+		        AND CALF.RG_SQNO             = 1
+	        )
+			LEFT OUTER JOIN TB_LA_IS_MM_USR USR
+			ON (SOG.NA_BZPLC            = USR.NA_BZPLC
+	        	AND SOG.FSRGMN_ENO          = USR.USRID
+	        )
+			LEFT JOIN(			
+				SELECT
+					NA_BZPLC
+					, AUC_OBJ_DSC
+					, AUC_DT
+					, OSLP_NO
+					, LED_SQNO
+					, FEE_APL_OBJ_C
+					, SUM(NVL(SRA_TR_FEE, 0)* DECODE(ANS_DSC, 1, 1, -1) ) AS SRA_TR_FEE
+				FROM TB_LA_IS_MH_FEE_IMPS
+				WHERE 1=1
+				AND FEE_APL_OBJ_C = '1'
+				<if test="stSearchDt !=null and !stSearchDt.equals('') and edSearchDt !=null and !edSearchDt.equals('')">
+					AND AUC_DT <![CDATA[>=]]> #{stSearchDt}
+					AND AUC_DT <![CDATA[<=]]> #{edSearchDt}
+				</if>
+				<if test="aucObjDsc !='' and aucObjDsc != null">
+					AND AUC_OBJ_DSC = #{aucObjDsc}
+				</if>
+				<if test="naBzplc !='' and naBzplc != null">
+					AND NA_BZPLC = #{naBzplc}
+				</if>
+				GROUP BY NA_BZPLC, AUC_OBJ_DSC, AUC_DT, OSLP_NO, LED_SQNO, FEE_APL_OBJ_C
+			) FEE_F	ON SOG.NA_BZPLC = FEE_F.NA_BZPLC
+					AND SOG.AUC_OBJ_DSC = FEE_F.AUC_OBJ_DSC
+					AND SOG.AUC_DT = FEE_F.AUC_DT
+					AND SOG.OSLP_NO = FEE_F.OSLP_NO
+					AND SOG.LED_SQNO = FEE_F.LED_SQNO
+			LEFT JOIN(			
+				SELECT
+					NA_BZPLC
+					, AUC_OBJ_DSC
+					, AUC_DT
+					, OSLP_NO
+					, LED_SQNO
+					, FEE_APL_OBJ_C
+					, SUM(NVL(SRA_TR_FEE, 0)* DECODE(ANS_DSC, 1, 1, -1) ) AS SRA_TR_FEE
+				FROM TB_LA_IS_MH_FEE_IMPS
+				WHERE 1=1
+				AND FEE_APL_OBJ_C = '2'
+				<if test="stSearchDt !=null and !stSearchDt.equals('') and edSearchDt !=null and !edSearchDt.equals('')">
+					AND AUC_DT <![CDATA[>=]]> #{stSearchDt}
+					AND AUC_DT <![CDATA[<=]]> #{edSearchDt}
+				</if>
+				<if test="aucObjDsc !='' and aucObjDsc != null">
+					AND AUC_OBJ_DSC = #{aucObjDsc}
+				</if>
+				<if test="naBzplc !='' and naBzplc != null">
+					AND NA_BZPLC = #{naBzplc}
+				</if>
+				GROUP BY NA_BZPLC, AUC_OBJ_DSC, AUC_DT, OSLP_NO, LED_SQNO, FEE_APL_OBJ_C
+			) FEE_M ON SOG.NA_BZPLC = FEE_M.NA_BZPLC
+					AND SOG.AUC_OBJ_DSC = FEE_M.AUC_OBJ_DSC
+					AND SOG.AUC_DT = FEE_M.AUC_DT
+					AND SOG.OSLP_NO = FEE_M.OSLP_NO
+					AND SOG.LED_SQNO = FEE_M.LED_SQNO
+			INNER JOIN TB_LA_IS_BM_BZLOC LOC ON SOG.NA_BZPLC = LOC.NA_BZPLC
+		WHERE 1=1
+			<if test="stSearchDt !=null and !stSearchDt.equals('') and edSearchDt !=null and !edSearchDt.equals('')">
+				AND SOG.AUC_DT <![CDATA[>=]]> #{stSearchDt}
+				AND SOG.AUC_DT <![CDATA[<=]]> #{edSearchDt}
+			</if>
+			<if test="aucObjDsc !='' and aucObjDsc != null">
+				AND SOG.AUC_OBJ_DSC = #{aucObjDsc}
+			</if>
+			<if test="naBzplc !='' and naBzplc != null">
+				AND SOG.NA_BZPLC = #{naBzplc}
+			</if>
+			<if test="naBzplcloc !='' and naBzplcloc != null">
+				AND LOC.NA_BZPLCLOC = #{naBzplcloc}
+			</if>
+			<if test="selStsDsc !='' and selStsDsc != null">
+				AND SOG.SEL_STS_DSC = #{selStsDsc}
+			</if>
+    </select>
+</mapper>

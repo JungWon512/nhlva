@@ -21,7 +21,7 @@
 				AND
 				A.SRA_INDV_AMNNO = TRIM(#{SRA_INDV_AMNNO})
 				AND
-				A.SRA_SRS_DSC = #{SRA_SRS_DSC}
+				A.SRA_SRS_DSC = TRIM(#{SRA_SRS_DSC})
 			 )
 		  WHEN MATCHED THEN UPDATE
 		   SET FHS_ID_NO				= TRIM(#{FHS_ID_NO})
@@ -297,7 +297,7 @@
 	<!-- 농가코드로 통합회원코드 조회 -->
 	<select id="getFhsInfo" parameterType="hashMap" resultType="hashMap">
 		SELECT FHS_ID_NO
-			 , MIN(MB_INTG_NO) AS MB_INTG_NO
+			 , NVL(MIN(MB_INTG_NO), '-1') AS MB_INTG_NO
 		  FROM TB_LA_IS_MM_FHS A
 		WHERE FHS_ID_NO = TRIM(#{FHS_ID_NO})
 		GROUP BY FHS_ID_NO
@@ -359,7 +359,9 @@
 	<!-- 통합회원 정보 저장 -->
 	<insert id="insertIntgInfo" parameterType="hashMap">
 		<selectKey keyProperty="MB_INTG_NO" resultType="String" order="BEFORE">
-			SELECT NVL(MAX(MB_INTG_NO) + 1, 1)
+			SELECT CASE WHEN #{MB_INTG_GB} = '01' THEN NVL(MAX(MB_INTG_NO), '100000000') + 1
+						ELSE NVL(MAX(MB_INTG_NO), '200000000') + 1
+					END AS MB_INTG_NO
 			  FROM TB_LA_IS_MM_MBINTG
 			 WHERE MB_INTG_GB = #{MB_INTG_GB}
 		</selectKey>
@@ -519,7 +521,7 @@
 	<!-- 등록된 형매정보 삭제 -->
 	<delete id="deleteIndvSibinf" parameterType="hashMap">
 		DELETE TB_LA_IS_MM_INDV_SIBINF
-		 WHERE SRA_INDV_AMNNO = #{SRA_INDV_AMNNO}
+		 WHERE SRA_INDV_AMNNO = TRIM(#{SRA_INDV_AMNNO})
 	</delete>
 	
 	<!-- 형매정보 저장 -->
@@ -539,17 +541,17 @@
 			, FSRG_DTM
 			, FSRGMN_ENO
 		) VALUES (
-			#{SRA_INDV_AMNNO}
-			, #{SIB_SRA_INDV_AMNNO}
-			, #{MATIME}
-			, #{SRA_INDV_PASG_QCN}
-			, #{RG_DSC}
-			, #{KPN_NO}
-			, #{INDV_SEX_C}
-			, #{BIRTH}
-			, #{METRB_BBDY_WT}
-			, #{METRB_METQLT_GRD}
-			, #{MIF_BTC_DT}
+			TRIM(#{SRA_INDV_AMNNO})
+			, TRIM(#{SIB_SRA_INDV_AMNNO})
+			, TRIM(#{SRA_INDV_LS_MATIME})
+			, TRIM(#{SRA_INDV_PASG_QCN})
+			, TRIM(#{RG_DSC})
+			, TRIM(#{SRA_KPN_NO})
+			, TRIM(#{INDV_SEX_C})
+			, TRIM(#{MIF_SRA_INDV_BIRTH})
+			, TRIM(#{METRB_BBDY_WT})
+			, TRIM(#{METRB_METQLT_GRD})
+			, TRIM(#{MIF_BTC_DT})
 			, SYSDATE
 			, #{lsCmeno}
 		)
@@ -558,7 +560,7 @@
 	<!-- 등록된 후대정보 삭제 -->
 	<delete id="deleteIndvPostinf" parameterType="hashMap">
 		DELETE TB_LA_IS_MM_INDV_POSTINF
-		 WHERE SRA_INDV_AMNNO = #{SRA_INDV_AMNNO}
+		 WHERE SRA_INDV_AMNNO = TRIM(#{SRA_INDV_AMNNO})
 	</delete>
 	
 	<!-- 형매정보 저장 -->
@@ -578,17 +580,17 @@
 			, FSRG_DTM
 			, FSRGMN_ENO
 		) VALUES (
-			#{SRA_INDV_AMNNO}
-			, #{POST_SRA_INDV_AMNNO}
-			, #{MATIME}
-			, #{SRA_INDV_PASG_QCN}
-			, #{RG_DSC}
-			, #{KPN_NO}
-			, #{INDV_SEX_C}
-			, #{BIRTH}
-			, #{METRB_BBDY_WT}
-			, #{METRB_METQLT_GRD}
-			, #{MIF_BTC_DT}
+			TRIM(#{SRA_INDV_AMNNO})
+			, TRIM(#{POST_SRA_INDV_AMNNO})
+			, TRIM(#{SRA_INDV_LS_MATIME})
+			, TRIM(#{SRA_INDV_PASG_QCN})
+			, TRIM(#{RG_DSC})
+			, TRIM(#{SRA_KPN_NO})
+			, TRIM(#{INDV_SEX_C})
+			, TRIM(#{MIF_SRA_INDV_BIRTH})
+			, TRIM(#{METRB_BBDY_WT})
+			, TRIM(#{METRB_METQLT_GRD})
+			, TRIM(#{MIF_BTC_DT})
 			, SYSDATE
 			, #{lsCmeno}
 		)

@@ -36,19 +36,19 @@
 			<dl>
 				<dt><p>암</p></dt>
 				<dd>
-					<p class="cowCnt"><span class="ea">${empty buyCnt.CNT_SEX_W? '0' : buyCnt.CNT_SEX_W_F}</span>두</p>
+					<p class="cowCnt"><span class="ea">${empty buyCnt.CNT_SEX_W_F? '0' : buyCnt.CNT_SEX_W_F}</span>두</p>
 				</dd>
 			</dl>
 			<dl>
 				<dt><p>수</p></dt>
 				<dd>
-					<p class="cowCnt"><span class="ea">${empty buyCnt.CNT_SEX_M? '0' : buyCnt.CNT_SEX_M_F }</span>두</p>
+					<p class="cowCnt"><span class="ea">${empty buyCnt.CNT_SEX_M_F? '0' : buyCnt.CNT_SEX_M_F }</span>두</p>
 				</dd>
 			</dl>
 			<dl>
 				<dt><p>기타</p></dt>
 				<dd>
-					<p class="cowCnt"><span class="ea">${empty buyCnt.CNT_SEX_ETC? '0' : buyCnt.CNT_SEX_ETC_F}</span>두</p>
+					<p class="cowCnt"><span class="ea">${empty buyCnt.CNT_SEX_ETC_F? '0' : buyCnt.CNT_SEX_ETC_F}</span>두</p>
 				</dd>
 			</dl>
 		</div>

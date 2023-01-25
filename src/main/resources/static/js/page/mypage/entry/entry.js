@@ -186,6 +186,7 @@
 			sHtml += '		</dl>';
 			sHtml += '	</dl>';
 			sHtml += '	<div class="btns">';
+			sHtml += '	<p style="color:red; font-size:18px; margin-bottom: 10px;">*최근 6개월 내 정산서만 검색 가능합니다.</p>';
 			sHtml += '	<button type="button" id="johap" class="btn_flag '+ (params.searchFlag == 'johap' ? "act" : "") +'">'+ data.johapData.AREANM +'축협</button>';
 			sHtml += '	<button type="button" id="all" class="btn_flag '+ (params.searchFlag == 'all' ? "act" : "") +'">전체축협</button>';
 			sHtml += '</div>';
@@ -297,7 +298,11 @@
 				barData5 = item.AVG_MY_SBID_AM ?? 0;
 	   			barData6 = item.AVG_SBID_AM ?? 0;
 			}
-		})
+		});
+		
+		// 차트 초기화
+		$('div.barChart').empty();
+    	$('div.barChart').append('<canvas id="myChartSample4"></canvas>');
 	    
 	    // 막대 차트 생성
 		const ctx = $('#myChartSample4');

@@ -193,7 +193,9 @@
 		   AND A.FARM_AMNNO = #{farmAmnno}
 		   AND A.NA_BZPLC = #{naBzplc}
 		   AND A.DEL_YN = '0'
+		<if test="naBzplcno != null and naBzplcno != ''">
 		   AND B.NA_BZPLCNO = #{naBzplcno}
+		</if>
 	</select>
 	
 	<!-- 방문자 이력 저장 -->

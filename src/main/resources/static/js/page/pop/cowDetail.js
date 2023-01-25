@@ -32,32 +32,6 @@
 				form.action = "/cowDetailFull"+params.join("&");
 				//form.target=target;
 				form.submit();
-				//$.ajax({
-				//	url: '/info/getIndvInfo',
-				//	data: param,
-				//	type: 'POST',
-				//	dataType: 'json',
-				//	success : function(result) {
-				//		if(result.success){			    		    
-				//    		$("form[name='frmDetail'] input[name='title']").val(title);
-				//    		$("form[name='frmDetail'] input[name='sraIndvAmnno']").val(indvNo);			
-				//			var temp = window.location.search.split("&");
-				//			var params = temp.filter(function(el) {return el != "type=0" && el != "type=1"});
-				//			var target = 'cowDetailFull';
-				//			window.open('',target, 'width=600, height=800, toolbar=no, menubar=no, scrollbars=no, resizable=yes');
-				//			var form = document.frmDetail;
-				//			form.action = "/cowDetailFull"+params.join("&");
-				//			form.target=target;
-				//			form.submit();
-				//		}else{
-				//			modalAlert('',title+"개체의 정보가 없습니다.");
-				//		}
-				//	},
-				//	error: function(xhr, status, error) {
-				//	}
-				//});
-    		
-    		
     		}
 			
 			return;

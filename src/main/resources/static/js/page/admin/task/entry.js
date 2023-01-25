@@ -11,6 +11,10 @@
 		})();
 		
 		var addEvent = function(){
+//				$(document).on("click", ".inp", function() {
+//						$('.btn_input_reset').show();
+//					});	
+			
 			// tab 이동 이벤트
 			$(document).on("click", ".tab_list ul.tab_2 > li", function() {
 				var tabId = $(this).find('a.act').attr('data-tab-id');
@@ -25,12 +29,25 @@
 			// 중량/예정가 팝업 비고버튼 이벤트
 			$(document).on("click", ".winpop_reg .admin_new_reg .tag button", function(e){
 				let rmkCntn = $('textarea[name=rmkCntn]').val();
+				
 				let oriStr = rmkCntn.toString().trim();
 				let str = "";
-
+				
+				console.log($(this).text());
+				
 				str = oriStr + (oriStr != '' && oriStr != null ? "," + $(this).text() : $(this).text());
 				
+				
+				if(rmkCntn.includes( $(this).text() )){
+					let bok = $(this).text()
+					str = str.replace(','+bok,'');
+					// return false;
+				}
+				
 				inputValidation(oriStr, str, e);
+				
+				
+				
 			});
 			// 초기화 이벤트
 			$(document).on("click", ".admin_new_reg .btn_input_reset", function(e){
@@ -53,11 +70,59 @@
 				}
 			});
 			
+
+			// 정보 조회
+			$(document).on(clickEvent, ".btn_cow_search", function() {
+				
+				const regExp = /^[0-9]*$/;
+				const aucPrgSq = $("input[name='aucPrgSq2']").val();
+				
+				if(!regExp.test(aucPrgSq)){
+					modalAlert("", '숫자만 입력해 주세요.');
+					return false;
+				}
+				
+				if(aucPrgSq ==null || aucPrgSq == '0'){
+					modalAlert("", '경매번호를 입력해주세요.');
+					return
+				}
+				$("form[name='frm_cow']").find("input[name='oslpNo']").val(aucPrgSq);
+				$("form[name='frm_cow']").find("input[name='aucPrgSq']").val('');
+				
+				
+				$.ajax({
+					url: '/office/task/cowInfo',
+					data: JSON.stringify($("form[name='frm_cow']").serializeObject()),
+					type: 'POST',
+					dataType: 'json',
+					beforeSend: function (xhr) {
+						xhr.setRequestHeader("Accept", "application/json");
+						xhr.setRequestHeader("Content-Type", "application/json");
+					}
+				}).done(function (body) {
+					var success = body.success;
+					var message = body.message;
+					if (!success) {
+						modalAlert("", message, fnReset);
+					}
+					else {
+						fnLWLayerPop(body.params,body.cowInfo);
+					}
+				});
+			});
+
+		// 입력 초기화
+		var fnReset = function() {
+			$("form[name='frm_cow']").find("input, select").val("");
+			$("form[name='frm_cow']").find("select").not("select[name='selStsDsc']").prop("disabled", true);
+			$("select").selectric("refresh");
+		}
+			
 			// 검색어 지우기
 			$(".btn_input_reset").on("click", function(e) {
 				$("input[name='searchTxt']").val("");
 				$("form[name='frm']").attr("action", "/office/task/entry").submit();
-			});-
+			});
 			
 			// 리스트 선택
 			$(document).on("dblclick", ".list_body > ul > li", function(e){
@@ -373,6 +438,7 @@
 			$(".list_body > ul").find("li#" + aucPrgSq).addClass("act");
 		};
 		
+		// 중량/예정가 등록 수정 팝업창
 		var fnLWLayerPop = function(params,cowInfo) {
 			var title = '예정가/중량등록';
 		
@@ -415,11 +481,17 @@
 			sHtml.push('							<tbody>                                                                                                                         ');
 			sHtml.push('								<tr>                                                                                                                        ');
 			sHtml.push('									<th>경매번호</th>                                                                                                       ');
-			sHtml.push('									<td class="bg-lilac">'+ cowInfo.AUC_PRG_SQ +'</td>                                                                                             ');
+			sHtml.push('										<td class="input-td">');
+			sHtml.push('											<ul class="num_scr">');
+			sHtml.push('												<li><input type="text" name="aucPrgSq2" class="required onlyNumber" id="aucPrgSq2" alt="경매번호" maxlength="4" pattern="\d*" inputmode="numeric" value="'+ cowInfo.AUC_PRG_SQ +'" /></li>'); 
+			sHtml.push('												<li><a href="javascript:;" class="btn_cow_search">조회</a></li>');
+			sHtml.push('											</ul>');
+			sHtml.push('										</td>');
+//			sHtml.push('									<td class="bg-lilac">'+ cowInfo.AUC_PRG_SQ +'</td>                                                                                             ');
 			sHtml.push('								</tr>                                                                                                                       ');
 			sHtml.push('								<tr>                                                                                                                        ');
 			sHtml.push('									<th>귀표번호</th>                                                                                                       ');
-			sHtml.push('									<td class="bg-lilac">'+ cowInfo.SRA_INDV_AMNNO_FORMAT +'</td>                                                                                          ');
+			sHtml.push('									<td class="bg-lilac">'+ cowInfo.SRA_INDV_AMNNO_FORMAT_FULL +'</td>                                                                                          ');
 			sHtml.push('								</tr>                                                                                                                       ');
 			sHtml.push('								<tr>                                                                                                                        ');
 			sHtml.push('									<th>어미/성별</th>                                                                                                      ');
@@ -429,7 +501,7 @@
 			sHtml.push('									<th>중량(Kg)</th>                                                                                                       ');
 			sHtml.push('									<td>                                                                                                                    ');
 			sHtml.push('										<div class="inp">                                                                                                   ');
-			sHtml.push('											<input type="text" name="cowSogWt" class="pd5 required onlyNumber" value="' + ((cowInfo.COW_SOG_WT == null || cowInfo.COW_SOG_WT == 0) ? "" : cowInfo.COW_SOG_WT) + '" maxlength="4" pattern="\d*" inputmode="numeric" />');
+			sHtml.push('											<input type="text" name="cowSogWt" class="pd5 required onlyNumber" value="' + ((cowInfo.COW_SOG_WT == null || cowInfo.COW_SOG_WT == '') ? "0" : cowInfo.COW_SOG_WT) + '" maxlength="4" pattern="\d*" inputmode="numeric" />');
 			sHtml.push('											<button type="button" class="btn_input_reset"></button>                                                         ');
 			sHtml.push('										</div>                                                                                                              ');
 			sHtml.push('									</td>                                                                                                                   ');
@@ -709,6 +781,10 @@
 				return;
 			}
 			
+			console.log("str" + str)
+			console.log("oriStr" + oriStr)
+			
+						
 			if (str.length > 30) {
 				modalAlert("","30자 이상 등록할 수 없습니다.");
 				return;

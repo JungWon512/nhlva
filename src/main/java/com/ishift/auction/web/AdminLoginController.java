@@ -1,5 +1,6 @@
 package com.ishift.auction.web;
 
+import java.io.IOException;
 import java.security.KeyFactory;
 import java.security.KeyPair;
 import java.security.KeyPairGenerator;
@@ -8,6 +9,7 @@ import java.security.PrivateKey;
 import java.security.PublicKey;
 import java.security.spec.InvalidKeySpecException;
 import java.security.spec.RSAPublicKeySpec;
+import java.sql.SQLException;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -24,6 +26,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.ui.ModelMap;
+import org.springframework.util.ObjectUtils;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -147,11 +150,6 @@ public class AdminLoginController {
 			AdminUserDetails adminUserDetails = (AdminUserDetails)authentication.getPrincipal();
 			
 			if (adminUserDetails != null) {
-//				JwtTokenVo jwtTokenVo = JwtTokenVo.builder()
-//						.userMemNum(adminUserDetails.getUsrid())
-//						.auctionHouseCode(adminUserDetails.getNaBzplc())
-//						.userRole(Constants.UserRole.ADMIN)
-//						.build();
 				AdminJwtTokenVo jwtTokenVo = AdminJwtTokenVo.builder()
 													.userMemNum(adminUserDetails.getUsername())
 													.auctionHouseCode(adminUserDetails.getNaBzplc())
@@ -191,6 +189,140 @@ public class AdminLoginController {
 		result.put("error", false);
 		
 		return result;
+	}
+	
+	/**
+	 * 대시보드 로그인 페이지
+	 * @param map
+	 * @return
+	 */
+	@GetMapping("/dashboard/user/login")
+	public ModelAndView dashboardUserLogin(@RequestParam final Map<String,Object> map
+			,@Value("${cript.key}")String iv
+			,@Value("${cript.iv}")String key
+			) {
+		ModelAndView mav = new ModelAndView("dashboard/user/login");
+		try {
+			mav.addAllObjects(map);
+			//RSA 키 생성
+			KeyPairGenerator generator = KeyPairGenerator.getInstance("RSA");
+			generator.initialize(2048);
+			KeyPair keyPair = generator.generateKeyPair();
+			KeyFactory keyFactory = KeyFactory.getInstance("RSA");
+			
+			PublicKey publicKey   = keyPair.getPublic();
+			PrivateKey privateKey = keyPair.getPrivate();
+			
+			RSAPublicKeySpec publicSpec = (RSAPublicKeySpec)keyFactory.getKeySpec(publicKey, RSAPublicKeySpec.class);
+			
+			String publicKeyModulus  = publicSpec.getModulus().toString(16);
+			String publicKeyExponent = publicSpec.getPublicExponent().toString(16);
+			
+			mav.addObject("RSAKey", new String(rsaCriptoConfig.byteArrayToHex(privateKey.getEncoded())));
+			mav.addObject("RSAModulus", publicKeyModulus);
+			mav.addObject("RSAExponent", publicKeyExponent);
+			mav.addObject("key", key);
+			mav.addObject("iv", iv);
+		}catch (RuntimeException re) {
+			log.error("AdminLoginController.adminUserLogin : {} ",re);
+		} catch (NoSuchAlgorithmException nsae) {
+			log.error("AdminLoginController.adminUserLogin : {} ",nsae);
+		} catch (InvalidKeySpecException ikse) {
+			log.error("AdminLoginController.adminUserLogin : {} ",ikse);
+		}
+		return mav;
+	}
+	
+	/**
+	 * 관리자 로그인 프로세스 - 로그인 인증을 AdminUserAuthenticationProvider에 위임
+	 * @param request
+	 * @param response
+	 * @param params
+	 * @param model
+	 * @return
+	 * @throws Exception
+	 */
+	@ResponseBody
+	@PostMapping(value="/dashboard/user/loginProc", produces = MediaType.APPLICATION_JSON_VALUE)
+	public Map<String, Object> dashboardUserLoginProc(HttpServletRequest request
+			, HttpServletResponse response
+			, @RequestBody final Map<String,Object> params
+			, ModelMap model) throws Exception {
+		
+		final Map<String, Object> result = new HashMap<String, Object>();
+		String token = "";
+		
+		try {
+			String usrid = params.getOrDefault("usrid", "").toString();
+			String pw = params.getOrDefault("pw", "").toString();
+			PrivateKey privateKey = rsaCriptoConfig.StringToPrivateKey(params.getOrDefault("rsaKey","").toString());
+			String decUsrId = rsaCriptoConfig.decryptRsa(privateKey, usrid);
+			String decPw = rsaCriptoConfig.decryptRsa(privateKey, pw);
+			Authentication authentication = authenticationManager.authenticate(new AdminUserAuthenticationToken(decUsrId, decPw, null));
+			
+			SecurityContextHolder.getContext().setAuthentication(authentication);
+			
+			AdminUserDetails adminUserDetails = (AdminUserDetails)authentication.getPrincipal();
+			
+			if (adminUserDetails != null) {
+				AdminJwtTokenVo jwtTokenVo = AdminJwtTokenVo.builder()
+															.userMemNum(adminUserDetails.getUsername())
+															.auctionHouseCode(adminUserDetails.getNaBzplc())
+															.userRole(Constants.UserRole.ADMIN)
+															.userId(adminUserDetails.getUsername())
+															.password(passwordEncoder.encode(adminUserDetails.getUsername()))
+															.eno(adminUserDetails.getEno())
+															.userCusName(adminUserDetails.getUsrnm())
+															.na_bzplc(adminUserDetails.getNaBzplc())
+															.security("security")
+															.na_bzplnm(adminUserDetails.getNaBzplNm())
+															.grp_c(adminUserDetails.getGrpC())
+															.build();
+				
+				token = jwtTokenUtil.generateToken(jwtTokenVo, Constants.JwtConstants.ACCESS_TOKEN);
+				final Cookie cookie = cookieUtil.createCookie(Constants.JwtConstants.ACCESS_TOKEN, token);
+				response.addCookie(cookie);
+				result.put("info", jwtTokenVo);
+				result.put("returnUrl", "/dashboard/main");
+			}
+			else {
+				result.put("message", "입력하신 정보가 없습니다.");
+				result.put("error", true);
+				return result;
+			}
+			
+		}catch (RuntimeException re) {
+			log.error("AdminLoginController.dashboardUserLoginProc : {} ", re);
+			result.put("message", re.getMessage());
+			result.put("error", true);
+			return result;
+		}
+		
+		response.setHeader(HttpHeaders.AUTHORIZATION, Constants.JwtConstants.BEARER + token);
+		result.put(Constants.JwtConstants.ACCESS_TOKEN, token);
+		result.put("message", "성공");
+		result.put("error", false);
+		
+		return result;
+	}
+	
+	/**
+	 * 로그아웃 프로세스
+	 * @param request
+	 * @param response
+	 * @return
+	 * @throws SQLException 
+	 */
+	@GetMapping(path = "/dashboard/user/logoutProc")
+	public void logoutProc(HttpServletRequest request
+						 , HttpServletResponse response) throws IOException {
+		try {
+			response.addCookie(cookieUtil.deleteCookie(request, Constants.JwtConstants.ACCESS_TOKEN));
+			response.sendRedirect("/dashboard/main");
+		}
+		catch (RuntimeException re) {
+			log.error("logoutProc : {} ", re);
+		}
 	}
 
 	/**

@@ -51,7 +51,7 @@
 					</li>
 				</c:if>
 				<c:forEach items="${bidList }" var="item" varStatus ="st">
-					<li>
+					<li style="<c:if test="${ item.SEL_STS_DSC_NAME eq '-' }">background-color:#fbfbb0; </c:if>">
 						<dl>
 							<dd class="date">${ item.AUC_DT_STR }</dd>
 							<dd class="num">${ item.AUC_PRG_SQ }</dd>

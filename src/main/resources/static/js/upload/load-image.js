@@ -100,7 +100,6 @@
    * @returns {HTMLImageElement|FileReader|Promise<Result>} Object
    */
   function loadImage(file, callback, options) {
-	console.log("loadImage");
     /**
      * Promise executor
      *

@@ -554,5 +554,13 @@ public interface AuctionService {
 	 * @throws SQLException
 	 */
 	Map<String, Object> myAuthNumIssue(Map<String, Object> params) throws SQLException;
+
+	/**
+	 * 이용해지 해당조합 조회
+	 * @param params
+	 * @return
+	 * @throws SQLException
+	 */
+	List<Map<String, Object>> selectJohqpList(Map<String, Object> map) throws SQLException;
 	
 }

@@ -49,7 +49,18 @@
 				<!--<div class="bg_yotube">
 					<iframe width="100%" height="100%" src="https://www.youtube.com/embed/kTHYB632Uws?autoplay=1" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
 				</div>-->
-				<div class="">
+				<div class="seeBox_bottom vidioSlide" style="max-height:59vh;">
+					<div class="seeBox_slick">
+						<ul class="slider">									
+							<c:forEach begin="1" end="${(johapData.KKO_SVC_CNT eq '' or johapData.KKO_SVC_CNT == null) ? '0' : johapData.KKO_SVC_CNT}" varStatus="st">
+								<li class="video_item" style="/* width: 100%; *//* height: auto; */">
+									<video id="remoteVideo1" style="/* width: 100%; */height: 73vh;background: black;" poster="/static/images/assets/no_video_18980.png" muted="muted" autoplay="" playsinline="" webkit-playsinline="">
+										Your browser does not support HTML5 video.
+									</video>
+								</li>
+							</c:forEach>
+						</ul>
+					</div> 
 				</div>
 			</td>
 			<td>

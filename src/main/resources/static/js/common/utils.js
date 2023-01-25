@@ -1,9 +1,9 @@
 var sFlag=false;
 // 페이지 이동 함수
 var pageMove = function(uri, chkSearch, addParam) {
-	
 	var temp = !chkSearch ? window.location.search.split("&") : [];
-	var params = temp.filter(function(el) {return el != "type=0" && el != "type=1"});
+	var params = temp.filter(function(el) {return el != "type=0" && el != "type=1" && el.startsWith("?place=")});
+	
 	if(addParam != undefined){
 		params.push(addParam);
 	}
@@ -124,6 +124,13 @@ var logoutProc = function() {
 				, function(){
 					pageMove('/user/logoutProc', false, 'connChannel=' + connChannel() + '&token=' + token);
 				});
+	return;
+};
+
+var dashboardProc = function(uri, bzPlcLoc) {
+	// 20230118 대시보드 하단 버튼 전국으로 고정
+//	pageMove(uri, true, '?searchPlace=' + bzPlcLoc);
+	pageMove(uri);
 	return;
 };
 
@@ -380,11 +387,11 @@ function modalBzInfo(){
 	sHtml += ' 			<dd>안병우</dd> ';
 	sHtml += ' 		</dl> ';
 	sHtml += ' 		<dl> ';
-	sHtml += ' 			<dt>•  주소</dt> ';
+	sHtml += ' 			<dt>•  주소지</dt> ';
 	sHtml += ' 			<dd>서울특별시 중구 새문안로 16, 8층 (충청로 1가, 농협중앙회 본관)</dd> ';
 	sHtml += ' 		</dl> ';
 	sHtml += ' 		<dl> ';
-	sHtml += ' 			<dt>•  사업자번호</dt> ';
+	sHtml += ' 			<dt>•  사업자</dt> ';
 	sHtml += ' 			<dd>845-85-00512</dd> ';
 	sHtml += ' 		</dl> ';
 	sHtml += ' 		<div class="btn_area"> ';
@@ -459,24 +466,18 @@ var nameEnc = function(name,encStr){
 var addCalendarEvent = function(target) {
 	if (!target) target = $(".calendar");
 	
-	$(target).datepicker({
-		dateFormat: 'yy-mm-dd' //Input Display Format 변경
-		,showOtherMonths: true //빈 공간에 현재월의 앞뒤월의 날짜를 표시
-		,showMonthAfterYear:true //년도 먼저 나오고, 뒤에 월 표시
-		,changeYear: true //콤보박스에서 년 선택 가능
-		,changeMonth: true //콤보박스에서 월 선택 가능                
-//		,showOn: "both" //button:버튼을 표시하고,버튼을 눌러야만 달력 표시 ^ both:버튼을 표시하고,버튼을 누르거나 input을 클릭하면 달력 표시  
-//		,buttonImage: "http://jqueryui.com/resources/demos/datepicker/images/calendar.gif" //버튼 이미지 경로
-//		,buttonImageOnly: false //기본 버튼의 회색 부분을 없애고, 이미지만 보이게 함
-//		,buttonText: "선택" //버튼에 마우스 갖다 댔을 때 표시되는 텍스트                
-		,yearSuffix: "년" //달력의 년도 부분 뒤에 붙는 텍스트
-		,monthNamesShort: ['1','2','3','4','5','6','7','8','9','10','11','12'] //달력의 월 부분 텍스트
-		,monthNames: ['1월','2월','3월','4월','5월','6월','7월','8월','9월','10월','11월','12월'] //달력의 월 부분 Tooltip 텍스트
-		,dayNamesMin: ['일','월','화','수','목','금','토'] //달력의 요일 부분 텍스트
-		,dayNames: ['일요일','월요일','화요일','수요일','목요일','금요일','토요일'] //달력의 요일 부분 Tooltip 텍스트
-		,minDate: "-20Y" //최소 선택일자(-1D:하루전, -1M:한달전, -1Y:일년전)
-		,maxDate: "+10Y" //최대 선택일자(+1D:하루후, -1M:한달후, -1Y:일년후) 
-	});
+	$.datepicker.setDefaults({
+        dateFormat: 'yymmdd',
+        prevText: '이전 달',
+        nextText: '다음 달',
+        monthNames: ['1월', '2월', '3월', '4월', '5월', '6월', '7월', '8월', '9월', '10월', '11월', '12월'],
+        monthNamesShort: ['1월', '2월', '3월', '4월', '5월', '6월', '7월', '8월', '9월', '10월', '11월', '12월'],
+        dayNames: ['일', '월', '화', '수', '목', '금', '토'],
+        dayNamesShort: ['일', '월', '화', '수', '목', '금', '토'],
+        dayNamesMin: ['일', '월', '화', '수', '목', '금', '토'],
+        showMonthAfterYear: true,
+        yearSuffix: '년'
+    });
 	$(target).prop("readonly", true);
 };
 
@@ -708,7 +709,6 @@ var connChannel = function(){
 		debugConsole(e);
 	}
 };
-
 
 var findGetParameter = function(paramName) {
     var result = null,

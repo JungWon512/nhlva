@@ -165,4 +165,14 @@ public class LoginDAO {
 	public int updateKkoRefreshToekn(Map<String, Object> params) throws SQLException {
 		return mainDao.update("LoginMapper.updateKkoRefreshToekn", params);		
 	}
+	
+	/**
+	 * 알람톡 템플릿 조회 
+	 * @param params
+	 * @return
+	 * @throws SQLException
+	 */
+	public Map<String, Object> selectAlarmTemplate(Map<String, Object> params) throws SQLException{
+		return mainDao.selectOne("LoginMapper.selectAlarmTemplate", params);
+	}
 }

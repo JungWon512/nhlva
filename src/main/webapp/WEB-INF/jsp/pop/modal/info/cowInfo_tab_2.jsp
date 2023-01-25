@@ -34,9 +34,7 @@
 		</tbody>
 	</table>
 </div>
-<div style="margin:20px 0;padding: 70px 0;background-color: #fff;text-align: center;font-weight: 700;">
-	<canvas id="epdChart" style="width:100%;height: 320px">
-	</canvas>
+<div id="epdChartDiv" style="margin:20px 0;padding: 70px 0;background-color: #fff;text-align: center;font-weight: 700;">
 </div>
 <div class="info">
 	육종가코드 :<br>
@@ -53,9 +51,10 @@
 <script type="text/javascript">
 var chart;
 $(document).ready(function(){ 
-	
+	$('#epdChartDiv').empty();
+	$('#epdChartDiv').append('<canvas id="epdChart" style="width:100%;height: 320px"></canvas>');
 	//차트 생성
-    ctx = $("#epdChart");
+    ctx = $("div#epdChartDiv #epdChart");
     //ctx.height(340);
     //var labels = ["냉도체중", "배최장근단면적", "등지방두께","근내지방도"];
     var labels = [];

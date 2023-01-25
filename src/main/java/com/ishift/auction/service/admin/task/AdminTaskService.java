@@ -1,5 +1,7 @@
 package com.ishift.auction.service.admin.task;
 
+import java.security.KeyManagementException;
+import java.security.NoSuchAlgorithmException;
 import java.sql.SQLException;
 import java.util.List;
 import java.util.Map;
@@ -113,8 +115,10 @@ public interface AdminTaskService {
 	 * @param params
 	 * @return
 	 * @throws SQLException 
+	 * @throws KeyManagementException 
+	 * @throws NoSuchAlgorithmException 
 	 */
-	Map<String, Object> uploadImageProc(Map<String, Object> params) throws SQLException;
+	Map<String, Object> uploadImageProc(Map<String, Object> params) throws SQLException, NoSuchAlgorithmException, KeyManagementException;
 
 	/**
 	 * 출장우 이미지 리스트

@@ -270,7 +270,11 @@
 			}
 			data.data.forEach(function(item,i){
 				var sHtml = [];							
-				sHtml.push("<li><dl>");
+				if (item.SEL_STS_DSC_NAME == '-') {
+					sHtml.push("<li><dl>");					
+				} else{
+					sHtml.push("<li style='background-color:#fbfbb0;'><dl>");					
+				}
 				sHtml.push(" <dd class='date'>"+getStringValue(item.AUC_DT_STR)+"</dd>");	
 				sHtml.push(" <dd class='num'>"+getStringValue(item.AUC_PRG_SQ)+"</dd>");	
 				sHtml.push(" <dd class='pd_ea textNumber'>"+getStringValue(item.SRA_INDV_AMNNO_FORMAT)+"</dd>");	
@@ -314,6 +318,7 @@
 			sHtml.push('		</dl>');
 			sHtml.push('	</dl>');
 			sHtml.push('	<div class="btns">');
+			sHtml.push('	<p style="color:red; font-size:18px; margin-bottom: 10px;">*최근 6개월 내 정산서만 검색 가능합니다.</p>');
 			sHtml.push('	<button type="button" id="johap" class="btn_johap_flag '+ (params.searchFlag == 'johap' ? "act" : "") +'">'+ data.johapData.AREANM +'축협</button>');
 			sHtml.push('	<button type="button" id="all" class="btn_johap_flag '+ (params.searchFlag == 'all' ? "act" : "") +'">전체축협</button>');
 			sHtml.push('</div>');
@@ -369,6 +374,13 @@
 	var setChart =  function(bidList) {
 		var doughChart;
 		var barChart;
+		
+		// 차트 초기화
+		$('div.doughnut div.graph').empty();
+    	$('div.doughnut div.graph').append('<canvas id="myDoughnutsample2"></canvas><span class="total"></span>');
+    	
+    	$('div.barChart').empty();
+    	$('div.barChart').append('<canvas id="myChartSample3"></canvas>');
 		
 		//도넛 차트 생성
 	    const ctx = $("#myDoughnutsample2");
@@ -557,14 +569,14 @@
 			$("ul.cowCnt span.cow2").html((data.cowBidCnt.length > 0 && data.cowBidCnt[2] ? data.cowBidCnt[2].TOT_COW_CNT : 0) + "두");
 			$("ul.cowCnt span.cow3").html((data.cowBidCnt.length > 0 && data.cowBidCnt[3] ? data.cowBidCnt[3].TOT_COW_CNT : 0) + "두");
 			
-			// 축종별 응찰현황
-			$("div.graph span.total").html("전체 <br>" + (data.cowBidCnt.length > 0 ? data.cowBidCnt[0].TOT_COW_CNT : 0) + "건");
-			
 			// 나의 응찰 현황
 			setDataBidTable(data.cowBidCntList, data.myJohapData);
 			
 			// 차트
 			setChart(data.cowBidPercent);
+			
+			// 축종별 응찰현황
+			$("div.graph span.total").html("전체 <br>" + (data.cowBidCnt.length > 0 ? data.cowBidCnt[0].TOT_COW_CNT : 0) + "건");
 		});
 	}
 	

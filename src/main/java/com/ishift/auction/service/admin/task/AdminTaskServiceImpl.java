@@ -5,6 +5,11 @@ import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
+import java.security.KeyManagementException;
+import java.security.NoSuchAlgorithmException;
+import java.security.SecureRandom;
+import java.security.cert.CertificateException;
+import java.security.cert.X509Certificate;
 import java.sql.SQLException;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -13,8 +18,14 @@ import java.util.Map;
 import java.util.UUID;
 
 import javax.imageio.ImageIO;
+import javax.net.ssl.HostnameVerifier;
+import javax.net.ssl.SSLContext;
+import javax.net.ssl.SSLSession;
+import javax.net.ssl.TrustManager;
+import javax.net.ssl.X509TrustManager;
 
 import org.apache.commons.codec.binary.Base64;
+import org.apache.http.conn.ssl.SSLConnectionSocketFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.MediaType;
@@ -23,10 +34,13 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.Base64Utils;
 import org.springframework.util.ObjectUtils;
 
+import com.amazonaws.ClientConfiguration;
 import com.amazonaws.SdkClientException;
 import com.amazonaws.auth.AWSStaticCredentialsProvider;
 import com.amazonaws.auth.BasicAWSCredentials;
 import com.amazonaws.client.builder.AwsClientBuilder;
+import com.amazonaws.http.apache.client.impl.SdkHttpClient;
+import com.amazonaws.http.conn.ssl.SdkTLSSocketFactory;
 import com.amazonaws.services.s3.AmazonS3;
 import com.amazonaws.services.s3.AmazonS3ClientBuilder;
 import com.amazonaws.services.s3.model.AccessControlList;
@@ -372,13 +386,43 @@ public class AdminTaskServiceImpl implements AdminTaskService {
 	 * @throws SQLException 
 	 */
 	@Override
-	public Map<String, Object> uploadImageProc(Map<String, Object> params) throws SQLException {
+	public Map<String, Object> uploadImageProc(Map<String, Object> params) throws SQLException, NoSuchAlgorithmException, KeyManagementException {
 		final Map<String, Object> result = new HashMap<String, Object>();
 		
+		HostnameVerifier hv = new HostnameVerifier() {
+			@Override
+			public boolean verify(String arg0, SSLSession arg1) {
+				return true;
+			}
+		};
+		TrustManager[] trustAllCerts = new TrustManager[] {
+			new X509TrustManager() {
+				@Override
+				public X509Certificate[] getAcceptedIssuers() {
+					return null;
+				}
+				@Override
+				public void checkServerTrusted(X509Certificate[] arg0, String arg1) throws CertificateException {return;}
+				
+				@Override
+				public void checkClientTrusted(X509Certificate[] arg0, String arg1) throws CertificateException {return;}
+			}
+		};
+		
+		SSLContext sc = SSLContext.getInstance("SSL");
+		sc.init(null, trustAllCerts, new SecureRandom());
+		SSLConnectionSocketFactory sslsf = new SdkTLSSocketFactory(sc, hv);
+
+		ClientConfiguration cc = new ClientConfiguration();
+		cc.getApacheHttpClientConfig().setSslSocketFactory(sslsf);
+		cc.setSignerOverride("AWSS3V4SignerType");
+
 		// S3 client
 		final AmazonS3 s3 = AmazonS3ClientBuilder.standard()
 												 .withEndpointConfiguration(new AwsClientBuilder.EndpointConfiguration(endPoint, regionName))
 												 .withCredentials(new AWSStaticCredentialsProvider(new BasicAWSCredentials(accessKey, secretKey)))
+												 .withPathStyleAccessEnabled(true)
+												 .withClientConfiguration(cc)
 												 .build();
 		
 		// ACL 설정 : 파일마다 읽기 권한을 설정

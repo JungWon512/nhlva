@@ -101,6 +101,10 @@
         <put-attribute name="content" value="/WEB-INF/jsp/front/{1}/{2}.jsp"/>
         <put-attribute name="page_footer_script" value="/static/js/page/{1}/{2}.js" />
     </definition> 
+    <definition name="dashboard/*" extends="front-layout">
+        <put-attribute name="content" value="/WEB-INF/jsp/dashboard/{1}.jsp"/>
+        <put-attribute name="page_footer_script" value="/static/js/page/dashboard/{1}.js" />
+    </definition> 
     <definition name="admin/auction/board/*" extends="board-layout">
         <put-attribute name="content" value="/WEB-INF/jsp/admin/auction/board/{1}.jsp"/>
         <put-attribute name="page_footer_script" value="/static/js/page/admin/auction/board/{1}.js" />
@@ -120,6 +124,10 @@
     <definition name="admin/user/*" extends="admin-login-layout">
         <put-attribute name="content" value="/WEB-INF/jsp/admin/user/{1}.jsp"/>
         <put-attribute name="page_footer_script" value="/static/js/page/admin/user/{1}.js" />
+    </definition>
+    <definition name="dashboard/user/*" extends="admin-login-layout">
+        <put-attribute name="content" value="/WEB-INF/jsp/dashboard/user/{1}.jsp"/>
+        <put-attribute name="page_footer_script" value="/static/js/page/dashboard/user/{1}.js" />
     </definition>
     <definition name="admin/*/*" extends="admin-layout">
         <put-attribute name="content" value="/WEB-INF/jsp/admin/{1}/{2}.jsp"/>

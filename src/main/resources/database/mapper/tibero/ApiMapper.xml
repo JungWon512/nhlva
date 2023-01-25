@@ -101,9 +101,6 @@
 		</if>
 		<if test="aucYn != null and aucYn != ''">
 		   AND A.AUC_YN = #{aucYn}
-<!-- 			AND A.LOWS_SBID_LMT_AM <![CDATA[>]]> 0 -->
-<!-- 			AND A.SEL_STS_DSC != '22' -->
-<!-- 			AND A.DEL_YN = '0' -->
 		</if>
 		<if test="ddlQcn != null and ddlQcn != ''">
 		   AND A.SEL_STS_DSC <![CDATA[<>]]> '22'
@@ -137,7 +134,6 @@
 			<choose>
 			<when test="aucYn != null and aucYn != ''">
 				CASE WHEN #{aucYn} = '1' THEN '11' ELSE SEL_STS_DSC END AS SEL_STS_DSC,
-<!-- 				CASE WHEN A.LOWS_SBID_LMT_AM <![CDATA[>]]> 0 AND A.SEL_STS_DSC != '22' AND A.DEL_YN = '0' THEN '11' ELSE SEL_STS_DSC END AS SEL_STS_DSC, -->
 			</when>
 			<otherwise>
 				A.SEL_STS_DSC,                   <!-- 판매상태구분코드  -->
@@ -265,9 +261,6 @@
 			</if>
 			<if test="aucYn != null and aucYn != ''">
 			   AND A.AUC_YN = #{aucYn}
-<!-- 				AND A.LOWS_SBID_LMT_AM <![CDATA[>]]> 0 -->
-<!-- 				AND A.SEL_STS_DSC != '22' -->
-<!-- 				AND A.DEL_YN = '0' -->
 			</if>
 			<if test="ddlQcn != null and ddlQcn != ''">
 			   AND A.SEL_STS_DSC <![CDATA[<>]]> '22'
@@ -601,7 +594,8 @@
 			FEE_CHK_YN_FEE,
 			SELFEE_CHK_YN_FEE,
 			DNA_YN,
-			PDA_ID
+			PDA_ID,
+			CHG_RMK_CNTN
 		) SELECT
 			A.NA_BZPLC,
 			A.AUC_OBJ_DSC,
@@ -670,12 +664,13 @@
 			A.FEE_CHK_YN_FEE,
 			A.SELFEE_CHK_YN_FEE,
 			A.DNA_YN,
-			#{pdaId}
-		FROM
-			TB_LA_IS_MH_SOG_COW A
+			#{pdaId},
+			#{chgPgid} || '['||TO_CHAR(SYSDATE,'YYYY-MM-DD HH24:MI:SS')||']'||#{chgRmkCntn}
+		FROM TB_LA_IS_MH_SOG_COW A
 		WHERE A.AUC_DT = #{aucDt}
 		AND NA_BZPLC = #{naBzPlc} 
 		AND AUC_OBJ_DSC = #{aucObjDsc}
+		AND NVL(A.DDL_QCN, '0') = #{maxDdlQcn} + 1
 		<choose>
 			<when test='"Y".equals(soldChkYn)'>
 				AND A.SEL_STS_DSC <![CDATA[=]]> #{selStsDsc}
@@ -701,8 +696,8 @@
 			 , A.SEL_STS_DSC									/* 경매결과 */
 			 , A.TRPCS_PY_YN 									/* 운송비지급여부 */
 			 , A.PPGCOW_FEE_DSC									/* 번식우수수료구분코드 1.임신우, 2.비임신우, 3.임신우+송아지, 4.비임신우+송아지,  5.해당없음 */
-			 , NVL(B.MACO_YN,0) as TRMN_MACO_YN					/* 중도매인 조합원여부 */
-			 , NVL(C.MACO_YN,0) as FHS_MACO_YN					/* 출하주 중도매인여부 */
+			 , NVL(B.MACO_YN, '0') as TRMN_MACO_YN				/* 중도매인 조합원여부 */
+			 , NVL(C.MACO_YN, '0') as FHS_MACO_YN				/* 출하주 중도매인여부 */
 			 , NVL(REGEXP_REPLACE(A.COW_SOG_WT, '[^0-9]'), 0) AS COW_SOG_WT		/* 중량 */
 			 , A.FEE_CHK_YN										/* 출하자 수수료 기적용 여부 */
 			 , A.FEE_CHK_YN_FEE									/* 출하자 수수료 기적용 금액 */
@@ -713,12 +708,14 @@
 			 , A.DNA_YN											/* 친자일치 검사 여부 */
 			 , A.DNA_YN_CHK										/* 친자일차 여부 */
 			 , A.PRNY_YN										/* 임신여부 */
-			 , A.PRNY_JUG_YN									/* 임신감정여부 */
-			 , A.NCSS_JUG_YN									/* 괴사감정여부 */
+			 , NVL(A.PRNY_JUG_YN, '0') AS PRNY_JUG_YN			/* 임신감정여부 */
+			 , NVL(A.NCSS_JUG_YN, '0') AS NCSS_JUG_YN			/* 괴사감정여부 */
 			 , A.NCSS_YN										/* 괴사여부 */
-			 , A.RMHN_YN										/* 제각여부 */
+			 , NVL(A.RMHN_YN, '0') AS RMHN_YN					/* 제각여부 */
 			 , NVL(A.BLOOD_AM,'0') BLOOD_AM						/* 송아지 혈통 수수료 */
 			 , C.SRA_FED_SPY_YN									/* 사료미사용 여부 */
+			 , C.FTSNM											/* 출하주명 */
+			 , C.CUS_MPNO										/* 휴대전화번호 */
 		  FROM TB_LA_IS_MH_SOG_COW A
 		  LEFT OUTER JOIN TB_LA_IS_MM_MWMN B
 		    ON ( A.NA_BZPLC = B.NA_BZPLC AND A.TRMN_AMNNO = B.TRMN_AMNNO )
@@ -839,10 +836,13 @@
 			 , NVL(D.MACO_YN,0) AS TRMN_MACO_YN 				/* 중도매인 조합원여부 */
 			 , A.FHS_ID_NO										/* 농가식별번호 */
 			 , A.FARM_AMNNO										/* 농가관린번호 */
-			 , C.TRMN_AMNNO										/* 날찰예정 중도매인번호 */
-			 , C.ATDR_AM										/* 낙찰예정가 */
-			 , C.LVST_AUC_PTC_MN_NO								/* 낙찰예정 참가번호 */
+			 , NVL(C.TRMN_AMNNO, '0') AS TRMN_AMNNO				/* 날찰예정 중도매인번호 */
+			 , NVL(C.ATDR_AM, 0) AS ATDR_AM										/* 낙찰예정가 */
+			 , NVL(C.LVST_AUC_PTC_MN_NO, '0') AS LVST_AUC_PTC_MN_NO		/* 낙찰예정 참가번호 */
 			 , C.ATDR_DTM										/* 최종응찰일시 */
+			 , CASE WHEN NVL(C.ATDR_AM, 0) <![CDATA[<>]]> 0 THEN '22'
+					ELSE '23'
+				END AS SEL_STS_DSC								/* 경매 상태코드 */
 			 , NVL(REGEXP_REPLACE(A.COW_SOG_WT, '[^0-9]'), 0) AS COW_SOG_WT /* 중량 */
 			 , A.FEE_CHK_YN										/* 출하자 수수료 기적용 여부 */
 			 , A.FEE_CHK_YN_FEE									/* 출하자 수수료 기적용 금액 */
@@ -853,12 +853,14 @@
 			 , A.DNA_YN											/* 친자일치 검사 여부 */
 			 , A.DNA_YN_CHK										/* 친자일차 여부 */
 			 , A.PRNY_YN										/* 임신여부 */
-			 , A.PRNY_JUG_YN									/* 임신감정여부 */
-			 , A.NCSS_JUG_YN									/* 괴사감정여부 */
+			 , NVL(A.PRNY_JUG_YN, '0') AS PRNY_JUG_YN			/* 임신감정여부 */
+			 , NVL(A.NCSS_JUG_YN, '0') AS NCSS_JUG_YN			/* 괴사감정여부 */
 			 , A.NCSS_YN										/* 괴사여부 */
-			 , A.RMHN_YN										/* 제각여부 */
-			 , A.BLOOD_AM										/* 송아지 혈통 수수료 */
+			 , NVL(A.RMHN_YN, '0') AS RMHN_YN					/* 제각여부 */
+			 , NVL(A.BLOOD_AM,'0') BLOOD_AM						/* 송아지 혈통 수수료 */
 			 , B.SRA_FED_SPY_YN									/* 사료미사용 여부 */
+			 , B.FTSNM											/* 출하주명 */
+			 , B.CUS_MPNO										/* 휴대전화번호 */
 		  FROM TB_LA_IS_MH_SOG_COW A
 		  LEFT OUTER JOIN TB_LA_IS_MM_FHS B
 			ON (
@@ -866,7 +868,7 @@
 				AND A.FHS_ID_NO = B.FHS_ID_NO
 				AND A.FARM_AMNNO = B.FARM_AMNNO
 			 )
-		  INNER JOIN (
+		  LEFT OUTER JOIN (
 				SELECT RANK() OVER(PARTITION BY NA_BZPLC, AUC_OBJ_DSC, OSLP_NO ORDER BY ATDR_AM DESC, ATDR_DTM ASC) AS ATDR_RANK
 					 , B.*
 				  FROM (
@@ -1056,10 +1058,18 @@
 			 , B.CUT_AM
 			 , B.SGNO_PRC_DSC
 			 , B.MALE_KG
-			 , B.FEMALE_KG 
+			 , B.FEMALE_KG
+			 , C.NA_BZPLNM
+			 , C.BRC AS ADJ_BRC
+			 , C.TELNO
+			 , D.SBID_SMS_YN
 		  FROM TB_LA_IS_MM_ENV_EST A
 		  LEFT OUTER JOIN TB_LA_IS_MH_AUC_QCN B
-		    ON ( A.NA_BZPLC = B.NA_BZPLC )
+			ON ( A.NA_BZPLC = B.NA_BZPLC )
+		  LEFT OUTER JOIN TB_LA_IS_MM_WMC C
+			ON ( A.NA_BZPLC = C.NA_BZPLC )
+		  LEFT OUTER JOIN TB_LA_IS_BM_BZLOC D
+			ON ( A.NA_BZPLC = D.NA_BZPLC )
 		 WHERE A.NA_BZPLC = #{naBzplc}
 		   AND B.AUC_DT = #{aucDt}
 		   <choose>

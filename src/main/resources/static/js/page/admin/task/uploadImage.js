@@ -280,7 +280,7 @@
 			init: function () {
 				addBtnEvent();
 				addImage();
-//				new Promise(addImage).then(makeThumbnailImage);
+				//new Promise(addImage).then(makeThumbnailImage);
 			}
 		};
 	}();
