@@ -7,8 +7,10 @@ $(function() {
 		var param = {
 				"place" : $("input#place").val(),
 				"type" : '0',
-				"userName" : $("input#name").val(),
-				"birthDate" : (birthyear.substr(2,2))+birthday,
+				"userName" : '홍길동',
+				"birthDate" : '711101',
+//				"userName" : $("input#name").val(),
+//				"birthDate" : (birthyear.substr(2,2))+birthday,
 				"connChannel" : connChannel()
 			
 		}
