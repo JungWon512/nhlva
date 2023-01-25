@@ -136,7 +136,13 @@ public class LoginController {
 					cookieUtil.createCookie("nhlva_k_r_token", rToken);
 				}
 				String tokenData= httpUtils.callApiKakaoTokenInfo("GET", aToken);
+				JSONObject token = JsonUtils.getJsonObjectFromString(tokenData);
+				JSONObject accountInfo = (JSONObject) token.get("kakao_account");
 				mav.addObject("tokenData", tokenData);
+
+				mav.addObject("birthyear", accountInfo.get("birthyear"));
+				mav.addObject("birthday", accountInfo.get("birthday"));
+				mav.addObject("name", accountInfo.get("name"));
 				mav.addObject("kkoAccessToken", aToken);
 			}
 		}
