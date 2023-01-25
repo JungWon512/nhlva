@@ -210,7 +210,7 @@
 	    var __COMPONENT_NAME = "LOGIN";
     	namespace[__COMPONENT_NAME] = Login;
 		if($('input[name=kkoLoginResult]').val()){
-				modalAlert('', $('input[name=kkoLoginResultMsg]').val());
+			modalAlert('', $('input[name=kkoLoginResultMsg]').val());
 		}
 	});
 })(window, window.jQuery);
@@ -220,7 +220,8 @@ function loginWithKakao() {
 	url+='&redirect_uri='+kko_redirect_url;
 	url+='&response_type=code';
 	url+='&state='+location.search.substr(1);
-	window.open(url, '카카오 로그인', 'width=800, height=700, toolbar=no, menubar=no, scrollbars=no, resizable=yes' );
+	location.href=url;
+	//window.open(url, '카카오 로그인', 'width=800, height=700, toolbar=no, menubar=no, scrollbars=no, resizable=yes' );
 //    Kakao.Auth.authorize({
 //      state : location.search.substr(1)
 //      ,throughTalk : true

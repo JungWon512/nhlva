@@ -11,6 +11,8 @@ import com.ishift.auction.util.PasswordEncoding;
 
 import java.io.IOException;
 import java.sql.SQLException;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -93,16 +95,22 @@ public class LoginController {
 							, @Value("${kko.login.redirect.url}") String kkoRedirectUrl
 	) throws Exception {
 		ModelAndView mav = new ModelAndView();
-		mav.setViewName("front/user/oauth");
+		//mav.setViewName("front/user/oauth");
 		
 		String code = (String)params.getOrDefault("code","");
 		String state = (String)params.getOrDefault("state","");
+		String tokenData ="";
+		String aToken = "";
+		String rToken = "";
 		
 		String kakaoRefreshToken = cookieUtil.getCookieValue(request, "nhlva_k_r_token");
 		String url = "/oauth/token";
 		String tempParm = "&grant_type=authorization_code&code="+code+"&redirect_uri="+kkoRedirectUrl;
 		String apiResult="";
 		JSONObject json=null;
+		
+
+		mav.setViewName("redirect:/user/login?"+state);
 		if(!StringUtils.isEmpty(kakaoRefreshToken)) {
 			tempParm="&grant_type=refresh_token&refresh_token="+kakaoRefreshToken;		
 			apiResult = httpUtils.callApiKauth("POST", "client_id="+kkoClientIdApp+tempParm);
@@ -112,16 +120,14 @@ public class LoginController {
 					apiResult = httpUtils.callApiKauth( "POST", "client_id="+kkoClientIdApp+"&grant_type=authorization_code&redirect_uri="+kkoRedirectUrl+"&code="+code);
 					json = JsonUtils.getJsonObjectFromString(apiResult);
 					
-					String aToken = (String) json.get("access_token");
-					String rToken = (String) json.get("refresh_token");
+					aToken = (String) json.get("access_token");
+					rToken = (String) json.get("refresh_token");
 					log.info("KAKAO ACCESS : TOKEN : "+aToken);
 					log.info("KAKAO REFRESH : TOKEN : "+rToken);
 					if(!StringUtils.isEmpty(rToken)) {
 						cookieUtil.createCookie("nhlva_k_r_token", rToken);
 					}
-					String tokenData= httpUtils.callApiKakaoTokenInfo("GET", aToken);
-					mav.addObject("tokenData", tokenData);
-					mav.addObject("kkoAccessToken", aToken);
+					tokenData= httpUtils.callApiKakaoTokenInfo("GET", aToken);
 				}
 			}
 		}else{
@@ -129,22 +135,14 @@ public class LoginController {
 			if(apiResult != null) {
 				json = JsonUtils.getJsonObjectFromString(apiResult);
 				
-				String aToken = (String) json.get("access_token");
-				String rToken = (String) json.get("refresh_token");
+				aToken = (String) json.get("access_token");
+				rToken = (String) json.get("refresh_token");
 				log.info("KAKAO ACCESS : TOKEN : "+aToken);
 				log.info("KAKAO REFRESH : TOKEN : "+rToken);
 				if(!StringUtils.isEmpty(rToken)) {
 					cookieUtil.createCookie("nhlva_k_r_token", rToken);
 				}
-				String tokenData= httpUtils.callApiKakaoTokenInfo("GET", aToken);
-				JSONObject token = JsonUtils.getJsonObjectFromString(tokenData);
-				JSONObject accountInfo = (JSONObject) token.get("kakao_account");
-				mav.addObject("tokenData", tokenData);
-
-				mav.addObject("birthyear", accountInfo.get("birthyear"));
-				mav.addObject("birthday", accountInfo.get("birthday"));
-				mav.addObject("name", accountInfo.get("name"));
-				mav.addObject("kkoAccessToken", aToken);
+				tokenData= httpUtils.callApiKakaoTokenInfo("GET", aToken);
 			}
 		}
 		String place="";
@@ -157,11 +155,37 @@ public class LoginController {
 				break;
 			}
 		}
-		mav.addObject("inputParam", params);
-		mav.addObject("place", place);
-		
-		mav.setViewName("front/user/oauth");
-		//mav.setViewName("redirect:/user/login?"+state);
+		//mav.addObject("inputParam", params);
+		//mav.addObject("place", place);
+		String message ="";
+		if(tokenData != null) {
+			JSONObject token = JsonUtils.getJsonObjectFromString(tokenData);
+			JSONObject accountInfo = (JSONObject) token.get("kakao_account");
+
+			if(accountInfo != null) {
+				//params.put("birthDate", "711101");
+				//params.put("userName", "홍길동");
+				DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyyMMdd HHmmss");
+				String year = accountInfo.getOrDefault("birthyear","9999").toString();
+				String birthday = accountInfo.getOrDefault("birthday","1231").toString();
+				LocalDateTime date = LocalDateTime.parse(year+birthday+" 000000", formatter);
+				String resultBirth = date.format(DateTimeFormatter.ofPattern("yyMMdd"));
+				params.put("userName", accountInfo.get("name"));
+				params.put("birthDate", resultBirth);
+				params.put("place", place);
+				params.put("type", "0");
+				Map<String, Object> result = this.loginProc(request, response, params, model);
+				if((boolean) result.get("success")) {
+					mav.addObject("loginResult",result);
+					mav.setViewName("redirect:/main?"+state);
+				}
+				message = (String) result.get("message");				
+			}
+			request.getSession().setAttribute("kkoLoginResult", false);
+			request.getSession().setAttribute("kkoLoginResultMsg", message);
+			mav.setViewName("redirect:/user/login?"+state);
+			return mav;
+		}
 		return mav;
 	}	
 	

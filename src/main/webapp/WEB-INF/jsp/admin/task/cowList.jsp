@@ -101,7 +101,7 @@
 									  data-birth="${item.BIRTH_MONTH}"
 									  data-kpn-no="${item.KPN_NO}"
 									  data-birth="${item.BIRTH}"
-									  data-indv-sex-c="${item.INDV_SEX_C}"
+									  data-indv-sex-c="${item.INDV_SEX_C_NAME}"
 									  data-mcow-dsc="${item.MCOW_DSC}"
 									  data-mcow-sra-indv-amnno="${item.MCOW_SRA_INDV_AMNNO}"
 									  data-matime="${item.MATIME}"
