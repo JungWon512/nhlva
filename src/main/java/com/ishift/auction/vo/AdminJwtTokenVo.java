@@ -16,7 +16,6 @@ public class AdminJwtTokenVo {
 	private String userMemNum;
 	
 	// 회원 권한 - 응찰(BIDDER), 농가(FARM), 일반(NORMAL), 관리자(ADMIN)
-	// TODO :: enum 생성
 	private String userRole;
 
 	private String userId;

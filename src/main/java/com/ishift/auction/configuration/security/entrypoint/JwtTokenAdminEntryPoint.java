@@ -25,8 +25,9 @@ public class JwtTokenAdminEntryPoint implements AuthenticationEntryPoint {
 	 * 인증에 실패 할 경우 이동할 url을 호출 또는 에러메시지 호출 
 	 */
 	@Override
-	public void commence(HttpServletRequest request, HttpServletResponse response,
-			AuthenticationException authException) throws IOException, ServletException {
+	public void commence(HttpServletRequest request
+						, HttpServletResponse response
+						, AuthenticationException authException) throws IOException, ServletException {
 		log.error("Unauthorized Error : {}", authException.getMessage());
 		if (request.getRequestURI().startsWith("/api")
 		) {
@@ -50,6 +51,9 @@ public class JwtTokenAdminEntryPoint implements AuthenticationEntryPoint {
 			sb.append(HttpStatus.UNAUTHORIZED.value());
 			sb.append("\" , \"message\" : \"사용자 인증에 실패했습니다.\"}");
 			response.getWriter().println(sb.toString());
+		}
+		else if (request.getRequestURI().startsWith("/dashboard/status")) {
+			response.sendRedirect("/dashboard/user/login");
 		}
 		else {
 			response.sendRedirect("/office/user/login");

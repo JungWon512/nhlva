@@ -127,7 +127,6 @@
 						  FROM TB_LA_IS_MH_SOG_COW B
 						 WHERE B.NA_BZPLC = #{naBzplc}
 						   AND B.AUC_DT = #{aucDt}
-						   AND B.NA_BZPLC = A.NA_BZPLC
 						   AND B.FHS_ID_NO = A.FHS_ID_NO
 						   AND B.FARM_AMNNO = A.FARM_AMNNO
 			)
@@ -142,14 +141,6 @@
 			 , MAX(TO_CHAR(A.LSCHG_DTM, 'YYYYMMDDHH24MISS')) OVER(PARTITION BY NA_BZPLC) AS TIMESTAMP
 		  FROM TB_LA_IS_MM_MWMN A
 		 WHERE A.NA_BZPLC = #{naBzplc}
-		   AND EXISTS ( 
-						SELECT 1
-						  FROM TB_LA_IS_MH_AUC_ENTR B
-						 WHERE B.NA_BZPLC = #{naBzplc}
-						   AND B.AUC_DT = #{aucDt}
-						   AND B.NA_BZPLC = A.NA_BZPLC
-						   AND B.TRMN_AMNNO = A.TRMN_AMNNO
-			 )
 		<if test="chgDtm != null and chgDtm != ''">
 		   AND TO_CHAR(A.LSCHG_DTM, 'YYYYMMDDHH24MISS') > #{chgDtm}
 		</if>	

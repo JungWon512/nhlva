@@ -77,6 +77,7 @@ public class ApiController {
 
 	@Autowired
 	private AuthenticationManager authenticationManager;
+	
 	@Autowired
 	private PasswordEncoder passwordEncoder;
 	
@@ -137,7 +138,7 @@ public class ApiController {
 					info.put("version", version);
 					try {
 						Map<String, Object> resultMap = auctionService.updateAuctionResultMap(info);
-						if (resultMap != null && !(boolean)resultMap.getOrDefault("success", false)) {
+						if (resultMap != null && !(boolean)resultMap.get("success")) {
 							failList.add(resultMap);
 						}
 					}catch (RuntimeException re) {
@@ -209,7 +210,7 @@ public class ApiController {
 					info.put("version", version);
 					try {
 						Map<String, Object> resultMap = auctionService.updateAuctionResultMap(info);
-						if (resultMap != null && !(boolean)resultMap.getOrDefault("success", false)) {
+						if (resultMap != null && !(boolean)resultMap.get("success")) {
 							failList.add(resultMap);
 						}
 					}catch (RuntimeException re) {
@@ -973,6 +974,11 @@ public class ApiController {
 				result.put("message", "변경된 정보가 없습니다.");
 			}
 			int cnt = auctionService.updateLowSbidAmt(params);
+			
+			// TODO :: 하한가 변경시 알림톡 보내기
+			if (cnt > 0 ) {
+				
+			}
 
 			result.put("success", true);
 			result.put("data", cnt);

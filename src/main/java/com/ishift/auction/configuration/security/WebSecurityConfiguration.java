@@ -52,6 +52,7 @@ import java.util.Arrays;
 @Slf4j
 @Configuration
 @EnableWebSecurity
+@SuppressWarnings({"unused"})
 @EnableGlobalMethodSecurity(securedEnabled = true, prePostEnabled = true)
 public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
 
@@ -66,7 +67,7 @@ public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
 	
 	@Autowired
 	private FarmUserDetailsService farmUserDetailsService;
-
+	
 	/**
 	 * 정적 자원은 security 설정을 적용하지 않도록 추가
 	 */
@@ -132,6 +133,7 @@ public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
 					.antMatchers("/api/**")
 					.antMatchers("/daemon/api/**")
 					.antMatchers("/kiosk/api/**")
+					.antMatchers("/dashboard/status/**")
 			.and()
 				.csrf()
 					.requireCsrfProtectionMatcher(csrfRequestMatcher)
@@ -150,6 +152,7 @@ public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
 					.antMatchers("/daemon/api/**").hasRole(Constants.UserRole.ADMIN)
 					.antMatchers("/kiosk/api/**/login").permitAll()
 					.antMatchers("/kiosk/api/**").hasRole(Constants.UserRole.ADMIN)
+					.antMatchers("/dashboard/status/**").hasRole(Constants.UserRole.ADMIN)
 					.anyRequest().permitAll()
 			.and()
 				.exceptionHandling()
@@ -157,7 +160,8 @@ public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
 					.authenticationEntryPoint(jwtTokenAdminEntryPoint)
 			.and()
 				.formLogin()
-					.loginPage("/office/user/login").permitAll();
+					.loginPage("/office/user/login").permitAll()
+					.loginPage("/dashboard/user/login").permitAll();
 
 			http.addFilterBefore(jwtAdminAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
 			
@@ -185,7 +189,7 @@ public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
 		private JwtTokenEntryPoint jwtTokenEntryPoint;
 
 		@Override
-		protected void configure(HttpSecurity http) throws Exception {
+		protected void configure(HttpSecurity http) throws Exception { 
 			log.debug("##### BidderConfigurationAdapter.configure [s] #####");
 
 			RequestMatcher csrfRequestMatcher = new RequestMatcher() {
@@ -202,11 +206,6 @@ public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
 
 				@Override
 				public boolean matches(HttpServletRequest request) {
-					// If the request match one url the CSFR protection will be disabled
-		//			for (AntPathRequestMatcher rm : requestMatchers) {
-		//				if (rm.matches(request)) { return false; }
-		//			}
-		//			return true;
 					return false;
 				} // method matches
 
@@ -261,6 +260,7 @@ public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
 		auth.authenticationProvider(adminUserAuthenticationProvider)
 			.userDetailsService(adminUserDetailsService)
 			.passwordEncoder(passwordEncoder());
+		
 		// 중도매인
 		auth.userDetailsService(bidUserDetailsService).passwordEncoder(passwordEncoder());
 		// 농가

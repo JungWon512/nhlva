@@ -185,7 +185,7 @@
 				popHtml.push('		<input type="hidden" name="regType" value="I" />');
 			}else if(className =='status_change'){				
 				popHtml.push('		<input type="hidden" name="qcnAucObjDsc" value="" />');
-				popHtml.push('		<input type="hidden" name="regType" value="S" />');				
+				popHtml.push('		<input type="hidden" name="regType" value="S" />');
 			}
 			popHtml.push('		<input type="hidden" name="oslpNo" value="" />');
 			popHtml.push('		<input type="hidden" name="ledSqno" value="" />');
@@ -248,6 +248,12 @@
 				popHtml.push('							</select>');
 				popHtml.push('						</td>');
 				popHtml.push('					</tr>');
+				popHtml.push('					<tr style="display:none;">');
+				popHtml.push('						<th>임신감정/임신 여부</th>');
+				popHtml.push('						<td class="input-td">');
+				popHtml.push('							<input type="text" name="prnyJugYn" id="prnyJugYn" value="" alt="임신감정여부" readonly="readonly" />');
+				popHtml.push('							<input type="text" name="prnyYn" id="prnyYn" value="" alt="임신여부" readonly="readonly" />');
+				popHtml.push('						</td>');
 				popHtml.push('					<tr>');
 				popHtml.push('						<th>(송)<span>성별<br>개월</span></th>');
 				popHtml.push('						<td class="input-td">');
@@ -513,6 +519,9 @@
 				return (newArrRmkCntn.indexOf(element) === index && element != "")
 			});
 			rmkCntn.val(uniqueArr.join(","));
+			
+			$("#prnyYn").val((prnyMtcn > 0) ? "1" : "0");
+			$("#prnyJugYn").val(["1", "3"].includes(ppgcowFeeDsc) ? "1" : "0");
 		};
 		
 		// 저장

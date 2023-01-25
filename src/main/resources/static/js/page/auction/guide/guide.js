@@ -3,7 +3,7 @@ $(function() {
 
     var setLayout = function() {
 		if(window.location.search.indexOf('place') < 0){
-			if (window.location.search.indexOf("?dashYn=Y") < 0) {
+			if (window.location.search.indexOf("dashYn") < 0) {
 				$('.m_header a').hide();
 				$('.w_header .side_menu .notice').hide();
 				$('.w_header .side_menu .login').hide();

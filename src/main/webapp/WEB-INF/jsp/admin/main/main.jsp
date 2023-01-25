@@ -42,7 +42,7 @@
 				<span class="ico">
 					<img src="/static/images/guide/ico_admin_menu_04.svg" alt="">
 				</span>
-				유투브방송
+				유투브방송(L)
 			</a>
 		</li>
 		<li class="menu_item">
@@ -50,10 +50,10 @@
 				<span class="ico">
 					<img src="/static/images/guide/ico_admin_menu_04.svg" alt="">
 				</span>
-				유투브방송
+				유투브방송(R)
 			</a>
 		</li>
-		<li class="menu_item">
+		<li class="menu_item" style="display:none;">
 			<a href="javascript:pageMove('/office/auction/bidInfo');">
 				<span class="ico">
 					<img src="/static/images/guide/ico_admin_menu_04.svg" alt="">
@@ -61,7 +61,7 @@
 				낙찰정보
 			</a>
 		</li>
-		<li class="menu_item">
+		<li class="menu_item" style="display:none;">
 			<a href="javascript:pageMove('/office/auction/videoStream');">
 				<span class="ico">
 					<img src="/static/images/guide/ico_admin_menu_04.svg" alt="">

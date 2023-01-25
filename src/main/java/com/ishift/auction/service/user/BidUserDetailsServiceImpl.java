@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
+import org.springframework.util.ObjectUtils;
 
 import com.ishift.auction.service.login.LoginService;
 import com.ishift.auction.vo.BidUserDetails;
@@ -42,7 +43,7 @@ public class BidUserDetailsServiceImpl implements BidUserDetailsService {
 										 .sraMwmnnm(wholesaler.get("SRA_MWMNNM").toString())
 										 .trmnAmnno(Long.parseLong(wholesaler.get("TRMN_AMNNO").toString()))
 										 .place(wholesaler.get("NA_BZPLCNO").toString())
-										 .mbIntgNo(wholesaler.get("MB_INTG_NO").toString())
+										 .mbIntgNo(ObjectUtils.isEmpty(wholesaler.get("MB_INTG_NO")) ? "" : wholesaler.get("MB_INTG_NO").toString())
 										 .cusMpno(wholesaler.get("CUS_MPNO").toString())
 										 .build();
 			}

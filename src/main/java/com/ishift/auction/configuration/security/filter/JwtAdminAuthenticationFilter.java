@@ -70,7 +70,7 @@ public class JwtAdminAuthenticationFilter extends OncePerRequestFilter {
 					SecurityContextHolder.getContext().setAuthentication(auth);
 				}
 			}catch (RuntimeException re) {
-				log.error("Cannot set user authentication : {} ",re);			
+				log.error("Cannot set user authentication : {} ",re);
 			}
 		}
 		
@@ -86,7 +86,8 @@ public class JwtAdminAuthenticationFilter extends OncePerRequestFilter {
 		String uri = request.getRequestURI();
 		return uri.startsWith("/static/")
 			|| uri.startsWith("/office/user")
-			|| !(uri.startsWith("/office") || uri.startsWith("/api") || uri.startsWith("/daemon/api") || uri.startsWith("/kiosk/api"))
-			|| uri.endsWith("/login");
+			|| !(uri.startsWith("/office") || uri.startsWith("/api") || uri.startsWith("/daemon/api") || uri.startsWith("/kiosk/api") || uri.startsWith("/dashboard/main") || uri.startsWith("/dashboard/status"))
+			|| uri.endsWith("/login")
+			;
 	}
 }

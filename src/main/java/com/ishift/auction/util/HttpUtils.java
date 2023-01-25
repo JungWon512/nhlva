@@ -592,6 +592,7 @@ public class HttpUtils {
         try {
             //get 요청할 url을 적어주시면 됩니다. 형태를 위해 저는 그냥 아무거나 적은 겁니다.
             URL url = new URL("https://kapi.kakao.com/v2/user/me");
+            SSLVaildBypass();
             HttpURLConnection con = (HttpURLConnection) url.openConnection();
             con.setConnectTimeout(5000); //서버에 연결되는 Timeout 시간 설정
             con.setReadTimeout(5000); // InputStream 읽어 오는 Timeout 시간 설정

@@ -342,8 +342,6 @@ public class KioskApiServiceImpl implements KioskApiService {
 
 		String token = jwtTokenUtil.generateToken(jwtTokenVo, "");
 		
-		// TODO :: 인증번호 발송하기...
-		
 		rtnMap.put("status", HttpStatus.OK.value());
 		rtnMap.put("code", "C" + HttpStatus.OK.value());
 		rtnMap.put("message", "인증번호 발신 성공했습니다.");

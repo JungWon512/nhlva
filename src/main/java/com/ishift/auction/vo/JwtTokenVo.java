@@ -35,7 +35,6 @@ public class JwtTokenVo {
 	private String userMemNum;
 	
 	// 회원 권한 - 응찰(BIDDER), 농가(FARM), 일반(NORMAL), 관리자(ADMIN)
-	// TODO :: enum 생성
 	private String userRole;
 	
 	// 경매구분 - 큰소(C100), 일반송아지(C200), 현통송아지(C300), 기타(C400)

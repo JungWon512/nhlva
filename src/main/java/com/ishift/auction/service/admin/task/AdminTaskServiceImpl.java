@@ -19,13 +19,20 @@ import java.util.UUID;
 
 import javax.imageio.ImageIO;
 import javax.net.ssl.HostnameVerifier;
+import javax.net.ssl.KeyManager;
 import javax.net.ssl.SSLContext;
 import javax.net.ssl.SSLSession;
+import javax.net.ssl.SSLSocketFactory;
 import javax.net.ssl.TrustManager;
 import javax.net.ssl.X509TrustManager;
 
 import org.apache.commons.codec.binary.Base64;
+import org.apache.http.conn.ssl.DefaultHostnameVerifier;
+import org.apache.http.conn.ssl.NoopHostnameVerifier;
 import org.apache.http.conn.ssl.SSLConnectionSocketFactory;
+import org.apache.http.conn.ssl.TrustStrategy;
+import org.apache.http.ssl.SSLContexts;
+import org.checkerframework.checker.units.qual.s;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.MediaType;
@@ -388,6 +395,8 @@ public class AdminTaskServiceImpl implements AdminTaskService {
 	@Override
 	public Map<String, Object> uploadImageProc(Map<String, Object> params) throws SQLException, NoSuchAlgorithmException, KeyManagementException {
 		final Map<String, Object> result = new HashMap<String, Object>();
+
+//		TrustStrategy ts = ((chain, authType) -> true);
 		
 		HostnameVerifier hv = new HostnameVerifier() {
 			@Override
@@ -401,6 +410,7 @@ public class AdminTaskServiceImpl implements AdminTaskService {
 				public X509Certificate[] getAcceptedIssuers() {
 					return null;
 				}
+				
 				@Override
 				public void checkServerTrusted(X509Certificate[] arg0, String arg1) throws CertificateException {return;}
 				
@@ -409,20 +419,22 @@ public class AdminTaskServiceImpl implements AdminTaskService {
 			}
 		};
 		
-		SSLContext sc = SSLContext.getInstance("SSL");
-		sc.init(null, trustAllCerts, new SecureRandom());
-		SSLConnectionSocketFactory sslsf = new SdkTLSSocketFactory(sc, hv);
-
+		SSLContext sc = SSLContext.getInstance("TLSv1.2");
+		sc.init(new KeyManager[0], trustAllCerts, new SecureRandom());
+		
 		ClientConfiguration cc = new ClientConfiguration();
-		cc.getApacheHttpClientConfig().setSslSocketFactory(sslsf);
-		cc.setSignerOverride("AWSS3V4SignerType");
+		SSLConnectionSocketFactory ssf = new SSLConnectionSocketFactory(sc
+																		, new String[] {"TLSv1.2", "TLSv1.1", "TLSv1"}
+																		, new String[] {"TLS_RSA_WITH_AES_128_GCM_SHA256", "TLS_RSA_WITH_AES_128_CBC_SHA256"}
+																		, hv);
+		cc.getApacheHttpClientConfig().withSslSocketFactory(ssf);
+		
 
 		// S3 client
 		final AmazonS3 s3 = AmazonS3ClientBuilder.standard()
+												 .withClientConfiguration(cc)
 												 .withEndpointConfiguration(new AwsClientBuilder.EndpointConfiguration(endPoint, regionName))
 												 .withCredentials(new AWSStaticCredentialsProvider(new BasicAWSCredentials(accessKey, secretKey)))
-												 .withPathStyleAccessEnabled(true)
-												 .withClientConfiguration(cc)
 												 .build();
 		
 		// ACL 설정 : 파일마다 읽기 권한을 설정

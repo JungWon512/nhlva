@@ -57,7 +57,7 @@
 				</c:if>
 				<c:if test="${ params.regType ne 'AW' && params.regType ne 'AL' && params.regType ne 'AWL' }">
 				<li class="barcoad">
-					<p>바코드</p>
+<!-- 					<p>바코드</p> -->
 					<div class="barcoad_input">
 						<input type="text" name="searchTxt" maxlength="15" value="${params.searchTxt}" placeholder="바코드/경매번호" pattern="\d*" inputmode="numeric" />
 						<button type="button" class="btn_input_reset">X</button>

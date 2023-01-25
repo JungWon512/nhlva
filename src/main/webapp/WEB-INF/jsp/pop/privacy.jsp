@@ -5,13 +5,13 @@
 <div id="" class="modal-wrap terms open"
 	style="overflow: auto; display: block;">
 	<div class="modal-content">
-		<h3 style="margin: 0px 24px; font-weight: 700; font-size: 20px;">개인정보 처리방침</h3>
+		<h3 style=" font-weight: 700; font-size: 20px;">개인정보 처리방침</h3>
 		<br />
 		<button class="modal_popup_close right_70"
 			onclick="window.close();return false;">닫기</button>
 		<section class="contents">
 			<div class="termsBox mCustomScrollBox "
-				style="margin: 0px 24px; overflow: hidden auto; height: 700px; min-height: 70px; background: #f1f1f1; !important;">
+				style="overflow: hidden auto; height: 700px; min-height: 70px; background: #f1f1f1; !important;">
 				<p>
 					제1조 (개인정보의 처리 목적)<br/>
 개인정보를 다음의 목적을 위해 처리합니다. 처리한 개인정보는 다음의 목적 이외의 용도로는 사용되지 않으며 이용 목적이 변경될 시에는 사전 동의를 구할 예정입니다.<br/>

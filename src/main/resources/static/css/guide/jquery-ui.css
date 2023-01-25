@@ -1048,31 +1048,31 @@ a.ui-button:active,
 }
 .ui-icon,
 .ui-widget-content .ui-icon {
-	background-image: url("images/ui-icons_444444_256x240.png");
+	background-image: url("/static/images/guide/v2/ui-icons_444444_256x240.png");
 }
 .ui-widget-header .ui-icon {
-	background-image: url("images/ui-icons_444444_256x240.png");
+	background-image: url("/static/images/guide/v2/ui-icons_444444_256x240.png");
 }
 .ui-state-hover .ui-icon,
 .ui-state-focus .ui-icon,
 .ui-button:hover .ui-icon,
 .ui-button:focus .ui-icon {
-	background-image: url("images/ui-icons_555555_256x240.png");
+	background-image: url("/static/images/guide/v2/ui-icons_555555_256x240.png");
 }
 .ui-state-active .ui-icon,
 .ui-button:active .ui-icon {
-	background-image: url("images/ui-icons_ffffff_256x240.png");
+	background-image: url("/static/images/guide/v2/ui-icons_ffffff_256x240.png");
 }
 .ui-state-highlight .ui-icon,
 .ui-button .ui-state-highlight.ui-icon {
-	background-image: url("images/ui-icons_777620_256x240.png");
+	background-image: url("/static/images/guide/v2/ui-icons_777620_256x240.png");
 }
 .ui-state-error .ui-icon,
 .ui-state-error-text .ui-icon {
-	background-image: url("images/ui-icons_cc0000_256x240.png");
+	background-image: url("/static/images/guide/v2/ui-icons_cc0000_256x240.png");
 }
 .ui-button .ui-icon {
-	background-image: url("images/ui-icons_777777_256x240.png");
+	background-image: url("/static/images/guide/v2/ui-icons_777777_256x240.png");
 }
 
 /* positioning */
@@ -1403,13 +1403,13 @@ a.ui-button:active,
 .ui-datepicker-title{text-align:center;}
 .ui-datepicker select.ui-datepicker-month, .ui-datepicker select.ui-datepicker-year{width:inherit;border:0}
 .ui-datepicker select{background:0;}
-.ui-widget-header .ui-icon{background:none;width:30px;height:30px}
-.ui-datepicker .ui-datepicker-prev{background:url(../images/mypage/datep_prev.png)no-repeat center center;left:15%}
-.ui-datepicker .ui-datepicker-next{background:url(../images/mypage/datep_next.png)no-repeat center center;right:15%}
+/* .ui-widget-header .ui-icon{background:none;width:30px;height:30px} */
+.ui-datepicker .ui-datepicker-prev{/*background:url(../images/mypage/datep_prev.png)no-repeat center center;*/left:15%}
+.ui-datepicker .ui-datepicker-next{/*background:url(../images/mypage/datep_next.png)no-repeat center center;*/right:15%}
 .ui-datepicker th{color:#888}
 .ui-datepicker td:first-child a{color:#888}
 .ui-datepicker select.ui-datepicker-year:after{content:'';color:red;width:3px;height:3px;background:#000;}
 .ui-datepicker .ui-datepicker-prev, .ui-datepicker .ui-datepicker-next{top:0}
 .ui-datepicker select.ui-datepicker-month, .ui-datepicker select.ui-datepicker-year{font-size: 18px;color: #000;}
-.ui-datepicker .ui-datepicker-prev span, .ui-datepicker .ui-datepicker-next span{margin-left:-15px;margin-top:-15px;}
+/* .ui-datepicker .ui-datepicker-prev span, .ui-datepicker .ui-datepicker-next span{margin-left:-15px;margin-top:-15px;} */
 .ui-datepicker .ui-datepicker-header{padding:0;margin:25px 0;}

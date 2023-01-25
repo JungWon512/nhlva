@@ -6,13 +6,12 @@
 <div id="" class="modal-wrap terms open"
 	style="overflow: auto; display: block;">
 	<div class="modal-content">
-		<h3 style="margin: 0px 24px; font-weight: 700; font-size: 20px;">이용약관</h3>
+		<h3 style="font-weight: 700; font-size: 20px;">이용약관</h3>
 		<br />
 		<button class="modal_popup_close right_70"
 			onclick="window.close();return false;">닫기</button>
 		<section class="contents">
-			<div class="termsBox mCustomScrollBox "
-				style="margin: 0px 24px; overflow: hidden auto; height: 700px; min-height: 70px; background: #f1f1f1; !important;">
+			<div class="termsBox mCustomScrollBox "style=" overflow: hidden auto; height: 700px; min-height: 70px; background: #f1f1f1; !important;">
 				<p>
 					제1조 (정의)<br /> &nbsp;&nbsp;1. “개설자”라 함은 「축산법」 제34조에 의거 가축시장을 개설한
 					축산업협동조합을(이하 “조합”이라 한다) 말한다.<br /> &nbsp;&nbsp;2. “가축거래”라 함은 가축의
@@ -74,10 +73,10 @@
 
 			</div>
 
-			<div class="terms_area">
-				<ul class="past-terms">
-					<li>2022.09.17 이용약관 <a href="javascript:pageMove('/agreement/220917');"  id="20220917" >[변경내용보기]</a></li>
-					<li>2021.06.20 이용약관 <a href="javascript:pageMove('/agreement/210620');"  id="20210620" >[변경내용보기]</a></li>
+			<div class=""style="margin-top: 15px; font-size: 18px; font-weight: 500; line-height: 1.2; letter-spacing: -0.8px; color: #007eff;">
+				<ul class="">
+					<li>2022.09.17 이용약관 <a href="javascript:pageMove('/agreement/220917');" id="20220917" style=" color: #007eff;">[변경내용보기]</a></li>
+					<li style="margin-top:5px;">2021.06.20 이용약관 <a href="javascript:pageMove('/agreement/210620');" id="20210620" style=" color: #007eff;">[변경내용보기]</a></li>
 				</ul>
 			</div>
 		</section>

@@ -73,8 +73,9 @@ public class DashboardController {
 		String before2Month = currMonth.minusMonths(2).format(DateTimeFormatter.ofPattern("yyyyMM"));
 		params.put("beforeMonth", beforeMonth);		//증감율 계산을 위한 전월
 		params.put("before2Month", before2Month);		//출장우 조회화면을 위한 전전월
-		params.put("beforeYear", String.valueOf(LocalDate.now().minusYears(1).getYear()));		//출장우 조회화면을 위한 전년도
-		params.put("searchYear", String.valueOf(LocalDate.now().getYear()));		//출장우 조회화면을 위한 이번년도
+		
+		params.put("beforeYear", currMonth.minusYears(1).format(DateTimeFormatter.ofPattern("yyyy")));
+		params.put("searchYear", currMonth.format(DateTimeFormatter.ofPattern("yyyy")));
 		params.put("searchMonTxt", searchMonth.substring(0, 4) + "년 "  + searchMonth.substring(4, 6) + "월");
 	}
 	

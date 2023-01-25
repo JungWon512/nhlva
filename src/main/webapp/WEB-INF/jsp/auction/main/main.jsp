@@ -25,7 +25,7 @@
 		</li>
 		<li>
 			<div class="btn2">	
-				<a href="javascript:location.href='/sales'+location.search;" class="auction_see">출장우</a>
+				<a href="javascript:location.href='/sales'+location.search;" class="auction_see">출장우 조회</a>
 				<a href="javascript:goWatchApp();" class="auction_see">경매 관전</a>
 			</div>
 		</li>

@@ -13,15 +13,15 @@
 					<c:forEach items="${ recentDateTopList }" var="vo" varStatus="i">
 						<li>
 							<dl class="union">
-								<dt><img src="/static/images/guide/v2/sample01.jpg" alt=""></dt>
+								<dt><img src="/static/images/guide/v2/sample_logo.jpg" alt=""></dt>
 								<dd class="name">${ vo.CLNTNM }</dd>
 								<fmt:formatNumber value="${vo.AMT}" type="number" var="AMT"/>
 								<c:choose>
 									<c:when test="${ vo.AMT > 0}">
-										<dd class="change fc-blue">+${empty AMT ? '0' : AMT} 원</dd>
+										<dd class="change fc-red">+${empty AMT ? '0' : AMT} 원</dd>
 									</c:when>
 									<c:otherwise>
-										<dd class="change fc-red">${empty AMT ? '0' : AMT} 원</dd>
+										<dd class="change fc-blue">${empty AMT ? '0' : AMT} 원</dd>
 									</c:otherwise>
 								</c:choose>
 								<fmt:formatNumber value="${vo.SBID_AMT}" type="number" var="SBID_AMT"/>

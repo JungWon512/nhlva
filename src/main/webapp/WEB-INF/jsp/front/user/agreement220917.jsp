@@ -2,8 +2,8 @@
 <%@ include file="/WEB-INF/__system/taglibs.jsp" %>
 
 		<section class="contents" style="margin : 0px 40px;" >
-		<h3 style="margin: 0px 24px; font-weight:700;font-size: 20px;">이용약관 2022.09.17</h3><br/>
-		<div class="termsBox mCustomScrollBox " style="margin: 0px 24px; overflow: hidden auto ; height: 700px; min-height: 70px; background: #f1f1f1; !important;">
+		<h3 style=" font-weight:700;font-size: 20px;">이용약관 2022.09.17</h3><br/>
+		<div class="termsBox mCustomScrollBox " style="overflow: hidden auto ; height: 700px; min-height: 70px; background: #f1f1f1; !important;">
 	
 				<p>
 					220917
@@ -67,10 +67,10 @@
 
 			</div>
 
-			<div class="terms_area">
-				<ul class="past-terms">
-					<li>2022.09.17 이용약관 <a href="javascript:pageMove('/agreement/220917');"  id="20220917" >[변경내용보기]</a></li>
-					<li>2021.06.20 이용약관 <a href="javascript:pageMove('/agreement/210620');"  id="20210620" >[변경내용보기]</a></li>
+			<div class=""style="margin-top: 15px; font-size: 18px; font-weight: 500; line-height: 1.2; letter-spacing: -0.8px; color: #007eff;">
+				<ul class="">
+					<li>2022.09.17 이용약관 <a href="javascript:pageMove('/agreement/220917');" id="20220917" style=" color: #007eff;">[변경내용보기]</a></li>
+					<li style="margin-top:5px;">2021.06.20 이용약관 <a href="javascript:pageMove('/agreement/210620');" id="20210620" style=" color: #007eff;">[변경내용보기]</a></li>
 				</ul>
 			</div>
 		</section>
