@@ -1,7 +1,6 @@
 $(function() {   
 	$(document).ready(function () {
 		Kakao.Auth.setAccessToken($('#kakao_access_token').val(),true);
-		debugger;
 		var birthday = $("input#birthday").val()||'';
 		var birthyear = $("input#birthyear").val()||'';
 		var param = {
@@ -15,7 +14,8 @@ $(function() {
 			
 		}
 		console.log('popup : '+param);
-		opener.redirectKaKaoLogin(param);
+		//opener.redirectKaKaoLogin(param);
+		localStorage.setItem("kkoRedirectParam", JSON.stringify(param));
 		window.close();
 	});
 });

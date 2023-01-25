@@ -234,7 +234,7 @@ function redirectKaKaoLogin(param){
 	console.log(param);
 	var reg = /[\{\}\[\]\/?.,;:|\)*~`!^\-_+<>@\#$%&\\\=\(\'\"\s]/gi;
 	$.ajax({
-		url: '/user/loginProc',
+		url: '/user/kkologinProc',
 		data: JSON.stringify(param),
 		type: 'POST',
 		dataType: 'json',

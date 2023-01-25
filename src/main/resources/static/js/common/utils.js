@@ -720,3 +720,32 @@ var findGetParameter = function(paramName) {
     }
     return result;
 }
+
+window.addEventListener("storage", function(data){
+	console.log(data);
+	var param = data.newValue;
+	if(data.key =='kkoRedirectParam' && param){	
+		var reg = /[\{\}\[\]\/?.,;:|\)*~`!^\-_+<>@\#$%&\\\=\(\'\"\s]/gi;
+		$.ajax({
+			url: '/user/kkologinProc',
+			data: param ,
+			type: 'POST',
+			dataType: 'json',
+			beforeSend: function (xhr) {
+				xhr.setRequestHeader("Accept", "application/json");
+				xhr.setRequestHeader("Content-Type", "application/json");
+			}
+		}).done(function (body) {
+			localStorage.removeItem("kkoRedirectParam");
+			var success = body.success;
+			var message = body.message;
+			if (!success) {
+				modalAlert('', message);
+			}
+			else {
+				var uri = body.returnUrl == null ? '/main' : body.returnUrl;
+				window.auction.LOGIN.sendUserInfo(body.access_token, body.info, body.branchInfo, uri);
+			}
+		});		
+	}
+});
