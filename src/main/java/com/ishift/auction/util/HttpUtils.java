@@ -6,6 +6,7 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.io.UnsupportedEncodingException;
+import java.net.ConnectException;
 import java.net.HttpURLConnection;
 import java.net.SocketTimeoutException;
 import java.net.URL;
@@ -109,13 +110,20 @@ public class HttpUtils {
         Calendar calendar = Calendar.getInstance();
         Date calcDate = calendar.getTime();
 		StringBuffer sb = new StringBuffer();
-        Random r = new Random();
-        r.setSeed(new Date().getTime());     
+        Random r;
+        int rnNum = 0;
+		try {
+			r = SecureRandom.getInstance("SHA1PRNG");
+			r.setSeed(System.currentTimeMillis());
+			rnNum = r.nextInt(99999999);
+		} catch (NoSuchAlgorithmException e) {
+			log.error(e.getMessage());
+		}
 		sb.append("{");
 		sb.append("\"header\":{");
         sb.append("\"CSTX\":\"\\u0002\"");
         sb.append(",\"CTGRM_CD\":\"3100\"");
-		sb.append(",\"CTGRM_CHSNB\":\"00FD68_" + String.format("%08d", r.nextInt(99999999))+"\"");
+		sb.append(",\"CTGRM_CHSNB\":\"00FD68_" + String.format("%08d", rnNum)+"\"");
 		sb.append(",\"CCRT_DATE\":\""+new SimpleDateFormat("yyyyMMdd").format(calcDate)+"\"");
 		sb.append(",\"CCRT_TIME\":\""+new SimpleDateFormat("HHmmss").format(calcDate) +"\"");
 		sb.append(",\"CORG_CD\":\"NHAH\"");
@@ -290,8 +298,17 @@ public class HttpUtils {
         Calendar calendar = Calendar.getInstance();
         Date calcDate = calendar.getTime();
 		StringBuffer sb = new StringBuffer();
-        Random r = new Random();
-        r.setSeed(new Date().getTime());  
+        
+		Random r;
+		int rnNum = 0;
+        try {
+			r = SecureRandom.getInstance("SHA1PRNG");
+			r.setSeed(System.currentTimeMillis());
+			rnNum = r.nextInt(99999999);
+		} catch (NoSuchAlgorithmException e) {
+			log.error(e.getMessage());
+		}
+        
         String ctrnCd = "";
         if(ctgrmCd != null) {
         	ctrnCd="IFLM00"+ctgrmCd.substring(0,2);
@@ -330,7 +347,7 @@ public class HttpUtils {
 		sb.append("\"header\":{");
         sb.append("\"CSTX\":\"\\u0002\"");
         sb.append(",\"CTGRM_CD\":\""+ctgrmCd+"\"");
-		sb.append(",\"CTGRM_CHSNB\":\"00FD68_" + String.format("%08d", r.nextInt(99999999))+"\"");
+		sb.append(",\"CTGRM_CHSNB\":\"00FD68_" + String.format("%08d", rnNum)+"\"");
 		sb.append(",\"CCRT_DATE\":\""+new SimpleDateFormat("yyyyMMdd").format(calcDate)+"\"");
 		sb.append(",\"CCRT_TIME\":\""+new SimpleDateFormat("HHmmss").format(calcDate) +"\"");
 		sb.append(",\"CORG_CD\":\"NHAH\"");
@@ -477,6 +494,8 @@ public class HttpUtils {
 			if(json.length() > 0) {
 				return this.getMapFromJsonObject(json);
 			}
+		}catch(RuntimeException re) {
+			log.error(re.getMessage());
 		}catch (Exception e) {
 			log.debug("MCA 통신중 ERROR",e);
 		}
@@ -521,7 +540,11 @@ public class HttpUtils {
 		        nodeMap.put("moveList", moveList);
 		        nodeMap.put("vacnInfo", vacnMap);
 			}
-		}catch (Exception e) {
+		}catch(ConnectException ce) {
+        	log.error(ce.getMessage());
+        }catch(RuntimeException re) {
+        	log.error(re.getMessage());
+        }catch (Exception e) {
 			log.debug("OPEN API 통신중 ERROR",e);
 		}
 		return nodeMap;
@@ -529,10 +552,8 @@ public class HttpUtils {
 
     public String callApiKauth(String type,String jsonMessage) {
         try {
-            //get 요청할 url을 적어주시면 됩니다. 형태를 위해 저는 그냥 아무거나 적은 겁니다.
-//            URL url = new URL("https://kauth.kakao.com"+hostUrl);
             URL url = new URL("https://kauth.kakao.com/oauth/token");
-            
+            SSLVaildBypass();            
             HttpURLConnection con = (HttpURLConnection) url.openConnection();
             con.setConnectTimeout(5000); //서버에 연결되는 Timeout 시간 설정
             con.setReadTimeout(5000); // InputStream 읽어 오는 Timeout 시간 설정
@@ -575,7 +596,11 @@ public class HttpUtils {
             	
             }
 
-        } catch (Exception e) {
+        }catch(ConnectException ce) {
+        	log.error(ce.getMessage());
+        }catch(RuntimeException re) {
+        	log.error(re.getMessage());
+        }catch (Exception e) {
             System.out.println(e.toString());
         }
         return null;
@@ -614,7 +639,11 @@ public class HttpUtils {
                 System.out.println(con.getResponseMessage());
             }
 
-        } catch (Exception e) {
+        }catch(ConnectException ce) {
+        	log.error(ce.getMessage());
+        }catch(RuntimeException re) {
+        	log.error(re.getMessage());
+        }catch (Exception e) {
             System.err.println(e.toString());
         }
         return null;
@@ -677,7 +706,11 @@ public class HttpUtils {
 		        	}
 		        }	        	
 	        }	        
-		} catch (Exception e) {
+		}catch(ConnectException ce) {
+			nodeMap = null;
+        }catch(RuntimeException re) {
+        	nodeMap = null;
+        }catch (Exception e) {
         	nodeMap = null;
         } finally {
             if (conn!= null) conn.disconnect();

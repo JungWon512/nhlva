@@ -5,7 +5,7 @@
 <!--end::Container-->
 <div class="auction_list">
 	<form name="frm_select" action="" method="post">
-		<input type="hidden" name="place" value="${param.place}" />
+		<input type="hidden" name="place" value="<c:out value="${param.place}" />" />
 		<input type="hidden" name="naBzplc" value="" />
 		<input type="hidden" name="aucDt" value="" />
 		<input type="hidden" name="aucObjDsc" value="" />

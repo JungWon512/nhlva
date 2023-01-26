@@ -357,8 +357,14 @@ public class AdminTaskController extends CommonController {
 		try {
 			result = adminTaskService.searchIndvAmnno(params);
 		}
+		catch(SQLException se) {
+			log.error("SQLException::AdminTaskController.searchIndvAjax : {} ", se);
+			result.put("success", false);
+			result.put("message", "개체 정보 조회중 오류가 발생했습니다.<br/>관리자에게 문의하세요.");
+			return result;
+		}
 		catch (Exception e) {
-			e.printStackTrace();
+			log.error("Exception::AdminTaskController.searchIndvAjax : {} ", e);
 			result.put("success", false);
 			result.put("message", "개체 정보 조회중 오류가 발생했습니다.<br/>관리자에게 문의하세요.");
 			return result;
@@ -374,13 +380,19 @@ public class AdminTaskController extends CommonController {
 	 */
 	@ResponseBody
 	@PostMapping(value = "/office/task/checkAucDt")
-	public Map<String, Object> checkAucDt(@RequestBody final Map<String, Object> params) throws SQLException {
+	public Map<String, Object> checkAucDt(@RequestBody final Map<String, Object> params) {
 		Map<String, Object> result = new HashMap<String, Object>();
 		try {
 			result = adminTaskService.checkAucDt(params);
 		}
+		catch(SQLException se) {
+			log.error("SQLException::AdminTaskController.checkAucDt : {} ", se);
+			result.put("success", false);
+			result.put("message", "경매차수 조회중 오류가 발생했습니다.<br/>관리자에게 문의하세요.");
+			return result;
+		}
 		catch (Exception e) {
-			e.printStackTrace();
+			log.error("Exception::AdminTaskController.checkAucDt : {} ", e);
 			result.put("success", false);
 			result.put("message", "경매차수 조회중 오류가 발생했습니다.<br/>관리자에게 문의하세요.");
 			return result;
@@ -422,8 +434,14 @@ public class AdminTaskController extends CommonController {
 		try {
 			result = adminTaskService.registSogCow(params);
 		}
+		catch(SQLException se) {
+			log.error("SQLException::AdminTaskController.registCowAjax : {} ", se);
+			result.put("success", false);
+			result.put("message", "저장중 오류가 발생했습니다.<br/>관리자에게 문의하세요.");
+			return result;
+		}
 		catch (Exception e) {
-			e.printStackTrace();
+			log.error("Exception::AdminTaskController.registCowAjax : {} ", e);
 			result.put("success", false);
 			result.put("message", "저장중 오류가 발생했습니다.<br/>관리자에게 문의하세요.");
 			return result;
@@ -448,8 +466,14 @@ public class AdminTaskController extends CommonController {
 		try {
 			result = adminTaskService.searchSogCow(params);
 		}
+		catch(SQLException se) {
+			log.error("SQLException::AdminTaskController.searchSogCowAjax : {} ", se);
+			result.put("success", false);
+			result.put("message", "저장중 오류가 발생했습니다.<br/>관리자에게 문의하세요.");
+			return result;
+		}
 		catch (Exception e) {
-			e.printStackTrace();
+			log.error("Exception::AdminTaskController.searchSogCowAjax : {} ", e);
 			result.put("success", false);
 			result.put("message", "저장중 오류가 발생했습니다.<br/>관리자에게 문의하세요.");
 			return result;
@@ -470,8 +494,14 @@ public class AdminTaskController extends CommonController {
 		try {
 			result = adminTaskService.updateResult(params);
 		}
+		catch(SQLException se) {
+			log.error("SQLException::AdminTaskController.updateResultAjax : {} ", se);
+			result.put("success", false);
+			result.put("message", "저장중 오류가 발생했습니다.<br/>관리자에게 문의하세요.");
+			return result;
+		}
 		catch (Exception e) {
-			e.printStackTrace();
+			log.error("Exception::AdminTaskController.updateResultAjax : {} ", e);
 			result.put("success", false);
 			result.put("message", "저장중 오류가 발생했습니다.<br/>관리자에게 문의하세요.");
 			return result;

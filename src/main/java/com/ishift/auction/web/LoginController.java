@@ -337,6 +337,7 @@ public class LoginController {
 			if ((boolean)chkResult.getOrDefault("success", false)) {
 				final String token = chkResult.get("token").toString();
 				Cookie cookie = cookieUtil.createCookie(Constants.JwtConstants.ACCESS_TOKEN, token);
+				cookie.setSecure(true);
 				response.addCookie(cookie);
 				response.setHeader(HttpHeaders.AUTHORIZATION, Constants.JwtConstants.BEARER + token);
 				chkResult.put(Constants.JwtConstants.ACCESS_TOKEN, token);
@@ -394,7 +395,9 @@ public class LoginController {
 			params.put("inOutGb", "2");
 			loginService.insertLoginConnHistory(request, params);		//로그아웃 이력 남기기
 			
-			response.addCookie(cookieUtil.deleteCookie(request, Constants.JwtConstants.ACCESS_TOKEN));
+			Cookie cookie = cookieUtil.deleteCookie(request, Constants.JwtConstants.ACCESS_TOKEN);
+			cookie.setSecure(true);
+			response.addCookie(cookie);
 			response.sendRedirect("/home");
 			
 		} catch (RuntimeException | SQLException re) {

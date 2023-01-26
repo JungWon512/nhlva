@@ -313,8 +313,8 @@
 			sHtml.push('	<dl class="date_top">');
 			sHtml.push('		<dl>');
 			sHtml.push('			<dt>'+ data.title +'</dt>');
-			sHtml.push('			<dd id="prev" class="btn_chg btn_prev '+(flag == "prev" && monthDiff >= 4 ? 'disabled' : "")+'"><a href="javascript:;">이전</a></dd>');
-			sHtml.push('			<dd id="next" class="btn_chg btn_next '+(flag == "next" && monthDiff <= 1 ? 'disabled' : "")+'"><a href="javascript:;">다음</a></dd>');
+			sHtml.push('			<dd id="prev" class="btn_chg btn_prev '+((flag == undefined || flag == "prev") && monthDiff >= 4 ? 'disabled' : "")+'"><a href="javascript:;">이전</a></dd>');
+			sHtml.push('			<dd id="next" class="btn_chg btn_next '+((flag == undefined || flag == "next") && monthDiff <= 1 ? 'disabled' : "")+'"><a href="javascript:;">다음</a></dd>');
 			sHtml.push('		</dl>');
 			sHtml.push('	</dl>');
 			sHtml.push('	<div class="btns">');

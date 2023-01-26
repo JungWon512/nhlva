@@ -1010,7 +1010,13 @@ public class AuctionController extends CommonController {
         	String cgtrmCd = (String)param.get("cgtrmCd");
 	        //map.put("SRA_INDV_AMNNO", param.get("sraIndvAmnno"));
         	result.put("data", httpUtils.sendPostJson(param, cgtrmCd));
-		}catch (Exception se) {
+		}
+        catch (RuntimeException re) {
+        	log.debug("ApiController.getInfCowDetailFull : {} ",re);
+        	result.put("success", false);
+        	result.put("message", "작업중 에러가 발생하였습니다.");
+        }
+        catch (Exception se) {
 			log.debug("ApiController.getInfCowDetailFull : {} ",se);
 			result.put("success", false);
             result.put("message", "작업중 에러가 발생하였습니다.");

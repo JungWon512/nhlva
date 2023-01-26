@@ -29,8 +29,8 @@ import com.google.gson.Gson;
 public class RestApiJsonController {
 
 	private static Logger logger = LoggerFactory.getLogger(RestApiJsonController.class);
-	String ctrn_cd = "";// 거래코드
-	String responseBody = "";
+	//String ctrn_cd = "";// 거래코드
+	//String responseBody = "";
 
 	@Value("${mca.url}")
 	private String mcaUrl;
@@ -40,11 +40,11 @@ public class RestApiJsonController {
 
 	// 전문 보내고 받기
 	public Map<String, Object> mcaSendMsg(String ctgrm_cd, int io_all_yn, String ccls_cd, String data) throws Exception {
-		responseBody = "";
+		String responseBody = "";
 		// 보낸메시지
 		String sendMsg = setSendMsg(ctgrm_cd, io_all_yn, ccls_cd, data);
 		// 전문보내기
-		sendPostJson(sendMsg);
+		responseBody = sendPostJson(sendMsg);
 		// 받은메시지
 		String recvMsg = responseBody;
 		
@@ -87,7 +87,7 @@ public class RestApiJsonController {
 		if ("0210".equals(ccls_cd)) {
 			cspr_cd = "O";
 		}
-		setData(ctgrm_cd);
+		String ctrn_cd = setData(ctgrm_cd);
 
 		String ctgrm_chsnb = "";// 전문 추적번호
 		Calendar calendar = Calendar.getInstance();
@@ -172,8 +172,8 @@ public class RestApiJsonController {
 	}
 
 	// 전문전송
-	public boolean sendPostJson(String jsonValue) throws Exception {
-
+	public String sendPostJson(String jsonValue) throws Exception {
+		StringBuffer sb = new StringBuffer();
 		URL url = new URL(mcaUrl);
 		HttpURLConnection con = (HttpURLConnection) url.openConnection();
 
@@ -211,12 +211,12 @@ public class RestApiJsonController {
 //                con.disconnect();
 //                return doJson(new URL(location), param, json, charset);
 			} else {
-				StringBuffer sb = new StringBuffer();
+				
 				BufferedReader reader = new BufferedReader(new InputStreamReader(con.getInputStream(), "UTF-8"));
 				for (String line; (line = reader.readLine()) != null;) {
 					sb.append(line).append("\n");
 				}
-				responseBody = sb.toString();
+				//responseBody = sb.toString();
 			}
 
 			con.disconnect();
@@ -232,14 +232,16 @@ public class RestApiJsonController {
 				con.disconnect();
 		}
 
-		return result;
+		return sb.toString();
 	}
 	
 	// 전문유형코드별 설정
-	public void setData(String ctgrm_cd) {
+	public String setData(String ctgrm_cd) {
+		String ctrn_cd = "";
 		if(!StringUtils.isEmpty(ctgrm_cd)) {
 			ctrn_cd = "IFLM00" + ctgrm_cd.substring(0, 2);
 		}
+		return ctrn_cd;
 	}
 	
 	public String localResponse(String ctgrm_cd) {
@@ -248,7 +250,7 @@ public class RestApiJsonController {
 		try {
 			str = StringUtils.join(Files.readAllLines(Paths.get(fileResource)), "");
 		} catch (IOException e) {
-			e.printStackTrace();
+			logger.error("RestApiJsonController.localResponse : {} ", e);
 			return "";
 		}
 		return str;

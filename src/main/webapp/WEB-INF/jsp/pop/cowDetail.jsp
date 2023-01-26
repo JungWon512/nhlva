@@ -4,19 +4,19 @@
 <!--${data} -->
 <!--end::Container-->
 <form name="frm" action="" method="post">
-	<input type="hidden" name="place" value="${inputParam.place}" />
-	<input type="hidden" name="naBzplc" value="${inputParam.naBzplc}" />
-	<input type="hidden" name="aucDt" value="${inputParam.aucDt}" />
-	<input type="hidden" name="aucObjDsc" value="${inputParam.aucObjDsc}" />
-	<input type="hidden" name="sraIndvAmnno" value="${inputParam.sraIndvAmnno}" />
-	<input type="hidden" name="aucPrgSq" value="${inputParam.aucPrgSq}" />
-	<input type="hidden" name="oslpNo" value="${inputParam.oslpNo}" />
-	<input type="hidden" name="ledSqno" value="${inputParam.ledSqno}" />
-	<input type="hidden" name="bidPopYn" value="${inputParam.bidPopYn}" />
+	<input type="hidden" name="place" value="<c:out value="${inputParam.place}" />" />
+	<input type="hidden" name="naBzplc" value="<c:out value="${inputParam.naBzplc}" />" />
+	<input type="hidden" name="aucDt" value="<c:out value="${inputParam.aucDt}" />" />
+	<input type="hidden" name="aucObjDsc" value="<c:out value="${inputParam.aucObjDsc}" />" />
+	<input type="hidden" name="sraIndvAmnno" value="<c:out value="${inputParam.sraIndvAmnno}" />" />
+	<input type="hidden" name="aucPrgSq" value="<c:out value="${inputParam.aucPrgSq}" />" />
+	<input type="hidden" name="oslpNo" value="<c:out value="${inputParam.oslpNo}" />" />
+	<input type="hidden" name="ledSqno" value="<c:out value="${inputParam.ledSqno}" />" />
+	<input type="hidden" name="bidPopYn" value="<c:out value="${inputParam.bidPopYn}" />" />
 </form>
 <form name="frmDetail" action="" method="post">
-	<input type="hidden" name="place" value="${param.place}" />
-	<input type="hidden" name="naBzplc" value="${param.naBzplc}" />
+	<input type="hidden" name="place" value="<c:out value="${param.place}" />" />
+	<input type="hidden" name="naBzplc" value="<c:out value="${param.naBzplc}" />" />
 	<input type="hidden" name="sraIndvAmnno" value="" />
 	<input type="hidden" name="title" value="" />
 </form>

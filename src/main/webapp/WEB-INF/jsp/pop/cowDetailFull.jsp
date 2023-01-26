@@ -4,15 +4,15 @@
 <!--${data} -->
 <!--end::Container-->
 <form name="frm" action="" method="post">
-	<input type="hidden" name="place" value="${param.place}" />
-	<input type="hidden" name="naBzplc" value="${param.naBzplc}" />
-	<input type="hidden" name="aucDt" value="${param.aucDt}" />
-	<input type="hidden" name="aucObjDsc" value="${param.aucObjDsc}" />
-	<input type="hidden" name="sraIndvAmnno" value="${param.sraIndvAmnno}" />
-	<input type="hidden" name="aucPrgSq" value="${param.aucPrgSq}" />
-	<input type="hidden" name="oslpNo" value="${param.oslpNo}" />
-	<input type="hidden" name="ledSqno" value="${param.ledSqno}" />
-	<input type="hidden" name="bidPopYn" value="${inputParam.bidPopYn}" />
+	<input type="hidden" name="place" value="<c:out value="${param.place}" />" />
+	<input type="hidden" name="naBzplc" value="<c:out value="${param.naBzplc}" />" />
+	<input type="hidden" name="aucDt" value="<c:out value="${param.aucDt}" />" />
+	<input type="hidden" name="aucObjDsc" value="<c:out value="${param.aucObjDsc}" />" />
+	<input type="hidden" name="sraIndvAmnno" value="<c:out value="${param.sraIndvAmnno}" />" />		
+	<input type="hidden" name="aucPrgSq" value="<c:out value="${param.aucPrgSq}" />" />
+	<input type="hidden" name="oslpNo" value="<c:out value="${param.oslpNo}" />" />
+	<input type="hidden" name="ledSqno" value="<c:out value="${param.ledSqno}" />" />
+	<input type="hidden" name="bidPopYn" value="<c:out value="${inputParam.bidPopYn}" />" />
 </form>
 <div class="winpop cow-detail">
 	<button type="button" class="winpop_back"><span class="sr-only">윈도우 팝업 닫기</span></button>

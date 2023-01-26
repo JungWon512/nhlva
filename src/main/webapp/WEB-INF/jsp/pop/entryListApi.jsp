@@ -7,14 +7,14 @@
 <input type="hidden" id="searchDate" value="${inputParam.date}"/>
 
 <form name="frm_select" action="" method="post">
-	<input type="hidden" name="place" value="${param.place}" />
+	<input type="hidden" name="place" value="<c:out value="${param.place}" />" />
 	<input type="hidden" name="naBzplc" value="" />
 	<input type="hidden" name="aucDt" value="" />
 	<input type="hidden" name="aucObjDsc" value="" />
 	<input type="hidden" name="sraIndvAmnno" value="" />
 	<input type="hidden" name="aucPrgSq" value="" />
 	<input type="hidden" name="ledSqno" value="" />
-	<input type="hidden" name="bidPopYn" value="${inputParam.bidPopYn}" />
+	<input type="hidden" name="bidPopYn" value="<c:out value="${inputParam.bidPopYn}" />" />
 </form>
 <div class="winpop winpop-list">
 	<button type="button" class="winpop_close"><span class="sr-only">윈도우 팝업 닫기</span></button>

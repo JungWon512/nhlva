@@ -14,7 +14,7 @@
 						<input type="hidden" class="noticeDsc" value="${vo.BLBD_DSC}" />
 						<a href="javascript:;">
 							<dl>
-								<dt><c:out value="${vo.BBRD_TINM }" escapeXml="false" /></dt>
+								<dt><c:out value="${vo.BBRD_TINM }" escapeXml="true" /></dt>
 								<dd>${vo.LSCHG_DTM }</dd>
 							</dl>
 						</a>

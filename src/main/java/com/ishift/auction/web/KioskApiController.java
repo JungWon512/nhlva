@@ -436,6 +436,9 @@ public class KioskApiController<T> {
 			final Map<String, Object> login = kioskApiService.mwmnLoginProc(params);
 			return this.createResultCUD(login);
 		}
+		catch (SQLException se) {
+			return this.createResultCUD(null);
+		}
 		catch (Exception e) {
 			return this.createResultCUD(null);
 		}

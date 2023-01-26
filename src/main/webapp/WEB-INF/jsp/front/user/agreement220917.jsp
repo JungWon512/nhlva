@@ -69,7 +69,6 @@
 
 			<div class=""style="margin-top: 15px; font-size: 18px; font-weight: 500; line-height: 1.2; letter-spacing: -0.8px; color: #007eff;">
 				<ul class="">
-					<li>2022.09.17 이용약관 <a href="javascript:pageMove('/agreement/220917');" id="20220917" style=" color: #007eff;">[변경내용보기]</a></li>
 					<li style="margin-top:5px;">2021.06.20 이용약관 <a href="javascript:pageMove('/agreement/210620');" id="20210620" style=" color: #007eff;">[변경내용보기]</a></li>
 				</ul>
 			</div>

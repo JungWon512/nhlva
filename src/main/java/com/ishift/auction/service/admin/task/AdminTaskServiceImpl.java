@@ -5,6 +5,11 @@ import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
+import java.security.KeyManagementException;
+import java.security.NoSuchAlgorithmException;
+import java.security.SecureRandom;
+import java.security.cert.CertificateException;
+import java.security.cert.X509Certificate;
 import java.sql.SQLException;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -13,8 +18,23 @@ import java.util.Map;
 import java.util.UUID;
 
 import javax.imageio.ImageIO;
+import javax.net.ssl.HostnameVerifier;
+import javax.net.ssl.KeyManager;
+import javax.net.ssl.SSLContext;
+import javax.net.ssl.SSLSession;
+import javax.net.ssl.SSLSocketFactory;
+import javax.net.ssl.TrustManager;
+import javax.net.ssl.X509TrustManager;
 
 import org.apache.commons.codec.binary.Base64;
+import org.apache.http.conn.ssl.DefaultHostnameVerifier;
+import org.apache.http.conn.ssl.NoopHostnameVerifier;
+import org.apache.http.conn.ssl.SSLConnectionSocketFactory;
+import org.apache.http.conn.ssl.TrustStrategy;
+import org.apache.http.ssl.SSLContexts;
+import org.checkerframework.checker.units.qual.s;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.MediaType;
@@ -23,10 +43,13 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.Base64Utils;
 import org.springframework.util.ObjectUtils;
 
+import com.amazonaws.ClientConfiguration;
 import com.amazonaws.SdkClientException;
 import com.amazonaws.auth.AWSStaticCredentialsProvider;
 import com.amazonaws.auth.BasicAWSCredentials;
 import com.amazonaws.client.builder.AwsClientBuilder;
+import com.amazonaws.http.apache.client.impl.SdkHttpClient;
+import com.amazonaws.http.conn.ssl.SdkTLSSocketFactory;
 import com.amazonaws.services.s3.AmazonS3;
 import com.amazonaws.services.s3.AmazonS3ClientBuilder;
 import com.amazonaws.services.s3.model.AccessControlList;
@@ -42,6 +65,7 @@ import com.ishift.auction.service.auction.AuctionService;
 import com.ishift.auction.service.common.CommonDAO;
 import com.ishift.auction.service.common.CommonService;
 import com.ishift.auction.util.SessionUtill;
+import com.ishift.auction.web.RestApiJsonController;
 
 /**
  * 홈페이지 관리자 경매업무 서비스
@@ -52,6 +76,8 @@ import com.ishift.auction.util.SessionUtill;
 @SuppressWarnings({"unused", "unchecked"})
 public class AdminTaskServiceImpl implements AdminTaskService {
 
+	private static Logger log = LoggerFactory.getLogger(AdminTaskServiceImpl.class);
+	
 	@Autowired
 	private AdminTaskDAO adminTaskDAO;
 	
@@ -357,7 +383,7 @@ public class AdminTaskServiceImpl implements AdminTaskService {
 			return ImageIO.write(img, ext, outputFile);
 		}
 		catch (IOException e) {
-			e.printStackTrace();
+			log.error("AdminTaskServiceImpl.makeImage : {} ", e);
 			return false;
 		}
 		finally {
@@ -372,11 +398,46 @@ public class AdminTaskServiceImpl implements AdminTaskService {
 	 * @throws SQLException 
 	 */
 	@Override
-	public Map<String, Object> uploadImageProc(Map<String, Object> params) throws SQLException {
+	public Map<String, Object> uploadImageProc(Map<String, Object> params) throws SQLException, NoSuchAlgorithmException, KeyManagementException {
 		final Map<String, Object> result = new HashMap<String, Object>();
+
+//		TrustStrategy ts = ((chain, authType) -> true);
 		
+		HostnameVerifier hv = new HostnameVerifier() {
+			@Override
+			public boolean verify(String arg0, SSLSession arg1) {
+				return true;
+			}
+		};
+		TrustManager[] trustAllCerts = new TrustManager[] {
+			new X509TrustManager() {
+				@Override
+				public X509Certificate[] getAcceptedIssuers() {
+					return null;
+				}
+				
+				@Override
+				public void checkServerTrusted(X509Certificate[] arg0, String arg1) throws CertificateException {return;}
+				
+				@Override
+				public void checkClientTrusted(X509Certificate[] arg0, String arg1) throws CertificateException {return;}
+			}
+		};
+		
+		SSLContext sc = SSLContext.getInstance("TLSv1.2");
+		sc.init(new KeyManager[0], trustAllCerts, new SecureRandom());
+		
+		ClientConfiguration cc = new ClientConfiguration();
+		SSLConnectionSocketFactory ssf = new SSLConnectionSocketFactory(sc
+																		, new String[] {"TLSv1.2", "TLSv1.1", "TLSv1"}
+																		, new String[] {"TLS_RSA_WITH_AES_128_GCM_SHA256", "TLS_RSA_WITH_AES_128_CBC_SHA256"}
+																		, hv);
+		cc.getApacheHttpClientConfig().withSslSocketFactory(ssf);
+		
+
 		// S3 client
 		final AmazonS3 s3 = AmazonS3ClientBuilder.standard()
+												 .withClientConfiguration(cc)
 												 .withEndpointConfiguration(new AwsClientBuilder.EndpointConfiguration(endPoint, regionName))
 												 .withCredentials(new AWSStaticCredentialsProvider(new BasicAWSCredentials(accessKey, secretKey)))
 												 .build();

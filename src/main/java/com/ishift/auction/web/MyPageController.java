@@ -97,10 +97,10 @@ public class MyPageController {
 		ModelAndView mav = new ModelAndView("mypage/buy/buy");
 		String today = LocalDate.now().format(DateTimeFormatter.ofPattern("yyyyMM"));
 		BidUserDetails userVo = (BidUserDetails) sessionUtill.getUserVo();
-		params.put("loginNo", userVo.getTrmnAmnno());
+		if(userVo != null) params.put("loginNo", userVo.getTrmnAmnno());
 		
-        Map<String,Object> paramMap = new HashMap<>();
-        paramMap.put("naBzPlcNo", params.get("place").toString());
+		Map<String,Object> paramMap = new HashMap<>();
+		paramMap.put("naBzPlcNo", params.get("place").toString());
 
 		Map<String,Object> johap = adminService.selectOneJohap(paramMap);
 		paramMap.put("naBzPlc", johap.get("NA_BZPLC"));
@@ -110,8 +110,10 @@ public class MyPageController {
 		
 		List<Map<String,Object>> datelist= auctionService.selectAucDateList(paramMap);
 		paramMap.put("searchDate", datelist.size() > 0 ? datelist.get(0).get("AUC_DT") : null);
-		paramMap.put("searchTrmnAmnNo", userVo.getTrmnAmnno());
-		paramMap.put("searchMbIntgNo", userVo.getMbIntgNo());
+		if(userVo != null) {
+			paramMap.put("searchTrmnAmnNo", userVo.getTrmnAmnno());
+			paramMap.put("searchMbIntgNo", userVo.getMbIntgNo());
+		}
 		paramMap.put("stateFlag", "buy");
 		
 		// 0. 나의 경매내역 > 구매내역
@@ -134,11 +136,11 @@ public class MyPageController {
 		
 		params.putAll(paramMap);
 		
- 		mav.addObject("johapData", johap);
+		mav.addObject("johapData", johap);
 		mav.addObject("dateList",datelist);
 		mav.addObject("inputParam", params);
 		mav.addObject("subheaderTitle","나의 경매내역");
- 		
+		
 		return mav;
 	}
 	/**
@@ -159,26 +161,28 @@ public class MyPageController {
 			
 			// 검색할 날짜 계산처리
 			String yyyyMM = "";
-	        DateTimeFormatter format = DateTimeFormatter.ofPattern("yyyyMM");
-	     	String searchYm = paramMap.get("searchDateState").toString();
-	     	LocalDate date = ( searchYm == null || searchYm.isEmpty()) ? LocalDate.now() : LocalDate.parse(searchYm+"01",DateTimeFormatter.ofPattern("yyyyMMdd"));
-	        if ("next".equals(paramMap.get("flag"))) {
-		        yyyyMM = date.plusMonths(1).format(format);
-	        }
-	        else if("prev".equals(paramMap.get("flag"))) {
-		        yyyyMM = date.minusMonths(1).format(format);	        	
-	        }
-	        else {
-		        yyyyMM = date.format(format);
-	        }
-	        
+			DateTimeFormatter format = DateTimeFormatter.ofPattern("yyyyMM");
+			String searchYm = paramMap.get("searchDateState").toString();
+			LocalDate date = ( searchYm == null || searchYm.isEmpty()) ? LocalDate.now() : LocalDate.parse(searchYm+"01",DateTimeFormatter.ofPattern("yyyyMMdd"));
+			if ("next".equals(paramMap.get("flag"))) {
+				yyyyMM = date.plusMonths(1).format(format);
+			}
+			else if("prev".equals(paramMap.get("flag"))) {
+				yyyyMM = date.minusMonths(1).format(format);
+			}
+			else {
+				yyyyMM = date.format(format);
+			}
+			
 			paramMap.put("stateFlag", "buy");
-			paramMap.put("searchMbIntgNo", ((BidUserDetails) sessionUtill.getUserVo()).getMbIntgNo());
+			if((BidUserDetails) sessionUtill.getUserVo() != null) {
+				paramMap.put("searchMbIntgNo", ((BidUserDetails) sessionUtill.getUserVo()).getMbIntgNo());
+			}
 			paramMap.put("searchTrmnAmnNo", sessionUtill.getUserId());
 			
 			paramMap.put("searchDateState", yyyyMM);
 			params.put("searchDateState", yyyyMM);
-						
+
 			List<Map<String,Object>> calendarList = auctionService.selectStateList(paramMap);
 			
 			if (calendarList != null) {
@@ -193,7 +197,13 @@ public class MyPageController {
 			result.put("inputParam",params);
 			result.put("johapData", johap);
 			result.put("title",formatUtil.dateAddDotLenSix(yyyyMM));
-		} catch (Exception e) {
+		} 
+		catch (SQLException se) {
+			log.error("MyPageController.buyList : {}", se);
+			result.put("success", false);
+			result.put("message", "작업중 오류가 발생했습니다. 관리자에게 문의하세요.");
+		}
+		catch (Exception e) {
 			log.error("MyPageController.buyList : {}", e);
 			result.put("success", false);
 			result.put("message", "작업중 오류가 발생했습니다. 관리자에게 문의하세요.");
@@ -217,7 +227,7 @@ public class MyPageController {
 		if(!ObjectUtils.isEmpty(flashMap) && flashMap.containsKey("params")) {
 			params.putAll((Map<String, Object>)flashMap.get("params"));
 		}
-		BidUserDetails userVo = (BidUserDetails) sessionUtill.getUserVo();
+		BidUserDetails userVo = (BidUserDetails)sessionUtill.getUserVo();
 		
 		Map<String,Object> paramMap = new HashMap<>();
 		paramMap.put("naBzPlcNo", params.get("searchnaBzPlcNo").toString());
@@ -226,7 +236,7 @@ public class MyPageController {
 		Map<String,Object> johap = adminService.selectOneJohap(paramMap);
 		paramMap.put("naBzPlc", johap.get("NA_BZPLC")); 
 		
-		paramMap.put("searchMbIntgNo", userVo.getMbIntgNo());
+		if(userVo != null) paramMap.put("searchMbIntgNo", userVo.getMbIntgNo());
 		paramMap.put("searchTrmnAmnNo", sessionUtill.getUserId());
 		paramMap.put("searchDate", params.get("searchDate"));
 		paramMap.put("searchAucObjDsc", params.get("searchAucObjDsc"));
@@ -238,7 +248,7 @@ public class MyPageController {
 		paramMap.put("stateFlag", "buy");
 		
 		//조합정보 및 계좌정보 가져오기
-		mav.addObject("accountInfo", auctionService.selectJohapAccInfo(paramMap));		
+		mav.addObject("accountInfo", auctionService.selectJohapAccInfo(paramMap));
 		//매수인 정보 조회
 		mav.addObject("stateInfo", auctionService.selectStateInfo(paramMap));
 		//낙찰가 조회
@@ -299,6 +309,7 @@ public class MyPageController {
 		mav.setView(new RedirectView("/my/entryInfo?place=" + johap.get("NA_BZPLCNO")));
 		return mav;
 	}
+
 	/**
 	 * 정산 페이지 접속을 위한 임시 로그인 처리
 	 * @param string
@@ -370,7 +381,7 @@ public class MyPageController {
         }catch (SQLException | RuntimeException re) {
             result.put("success", false);
             result.put("message", "작업중 오류가 발생했습니다. 관리자에게 문의하세요.");
-			log.error("MyPageController.selectMyBuyList : {} ",re);
+			log.error("MyPageController.myBidList : {} ",re);
 		}
         return result;
     }
@@ -391,13 +402,17 @@ public class MyPageController {
 			
 			if ("entry".equals(params.get("stateFlag"))) {
 				FarmUserDetails userVo = (FarmUserDetails)sessionUtill.getUserVo();
-				paramMap.put("searchMbIntgNo", userVo.getMbIntgNo());
-				params.put("searchFhsIdNo", userVo.getFhsIdNo());
-				params.put("searchFarmAmnno", userVo.getFarmAmnno());
+				if(userVo != null) {
+					paramMap.put("searchMbIntgNo", userVo.getMbIntgNo());
+					params.put("searchFhsIdNo", userVo.getFhsIdNo());
+					params.put("searchFarmAmnno", userVo.getFarmAmnno());
+				}
 				paramMap.put("feeFlag", "Y");
 			} else {
 				BidUserDetails userVo = (BidUserDetails)sessionUtill.getUserVo();
-				paramMap.put("searchMbIntgNo", userVo.getMbIntgNo());
+				if(userVo != null) {
+					paramMap.put("searchMbIntgNo", userVo.getMbIntgNo());
+				}
 				paramMap.put("searchTrmnAmnno", sessionUtill.getUserId());
 			}
 			
@@ -434,15 +449,19 @@ public class MyPageController {
 		try {     
 			if ("entry".equals(params.get("stateFlag"))) {
 				FarmUserDetails userVo = (FarmUserDetails)sessionUtill.getUserVo();
-				params.put("searchMbIntgNo", userVo.getMbIntgNo());
-				params.put("searchFhsIdNo", userVo.getFhsIdNo());
-				params.put("searchFarmAmnno", userVo.getFarmAmnno());
+				if(userVo != null) {
+					params.put("searchMbIntgNo", userVo.getMbIntgNo());
+					params.put("searchFhsIdNo", userVo.getFhsIdNo());
+					params.put("searchFarmAmnno", userVo.getFarmAmnno());
+				}
 				params.put("aucYnState", "1");
 				params.put("feeFlag", "Y");
 			} else {
 				BidUserDetails userVo = (BidUserDetails)sessionUtill.getUserVo();
-				params.put("searchMbIntgNo", userVo.getMbIntgNo());
-				params.put("searchTrmnAmnNo", userVo.getTrmnAmnno());
+				if(userVo != null) {
+					params.put("searchMbIntgNo", userVo.getMbIntgNo());
+					params.put("searchTrmnAmnNo", userVo.getTrmnAmnno());
+				}
 			}
 			
 			Map<String,Object> paramMap = new HashMap<>();
@@ -540,7 +559,9 @@ public class MyPageController {
 			
 			if ("buy".equals(params.get("stateFlag"))) {
 				BidUserDetails userVo = ((BidUserDetails) sessionUtill.getUserVo());
-				paramMap.put("searchMbIntgNo", userVo.getMbIntgNo());
+				if(userVo != null) {
+					paramMap.put("searchMbIntgNo", userVo.getMbIntgNo());
+				}
 	    		paramMap.put("searchTrmnAmnNo", sessionUtill.getUserId());
 	    		
 	    		// > 연/월단위 기준 전체 낙찰두수, 송아지, 비육우, 번식우의 낙찰두수
@@ -595,7 +616,7 @@ public class MyPageController {
 		ModelAndView mav = new ModelAndView("mypage/entry/entry");
 		String today = LocalDate.now().format(DateTimeFormatter.ofPattern("yyyyMM"));
 		FarmUserDetails userVo = (FarmUserDetails) sessionUtill.getUserVo();
-		params.put("loginNo", userVo.getFhsIdNo());
+		if(userVo != null) params.put("loginNo", userVo.getFhsIdNo());
 		
         Map<String,Object> paramMap = new HashMap<>();
         paramMap.put("naBzPlcNo", params.get("place"));
@@ -608,9 +629,11 @@ public class MyPageController {
 		
 		List<Map<String,Object>> datelist= auctionService.selectAucDateList(paramMap);
 		paramMap.put("searchDate", datelist.size() > 0 ? datelist.get(0).get("AUC_DT") : null);
-		paramMap.put("searchMbIntgNo", userVo.getMbIntgNo());
-		paramMap.put("searchFhsIdNo", userVo.getFhsIdNo());
-		paramMap.put("searchFarmAmnno", userVo.getFarmAmnno());
+		if(userVo != null) {
+			paramMap.put("searchMbIntgNo", userVo.getMbIntgNo());
+			paramMap.put("searchFhsIdNo", userVo.getFhsIdNo());
+			paramMap.put("searchFarmAmnno", userVo.getFarmAmnno());
+		}
 		
 		paramMap.putAll(params);
 		paramMap.put("stateFlag", "entry");
@@ -696,9 +719,11 @@ public class MyPageController {
 	        
 	        FarmUserDetails userVo = (FarmUserDetails)sessionUtill.getUserVo();
 	        paramMap.put("stateFlag", "entry");
-			paramMap.put("searchMbIntgNo", userVo.getMbIntgNo());
-			paramMap.put("searchFhsIdNo", userVo.getFhsIdNo());
-			paramMap.put("searchFarmAmnno", userVo.getFarmAmnno());
+	        if(userVo != null) {
+	        	paramMap.put("searchMbIntgNo", userVo.getMbIntgNo());
+	        	paramMap.put("searchFhsIdNo", userVo.getFhsIdNo());
+	        	paramMap.put("searchFarmAmnno", userVo.getFarmAmnno());
+	        }
 			
 			paramMap.put("searchDateState", yyyyMM);
 			params.put("searchDateState", yyyyMM);
@@ -717,8 +742,14 @@ public class MyPageController {
 			result.put("inputParam",params);
 			result.put("johapData", johap);
 			result.put("title",formatUtil.dateAddDotLenSix(yyyyMM));
-		} catch (Exception e) {
-			log.error("MyPageController.buyList : {}", e);
+		} 
+		catch (SQLException se) {
+			log.error("MyPageController.entryList : {}", se);
+			result.put("success", false);
+			result.put("message", "작업중 오류가 발생했습니다. 관리자에게 문의하세요.");
+		}
+		catch (Exception e) {
+			log.error("MyPageController.entryList : {}", e);
 			result.put("success", false);
 			result.put("message", "작업중 오류가 발생했습니다. 관리자에게 문의하세요.");
 		}
@@ -754,9 +785,11 @@ public class MyPageController {
 		map.put("searchAucObjDsc", params.get("searchAucObjDsc"));
 		map.put("aucYnState", "1");
 		
-		map.put("searchMbIntgNo", userVo.getMbIntgNo());
-		map.put("searchFhsIdNo", userVo.getFhsIdNo());
-		map.put("searchFarmAmnno", userVo.getFarmAmnno());
+		if(userVo != null) {
+			map.put("searchMbIntgNo", userVo.getMbIntgNo());
+			map.put("searchFhsIdNo", userVo.getFhsIdNo());
+			map.put("searchFarmAmnno", userVo.getFarmAmnno());
+		}
 		
 		params.put("aucDt", dateUtil.addDelimDate(params.get("searchDate").toString()));
 		//출하우정산서 flag insert
@@ -936,7 +969,7 @@ public class MyPageController {
 		Map<String,Object> johap = adminService.selectOneJohap(map);
 		mav.addObject("johapData", johap);
 		
-		if(sessionUtill.getUserId() != null) params.put("loginNo", sessionUtill.getUserId());
+		if(sessionUtill.getUserId() != null) params.put("loginNo", sessionUtill.getUserId()); 
 		if(sessionUtill.getUserId() != null) map.put("mbIntgNo", ((BidUserDetails) sessionUtill.getUserVo()).getMbIntgNo() ); 
 		
 		List<Map<String,Object>>  johqpList= auctionService.selectJohqpList(map);
@@ -965,8 +998,10 @@ public class MyPageController {
 		try {
 			BidUserDetails userVo = (BidUserDetails) sessionUtill.getUserVo();
 			params.put("naBzPlc", StringUtils.isEmpty(params.get("johpCd").toString()) ? sessionUtill.getNaBzplc() : params.get("johpCd"));
-			params.put("loginNo", StringUtils.isEmpty(params.get("loginNo").toString()) ? sessionUtill.getUserId() : params.get("loginNo")); 
-			params.put("mbIntgNo", userVo.getMbIntgNo());
+			params.put("loginNo", StringUtils.isEmpty(params.get("loginNo").toString()) ? sessionUtill.getUserId() : params.get("loginNo"));
+			if(userVo != null) {
+				params.put("mbIntgNo", userVo.getMbIntgNo());
+			}
 			
 			auctionService.insertMySecAplyInfo(params);
 			result.put("success", true);

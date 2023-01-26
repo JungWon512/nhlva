@@ -1,5 +1,7 @@
 package com.ishift.auction.service.auction;
 
+import java.security.NoSuchAlgorithmException;
+import java.security.SecureRandom;
 import java.sql.SQLException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -15,6 +17,8 @@ import java.util.Set;
 
 import javax.annotation.Resource;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -24,11 +28,14 @@ import com.ishift.auction.util.AlarmTalkForm;
 import com.ishift.auction.util.McaUtil;
 import com.ishift.auction.util.SessionUtill;
 import com.ishift.auction.vo.FarmUserDetails;
+import com.ishift.auction.web.TradeMcaMsgDataController;
 
 @Service("auctionService")
 @Transactional(transactionManager = "txManager", rollbackFor = Exception.class)
 public class AuctionServiceImpl implements AuctionService {
 
+	private static Logger log = LoggerFactory.getLogger(AuctionServiceImpl.class);
+	
 	@Resource(name = "auctionDAO")
 	AuctionDAO auctionDAO;
 	
@@ -1747,16 +1754,22 @@ public class AuctionServiceImpl implements AuctionService {
 						return result;
 					}
 				} catch (ParseException e) {
-					e.printStackTrace();
+					log.error("AuctionServiceImpl.myAuthNumIssue : {} ", e);
 				}
 			}
 			
 			//유효시간이 지났거나, 인증번호 발급받은 적이 없으면 인증번호 6자리 발급
-			Random random = new Random();
-			random.setSeed(System.currentTimeMillis());
-			String authNo = String.format("%06d", random.nextInt(1000000));
+			Random random;
+			String authNo = "";
+			try {
+				random = SecureRandom.getInstance("SHA1PRNG");
+				random.setSeed(System.currentTimeMillis());
+				authNo = String.format("%06d", random.nextInt(1000000));
+				params.put("auth_no", authNo);
+			} catch (NoSuchAlgorithmException e) {
+				log.error(e.getMessage());
+			}
 			
-			params.put("auth_no", authNo);
 			if("ROLE_BIDDER".equals(sessionUtill.getRoleConfirm())) {
 				this.updateMwmnAuthNoYmdInfo(params);
 				authNoYmd = this.selectMwmnAuthNoYmdInfo(params);
@@ -1769,7 +1782,7 @@ public class AuctionServiceImpl implements AuctionService {
 			result.put("success", true);
 			result.put("type", "issueNum");
 			result.put("auth_no", authNo);
-			result.put("auth_ymd", authNoYmd.get("AUTH_YMD").toString());
+			result.put("auth_ymd", authNoYmd.get("AUTH_YMD") != null ? authNoYmd.get("AUTH_YMD").toString() : "");
 			result.put("message", "인증번호가 발급되었습니다.");
 		}
 		

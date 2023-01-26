@@ -220,7 +220,9 @@ var KTTagifyDemos = function() {
                         html += '</div>';
 
                         return html;
-                    } catch (err) {}
+                    } catch (err) {
+						return '';
+					}
                 }
             },
             transformTag: function(tagData) {

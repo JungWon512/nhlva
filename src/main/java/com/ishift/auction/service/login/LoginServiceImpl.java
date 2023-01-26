@@ -1,5 +1,7 @@
 package com.ishift.auction.service.login;
 
+import java.security.NoSuchAlgorithmException;
+import java.security.SecureRandom;
 import java.sql.SQLException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -292,9 +294,14 @@ public class LoginServiceImpl implements LoginService {
 			}
 			// - 아닌 경우 4자리 숫자를 랜덤 생성 후 TB_LA_IS_MM_MWMN테이블에 인증번호를 UPDATE해준다.
 			else {
-				Random random = new Random();
-				random.setSeed(System.currentTimeMillis());
-				smsNo = String.format("%04d", random.nextInt(10000));
+				Random random;
+				try {
+					random = SecureRandom.getInstance("SHA1PRNG");
+					random.setSeed(System.currentTimeMillis());
+					smsNo = String.format("%04d", random.nextInt(10000));
+				} catch (NoSuchAlgorithmException e) {
+					log.error(e.getMessage());
+				}
 				params.put("smsNo", smsNo);
 
 				// 인증번호 upate
@@ -346,7 +353,10 @@ public class LoginServiceImpl implements LoginService {
 					returnMap.put("success", false);
 					returnMap.put("message", "인증번호 발송에 실패했습니다.");
 				}
-			} catch (Exception e1) {
+			}catch(RuntimeException re) {
+				returnMap.put("success", false);
+				returnMap.put("message", "인증번호 발송에 실패했습니다.");
+			}catch (Exception e1) {
 				returnMap.put("success", false);
 				returnMap.put("message", "인증번호 발송에 실패했습니다.");
 			}
@@ -422,18 +432,22 @@ public class LoginServiceImpl implements LoginService {
 		final JwtTokenVo tokenVo = jwtTokenUtil.getTokenVo(params.get("token").toString());
 		String inOutGb = params.get("inOutGb").toString();		//앞에서 들어옴
 		
-		//TODO : 경제지주, 축산담당 -> 대시보드 로그인 때 들어올 가능성 있음, 추후 작업 필요하면 추가할 예정 
+		//TODO : 경제지주, 축산담당 -> 대시보드 로그인 때, 추후 작업 필요하면 추가할 예정 
 		//접속자구분 : CONN_GBCD (중도매인 : 1, 농가 : 2, 경제지주 : 3, 축산담당 : 4, 기타 : 5)
-		switch(tokenVo.getUserRole()) {
-			case Constants.UserRole.BIDDER : 
-				params.put("connGbcd", "1");		
-				break;
-			case Constants.UserRole.FARM : 
-				params.put("connGbcd", "2");	
-				break;
-			default :
-				params.put("connGbcd", "5");	
-				break;
+		if(tokenVo.getUserRole() != null) {
+			switch(tokenVo.getUserRole()) {
+				case Constants.UserRole.BIDDER : 
+					params.put("connGbcd", "1");		
+					break;
+				case Constants.UserRole.FARM : 
+					params.put("connGbcd", "2");	
+					break;
+				default :
+					params.put("connGbcd", "5");	
+					break;
+			}
+		}else {
+			params.put("connGbcd", "5");	
 		}
 		
 		params.put("mbIntgNo", tokenVo.getMbIntgNo());		//회원통합번호 

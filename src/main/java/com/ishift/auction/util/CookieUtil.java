@@ -18,6 +18,7 @@ public class CookieUtil {
 		Cookie cookie = new Cookie(cookieName, value);
 //		cookie.setHttpOnly(true);
 		cookie.setMaxAge(60*60*24);
+		cookie.setSecure(true);
 		cookie.setPath("/");
 		return cookie;
 	}

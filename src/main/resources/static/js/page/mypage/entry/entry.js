@@ -181,8 +181,8 @@
 			sHtml += '	<dl class="date_top">';
 			sHtml += '		<dl>';
 			sHtml += '			<dt>'+ data.title +'</dt>';
-			sHtml += '			<dd id="prev" class="btn_chg btn_prev '+(flag == "prev" && monthDiff >= 4 ? 'disabled' : "")+'"><a href="javascript:;">이전</a></dd>';
-			sHtml += '			<dd id="next" class="btn_chg btn_next '+(flag == "next" && monthDiff <= 1 ? 'disabled' : "")+'"><a href="javascript:;">다음</a></dd>';
+			sHtml += '			<dd id="prev" class="btn_chg btn_prev '+((flag == undefined || flag == "prev") && monthDiff >= 4 ? 'disabled' : "")+'"><a href="javascript:;">이전</a></dd>';
+			sHtml += '			<dd id="next" class="btn_chg btn_next '+((flag == undefined || flag == "next") && monthDiff <= 1 ? 'disabled' : "")+'"><a href="javascript:;">다음</a></dd>';
 			sHtml += '		</dl>';
 			sHtml += '	</dl>';
 			sHtml += '	<div class="btns">';

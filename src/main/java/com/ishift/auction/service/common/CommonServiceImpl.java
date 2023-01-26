@@ -90,9 +90,20 @@ public class CommonServiceImpl implements CommonService {
 			// 6. 후대정보 저장
 			this.updateIndvPostInfo(params);
 		}
-		catch(Exception e) {
+		catch(RuntimeException re) {
+			result.put("success", false);
+			result.put("message", re.getMessage());
+			log.error("RuntimeException::CommonServiceImpl.searchIndvDetails : {} ",re);
+			return result;
+		} catch(SQLException se) {
+			result.put("success", false);
+			result.put("message", se.getMessage());
+			log.error("SQLException::CommonServiceImpl.searchIndvDetails : {} ",se);
+			return result;
+		} catch(Exception e) {
 			result.put("success", false);
 			result.put("message", e.getMessage());
+			log.error("Exception::CommonServiceImpl.searchIndvDetails : {} ",e);
 			return result;
 		}
 		

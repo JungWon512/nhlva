@@ -281,6 +281,7 @@ public class AdminLoginController {
 				
 				token = jwtTokenUtil.generateToken(jwtTokenVo, Constants.JwtConstants.ACCESS_TOKEN);
 				final Cookie cookie = cookieUtil.createCookie(Constants.JwtConstants.ACCESS_TOKEN, token);
+				cookie.setSecure(true);
 				response.addCookie(cookie);
 				result.put("info", jwtTokenVo);
 				result.put("returnUrl", "/dashboard/main");

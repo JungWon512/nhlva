@@ -33,25 +33,20 @@
 				let oriStr = rmkCntn.toString().trim();
 				let str = "";
 				
-				console.log($(this).text());
-				
 				str = oriStr + (oriStr != '' && oriStr != null ? "," + $(this).text() : $(this).text());
-				
 				
 				if(rmkCntn.includes( $(this).text() )){
 					let bok = $(this).text()
 					str = str.replace(','+bok,'');
 					// return false;
 				}
-				
 				inputValidation(oriStr, str, e);
-				
-				
-				
 			});
+			
 			// 초기화 이벤트
 			$(document).on("click", ".admin_new_reg .btn_input_reset", function(e){
 				$(this).siblings("input").val("");			
+				$(this).siblings("input").focus();
 			});
 			$(document).on("click", ".admin_new_reg .btn_tag_reset", function(e){
 				$('textarea[name=rmkCntn]').val("");
@@ -70,6 +65,11 @@
 				}
 			});
 			
+			// 경매번호 Key up 이벤트
+			$(document).on("keyup", "#aucPrgSq2", function() {
+				fnReset2();
+			});
+			
 
 			// 정보 조회
 			$(document).on(clickEvent, ".btn_cow_search", function() {
@@ -84,11 +84,15 @@
 				
 				if(aucPrgSq ==null || aucPrgSq == '0'){
 					modalAlert("", '경매번호를 입력해주세요.');
-					return
+					return false;
 				}
 				$("form[name='frm_cow']").find("input[name='oslpNo']").val(aucPrgSq);
-				$("form[name='frm_cow']").find("input[name='aucPrgSq']").val('');
+				$("form[name='frm_cow']").find("input[name='aucDt']").val( $("input[name='aucDt']").val() );
+				$("form[name='frm_cow']").find("input[name='aucObjDsc']").val( $("input[name='aucObjDsc']").val() );
 				
+				// 없는 번호로 조회시 팝업창이 초기화되어서 셋팅된 값이 날라간 상태로
+				// 조회를 하니 파라미터 전달 자체에 문제가 생김.
+				// 사라지는것 : 경매날자 , 경매대상 구분번호
 				
 				$.ajax({
 					url: '/office/task/cowInfo',
@@ -103,7 +107,7 @@
 					var success = body.success;
 					var message = body.message;
 					if (!success) {
-						modalAlert("", message, fnReset);
+						modalAlert("", message, fnReset2);
 					}
 					else {
 						fnLWLayerPop(body.params,body.cowInfo);
@@ -111,11 +115,11 @@
 				});
 			});
 
-		// 입력 초기화
-		var fnReset = function() {
-			$("form[name='frm_cow']").find("input, select").val("");
-			$("form[name='frm_cow']").find("select").not("select[name='selStsDsc']").prop("disabled", true);
-			$("select").selectric("refresh");
+		//중량 예정가 등록 리셋 함수
+		var fnReset2 = function() {
+			$("form[name='frm_cow']").find("input").text("");
+			$('.rs').text('');
+			$('.rs').val('');
 		}
 			
 			// 검색어 지우기
@@ -491,17 +495,17 @@
 			sHtml.push('								</tr>                                                                                                                       ');
 			sHtml.push('								<tr>                                                                                                                        ');
 			sHtml.push('									<th>귀표번호</th>                                                                                                       ');
-			sHtml.push('									<td class="bg-lilac">'+ cowInfo.SRA_INDV_AMNNO_FORMAT_FULL +'</td>                                                                                          ');
+			sHtml.push('									<td class="rs bg-lilac">'+ cowInfo.SRA_INDV_AMNNO_FORMAT_FULL +'</td>                                                                                          ');
 			sHtml.push('								</tr>                                                                                                                       ');
 			sHtml.push('								<tr>                                                                                                                        ');
 			sHtml.push('									<th>어미/성별</th>                                                                                                      ');
-			sHtml.push('									<td class="bg-lilac">'+ cowInfo.MCOW_DSC_NM + ' / ' + cowInfo.INDV_SEX_NAME + '</td>                                                                                     ');
+			sHtml.push('									<td class="rs bg-lilac">'+ cowInfo.MCOW_DSC_NM + ' / ' + cowInfo.INDV_SEX_NAME + '</td>                                                                                     ');
 			sHtml.push('								</tr>                                                                                                                       ');
 			sHtml.push('								<tr>                                                                                                                        ');
 			sHtml.push('									<th>중량(Kg)</th>                                                                                                       ');
 			sHtml.push('									<td>                                                                                                                    ');
 			sHtml.push('										<div class="inp">                                                                                                   ');
-			sHtml.push('											<input type="text" name="cowSogWt" class="pd5 required onlyNumber" value="' + ((cowInfo.COW_SOG_WT == null || cowInfo.COW_SOG_WT == '') ? "0" : cowInfo.COW_SOG_WT) + '" maxlength="4" pattern="\d*" inputmode="numeric" />');
+			sHtml.push('											<input type="text" name="cowSogWt" class="rs pd5 required onlyNumber" value="' + ((cowInfo.COW_SOG_WT == null || cowInfo.COW_SOG_WT == '') ? "0" : cowInfo.COW_SOG_WT) + '" maxlength="4" pattern="\d*" inputmode="numeric" />');
 			sHtml.push('											<button type="button" class="btn_input_reset"></button>                                                         ');
 			sHtml.push('										</div>                                                                                                              ');
 			sHtml.push('									</td>                                                                                                                   ');
@@ -510,7 +514,7 @@
 			sHtml.push('									<th>예정가</th>                                                                                                         ');
 			sHtml.push('									<td>                                                                                                                    ');
 			sHtml.push('										<div class="inp">                                                                                                   ');
-			sHtml.push('											<input type="text" name="firLowsSbidLmtAm" class="pd5 required onlyNumber" value="' + ((cowInfo.LOWS_SBID_LMT_AM == null || cowInfo.LOWS_SBID_LMT_AM == 0) ? "" : cowInfo.LOWS_SBID_LMT_AM) + '" maxlength="5" pattern="\d*" inputmode="numeric" />');
+			sHtml.push('											<input type="text" name="firLowsSbidLmtAm" class="rs pd5 required onlyNumber" value="' + ((cowInfo.LOWS_SBID_LMT_AM == null || cowInfo.LOWS_SBID_LMT_AM == 0) ? "" : cowInfo.LOWS_SBID_LMT_AM) + '" maxlength="5" pattern="\d*" inputmode="numeric" />');
 			sHtml.push('											<button type="button" class="btn_input_reset"></button>                                                         ');
 			sHtml.push('										</div>                                                                                                              ');
 			sHtml.push('									</td>                                                                                                                   ');
@@ -518,7 +522,7 @@
 			sHtml.push('								<tr>                                                                                                                        ');
 			sHtml.push('									<td colspan="2" class="tagBox">                                                                                         ');
 			sHtml.push('										<div class="inp">                                                                                                   ');
-			sHtml.push('											<textarea name="rmkCntn" class="pd5" style="height:32px;" placeholder="비고" maxlength="30" rows="1">'+(cowInfo.RMK_CNTN == null ? '' : cowInfo.RMK_CNTN)+'</textarea>');
+			sHtml.push('											<textarea name="rmkCntn" class="rs pd5" style="height:32px;" placeholder="비고" maxlength="30" rows="1">'+(cowInfo.RMK_CNTN == null ? '' : cowInfo.RMK_CNTN)+'</textarea>');
 			sHtml.push('											<button type="button" class="btn_tag_reset"></button>                                                               ');
 			sHtml.push('										</div>                                                                                                   ');
 			sHtml.push('									</td>                                                                                                                   ');

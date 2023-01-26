@@ -85,6 +85,7 @@ public class AdminController {
 			String caToken=params.getOrDefault("caToken", "").toString();
 			String url = params.getOrDefault("url","").toString();
 			final Cookie cookie = cookieUtil.createCookie(Constants.JwtConstants.ACCESS_TOKEN, caToken);
+			cookie.setSecure(true);
 			response.addCookie(cookie);
 			
 			if("".equals(caToken) || "".equals(url)) {
@@ -229,8 +230,12 @@ public class AdminController {
 			if(userVo != null || loginChk) {
 				Map<String,Object> map = new HashMap<>();
 				map.put("delYn", "0");
-				if(userVo.getPlace() != null) map.put("naBzPlcNo", userVo.getPlace());
-				String usrid = userVo.getUsrid();
+				
+				String usrid = "";
+				if(userVo != null) {
+					if(userVo.getPlace() != null) map.put("naBzPlcNo", userVo.getPlace());
+					if(userVo.getUsrid() != null) usrid = userVo.getUsrid();
+				}
 				map.put("aucDscFlag", "Y");
 				Map<String,Object> johap = adminService.selectOneJohap(map);
 				String aucGubun = (String) johap.getOrDefault("AUC_DSC","");
@@ -298,8 +303,12 @@ public class AdminController {
 			if(userVo != null || loginChk) {
 				Map<String,Object> map = new HashMap<>();
 				map.put("delYn", "0");
-				if(userVo.getPlace() != null) map.put("naBzPlcNo", userVo.getPlace());
-				String usrid = userVo.getUsrid();
+				
+				String usrid = "";
+				if(userVo != null) {
+					if(userVo.getPlace() != null) map.put("naBzPlcNo", userVo.getPlace());
+					if(userVo.getUsrid() != null) usrid = userVo.getUsrid();
+				}
 				Map<String,Object> johap = adminService.selectOneJohap(map);
 				mav.setViewName("admin/auction/board/bidInfo");
 				mav.addObject("userId", usrid);
@@ -602,6 +611,7 @@ public class AdminController {
 						.build();
 				token = jwtTokenUtil.generateToken(jwtTokenVo, Constants.JwtConstants.ACCESS_TOKEN);
 				final Cookie cookie = cookieUtil.createCookie(Constants.JwtConstants.ACCESS_TOKEN, token);
+				cookie.setSecure(true);
 				response.addCookie(cookie);
 			}
 		}catch (RuntimeException re) {
