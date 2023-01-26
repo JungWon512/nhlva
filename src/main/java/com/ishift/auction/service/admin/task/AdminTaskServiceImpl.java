@@ -480,6 +480,7 @@ public class AdminTaskServiceImpl implements AdminTaskService {
 
 				boolean isSuccess = true;
 				String fileNm = "";
+				InputStream oriBis = null;
 
 				if ("image".equals(file.get("type"))) {
 					fileNm = file.get("fileNm").toString();
@@ -495,7 +496,7 @@ public class AdminTaskServiceImpl implements AdminTaskService {
 					String origin = file.getOrDefault("origin", ",").toString();
 					String[] oriBase64Arr = origin.split(",");
 					byte[] oriImgByte = Base64.decodeBase64(oriBase64Arr[1]);
-					InputStream oriBis = new ByteArrayInputStream(oriImgByte);
+					oriBis = new ByteArrayInputStream(oriImgByte);
 
 					ObjectMetadata oriObjectMetadata = new ObjectMetadata();
 					oriObjectMetadata.setContentLength(oriImgByte.length);
@@ -514,6 +515,9 @@ public class AdminTaskServiceImpl implements AdminTaskService {
 						e.printStackTrace();
 						isSuccess = false;
 					}
+					finally {
+						if(oriBis != null) try {oriBis.close();}catch(IOException ie) {}
+					}
 					
 					if (!isSuccess) continue;
 					successCnt++;
@@ -529,10 +533,11 @@ public class AdminTaskServiceImpl implements AdminTaskService {
 					if (ObjectUtils.isEmpty(file.get("thumbnail"))
 					|| !file.getOrDefault("thumbnail", ",").toString().startsWith("data:image")) continue;
 					
+					InputStream thumbBis = null;
 					String thumbnail = file.getOrDefault("thumbnail", ",").toString();
 					String[] thumbBase64Arr = thumbnail.split(",");
 					byte[] thumbImgByte = Base64.decodeBase64(thumbBase64Arr[1]);
-					InputStream thumbBis = new ByteArrayInputStream(thumbImgByte);
+					thumbBis = new ByteArrayInputStream(thumbImgByte);
 					
 					ObjectMetadata thumbObjectMetadata = new ObjectMetadata();
 					thumbObjectMetadata.setContentLength(thumbImgByte.length);
@@ -548,6 +553,9 @@ public class AdminTaskServiceImpl implements AdminTaskService {
 					}
 					catch(SdkClientException e) {
 						e.printStackTrace();
+					}
+					finally {
+						if (thumbBis != null) try {thumbBis.close();}catch(IOException ie) {}
 					}
 				}
 			}

@@ -7,6 +7,7 @@
 	<form name="frm" id="frm" method="post">
 		<input type="hidden" name="place" value="${place}" />
 		<input type="hidden" name="type" value="${empty type ? '0' : type}" />
+<%-- 		<input type="hidden" name="rtnUrl" value="${rtnUrl}" /> --%>
 		<div class="login_top" id="login_info">
 			<h3>${johapData.CLNTNM}</h3>
 			<dl>
