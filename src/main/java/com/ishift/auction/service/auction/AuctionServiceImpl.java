@@ -20,6 +20,7 @@ import javax.annotation.Resource;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.ObjectUtils;
@@ -47,6 +48,9 @@ public class AuctionServiceImpl implements AuctionService {
 	
 	@Autowired
 	private McaUtil mcaUtil;
+	
+	@Value("${ncloud.storage.end-point}") private String endPoint;
+	@Value("${ncloud.storage.bucket-name}") private String bucketName;
 	
 	@Override
 	public List<Map<String,Object>> noticeSelectList(Map<String, Object> reqMap)throws SQLException {
@@ -1552,6 +1556,7 @@ public class AuctionServiceImpl implements AuctionService {
 	 */
 	@Override
 	public List<Map<String, Object>> selectListCowImg(Map<String, Object> param) throws SQLException{
+		param.put("imgDomain", endPoint + "/" + bucketName + "/");
 		return auctionDAO.selectListCowImg(param);
 	}
 	

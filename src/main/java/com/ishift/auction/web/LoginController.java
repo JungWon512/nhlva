@@ -178,6 +178,7 @@ public class LoginController {
 				if((boolean) result.get("success")) {
 					mav.addObject("loginResult",result);
 					mav.setViewName("redirect:/main?"+state);
+					return mav;
 				}
 				message = (String) result.get("message");				
 			}
