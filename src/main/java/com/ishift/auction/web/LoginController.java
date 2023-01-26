@@ -311,6 +311,7 @@ public class LoginController {
 				response.setHeader(HttpHeaders.AUTHORIZATION, Constants.JwtConstants.BEARER + token);
 				result.put(Constants.JwtConstants.ACCESS_TOKEN, token);
 				
+//				if (!"".equals(params.get("returnUrl"))) result.put("returnUrl", params.get("returnUrl"));
 				params.put("token", token);
 				params.put("inOutGb", "1");
 				loginService.insertLoginConnHistory(request, params);		//로그인 이력 남기기

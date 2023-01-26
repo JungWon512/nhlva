@@ -69,8 +69,8 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 			try {
 				// 헤더와 쿠키 둘 다 토큰이 있는 경우 헤더의 토큰을 우선으로 체크
 				String accessToken = (headerAccessToken != null && !"".equals(headerAccessToken)) ? 
-						headerAccessToken.substring(Constants.JwtConstants.BEARER.length()) 
-						: cookieAccessToken;
+										headerAccessToken.replace(Constants.JwtConstants.BEARER, "") 
+										: cookieAccessToken;
 				
 				if (jwtTokenUtil.isValidToken(accessToken)
 				&& Constants.UserRole.BIDDER.equals(jwtTokenUtil.getValue(accessToken, Constants.JwtConstants.JWT_CLAIM_USER_ROLE))) {

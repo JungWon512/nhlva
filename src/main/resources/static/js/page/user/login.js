@@ -88,6 +88,7 @@
 //						"birthDate" : hex_sha512($("input#password").val()).toString(),
 //						"telNo" : hex_sha512($("input#password").val().replace(reg, "")).toString()
 					"connChannel" : connChannel()
+//					,"returnUrl" : $("input[name='rtnUrl']").val()
 				}),
 				type: 'POST',
 				dataType: 'json',

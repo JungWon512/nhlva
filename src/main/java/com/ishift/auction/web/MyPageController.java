@@ -269,11 +269,13 @@ public class MyPageController {
 									, @PathVariable Map<String, Object> params
 									, RedirectAttributes redirect) throws SQLException {
 		final ModelAndView mav = new ModelAndView();
+//		final String rtnUrl = request.getRequestURI();
 //		this.setTempLoginProc("mwmn", params, response);
 		final Map<String,Object> johap = adminService.selectOneJohap(params);
 		params.put("searchnaBzPlcNo", johap.get("NA_BZPLCNO"));
 //		redirect.addFlashAttribute("params", params);
 		redirect.mergeAttributes(params);
+//		mav.setView(new RedirectView("/my/buyInfo?place=" + johap.get("NA_BZPLCNO") + "&rtnUrl=" + rtnUrl));
 		mav.setView(new RedirectView("/my/buyInfo?place=" + johap.get("NA_BZPLCNO")));
 		return mav;
 	}
@@ -291,11 +293,13 @@ public class MyPageController {
 									, @PathVariable Map<String, Object> params
 									, RedirectAttributes redirect) throws SQLException {
 		final ModelAndView mav = new ModelAndView();
+//		final String rtnUrl = request.getRequestURI();
 //		this.setTempLoginProc("fhs", params, response);
 		final Map<String,Object> johap = adminService.selectOneJohap(params);
 		params.put("searchnaBzPlcNo", johap.get("NA_BZPLCNO"));
 //		redirect.addFlashAttribute("params", params);
 		redirect.mergeAttributes(params);
+//		mav.setView(new RedirectView("/my/entryInfo?place=" + johap.get("NA_BZPLCNO") + "&rtnUrl=" + rtnUrl));
 		mav.setView(new RedirectView("/my/entryInfo?place=" + johap.get("NA_BZPLCNO")));
 		return mav;
 	}
