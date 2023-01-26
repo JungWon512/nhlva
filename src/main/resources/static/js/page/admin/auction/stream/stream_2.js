@@ -112,48 +112,48 @@ var messageHandler = function(data) {
 				,t8007:'경매 종료'
 			}
 			switch(dataArr[6]){
-				case "8001" : $('table.tblAuctionSt tbody tr.st td.auctionTxt p').removeClass('txt-red txt-green').addClass('txt-green').text(aucStConfig.t8001); break; 
-				case "8002" : $('table.tblAuctionSt tbody tr.st td.auctionTxt p').removeClass('txt-red txt-green').addClass('txt-green').text(aucStConfig.t8002); break; 
-				case "8003" : $('table.tblAuctionSt tbody tr.st td.auctionTxt p').removeClass('txt-red txt-green').addClass('txt-green').text(aucStConfig.t8003); break; 
-				case "8004" : $('table.tblAuctionSt tbody tr.st td.auctionTxt p').removeClass('txt-red txt-green').addClass('txt-red').text(aucStConfig.t8004); break; 
-				case "8005" : $('table.tblAuctionSt tbody tr.st td.auctionTxt p').removeClass('txt-red txt-green').addClass('txt-green').text(aucStConfig.t8005); break; 
-				case "8006" : $('table.tblAuctionSt tbody tr.st td.auctionTxt p').removeClass('txt-red txt-green').addClass('txt-green').text(aucStConfig.t8006); break; 
+				case "8001" : $('table.tblAuctionSt tbody tr td.auctionTxt p').removeClass('txt-red txt-green').addClass('txt-green').text(aucStConfig.t8001); break; 
+				case "8002" : $('table.tblAuctionSt tbody tr td.auctionTxt p').removeClass('txt-red txt-green').addClass('txt-green').text(aucStConfig.t8002); break; 
+				case "8003" : $('table.tblAuctionSt tbody tr td.auctionTxt p').removeClass('txt-red txt-green').addClass('txt-green').text(aucStConfig.t8003); break; 
+				case "8004" : $('table.tblAuctionSt tbody tr td.auctionTxt p').removeClass('txt-red txt-green').addClass('txt-red').text(aucStConfig.t8004); break; 
+				case "8005" : $('table.tblAuctionSt tbody tr td.auctionTxt p').removeClass('txt-red txt-green').addClass('txt-green').text(aucStConfig.t8005); break; 
+				case "8006" : $('table.tblAuctionSt tbody tr td.auctionTxt p').removeClass('txt-red txt-green').addClass('txt-green').text(aucStConfig.t8006); break; 
 				case "8007" : 
 					socketDisconnect();
-					$('table.tblAuctionSt tbody tr.st td.auctionTxt p').removeClass('txt-red txt-green').addClass('txt-green').text(aucStConfig.t8007); 
+					$('table.tblAuctionSt tbody tr td.auctionTxt p').removeClass('txt-red txt-green').addClass('txt-green').text(aucStConfig.t8007); 
 				break; 
 				default:break;
 			}
 		break;	
 		case "AF" :
-			$('.tblBoard table tbody tr td.auctionNum').text(dataArr[2]);
+			$('table.tblAuctionSt tbody tr td.val p.auctionNum').text(dataArr[2]);
 			if(dataArr[3]=='22'){ //낙찰
 				var user =dataArr[5],price = dataArr[6];
-				$('table.tblAuctionSt tbody tr.st td.complate p.tdBiddNum').html(''+ user);
-				$('table.tblAuctionSt tbody tr.st td.complate p.tdBiddAmt').html(''+ price);
-				$('table.tblAuctionSt tbody tr.st td.auctionTxt p').removeClass('txt-red txt-green').addClass('txt-green').text('낙찰');	
+				$('table.tblAuctionSt tbody tr td.complate p.tdBiddNum').html(''+ user);
+				$('table.tblAuctionSt tbody tr td.complate p.tdBiddAmt').html(''+ price);
+				$('table.tblAuctionSt tbody tr td.auctionTxt p').removeClass('txt-red txt-green').addClass('txt-green').text('낙찰');	
 			}else{
-				$('table.tblAuctionSt tbody tr.st td.complate p.tdBiddNum').html('-');
-				$('table.tblAuctionSt tbody tr.st td.complate p.tdBiddAmt').html('-');
-				$('table.tblAuctionSt tbody tr.st td.auctionTxt p').removeClass('txt-red txt-green').addClass('txt-green').text('유찰');				
+				$('table.tblAuctionSt tbody tr td.complate p.tdBiddNum').html('-');
+				$('table.tblAuctionSt tbody tr td.complate p.tdBiddAmt').html('-');
+				$('table.tblAuctionSt tbody tr td.auctionTxt p').removeClass('txt-red txt-green').addClass('txt-green').text('유찰');				
 			}
 		break;	
 		case "SD" : //경매종료 카운트		
 			if(dataArr[2]=='C'){
-				$('table.tblAuctionSt tbody tr.st td.auctionTxt p').removeClass('txt-red txt-green').addClass('txt-green').html('경매마감 <b>'+dataArr[3]+'</b>초 전');				
+				$('table.tblAuctionSt tbody tr td.auctionTxt p').removeClass('txt-red txt-green').addClass('txt-green').html('마감 <b>'+dataArr[3]+'</b>초 전');				
 			}	
 		break;	
 		case "AN" :
 			// 재경매 대상 수신
 			auctionConfig.anStatus = true;
-			$('table.tblAuctionSt tbody tr.st td.auctionTxt p').removeClass('txt-red txt-green').addClass('txt-green').text('재경매 진행 중');
+			$('table.tblAuctionSt tbody tr td.auctionTxt p').removeClass('txt-red txt-green').addClass('txt-green').text('재경매 진행중');
 			break;
 		case "AY" :
 			// 재경매 대상 수신
 			if(dataArr[2]!=$('table.tblAuctionSt tbody tr td.val p.auctionNum').text()) return;
-			if((auctionConfig.auctionSt =='8003' || auctionConfig.auctionSt =='8004') && 'F' == dataArr[3].trim()) $('table.tblAuctionSt tbody tr.st td.auctionTxt p').removeClass('txt-red txt-green').addClass('txt-green').text('응찰 종료');
-			else if(auctionConfig.anStatus) $('table.tblAuctionSt tbody tr.st td.auctionTxt p').removeClass('txt-red txt-green').addClass('txt-red').text('재경매 진행중');
-			else $('table.tblAuctionSt tbody tr.st td.auctionTxt p').removeClass('txt-red txt-green').addClass('txt-red').text('경매 진행중');
+			if((auctionConfig.auctionSt =='8003' || auctionConfig.auctionSt =='8004') && 'F' == dataArr[3].trim()) $('table.tblAuctionSt tbody tr td.auctionTxt p').removeClass('txt-red txt-green').addClass('txt-green').text('응찰 종료');
+			else if(auctionConfig.anStatus) $('table.tblAuctionSt tbody tr td.auctionTxt p').removeClass('txt-red txt-green').addClass('txt-red').text('재경매 진행중');
+			else $('table.tblAuctionSt tbody tr td.auctionTxt p').removeClass('txt-red txt-green').addClass('txt-red').text('경매 진행중');
 			break;
 		default:break;
 	}
