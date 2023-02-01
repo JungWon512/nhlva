@@ -6,6 +6,9 @@
     };
     
     var setBinding = function() {
+		$(document).on("click","button.btn-top10-confirm", function(){
+        	window.close();
+		});
     };
 
     var namespace = win.auction;

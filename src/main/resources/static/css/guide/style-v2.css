@@ -574,7 +574,7 @@
 	width: 100%;
 	padding-left: 15px;
 	padding-right: 30px; /*50 px*/
-	/* 	font-size: 14.3px; 18px */
+	/* 	font-size: 18px; */
 	font-size : 18px;
 	border: 1px solid #d3d3d3;
 	border-radius: 5px;
@@ -712,7 +712,7 @@
 	border-left: 1px solid #76baff;
 }
 
-.winpop_close:not(.btn-top10-confirm) {
+.winpop_close {
 	width: 50px;
 	height: 50px;
 	background: url(/static/images/guide/ico_close.svg) no-repeat 50% 50%;
@@ -1309,19 +1309,11 @@ input[type="number"]::-webkit-inner-spin-button {
 }
 
 .admin_area .admin_new_reg2 .btn-reg-pic {
-	width: 50px;
+	width: 60px;
 	height: 30px;
 	border-radius: 3px;
 	background-color: #ffaf00;
     color: #1a1a1a;
-    font-weight: 500;
-}
-.admin_area .admin_new_reg2 .btn-reg-pic2 {
-	width: 50px;
-	height: 30px;
-	border-radius: 3px;
-	background-color: #007eff;
-    color: #fff;
     font-weight: 500;
 }
 
@@ -1463,7 +1455,7 @@ input[type="number"]::-webkit-inner-spin-button {
 }
 
 .winpop .winpop_close.ta-R {
-	 background-size: 20px 20px !important;
+	background-size: 20px 20px !important;
 	position: absolute;
 	right: 0;
 	top: 0;
@@ -1545,19 +1537,19 @@ input[type="number"]::-webkit-inner-spin-button {
 	position: absolute;
 	right: 0;
 	top: 0;
-	padding: 0 29px 0 16px;
+	padding: 0 32px 0 13px;
 	font-size: 16px;
-	line-height: 28px;
+	line-height: 36px;
 	color: #fff;
 	font-weight: 700;
 	background-color: #346fdc;
-	border-radius: 15px;
+	border-radius: 18px;
 }
 
 .sec-board .tit-area .btn-top3:before {
 	position: absolute;
-	right: 6px;
-	top: 6px;
+	right: 10px;
+	top: 10px;
 	width: 16px;
 	height: 16px;
 	background: #fff url(/static/images/guide/v2/ico-arrow-forward-blue.svg) no-repeat 50% 50%;
@@ -1613,12 +1605,12 @@ input[type="number"]::-webkit-inner-spin-button {
 .btnBox button {
 	padding: 0 10px;
 	margin: 0 8px;
-	height: 35px;
+	height: 36px;
 	font-size: 16px;
 	color: #515457;
 	background-color: #fff;
 	border: 1px solid #d9d9d9;
-	border-radius: 15px;
+	border-radius: 18px;
 	font-weight: 700;
 	width: 33.33%;
 }
@@ -2122,7 +2114,7 @@ input[type="number"]::-webkit-inner-spin-button {
 }
 
 .list-market li ~ li {
-	border-top: 1px solid #5e5e5e;
+	border-top: 1px solid rgba(173, 173, 173, .5);
 }
 
 .list-market .item {
@@ -2221,8 +2213,8 @@ input[type="number"]::-webkit-inner-spin-button {
 .sec-board .tit-area .login-btn-area .btn-login {
 	display: inline-block;
 	margin: 0;
-	width: 30px;
-	height: 30px;
+	width: 28px;
+	height: 28px;
 	background: url(/static/images/guide/v2/ic_login.svg) no-repeat 0 0;
 	background-size: 28px auto;
 }
@@ -2452,7 +2444,7 @@ input[type="number"]::-webkit-inner-spin-button {
 	display: block;
 	margin: 50px 0;
 	border: 0;
-	border-bottom: 1px solid #939292;
+	border-bottom: 1px solid rgba(173, 173, 173, .5);;
 }
 
 .board-main .sort-area .hr-line {
@@ -2564,7 +2556,7 @@ input[type="number"]::-webkit-inner-spin-button {
 }
 
 .winpop_filter .winpop-head {
-	padding: 0 53px 0 27px;
+	padding: 53px 0 27px;
 }
 
 .winpop_filter .filter-area {
@@ -2620,7 +2612,7 @@ input[type="number"]::-webkit-inner-spin-button {
 }
 
 .winpop_top10 .winpop-head {
-	padding: 0 53px 0 27px;
+	padding: 53px 0 27px;
 }
 
 .winpop_top10 .btn-area {
@@ -3765,15 +3757,15 @@ input[type="number"]::-webkit-inner-spin-button {
 	}
 
 	.sec-board .tit-area .btn-top3 {
-		padding: 0 29px 0 16px;
+		padding: 0 32px 0 13px;
 		font-size: 16px;
-		line-height: 28px;
-		border-radius: 15px;
+		line-height: 36px;
+		border-radius: 18px;
 	}
 	
 	.sec-board .tit-area .btn-top3:before {
-		right: 6px;
-		top: 6px;
+		right: 10px;
+		top: 10px;
 		width: 16px;
 		height: 16px;
 		background-size: 13px 13px;
@@ -3810,9 +3802,7 @@ input[type="number"]::-webkit-inner-spin-button {
 	.btnBox button {
 		padding: 0 5px;
 		margin: 0 4px;
-		height: 28px;
 		font-size: 13px;
-		border-radius: 15px;
 	}
 
 	.board-main .sort-area .btnBox:first-child {
@@ -3899,7 +3889,7 @@ input[type="number"]::-webkit-inner-spin-button {
 	}
 	
 	.board-number.average dd.won {
-		font-size: 19px;
+		font-size: 15px;
 	}
 	
 	.board-number .per {
@@ -3922,7 +3912,7 @@ input[type="number"]::-webkit-inner-spin-button {
 	}
 	
 	.white-box {
-		padding: 10px;
+		padding: 18px 15px;
 		border-radius: 15px;
 	}
 
@@ -3947,7 +3937,7 @@ input[type="number"]::-webkit-inner-spin-button {
 	}
 	
 	.board-number.col-3 dd.won {
-		font-size: 13px;
+		font-size: 12px;
 	}
 
 	.board-number + .gap-area {
@@ -4009,7 +3999,7 @@ input[type="number"]::-webkit-inner-spin-button {
 	
 	.list-top10 .union dt img {
 		width: 64px;
-		height: 68px;
+		height: 64px;
 	}
 	
 	.list-top10 .union .price {
@@ -4083,7 +4073,7 @@ input[type="number"]::-webkit-inner-spin-button {
 		height: 75px;
 		font-size: 20px;
 		color: #515457;
-		border: 1px solid #939292;
+		border: 1px solid rgba(147, 146, 146, .5);;
 		border-radius: 15px;
 		background-color: #fff;
 	}
@@ -4386,7 +4376,7 @@ input[type="number"]::-webkit-inner-spin-button {
 	}
 
 	.modal-wrap.pop_reg .modal-content {
-		padding: 10px 0 0;
+		padding: 20px 0 0;
 	}
 
 	.modal-wrap.pop_status_change .modal-content {
@@ -4498,6 +4488,14 @@ input[type="number"]::-webkit-inner-spin-button {
 
 }
 
+@media only all and (max-width: 420px) {
+
+	.admin_new_reg .top-btns.btn-4 button {
+		font-size: 15px;
+	}
+	
+}
+
 @media only all and (max-width: 360px) {
 
 	.stats-box .num {
@@ -4527,6 +4525,11 @@ input[type="number"]::-webkit-inner-spin-button {
 
 	.board-new .box-select.ver-date input {
 		padding-right: 26px;
+		font-size: 14px;
+	}
+
+	.admin_new_reg .top-btns.btn-4 button {
+		margin: 0 4px;
 		font-size: 14px;
 	}
 
@@ -4678,6 +4681,7 @@ input[type="number"]::-webkit-inner-spin-button {
 	}
 
 	.page-board-main .sec-board:nth-of-type(1) .period-area {
+		padding-top: 30px;
 		padding-left: 30px;
 	}
 
@@ -5074,4 +5078,8 @@ input[type="number"]::-webkit-inner-spin-button {
 		width: 804px;
 		margin: 0 auto;
 	}
+}
+
+@media only all and (min-width: 1025px) {
+	.div_na_bzplc .secAplyDl .table-simple thead th, .table-simple tbody td{height:50px;font-size:18px;}
 }

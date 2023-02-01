@@ -141,7 +141,7 @@
 						 COMMONS.callAjax("/auction/api/inserttZimPrice", "post", params, 'application/json', 'json', function(data){
 							modalPopupClose('.popup .modal-wrap.pop_jjim_input.zim');
 							if(data && !data.success){
-								modalAlert('','작업중 오류가 발생했습니다. <br/>관리자에게 문의하세요.');
+								modalAlert('', data.message);
 								return;
 							}
 							location.reload();

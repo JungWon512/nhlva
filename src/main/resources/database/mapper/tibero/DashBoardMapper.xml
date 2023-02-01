@@ -2,6 +2,13 @@
 <!DOCTYPE mapper PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="dashboard">
+	<select id="findFilterRegionList" parameterType="map" resultType="map">
+		/* FrontMapper.findFilterRegionList  */
+		SELECT DISTINCT A.NA_BZPLCLOC
+				, A.LOCNM
+		FROM TB_LA_IS_BM_BZLOC A
+	</select>
+
 	<select id="findCowPriceList" parameterType="map" resultType="map">
 		/* FrontMapper.findCowPriceList  */
 		SELECT T.MONTH_OLD_C
@@ -16,11 +23,24 @@
 		FROM
 		 (
 			SELECT 'PRE' AS WEEK_FLAG
-					, A.MONTH_OLD_C
+					, B.SIMP_C AS MONTH_OLD_C
 					, SUM(NVL(A.TOT_SBID_CNT,0)) SUM_SBID_CNT
 					, NVL(TRUNC((DECODE(SUM(A.TOT_SBID_CNT),0,0,(SUM(A.SBID_SUM_AMT) / SUM(A.TOT_SBID_CNT))))),0) AS AVG_SBID_AM
-			FROM TB_LA_IS_MM_DB_SUM A
-			WHERE 1=1
+			FROM (
+					SELECT *
+					FROM TB_LA_IS_MH_COMN_APL
+					WHERE SIMP_TPC = 'MONTH_OLD_C'
+					<choose>
+						<when test='!"1".equals(searchAucObjDsc)'>
+							AND AMN_HCNT = '2'
+						</when>
+						<otherwise>
+							AND AMN_HCNT = '1'
+						</otherwise>
+					</choose>
+			) B
+			LEFT JOIN TB_LA_IS_MM_DB_SUM A 
+				ON B.SIMP_C = A.MONTH_OLD_C 
 				AND A.MONTH_SUM_YN = '0'
 					<if test="searchAucObjDsc != null and searchAucObjDsc != ''">
 						AND A.AUC_OBJ_DSC = #{searchAucObjDsc}
@@ -39,35 +59,52 @@
 							AND A.AUC_DT BETWEEN TO_CHAR(SYSDATE - 11, 'YYYYMMDD') AND TO_CHAR(SYSDATE-1, 'YYYYMMDD')
 						</otherwise>
 					</choose>
-			GROUP BY ROLLUP (A.MONTH_OLD_C)
+					AND NVL(A.SBID_SUM_AMT, 0) <![CDATA[>]]> 0
+			WHERE 1=1
+			GROUP BY ROLLUP (B.SIMP_C)
 	
 			UNION ALL
 			
 			SELECT 'THIS' AS WEEK_FLAG
-					, A.MONTH_OLD_C
+					, B.SIMP_C AS MONTH_OLD_C
 					, SUM(NVL(A.TOT_SBID_CNT,0)) SUM_SBID_CNT
 					, NVL(TRUNC((DECODE(SUM(A.TOT_SBID_CNT),0,0,(SUM(A.SBID_SUM_AMT) / SUM(A.TOT_SBID_CNT))))),0) AS AVG_SBID_AM
-			FROM TB_LA_IS_MM_DB_SUM A
-			WHERE 1=1
-				AND A.MONTH_SUM_YN = '0'
-					<if test="searchAucObjDsc != null and searchAucObjDsc != ''">
-						AND A.AUC_OBJ_DSC = #{searchAucObjDsc}
-					</if>
-					<if test="searchPlace != null and searchPlace != ''"> 
-						AND A.NA_BZPLCLOC = #{searchPlace}
-					</if>
-			        <choose>
-						<when test='"range20".equals(searchRaDate)'>
-							AND A.AUC_DT BETWEEN TO_CHAR(SYSDATE - 20, 'YYYYMMDD') AND TO_CHAR(SYSDATE, 'YYYYMMDD')
-						</when>
-						<when test='"range30".equals(searchRaDate)'>
-							AND A.AUC_DT BETWEEN TO_CHAR(SYSDATE - 30, 'YYYYMMDD') AND TO_CHAR(SYSDATE, 'YYYYMMDD')
+			FROM (
+					SELECT *
+					FROM TB_LA_IS_MH_COMN_APL
+					WHERE SIMP_TPC = 'MONTH_OLD_C'
+					<choose>
+						<when test='!"1".equals(searchAucObjDsc)'>
+							AND AMN_HCNT = '2'
 						</when>
 						<otherwise>
-							AND A.AUC_DT BETWEEN TO_CHAR(SYSDATE - 10, 'YYYYMMDD') AND TO_CHAR(SYSDATE, 'YYYYMMDD')
+							AND AMN_HCNT = '1'
 						</otherwise>
 					</choose>
-			GROUP BY ROLLUP (A.MONTH_OLD_C)
+			) B
+			LEFT JOIN TB_LA_IS_MM_DB_SUM A 
+				ON B.SIMP_C = A.MONTH_OLD_C 
+				AND A.MONTH_SUM_YN = '0'
+				AND NVL(A.SBID_SUM_AMT, 0) <![CDATA[>]]> 0
+				<if test="searchAucObjDsc != null and searchAucObjDsc != ''">
+					AND A.AUC_OBJ_DSC = #{searchAucObjDsc}
+				</if>
+				<if test="searchPlace != null and searchPlace != ''"> 
+					AND A.NA_BZPLCLOC = #{searchPlace}
+				</if>
+		        <choose>
+					<when test='"range20".equals(searchRaDate)'>
+						AND A.AUC_DT BETWEEN TO_CHAR(SYSDATE - 20, 'YYYYMMDD') AND TO_CHAR(SYSDATE, 'YYYYMMDD')
+					</when>
+					<when test='"range30".equals(searchRaDate)'>
+						AND A.AUC_DT BETWEEN TO_CHAR(SYSDATE - 30, 'YYYYMMDD') AND TO_CHAR(SYSDATE, 'YYYYMMDD')
+					</when>
+					<otherwise>
+						AND A.AUC_DT BETWEEN TO_CHAR(SYSDATE - 10, 'YYYYMMDD') AND TO_CHAR(SYSDATE, 'YYYYMMDD')
+					</otherwise>
+				</choose>
+			WHERE 1=1
+			GROUP BY ROLLUP (B.SIMP_C)
 		) T
 		WHERE 1=1
 		GROUP BY T.MONTH_OLD_C
@@ -790,7 +827,7 @@
 			END SEL_STS_DSC_NM
 			, SOG.TRPCS_PY_YN
 			, INDV.BIRTH
-			, TRUNC(MONTHS_BETWEEN(SOG.AUC_DT, INDV.BIRTH)) AS MTCN
+			, TRUNC(MONTHS_BETWEEN(SOG.AUC_DT, INDV.BIRTH)) +1 AS MTCN
 			, INDV.SRA_INDV_BRDSRA_RG_NO
 			, SUBSTR(TRPL.BRKR_NAME,1,1) || LPAD('*',LENGTH(TRPL.BRKR_NAME)-2, '*') || SUBSTR(TRPL.BRKR_NAME,LENGTH(TRPL.BRKR_NAME),1) BRKR_NAME
 			, SOG.BRCL_ISP_DT

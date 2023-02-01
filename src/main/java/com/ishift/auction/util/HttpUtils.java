@@ -759,6 +759,47 @@ public class HttpUtils {
 		}
         return null;
 	}
+
+	public String callApiKaKao(String pUrl) {
+		BufferedReader br = null;
+		HttpURLConnection con = null;
+        try {
+        	
+            URL url = new URL(pUrl);
+            SSLVaildBypass();
+            
+            con = (HttpURLConnection) url.openConnection();
+            con.setConnectTimeout(5000); //서버에 연결되는 Timeout 시간 설정
+            con.setReadTimeout(5000); // InputStream 읽어 오는 Timeout 시간 설정
+            con.setRequestMethod("GET");
+            con.setDoOutput(false);    
+
+            StringBuilder sb = new StringBuilder();
+            log.info("callApiAiak resp code : "+con.getResponseCode());
+            if (con.getResponseCode() == HttpURLConnection.HTTP_OK) {
+                br = new BufferedReader(new InputStreamReader(con.getInputStream(), "utf-8"));
+                String line;
+                while ((line = br.readLine()) != null) {
+                    sb.append(line).append("\n");
+                }
+                log.info("callApiKaKao : "+sb.toString());
+                return sb.toString();
+            } else {
+                log.error(con.getResponseMessage());
+            }
+
+        } catch (Exception e) {
+            log.error(pUrl+" : ",e);
+        } finally {
+        	try {
+                if(con != null)con.disconnect();
+                if(br !=null) br.close();
+        	}catch(Exception e) {
+                log.error(pUrl+" : ",e);	
+        	}
+		}
+        return null;
+	}
 	
 	private void SSLVaildBypass() throws NoSuchAlgorithmException, KeyManagementException {
         HostnameVerifier hv = new HostnameVerifier() {

@@ -3,11 +3,12 @@ package com.ishift.auction.util;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 @Component
 public class CookieUtil {
-	
+	@Value("${spring.profiles.active}") private String profiles;
 	/**
 	 * 쿠키 생성
 	 * @param cookieName
@@ -18,7 +19,9 @@ public class CookieUtil {
 		Cookie cookie = new Cookie(cookieName, value);
 //		cookie.setHttpOnly(true);
 		cookie.setMaxAge(60*60*24);
-		cookie.setSecure(true);
+		if("production".equals(profiles)) {
+			cookie.setSecure(true);
+		}
 		cookie.setPath("/");
 		return cookie;
 	}

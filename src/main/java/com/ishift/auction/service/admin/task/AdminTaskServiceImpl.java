@@ -6,6 +6,7 @@ import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.security.KeyManagementException;
+import java.security.KeyStoreException;
 import java.security.NoSuchAlgorithmException;
 import java.security.SecureRandom;
 import java.security.cert.CertificateException;
@@ -44,10 +45,12 @@ import org.springframework.util.Base64Utils;
 import org.springframework.util.ObjectUtils;
 
 import com.amazonaws.ClientConfiguration;
+import com.amazonaws.SDKGlobalConfiguration;
 import com.amazonaws.SdkClientException;
 import com.amazonaws.auth.AWSStaticCredentialsProvider;
 import com.amazonaws.auth.BasicAWSCredentials;
 import com.amazonaws.client.builder.AwsClientBuilder;
+import com.amazonaws.http.AmazonHttpClient;
 import com.amazonaws.http.apache.client.impl.SdkHttpClient;
 import com.amazonaws.http.conn.ssl.SdkTLSSocketFactory;
 import com.amazonaws.services.s3.AmazonS3;
@@ -359,56 +362,24 @@ public class AdminTaskServiceImpl implements AdminTaskService {
 	}
 	
 	/**
-	 * base64 인코딩한 이미지 파일로 변환
-	 * @param base64Str
-	 * @param uploadPath
-	 * @param fileName
-	 * @param ext
-	 * @return
-	 */
-	public boolean makeImage(String base64Str, String uploadPath, String fileName, String ext) {
-		ByteArrayInputStream bis = null;
-		BufferedImage img = null;
-		try {
-			byte[] byteImg = Base64Utils.decodeFromString(base64Str);
-			bis = new ByteArrayInputStream(byteImg);
-			img = ImageIO.read(bis);
-			bis.close();
-			
-			File folder = new File(uploadPath);
-			File outputFile = new File(uploadPath + fileName + "." + ext);
-			
-			if (!folder.isDirectory()) folder.mkdir();
-			if (outputFile.exists()) outputFile.delete();
-			return ImageIO.write(img, ext, outputFile);
-		}
-		catch (IOException e) {
-			log.error("AdminTaskServiceImpl.makeImage : {} ", e);
-			return false;
-		}
-		finally {
-			if (bis != null) try {bis.close();} catch (IOException e) {}
-		}
-	}
-	
-	/**
 	 * 출장우 이미지 업로드
 	 * @param params
 	 * @return
 	 * @throws SQLException 
+	 * @throws KeyStoreException 
 	 */
 	@Override
-	public Map<String, Object> uploadImageProc(Map<String, Object> params) throws SQLException, NoSuchAlgorithmException, KeyManagementException {
+	public Map<String, Object> uploadImageProc(Map<String, Object> params) throws SQLException, AmazonS3Exception, SdkClientException, NoSuchAlgorithmException, KeyManagementException, KeyStoreException {
 		final Map<String, Object> result = new HashMap<String, Object>();
 
-//		TrustStrategy ts = ((chain, authType) -> true);
-		
 		HostnameVerifier hv = new HostnameVerifier() {
 			@Override
 			public boolean verify(String arg0, SSLSession arg1) {
 				return true;
 			}
 		};
+		
+		AmazonHttpClient ac = null;
 		TrustManager[] trustAllCerts = new TrustManager[] {
 			new X509TrustManager() {
 				@Override
@@ -424,16 +395,18 @@ public class AdminTaskServiceImpl implements AdminTaskService {
 			}
 		};
 		
-		SSLContext sc = SSLContext.getInstance("TLSv1.2");
-		sc.init(new KeyManager[0], trustAllCerts, new SecureRandom());
+		SSLContext sc = SSLContext.getInstance("SSL");
+		sc.init(null, trustAllCerts, new SecureRandom());
 		
 		ClientConfiguration cc = new ClientConfiguration();
 		SSLConnectionSocketFactory ssf = new SSLConnectionSocketFactory(sc
-																		, new String[] {"TLSv1.2", "TLSv1.1", "TLSv1"}
+																		, new String[] {"TLSv1.2", "TLSv1.1", "TLSv1", "SSLv3", "SSLv2Hello"}
 																		, new String[] {"TLS_RSA_WITH_AES_128_GCM_SHA256", "TLS_RSA_WITH_AES_128_CBC_SHA256"}
 																		, hv);
 		cc.getApacheHttpClientConfig().withSslSocketFactory(ssf);
-		
+		cc.setSignerOverride("AWSS3V4SignerType");
+		cc.setConnectionTimeout(500);
+		cc.setMaxErrorRetry(1);
 
 		// S3 client
 		final AmazonS3 s3 = AmazonS3ClientBuilder.standard()
@@ -503,21 +476,21 @@ public class AdminTaskServiceImpl implements AdminTaskService {
 					oriObjectMetadata.setContentType(MediaType.IMAGE_PNG_VALUE);
 					PutObjectRequest oriPutObjectRequest = new PutObjectRequest(bucketName, filePath + fileNm + fileExtNm, oriBis, oriObjectMetadata);
 
-					try {
+//					try {
 						oriPutObjectRequest.setAccessControlList(accessControlList);
 						s3.putObject(oriPutObjectRequest);
-					}
-					catch (AmazonS3Exception e) {
-						e.printStackTrace();
-						isSuccess = false;
-					}
-					catch(SdkClientException e) {
-						e.printStackTrace();
-						isSuccess = false;
-					}
-					finally {
-						if(oriBis != null) try {oriBis.close();}catch(IOException ie) {}
-					}
+//					}
+//					catch (AmazonS3Exception e) {
+//						log.error("AdminTaskServiceImpl.uploadImageProc AmazonS3Exception : {} ", e);
+//						isSuccess = false;
+//					}
+//					catch(SdkClientException e) {
+//						log.error("AdminTaskServiceImpl.uploadImageProc SdkClientException : {} ", e);
+//						isSuccess = false;
+//					}
+//					finally {
+						if(oriBis != null) try {oriBis.close();}catch(IOException ie) {log.error("AdminTaskServiceImpl.uploadImageProc IOException : {} ", ie);}
+//					}
 					
 					if (!isSuccess) continue;
 					successCnt++;
@@ -544,19 +517,19 @@ public class AdminTaskServiceImpl implements AdminTaskService {
 					thumbObjectMetadata.setContentType(MediaType.IMAGE_PNG_VALUE);
 					PutObjectRequest thumbPutObjectRequest = new PutObjectRequest(bucketName, filePath + "thumb/" + fileNm + fileExtNm, thumbBis, thumbObjectMetadata);
 					
-					try {
+//					try {
 						thumbPutObjectRequest.setAccessControlList(accessControlList);
 						s3.putObject(thumbPutObjectRequest);
-					}
-					catch (AmazonS3Exception e) {
-						e.printStackTrace();
-					}
-					catch(SdkClientException e) {
-						e.printStackTrace();
-					}
-					finally {
-						if (thumbBis != null) try {thumbBis.close();}catch(IOException ie) {}
-					}
+//					}
+//					catch (AmazonS3Exception e) {
+//						log.error("AdminTaskServiceImpl.uploadImageProc AmazonS3Exception : {} ", e);
+//					}
+//					catch(SdkClientException e) {
+//						log.error("AdminTaskServiceImpl.uploadImageProc SdkClientException : {} ", e);
+//					}
+//					finally {
+						if (thumbBis != null) try {thumbBis.close();}catch(IOException ie) {log.error("AdminTaskServiceImpl.uploadImageProc IOException : {} ", ie);}
+//					}
 				}
 			}
 		}

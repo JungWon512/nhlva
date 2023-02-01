@@ -107,7 +107,7 @@
 										<dd class="change fc-blue">${AMT} 원</dd>
 									</c:when>
 									<c:otherwise>
-										<dd class="change fc-red">+${AMT} 원</dd>
+										<dd class="change fc-red">+ ${AMT} 원</dd>
 									</c:otherwise>								
 								</c:choose>
 								

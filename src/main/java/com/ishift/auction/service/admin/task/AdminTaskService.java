@@ -1,10 +1,14 @@
 package com.ishift.auction.service.admin.task;
 
 import java.security.KeyManagementException;
+import java.security.KeyStoreException;
 import java.security.NoSuchAlgorithmException;
 import java.sql.SQLException;
 import java.util.List;
 import java.util.Map;
+
+import com.amazonaws.SdkClientException;
+import com.amazonaws.services.s3.model.AmazonS3Exception;
 
 /**
  * 홈페이지 관리자 경매업무 서비스
@@ -117,8 +121,9 @@ public interface AdminTaskService {
 	 * @throws SQLException 
 	 * @throws KeyManagementException 
 	 * @throws NoSuchAlgorithmException 
+	 * @throws KeyStoreException 
 	 */
-	Map<String, Object> uploadImageProc(Map<String, Object> params) throws SQLException, NoSuchAlgorithmException, KeyManagementException;
+	Map<String, Object> uploadImageProc(Map<String, Object> params) throws SQLException, AmazonS3Exception, SdkClientException, NoSuchAlgorithmException, KeyManagementException, KeyStoreException;
 
 	/**
 	 * 출장우 이미지 리스트

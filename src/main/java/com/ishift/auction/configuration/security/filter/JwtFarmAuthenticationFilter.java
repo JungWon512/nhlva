@@ -87,7 +87,7 @@ public class JwtFarmAuthenticationFilter extends OncePerRequestFilter {
 					SecurityContextHolder.getContext().setAuthentication(auth);
 				}
 			}catch (RuntimeException re) {
-				log.error("RuntimeException: JwtFarmAuthenticationFilter ",re);
+				log.error("RuntimeException: JwtFarmAuthenticationFilter ",re);			
 			}
 		}
 		log.debug("#### JwtFarmAuthenticationFilter [e] #####");

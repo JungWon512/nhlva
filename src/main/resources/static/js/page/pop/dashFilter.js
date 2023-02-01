@@ -3,10 +3,11 @@
     var COMMONS = win.auction["commons"];
     
     var setLayout = function() {
-		// 첫화면 전체 클릭
+		// 첫화면 전체 클릭 & 경기/인천
 		const searchFlag = $("input[name=searchFlag]").val();
 		if (searchFlag == "A" || searchFlag == "") {
-			$("ul.radio_group.step3 li input").attr("disabled", true);			
+			$("ul.radio_group.step3 li input").attr("disabled", true);
+			$("#A31").prop("checked", true);
 		}
     };
     
@@ -25,6 +26,7 @@
 		$(document).on("change","input[name='radioG2']", function() {
 			if ($(this).val() == 'A') {
 				$("ul.radio_group.step3 li input").attr("disabled", true);
+				$("#A31").prop("checked", true);
 			} else {
 				$("ul.radio_group.step3 li input").attr("disabled", false);				
 			}

@@ -508,59 +508,63 @@ public class AuctionController extends CommonController {
 	
 	@ResponseBody
 	@PostMapping(path = "/auction/api/inserttZimPrice", produces = MediaType.APPLICATION_JSON_VALUE)
-    Map<String, Object> insertUpdateZim(@RequestBody Map<String,Object> params) {
-        Map<String, Object> result = new HashMap<>();
-        // params.put("loginNo", sessionUtill.getUserId());
-        result.put("success", true);
-        try {
-        	if(params.get("loginNo") == null || 	"".equals(params.get("loginNo"))) {
-            	params.put("loginNo", sessionUtill.getUserId());        		
-        	}
-            result.put("data", auctionService.insertUpdateZim(params));
-            Map<String,Object> map = new HashMap<String, Object>();
-            map.put("naBzplc", params.get("naBzPlc"));
-            map.put("searchDate", params.get("aucDt"));
-            map.put("searchAucObjDsc", params.get("aucObjDsc"));
-            map.put("searchAucPrgSq", params.get("aucPrgSq"));
-            map.put("loginNo", params.get("loginNo"));
-            List<Map<String,Object>> list = auctionService.entrySelectList(map);
-            result.put("aucInfo", list.size() > 0 ? list.get(0) : null);
-        }catch (RuntimeException | SQLException re) {
-            result.put("success", false);
-            //result.put("message", re.getMessage());
-            result.put("message", "작업중 오류가 발생했습니다. 관리자에게 문의하세요.");
+	Map<String, Object> insertUpdateZim(@RequestBody Map<String,Object> params) {
+		Map<String, Object> result = new HashMap<>();
+		try {
+			if(params.get("loginNo") == null || "".equals(params.get("loginNo"))) {
+				params.put("loginNo", sessionUtill.getUserId());
+			}
+			int cnt = auctionService.insertUpdateZim(params);
+			result.put("data", cnt);
+			result.put("success", (cnt > 0));
+			result.put("message", (cnt > 0) ? "찜가격 등록에 성공했습니다." : "찜가격을 확인하세요.");
+			
+			Map<String,Object> map = new HashMap<String, Object>();
+			map.put("naBzplc", params.get("naBzPlc"));
+			map.put("searchDate", params.get("aucDt"));
+			map.put("searchAucObjDsc", params.get("aucObjDsc"));
+			map.put("searchAucPrgSq", params.get("aucPrgSq"));
+			map.put("loginNo", params.get("loginNo"));
+			List<Map<String,Object>> list = auctionService.entrySelectList(map);
+			result.put("aucInfo", list.size() > 0 ? list.get(0) : null);
+		}
+		catch (RuntimeException | SQLException re) {
+			result.put("success", false);
+			result.put("message", "작업중 오류가 발생했습니다. 관리자에게 문의하세요.");
 			log.error("AuctionController.insertUpdateZim : {} ",re);
 		}
-        return result;
-    }
+		return result;
+	}
 
 	@ResponseBody
 	@PostMapping(path = "/auction/api/deleteZimPrice", produces = MediaType.APPLICATION_JSON_VALUE)
-    Map<String, Object> deleteZimPrice(@RequestBody Map<String,Object> params) {
-        Map<String, Object> result = new HashMap<>();
-        // params.put("loginNo", sessionUtill.getUserId());
-        result.put("success", true);
-        try {
-        	if(params.get("loginNo") == null || "".equals(params.get("loginNo"))) {
-            	params.put("loginNo", sessionUtill.getUserId());        		
-        	}
-            result.put("data", auctionService.deleteZimPrice(params));
-            Map<String,Object> map = new HashMap<String, Object>();
-            map.put("naBzplc", params.get("naBzPlc"));
-            map.put("searchDate", params.get("aucDt"));
-            map.put("searchAucObjDsc", params.get("aucObjDsc"));
-            map.put("searchAucPrgSq", params.get("aucPrgSq"));
-            map.put("loginNo", params.get("loginNo"));
-            List<Map<String,Object>> list = auctionService.entrySelectList(map);
-            result.put("aucInfo", list.size() > 0 ? list.get(0) : null);
-        }catch (RuntimeException | SQLException re) {
-            result.put("success", false);
-            //result.put("message", re.getMessage());
-            result.put("message", "작업중 오류가 발생했습니다. 관리자에게 문의하세요.");
+	Map<String, Object> deleteZimPrice(@RequestBody Map<String,Object> params) {
+		Map<String, Object> result = new HashMap<>();
+		// params.put("loginNo", sessionUtill.getUserId());
+		result.put("success", true);
+		try {
+			if(params.get("loginNo") == null || "".equals(params.get("loginNo"))) {
+				params.put("loginNo", sessionUtill.getUserId());
+			}
+			result.put("data", auctionService.deleteZimPrice(params));
+			
+			Map<String,Object> map = new HashMap<String, Object>();
+			map.put("naBzplc", params.get("naBzPlc"));
+			map.put("searchDate", params.get("aucDt"));
+			map.put("searchAucObjDsc", params.get("aucObjDsc"));
+			map.put("searchAucPrgSq", params.get("aucPrgSq"));
+			map.put("loginNo", params.get("loginNo"));
+			List<Map<String,Object>> list = auctionService.entrySelectList(map);
+			result.put("aucInfo", list.size() > 0 ? list.get(0) : null);
+		}
+		catch (RuntimeException | SQLException re) {
+			result.put("success", false);
+			//result.put("message", re.getMessage());
+			result.put("message", "작업중 오류가 발생했습니다. 관리자에게 문의하세요.");
 			log.error("AuctionController.deleteZimPrice : {} ",re);
 		}
-        return result;
-    }
+		return result;
+	}
 
 	@RequestMapping(value = "/auction/api/entryListApi",method = { RequestMethod.GET, RequestMethod.POST })
 	public ModelAndView entryListApiPopUp(@RequestParam Map<String,Object> param) throws Exception {
@@ -1035,5 +1039,22 @@ public class AuctionController extends CommonController {
 			result.put("success", false);		
 		}		
 		return result;
+	}
+
+	@ResponseBody
+	@RequestMapping(value = "/info/getAiakInfo", method = { RequestMethod.GET, RequestMethod.POST })
+	public String testAiak(@RequestParam Map<String, Object> params) throws Exception {
+		String rHtml= "";
+		try {
+			if(params.get("barcode") == null) {
+				throw new Exception("귀표번호를 입력해주시기 바랍니다.");
+			}
+			String barcode ="";
+			if(params.get("barcode") != null) barcode = (String)params.get("barcode");
+			rHtml = httpUtils.callApiAiak(barcode);
+		}catch(RuntimeException re) {		//SQLException |
+			rHtml = "작업중 오류가 발생했습니다. 관리자에게 문의하세요.";
+		}
+		return rHtml;
 	}
 }

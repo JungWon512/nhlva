@@ -265,7 +265,7 @@
 				<div class="list_table schedule_tb_mo">
 					<div class="list_head">
 						<dl>
-							<dd class="num" style="width: 11%; "><a role="button"  href="javascript:;"   class="btn-sort numUpDown ${empty inputParam.numUpDown  ? '' :  inputParam.numUpDown eq '2' ? 'is-down' : 'is-up' }">번호</a></dd>
+							<dd class="num" style="width: 12%; "><a role="button"  href="javascript:;"   class="btn-sort numUpDown ${empty inputParam.numUpDown  ? '' :  inputParam.numUpDown eq '2' ? 'is-down' : 'is-up' }">번호</a></dd>
 							<dd class="pd_ea">개체</dd>
 							<dd class="pd_date"><a role="button"  href="javascript:;"  class="btn-sort birthUpDown ${empty inputParam.birthUpDown ? '' :  inputParam.birthUpDown eq '2' ? 'is-up' : 'is-down' }">생년월</a></dd>
 							<dd class="pd_sex">성별</dd>

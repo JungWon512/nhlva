@@ -721,31 +721,20 @@ var findGetParameter = function(paramName) {
     return result;
 }
 
-window.addEventListener("storage", function(data){
-	console.log(data);
-	var param = data.newValue;
-	if(data.key =='kkoRedirectParam' && param){	
-		var reg = /[\{\}\[\]\/?.,;:|\)*~`!^\-_+<>@\#$%&\\\=\(\'\"\s]/gi;
-		$.ajax({
-			url: '/user/kkologinProc',
-			data: param ,
-			type: 'POST',
-			dataType: 'json',
-			beforeSend: function (xhr) {
-				xhr.setRequestHeader("Accept", "application/json");
-				xhr.setRequestHeader("Content-Type", "application/json");
-			}
-		}).done(function (body) {
-			localStorage.removeItem("kkoRedirectParam");
-			var success = body.success;
-			var message = body.message;
-			if (!success) {
-				modalAlert('', message);
-			}
-			else {
-				var uri = body.returnUrl == null ? '/main' : body.returnUrl;
-				window.auction.LOGIN.sendUserInfo(body.access_token, body.info, body.branchInfo, uri);
-			}
-		});		
-	}
-});
+function fn_xxsDecode(p_str){
+    var result = "";
+    if(p_str != null && typeof p_str == 'string' && p_str != ""){
+    	result = p_str;
+        result = result.replace(/&amp;/gi , "&");
+        result = result.replace(/&#35;/gi , "#");
+        result = result.replace(/&lt;/gi  , "<");
+        result = result.replace(/&gt;/gi  , ">");
+        result = result.replace(/&#40;/gi , "(");
+        result = result.replace(/&#41;/gi , ")");
+        result = result.replace(/&quot;/gi, "\"");
+        result = result.replace(/&#x27;/gi, "'");      
+        return result;
+    }else{
+    	return p_str;
+    }
+}

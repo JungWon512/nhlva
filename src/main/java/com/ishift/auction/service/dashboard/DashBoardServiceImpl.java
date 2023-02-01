@@ -146,6 +146,11 @@ public class DashBoardServiceImpl implements DashBoardService {
 	}
 
 	@Override
+	public List<Map<String, Object>> findFilterRegionList(Map<String, Object> params) throws SQLException {
+		return dashBoardDAO.findFilterRegionList(params);
+	}
+	
+	@Override
 	public Map<String, Object> findPartiBidderInfo(Map<String, Object> params) throws SQLException {
 		return dashBoardDAO.findPartiBidderInfo(params);
 	}

@@ -312,7 +312,6 @@ public class LoginController {
 				response.setHeader(HttpHeaders.AUTHORIZATION, Constants.JwtConstants.BEARER + token);
 				result.put(Constants.JwtConstants.ACCESS_TOKEN, token);
 				
-//				if (!"".equals(params.get("returnUrl"))) result.put("returnUrl", params.get("returnUrl"));
 				params.put("token", token);
 				params.put("inOutGb", "1");
 				loginService.insertLoginConnHistory(request, params);		//로그인 이력 남기기
@@ -339,7 +338,6 @@ public class LoginController {
 			if ((boolean)chkResult.getOrDefault("success", false)) {
 				final String token = chkResult.get("token").toString();
 				Cookie cookie = cookieUtil.createCookie(Constants.JwtConstants.ACCESS_TOKEN, token);
-				cookie.setSecure(true);
 				response.addCookie(cookie);
 				response.setHeader(HttpHeaders.AUTHORIZATION, Constants.JwtConstants.BEARER + token);
 				chkResult.put(Constants.JwtConstants.ACCESS_TOKEN, token);
@@ -398,13 +396,29 @@ public class LoginController {
 			loginService.insertLoginConnHistory(request, params);		//로그아웃 이력 남기기
 			
 			Cookie cookie = cookieUtil.deleteCookie(request, Constants.JwtConstants.ACCESS_TOKEN);
-			cookie.setSecure(true);
 			response.addCookie(cookie);
 			response.sendRedirect("/home");
 			
 		} catch (RuntimeException | SQLException re) {
 			log.error("LoginController.logoutProc : {} ", re);
 		}
+	}
+	
+	@RequestMapping(value = "/test/kko", method = { RequestMethod.GET, RequestMethod.POST })
+	public Map<String,Object> testAiak(@RequestParam Map<String, Object> params) throws Exception {
+		// 전국지도 - 8개군에서 선택
+		Map<String, Object> resultMap = new HashMap<>();
+		resultMap.put("success", true);		
+		try {
+			String url ="";
+			if(params.get("url") != null) url = (String)params.get("url");
+			resultMap.put("result", httpUtils.callApiKaKao(url));
+		}catch(RuntimeException re) {		//SQLException | 
+			resultMap.put("success", false);
+			resultMap.put("message", "작업중 오류가 발생했습니다. 관리자에게 문의하세요.");
+			return resultMap;
+		}
+		return resultMap;
 	}
 
 }

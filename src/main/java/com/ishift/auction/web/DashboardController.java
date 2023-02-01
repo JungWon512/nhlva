@@ -108,7 +108,7 @@ public class DashboardController {
 		
 		String searchDate = LocalDate.now().format(DateTimeFormatter.ofPattern("yyyyMMdd"));
 		String searchPreDate = LocalDate.now().minusDays(range).format(DateTimeFormatter.ofPattern("yyyyMMdd"));
-		String title = "최근 " + range + "일 (" + DateUtil.addSlashYYYYMMDD(searchPreDate) + " ~ " + DateUtil.addSlashYYYYMMDD(searchDate) + " 까지)";
+		String title = "최근 " + range + "일 (" + DateUtil.addSlashYYMMDD(searchPreDate) + " ~ " + DateUtil.addSlashYYMMDD(searchDate) + " 까지)";
 		
 		params.putIfAbsent("searchAucObjDsc", "1");		//기본으로 송아지
 		
@@ -136,7 +136,7 @@ public class DashboardController {
 			
 			String searchDate = LocalDate.now().format(DateTimeFormatter.ofPattern("yyyyMMdd"));
 			String searchPreDate = LocalDate.now().minusDays(range).format(DateTimeFormatter.ofPattern("yyyyMMdd"));
-			String title = "최근 " + range + "일 (" + DateUtil.addSlashYYYYMMDD(searchPreDate) + " ~ " + DateUtil.addSlashYYYYMMDD(searchDate) + " 까지)";
+			String title = "최근 " + range + "일 (" + DateUtil.addSlashYYMMDD(searchPreDate) + " ~ " + DateUtil.addSlashYYMMDD(searchDate) + " 까지)";
 			
 			// 1. 최근 가축시장 시세 조회 
 			resultMap.put("cowPriceList", dashboardService.findCowPriceList(params));
@@ -416,7 +416,8 @@ public class DashboardController {
 	public ModelAndView dashFilter(@RequestParam Map<String, Object> params) throws Exception {
 		// 메인화면 > 현황 > 필터
 		ModelAndView mav = new ModelAndView("pop/dashFilter");
-		mav.addObject("inputParam", params);		
+		mav.addObject("regionList", dashboardService.findFilterRegionList(params));
+		mav.addObject("inputParam", params);
 		return mav;
 	}
 	

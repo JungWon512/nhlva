@@ -294,9 +294,8 @@ public class LoginServiceImpl implements LoginService {
 			}
 			// - 아닌 경우 4자리 숫자를 랜덤 생성 후 TB_LA_IS_MM_MWMN테이블에 인증번호를 UPDATE해준다.
 			else {
-				Random random;
 				try {
-					random = SecureRandom.getInstance("SHA1PRNG");
+					Random random = SecureRandom.getInstance("SHA1PRNG");
 					random.setSeed(System.currentTimeMillis());
 					smsNo = String.format("%04d", random.nextInt(10000));
 				} catch (NoSuchAlgorithmException e) {
@@ -323,7 +322,7 @@ public class LoginServiceImpl implements LoginService {
 		params.put("smsTrmsTelno", branchInfo.get("TEL_NO"));
 		
 		StringBuffer sb = new StringBuffer();
-		sb.append("경매참가 인증번호 [").append(smsNo).append("] 입니다.");
+		sb.append("가축시장 로그인 인증번호 [").append(smsNo).append("] 입니다.");
 		params.put("smsFwdgCntn", sb.toString());
 
 		if ("production".equals(profile)) {
@@ -434,7 +433,7 @@ public class LoginServiceImpl implements LoginService {
 		
 		//TODO : 경제지주, 축산담당 -> 대시보드 로그인 때, 추후 작업 필요하면 추가할 예정 
 		//접속자구분 : CONN_GBCD (중도매인 : 1, 농가 : 2, 경제지주 : 3, 축산담당 : 4, 기타 : 5)
-		if(tokenVo.getUserRole() != null) {
+		if(tokenVo != null) {
 			switch(tokenVo.getUserRole()) {
 				case Constants.UserRole.BIDDER : 
 					params.put("connGbcd", "1");		
@@ -450,9 +449,9 @@ public class LoginServiceImpl implements LoginService {
 			params.put("connGbcd", "5");	
 		}
 		
-		params.put("mbIntgNo", tokenVo.getMbIntgNo());		//회원통합번호 
-		params.put("loginId", tokenVo.getUserMemNum());		//LOGIN_ID (중도매인 : TRMN_AMNNO, 농가 : FHS_ID_NO, 축산/경제지주 : 사번 또는 부여코드)
-		params.put("naBzPlc", tokenVo.getAuctionHouseCode());	//NA_BZPLC
+		params.put("mbIntgNo", tokenVo != null ? tokenVo.getMbIntgNo() : "");		//회원통합번호 
+		params.put("loginId", tokenVo != null ? tokenVo.getUserMemNum() : "");		//LOGIN_ID (중도매인 : TRMN_AMNNO, 농가 : FHS_ID_NO, 축산/경제지주 : 사번 또는 부여코드)
+		params.put("naBzPlc", tokenVo != null ? tokenVo.getAuctionHouseCode() : "");	//NA_BZPLC
 		params.put("inOutGb", inOutGb);	//로그인, 로그아웃 구분코드 (로그인 : 1, 로그아웃 : 2)
 		params.put("connIP", Util.getClientIP(request));		//접속자 IP
 		loginDAO.insertMmConnHistory(params);

@@ -32,30 +32,11 @@
 			</li>
 		</ul>
 		<ul class="radio_group step3">
-			<li>
-				<input type="radio" name="radioG3" id="ra3_1" class="경기/인천" value="A31" <c:if test="${inputParam.searchPlace eq 'A31' || inputParam.searchPlace eq ''}">checked</c:if>><label for="ra3_1">경기/인천</label>
-			</li>
-			<li>
-				<input type="radio" name="radioG3" id="ra3_2" class="강원" value="A33" <c:if test="${inputParam.searchPlace eq 'A33'}">checked</c:if>><label for="ra3_2">강원</label>
-			</li>
-			<li>
-				<input type="radio" name="radioG3" id="ra3_3" class="충북" value="A43" <c:if test="${inputParam.searchPlace eq 'A43'}">checked</c:if>><label for="ra3_3">충북</label>
-			</li>
-			<li>
-				<input type="radio" name="radioG3" id="ra3_4" class="충남" value="A41" <c:if test="${inputParam.searchPlace eq 'A41'}">checked</c:if>><label for="ra3_4">충남</label>
-			</li>
-			<li>
-				<input type="radio" name="radioG3" id="ra3_5" class="전북" value="A63" <c:if test="${inputParam.searchPlace eq 'A63'}">checked</c:if>><label for="ra3_5">전북</label>
-			</li>
-			<li>
-				<input type="radio" name="radioG3" id="ra3_6" class="전남" value="A61" <c:if test="${inputParam.searchPlace eq 'A61'}">checked</c:if>><label for="ra3_6">전남</label>
-			</li>
-			<li>
-				<input type="radio" name="radioG3" id="ra3_7" class="경북" value="A54" <c:if test="${inputParam.searchPlace eq 'A54'}">checked</c:if>><label for="ra3_7">경북</label>
-			</li>
-			<li>
-				<input type="radio" name="radioG3" id="ra3_8" class="경남" value="A55" <c:if test="${inputParam.searchPlace eq 'A55'}">checked</c:if>><label for="ra3_8">경남</label>
-			</li>
+			<c:forEach items="${ regionList }" var="vo" varStatus="i">
+				<li>
+					<input type="radio" name="radioG3" id="${vo.NA_BZPLCLOC}" class="${vo.LOCNM}" value="${vo.NA_BZPLCLOC}" <c:if test="${inputParam.searchPlace eq vo.NA_BZPLCLOC}">checked</c:if>><label for="${vo.NA_BZPLCLOC}">${vo.LOCNM}</label>
+				</li>
+			</c:forEach>
 		</ul>
 		<div class="btn-area">
 			<button type="button" id="btn-apply" class="btn-apply">적용</button>

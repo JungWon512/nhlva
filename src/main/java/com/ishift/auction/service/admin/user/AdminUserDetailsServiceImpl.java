@@ -46,14 +46,14 @@ public class AdminUserDetailsServiceImpl implements AdminUserDetailsService {
 										.build();
 				}
 			else {
-				throw new UsernameNotFoundException("[" + username + "] 1.로그인 정보를 찾을 수 없습니다.");
+				throw new UsernameNotFoundException("로그인 정보를 찾을 수 없습니다.");
 			}
 		}catch (RuntimeException re) {
 			log.error("RuntimeException: AdminUserDetailsServiceImpl ");			
-			throw new UsernameNotFoundException("[" + username + "] 로그인 정보를 찾을 수 없습니다.");
+			throw new UsernameNotFoundException("로그인 정보를 찾을 수 없습니다.");
 		} catch (SQLException se) {
 			log.error("SQLException: AdminUserDetailsServiceImpl ");			
-			throw new UsernameNotFoundException("[" + username + "] 로그인 정보를 찾을 수 없습니다.");
+			throw new UsernameNotFoundException("로그인 정보를 찾을 수 없습니다.");
 		}
 		
 		log.debug("##### AdminUserDetailsServiceImpl.loadUserByUsername [e]");
@@ -85,7 +85,7 @@ public class AdminUserDetailsServiceImpl implements AdminUserDetailsService {
 										.build();
 				}
 			else {
-				throw new UsernameNotFoundException(" 1.로그인 정보를 찾을 수 없습니다.");
+				throw new UsernameNotFoundException("로그인 정보를 찾을 수 없습니다.");
 			}
 		}catch (RuntimeException re) {
 			log.error("RuntimeException: AdminUserDetailsServiceImpl ");			

@@ -124,6 +124,15 @@
 					body["sogCowInfo"] = sogCowInfo;
 				}
 				
+				//Next 버튼 처리
+				if ($('#nowMonth').val() == body.inputParam.searchMonth) {
+//					$("button.btn-next").attr("disabled", true);
+					$("button.btn-next").hide();
+				} else {
+//					$("button.btn-next").attr("disabled", false);
+					$("button.btn-next").show();
+				}
+				
 				var totChgHtml = "";
 				//출장우 총 두수 (증감두수 표시)
 				$("div.cow-board-top").empty();

@@ -1,14 +1,19 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
 <%@ include file="/WEB-INF/__system/taglibs.jsp"%>
 
+<!-- 현재날짜 처리 -->
+<jsp:useBean id="now" class="java.util.Date" />
+<fmt:formatDate value="${now}" pattern="yyyyMM" var="nowMonth" />
+
 <form name="frm" action="" method="post">
 	<input type="hidden" name="searchRaDate" 	id="searchRaDate" 		value="${inputParam.searchRaDate}">
 	<input type="hidden" name="searchFlag" 		id="searchFlag" 			value="${inputParam.searchFlag}">
 	<input type="hidden" name="searchPlace" 		id="searchPlace" 			value="">
-	<input type="hidden" name="searchMonth" 		id="searchMonth" 			value="${inputParam.searchMonth}">
+	<input type="hidden" name="searchMonth" 	id="searchMonth" 			value="${inputParam.searchMonth}">
 	<input type="hidden" name="aucObjDsc" 		id="aucObjDsc" 			value="${inputParam.aucObjDsc }" />
 	<input type="hidden" name="monthOldC" 		id="monthOldC" 			value="" />
 	<input type="hidden" name="indvSexC" 		id="indvSexC" 			value="" />
+	<input type="hidden" name="nowMonth" 		id="nowMonth" 			value="${nowMonth}" />
 </form>
 <div class="board-main pt-0">
 	<div class="sec-board">
@@ -20,7 +25,8 @@
 				<div class="has-btn">
 					<button class="btn-prev btn-chg"><span class="sr-only">이전</span></button>
 					<span class="month_txt_title">${searchMonTxt }</span>
-					<button class="btn-next btn-chg"><span class="sr-only">다음</span></button>
+<%-- 					<button class="btn-next btn-chg" ${nowMonth eq inputParam.searchMonth ? 'disabled' : ''}><span class="sr-only">다음</span></button> --%>
+					<button class="btn-next btn-chg" <c:if test="${nowMonth eq inputParam.searchMonth}">style="display:none;"</c:if>><span class="sr-only">다음</span></button>
 				</div>
 			</div>
 		</div>

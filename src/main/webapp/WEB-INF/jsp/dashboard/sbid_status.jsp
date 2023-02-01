@@ -21,7 +21,8 @@
 				<div class="has-btn">
 					<button class="btn-prev btn-chg"><span class="sr-only">이전</span></button>
 					<span class="month_txt_title">${searchMonTxt }</span>
-					<button class="btn-next btn-chg" ${nowMonth eq inputParam.searchMonth ? 'disabled' : ''}><span class="sr-only">다음</span></button>
+<%-- 					<button class="btn-next btn-chg" ${nowMonth eq inputParam.searchMonth ? 'disabled' : ''}><span class="sr-only">다음</span></button> --%>
+										<button class="btn-next btn-chg" <c:if test="${nowMonth eq inputParam.searchMonth}">style="display:none;"</c:if>><span class="sr-only">다음</span></button>
 				</div>
 			</div>
 		</div>

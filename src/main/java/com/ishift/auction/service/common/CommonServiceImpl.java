@@ -72,7 +72,7 @@ public class CommonServiceImpl implements CommonService {
 			
 			// 3. 조회 된 개체정보 저장
 			dataMap4700.put("NA_BZPLC", sessionUtil.getNaBzplc());
-			dataMap4700.put("regUsrid", "MCA4800");
+			dataMap4700.put("regUsrid", "MCA4700");
 			this.updateIndvInfo(dataMap4700);
 
 			// 4. 출하주 정보 저장
@@ -83,6 +83,7 @@ public class CommonServiceImpl implements CommonService {
 			if (!"".equals(dataMap4700.getOrDefault("MCOW_SRA_INDV_EART_NO", "").toString().trim())) {
 				Map<String,Object> tempParam = new HashMap<>();				
 				tempParam.put("SRA_INDV_AMNNO", dataMap4700.getOrDefault("MCOW_SRA_INDV_EART_NO","").toString().trim());
+				tempParam.put("SRA_INDV_AMNNO_ORI", dataMap4700.getOrDefault("SRA_INDV_AMNNO","").toString().trim());
 				this.updateIndvSibInfo(tempParam);
 			}
 
@@ -95,12 +96,14 @@ public class CommonServiceImpl implements CommonService {
 			result.put("message", re.getMessage());
 			log.error("RuntimeException::CommonServiceImpl.searchIndvDetails : {} ",re);
 			return result;
-		} catch(SQLException se) {
+		}
+		catch(SQLException se) {
 			result.put("success", false);
 			result.put("message", se.getMessage());
 			log.error("SQLException::CommonServiceImpl.searchIndvDetails : {} ",se);
 			return result;
-		} catch(Exception e) {
+		}
+		catch(Exception e) {
 			result.put("success", false);
 			result.put("message", e.getMessage());
 			log.error("Exception::CommonServiceImpl.searchIndvDetails : {} ",e);
@@ -147,7 +150,7 @@ public class CommonServiceImpl implements CommonService {
 		// 통합회원 구분 ( 01:중도매인, 02:출하주)
 		params.put("MB_INTG_GB", "02");
 		params.put("MB_INTG_NM", params.getOrDefault("SRA_FHSNM", "").toString().trim());													// 출하주 이름
-		params.put("MB_RLNO", params.getOrDefault("SRA_FHS_BIRTH", "").toString().trim());													// 생년월일
+		params.put("MB_RLNO", params.getOrDefault("BIRTH", "").toString().trim());															// 생년월일
 		params.put("MB_MPNO", params.getOrDefault("SRA_FHS_REP_MPSVNO", "").toString().trim() + 
 							  params.getOrDefault("SRA_FHS_REP_MPHNO", "").toString().trim() +
 							  params.getOrDefault("SRA_FHS_REP_MPSQNO", "").toString().trim());												// 휴대전화번호
@@ -198,18 +201,19 @@ public class CommonServiceImpl implements CommonService {
 	 */
 	public void updateIndvSibInfo(Map<String, Object> params) throws Exception {
 		// 1. 형매정보 mca 호출
-		final Map<String, Object> mcaMap			= mcaUtil.tradeMcaMsg("4900", params);		
+		final Map<String, Object> mcaMap			= mcaUtil.tradeMcaMsg("4900", params);
 		Map<String, Object> mcaJson = (Map<String, Object>) mcaMap.get("jsonData");
 		final List<Map<String, Object>> dataList	= (List<Map<String, Object>>)mcaJson.get("RPT_DATA");			// 형매정보 데이터
 		
 		if (!ObjectUtils.isEmpty(dataList)) {
 			this.paramLog(params);
 			// 2. 저장 전 데이터 삭제
+			params.put("SRA_INDV_AMNNO", params.get("SRA_INDV_AMNNO_ORI"));;
 			commonDao.deleteIndvSibinf(params);
 			
 			for (Map<String, Object> dataMap : dataList) {
 				dataMap.put("SIB_SRA_INDV_AMNNO", dataMap.get("SRA_INDV_AMNNO"));
-				dataMap.put("SRA_INDV_AMNNO", params.get("SRA_INDV_AMNNO"));
+				dataMap.put("SRA_INDV_AMNNO", params.get("SRA_INDV_AMNNO_ORI"));
 				commonDao.insertIndvSibinf(dataMap);
 			}
 		}
@@ -225,10 +229,9 @@ public class CommonServiceImpl implements CommonService {
 		// 1. 후대정보 mca 호출
 		final Map<String, Object> mcaMap			= mcaUtil.tradeMcaMsg("4900", params);		
 		Map<String, Object> mcaJson = (Map<String, Object>) mcaMap.get("jsonData");
-		final List<Map<String, Object>> dataList	= (List<Map<String, Object>>)mcaJson.get("RPT_DATA");		// 형매정보 데이터
+		final List<Map<String, Object>> dataList	= (List<Map<String, Object>>)mcaJson.get("RPT_DATA");		// 후대정보 데이터
 		
 		if (!ObjectUtils.isEmpty(dataList)) {
-			
 			this.paramLog(params);
 			// 2. 저장 전 데이터 삭제
 			commonDao.deleteIndvPostinf(params);

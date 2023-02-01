@@ -17,6 +17,10 @@ public class DashBoardDAO {
 	@Autowired
 	private MainDao mainDao;
 	@Value("${spring.profiles.active}") private String profile;
+		
+	public List<Map<String, Object>> findFilterRegionList(Map<String, Object> reqMap) throws SQLException {
+		return mainDao.selectList("dashboard.findFilterRegionList", reqMap);
+	}
 
 	public List<Map<String, Object>> findCowPriceList(Map<String, Object> reqMap) throws SQLException {
 		return mainDao.selectList("dashboard.findCowPriceList", reqMap);

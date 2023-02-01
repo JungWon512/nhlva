@@ -181,10 +181,14 @@ $(function() {
 					, 'json'
 					, function(data){
 						modalPopupClose('.popup .modal-wrap.pop_jjim_input.zim');
+//						if(data && !data.success){
+//							modalAlert('','작업중 오류가 발생했습니다. <br/>관리자에게 문의하세요.');
+//							return;
+//						}
 						if(data && !data.success){
-							modalAlert('','작업중 오류가 발생했습니다. <br/>관리자에게 문의하세요.');
-							return;
-						}
+								modalAlert('', data.message);
+								return;
+							}
 						if(data.aucInfo){
 							var aucPrgSq =$('.pop_auction .schedule_area .list_table li dl dd.num').toArray().filter((obj) => {if($(obj).text() == data.aucInfo.AUC_PRG_SQ) return obj;});
 							var li = $(aucPrgSq[0]).closest('li');

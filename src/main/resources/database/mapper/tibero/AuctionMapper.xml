@@ -229,6 +229,7 @@
 			, CASE WHEN TRIM(B.BOVINE_DT) IS NOT NULL THEN TO_CHAR(TO_DATE(TRIM(B.BOVINE_DT),'YYYYMMDD'),'YYYY.MM.DD')
 				   ELSE ''
 			   END AS BOVINE_DT_STR
+			, I.QCN
 		FROM TB_LA_IS_MH_SOG_COW B
 		LEFT JOIN TB_LA_IS_MM_INDV A
 		ON (
@@ -260,6 +261,10 @@
 		LEFT JOIN TB_LA_IS_MM_MWMN H 
 			ON B.NA_BZPLC = H.NA_BZPLC
 			AND B.TRMN_AMNNO = H.TRMN_AMNNO
+		LEFT JOIN TB_LA_IS_MH_AUC_QCN I 
+			ON B.NA_BZPLC = I.NA_BZPLC
+			AND B.AUC_DT = I.AUC_DT
+			AND B.AUC_OBJ_DSC = DECODE(I.AUC_OBJ_DSC,'0',B.AUC_OBJ_DSC,I.AUC_OBJ_DSC) 
 		WHERE 1=1
 		<if test="naBzPlcNo != null and naBzPlcNo != ''">
 			AND D.NA_BZPLCNO = #{naBzPlcNo}
@@ -863,6 +868,24 @@
 		ORDER BY A.AUC_DT
 	</select>
 
+	<!-- 찜가격 저장 전 찜가격이 예정가보다 크거나 같은지 체크 -->
+	<select id="selectZimPriceChk" parameterType="map" resultType="map">
+		SELECT *
+		  FROM TB_LA_IS_MH_SOG_COW
+		 WHERE NA_BZPLC = #{naBzPlc}
+		   AND AUC_OBJ_DSC = #{aucObjDsc}
+		   AND AUC_DT = #{aucDt}
+		   AND OSLP_NO = #{oslpNo}
+		   AND NVL(LOWS_SBID_LMT_AM, 0) <![CDATA[<=]]> REGEXP_REPLACE(#{inputUpr}, '[^0-9]') * (SELECT CASE WHEN #{aucObjDsc} = '1' THEN CALF_AUC_ATDR_UNT_AM
+																								WHEN #{aucObjDsc} = '2' THEN NBFCT_AUC_ATDR_UNT_AM
+																								WHEN #{aucObjDsc} = '3' THEN PPGCOW_AUC_ATDR_UNT_AM
+																								ELSE 10000
+																							END
+																					  FROM TB_LA_IS_MM_ENV_EST
+																					 WHERE NA_BZPLC = #{naBzPlc})
+	</select>
+
+	<!-- 찜가격 저장 -->
 	<insert id="insertUpdateZim" parameterType="map">
 		MERGE INTO TB_LA_IS_MH_SOG_ZIM A
 		USING (
@@ -912,6 +935,7 @@
 			)
 	</insert>
 
+	<!-- 찜가격 삭제 -->
 	<insert id="deleteZimPrice" parameterType="map">
 		DELETE FROM TB_LA_IS_MH_SOG_ZIM
 		WHERE NA_BZPLC = #{naBzPlc}
@@ -3191,37 +3215,47 @@
 		</if>
 	</delete>
 
-	<select id="selectMwmnAuthNoYmdInfo" parameterType="map"
-		resultType="map">
+	<select id="selectMwmnAuthNoYmdInfo" parameterType="map" resultType="map">
 		/*AuctionMapper.selectMwmnAuthNoYmdInfo_20221221_추가*/
 		SELECT MWN.NA_BZPLC
-		, MWN.TRMN_AMNNO
-		, MWN.AUTH_NO
-		, MWN.AUTH_YMD
-		, BZ.KIOSK_YN
-		FROM TB_LA_IS_MM_MWMN MWN
-		INNER JOIN TB_LA_IS_BM_BZLOC BZ
-		ON(MWN.NA_BZPLC = BZ.NA_BZPLC)
+				, MWN.TRMN_AMNNO
+				, MWN.AUTH_NO
+				, MWN.AUTH_YMD
+				, BZ.KIOSK_YN
+		FROM TB_LA_IS_MM_MWMN MWN INNER JOIN TB_LA_IS_BM_BZLOC BZ ON(MWN.NA_BZPLC = BZ.NA_BZPLC)
 		WHERE MWN.NA_BZPLC = #{naBzPlc}
-		AND MWN.TRMN_AMNNO = #{loginNo}
+				AND MWN.TRMN_AMNNO = #{loginNo}
 	</select>
 
-	<select id="selectFhsAuthNoYmdInfo" parameterType="map"
-		resultType="map">
+	<select id="selectFhsAuthNoYmdInfo" parameterType="map" resultType="map">
 		/*AuctionMapper.selectFhsAuthNoYmdInfo_20221221_추가*/
-		SELECT
-		FHS.NA_BZPLC
-		, FHS.FHS_ID_NO
-		, FHS.FARM_AMNNO
-		, FHS.AUTH_NO
-		, FHS.AUTH_YMD
-		, BZ.KIOSK_YN
+		SELECT FHS.NA_BZPLC
+				, FHS.FHS_ID_NO
+				, FHS.FARM_AMNNO
+				, FHS.AUTH_NO
+				, FHS.AUTH_YMD
+				, BZ.KIOSK_YN
 		FROM TB_LA_IS_MM_FHS FHS
-		INNER JOIN TB_LA_IS_BM_BZLOC BZ
-		ON(FHS.NA_BZPLC = BZ.NA_BZPLC)
+		INNER JOIN TB_LA_IS_BM_BZLOC BZ ON(FHS.NA_BZPLC = BZ.NA_BZPLC)
 		WHERE FHS.NA_BZPLC = #{naBzPlc}
-		AND FHS.FHS_ID_NO = #{loginNo}
-		AND FHS.FARM_AMNNO = #{farmAmnno}
+				AND FHS.FHS_ID_NO = #{loginNo}
+				AND FHS.FARM_AMNNO = #{farmAmnno}
+	</select>
+	
+	<select id="selectMwmnAuthNoYmdInfoCnt" parameterType="map" resultType="map">
+		/*AuctionMapper.selectMwmnAuthNoYmdInfoCnt*/
+		SELECT COUNT(*) AS CNT
+		FROM TB_LA_IS_MM_MWMN MWN
+		WHERE MWN.AUTH_NO = #{authNo}
+			AND MWN.AUTH_YMD BETWEEN TO_CHAR(SYSDATE, 'YYYYMMDDHH24MISS') AND TO_CHAR(SYSDATE + 1 / 24 / 60 * 10, 'YYYYMMDDHH24MISS')
+	</select>
+
+	<select id="selectFhsAuthNoYmdInfoCnt" parameterType="map" resultType="map">
+		/*AuctionMapper.selectFhsAuthNoYmdInfoCnt*/
+		SELECT COUNT(*) AS CNT
+		FROM TB_LA_IS_MM_FHS FHS
+		WHERE FHS.AUTH_NO = #{authNo}
+			AND FHS.AUTH_YMD BETWEEN TO_CHAR(SYSDATE, 'YYYYMMDDHH24MISS') AND TO_CHAR(SYSDATE + 1 / 24 / 60 * 10, 'YYYYMMDDHH24MISS') 
 	</select>
 
 	<update id="updateMwmnAuthNoYmdInfo" parameterType="map">
@@ -3229,7 +3263,7 @@
 		UPDATE
 		TB_LA_IS_MM_MWMN
 		SET AUTH_NO = #{auth_no}
-		, AUTH_YMD = TO_CHAR(SYSDATE + 1 / 24 / 60 * 10, 'YYYYMMDDHH24MISS')
+			, AUTH_YMD = TO_CHAR(SYSDATE + 1 / 24 / 60 * 10, 'YYYYMMDDHH24MISS')
 		WHERE NA_BZPLC = #{naBzPlc}
 		AND TRMN_AMNNO = #{loginNo}
 	</update>
@@ -3239,7 +3273,7 @@
 		UPDATE
 		TB_LA_IS_MM_FHS
 		SET AUTH_NO = #{auth_no}
-		, AUTH_YMD = TO_CHAR(SYSDATE + 1 / 24 / 60 * 10, 'YYYYMMDDHH24MISS')
+			, AUTH_YMD = TO_CHAR(SYSDATE + 1 / 24 / 60 * 10, 'YYYYMMDDHH24MISS')
 		WHERE NA_BZPLC = #{naBzPlc}
 		AND FHS_ID_NO = #{loginNo}
 		AND FARM_AMNNO = #{farmAmnno}
@@ -3343,6 +3377,7 @@
 		   AND A.LED_SQNO = #{LED_SQNO}
 	</select>
 	
+	<!-- 알림톡 발송 로그 저장 -->
 	<insert id="insertSmsInfo" parameterType="map">
 		 MERGE INTO TB_LA_IS_MM_SMS A
 		 USING DUAL ON(	A.NA_BZPLC      = #{NA_BZPLC}                  AND 

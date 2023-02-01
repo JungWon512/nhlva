@@ -85,6 +85,16 @@ public class AuctionDAO {
 	}
 
 	/**
+	 * 찜가격 등록 전 찜가격이 예정가보다 크거나 같은지 체크
+	 * @param params
+	 * @return
+	 * @throws SQLException
+	 */
+	public Map<String, Object> selectZimPriceChk(Map<String, Object> params) throws SQLException {
+		return mainDao.selectOne("auction.selectZimPriceChk", params);
+	}
+	
+	/**
 	 * 찜가격 등록
 	 * @param param
 	 * @return
@@ -729,6 +739,26 @@ public class AuctionDAO {
 	 */
 	public Map<String, Object> selectFhsAuthNoYmdInfo(Map<String, Object> map) throws SQLException{
 		return mainDao.selectOne("auction.selectFhsAuthNoYmdInfo", map);
+	}
+	
+	/**
+	 * 키오스크 인증번호 확인 카운트 (중도매인)
+	 * @param map
+	 * @return
+	 * @throws SQLException
+	 */
+	public Map<String, Object> selectMwmnAuthNoYmdInfoCnt(Map<String, Object> map) throws SQLException{
+		return mainDao.selectOne("auction.selectMwmnAuthNoYmdInfoCnt", map);
+	}
+
+	/**
+	 * 키오스크 인증번호 확인 카운트 (출하주)
+	 * @param map
+	 * @return
+	 * @throws SQLException
+	 */
+	public Map<String, Object> selectFhsAuthNoYmdInfoCnt(Map<String, Object> map) throws SQLException{
+		return mainDao.selectOne("auction.selectFhsAuthNoYmdInfoCnt", map);
 	}
 
 	/**

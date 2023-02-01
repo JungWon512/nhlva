@@ -4,6 +4,15 @@
 
     var setBinding = function() {
 		
+		$(".select_na_bzplc").unbind("click").click(function(){
+			var id = $(this).find("input[name='selelctNaBzPlc']").attr("id");
+			if(id == "select_bzplc"){
+				$(".secAplyDl").hide();
+			}else{
+				$(".secAplyDl").show();
+			}
+		});
+		
 		$(".btn_withdraw").unbind("click").click(function(e){
 			e.preventDefault();
 			fnSecWithdrawInfo();
