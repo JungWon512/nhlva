@@ -56,6 +56,16 @@ public class DaemonApiDAO {
 	}
 
 	/**
+	 * TB_LA_IS_MM_INDV : 개별 개체 조회
+	 * @param params
+	 * @return
+	 * @throws SQLException
+	 */
+	public Map<String, Object> selectIndvInfo(Map<String, Object> params) throws SQLException {
+		return mainDao.selectOne("DaemonApiMapper.selectIndvInfo", params);
+	}
+	
+	/**
 	 * TB_LA_IS_MH_AUC_ENTR : 경매 참가자 정보 리스트
 	 * @param params
 	 * @return

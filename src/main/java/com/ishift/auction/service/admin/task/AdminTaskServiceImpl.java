@@ -372,45 +372,8 @@ public class AdminTaskServiceImpl implements AdminTaskService {
 	public Map<String, Object> uploadImageProc(Map<String, Object> params) throws SQLException, AmazonS3Exception, SdkClientException, NoSuchAlgorithmException, KeyManagementException, KeyStoreException {
 		final Map<String, Object> result = new HashMap<String, Object>();
 
-		HostnameVerifier hv = new HostnameVerifier() {
-			@Override
-			public boolean verify(String arg0, SSLSession arg1) {
-				return true;
-			}
-		};
-		
-		AmazonHttpClient ac = null;
-		TrustManager[] trustAllCerts = new TrustManager[] {
-			new X509TrustManager() {
-				@Override
-				public X509Certificate[] getAcceptedIssuers() {
-					return null;
-				}
-				
-				@Override
-				public void checkServerTrusted(X509Certificate[] arg0, String arg1) throws CertificateException {return;}
-				
-				@Override
-				public void checkClientTrusted(X509Certificate[] arg0, String arg1) throws CertificateException {return;}
-			}
-		};
-		
-		SSLContext sc = SSLContext.getInstance("SSL");
-		sc.init(null, trustAllCerts, new SecureRandom());
-		
-		ClientConfiguration cc = new ClientConfiguration();
-		SSLConnectionSocketFactory ssf = new SSLConnectionSocketFactory(sc
-																		, new String[] {"TLSv1.2", "TLSv1.1", "TLSv1", "SSLv3", "SSLv2Hello"}
-																		, new String[] {"TLS_RSA_WITH_AES_128_GCM_SHA256", "TLS_RSA_WITH_AES_128_CBC_SHA256"}
-																		, hv);
-		cc.getApacheHttpClientConfig().withSslSocketFactory(ssf);
-		cc.setSignerOverride("AWSS3V4SignerType");
-		cc.setConnectionTimeout(500);
-		cc.setMaxErrorRetry(1);
-
 		// S3 client
 		final AmazonS3 s3 = AmazonS3ClientBuilder.standard()
-												 .withClientConfiguration(cc)
 												 .withEndpointConfiguration(new AwsClientBuilder.EndpointConfiguration(endPoint, regionName))
 												 .withCredentials(new AWSStaticCredentialsProvider(new BasicAWSCredentials(accessKey, secretKey)))
 												 .build();
@@ -438,9 +401,9 @@ public class AdminTaskServiceImpl implements AdminTaskService {
 		final String fileExtNm = ".png";
 		
 		// 해당 path에 있는 이미지 삭제 : 이미지 저장에 실패했을때 transaction은 어떤 방식으로 처리할 지....
-		for (S3ObjectSummary file : s3.listObjects(bucketName, filePath).getObjectSummaries()){
-			s3.deleteObject(bucketName, file.getKey());
-		}
+//		for (S3ObjectSummary file : s3.listObjects(bucketName, filePath).getObjectSummaries()){
+//			s3.deleteObject(bucketName, file.getKey());
+//		}
 		
 		// 이미지 정보 삭제
 		adminTaskDAO.deleteCowImg(params);
@@ -477,8 +440,8 @@ public class AdminTaskServiceImpl implements AdminTaskService {
 					PutObjectRequest oriPutObjectRequest = new PutObjectRequest(bucketName, filePath + fileNm + fileExtNm, oriBis, oriObjectMetadata);
 
 //					try {
-						oriPutObjectRequest.setAccessControlList(accessControlList);
-						s3.putObject(oriPutObjectRequest);
+					oriPutObjectRequest.setAccessControlList(accessControlList);
+					s3.putObject(oriPutObjectRequest);
 //					}
 //					catch (AmazonS3Exception e) {
 //						log.error("AdminTaskServiceImpl.uploadImageProc AmazonS3Exception : {} ", e);
@@ -489,7 +452,7 @@ public class AdminTaskServiceImpl implements AdminTaskService {
 //						isSuccess = false;
 //					}
 //					finally {
-						if(oriBis != null) try {oriBis.close();}catch(IOException ie) {log.error("AdminTaskServiceImpl.uploadImageProc IOException : {} ", ie);}
+					if(oriBis != null) try {oriBis.close();}catch(IOException ie) {log.error("AdminTaskServiceImpl.uploadImageProc IOException : {} ", ie);}
 //					}
 					
 					if (!isSuccess) continue;
@@ -518,8 +481,8 @@ public class AdminTaskServiceImpl implements AdminTaskService {
 					PutObjectRequest thumbPutObjectRequest = new PutObjectRequest(bucketName, filePath + "thumb/" + fileNm + fileExtNm, thumbBis, thumbObjectMetadata);
 					
 //					try {
-						thumbPutObjectRequest.setAccessControlList(accessControlList);
-						s3.putObject(thumbPutObjectRequest);
+					thumbPutObjectRequest.setAccessControlList(accessControlList);
+					s3.putObject(thumbPutObjectRequest);
 //					}
 //					catch (AmazonS3Exception e) {
 //						log.error("AdminTaskServiceImpl.uploadImageProc AmazonS3Exception : {} ", e);
@@ -528,14 +491,14 @@ public class AdminTaskServiceImpl implements AdminTaskService {
 //						log.error("AdminTaskServiceImpl.uploadImageProc SdkClientException : {} ", e);
 //					}
 //					finally {
-						if (thumbBis != null) try {thumbBis.close();}catch(IOException ie) {log.error("AdminTaskServiceImpl.uploadImageProc IOException : {} ", ie);}
+					if (thumbBis != null) try {thumbBis.close();}catch(IOException ie) {log.error("AdminTaskServiceImpl.uploadImageProc IOException : {} ", ie);}
 //					}
 				}
 			}
 		}
 		
 		result.put("success", (files.size() == successCnt));
-		result.put("message", "이미지 저장에 성공했습니다.");
+		result.put("message", (files.size() == successCnt) ? "이미지 저장에 성공했습니다." : "이미지 저장에 실패했습니다.");
 //		result.put("message", String.format("전체 : %d, 성공 : %d", files.size(), successCnt));
 		return result;
 	}
