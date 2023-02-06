@@ -905,8 +905,12 @@ public class AuctionServiceImpl implements AuctionService {
 				auctionDAO.insertSmsInfo(msgMap);
 			}
 		}
+		catch(RuntimeException | SQLException se) {
+			log.error("AuctionServiceImpl.sendAlamTalkProc : {} ", se);
+			return false;
+		}
 		catch(Exception e) {
-			e.printStackTrace();
+			log.error("AuctionServiceImpl.sendAlamTalkProc : {} ", e);
 			return false;
 		}
 		return true;

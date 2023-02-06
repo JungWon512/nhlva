@@ -23,20 +23,28 @@
 			</dl>
 			<ul class="agree_list">
 				<li>
-					<input type="checkbox" id="agree_chk1"><label for="agree_chk1">개인정보 이용약관 동의(체크)</label>
-					<a href="#" onclick="window.open('/privacy', '개인정보 처리 방침', 'width=800, height=700, toolbar=no, menubar=no, scrollbars=no, resizable=yes' );return false;"  class="agree_info" >팝업</a>
-<!-- 					<a href="javascript:;" class="agree_info btn_privacy_pop">팝업</a> -->
+					<input type="checkbox" id="agree_chkAll"><label for="agree_chkAll">전체 동의하기</label>
 				</li>
 				<li>
-					<input type="checkbox" id="agree_chk2"><label for="agree_chk2">가축시장 시스템 이용약관 동의(체크)</label>
+					<input type="checkbox" id="agree_chk1" class="agree_chk"><label for="agree_chk1">[필수] 개인정보 이용약관 동의</label>
+					<a href="#" onclick="window.open('/privacy', '개인정보 처리 방침', 'width=800, height=700, toolbar=no, menubar=no, scrollbars=no, resizable=yes' );return false;"  class="agree_info" >팝업</a>
+				</li>
+				<li>
+					<input type="checkbox" id="agree_chk2" class="agree_chk"><label for="agree_chk2">[필수] 가축시장 시스템 이용약관 동의</label>
 					<a href="#" onclick="window.open('/agreement/new', '이용약관', 'width=800, height=700, toolbar=no, menubar=no, scrollbars=no, resizable=yes' );return false;"  class="agree_info" >팝업</a>
-<!-- 					<a href="javascript:;" class="agree_info btn_agreement_pop">팝업</a> -->
+				</li>
+				<li>
+					<input type="checkbox" id="agree_chk3" class="agree_chk"><label for="agree_chk3">[필수] 가축시장 제3자 정보제공 동의</label>
+					<a href="#" onclick="window.open('/agreement/new', '이용약관', 'width=800, height=700, toolbar=no, menubar=no, scrollbars=no, resizable=yes' );return false;"  class="agree_info" >팝업</a>	
+					<!-- 제3자 정보제공 동의 내용 팝업 필요함 -->
 				</li>
 			</ul>
 			<a href="javascript:;" class="btn_login">로그인</a>
-			<div class="sns_login" style="display:none;">
-				<a href="javascript:loginWithKakao();" class="btn_kakao">카카오 로그인</a>
-			</div>
+			<c:if test="${type ne '1' }">
+				<div class="sns_login" style="display:none;">
+					<a href="javascript:loginWithKakao();" class="btn_kakao">카카오 로그인</a>
+				</div>
+			</c:if>
 		</div>
 	</form>
 	<form name="frm_auth" id="frm_auth" method="post">
@@ -52,7 +60,7 @@
 				<dd>
 					<div class="authentication_number">
 						<input type="text" name="authNumber" id="authNumber" placeholder="인증번호 4자리" maxlength="4" pattern="\d*" required inputmode="numeric" />
-						<button type="button" class="btn_resend">재발송</button>
+						<!-- <button type="button" class="btn_resend">재발송</button> -->
 					</div>
 					<p class="step_msg">휴대폰으로 수신된 인증번호를 입력하세요.</p>
 					<p class="err_msg" style="display:none;">인증번호가 올바르지 않습니다.</p>

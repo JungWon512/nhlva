@@ -231,7 +231,15 @@
 			, (SELECT MAX(SBID_DT) FROM TB_LA_IS_MM_DB_BTCAUC WHERE SBID_DT <![CDATA[<]]> M.SBID_DT AND INDV_SEX_TP = M.INDV_SEX_TP AND SRA_GRD_DSC = M.SRA_GRD_DSC) AS BEFORE_DT
 			, (SELECT MIN(SBID_DT) FROM TB_LA_IS_MM_DB_BTCAUC WHERE SBID_DT <![CDATA[>]]> M.SBID_DT AND INDV_SEX_TP = M.INDV_SEX_TP AND SRA_GRD_DSC = M.SRA_GRD_DSC) AS AFTER_DT
 		FROM (
-			SELECT ROW_NUMBER() OVER(ORDER BY SBID_DT ${sortCommand}, GRD_ORD.ORD_CNT ASC) AS N_NUM
+			SELECT
+				<choose>
+					<when test='sortCommand != null and sortCommand == "DESC"'>
+				ROW_NUMBER() OVER(ORDER BY SBID_DT DESC, GRD_ORD.ORD_CNT ASC) AS N_NUM
+					</when>
+					<otherwise>
+				ROW_NUMBER() OVER(ORDER BY SBID_DT ASC, GRD_ORD.ORD_CNT ASC) AS N_NUM
+					</otherwise>
+				</choose> 
 				, AUC.SBID_DT
 				, AUC.INDV_SEX_TP
 				, AUC.SRA_GRD_DSC
@@ -265,9 +273,9 @@
 					<when test='SBID_DT != null and SBID_DT != "" and (addFlag == null or addFlag == "")'>
 					AND AUC.SBID_DT = #{SBID_DT}	
 					</when>
-					<when test='SBID_DT == null or SBID_DT == ""'>
+					<!-- <when test='SBID_DT == null or SBID_DT == ""'>
 					AND AUC.SBID_DT BETWEEN #{searchMonth}|| '01' AND  #{searchMonth} || '31'
-					</when>
+					</when> -->
 				</choose>
 				<if test="SRA_GRD_DSC != null and SRA_GRD_DSC != ''">
 					AND AUC.SRA_GRD_DSC = #{SRA_GRD_DSC}
@@ -431,7 +439,7 @@
 				AND A.NA_BZPLCLOC = #{searchPlace}
 				</if>
 				<if test="aucObjDsc != null and aucObjDsc != ''">
-				AND AUC_OBJ_DSC = ${aucObjDsc}
+				AND AUC_OBJ_DSC = #{aucObjDsc}
 				</if>
 				<if test="monthOldC != null and monthOldC != ''">
 				AND MONTH_OLD_C = #{monthOldC}
@@ -481,7 +489,7 @@
 				AND DS.MONTH_SUM_YN = '1'
 				AND DS.AUC_DT = #{searchMonth}
 				<if test="aucObjDsc != null and aucObjDsc != ''">
-				AND AUC_OBJ_DSC = ${aucObjDsc}
+				AND AUC_OBJ_DSC = #{aucObjDsc}
 				</if>
 				<if test="monthOldC != null and monthOldC != ''">
 				AND MONTH_OLD_C = #{monthOldC}
@@ -510,7 +518,7 @@
 				AND DS.NA_BZPLCLOC = #{searchPlace}
 				</if>
 				<if test="aucObjDsc != null and aucObjDsc != ''">
-				AND DS.AUC_OBJ_DSC = ${aucObjDsc}
+				AND DS.AUC_OBJ_DSC = #{aucObjDsc}
 				</if>
 				<if test="monthOldC != null and monthOldC != ''">
 				AND DS.MONTH_OLD_C = #{monthOldC}
@@ -532,10 +540,10 @@
 					AND A.NA_BZPLCLOC = #{searchPlace}
 				</if>
 				<if test="aucObjDsc != null and aucObjDsc != ''">
-					AND A.AUC_OBJ_DSC = ${aucObjDsc}
+					AND A.AUC_OBJ_DSC = #{aucObjDsc}
 				</if>
 				<if test="indvSexC != null and indvSexC != ''">
-					AND A.INDV_SEX_C = ${indvSexC}
+					AND A.INDV_SEX_C = #{indvSexC}
 				</if>
 				<if test="monthOldC != null and monthOldC != ''">
 					AND A.MONTH_OLD_C = #{monthOldC}

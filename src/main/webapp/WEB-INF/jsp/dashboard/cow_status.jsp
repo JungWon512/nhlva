@@ -4,6 +4,7 @@
 <!-- 현재날짜 처리 -->
 <jsp:useBean id="now" class="java.util.Date" />
 <fmt:formatDate value="${now}" pattern="yyyyMM" var="nowMonth" />
+<input type="hidden" name="searchPlaceNm" 		id="searchPlaceNm" 			value="">
 
 <form name="frm" action="" method="post">
 	<input type="hidden" name="searchRaDate" 	id="searchRaDate" 		value="${inputParam.searchRaDate}">
@@ -12,7 +13,7 @@
 	<input type="hidden" name="searchMonth" 	id="searchMonth" 			value="${inputParam.searchMonth}">
 	<input type="hidden" name="aucObjDsc" 		id="aucObjDsc" 			value="${inputParam.aucObjDsc }" />
 	<input type="hidden" name="monthOldC" 		id="monthOldC" 			value="" />
-	<input type="hidden" name="indvSexC" 		id="indvSexC" 			value="" />
+	<input type="hidden" name="indvSexC" 		id="indvSexC" 			value="1" />
 	<input type="hidden" name="nowMonth" 		id="nowMonth" 			value="${nowMonth}" />
 </form>
 <div class="board-main pt-0">
@@ -110,7 +111,7 @@
 				<c:forEach items="${areaSbidList}" var="areaVo" varStatus="a">
 				<li class="sCowPop" id="${areaVo.NA_BZPLCLOC}">
 					<dl>
-						<dt>${areaVo.NA_BZPLCLOC_NM}</dt>
+						<dt class="locnm">${areaVo.NA_BZPLCLOC_NM}</dt>
 						<dd class="won"><fmt:formatNumber value="${areaVo.AVG_EXPRI_UPR}" type="number" />원</dd>
 						<dd><fmt:formatNumber value="${areaVo.TOT_SOG_CNT}" type="number" />두</dd>
 					</dl>

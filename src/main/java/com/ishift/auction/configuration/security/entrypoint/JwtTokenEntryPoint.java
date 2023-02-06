@@ -29,8 +29,6 @@ public class JwtTokenEntryPoint implements AuthenticationEntryPoint {
 		String uri = request.getRequestURI();
 		String type = (uri.startsWith("/my/entry") ? "1" : "0").replaceAll("\r", "").replaceAll("\n", "");
 		String place = (request.getParameter("place") == null) ? "" : request.getParameter("place").replaceAll("\r", "").replaceAll("\n", "");
-//		String rtnUrl = (request.getParameter("rtnUrl") == null) ? "" : request.getParameter("rtnUrl").replaceAll("\r", "").replaceAll("\n", "");
-//		response.sendRedirect("/user/login?place=" + place + "&type=" + type + "&rtnUrl=" + rtnUrl);
 		response.sendRedirect("/user/login?place=" + place + "&type=" + type);
 	}
 

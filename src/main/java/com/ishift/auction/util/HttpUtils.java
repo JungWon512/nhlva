@@ -747,14 +747,22 @@ public class HttpUtils {
                 log.error(con.getResponseMessage());
             }
 
-        } catch (Exception e) {
-            log.error("https://aiak.or.kr 테스트 : ",e);
+        }
+        catch (IOException ie) {
+        	log.error("IOException - https://aiak.or.kr 테스트 : ", ie);
+        }
+        catch (Exception e) {
+            log.error("Exception - https://aiak.or.kr 테스트 : ",e);
         } finally {
         	try {
                 if(con != null)con.disconnect();
                 if(br !=null) br.close();
-        	}catch(Exception e) {
-                log.error("https://aiak.or.kr 테스트 : ",e);        		
+        	}
+        	catch (IOException ie) {
+            	log.error("IOException - https://aiak.or.kr 테스트 : ", ie);
+            }
+        	catch(Exception e) {
+                log.error("Exception - https://aiak.or.kr 테스트 : ",e);        		
         	}
 		}
         return null;
@@ -788,13 +796,21 @@ public class HttpUtils {
                 log.error(con.getResponseMessage());
             }
 
-        } catch (Exception e) {
+        } 
+        catch (IOException ie) {
+            log.error(pUrl+" : ", ie);
+        } 
+        catch (Exception e) {
             log.error(pUrl+" : ",e);
         } finally {
         	try {
                 if(con != null)con.disconnect();
                 if(br !=null) br.close();
-        	}catch(Exception e) {
+        	}
+        	catch (IOException ie) {
+                log.error(pUrl+" : ", ie);
+            }
+        	catch(Exception e) {
                 log.error(pUrl+" : ",e);	
         	}
 		}

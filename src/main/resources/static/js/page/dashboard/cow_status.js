@@ -13,6 +13,7 @@
 			$(this).siblings().children("dl").removeClass();
 			$(this).children("dl").addClass("on");
 			$("#searchPlace").val($(this).attr("id"));
+			$("#searchPlaceNm").val($(this).find(".locnm").text());
 			
 			var param = [];
 			param.push("searchMonth=" + $("#searchMonth").val());
@@ -21,7 +22,7 @@
 			param.push("monthOldC=" + $(".birth_weight_dsc").find("button.on").attr("id"));
 			param.push("aucObjDscNm=" + $(".auc_obj_dsc").find("button.on").text());
 			param.push("monthOldCNm=" + $(".birth_weight_dsc").find("button.on").text());
-			param.push("searchPlaceNm=" + $(this).find(".locnm").text());
+			param.push("searchPlaceNm=" + $("#searchPlaceNm").val());
 			
 			// 송아지인경우 성별필요
 			if($("#aucObjDsc").val() == "1"){
@@ -40,9 +41,11 @@
 			if ($(this).attr("id").startsWith("1")) {
 				$("#aucObjDsc").val($(this).attr("id").substring(0,1));
 				$("#indvSexC").val($(this).attr("id").substring(1));
+				$("#monthOldC").val("");
 			} else {
 				$("#aucObjDsc").val($(this).attr("id"));
 				$("#indvSexC").val("");
+				$("#monthOldC").val("");
 			}
 			
 			$(".birth_weight_dsc").empty();

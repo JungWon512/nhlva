@@ -1179,8 +1179,8 @@ input[type="number"]::-webkit-inner-spin-button {
 	border: 0;
 }
 .admin_new_reg .inp textarea {
-	padding: 0 40px 0 0;
-	font-size: 25px;
+	padding: 0 0 0 0; /*0  24px  0 0*/
+	font-size: 24px; /*25px*/
 	font-weight: 700;
 	color: #1a1a1a;
 	background-color: #fff;
@@ -1191,6 +1191,10 @@ input[type="number"]::-webkit-inner-spin-button {
 	height: 0;
 	opacity: 0;
 	padding: 0;
+}
+
+.office_text_area{
+	max-width : 91%;
 }
 
 .admin_new_reg .inp input[type=date] {
@@ -1440,6 +1444,8 @@ input[type="number"]::-webkit-inner-spin-button {
 
 .winpop_reg .btn_tag_reset {
 	float: right;
+	position: absolute; /*수정적용*/
+    right: 0px; /*수정적용*/
     width: 30px;
     height: 37px;
     background: url(/static/images/guide/v2/ico-input-del.svg) no-repeat 50% 50%;

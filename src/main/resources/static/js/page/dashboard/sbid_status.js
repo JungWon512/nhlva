@@ -12,6 +12,7 @@
 			$(this).siblings().children("dl").removeClass();
 			$(this).children("dl").addClass("on");
 			$("#searchPlace").val($(this).attr("id"));
+			$("#searchPlaceNm").val($(this).find(".locnm").text());
 			
 			var param = [];
 			param.push("searchMonth=" + $("#searchMonth").val());

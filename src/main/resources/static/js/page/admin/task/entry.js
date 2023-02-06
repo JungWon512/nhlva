@@ -87,12 +87,11 @@
 					return false;
 				}
 				$("form[name='frm_cow']").find("input[name='oslpNo']").val(aucPrgSq);
+				$("form[name='frm_cow']").find("input[name='aucPrgSq']").val(aucPrgSq);
 				$("form[name='frm_cow']").find("input[name='aucDt']").val( $("input[name='aucDt']").val() );
 				$("form[name='frm_cow']").find("input[name='aucObjDsc']").val( $("input[name='aucObjDsc']").val() );
 				
-				// 없는 번호로 조회시 팝업창이 초기화되어서 셋팅된 값이 날라간 상태로
-				// 조회를 하니 파라미터 전달 자체에 문제가 생김.
-				// 사라지는것 : 경매날자 , 경매대상 구분번호
+		
 				
 				$.ajax({
 					url: '/office/task/cowInfo',
@@ -274,9 +273,10 @@
 				if(!$(this).val() || $(this).val() == '0') $(this).val('');
 			});
 			
+			
 			// 중량 일괄등록
 			$(document).on("focusout", "input[name='cowSogWt'].noPop", function(){			
-				if(!$(this).val() || $(this).val() == '') $(this).val('0');
+				if(!$(this).val() || $(this).val() == '0') $(this).val('') ;
 				var li = $(this).closest("li");
 				var params = {
 					regType : $("input[name='regType']").val()
@@ -285,7 +285,7 @@
 					, aucObjDsc : '' + li.find("dd.col1").data("aucObjDsc")
 					, oslpNo : '' + li.find("dd.col1").data("oslpNo")
 					, ledSqno : '' + li.find("dd.col1").data("ledSqno")
-					, cowSogWt : $(this).val()
+					, cowSogWt : $(this).val() == '' ? '0' : $(this).val()
 					, firLowsSbidLmtAm : $("input[name='firLowsSbidLmtAm']").val()
 					, searchAucObjDsc : $("select#aucObjDsc").val()
 				}
@@ -310,7 +310,7 @@
 			
 			// 예정가 일괄등록
 			$(document).on("focusout", "input[name='firLowsSbidLmtAm'].noPop", function(){			
-				if(!$(this).val() || $(this).val() == '') $(this).val('0');
+				if(!$(this).val() || $(this).val() == '0') $(this).val('');
 				var li = $(this).closest("li");
 				var params = {
 					regType : $("input[name='regType']").val()
@@ -320,7 +320,7 @@
 					, oslpNo : '' + li.find("dd.col1").data("oslpNo")
 					, ledSqno : '' + li.find("dd.col1").data("ledSqno")
 					, cowSogWt : $("input[name='cowSogWt']").val()
-					, firLowsSbidLmtAm : $(this).val()
+					, firLowsSbidLmtAm : $(this).val() == '' ? '0' : $(this).val()
 					, searchAucObjDsc : $("select#aucObjDsc").val()
 				}
 				
@@ -487,7 +487,7 @@
 			sHtml.push('									<th>경매번호</th>                                                                                                       ');
 			sHtml.push('										<td class="input-td">');
 			sHtml.push('											<ul class="num_scr">');
-			sHtml.push('												<li><input type="text" name="aucPrgSq2" class="required onlyNumber" id="aucPrgSq2" alt="경매번호" maxlength="4" pattern="\d*" inputmode="numeric" value="'+ cowInfo.AUC_PRG_SQ +'" /></li>'); 
+			sHtml.push('												<li><input type="text" name="aucPrgSq2" class="required onlyNumber inp"  id="aucPrgSq2" alt="경매번호" maxlength="4" pattern="\d*" inputmode="numeric" value="'+ cowInfo.AUC_PRG_SQ +'" /></li>'); 
 			sHtml.push('												<li><a href="javascript:;" class="btn_cow_search">조회</a></li>');
 			sHtml.push('											</ul>');
 			sHtml.push('										</td>');
@@ -522,7 +522,7 @@
 			sHtml.push('								<tr>                                                                                                                        ');
 			sHtml.push('									<td colspan="2" class="tagBox">                                                                                         ');
 			sHtml.push('										<div class="inp">                                                                                                   ');
-			sHtml.push('											<textarea name="rmkCntn" class="rs pd5" style="height:32px;" placeholder="비고" maxlength="30" rows="1">'+(cowInfo.RMK_CNTN == null ? '' : cowInfo.RMK_CNTN)+'</textarea>');
+			sHtml.push('											<textarea name="rmkCntn" class="rs pd5 office_text_area" style="height:32px;" placeholder="비고" maxlength="30" rows="1">'+(cowInfo.RMK_CNTN == null ? '' : cowInfo.RMK_CNTN)+'</textarea>');
 			sHtml.push('											<button type="button" class="btn_tag_reset"></button>                                                               ');
 			sHtml.push('										</div>                                                                                                   ');
 			sHtml.push('									</td>                                                                                                                   ');
@@ -785,10 +785,6 @@
 				return;
 			}
 			
-			console.log("str" + str)
-			console.log("oriStr" + oriStr)
-			
-						
 			if (str.length > 30) {
 				modalAlert("","30자 이상 등록할 수 없습니다.");
 				return;

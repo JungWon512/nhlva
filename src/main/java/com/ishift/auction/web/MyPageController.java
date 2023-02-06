@@ -576,8 +576,8 @@ public class MyPageController {
 				FarmUserDetails userVo = ((FarmUserDetails) sessionUtill.getUserVo());
 				if(userVo != null) {
 					paramMap.put("searchMbIntgNo", userVo.getMbIntgNo());
-					paramMap.put("searchFhsIdNo", ((FarmUserDetails) sessionUtill.getUserVo()).getFhsIdNo());
-					paramMap.put("searchFarmAmnno", ((FarmUserDetails) sessionUtill.getUserVo()).getFarmAmnno());
+					paramMap.put("searchFhsIdNo", userVo.getFhsIdNo());
+					paramMap.put("searchFarmAmnno", userVo.getFarmAmnno());
 				}
 	    		
 	    		// > 연/월단위 기준 전체 출장두수, 송아지, 비육우, 번식우의 낙찰두수, 낙찰평균, 평균시세

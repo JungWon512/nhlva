@@ -732,7 +732,8 @@ function fn_xxsDecode(p_str){
         result = result.replace(/&#40;/gi , "(");
         result = result.replace(/&#41;/gi , ")");
         result = result.replace(/&quot;/gi, "\"");
-        result = result.replace(/&#x27;/gi, "'");      
+        result = result.replace(/&#x27;/gi, "'"); 
+        result = result.replace("script>", "script〉");      
         return result;
     }else{
     	return p_str;

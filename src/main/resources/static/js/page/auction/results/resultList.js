@@ -64,6 +64,10 @@
       	$(document).on("click",".list_body .pd_ea a", function(){			
 			var pdEa = new String($(this).find('span').attr('fullstr'));	
 			var tr = $(this).closest('li');
+			
+        	if(tr.find('.commitYn').val() != '1'){
+        		return;
+        	}
 			$("form[name='frm_select'] input[name='naBzplc']").val(tr.find('.naBzPlc').val());
 			$("form[name='frm_select'] input[name='aucDt']").val(tr.find('.aucDt').val());
 			$("form[name='frm_select'] input[name='aucObjDsc']").val(tr.find('.aucObjDsc').val());

@@ -5,13 +5,15 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 @Service("DashBoardService")
 public class DashBoardServiceImpl implements DashBoardService {
 
-	private static long loadTime; 
+	private static Logger log = LoggerFactory.getLogger(DashBoardServiceImpl.class);
 	private final static long duration = 3600 * 1000L;		//1시간 (3600초)
 	public static final Map<String, Object> COW_PRICE_LIST = new HashMap<String, Object>();						//findCowPriceList
 	public static final Map<String, Object> AVG_PLACE_BID_AM_LIST = new HashMap<String, Object>();		//findAvgPlaceBidAmList
@@ -43,6 +45,8 @@ public class DashBoardServiceImpl implements DashBoardService {
 		
 		if(isCache) {
 			long now = System.currentTimeMillis();
+			long loadTime = !COW_PRICE_LIST.isEmpty() ? (long) COW_PRICE_LIST.get("loadTime") : 0L;
+			
 			try {
 				if(COW_PRICE_LIST.isEmpty() || now - loadTime > duration) {
 					synchronized (COW_PRICE_LIST) {
@@ -52,14 +56,18 @@ public class DashBoardServiceImpl implements DashBoardService {
 							
 							COW_PRICE_LIST.clear();
 							COW_PRICE_LIST.putAll(map);
-							loadTime = now;
+							COW_PRICE_LIST.put("loadTime", now);
 						}
 					}
 				}
 				
 				resultList = (List<Map<String, Object>>) COW_PRICE_LIST.get("list");
-			} catch (Exception e) {
-				e.printStackTrace();
+			}
+			catch(RuntimeException | SQLException se) {
+				log.error("DashboardServiceImpl.findCowPriceList : {} ", se);
+			}
+			catch (Exception e) {
+				log.error("DashboardServiceImpl.findCowPriceList : {} ", e);
 			}
 		}else {
 			resultList = dashBoardDAO.findCowPriceList(reqMap);
@@ -82,6 +90,8 @@ public class DashBoardServiceImpl implements DashBoardService {
 		
 		if(isCache) {
 			long now = System.currentTimeMillis();
+			long loadTime = !AVG_PLACE_BID_AM_LIST.isEmpty() ? (long) AVG_PLACE_BID_AM_LIST.get("loadTime") : 0L;
+			
 			try {
 				if(AVG_PLACE_BID_AM_LIST.isEmpty() || now - loadTime > duration) {
 					synchronized (AVG_PLACE_BID_AM_LIST) {
@@ -91,14 +101,18 @@ public class DashBoardServiceImpl implements DashBoardService {
 							
 							AVG_PLACE_BID_AM_LIST.clear();
 							AVG_PLACE_BID_AM_LIST.putAll(map);
-							loadTime = now;
+							AVG_PLACE_BID_AM_LIST.put("loadTime", now);
 						}
 					}
 				}
 				
 				resultList = (List<Map<String, Object>>) AVG_PLACE_BID_AM_LIST.get("list");
-			} catch (Exception e) {
-				e.printStackTrace();
+			} 
+			catch(RuntimeException | SQLException se) {
+				log.error("DashboardServiceImpl.findAvgPlaceBidAmList : {} ", se);
+			}
+			catch (Exception e) {
+				log.error("DashboardServiceImpl.findAvgPlaceBidAmList : {} ", e);
 			}
 		}else {
 			resultList = dashBoardDAO.findAvgPlaceBidAmList(reqMap);
@@ -120,6 +134,8 @@ public class DashBoardServiceImpl implements DashBoardService {
 		
 		if(isCache) {
 			long now = System.currentTimeMillis();
+			long loadTime = !RECENT_DATE_TOP_LIST.isEmpty() ? (long) RECENT_DATE_TOP_LIST.get("loadTime") : 0L;
+			
 			try {
 				if(RECENT_DATE_TOP_LIST.isEmpty() || now - loadTime > duration) {
 					synchronized (RECENT_DATE_TOP_LIST) {
@@ -129,14 +145,18 @@ public class DashBoardServiceImpl implements DashBoardService {
 							
 							RECENT_DATE_TOP_LIST.clear();
 							RECENT_DATE_TOP_LIST.putAll(map);
-							loadTime = now;
+							RECENT_DATE_TOP_LIST.put("loadTime", now);
 						}
 					}
 				}
 				
 				resultList = (List<Map<String, Object>>) RECENT_DATE_TOP_LIST.get("list");
-			} catch (Exception e) {
-				e.printStackTrace();
+			}
+			catch(RuntimeException | SQLException se) {
+				log.error("DashboardServiceImpl.findRecentDateTopList : {} ", se);
+			}
+			catch (Exception e) {
+				log.error("DashboardServiceImpl.findRecentDateTopList : {} ", e);
 			}
 		}else {
 			resultList = dashBoardDAO.findRecentDateTopList(reqMap);

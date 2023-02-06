@@ -1926,14 +1926,14 @@ public class ApiController {
 	}
 
 	@PostMapping(value = "/api/v1/biz/smsTest", produces = MediaType.APPLICATION_JSON_VALUE)
-	public Map<String, Object> smsTest(@RequestBody final Map<String, Object> param) {
+	public Map<String, Object> smsTest(@RequestBody final Map<String, Object> param,@Value("${mca.url}")String mcaUrl) {
 		Map<String, Object> result = new HashMap<String, Object>();		
-
+		
         HttpURLConnection con = null;
         try {
 	        String jsonValue = httpUtils.setJsonData(param);
 	    	result.put("jsonValue", jsonValue);
-        	URL url = new URL("http://192.168.97.141:18211/http/lvaca-fmec");
+        	URL url = new URL(mcaUrl);
             con = (HttpURLConnection) url.openConnection();
             log.debug("REST API START");
             

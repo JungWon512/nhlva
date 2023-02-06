@@ -7753,7 +7753,7 @@ Base styles: contents layer
 
 .sms_authentication .authentication_number {
 	position: relative;
-	padding-right: 70px
+	/* padding-right: 70px */
 }
 
 .sms_authentication .authentication_number .btn_resend {

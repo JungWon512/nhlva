@@ -291,6 +291,17 @@ public class LoginServiceImpl implements LoginService {
 			// SMS 인증번호 생성일자가 오늘인 경우
 			if (now.equals(authInfo.get("SMS_YMD"))) {
 				smsNo = authInfo.getOrDefault("SMS_NO", "").toString();
+				
+				if (!"production".equals(profile)) {	//로컬, 개발에서는 인증번호가 입력되게끔 함, 운영에서는 노출 안 됨
+					returnMap.put("smsNo", smsNo);	
+				}
+				
+				//로그인 인증번호 문자 발송을 최초 1번만 하고, 그 후 당일 내 재로그인 시에는 담당자에게 문의하여 SMS인증번호를 알도록 안내 문구 띄우기
+				//업무정산 - 중도매인 : 경매참가번호관리(인증번호), 출하주 : 농가관리(SMS인증번호) 로 확인 가능함
+				returnMap.put("alreadyFlag", "Y");
+				returnMap.put("success", true);
+				returnMap.put("message", "SMS 인증번호 발송내역이 있습니다.<br/>담당자에게 문의하세요.");
+				return returnMap;
 			}
 			// - 아닌 경우 4자리 숫자를 랜덤 생성 후 TB_LA_IS_MM_MWMN테이블에 인증번호를 UPDATE해준다.
 			else {
