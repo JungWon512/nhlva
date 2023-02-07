@@ -206,6 +206,7 @@ public class DashBoardServiceImpl implements DashBoardService {
 		
 		if(isCache) {
 			long now = System.currentTimeMillis();
+			long loadTime = !JOHAP_LOGO_LIST.isEmpty() ? (long) JOHAP_LOGO_LIST.get("loadTime") : 0L;
 			try {
 				if(JOHAP_LOGO_LIST.isEmpty() || now - loadTime > duration) {
 					synchronized (JOHAP_LOGO_LIST) {
