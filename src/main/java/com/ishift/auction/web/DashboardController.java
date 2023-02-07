@@ -117,7 +117,21 @@ public class DashboardController {
 		// 2. 지역별 평균 낙찰가
 		mav.addObject("avgPlaceBidAmList", dashboardService.findAvgPlaceBidAmList(params));
 		// 3. 금주의 TOP 3
-		mav.addObject("recentDateTopList", dashboardService.findRecentDateTopList(params));
+		List<Map<String, Object>> recentDateTopList = dashboardService.findRecentDateTopList(params);
+		// 4. 조합 Logo 이미지 가져오기
+		List<Map<String, Object>> johapLogoList = dashboardService.findJohapLogoList(params);
+		
+		if(recentDateTopList.size() > 0) {
+			for(Map<String, Object> date : recentDateTopList) {
+				for(Map<String, Object> johap : johapLogoList) {
+					if(date.get("NA_BZPLC").toString().equals(johap.get("file_nm").toString())) {
+						date.put("FILE_PATH", johap.get("file_path"));
+					}
+				}
+			}
+		}
+		
+		mav.addObject("recentDateTopList", recentDateTopList);
 		
 		mav.addObject("range", range);
 		mav.addObject("title", title);
@@ -143,7 +157,21 @@ public class DashboardController {
 			// 2. 지역별 평균 낙찰가
 			resultMap.put("avgPlaceBidAmList", dashboardService.findAvgPlaceBidAmList(params));
 			// 3. 금주의 TOP 3
-			resultMap.put("recentDateTopList", dashboardService.findRecentDateTopList(params));
+			List<Map<String, Object>> recentDateTopList = dashboardService.findRecentDateTopList(params);
+			// 4. 조합 Logo 이미지 가져오기
+			List<Map<String, Object>> johapLogoList = dashboardService.findJohapLogoList(params);
+			
+			if(recentDateTopList.size() > 0) {
+				for(Map<String, Object> date : recentDateTopList) {
+					for(Map<String, Object> johap : johapLogoList) {
+						if(date.get("NA_BZPLC").toString().equals(johap.get("file_nm").toString())) {
+							date.put("FILE_PATH", johap.get("file_src"));
+						}
+					}
+				}
+			}
+			
+			resultMap.put("recentDateTopList", recentDateTopList);
 			
 			resultMap.put("range", range);
 			resultMap.put("title", title);

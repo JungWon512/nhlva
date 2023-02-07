@@ -99,7 +99,16 @@
 					<c:if test="${i.index < 3}">
 						<li>
 							<dl class="union">
-								<dt><img src="/static/images/guide/v2/sample_logo.jpg" alt=""></dt>
+								<dt>
+								<c:choose>
+									<c:when test="${!empty vo.FILE_URL}">
+										<img src="${vo.FILE_URL}" alt="">
+									</c:when>
+									<c:otherwise>
+										<img src="/static/images/guide/v2/sample_logo.jpg" alt="">
+									</c:otherwise>
+								</c:choose>
+								</dt>
 								<dd class="name">${ vo.CLNTNM }</dd>
 								<fmt:formatNumber value="${empty vo.AMT ? 0 : vo.AMT}" type="number" var="AMT"/>
 								<c:choose>
@@ -107,7 +116,7 @@
 										<dd class="change fc-blue">${AMT} 원</dd>
 									</c:when>
 									<c:otherwise>
-										<dd class="change fc-red">+${AMT} 원</dd>
+										<dd class="change fc-red">+ ${AMT} 원</dd>
 									</c:otherwise>								
 								</c:choose>
 								

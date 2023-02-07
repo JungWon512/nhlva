@@ -14,7 +14,13 @@
 	<input type="hidden" id="webPort" value="${johapData.WEB_PORT}" />
 	
 	<input type="hidden" id="aucDate" value="${dateVo.AUC_DT}" />
-
+	<div>
+		<div class="stats-box">
+			<div class="num stand"><i class="off"></i>대기 <span>${watchCount.CNT_STAND }</span></div>
+			<div class="num bid"><i class="on"></i>완료 <span>${watchCount.CNT_BID }</span></div>
+			<div><button type="button" class="btn_reload btn-f5">새로고침</button></div>
+		</div>
+	</div>
 	<!-- //auction_seeBox e -->
 	<div class="list_table auction_see tblAuction">
 		<div class="list_head" style="${johapData.AUC_DSC eq '2'?'border-radius: 0px;':'' }">

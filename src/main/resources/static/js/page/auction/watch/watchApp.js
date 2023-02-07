@@ -28,6 +28,10 @@ $(function() {
 				};
 		});
 	}
+		
+	$("button.btn_reload").click(function(){
+		location.reload();
+	});
 	socketStart();
 });
 

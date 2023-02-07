@@ -2,6 +2,13 @@
 <!DOCTYPE mapper PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="dashboard">
+	<select id="findFilterRegionList" parameterType="map" resultType="map">
+		/* FrontMapper.findFilterRegionList  */
+		SELECT DISTINCT A.NA_BZPLCLOC
+				, A.LOCNM
+		FROM TB_LA_IS_BM_BZLOC A
+	</select>
+
 	<select id="findCowPriceList" parameterType="map" resultType="map">
 		/* FrontMapper.findCowPriceList  */
 		SELECT T.MONTH_OLD_C
@@ -16,11 +23,24 @@
 		FROM
 		 (
 			SELECT 'PRE' AS WEEK_FLAG
-					, A.MONTH_OLD_C
+					, B.SIMP_C AS MONTH_OLD_C
 					, SUM(NVL(A.TOT_SBID_CNT,0)) SUM_SBID_CNT
 					, NVL(TRUNC((DECODE(SUM(A.TOT_SBID_CNT),0,0,(SUM(A.SBID_SUM_AMT) / SUM(A.TOT_SBID_CNT))))),0) AS AVG_SBID_AM
-			FROM TB_LA_IS_MM_DB_SUM A
-			WHERE 1=1
+			FROM (
+					SELECT *
+					FROM TB_LA_IS_MH_COMN_APL
+					WHERE SIMP_TPC = 'MONTH_OLD_C'
+					<choose>
+						<when test='!"1".equals(searchAucObjDsc)'>
+							AND AMN_HCNT = '2'
+						</when>
+						<otherwise>
+							AND AMN_HCNT = '1'
+						</otherwise>
+					</choose>
+			) B
+			LEFT JOIN TB_LA_IS_MM_DB_SUM A 
+				ON B.SIMP_C = A.MONTH_OLD_C 
 				AND A.MONTH_SUM_YN = '0'
 					<if test="searchAucObjDsc != null and searchAucObjDsc != ''">
 						AND A.AUC_OBJ_DSC = #{searchAucObjDsc}
@@ -39,35 +59,52 @@
 							AND A.AUC_DT BETWEEN TO_CHAR(SYSDATE - 11, 'YYYYMMDD') AND TO_CHAR(SYSDATE-1, 'YYYYMMDD')
 						</otherwise>
 					</choose>
-			GROUP BY ROLLUP (A.MONTH_OLD_C)
+					AND NVL(A.SBID_SUM_AMT, 0) <![CDATA[>]]> 0
+			WHERE 1=1
+			GROUP BY ROLLUP (B.SIMP_C)
 	
 			UNION ALL
 			
 			SELECT 'THIS' AS WEEK_FLAG
-					, A.MONTH_OLD_C
+					, B.SIMP_C AS MONTH_OLD_C
 					, SUM(NVL(A.TOT_SBID_CNT,0)) SUM_SBID_CNT
 					, NVL(TRUNC((DECODE(SUM(A.TOT_SBID_CNT),0,0,(SUM(A.SBID_SUM_AMT) / SUM(A.TOT_SBID_CNT))))),0) AS AVG_SBID_AM
-			FROM TB_LA_IS_MM_DB_SUM A
-			WHERE 1=1
-				AND A.MONTH_SUM_YN = '0'
-					<if test="searchAucObjDsc != null and searchAucObjDsc != ''">
-						AND A.AUC_OBJ_DSC = #{searchAucObjDsc}
-					</if>
-					<if test="searchPlace != null and searchPlace != ''"> 
-						AND A.NA_BZPLCLOC = #{searchPlace}
-					</if>
-			        <choose>
-						<when test='"range20".equals(searchRaDate)'>
-							AND A.AUC_DT BETWEEN TO_CHAR(SYSDATE - 20, 'YYYYMMDD') AND TO_CHAR(SYSDATE, 'YYYYMMDD')
-						</when>
-						<when test='"range30".equals(searchRaDate)'>
-							AND A.AUC_DT BETWEEN TO_CHAR(SYSDATE - 30, 'YYYYMMDD') AND TO_CHAR(SYSDATE, 'YYYYMMDD')
+			FROM (
+					SELECT *
+					FROM TB_LA_IS_MH_COMN_APL
+					WHERE SIMP_TPC = 'MONTH_OLD_C'
+					<choose>
+						<when test='!"1".equals(searchAucObjDsc)'>
+							AND AMN_HCNT = '2'
 						</when>
 						<otherwise>
-							AND A.AUC_DT BETWEEN TO_CHAR(SYSDATE - 10, 'YYYYMMDD') AND TO_CHAR(SYSDATE, 'YYYYMMDD')
+							AND AMN_HCNT = '1'
 						</otherwise>
 					</choose>
-			GROUP BY ROLLUP (A.MONTH_OLD_C)
+			) B
+			LEFT JOIN TB_LA_IS_MM_DB_SUM A 
+				ON B.SIMP_C = A.MONTH_OLD_C 
+				AND A.MONTH_SUM_YN = '0'
+				AND NVL(A.SBID_SUM_AMT, 0) <![CDATA[>]]> 0
+				<if test="searchAucObjDsc != null and searchAucObjDsc != ''">
+					AND A.AUC_OBJ_DSC = #{searchAucObjDsc}
+				</if>
+				<if test="searchPlace != null and searchPlace != ''"> 
+					AND A.NA_BZPLCLOC = #{searchPlace}
+				</if>
+		        <choose>
+					<when test='"range20".equals(searchRaDate)'>
+						AND A.AUC_DT BETWEEN TO_CHAR(SYSDATE - 20, 'YYYYMMDD') AND TO_CHAR(SYSDATE, 'YYYYMMDD')
+					</when>
+					<when test='"range30".equals(searchRaDate)'>
+						AND A.AUC_DT BETWEEN TO_CHAR(SYSDATE - 30, 'YYYYMMDD') AND TO_CHAR(SYSDATE, 'YYYYMMDD')
+					</when>
+					<otherwise>
+						AND A.AUC_DT BETWEEN TO_CHAR(SYSDATE - 10, 'YYYYMMDD') AND TO_CHAR(SYSDATE, 'YYYYMMDD')
+					</otherwise>
+				</choose>
+			WHERE 1=1
+			GROUP BY ROLLUP (B.SIMP_C)
 		) T
 		WHERE 1=1
 		GROUP BY T.MONTH_OLD_C
@@ -143,7 +180,7 @@
 				<if test="searchMonthOldC != null and searchMonthOldC != ''">
 					AND A.MONTH_OLD_C = #{searchMonthOldC}
 				</if>
-					AND A.CR_DT BETWEEN TO_CHAR(SYSDATE-7, 'YYYYMMDD') AND TO_CHAR(SYSDATE-1, 'YYYYMMDD')
+<!-- 					AND A.CR_DT BETWEEN TO_CHAR(SYSDATE-7, 'YYYYMMDD') AND TO_CHAR(SYSDATE-1, 'YYYYMMDD') -->
 		) T
 		WHERE 1=1
 			AND T.RANK_NO <![CDATA[<=]]> 10
@@ -194,7 +231,15 @@
 			, (SELECT MAX(SBID_DT) FROM TB_LA_IS_MM_DB_BTCAUC WHERE SBID_DT <![CDATA[<]]> M.SBID_DT AND INDV_SEX_TP = M.INDV_SEX_TP AND SRA_GRD_DSC = M.SRA_GRD_DSC) AS BEFORE_DT
 			, (SELECT MIN(SBID_DT) FROM TB_LA_IS_MM_DB_BTCAUC WHERE SBID_DT <![CDATA[>]]> M.SBID_DT AND INDV_SEX_TP = M.INDV_SEX_TP AND SRA_GRD_DSC = M.SRA_GRD_DSC) AS AFTER_DT
 		FROM (
-			SELECT ROW_NUMBER() OVER(ORDER BY SBID_DT ${sortCommand}, GRD_ORD.ORD_CNT ASC) AS N_NUM
+			SELECT
+				<choose>
+					<when test='sortCommand != null and sortCommand == "DESC"'>
+				ROW_NUMBER() OVER(ORDER BY SBID_DT DESC, GRD_ORD.ORD_CNT ASC) AS N_NUM
+					</when>
+					<otherwise>
+				ROW_NUMBER() OVER(ORDER BY SBID_DT ASC, GRD_ORD.ORD_CNT ASC) AS N_NUM
+					</otherwise>
+				</choose> 
 				, AUC.SBID_DT
 				, AUC.INDV_SEX_TP
 				, AUC.SRA_GRD_DSC
