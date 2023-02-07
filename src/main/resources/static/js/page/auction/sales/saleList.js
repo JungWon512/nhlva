@@ -60,9 +60,12 @@
         });
 
         $(document).on("click",".pd_pav a", function(){
+        	        
 			$('.popup .modal-wrap.pop_jjim_input.zim').remove();
-			
 			var li = $(this).closest('li');
+        	if(li.find('.commitYn').val() != '1'){
+        		return;
+        	}
 			
 			var jjim_price = li.find('input.sbidUpr').val();
 			var naBzPlc = li.find('input.naBzPlc').val();
@@ -141,7 +144,7 @@
 						 COMMONS.callAjax("/auction/api/inserttZimPrice", "post", params, 'application/json', 'json', function(data){
 							modalPopupClose('.popup .modal-wrap.pop_jjim_input.zim');
 							if(data && !data.success){
-								modalAlert('','작업중 오류가 발생했습니다. <br/>관리자에게 문의하세요.');
+								modalAlert('', data.message);
 								return;
 							}
 							location.reload();
@@ -157,9 +160,12 @@
 			var pdEa = new String($(this).find('span').attr('fullstr'));
 			var tr = $(this).closest('li');
 			
+        	if(tr.find('.commitYn').val() != '1'){
+        		return;
+        	}
 			
-			var pdEa = new String($(this).find('span').attr('fullstr'));	
-			var tr = $(this).closest('li');
+			
+			var pdEa = new String($(this).find('span').attr('fullstr'));
 			$("form[name='frm_select'] input[name='naBzplc']").val(tr.find('.naBzPlc').val());
 			$("form[name='frm_select'] input[name='aucDt']").val(tr.find('.aucDt').val());
 			$("form[name='frm_select'] input[name='aucObjDsc']").val(tr.find('.aucObjDsc').val());
@@ -181,83 +187,7 @@
 			
 			return;
 			
-		});
-		
-		$(document).on("click",".list_body .aaaaapd_ea a", function(){
-			var pdEa = new String($(this).find('span').attr('fullstr'));
-			var tr = $(this).closest('li');
-			
-			modalPopupClose('.popup .modal-wrap.pop_exit_cow');
-			$('.popup .modal-wrap.pop_exit_cow').remove();
-			var sHtml=''; 
-			
-			sHtml += '  <div id="" class="modal-wrap pop_exit_cow">                                                                                        ';
-			sHtml += '  	<div class="modal-content">                                                                                                    ';
-			sHtml += '  		<button class="modal_popup_close" onclick="modalPopupClose(\'.pop_exit_cow\');return false;">닫기</button>                   ';
-			sHtml += '  		<h3>출장우 상세</h3>                                                                                                       ';
-			sHtml += '  		<div class="cow-table">                                                                                                    ';
-			sHtml += '  			<table>                                                                                                                ';
-			sHtml += '  				<colgroup>                                                                                                         ';
-			sHtml += '  					<col width="20%">                                                                                              ';
-			sHtml += '  					<col width="30%">                                                                                              ';
-			sHtml += '  					<col width="20%">                                                                                              ';
-			sHtml += '  					<col width="*">                                                                                                ';
-			sHtml += '  				</colgroup>                                                                                                        ';
-			sHtml += '  				<tr>                                                                                                               ';
-			sHtml += '  					<th>경매<br>번호</th>                                                                                          ';
-			sHtml += '  					<td class="auc-num">'+tr.find('.aucPrgSq').val()+'</td>                                                                                   ';
-			sHtml += '  					<th>출하주</th>                                                                                                  ';
-			sHtml += '  					<td class="name">'+tr.find('.sraPdmNm').val()+'</td>                                                                                   ';
-			sHtml += '  				</tr>                                                                                                              ';
-			sHtml += '  				<tr>                                                                                                               ';
-			sHtml += '  					<th>지역</th>                                                                                                  ';
-			sHtml += '  					<td colspan="3" class="tal">'+tr.find('.sraPdRgnnm').val()+'</td>                                                             ';
-			sHtml += '  				</tr>                                                                                                              ';
-			sHtml += '  				<tr>                                                                                                               ';
-			sHtml += '  					<th>생년<br/>월일</th>                                                                                              ';
-			sHtml += '  					<td colspan="3" class="tal">'+convertStrDate(tr.find('.birthMonth').val())+'</td>                                                           ';
-			sHtml += '  				</tr>                                                                                                              ';
-			sHtml += '  				<tr>                                                                                                               ';
-			sHtml += '  					<th>개체<br/>번호</th>                                                                                              ';
-			sHtml += '  					<td colspan="3" class="num tal">'+pdEa.substring(6,10)+' <span>'+pdEa.substring(10,14)+'</span> '+pdEa.substring(14,15)+'</td>                                                              ';
-			sHtml += '  				</tr>                                                                                                              ';
-			sHtml += '  				<tr>                                                                                                               ';
-			sHtml += '  					<th>KPN</th>                                                                                                   ';
-			sHtml += '  					<td colspan="3" class="fwb tal">'+tr.find('.kpnNoStr').val()+'</td>                                                                                      ';			
-			sHtml += '  				</tr>                                                                                                              ';			
-			sHtml += '  				<tr>                                                                                                               ';
-			sHtml += '  					<th>중량</th>                                                                                                  ';
-			sHtml += '  					<td class="tac">'+fnSetComma(tr.find('.cowSogWt').val())+'kg</td>                                                                                     ';
-			sHtml += '  					<th>성별</th>                                                                                                  ';
-			sHtml += '  					<td class="sex">'+tr.find('.indvSexCName').val()+'</td>                                                                                        ';			
-			sHtml += '  				</tr>                                                                                                              ';
-			sHtml += '  				<tr>                                                                                                               ';
-			sHtml += '  					<th>예정가</th>                                                                                                ';
-			sHtml += '  					<td class="tac">'+fnSetComma(tr.find('.lowsSbidLmtUpr').val())+'</td>                                                                                  ';
-			sHtml += '  					<th>어미</th>                                                                                                  ';
-			sHtml += '  					<td class="fwb">'+tr.find('.mcowDsc').val()+'</td>                                                                                      ';
-			sHtml += '  				</tr>                                                                                                              ';
-			sHtml += '  				<tr>                                                                                                               ';
-			sHtml += '  					<th>산차</th>                                                                                                  ';
-			sHtml += '  					<td class="fwb">'+tr.find('.matime').val()+'</td>                                                                                         ';
-			sHtml += '  					<th>계대</th>                                                                                                  ';
-			sHtml += '  					<td class="fwb">'+tr.find('.sraIndvPasgQcn').val()+'</td>                                                                                         ';
-			sHtml += '  				</tr>                                                                                                              ';
-			sHtml += '  				<tr>                                                                                                               ';
-			sHtml += '  					<th class="vtt">특이<br/>사항</th>                                                                                  ';
-			sHtml += '  					<td colspan="3" class="tal vtt">'+tr.find('.rmkCntn').val()+'</td>                                                                          ';
-			sHtml += '  				</tr>                                                                                                              ';
-			sHtml += '  			</table>                                                                                                               ';
-			sHtml += '  		</div>                                                                                                                     ';
-			sHtml += '  	</div>                                                                                                                         ';
-			sHtml += '  </div>                                                                                                                             ';
-							
-			$('.popup').append($(sHtml));
-			$('.cow-table td').each(function(){
-				if(!$(this).text()) $(this).text('-');
-			});
-			modalPopup('.popup .modal-wrap.pop_exit_cow');
-        });
+		});		
         
       //-------------------------------------
         //          필터 관련 이벤트.

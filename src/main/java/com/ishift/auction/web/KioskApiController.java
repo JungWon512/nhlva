@@ -181,7 +181,6 @@ public class KioskApiController<T> {
 			return this.createResultSetMapData(info);
 		}
 		catch (RuntimeException | SQLException e) {
-			e.printStackTrace();
 			return this.createResultSetMapData(null);
 		}
 	}
@@ -219,7 +218,6 @@ public class KioskApiController<T> {
 			return this.createResultSetMapData(info);
 		}
 		catch (RuntimeException | SQLException e) {
-			e.printStackTrace();
 			return this.createResultSetMapData(null);
 		}
 	}

@@ -85,7 +85,6 @@ public class AdminController {
 			String caToken=params.getOrDefault("caToken", "").toString();
 			String url = params.getOrDefault("url","").toString();
 			final Cookie cookie = cookieUtil.createCookie(Constants.JwtConstants.ACCESS_TOKEN, caToken);
-			cookie.setSecure(true);
 			response.addCookie(cookie);
 			
 			if("".equals(caToken) || "".equals(url)) {
@@ -295,7 +294,7 @@ public class AdminController {
 				String decPw = new String(Base64.getDecoder().decode((String)params.getOrDefault("eb","")));
 				params.put("usrid",decUsrId);
 				params.put("pw",decPw);
-				loginChk = this.adminUserLoginProc(response, params);				
+				loginChk = this.adminUserLoginProc(response, params);
 			}					
 			
 			final AdminUserDetails userVo = (AdminUserDetails)sessionUtill.getUserVo();
@@ -611,7 +610,6 @@ public class AdminController {
 						.build();
 				token = jwtTokenUtil.generateToken(jwtTokenVo, Constants.JwtConstants.ACCESS_TOKEN);
 				final Cookie cookie = cookieUtil.createCookie(Constants.JwtConstants.ACCESS_TOKEN, token);
-				cookie.setSecure(true);
 				response.addCookie(cookie);
 			}
 		}catch (RuntimeException re) {

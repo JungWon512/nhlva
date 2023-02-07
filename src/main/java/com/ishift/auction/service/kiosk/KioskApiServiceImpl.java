@@ -119,12 +119,29 @@ public class KioskApiServiceImpl implements KioskApiService {
 		params.put("naBzplc", tokenVo.getAuctionHouseCode());
 		params.put("trmnAmnno", tokenVo.getUserMemNum());
 		
+		// 중도매인 정보 확인
+		final Map<String, Object> mwmnInfo = kioskApiDAO.selectMwmnInfo(params);
+		if (ObjectUtils.isEmpty(mwmnInfo)) {
+			reMap.put("status", HttpStatus.BAD_REQUEST.value());
+			reMap.put("code", "C" + HttpStatus.BAD_REQUEST.value());
+			reMap.put("message", "인증에 실패했습니다.");
+			return reMap;
+		}
+		
 		// 오늘 날짜로 등록된 참가 번호가 있는지 확인
 		final List<Map<String, Object>> entryList = kioskApiDAO.selectEntryList(params);
 		if (!ObjectUtils.isEmpty(entryList)) {
 			reMap.put("status", HttpStatus.BAD_REQUEST.value());
 			reMap.put("code", "C" + HttpStatus.BAD_REQUEST.value());
 			reMap.put("message", String.format("이미 참가 등록된 번호입니다.[참가번호 : %s]", entryList.get(0).get("LVST_AUC_PTC_MN_NO")));
+			return reMap;
+		}
+		
+		// 불량 회원 등록 여부 체크
+		if ("0".equals(mwmnInfo.get("AUC_PART_LIMIT_YN"))) {
+			reMap.put("status", HttpStatus.BAD_REQUEST.value());
+			reMap.put("code", "C" + HttpStatus.BAD_REQUEST.value());
+			reMap.put("message", "경매 참가등록에 실패했습니다. 담당자에게 문의하세요.");
 			return reMap;
 		}
 		

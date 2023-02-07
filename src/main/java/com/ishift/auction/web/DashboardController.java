@@ -7,6 +7,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.util.StringUtils;
@@ -27,6 +29,8 @@ import com.ishift.auction.vo.AdminUserDetails;
 
 @RestController
 public class DashboardController {
+
+	private static Logger log = LoggerFactory.getLogger(DashboardController.class);
 	
 	@Autowired
 	AuctionService auctionService;
@@ -108,7 +112,7 @@ public class DashboardController {
 		
 		String searchDate = LocalDate.now().format(DateTimeFormatter.ofPattern("yyyyMMdd"));
 		String searchPreDate = LocalDate.now().minusDays(range).format(DateTimeFormatter.ofPattern("yyyyMMdd"));
-		String title = "최근 " + range + "일 (" + DateUtil.addSlashYYYYMMDD(searchPreDate) + " ~ " + DateUtil.addSlashYYYYMMDD(searchDate) + " 까지)";
+		String title = "최근 " + range + "일 (" + DateUtil.addSlashYYMMDD(searchPreDate) + " ~ " + DateUtil.addSlashYYMMDD(searchDate) + " 까지)";
 		
 		params.putIfAbsent("searchAucObjDsc", "1");		//기본으로 송아지
 		
@@ -150,7 +154,7 @@ public class DashboardController {
 			
 			String searchDate = LocalDate.now().format(DateTimeFormatter.ofPattern("yyyyMMdd"));
 			String searchPreDate = LocalDate.now().minusDays(range).format(DateTimeFormatter.ofPattern("yyyyMMdd"));
-			String title = "최근 " + range + "일 (" + DateUtil.addSlashYYYYMMDD(searchPreDate) + " ~ " + DateUtil.addSlashYYYYMMDD(searchDate) + " 까지)";
+			String title = "최근 " + range + "일 (" + DateUtil.addSlashYYMMDD(searchPreDate) + " ~ " + DateUtil.addSlashYYMMDD(searchDate) + " 까지)";
 			
 			// 1. 최근 가축시장 시세 조회 
 			resultMap.put("cowPriceList", dashboardService.findCowPriceList(params));
@@ -194,15 +198,27 @@ public class DashboardController {
 		
 		params.putIfAbsent("searchIndvSexC", "1");
 		params.putIfAbsent("sortCommand", "DESC");
-		Map<String, Object> btcAucDate = dashboardService.getBtcAucDateInfo(params);	//앞뒤 날짜 셋팅
-	
-		params.putAll(btcAucDate);
-		List<Map<String, Object>> btcAucGrd = dashboardService.getBtcAucGradeList(params);	//성별,날짜에 따른 등급 종류
-
-		params.put("SRA_GRD_DSC", btcAucGrd.get(0).get("SRA_GRD_DSC"));
+		Map<String, Object> btcAucDate = dashboardService.getBtcAucDateInfo(params);	//도축장 시세 날짜 로직 가져오기
+		if(btcAucDate != null) {
+			params.put("SBID_DT", btcAucDate.get("SBID_DT"));		//현재 가장 가까운 도축일자
+			params.put("BEFORE_DT", btcAucDate.get("BEFORE_DT"));		//그 이전 도축일자
+			
+			String basicDt = btcAucDate.get("SBID_DT").toString();
+			String basicYm = basicDt.substring(0, 4) + "년 " + basicDt.substring(4, 6)  + "월";
+			String basicDay = basicDt.substring(6, 8) + " 일";
+			mav.addObject("basicYm", basicYm);
+			mav.addObject("basicDay", basicDay);
+		}
+		
+		List<Map<String, Object>> btcAucGrd = dashboardService.getBtcAucGradeList(params);		//성별, 도축일자에 따른 등급 종류
+		int grdSize = btcAucGrd == null ? 0 : btcAucGrd.size();
+		if(grdSize > 0) {
+			params.put("SRA_GRD_DSC", btcAucGrd.get(0).get("SRA_GRD_DSC"));		//도축장 경매 정보 중, 가장 위 등급을 기본으로 셋팅하여 데이터 가져오기
+		}
+		
 		Map<String, Object> btcAucAvg = dashboardService.getBtcAucPriceAvgInfo(params);	//거래가 평균 정보
 		List<Map<String, Object>> areaList = dashboardService.getBtcAucAreaAvgList(params);	//지역별 거래가, 낙찰두수 (차트와 목록 같이 사용)
-		Map<String, Object> areaSum = dashboardService.getBtcAucAreaAvgSum(params);
+		Map<String, Object> areaSum = dashboardService.getBtcAucAreaAvgSum(params);		//지역별 목록의 총 평균
 		
 		mav.addObject("btcAucDate", btcAucDate);
 		mav.addObject("btcAucGrd", btcAucGrd);
@@ -211,11 +227,6 @@ public class DashboardController {
 		mav.addObject("areaSum", areaSum);
 		mav.addObject("dashheaderTitle", "도축장시세");
 		
-		String basicDt = btcAucDate.get("SBID_DT").toString();
-		String basicYm = basicDt.substring(0, 4) + "년 " + basicDt.substring(4, 6)  + "월";
-		String basicDay = basicDt.substring(6, 8) + " 일";
-		mav.addObject("basicYm", basicYm);
-		mav.addObject("basicDay", basicDay);
 		return mav;
 	}
 	
@@ -232,17 +243,29 @@ public class DashboardController {
 			String sortCommand = addFlag.equals("next") ? "ASC" : "DESC";
 			params.put("sortCommand", sortCommand);
 			
-			Map<String, Object> btcAucDate = dashboardService.getBtcAucDateInfo(params);	//앞뒤 날짜 셋팅
+			Map<String, Object> btcAucDate = dashboardService.getBtcAucDateInfo(params);	//도축장 시세 날짜 로직 가져오기
+			if(btcAucDate != null) {
+				params.put("SBID_DT", btcAucDate.get("SBID_DT"));		//현재 가장 가까운 도축일자
+				params.put("BEFORE_DT", btcAucDate.get("BEFORE_DT"));		//그 이전 도축일자
+				
+				String basicDt = btcAucDate.get("SBID_DT").toString();
+				String basicYm = basicDt.substring(0, 4) + "년 " + basicDt.substring(4, 6)  + "월";
+				String basicDay = basicDt.substring(6, 8) + " 일";
+				resultMap.put("basicYm", basicYm);
+				resultMap.put("basicDay", basicDay);
+			}
 			
-			params.putAll(btcAucDate);
 			List<Map<String, Object>> btcAucGrd = dashboardService.getBtcAucGradeList(params);	//성별,날짜에 따른 등급 종류
+			int grdSize = btcAucGrd == null ? 0 : btcAucGrd.size();
 			
 			if("".equals(params.get("SRA_GRD_DSC"))) {
-				params.put("SRA_GRD_DSC", btcAucGrd.get(0).get("SRA_GRD_DSC"));
+				if(grdSize > 0) {
+					params.put("SRA_GRD_DSC", btcAucGrd.get(0).get("SRA_GRD_DSC"));		//도축장 경매 정보 중, 가장 위 등급을 기본으로 셋팅하여 데이터 가져오기
+				}
 			}
 			Map<String, Object> btcAucAvg = dashboardService.getBtcAucPriceAvgInfo(params);	//거래가 평균 정보
 			List<Map<String, Object>> areaList = dashboardService.getBtcAucAreaAvgList(params);	//지역별 거래가, 낙찰두수 (차트와 목록 같이 사용)
-			Map<String, Object> areaSum = dashboardService.getBtcAucAreaAvgSum(params);
+			Map<String, Object> areaSum = dashboardService.getBtcAucAreaAvgSum(params);		//지역별 목록의 총 평균
 			
 			resultMap.put("btcAucDate", btcAucDate);
 			resultMap.put("btcAucGrd", btcAucGrd);
@@ -251,17 +274,11 @@ public class DashboardController {
 			resultMap.put("areaSum", areaSum);
 			resultMap.put("dashheaderTitle", "도축장시세");
 			
-			String basicDt = btcAucDate.get("SBID_DT").toString();
-			String basicYm = basicDt.substring(0, 4) + "년 " + basicDt.substring(4, 6)  + "월";
-			String basicDay = basicDt.substring(6, 8) + " 일";
-			resultMap.put("basicYm", basicYm);
-			resultMap.put("basicDay", basicDay);
-
 			resultMap.put("success", true);
 			resultMap.put("inputParam", params);
 			
 		}catch(SQLException | RuntimeException re) {
-			re.printStackTrace();
+			log.error("DashboardController.dashboard_btc_price_ajax : {} ", re);
 			resultMap.put("success", false);
 			resultMap.put("message", "작업중 오류가 발생했습니다. 관리자에게 문의하세요.");
 			return resultMap;
@@ -444,7 +461,8 @@ public class DashboardController {
 	public ModelAndView dashFilter(@RequestParam Map<String, Object> params) throws Exception {
 		// 메인화면 > 현황 > 필터
 		ModelAndView mav = new ModelAndView("pop/dashFilter");
-		mav.addObject("inputParam", params);		
+		mav.addObject("regionList", dashboardService.findFilterRegionList(params));
+		mav.addObject("inputParam", params);
 		return mav;
 	}
 	
@@ -487,31 +505,13 @@ public class DashboardController {
 		params.put("popupFlag", "P");
 		
 		Map<String, Object> sogCowInfo = dashboardService.findSogCowInfo(params);		//가축시장 출장우 현황 출장두수 및 증감율
-		List<Map<String, Object>> sogCowInfoList = dashboardService.findSogCowInfoList(params);		//가축시장 출장우 현황
-		List<Map<String, Object>> areaSbidList = dashboardService.findAreaSbidList(params);		//지역별 평균 예정가
 		List<Map<String, Object>> monSogCowList = dashboardService.findMonthlySogCowList(params);		//월별 출장우 현황
 		
 		mav.addObject("sogCowInfo", sogCowInfo);
-		mav.addObject("sogCowInfoList", sogCowInfoList);
-		mav.addObject("areaSbidList", areaSbidList);
 		mav.addObject("monSogCowList", monSogCowList);
 		
 		mav.addObject("searchMonTxt", params.get("searchMonTxt"));
 		mav.addObject("inputParam", params);	
-		return mav;
-	}
-	
-	/**
-	 * 대시보드 관리자용 통계 페이지
-	 * @param params
-	 * @return
-	 */
-	@RequestMapping(value = "/dashboard/status/admin", method = { RequestMethod.GET, RequestMethod.POST })
-	public ModelAndView dashboard_status_admin(@RequestParam Map<String, Object> params) {
-		System.out.println(sessionUtil.getUserVo().toString());
-		AdminUserDetails user = (AdminUserDetails)sessionUtil.getUserVo();
-		// user.getGrpC() 가 000 이면 축협직원 나머지는 관리자 
-		ModelAndView mav = new ModelAndView("dashboard/sbid_status");
 		return mav;
 	}
 

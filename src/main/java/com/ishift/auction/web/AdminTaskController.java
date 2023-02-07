@@ -1,6 +1,7 @@
 package com.ishift.auction.web;
 
 import java.security.KeyManagementException;
+import java.security.KeyStoreException;
 import java.security.NoSuchAlgorithmException;
 import java.sql.SQLException;
 import java.util.HashMap;
@@ -18,6 +19,8 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
+import com.amazonaws.SdkClientException;
+import com.amazonaws.services.s3.model.AmazonS3Exception;
 import com.ishift.auction.service.admin.AdminService;
 import com.ishift.auction.service.admin.task.AdminTaskService;
 import com.ishift.auction.service.auction.AuctionService;
@@ -531,8 +534,17 @@ public class AdminTaskController extends CommonController {
 	
 	@ResponseBody
 	@RequestMapping(value = "/office/task/uploadImageAjax", method = {RequestMethod.POST})
-	public Map<String, Object> uploadImageAjax(@RequestBody final Map<String, Object> params) throws SQLException, KeyManagementException, NoSuchAlgorithmException {
-		return adminTaskService.uploadImageProc(params);
+	public Map<String, Object> uploadImageAjax(@RequestBody final Map<String, Object> params) {
+		try {
+			return adminTaskService.uploadImageProc(params);
+		}
+		catch (SQLException | SdkClientException | NoSuchAlgorithmException | KeyManagementException | KeyStoreException e) {
+			log.error("Exception::AdminTaskController.uploadImageAjax : {} ", e);
+			final Map<String, Object> result = new HashMap<String, Object>();
+			result.put("success", false);
+			result.put("message", "이미지 업로드에 실패했습니다.");
+			return result;
+		}
 	}
 	/* ---------------------------------------------------------- 출장우 이미지 업로드 [e] ---------------------------------------------------------- */
 

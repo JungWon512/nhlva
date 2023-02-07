@@ -27,7 +27,7 @@
 							<c:set var="tot_sbid_chg_txt" value="▼ ${fn:replace(TOT_SBID_CHG, '-', '')} 두" />
 						</c:otherwise>
 					</c:choose>
-					<strong><fmt:formatNumber value="${TOT_SBID_CNT}" type="number" /> 두</strong>  ${tot_sbid_chg_txt }<br>(${empty sbidInfo.MONTH_OLD_C_NM ? inputParam.monthOldCNm : sbidInfo.MONTH_OLD_C_NM})
+					<strong><fmt:formatNumber value="${TOT_SBID_CNT}" type="number" /> 두</strong>  ${tot_sbid_chg_txt }<br>(<span class="sort3">${empty sbidInfo.MONTH_OLD_C_NM ? inputParam.monthOldCNm : sbidInfo.MONTH_OLD_C_NM}</span>)
 				</div>
 				<ul class="board-number col-3">
 					<li>

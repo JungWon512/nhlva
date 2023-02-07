@@ -273,9 +273,9 @@
 					<when test='SBID_DT != null and SBID_DT != "" and (addFlag == null or addFlag == "")'>
 					AND AUC.SBID_DT = #{SBID_DT}	
 					</when>
-					<when test='SBID_DT == null or SBID_DT == ""'>
+					<!-- <when test='SBID_DT == null or SBID_DT == ""'>
 					AND AUC.SBID_DT BETWEEN #{searchMonth}|| '01' AND  #{searchMonth} || '31'
-					</when>
+					</when> -->
 				</choose>
 				<if test="SRA_GRD_DSC != null and SRA_GRD_DSC != ''">
 					AND AUC.SRA_GRD_DSC = #{SRA_GRD_DSC}
@@ -439,7 +439,7 @@
 				AND A.NA_BZPLCLOC = #{searchPlace}
 				</if>
 				<if test="aucObjDsc != null and aucObjDsc != ''">
-				AND AUC_OBJ_DSC = ${aucObjDsc}
+				AND AUC_OBJ_DSC = #{aucObjDsc}
 				</if>
 				<if test="monthOldC != null and monthOldC != ''">
 				AND MONTH_OLD_C = #{monthOldC}
@@ -489,7 +489,7 @@
 				AND DS.MONTH_SUM_YN = '1'
 				AND DS.AUC_DT = #{searchMonth}
 				<if test="aucObjDsc != null and aucObjDsc != ''">
-				AND AUC_OBJ_DSC = ${aucObjDsc}
+				AND AUC_OBJ_DSC = #{aucObjDsc}
 				</if>
 				<if test="monthOldC != null and monthOldC != ''">
 				AND MONTH_OLD_C = #{monthOldC}
@@ -518,7 +518,7 @@
 				AND DS.NA_BZPLCLOC = #{searchPlace}
 				</if>
 				<if test="aucObjDsc != null and aucObjDsc != ''">
-				AND DS.AUC_OBJ_DSC = ${aucObjDsc}
+				AND DS.AUC_OBJ_DSC = #{aucObjDsc}
 				</if>
 				<if test="monthOldC != null and monthOldC != ''">
 				AND DS.MONTH_OLD_C = #{monthOldC}
@@ -540,10 +540,10 @@
 					AND A.NA_BZPLCLOC = #{searchPlace}
 				</if>
 				<if test="aucObjDsc != null and aucObjDsc != ''">
-					AND A.AUC_OBJ_DSC = ${aucObjDsc}
+					AND A.AUC_OBJ_DSC = #{aucObjDsc}
 				</if>
 				<if test="indvSexC != null and indvSexC != ''">
-					AND A.INDV_SEX_C = ${indvSexC}
+					AND A.INDV_SEX_C = #{indvSexC}
 				</if>
 				<if test="monthOldC != null and monthOldC != ''">
 					AND A.MONTH_OLD_C = #{monthOldC}
@@ -835,7 +835,7 @@
 			END SEL_STS_DSC_NM
 			, SOG.TRPCS_PY_YN
 			, INDV.BIRTH
-			, TRUNC(MONTHS_BETWEEN(SOG.AUC_DT, INDV.BIRTH)) AS MTCN
+			, TRUNC(MONTHS_BETWEEN(SOG.AUC_DT, INDV.BIRTH)) +1 AS MTCN
 			, INDV.SRA_INDV_BRDSRA_RG_NO
 			, SUBSTR(TRPL.BRKR_NAME,1,1) || LPAD('*',LENGTH(TRPL.BRKR_NAME)-2, '*') || SUBSTR(TRPL.BRKR_NAME,LENGTH(TRPL.BRKR_NAME),1) BRKR_NAME
 			, SOG.BRCL_ISP_DT

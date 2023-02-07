@@ -33,7 +33,8 @@
 		<!-- sub_search[e] -->
 		
 		<!-- top-btns [s] -->
-		<div class="top-btns">
+		<div class="top-btns btn-4">
+			<button type="button" class="btn_smart_entry">계류</button>
 			<button type="button" class="btn_chg_result">낙찰변경</button>
 			<button type="button" class="btn_modify">출장우 수정</button>
 			<button type="button" class="btn_regist">신규 등록</button>
@@ -51,7 +52,6 @@
 					<dd class="col4">출하자</dd>
 					<dd class="col5">성별</dd>
 					<dd class="col6">사진</dd>
-					<dd class="col7">계류</dd>
 				</dl>
 			</div>
 			<!-- list_head[e] -->
@@ -70,8 +70,14 @@
 							<dl>
 								<dd class="col1" >
 									<input type="checkbox" name="oslpNo" id="oslpNo_${st.index}" value="${item.OSLP_NO}" 
-										   data-amnno="${item.SRA_INDV_AMNNO}" data-auc-obj-dsc="${item.AUC_OBJ_DSC}" data-led-sqno="${item.LED_SQNO}"
-										   />
+										   data-amnno="${item.SRA_INDV_AMNNO}" 
+										   data-auc-obj-dsc="${item.AUC_OBJ_DSC}" 
+										   data-led-sqno="${item.LED_SQNO}" 
+									  	   data-qcn="${item.QCN}"
+									  	   data-auc-prg-sq="${item.AUC_PRG_SQ}" 					
+									  	   data-ftsnm="${item.FTSNM_ORI}"				
+									  	   data-indv-sex-c="${item.INDV_SEX_C_NAME}"  
+									/>
 									<label for="oslpNo_${st.index}"></label>
 								</dd>
 								<dd class="col2">${item.AUC_PRG_SQ}</dd>
@@ -87,45 +93,6 @@
 									</c:choose>
 									</button>
 								</dd>
-								
-								<dd class="col7" ><button type="button" class="btn_smart_entry btn-reg-pic2"
-									  data-auc-prg-sq="${item.AUC_PRG_SQ}" 									  
-									  data-qcn="${item.QCN}"
-									  data-auc-obj-dsc="${item.AUC_OBJ_DSC}"
-									  data-amnno="${item.SRA_INDV_AMNNO}" 
-									  data-sra-srs-dsc="${item.SRA_SRS_DSC}" 
-									  data-fhs-id-no="${item.FHS_ID_NO}"
-									  data-farm-amnno="${item.FARM_AMNNO}"
-									  data-ftsnm="${item.FTSNM_ORI}"
-									  data-brandnm="${item.BRANDNM}"
-									  data-birth="${item.BIRTH_MONTH}"
-									  data-kpn-no="${item.KPN_NO}"
-									  data-birth="${item.BIRTH}"
-									  data-indv-sex-c="${item.INDV_SEX_C_NAME}"
-									  data-mcow-dsc="${item.MCOW_DSC}"
-									  data-mcow-sra-indv-amnno="${item.MCOW_SRA_INDV_AMNNO}"
-									  data-matime="${item.MATIME}"
-									  data-prny-mtcn="${item.PRNY_MTCN}"
-									  data-sra-indv-pasg-qcn="${item.SRA_INDV_PASG_QCN}"
-									  data-indv-id-no="${item.INDV_ID_NO}"
-									  data-sra-indv-brdsra-rg-no="${item.SRA_INDV_BRDSRA_RG_NO}"
-									  data-rg-dsc="${item.RG_DSC}"
-									  data-sra-pd-rgnnm="${item.SRA_PD_RGNNM}"
-									  data-dna-yn="${item.DNA_YN}"
-									  data-anw-yn="${item.ANW_YN}"
-									  data-cow-sog-wt="${item.COW_SOG_WT}"
-									  data-fir-lows-sbid-lmt-am="${item.FIR_LOWS_SBID_LMT_AM}"
-									  data-lows-sbid-lmt-am="${item.LOWS_SBID_LMT_AM}"
-									  data-rmk-cntn="${item.RMK_CNTN}"
-									  data-sel-sts-dsc="${item.SEL_STS_DSC}"
-									  data-lvst-auc-ptc-mn-no="${item.LVST_AUC_PTC_MN_NO}"
-									  data-sra-sbid-upr="${item.SRA_SBID_UPR}"
-									  data-atdr-dtm="${item.ATDR_DTM}"
-									  data-modl-no="${item.MODL_NO}"
-									  
-									  
-									  data-auc-obj-dsc="${item.AUC_OBJ_DSC}"
-								>계류</dd>
 							</dl>
 						</li>
 					</c:forEach>

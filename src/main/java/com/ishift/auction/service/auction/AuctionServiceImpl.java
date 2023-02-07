@@ -29,7 +29,6 @@ import com.ishift.auction.util.AlarmTalkForm;
 import com.ishift.auction.util.McaUtil;
 import com.ishift.auction.util.SessionUtill;
 import com.ishift.auction.vo.FarmUserDetails;
-import com.ishift.auction.web.TradeMcaMsgDataController;
 
 @Service("auctionService")
 @Transactional(transactionManager = "txManager", rollbackFor = Exception.class)
@@ -114,7 +113,7 @@ public class AuctionServiceImpl implements AuctionService {
 	 * @throws SQLException
 	 */
 	public int insertUpdateZim(Map<String, Object> param) throws SQLException {
-		return auctionDAO.insertUpdateZim(param);
+		return ObjectUtils.isEmpty(auctionDAO.selectZimPriceChk(param)) ? 0 : auctionDAO.insertUpdateZim(param); 
 	}
 
 	/**
@@ -906,8 +905,12 @@ public class AuctionServiceImpl implements AuctionService {
 				auctionDAO.insertSmsInfo(msgMap);
 			}
 		}
+		catch(RuntimeException | SQLException se) {
+			log.error("AuctionServiceImpl.sendAlamTalkProc : {} ", se);
+			return false;
+		}
 		catch(Exception e) {
-			e.printStackTrace();
+			log.error("AuctionServiceImpl.sendAlamTalkProc : {} ", e);
 			return false;
 		}
 		return true;
@@ -1764,13 +1767,30 @@ public class AuctionServiceImpl implements AuctionService {
 			}
 			
 			//유효시간이 지났거나, 인증번호 발급받은 적이 없으면 인증번호 6자리 발급
+			Map<String, Object> authNoCnt = new HashMap<>();
 			Random random;
 			String authNo = "";
 			try {
-				random = SecureRandom.getInstance("SHA1PRNG");
-				random.setSeed(System.currentTimeMillis());
-				authNo = String.format("%06d", random.nextInt(1000000));
+				do {
+					//난수 생성
+					random = SecureRandom.getInstance("SHA1PRNG");
+					random.setSeed(System.currentTimeMillis());
+					authNo = String.format("%06d", random.nextInt(1000000));
+					params.put("authNo", authNo);
+					
+					//해당 유효시간내에 다른 계정에서 발급받은 인증번호가 같은경우 다시 난수발급 
+					//중도매인 or 출하주 테이블 AUTH_YMD 기한내에 AUTH_NO 조회
+					if (sessionUtill.getRoleConfirm() != null) {
+						if("ROLE_BIDDER".equals(sessionUtill.getRoleConfirm())) {
+							authNoCnt = auctionDAO.selectMwmnAuthNoYmdInfoCnt(params);
+						} else {
+							authNoCnt = auctionDAO.selectFhsAuthNoYmdInfoCnt(params);
+						}
+					}
+				} while (Integer.parseInt(authNoCnt.getOrDefault("CNT", 0).toString()) > 0);
+				
 				params.put("auth_no", authNo);
+				
 			} catch (NoSuchAlgorithmException e) {
 				log.error(e.getMessage());
 			}

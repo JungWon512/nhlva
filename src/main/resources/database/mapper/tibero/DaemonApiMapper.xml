@@ -59,6 +59,18 @@
 		 ORDER BY LSCHG_DTM ASC
 	</select>
 	
+	<!-- 개체 정보 개별 조회 -->
+	<select id="selectIndvInfo" parameterType="hashMap" resultType="hashMap">
+		SELECT A.*
+			 , TO_CHAR(A.LSCHG_DTM, 'YYYYMMDDHH24MISS') AS TIMESTAMP
+		  FROM TB_LA_IS_MM_INDV A
+		 WHERE NA_BZPLC = #{naBzplc}
+		   AND A.SRA_INDV_AMNNO = #{sraIndvAmnno}
+		<if test="chgDtm != null and chgDtm != ''">
+		   AND TO_CHAR(A.LSCHG_DTM, 'YYYYMMDDHH24MISS') > #{chgDtm}
+		</if>
+	</select>
+	
 	<!-- 경매 참가자 정보 리스트 -->
 	<select id="selectAucEntrList" parameterType="hashMap" resultType="hashMap">
 		SELECT A.*

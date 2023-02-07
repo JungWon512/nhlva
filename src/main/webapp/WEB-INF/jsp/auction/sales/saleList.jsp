@@ -177,7 +177,7 @@
 						</dl>
 					</div>
 					<div class="list_body">
-						<ul class="mCustomScrollBox">
+						<ul>
 						<c:if test="${salesList.size() <= 0}">
 							<li>
 								<dl>
@@ -212,15 +212,14 @@
 	                    	 	<input type="hidden" class="sraSbidUpr" name="sraSbidUpr_${st.index }" value="${fn:split(item.SRA_SBID_UPR,'.')[0]}"/>
 			                   	<input type="hidden" class="rmkCntn" name="rmkCntn_${st.index }" value="${item.RMK_CNTN}"/>
 			                   	<input type="hidden" class="cowSogWt" name="cowSogWt_${st.index }" value="${fn:split(item.COW_SOG_WT,'.')[0] }"/>
-<%--                     	<input type="hidden" class="sraMwmnnm" name="sraMwmnnm_${st.index }" value="${item.SRA_MWMNNM}"/> --%>
-<%--                     	<input type="hidden" class="sraPdRgnnm" name="sraPdRgnnm_${st.index }" value="${item.SRA_PD_RGNNM}"/> --%>
+			                   	<input type="hidden" class="commitYn" name="commitYn_${st.index }" value="${item.COMMIT_YN}"/>
                    			 	
 								<dl>
 									<dd class="date">${ item.AUC_DT_STR}</dd>
 									<dd class="num">${ item.AUC_PRG_SQ }</dd>
 									<dd class="name">${item.FTSNM}</dd>
 								   <dd class="pd_ea">
-		                               <a href="javascript:;"><span class="ico_move" fullstr="${ item.SRA_INDV_AMNNO}">${ item.SRA_INDV_AMNNO_FORMAT}</span></a>                                
+		                               <a href="javascript:;"><span class="ico_move" fullstr="${ item.SRA_INDV_AMNNO}">${ item.SRA_INDV_AMNNO_FORMAT_F}</span></a>                                
 		                           </dd>
 									<dd class="pd_sex">${ item.INDV_SEX_C_NAME}</dd>
 									<dd class="pd_date">${ item.BIRTH_STR}</dd>
@@ -265,7 +264,7 @@
 				<div class="list_table schedule_tb_mo">
 					<div class="list_head">
 						<dl>
-							<dd class="num" style="width: 11%; "><a role="button"  href="javascript:;"   class="btn-sort numUpDown ${empty inputParam.numUpDown  ? '' :  inputParam.numUpDown eq '2' ? 'is-down' : 'is-up' }">번호</a></dd>
+							<dd class="num" style="width: 12%; "><a role="button"  href="javascript:;"   class="btn-sort numUpDown ${empty inputParam.numUpDown  ? '' :  inputParam.numUpDown eq '2' ? 'is-down' : 'is-up' }">번호</a></dd>
 							<dd class="pd_ea">개체</dd>
 							<dd class="pd_date"><a role="button"  href="javascript:;"  class="btn-sort birthUpDown ${empty inputParam.birthUpDown ? '' :  inputParam.birthUpDown eq '2' ? 'is-up' : 'is-down' }">생년월</a></dd>
 							<dd class="pd_sex">성별</dd>
@@ -308,11 +307,12 @@
 		                    	<input type="hidden" class="sraIndvPasgQcn" name="sraIndvPasgQcn_${st.index }" value="${item.SRA_INDV_PASG_QCN}"/>
 	                    	 	<input type="hidden" class="sraSbidUpr" name="sraSbidUpr_${st.index }" value="${fn:split(item.SRA_SBID_UPR,'.')[0]}"/>
 			                   	<input type="hidden" class="rmkCntn" name="rmkCntn_${st.index }" value="${item.RMK_CNTN}"/>
-			                   	<input type="hidden" class="cowSogWt" name="cowSogWt_${st.index }" value="${fn:split(item.COW_SOG_WT,'.')[0] }"/>
+			                   	<input type="hidden" class="cowSogWt" name="cowSogWt_${st.index }" value="${fn:split(item.COW_SOG_WT,'.')[0] }"/>			                   	
+			                   	<input type="hidden" class="commitYn" name="commitYn_${st.index }" value="${item.COMMIT_YN}"/>
 								<dl>
 									<dd class="num">${ item.AUC_PRG_SQ }</dd>
 									<dd class="pd_ea">
-										  <a href="javascript:;"><span class="" fullstr="${ item.SRA_INDV_AMNNO}">${ item.SRA_INDV_AMNNO_FORMAT}</span></a>               
+										  <a href="javascript:;"><span class="" fullstr="${ item.SRA_INDV_AMNNO}">${ item.SRA_INDV_AMNNO_FORMAT_F}</span></a>               
 									</dd>
 									<dd class="pd_date">${ item.BIRTH_MO}</dd>
 									<dd class="pd_sex">${ item.INDV_SEX_C_NAME}</dd>

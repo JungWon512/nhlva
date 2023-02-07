@@ -55,7 +55,6 @@ public class SessionContextInterceptor implements HandlerInterceptor {
 						.build();
 				String token = jwtTokenUtil.generateToken(jwtTokenVo, Constants.JwtConstants.ACCESS_TOKEN);
 				Cookie cookie = cookieUtil.createCookie("watch_token", token);
-				cookie.setSecure(true);
 				response.addCookie(cookie);
 			}
 

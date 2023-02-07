@@ -97,9 +97,14 @@ public class MyPageController {
 		ModelAndView mav = new ModelAndView("mypage/buy/buy");
 		String today = LocalDate.now().format(DateTimeFormatter.ofPattern("yyyyMM"));
 		BidUserDetails userVo = (BidUserDetails) sessionUtill.getUserVo();
-		if(userVo != null) params.put("loginNo", userVo.getTrmnAmnno());
-		
 		Map<String,Object> paramMap = new HashMap<>();
+		
+		if(userVo != null) {
+			params.put("loginNo", userVo.getTrmnAmnno());
+			paramMap.put("searchTrmnAmnNo", userVo.getTrmnAmnno());
+			paramMap.put("searchMbIntgNo", userVo.getMbIntgNo());
+		}
+		
 		paramMap.put("naBzPlcNo", params.get("place").toString());
 
 		Map<String,Object> johap = adminService.selectOneJohap(paramMap);
@@ -110,10 +115,6 @@ public class MyPageController {
 		
 		List<Map<String,Object>> datelist= auctionService.selectAucDateList(paramMap);
 		paramMap.put("searchDate", datelist.size() > 0 ? datelist.get(0).get("AUC_DT") : null);
-		if(userVo != null) {
-			paramMap.put("searchTrmnAmnNo", userVo.getTrmnAmnno());
-			paramMap.put("searchMbIntgNo", userVo.getMbIntgNo());
-		}
 		paramMap.put("stateFlag", "buy");
 		
 		// 0. 나의 경매내역 > 구매내역
@@ -279,13 +280,11 @@ public class MyPageController {
 									, @PathVariable Map<String, Object> params
 									, RedirectAttributes redirect) throws SQLException {
 		final ModelAndView mav = new ModelAndView();
-//		final String rtnUrl = request.getRequestURI();
 //		this.setTempLoginProc("mwmn", params, response);
 		final Map<String,Object> johap = adminService.selectOneJohap(params);
 		params.put("searchnaBzPlcNo", johap.get("NA_BZPLCNO"));
 //		redirect.addFlashAttribute("params", params);
 		redirect.mergeAttributes(params);
-//		mav.setView(new RedirectView("/my/buyInfo?place=" + johap.get("NA_BZPLCNO") + "&rtnUrl=" + rtnUrl));
 		mav.setView(new RedirectView("/my/buyInfo?place=" + johap.get("NA_BZPLCNO")));
 		return mav;
 	}
@@ -303,13 +302,11 @@ public class MyPageController {
 									, @PathVariable Map<String, Object> params
 									, RedirectAttributes redirect) throws SQLException {
 		final ModelAndView mav = new ModelAndView();
-//		final String rtnUrl = request.getRequestURI();
 //		this.setTempLoginProc("fhs", params, response);
 		final Map<String,Object> johap = adminService.selectOneJohap(params);
 		params.put("searchnaBzPlcNo", johap.get("NA_BZPLCNO"));
 //		redirect.addFlashAttribute("params", params);
 		redirect.mergeAttributes(params);
-//		mav.setView(new RedirectView("/my/entryInfo?place=" + johap.get("NA_BZPLCNO") + "&rtnUrl=" + rtnUrl));
 		mav.setView(new RedirectView("/my/entryInfo?place=" + johap.get("NA_BZPLCNO")));
 		return mav;
 	}
@@ -577,9 +574,11 @@ public class MyPageController {
 	    		
 			} else {
 				FarmUserDetails userVo = ((FarmUserDetails) sessionUtill.getUserVo());
-				paramMap.put("searchMbIntgNo", userVo.getMbIntgNo());
-	    		paramMap.put("searchFhsIdNo", ((FarmUserDetails) sessionUtill.getUserVo()).getFhsIdNo());
-	    		paramMap.put("searchFarmAmnno", ((FarmUserDetails) sessionUtill.getUserVo()).getFarmAmnno());
+				if(userVo != null) {
+					paramMap.put("searchMbIntgNo", userVo.getMbIntgNo());
+					paramMap.put("searchFhsIdNo", userVo.getFhsIdNo());
+					paramMap.put("searchFarmAmnno", userVo.getFarmAmnno());
+				}
 	    		
 	    		// > 연/월단위 기준 전체 출장두수, 송아지, 비육우, 번식우의 낙찰두수, 낙찰평균, 평균시세
 	    		result.put("cowEntryCnt", myPageService.selectCowEntryCnt(paramMap));
@@ -620,9 +619,15 @@ public class MyPageController {
 		ModelAndView mav = new ModelAndView("mypage/entry/entry");
 		String today = LocalDate.now().format(DateTimeFormatter.ofPattern("yyyyMM"));
 		FarmUserDetails userVo = (FarmUserDetails) sessionUtill.getUserVo();
-		if(userVo != null) params.put("loginNo", userVo.getFhsIdNo());
+		Map<String,Object> paramMap = new HashMap<>();
 		
-        Map<String,Object> paramMap = new HashMap<>();
+		if(userVo != null) {
+			params.put("loginNo", userVo.getFhsIdNo());
+			paramMap.put("searchMbIntgNo", userVo.getMbIntgNo());
+			paramMap.put("searchFhsIdNo", userVo.getFhsIdNo());
+			paramMap.put("searchFarmAmnno", userVo.getFarmAmnno());
+		}
+		
         paramMap.put("naBzPlcNo", params.get("place"));
 
 		Map<String,Object> johap = adminService.selectOneJohap(paramMap);
@@ -633,11 +638,6 @@ public class MyPageController {
 		
 		List<Map<String,Object>> datelist= auctionService.selectAucDateList(paramMap);
 		paramMap.put("searchDate", datelist.size() > 0 ? datelist.get(0).get("AUC_DT") : null);
-		if(userVo != null) {
-			paramMap.put("searchMbIntgNo", userVo.getMbIntgNo());
-			paramMap.put("searchFhsIdNo", userVo.getFhsIdNo());
-			paramMap.put("searchFarmAmnno", userVo.getFarmAmnno());
-		}
 		
 		paramMap.putAll(params);
 		paramMap.put("stateFlag", "entry");
@@ -974,11 +974,12 @@ public class MyPageController {
 		mav.addObject("johapData", johap);
 		
 		if(sessionUtill.getUserId() != null) params.put("loginNo", sessionUtill.getUserId()); 
-		if(sessionUtill.getUserId() != null) map.put("mbIntgNo", ((BidUserDetails) sessionUtill.getUserVo()).getMbIntgNo() ); 
+		if((BidUserDetails) sessionUtill.getUserVo() != null) {
+			map.put("mbIntgNo", ((BidUserDetails) sessionUtill.getUserVo()).getMbIntgNo());
+		}
 		
 		List<Map<String,Object>>  johqpList= auctionService.selectJohqpList(map);
 		mav.addObject("johqpList", johqpList);
-
 		
 		mav.addObject("inputParam", params);
 
@@ -1080,6 +1081,12 @@ public class MyPageController {
 		Map<String,Object> johap = adminService.selectOneJohap(map);
 		mav.addObject("johapData", johap);
 		
+		if((BidUserDetails) sessionUtill.getUserVo() != null) {
+			map.put("mbIntgNo", ((BidUserDetails) sessionUtill.getUserVo()).getMbIntgNo());
+		}
+		List<Map<String,Object>>  johqpList= auctionService.selectJohqpList(map);
+		mav.addObject("johqpList", johqpList);
+		
 		if(sessionUtill.getUserId() != null) params.put("loginNo", sessionUtill.getUserId());
 		mav.addObject("inputParam", params);
 
@@ -1104,7 +1111,7 @@ public class MyPageController {
 			BidUserDetails userVo = (BidUserDetails) sessionUtill.getUserVo();
 			params.put("naBzPlc", StringUtils.isEmpty(params.get("johpCd").toString()) ? sessionUtill.getNaBzplc() : params.get("johpCd"));
 			params.put("loginNo", StringUtils.isEmpty(params.get("loginNo").toString()) ? sessionUtill.getUserId() : params.get("loginNo")); 
-			params.put("mbIntgNo", userVo.getMbIntgNo());
+			params.put("mbIntgNo", userVo != null ? userVo.getMbIntgNo() : "");
 			
 			Map<String, Object> aplyInfo = auctionService.selectMySecAplyInfo(params);
 			

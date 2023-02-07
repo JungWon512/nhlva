@@ -37,6 +37,14 @@ public interface DaemonApiService {
 	 * @throws SQLException
 	 */
 	List<Map<String, Object>> selectIndvList(Map<String, Object> params) throws SQLException;
+	
+	/**
+	 * TB_LA_IS_MM_INDV : 개별 개체 조회
+	 * @param params
+	 * @return
+	 * @throws SQLException
+	 */
+	Map<String, Object> selectIndvInfo(Map<String, Object> params) throws SQLException;
 
 	/**
 	 * TB_LA_IS_MH_AUC_ENTR : 경매 참가자 정보 리스트

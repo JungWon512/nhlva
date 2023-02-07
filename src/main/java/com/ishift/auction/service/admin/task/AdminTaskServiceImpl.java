@@ -6,6 +6,7 @@ import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.security.KeyManagementException;
+import java.security.KeyStoreException;
 import java.security.NoSuchAlgorithmException;
 import java.security.SecureRandom;
 import java.security.cert.CertificateException;
@@ -44,10 +45,12 @@ import org.springframework.util.Base64Utils;
 import org.springframework.util.ObjectUtils;
 
 import com.amazonaws.ClientConfiguration;
+import com.amazonaws.SDKGlobalConfiguration;
 import com.amazonaws.SdkClientException;
 import com.amazonaws.auth.AWSStaticCredentialsProvider;
 import com.amazonaws.auth.BasicAWSCredentials;
 import com.amazonaws.client.builder.AwsClientBuilder;
+import com.amazonaws.http.AmazonHttpClient;
 import com.amazonaws.http.apache.client.impl.SdkHttpClient;
 import com.amazonaws.http.conn.ssl.SdkTLSSocketFactory;
 import com.amazonaws.services.s3.AmazonS3;
@@ -359,85 +362,18 @@ public class AdminTaskServiceImpl implements AdminTaskService {
 	}
 	
 	/**
-	 * base64 인코딩한 이미지 파일로 변환
-	 * @param base64Str
-	 * @param uploadPath
-	 * @param fileName
-	 * @param ext
-	 * @return
-	 */
-	public boolean makeImage(String base64Str, String uploadPath, String fileName, String ext) {
-		ByteArrayInputStream bis = null;
-		BufferedImage img = null;
-		try {
-			byte[] byteImg = Base64Utils.decodeFromString(base64Str);
-			bis = new ByteArrayInputStream(byteImg);
-			img = ImageIO.read(bis);
-			bis.close();
-			
-			File folder = new File(uploadPath);
-			File outputFile = new File(uploadPath + fileName + "." + ext);
-			
-			if (!folder.isDirectory()) folder.mkdir();
-			if (outputFile.exists()) outputFile.delete();
-			return ImageIO.write(img, ext, outputFile);
-		}
-		catch (IOException e) {
-			log.error("AdminTaskServiceImpl.makeImage : {} ", e);
-			return false;
-		}
-		finally {
-			if (bis != null) try {bis.close();} catch (IOException e) {}
-		}
-	}
-	
-	/**
 	 * 출장우 이미지 업로드
 	 * @param params
 	 * @return
 	 * @throws SQLException 
+	 * @throws KeyStoreException 
 	 */
 	@Override
-	public Map<String, Object> uploadImageProc(Map<String, Object> params) throws SQLException, NoSuchAlgorithmException, KeyManagementException {
+	public Map<String, Object> uploadImageProc(Map<String, Object> params) throws SQLException, AmazonS3Exception, SdkClientException, NoSuchAlgorithmException, KeyManagementException, KeyStoreException {
 		final Map<String, Object> result = new HashMap<String, Object>();
-
-//		TrustStrategy ts = ((chain, authType) -> true);
-		
-		HostnameVerifier hv = new HostnameVerifier() {
-			@Override
-			public boolean verify(String arg0, SSLSession arg1) {
-				return true;
-			}
-		};
-		TrustManager[] trustAllCerts = new TrustManager[] {
-			new X509TrustManager() {
-				@Override
-				public X509Certificate[] getAcceptedIssuers() {
-					return null;
-				}
-				
-				@Override
-				public void checkServerTrusted(X509Certificate[] arg0, String arg1) throws CertificateException {return;}
-				
-				@Override
-				public void checkClientTrusted(X509Certificate[] arg0, String arg1) throws CertificateException {return;}
-			}
-		};
-		
-		SSLContext sc = SSLContext.getInstance("TLSv1.2");
-		sc.init(new KeyManager[0], trustAllCerts, new SecureRandom());
-		
-		ClientConfiguration cc = new ClientConfiguration();
-		SSLConnectionSocketFactory ssf = new SSLConnectionSocketFactory(sc
-																		, new String[] {"TLSv1.2", "TLSv1.1", "TLSv1"}
-																		, new String[] {"TLS_RSA_WITH_AES_128_GCM_SHA256", "TLS_RSA_WITH_AES_128_CBC_SHA256"}
-																		, hv);
-		cc.getApacheHttpClientConfig().withSslSocketFactory(ssf);
-		
 
 		// S3 client
 		final AmazonS3 s3 = AmazonS3ClientBuilder.standard()
-												 .withClientConfiguration(cc)
 												 .withEndpointConfiguration(new AwsClientBuilder.EndpointConfiguration(endPoint, regionName))
 												 .withCredentials(new AWSStaticCredentialsProvider(new BasicAWSCredentials(accessKey, secretKey)))
 												 .build();
@@ -465,9 +401,9 @@ public class AdminTaskServiceImpl implements AdminTaskService {
 		final String fileExtNm = ".png";
 		
 		// 해당 path에 있는 이미지 삭제 : 이미지 저장에 실패했을때 transaction은 어떤 방식으로 처리할 지....
-		for (S3ObjectSummary file : s3.listObjects(bucketName, filePath).getObjectSummaries()){
-			s3.deleteObject(bucketName, file.getKey());
-		}
+//		for (S3ObjectSummary file : s3.listObjects(bucketName, filePath).getObjectSummaries()){
+//			s3.deleteObject(bucketName, file.getKey());
+//		}
 		
 		// 이미지 정보 삭제
 		adminTaskDAO.deleteCowImg(params);
@@ -503,21 +439,21 @@ public class AdminTaskServiceImpl implements AdminTaskService {
 					oriObjectMetadata.setContentType(MediaType.IMAGE_PNG_VALUE);
 					PutObjectRequest oriPutObjectRequest = new PutObjectRequest(bucketName, filePath + fileNm + fileExtNm, oriBis, oriObjectMetadata);
 
-					try {
-						oriPutObjectRequest.setAccessControlList(accessControlList);
-						s3.putObject(oriPutObjectRequest);
-					}
-					catch (AmazonS3Exception e) {
-						e.printStackTrace();
-						isSuccess = false;
-					}
-					catch(SdkClientException e) {
-						e.printStackTrace();
-						isSuccess = false;
-					}
-					finally {
-						if(oriBis != null) try {oriBis.close();}catch(IOException ie) {}
-					}
+//					try {
+					oriPutObjectRequest.setAccessControlList(accessControlList);
+					s3.putObject(oriPutObjectRequest);
+//					}
+//					catch (AmazonS3Exception e) {
+//						log.error("AdminTaskServiceImpl.uploadImageProc AmazonS3Exception : {} ", e);
+//						isSuccess = false;
+//					}
+//					catch(SdkClientException e) {
+//						log.error("AdminTaskServiceImpl.uploadImageProc SdkClientException : {} ", e);
+//						isSuccess = false;
+//					}
+//					finally {
+					if(oriBis != null) try {oriBis.close();}catch(IOException ie) {log.error("AdminTaskServiceImpl.uploadImageProc IOException : {} ", ie);}
+//					}
 					
 					if (!isSuccess) continue;
 					successCnt++;
@@ -544,25 +480,25 @@ public class AdminTaskServiceImpl implements AdminTaskService {
 					thumbObjectMetadata.setContentType(MediaType.IMAGE_PNG_VALUE);
 					PutObjectRequest thumbPutObjectRequest = new PutObjectRequest(bucketName, filePath + "thumb/" + fileNm + fileExtNm, thumbBis, thumbObjectMetadata);
 					
-					try {
-						thumbPutObjectRequest.setAccessControlList(accessControlList);
-						s3.putObject(thumbPutObjectRequest);
-					}
-					catch (AmazonS3Exception e) {
-						e.printStackTrace();
-					}
-					catch(SdkClientException e) {
-						e.printStackTrace();
-					}
-					finally {
-						if (thumbBis != null) try {thumbBis.close();}catch(IOException ie) {}
-					}
+//					try {
+					thumbPutObjectRequest.setAccessControlList(accessControlList);
+					s3.putObject(thumbPutObjectRequest);
+//					}
+//					catch (AmazonS3Exception e) {
+//						log.error("AdminTaskServiceImpl.uploadImageProc AmazonS3Exception : {} ", e);
+//					}
+//					catch(SdkClientException e) {
+//						log.error("AdminTaskServiceImpl.uploadImageProc SdkClientException : {} ", e);
+//					}
+//					finally {
+					if (thumbBis != null) try {thumbBis.close();}catch(IOException ie) {log.error("AdminTaskServiceImpl.uploadImageProc IOException : {} ", ie);}
+//					}
 				}
 			}
 		}
 		
 		result.put("success", (files.size() == successCnt));
-		result.put("message", "이미지 저장에 성공했습니다.");
+		result.put("message", (files.size() == successCnt) ? "이미지 저장에 성공했습니다." : "이미지 저장에 실패했습니다.");
 //		result.put("message", String.format("전체 : %d, 성공 : %d", files.size(), successCnt));
 		return result;
 	}

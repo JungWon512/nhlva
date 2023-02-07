@@ -16,11 +16,29 @@
            <input type="radio" name="selelctNaBzPlc" id="all_bzplc" value="ALL" ><label for="all_bzplc">전체 조합</label>
        </li>
     </ul>
-	    <dl id="selectBzplcList" class="secAplyDl"  >
-    <c:forEach items="${ johqpList }" var="list">
-		    <dd class="secAplyDD" >· ${list.CLNTNM} : ${list.SRA_MWMNNM}</dd>
-    </c:forEach>
-	    </dl>
+    <div class="table-simple secAplyDl" style="display:none;">
+    	<table>
+			<colgroup>
+				<col width="50%">
+				<col width="50%">
+			</colgroup>
+			<thead>
+				<tr>
+					<th scope="col" style="text-align:center;">조합명</th>
+					<th scope="col" style="text-align:center;">이름</th>
+				</tr>
+			</thead>
+			<tbody>
+				<c:forEach items="${ johqpList }" var="list">
+				<tr>
+					<td>${list.CLNTNM}</td>
+					<td>${list.SRA_MWMNNM}</td>
+				</tr>
+				</c:forEach>
+			</tbody>
+		</table>
+	</div>
+	
 	<p class="title_text mt30"><span class="txt_blue">*</span> 이용해지 신청 사유</p>
 	<div class="inp">
 		<textarea name="sec_reason" maxLength="50"></textarea>

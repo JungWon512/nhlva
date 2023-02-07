@@ -85,6 +85,7 @@
 		</otherwise>
 		</choose>
 			 , SRA_INDV_BRDSRA_RG_NO	= TRIM(#{SRA_INDV_BRDSRA_RG_NO})
+			 , MIF_FCOW_SRA_INDV_EART_NO = TRIM(#{FCOW_SRA_INDV_EART_NO})		/* 아비 개체번호 */
 			 , GRFA_SRA_KPN_NO 			= TRIM(#{GRFA_SRA_KPN_NO})				/* 조부 KPN */
 			 , GRFA_SRA_INDV_EART_NO	= TRIM(#{GRFA_SRA_INDV_EART_NO})		/* 조부 개체번호 */
 			 , GRMO_SRA_INDV_EART_NO	= TRIM(#{GRMO_SRA_INDV_EART_NO})		/* 조모 개체번호 */
@@ -115,6 +116,7 @@
 			, FSRGMN_ENO
 			, LSCHG_DTM
 			, LS_CMENO
+			, MIF_FCOW_SRA_INDV_EART_NO
 			, GRFA_SRA_KPN_NO
 			, GRFA_SRA_INDV_EART_NO
 			, GRMO_SRA_INDV_EART_NO
@@ -191,6 +193,7 @@
 			, #{regUsrid}
 			, SYSDATE
 			, #{regUsrid}
+			, TRIM(#{FCOW_SRA_INDV_EART_NO})
 			, TRIM(#{GRFA_SRA_KPN_NO})
 			, TRIM(#{GRFA_SRA_INDV_EART_NO})
 			, TRIM(#{GRMO_SRA_INDV_EART_NO})

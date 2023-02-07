@@ -79,6 +79,7 @@ public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
 	@Override
 	protected void configure(HttpSecurity http) throws Exception {
 		http.headers(headers -> headers.cacheControl(cache -> cache.disable()));
+		http.headers().xssProtection().and().contentSecurityPolicy("script-src 'self'");
 	}
 	
 	// 관리자 권한 체크

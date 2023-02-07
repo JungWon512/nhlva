@@ -213,6 +213,30 @@ public class DaemonApiController {
 	}
 	
 	/**
+	 * TB_LA_IS_MM_INDV : 개체 정보 리스트
+	 * @param naBzplc : 조합코드
+	 * @param aucDt : 경매일자
+	 * @param timestamp : 타임스탬프
+	 * @return
+	 * @throws SQLException 
+	 */
+	@GetMapping("/{version}/indv/{naBzplc}/{aucDt}/{sraIndvAmnno}")
+	public Map<String, Object> indvOne(@PathVariable final Map<String, Object> params
+									, @RequestParam(name = "chgDtm", required = false) String chgDtm) {
+		
+		try {
+			if (!"".equals(chgDtm)) {
+				params.put("chgDtm", chgDtm);
+			}
+			final Map<String, Object> list = daemonApiService.selectIndvInfo(params);
+			return this.createResultSetData(list);
+		}
+		catch(SQLException e) {
+			return this.createResultSetListData(null);
+		}
+	}
+	
+	/**
 	 * TB_LA_IS_MH_AUC_ENTR : 경매 참가자 정보 리스트
 	 * @param naBzplc : 조합코드
 	 * @param aucDt : 경매일자
@@ -419,7 +443,32 @@ public class DaemonApiController {
 	/************************************************************************ 공통 함수 [s] ************************************************************************/
 	
 	/**
-	 * 조회 API 응답 생성
+	 * 단일 조회 API 응답 생성
+	 * @param list
+	 * @return
+	 */
+	public Map<String, Object> createResultSetData(Map<String, Object> data){
+		//데이터 암호화해서 result 추가, 상태코드 추가, 조회 count 추가
+		final Map<String, Object> reMap = new HashMap<String, Object>();
+		
+		// 조회 결과가 0건일 경우 201 리턴
+		if(ObjectUtils.isEmpty(data)) {
+			reMap.put("status", HttpStatus.NO_CONTENT.value());
+			reMap.put("code", "C" + HttpStatus.NO_CONTENT.value());
+			reMap.put("message", "조회된 내역이 없습니다.");
+			return reMap;
+		}
+		
+		reMap.put("status", HttpStatus.OK.value());
+		reMap.put("code", "C" + HttpStatus.OK.value());
+		reMap.put("message", "조회에 성공했습니다.");
+		reMap.put("data", data);
+		
+		return reMap;
+	}
+	
+	/**
+	 * 리스트 조회 API 응답 생성
 	 * @param list
 	 * @return
 	 */

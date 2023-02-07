@@ -88,7 +88,7 @@
 							<dd class="date">${vo.AUC_DT }</dd>
 							<dd class="num">${vo.AUC_PRG_SQ }</dd>
 							<dd class="name">${vo.FTSNM }</dd>
-							<dd class="pd_ea">${vo.SRA_INDV_AMNNO_FORMAT }</dd>
+							<dd class="pd_ea">${vo.SRA_INDV_AMNNO_FORMAT_F }</dd>
 							<dd class="pd_sex">${vo.INDV_SEX_C_NAME }</dd>
 							<dd class="pd_kg textNumber">${vo.COW_SOG_WT }</dd>
 							<dd class="pd_kpn">${vo.KPN_NO_STR }</dd>

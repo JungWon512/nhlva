@@ -1,9 +1,9 @@
 ;(function (win, $,COMMONS) {
 // Class definition
 	var Login = function () {	
-		if($('input[name=type]').val() =='0' || !isIos()){
-			$('div.sns_login').show();
-		}
+		//if($('input[name=type]').val() =='0' || !isIos()){
+		//	$('div.sns_login').show();
+		//}
 		var get_msg = function(message) {
 			if(message!=undefined){
 				alert(message);
@@ -47,6 +47,16 @@
 				$("#login_info").show();
 				$("#login_sms_auth").hide();
 			});
+			
+			//전체 동의 클릭 
+			$("#agree_chkAll").click(function(){
+				if($(this).prop("checked")){
+					$(".agree_chk").prop("checked", true);
+				}else{
+					$(".agree_chk").prop("checked", false);
+				}
+				
+			});
 		};
 		
 		// 로그인 처리
@@ -72,6 +82,11 @@
 
 			if (!$("input#agree_chk2").is(":checked")) {
 				modalAlert('', "가축시장 시스템 이용약관에 동의하세요.");
+				return;
+			}
+			
+			if (!$("input#agree_chk3").is(":checked")) {
+				modalAlert('', "가축시장 제3자 정보제공에 동의하세요.");
 				return;
 			}
 			
@@ -109,6 +124,7 @@
 						$("input[name='naBzplc']", $("form[name='frm_auth']")).val(body.branchInfo.NA_BZPLC);
 						$("input[name='token']", $("form[name='frm_auth']")).val(body.token);
 						$("input[name='connChannel']", $("form[name='frm_auth']")).val(connChannel());
+						if(body.alreadyFlag != undefined) modalAlert('', message);
 						if (body.smsNo != undefined) $("input#authNumber").val(body.smsNo);
 					}
 					else {
@@ -222,14 +238,6 @@ function loginWithKakao() {
 	url+='&response_type=code';
 	url+='&state='+location.search.substr(1);
 	location.href=url;
-	//window.open(url, '카카오 로그인', 'width=800, height=700, toolbar=no, menubar=no, scrollbars=no, resizable=yes' );
-//    Kakao.Auth.authorize({
-//      state : location.search.substr(1)
-//      ,throughTalk : true
-////      ,prompts : 'none'
-//      ,serviceTerms:'name,birthyear'	
-//      ,redirectUri: kko_redirect_url
-//    });
   }
   
 function redirectKaKaoLogin(param){	

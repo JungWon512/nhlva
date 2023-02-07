@@ -12,6 +12,7 @@
 			$(this).siblings().children("dl").removeClass();
 			$(this).children("dl").addClass("on");
 			$("#searchPlace").val($(this).attr("id"));
+			$("#searchPlaceNm").val($(this).find(".locnm").text());
 			
 			var param = [];
 			param.push("searchMonth=" + $("#searchMonth").val());
@@ -100,9 +101,11 @@
 				$("#searchMonth").val(body.inputParam.searchMonth)
 				$(".month_txt_title").text(body.inputParam.searchMonTxt);
 				if($("#nowMonth").val() == body.inputParam.searchMonth){
-					$(".btn-next").attr("disabled", true);
+//					$(".btn-next").attr("disabled", true);
+					$("button.btn-next").hide();
 				}else{
-					$(".btn-next").attr("disabled", false);
+//					$(".btn-next").attr("disabled", false);
+					$("button.btn-next").show();
 				}
 				
 				var sbidInfo = body.sbidInfo;

@@ -68,6 +68,20 @@ public class DateUtil {
 		}
         return returnValue;
     }
+    public static String addSlashYYMMDD(String YYYYYMMDD){
+        String returnValue = YYYYYMMDD;
+        try{
+            if(YYYYYMMDD.length() < 8){
+                returnValue = "20/01/01";
+            } else {
+                returnValue = YYYYYMMDD.substring(2,4)+"/"+YYYYYMMDD.substring(4,6)+"/"+YYYYYMMDD.substring(6,8);
+            }
+
+        }catch (RuntimeException re) {
+            returnValue = "20/01/01";
+		}
+        return returnValue;
+    }
     public static String removeSlashYYYYMMDD(String YYYYYMMDD){
         String returnValue = YYYYYMMDD;
         try{

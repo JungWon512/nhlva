@@ -39,7 +39,7 @@
 				<tbody>
 					<tr>
 						<th>부</th>
-						<td colspan="2" class="bg-gray fz-32 fCowSraIndvData">
+						<td colspan="2" class="bg-gray fz-32 fCowSraIndvData" name="blInfo_1">
 							<c:choose>
 								<c:when test="${empty infoData.MIF_FCOW_SRA_INDV_EART_NO_FORMAT }">
 								</c:when>
@@ -52,7 +52,7 @@
 					</tr>
 					<tr>
 						<th colspan="2">조부</th>
-						<td class="fz-32 grfCowSraIndvData">
+						<td class="fz-32 grfCowSraIndvData" name="blInfo_0">
 							<c:choose>
 								<c:when test="${empty infoData.GRFA_SRA_INDV_EART_NO_FORMAT }">
 								</c:when>
@@ -65,7 +65,7 @@
 					</tr>
 					<tr>
 						<th colspan="2">조모</th>
-						<td class="fz-32 grmCowSraIndvData">
+						<td class="fz-32 grmCowSraIndvData" name="blInfo_2">
 							<c:choose>
 								<c:when test="${empty infoData.GRMO_SRA_INDV_EART_NO_FORMAT }">
 								</c:when>
@@ -88,7 +88,7 @@
 				<tbody>
 					<tr>
 						<th>모</th>
-						<td colspan="2" class="bg-gray fz-32 mCowSraIndvData">
+						<td colspan="2" class="bg-gray fz-32 mCowSraIndvData" name="blInfo_4">
 							<c:choose>
 								<c:when test="${empty infoData.MCOW_SRA_INDV_AMNNO_FORMAT }">
 								</c:when>
@@ -100,7 +100,7 @@
 					</tr>
 					<tr>
 						<th colspan="2">외조부</th>
-						<td class="fz-32 mgrfCowSraIndvData">
+						<td class="fz-32 mgrfCowSraIndvData" name="blInfo_3">
 							<c:choose>
 								<c:when test="${empty infoData.MTGRFA_SRA_INDV_EART_NO_FORMAT }">
 								</c:when>
@@ -113,7 +113,7 @@
 					</tr>
 					<tr>
 						<th colspan="2">외조모</th>
-						<td class="fz-32 mgrmCowSraIndvData">
+						<td class="fz-32 mgrmCowSraIndvData" name="blInfo_5">
 							<c:choose>
 								<c:when test="${empty infoData.MTGRMO_SRA_INDV_EART_NO_FORMAT }">
 								</c:when>

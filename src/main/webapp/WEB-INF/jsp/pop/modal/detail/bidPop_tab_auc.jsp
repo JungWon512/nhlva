@@ -44,12 +44,13 @@
 		<div class="list_body">
 			<ul class="">
                	<c:forEach items="${ aucList }" var="vo" varStatus="st">
+               	<input type="hidden" class="commitYn" name="commitYn_${st.index }" value="${vo.COMMIT_YN}"/>
 					<li>
 						<dl>
 							<dd class="date">${vo.AUC_DT_STR}</dd>
 							<dd class="num">${vo.AUC_PRG_SQ}</dd>
 							<dd class="name">${vo.FTSNM}</dd>
-							<dd class="pd_ea"><a href="javascript:;"><span class="ico_move">${vo.SRA_INDV_AMNNO_FORMAT}</span></a></dd>
+							<dd class="pd_ea"><a href="javascript:;"><span class="ico_move">${vo.SRA_INDV_AMNNO_FORMAT_F}</span></a></dd>
 							<dd class="pd_sex">${vo.INDV_SEX_C_NAME}</dd>
 							<dd class="pd_date">${vo.BIRTH_STR}</dd>
 							<dd class="pd_kpn">${vo.KPN_NO_STR}</dd>
@@ -127,12 +128,12 @@
                     	<input type="hidden" class="sraPdRgnnm" name="sraPdRgnnm_${st.index }" value="${vo.SRA_PD_RGNNM}"/>
                     	<input type="hidden" class="sraIndvPasgQcn" name="sraIndvPasgQcn_${st.index }" value="${vo.SRA_INDV_PASG_QCN}"/>
                     	<input type="hidden" class="sraSbidUpr" name="sraSbidUpr_${st.index }" value="${fn:split(vo.SRA_SBID_UPR,'.')[0]}"/>
-                    	<input type="hidden" class="rmkCntn" name="rmkCntn_${st.index }" value="${vo.RMK_CNTN}"/>
-                    	
+                    	<input type="hidden" class="rmkCntn" name="rmkCntn_${st.index }" value="${vo.RMK_CNTN}"/>                    	
+		               	<input type="hidden" class="commitYn" name="commitYn_${st.index }" value="${vo.COMMIT_YN}"/>
 						<dl>
 							<dd class="num">${vo.AUC_PRG_SQ }</dd>
 							<dd class="pd_ea">
-								<a href="javascript:;">${vo.SRA_INDV_AMNNO_FORMAT }</a>
+								<a href="javascript:;">${vo.SRA_INDV_AMNNO_FORMAT_F }</a>
 							</dd>
 							<dd class="pd_date">${vo.BIRTH_MO }</dd>
 							<dd class="pd_sex">${vo.INDV_SEX_C_NAME }</dd>

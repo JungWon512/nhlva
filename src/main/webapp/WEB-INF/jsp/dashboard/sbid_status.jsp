@@ -2,6 +2,8 @@
 <%@ include file="/WEB-INF/__system/taglibs.jsp"%>
 <jsp:useBean id="now" class="java.util.Date" />
 <fmt:formatDate value="${now}" pattern="yyyyMM" var="nowMonth" />
+<input type="hidden" name="searchPlaceNm" 		id="searchPlaceNm" 			value="">
+
 <form name="frm" action="" method="post">
 	<input type="hidden" name="searchRaDate" 	id="searchRaDate" 		value="${inputParam.searchRaDate}" />
 	<input type="hidden" name="searchFlag" 		id="searchFlag" 			value="${inputParam.searchFlag}" />
@@ -21,7 +23,8 @@
 				<div class="has-btn">
 					<button class="btn-prev btn-chg"><span class="sr-only">이전</span></button>
 					<span class="month_txt_title">${searchMonTxt }</span>
-					<button class="btn-next btn-chg" ${nowMonth eq inputParam.searchMonth ? 'disabled' : ''}><span class="sr-only">다음</span></button>
+<%-- 					<button class="btn-next btn-chg" ${nowMonth eq inputParam.searchMonth ? 'disabled' : ''}><span class="sr-only">다음</span></button> --%>
+										<button class="btn-next btn-chg" <c:if test="${nowMonth eq inputParam.searchMonth}">style="display:none;"</c:if>><span class="sr-only">다음</span></button>
 				</div>
 			</div>
 		</div>
@@ -52,7 +55,7 @@
 						<c:set var="tot_sbid_chg_txt" value="▼ ${fn:replace(sbidInfo.TOT_SBID_CHG, '-', '')} 두" />
 					</c:otherwise>
 				</c:choose>
-				<strong class="tot_sbid_cnt"><fmt:formatNumber value="${sbidInfo.TOT_SBID_CNT}" type="number" /> 두</strong>  <span class="tot_sbid_chg_txt">${tot_sbid_chg_txt }</span><br><span class="month_old_c_nm">(${empty sbidInfo.MONTH_OLD_C_NM ? '전체' : sbidInfo.MONTH_OLD_C_NM})</span>
+				<strong class="tot_sbid_cnt"><fmt:formatNumber value="${sbidInfo.TOT_SBID_CNT}" type="number" /> 두</strong>  <span class="tot_sbid_chg_txt">${tot_sbid_chg_txt }</span><br>(<span class="month_old_c_nm">${empty sbidInfo.MONTH_OLD_C_NM ? '전체' : sbidInfo.MONTH_OLD_C_NM}</span>)
 			</div>
 			<ul class="board-number col-3">
 				<li>

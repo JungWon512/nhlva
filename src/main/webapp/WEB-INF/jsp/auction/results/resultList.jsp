@@ -205,11 +205,12 @@
 							<input type="hidden" class="cowSogWt" name="cowSogWt_${st.index }" value="${fn:split(item.COW_SOG_WT,'.')[0] }"/>
 							
 							<input type="hidden" class="lvstAucPtcMnNo" name="lvstAucPtcMnNo_${st.index}" value="${item.LVST_AUC_PTC_MN_NO}" />
+			                   	<input type="hidden" class="commitYn" name="commitYn_${st.index }" value="${item.COMMIT_YN}"/>
 							<dl>
 								<dd class="date">${ item.AUC_DT_STR }</dd>
 								<dd class="num">${ item.AUC_PRG_SQ }</dd>
 								<dd class="name">${ item.FTSNM }</dd>
-								<dd class="pd_ea"><a href="javascript:;"><span class="ico_move" fullstr="${ item.SRA_INDV_AMNNO}">${ item.SRA_INDV_AMNNO_FORMAT }</span></a></dd>
+								<dd class="pd_ea"><a href="javascript:;"><span class="ico_move" fullstr="${ item.SRA_INDV_AMNNO}">${ item.SRA_INDV_AMNNO_FORMAT_F }</span></a></dd>
 								<dd class="pd_sex">${item.INDV_SEX_C_NAME }</dd>
 								<dd class="pd_kg textNumber">
 									<c:choose>

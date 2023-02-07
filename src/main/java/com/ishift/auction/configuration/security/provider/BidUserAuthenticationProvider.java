@@ -53,7 +53,6 @@ public class BidUserAuthenticationProvider implements AuthenticationProvider {
 		}
 		
 		log.debug("encode pw : {}", passwordEncoder.encode(password));
-		// TODO :: 패스워드 encoder확인 추가 예정
 //		if (!passwordEncoder.matches(password, bidUserDetails.getPw())) {
 //			throw new BadCredentialsException("아이디 또는 패스워드를 확인해주세요.");
 //		}

@@ -5,53 +5,41 @@
 	<select id="selectMwmnInfo" parameterType="hashMap" resultType="hashMap">
 		SELECT A.NA_BZPLC
 			 , A.TRMN_AMNNO
+			 , A.TRMN_AMNNO AS USER_MEM_NUM
 			 , A.MWMN_NA_TRPL_C
-			 , NVL(B.SRA_MWMNNM, A.SRA_MWMNNM) AS SRA_MWMNNM
+			 , A.SRA_MWMNNM
 			 , A.FRLNO
 			 , A.ZIP
 			 , A.DONGUP
 			 , A.DONGBW
-			 , NVL(B.OHSE_TELNO, A.OHSE_TELNO) AS OHSE_TELNO
-			 , NVL(B.CUS_MPNO, A.CUS_MPNO) AS CUS_MPNO
+			 , A.OHSE_TELNO
+			 , A.CUS_MPNO
 			 , A.MACO_YN
 			 , A.JRDWO_DSC
 			 , A.PSN_INF_OFR_AGR_YN
 			 , A.TMS_YN
 			 , A.DEL_YN
 			 , A.RMK_CNTN
-			 , NVL(B.CUS_RLNO, A.CUS_RLNO) AS CUS_RLNO
-			 , A.LSCHG_DTM
-			 , A.LS_CMENO
+			 , A.CUS_RLNO
 			 , A.FSRG_DTM
 			 , A.FSRGMN_ENO
-			 , NVL(A.MB_INTG_NO, '') AS MB_INTG_NO
-			 , NVL((SELECT DORMACC_YN FROM TB_LA_IS_MM_MBINTG C WHERE C.MB_INTG_NO = A.MB_INTG_NO), '0') AS DORMACC_YN
+			 , A.LSCHG_DTM
+			 , A.LS_CMENO
+			 , A.SMS_NO
+			 , A.SMS_YMD
+			 , A.MB_INTG_NO
+			 , A.AUTH_NO
+			 , A.AUTH_YMD
+			 , (SELECT MIN(DECODE(B.NA_BZPLC, #{naBzplc}, B.AUC_PART_LIMIT_YN, '1'))
+				  FROM TB_LA_IS_MM_BLACKLIST B
+				 WHERE B.MB_INTG_NO = A.MB_INTG_NO
+				   AND B.DEL_YN = '0'
+				   AND B.LIMIT_DATE <![CDATA[>=]]> TO_CHAR(SYSDATE, 'YYYYMMDD')
+				 GROUP BY B.MB_INTG_NO) AS AUC_PART_LIMIT_YN
 		  FROM TB_LA_IS_MM_MWMN A
-		  LEFT OUTER JOIN TB_LA_IS_BK_DORM_MWMN B
-			ON (
-				A.NA_BZPLC = B.NA_BZPLC
-				AND
-				A.TRMN_AMNNO = B.TRMN_AMNNO
-			 )
 		 WHERE A.NA_BZPLC = #{naBzplc}
+		   AND A.TRMN_AMNNO = #{trmnAmnno}
 		   AND A.DEL_YN = '0'
-		   AND (
-					(
-						REPLACE(TRIM(A.SRA_MWMNNM),' ','') = REPLACE(TRIM(#{sraMwmnnm}),' ','')
-						AND
-						REPLACE(TRIM(A.CUS_RLNO),' ','') = REPLACE(TRIM(#{cusRlno}),' ','')
-						AND
-						REGEXP_REPLACE(A.CUS_MPNO, '[^0-9]') = REGEXP_REPLACE(#{cusMpno}, '[^0-9]')
-					)
-					OR
-					(
-						REPLACE(TRIM(NVL(B.SRA_MWMNNM, '')),' ','') = REPLACE(TRIM(#{sraMwmnnm}),' ','')
-						AND
-						REPLACE(TRIM(NVL(B.CUS_RLNO, '')),' ','') = REPLACE(TRIM(#{cusRlno}),' ','')
-						AND
-						REGEXP_REPLACE(B.CUS_MPNO, '[^0-9]') = REGEXP_REPLACE(#{cusMpno}, '[^0-9]')
-					)
-			 )
 	</select>
 
 	<!-- 출장우 정보 리스트 -->
@@ -69,8 +57,8 @@
 			 , C.INDV_SEX_C
 			 , F.SIMP_CNM AS INDV_SEX_CNM
 			 , TO_CHAR(TO_DATE(C.BIRTH,'YYYYMMDD'),'YYYY-MM-DD') BIRTH
-			 , CASE WHEN TRUNC(MONTHS_BETWEEN(A.AUC_DT, C.BIRTH)) <![CDATA[<=]]> 4 AND A.NA_BZPLC NOT IN ('8808990656199', '8808990656434') THEN 4
-					ELSE TRUNC(MONTHS_BETWEEN(A.AUC_DT, C.BIRTH)) 
+			 , CASE WHEN TRUNC(MONTHS_BETWEEN(A.AUC_DT, C.BIRTH)) +1 <![CDATA[<=]]> 4 AND A.NA_BZPLC NOT IN ('8808990656199', '8808990656434') THEN 4
+					ELSE TRUNC(MONTHS_BETWEEN(A.AUC_DT, C.BIRTH)) +1
 				END AS MTCN
 			 , NVL(A.PRNY_JUG_YN, '0') AS PRNY_JUG_YN
 			 , NVL(A.PRNY_YN, '0') AS PRNY_YN
@@ -151,37 +139,38 @@
 
 	<!-- 키오스크 인증번호로 중도매인정보 조회 -->
 	<select id="selectAuthNoInfo" parameterType="hashMap" resultType="hashMap">
-		SELECT NA_BZPLC
-			 , TRMN_AMNNO
-			 , TRMN_AMNNO AS USER_MEM_NUM
-			 , MWMN_NA_TRPL_C
-			 , SRA_MWMNNM
-			 , FRLNO
-			 , ZIP
-			 , DONGUP
-			 , DONGBW
-			 , OHSE_TELNO
-			 , CUS_MPNO
-			 , MACO_YN
-			 , JRDWO_DSC
-			 , PSN_INF_OFR_AGR_YN
-			 , TMS_YN
-			 , DEL_YN
-			 , RMK_CNTN
-			 , CUS_RLNO
-			 , FSRG_DTM
-			 , FSRGMN_ENO
-			 , LSCHG_DTM
-			 , LS_CMENO
-			 , SMS_NO
-			 , SMS_YMD
-			 , MB_INTG_NO
-			 , AUTH_NO
-			 , AUTH_YMD
-		  FROM TB_LA_IS_MM_MWMN
-		 WHERE NA_BZPLC = #{naBzplc}
-		   AND AUTH_NO = #{authNo}
-		   AND AUTH_YMD <![CDATA[>=]]> TO_CHAR(SYSDATE, 'YYYYMMDDHH24MISS')
+		SELECT A.NA_BZPLC
+			 , A.TRMN_AMNNO
+			 , A.TRMN_AMNNO AS USER_MEM_NUM
+			 , A.MWMN_NA_TRPL_C
+			 , A.SRA_MWMNNM
+			 , A.FRLNO
+			 , A.ZIP
+			 , A.DONGUP
+			 , A.DONGBW
+			 , A.OHSE_TELNO
+			 , A.CUS_MPNO
+			 , A.MACO_YN
+			 , A.JRDWO_DSC
+			 , A.PSN_INF_OFR_AGR_YN
+			 , A.TMS_YN
+			 , A.DEL_YN
+			 , A.RMK_CNTN
+			 , A.CUS_RLNO
+			 , A.FSRG_DTM
+			 , A.FSRGMN_ENO
+			 , A.LSCHG_DTM
+			 , A.LS_CMENO
+			 , A.SMS_NO
+			 , A.SMS_YMD
+			 , A.MB_INTG_NO
+			 , A.AUTH_NO
+			 , A.AUTH_YMD
+		  FROM TB_LA_IS_MM_MWMN A
+		 WHERE A.NA_BZPLC = #{naBzplc}
+		   AND A.DEL_YN = '0'
+		   AND A.AUTH_NO = #{authNo}
+		   AND A.AUTH_YMD <![CDATA[>=]]> TO_CHAR(SYSDATE, 'YYYYMMDDHH24MISS')
 	</select>
 	
 	<!-- 키오스크 인증번호로 출하주정보 조회 -->

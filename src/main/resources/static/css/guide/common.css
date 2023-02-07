@@ -7753,7 +7753,7 @@ Base styles: contents layer
 
 .sms_authentication .authentication_number {
 	position: relative;
-	padding-right: 70px
+	/* padding-right: 70px */
 }
 
 .sms_authentication .authentication_number .btn_resend {
@@ -8376,37 +8376,22 @@ div.search.sum_table{display:none;}
 @media only all and (max-width: 1024px) {.div_na_bzplc .btn_area .btn_apply{height: 50px;line-height: 50px;border-radius: 5px;font-size: 18px;margin: 25px auto 20px;}}
 .div_na_bzplc .btn_area .btn_withdraw{width: 100%;height: 46px;display: block;line-height: 46px;background: #007eff;border-radius: 5px;text-align: center;color: #ffffff;font-family: "Noto Sans KR", "Roboto", "AppleGothic", "sans-serif";font-weight: 700;font-size: 18px;margin: 30px auto 20px;}
 @media only all and (max-width: 1024px) {.div_na_bzplc .btn_area .btn_withdraw{height: 50px;line-height: 50px;border-radius: 5px;font-size: 18px;margin: 25px auto 20px;}}
-	.secAplyDl{
-		margin-top: 10px;
-		width: 80%;
-		display: none;
-		border: 1px solid #dbdbdb;
-		padding: 20px;
-		border-radius: 5px;
-	}
-	
-	.secAplyDD{
-		color: #1a1a1a;
-		font-size: 17px;
-		border-bottom: 1px solid #dbdbdb;
-		margin-bottom: 6px;
-		font-weight: 700;
-	}
-	
-		/*중량예정가 등록 */
-	.btn_cow_search{
-	    padding: 5px 10px;
-	    color: #fff;
-	    border-radius: 3px;
-	    font-size: 18px;
-	    font-weight: 500;
-	    background-color: #007eff;
-    }
-    .num_scr{
-    width: 100%;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
+.div_na_bzplc .secAplyDl{margin-top: 15px;border: 1px solid #ddd;padding: 10px; text-align:center;}
+
+/*중량예정가 등록 */
+.btn_cow_search{
+    padding: 5px 10px;
+    color: #fff;
+    border-radius: 3px;
+    font-size: 18px;
+    font-weight: 500;
+    background-color: #007eff;
+   }
+   .num_scr{
+   width: 100%;
+   display: flex;
+   justify-content: space-between;
+   align-items: center;
 }
 
 /*인풋*/
@@ -8417,9 +8402,10 @@ div.search.sum_table{display:none;}
     color: #1a1a1a;
     background-color: #fff;
     border: 0;
-    }
-    .num_scr > li:first-child{
-    	width : 70%;
-    }
+}
+
+.num_scr > li:first-child{
+	width : 70%;
+}
 	
 	

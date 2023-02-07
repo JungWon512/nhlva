@@ -5,6 +5,8 @@ import java.util.List;
 import java.util.Map;
 
 public interface DashBoardService {
+	List<Map<String,Object>> findFilterRegionList(Map<String, Object> reqMap) throws SQLException;
+	
 	List<Map<String,Object>> findCowPriceList(Map<String, Object> reqMap) throws SQLException;
 	
 	List<Map<String,Object>> findAvgPlaceBidAmList(Map<String, Object> reqMap) throws SQLException;

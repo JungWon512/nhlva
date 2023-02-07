@@ -287,7 +287,7 @@
 							<dd class="date aucDt">${ vo.AUC_DT_STR }</dd>
 							<dd class="num aucPrgSq">${ vo.AUC_PRG_SQ }</dd>
 							<dd class="name ftsnm" style="white-space: nowrap;overflow: hidden;text-overflow: ellipsis;">${ vo.FTSNM }</dd>
-							<dd class="pd_ea sraIndvAmnno">${ vo.SRA_INDV_AMNNO_FORMAT }</dd>
+							<dd class="pd_ea sraIndvAmnno">${ vo.SRA_INDV_AMNNO_FORMAT_F }</dd>
 							<dd class="pd_sex indvSexC">${ vo.INDV_SEX_C_NAME }</dd>
 							<dd class="pd_kg cowSogWt">${(vo.COW_SOG_WT eq '' || vo.COW_SOG_WT == null) ? '0' : fn:split(vo.COW_SOG_WT,'.')[0]}</dd>
 							<dd class="pd_kpn kpnNo">${ vo.KPN_NO_STR }</dd>

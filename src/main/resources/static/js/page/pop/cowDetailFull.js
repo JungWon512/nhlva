@@ -7,6 +7,7 @@
     		$('div.tab_area.cowTab_2').show();
     		//epdChartDraw();
     	}
+		//getAiakInfo();
     	
     	var indvData = getInfMca({cgtrmCd : '4700', SRA_INDV_AMNNO : $('input[name=sraIndvAmnno]').val()});
     	if(indvData && indvData.success){
@@ -212,6 +213,85 @@ function getInfMca(params){
 	return result;
 }
 
+var getAiakInfo = function(){
+	var param = new Object();
+	param.barcode = ($('form[name="frm"] input[name=sraIndvAmnno]').val()||'').substr(3);
+	$.ajax({
+		url: '/info/getAiakInfo',
+		data: param,
+		type: 'POST',
+		dataType: 'html',
+		async : false,
+		success : function(html) {
+			var bloodInfo = $(html).find('table').get(1);
+			$(bloodInfo).find('tbody tr').each((i,e)=>{
+				var bloodTxt ='';
+				if(i != '2' && i != '4' && i != '5'){
+					bloodTxt+='[KPN]'+($(e).find('td:eq(1)').text()||'-').trim()+'<br/>';
+				}
+				bloodTxt+=($(e).find('td:eq(3)').text()||'-').trim();
+				$('td[name=blInfo_'+(i)+']').html(bloodTxt);
+			});
+			
+			var epdInfo = $(html).find('table').get(4);
+			$(epdInfo).find('tbody tr:eq(0) td:not(.t1)').each((i,e)=>{
+				var txt = ($(e).text()||'').trim();
+				$('td[name=reProduct'+(i+1)+']').text(txt);
+			});
+			$(epdInfo).find('tbody tr:eq(1) td:not(.t1)').each((i,e)=>{
+				var txt = ($(e).text()||'').trim();
+				$('td[name=dscReProduct'+(i+1)+'] span').text(txt);
+			});
+			
+			var postIndvInfo = $(html).find('table').get(6);
+			$('table.postIndvTable tbody').empty();
+			var postHtml = '<tr><td rowspan="2" colspan="5" class="ta-C">등록된 후대정보가 없습니다.</td></tr>';
+			if($(postIndvInfo).find('tbody tr td').length > 1){
+				postHtml='';
+				$(postIndvInfo).find('tbody tr').each((i,e)=>{
+					postHtml += '<tr>';
+					postHtml += '	<td rowspan="2" class="ta-C bg-gray matime">'+($(e).find('td:eq(0)').text()?.trim()||'-')+'</td>';
+					postHtml += '	<td rowspan="2" class="ta-C sraIndvAmnno">'+($(e).find('td:eq(2)').text()?.trim()||'-')+'</td>';
+					postHtml += '	<td class="ta-C rgDsc">'+($(e).find('td:eq(3)').text()?.trim()||'-').trim()+'</td>';
+					postHtml += '	<td class="ta-C indvSexC">'+($(e).find('td:eq(4)').text()?.trim()||'-')+'</td>';
+					postHtml += '	<td class="ta-C birth">'+($(e).find('td:eq(5)').text()?.trim()||'-')+'</td>';
+					postHtml += '</tr>';
+					postHtml += '<tr>';
+					postHtml += '	<td class="ta-C metrbMetqltGrd">'+($(e).find('td:eq(9)').text()?.trim()||'-')+'</td>';
+					postHtml += '	<td class="ta-C metrbBbdyWt">'+($(e).find('td:eq(8)').text()?.trim()||'-')+'</td>';
+					postHtml += '	<td class="ta-C mifBtcDt">'+($(e).find('td:eq(10)').text()?.trim()||'-')+'</td>';
+					postHtml += '</tr>';
+				});
+			}
+			$('table.postIndvTable tbody').append(postHtml);
+
+			var sibIndvInfo = $(html).find('table').get(7);
+			$('table.sibIndvTable tbody').empty(); 
+			var sibHtml = '<tr><td rowspan="2" colspan="5" class="ta-C">등록된 형매정보가 없습니다.</td></tr>';
+			if($(sibIndvInfo).find('tbody tr td').length > 1){
+				sibHtml='';
+				$(sibIndvInfo).find('tbody tr').each((i,e)=>{
+					sibHtml += '<tr>';
+					sibHtml += '	<td rowspan="2" class="ta-C bg-gray matime">'+($(e).find('td:eq(0)').text()?.trim()||'-')+'</td>';
+					sibHtml += '	<td rowspan="2" class="ta-C sraIndvAmnno">'+($(e).find('td:eq(2)').text()?.trim()||'-')+'</td>';
+					sibHtml += '	<td class="ta-C rgDsc">'+($(e).find('td:eq(3)').text()?.trim()||'-').trim()+'</td>';
+					sibHtml += '	<td class="ta-C indvSexC">'+($(e).find('td:eq(4)').text()?.trim()||'-')+'</td>';
+					sibHtml += '	<td class="ta-C birth">'+($(e).find('td:eq(5)').text()?.trim()||'-')+'</td>';
+					sibHtml += '</tr>';
+					sibHtml += '<tr>';
+					sibHtml += '	<td class="ta-C metrbMetqltGrd">'+($(e).find('td:eq(9)').text()?.trim()||'-')+'</td>';
+					sibHtml += '	<td class="ta-C metrbBbdyWt">'+($(e).find('td:eq(8)').text()?.trim()||'-')+'</td>';
+					sibHtml += '	<td class="ta-C mifBtcDt">'+($(e).find('td:eq(10)').text()?.trim()||'-')+'</td>';
+					sibHtml += '</tr>';
+				});
+			}
+			$('table.sibIndvTable tbody').append(sibHtml);
+		},
+		error: function(xhr, status, error) {
+		}
+	}).done(function (json) {
+	});
+};
 function epdChartDraw(){
 
 	//차트 생성
@@ -221,7 +301,6 @@ function epdChartDraw(){
 	var epdData = [];
 	
 	$('div.epdInfo td[name^=dscReProduct]').each((i,o)=>{
-		//epdData.push($(o).text().trim());
     	var data = $(o).text().trim();    	
     	epdData.push((data == 'A'? 4:(data == 'B'? 3 : (data == 'C' ? 2 : (data == 'D' ? 1 :0)))));
 		labels.push($(o).closest('tr').find('th').text().trim());

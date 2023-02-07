@@ -3,9 +3,13 @@ package com.ishift.auction.web;
 
 import java.io.File;
 import java.io.FileOutputStream;
+import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.io.UnsupportedEncodingException;
 import java.net.HttpURLConnection;
+import java.net.MalformedURLException;
+import java.net.ProtocolException;
 import java.net.URL;
 import java.net.URLEncoder;
 import java.util.HashMap;
@@ -87,19 +91,30 @@ public class FileDownloadController {
                 while ((bytesRead = inputStream.read(buffer)) != -1) {
                    outputStream.write(buffer, 0, bytesRead);
                 }
-
-            } catch(Exception e) {
+            }
+            catch(IOException e) {
                 log.error(e.getMessage(),e);
                 response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
-            } finally {
+            }
+            catch(Exception e) {
+            	log.error(e.getMessage(),e);
+            	response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+            }
+            finally {
                   if(outputStream != null) outputStream.close(); 
                   if(inputStream != null) inputStream.close();
             }            
         	if(con != null) con.disconnect();
-        } catch (Exception e) {
+        }
+        catch (IOException e) {
             log.error(e.getMessage(),e);
             response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
-        } finally {
+        }
+        catch (Exception e) {
+        	log.error(e.getMessage(),e);
+        	response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+        }
+        finally {
         	if(con != null) con.disconnect();
         }        
     }

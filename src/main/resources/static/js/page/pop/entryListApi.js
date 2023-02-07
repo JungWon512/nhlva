@@ -22,9 +22,12 @@
 			fn_Load(tabId);
 		});
                 
-      	$(document).on("click",".tab_area.auc .schedule_tb_mo .list_body .pd_ea a", function(){			
+      	$(document).on("click",".tab_area.auc .schedule_tb_mo .list_body .pd_ea a", function(){
 			var pdEa = new String($(this).find('span').attr('fullstr'));	
 			var tr = $(this).closest('li');
+        	if(tr.find('.commitYn').val() != '1'){
+        		return;
+        	}
 			$("form[name='frm_select'] input[name='naBzplc']").val(tr.find('.naBzPlc').val());
 			$("form[name='frm_select'] input[name='aucDt']").val(tr.find('.aucDt').val());
 			$("form[name='frm_select'] input[name='aucObjDsc']").val(tr.find('.aucObjDsc').val());
@@ -142,8 +145,12 @@
 				if(inputUpr && parseInt(lowsSbidLmtUpr) <= parseInt(inputUpr)) {
 					 COMMONS.callAjax("/auction/api/inserttZimPrice", "post", params, 'application/json', 'json', function(data){
 						modalPopupClose('.popup .modal-wrap.pop_jjim_input.zim');
+//						if(data && !data.success){
+//							modalAlert('','작업중 오류가 발생했습니다. <br/>관리자에게 문의하세요.');
+//							return;
+//						}
 						if(data && !data.success){
-							modalAlert('','작업중 오류가 발생했습니다. <br/>관리자에게 문의하세요.');
+							modalAlert('', data.message);
 							return;
 						}
 						if(data.aucInfo){
