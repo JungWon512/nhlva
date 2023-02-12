@@ -1280,6 +1280,8 @@ public class AuctionServiceImpl implements AuctionService {
 						feeInfo.put("SRA_TR_FEE", 0L);
 					}
 					
+					
+					// TODO :: 임신, 괴사 감정료 미적용로직 유찰시에도 적용하기
 					// 운송비인 경우 TRPCS_PY_YN(운송비 지급 여부)가 1일 때는 수수를 부과하지 않는다.
 					if ("040".equals(feeInfo.get("NA_FEE_C")) && "1".equals(info.get("TRPCS_PY_YN"))) {
 						feeAmt = 0L;

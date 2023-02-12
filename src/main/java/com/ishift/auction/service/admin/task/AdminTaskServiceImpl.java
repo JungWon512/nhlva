@@ -372,8 +372,45 @@ public class AdminTaskServiceImpl implements AdminTaskService {
 	public Map<String, Object> uploadImageProc(Map<String, Object> params) throws SQLException, AmazonS3Exception, SdkClientException, NoSuchAlgorithmException, KeyManagementException, KeyStoreException {
 		final Map<String, Object> result = new HashMap<String, Object>();
 
+		HostnameVerifier hv = new HostnameVerifier() {
+			@Override
+			public boolean verify(String arg0, SSLSession arg1) {
+				return true;
+			}
+		};
+		
+		AmazonHttpClient ac = null;
+		TrustManager[] trustAllCerts = new TrustManager[] {
+			new X509TrustManager() {
+				@Override
+				public X509Certificate[] getAcceptedIssuers() {
+					return null;
+				}
+				
+				@Override
+				public void checkServerTrusted(X509Certificate[] arg0, String arg1) throws CertificateException {return;}
+				
+				@Override
+				public void checkClientTrusted(X509Certificate[] arg0, String arg1) throws CertificateException {return;}
+			}
+		};
+		
+		SSLContext sc = SSLContext.getInstance("SSL");
+		sc.init(null, trustAllCerts, new SecureRandom());
+		
+		ClientConfiguration cc = new ClientConfiguration();
+		SSLConnectionSocketFactory ssf = new SSLConnectionSocketFactory(sc
+																		, new String[] {"TLSv1.2", "TLSv1.1", "TLSv1", "SSLv3", "SSLv2Hello"}
+																		, new String[] {"TLS_RSA_WITH_AES_128_GCM_SHA256", "TLS_RSA_WITH_AES_128_CBC_SHA256"}
+																		, hv);
+		cc.getApacheHttpClientConfig().withSslSocketFactory(ssf);
+		cc.setSignerOverride("AWSS3V4SignerType");
+		cc.setConnectionTimeout(500);
+		cc.setMaxErrorRetry(1);
+
 		// S3 client
 		final AmazonS3 s3 = AmazonS3ClientBuilder.standard()
+												 .withClientConfiguration(cc)
 												 .withEndpointConfiguration(new AwsClientBuilder.EndpointConfiguration(endPoint, regionName))
 												 .withCredentials(new AWSStaticCredentialsProvider(new BasicAWSCredentials(accessKey, secretKey)))
 												 .build();

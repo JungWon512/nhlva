@@ -170,9 +170,11 @@
 					<th class="ta-C bdr-n">사육지</th>
 				</tr>			
 				<c:forEach items="${ moveList }" var="item" varStatus="st">
+				<tr>
 					<td class="ta-C bdr-y">${ item.REGTYPE }</td>
 					<td class="ta-C bdr-y">${ item.FARMERNM }<br><span class="fz-32">${item.REGYMD}</span></td>
 					<td class="fz-32">${ item.FARMADDR }</td>
+				</tr>
 				</c:forEach>
 			</tbody>
 		</table>
