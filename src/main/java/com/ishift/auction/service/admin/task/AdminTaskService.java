@@ -133,4 +133,13 @@ public interface AdminTaskService {
 	 */
 	List<Map<String, Object>> selectCowImg(Map<String, Object> params) throws SQLException;
 
+	/**
+	 * 출장우 이미지 업로드 ( 스크립트로 업로드 한 경우 )
+	 * @param params
+	 * @return
+	 * @throws RuntimeException 
+	 * @throws SQLException 
+	 */
+	Map<String, Object> uploadImageInfoProc(Map<String, Object> params) throws SQLException, RuntimeException;
+
 }

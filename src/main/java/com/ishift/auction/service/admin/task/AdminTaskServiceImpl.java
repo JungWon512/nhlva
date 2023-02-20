@@ -5,6 +5,7 @@ import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
+import java.net.URL;
 import java.security.KeyManagementException;
 import java.security.KeyStoreException;
 import java.security.NoSuchAlgorithmException;
@@ -13,6 +14,7 @@ import java.security.cert.CertificateException;
 import java.security.cert.X509Certificate;
 import java.sql.SQLException;
 import java.util.Arrays;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -45,8 +47,10 @@ import org.springframework.util.Base64Utils;
 import org.springframework.util.ObjectUtils;
 
 import com.amazonaws.ClientConfiguration;
+import com.amazonaws.HttpMethod;
 import com.amazonaws.SDKGlobalConfiguration;
 import com.amazonaws.SdkClientException;
+import com.amazonaws.auth.AWSCredentials;
 import com.amazonaws.auth.AWSStaticCredentialsProvider;
 import com.amazonaws.auth.BasicAWSCredentials;
 import com.amazonaws.client.builder.AwsClientBuilder;
@@ -54,11 +58,13 @@ import com.amazonaws.http.AmazonHttpClient;
 import com.amazonaws.http.apache.client.impl.SdkHttpClient;
 import com.amazonaws.http.conn.ssl.SdkTLSSocketFactory;
 import com.amazonaws.services.s3.AmazonS3;
+import com.amazonaws.services.s3.AmazonS3Client;
 import com.amazonaws.services.s3.AmazonS3ClientBuilder;
 import com.amazonaws.services.s3.model.AccessControlList;
 import com.amazonaws.services.s3.model.AmazonS3Exception;
 import com.amazonaws.services.s3.model.BucketCrossOriginConfiguration;
 import com.amazonaws.services.s3.model.CORSRule;
+import com.amazonaws.services.s3.model.GeneratePresignedUrlRequest;
 import com.amazonaws.services.s3.model.GroupGrantee;
 import com.amazonaws.services.s3.model.ObjectMetadata;
 import com.amazonaws.services.s3.model.Permission;
@@ -372,45 +378,9 @@ public class AdminTaskServiceImpl implements AdminTaskService {
 	public Map<String, Object> uploadImageProc(Map<String, Object> params) throws SQLException, AmazonS3Exception, SdkClientException, NoSuchAlgorithmException, KeyManagementException, KeyStoreException {
 		final Map<String, Object> result = new HashMap<String, Object>();
 
-		HostnameVerifier hv = new HostnameVerifier() {
-			@Override
-			public boolean verify(String arg0, SSLSession arg1) {
-				return true;
-			}
-		};
-		
-		AmazonHttpClient ac = null;
-		TrustManager[] trustAllCerts = new TrustManager[] {
-			new X509TrustManager() {
-				@Override
-				public X509Certificate[] getAcceptedIssuers() {
-					return null;
-				}
-				
-				@Override
-				public void checkServerTrusted(X509Certificate[] arg0, String arg1) throws CertificateException {return;}
-				
-				@Override
-				public void checkClientTrusted(X509Certificate[] arg0, String arg1) throws CertificateException {return;}
-			}
-		};
-		
-		SSLContext sc = SSLContext.getInstance("SSL");
-		sc.init(null, trustAllCerts, new SecureRandom());
-		
-		ClientConfiguration cc = new ClientConfiguration();
-		SSLConnectionSocketFactory ssf = new SSLConnectionSocketFactory(sc
-																		, new String[] {"TLSv1.2", "TLSv1.1", "TLSv1", "SSLv3", "SSLv2Hello"}
-																		, new String[] {"TLS_RSA_WITH_AES_128_GCM_SHA256", "TLS_RSA_WITH_AES_128_CBC_SHA256"}
-																		, hv);
-		cc.getApacheHttpClientConfig().withSslSocketFactory(ssf);
-		cc.setSignerOverride("AWSS3V4SignerType");
-		cc.setConnectionTimeout(500);
-		cc.setMaxErrorRetry(1);
-
 		// S3 client
 		final AmazonS3 s3 = AmazonS3ClientBuilder.standard()
-												 .withClientConfiguration(cc)
+//												 .withClientConfiguration(cc)
 												 .withEndpointConfiguration(new AwsClientBuilder.EndpointConfiguration(endPoint, regionName))
 												 .withCredentials(new AWSStaticCredentialsProvider(new BasicAWSCredentials(accessKey, secretKey)))
 												 .build();
@@ -537,6 +507,43 @@ public class AdminTaskServiceImpl implements AdminTaskService {
 		result.put("success", (files.size() == successCnt));
 		result.put("message", (files.size() == successCnt) ? "이미지 저장에 성공했습니다." : "이미지 저장에 실패했습니다.");
 //		result.put("message", String.format("전체 : %d, 성공 : %d", files.size(), successCnt));
+		return result;
+	}
+	
+	/**
+	 * 출장우 이미지 업로드
+	 * @param params
+	 * @return
+	 * @throws SQLException 
+	 * @throws RuntimeException 
+	 */
+	@Override
+	public Map<String, Object> uploadImageInfoProc(Map<String, Object> params) throws SQLException, RuntimeException {
+		final Map<String, Object> result = new HashMap<String, Object>();
+		
+		// 이미지 정보 삭제
+		adminTaskDAO.deleteCowImg(params);
+		
+		final String naBzplc = params.getOrDefault("naBzplc", sessionUtil.getNaBzplc()).toString();
+		final String aucDt = params.get("aucDt").toString();
+		final String sraIndvAmnno = params.get("sraIndvAmnno").toString();
+		
+		List<Map<String, Object>> uploadList = (List<Map<String, Object>>)params.get("uploadList");
+		int successCnt = 0;
+		int imgSqno = 1;
+		if (!ObjectUtils.isEmpty(uploadList)) {
+			for (Map<String, Object> info : uploadList) {
+				params.put("imgSqno", imgSqno);
+				params.put("filePath", info.get("filePath"));
+				params.put("fileNm", info.get("fileNm"));
+				params.put("fileExtNm", info.get("fileExtNm"));
+				adminTaskDAO.insertCowImg(params);
+				imgSqno++;
+			}
+		}
+		
+		result.put("success", true);
+		result.put("message", "이미지 저장에 성공했습니다.");
 		return result;
 	}
 

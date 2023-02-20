@@ -546,6 +546,21 @@ public class AdminTaskController extends CommonController {
 			return result;
 		}
 	}
+	
+	@ResponseBody
+	@RequestMapping(value = "/office/task/uploadImageInfoAjax", method = {RequestMethod.POST})
+	public Map<String, Object> uploadImageInfoAjax(@RequestBody final Map<String, Object> params) {
+		try {
+			return adminTaskService.uploadImageInfoProc(params);
+		}
+		catch (SQLException | RuntimeException e) {
+			log.error("Exception::AdminTaskController.uploadImageInfoAjax : {} ", e);
+			final Map<String, Object> result = new HashMap<String, Object>();
+			result.put("success", false);
+			result.put("message", "이미지 업로드에 실패했습니다.");
+			return result;
+		}
+	}
 	/* ---------------------------------------------------------- 출장우 이미지 업로드 [e] ---------------------------------------------------------- */
 
 }

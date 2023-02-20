@@ -2268,9 +2268,18 @@
 					AND NA_BZPLC = A.NA_BZPLC)
 				</when>
 				<otherwise>
-					AND EXISTS (SELECT 1 FROM TB_LA_IS_MM_MWMN WHERE MB_INTG_NO =
-					#{searchMbIntgNo} AND TRMN_AMNNO = A.TRMN_AMNNO AND NA_BZPLC =
-					A.NA_BZPLC)
+					AND EXISTS (
+							SELECT 1 FROM TB_LA_IS_MM_MWMN 
+							WHERE 1=1 
+							<choose>
+								<when test="searchMbIntgNo !=null and searchMbIntgNo != ''">
+									AND MB_INTG_NO = #{searchMbIntgNo}
+								</when>
+								<otherwise>
+									AND TRMN_AMNNO = A.TRMN_AMNNO AND NA_BZPLC = A.NA_BZPLC	
+								</otherwise>
+							</choose>
+							)
 				</otherwise>
 			</choose>
 		</if>
@@ -2323,9 +2332,18 @@
 					AND NA_BZPLC = A.NA_BZPLC)
 				</when>
 				<otherwise>
-					AND EXISTS (SELECT 1 FROM TB_LA_IS_MM_MWMN WHERE MB_INTG_NO =
-					#{searchMbIntgNo} AND TRMN_AMNNO = A.TRMN_AMNNO AND NA_BZPLC =
-					A.NA_BZPLC)
+					AND EXISTS (
+							SELECT 1 FROM TB_LA_IS_MM_MWMN 
+							WHERE 1=1 
+							<choose>
+								<when test="searchMbIntgNo !=null and searchMbIntgNo != ''">
+									AND MB_INTG_NO = #{searchMbIntgNo}
+								</when>
+								<otherwise>
+									AND TRMN_AMNNO = A.TRMN_AMNNO AND NA_BZPLC = A.NA_BZPLC	
+								</otherwise>
+							</choose>
+							)
 				</otherwise>
 			</choose>
 		</if>
