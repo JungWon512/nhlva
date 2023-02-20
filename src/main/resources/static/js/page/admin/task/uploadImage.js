@@ -12,6 +12,42 @@
 		const arrExt = ["jpg", "png", "gif", "jpeg"];	// 업로드 가능 확장자 리스트
 		const limitSize = 10 * 1024 * 1024; 			// TODO :: 업로드 가능한 파일 최대 크기를 적용할지?
 		
+		const endpoint = new AWS.Endpoint('https://kr.object.ncloudstorage.com');
+		const region = 'kr-standard';
+		const bucket_name = 'smartauction-storage';
+		const access_key = 'LBIYVr5QNEVHjiMOha3w';
+		const secret_key = 'NB06umoPLA89ODh48DlVs7n2OTlKjDs0c4IOArif';
+		
+		const S3 = new AWS.S3({
+			endpoint: endpoint,
+			region: region,
+			credentials: {
+				accessKeyId : access_key,
+				secretAccessKey: secret_key
+			}
+		});
+		
+//		const params = {
+//			Bucket: bucket_name,
+//			CORSConfiguration: {
+//				CORSRules: [
+//					{
+//						AllowedHeaders: ["*"],
+//						AllowedMethods: ["GET", "PUT"],
+//						AllowedOrigins: ["*"],
+//						MaxAgeSeconds: 3000,
+//					},
+//				],
+//			}
+//		};
+		
+		(async () => {
+			// Set CORS
+//			await S3.putBucketCors(params).promise();
+			// Get CORS
+//			const response = await S3.getBucketCors({ Bucket: bucket_name }).promise();
+		})();
+		
 		// 썸네일 이미지 생성
 		function makeThumbnailImage() {
 			var previewList = resultNode.find("div.item > canvas");
@@ -182,10 +218,27 @@
 				});
 				return;
 			});
+			
+			$(".btn_list_search").on("click", function(){
+				fnListSearch();
+			});
 		};
 		
-		// 이미지 저장
-		var fnSave = function() {
+		var fnListSearch = function() {
+			var param = {
+				Bucket: bucket_name
+			}
+			S3.listObjects({ Delimiter: "/", Bucket : bucket_name }, function(err, data) {
+				if (err) {
+					return alert("There was an error listing your albums: " + err.message);
+				} else {
+					console.log(data);
+				}
+			});
+		}
+		
+		// 이미지 저장 : 사용x
+		var fnSaveback = function() {
 			$(".btn_save").addClass("disabled");
 			
 			var frm = $("form[name='frm']").serializeObject();
@@ -219,8 +272,6 @@
 				},
 				error:function(request,status,error){
 					modalAlert("", "이미지 저장에 실패했습니다.");
-//					console.log(arguments);
-//					alert("code:"+request.status+"\n"+"message:"+request.responseText+"\n"+"error:"+error);
 				}
 			}).done(function (body) {
 				modalAlert("", body.message);
@@ -228,7 +279,71 @@
 				return;
 			});
 		};
-
+		
+		// 이미지 저장
+		var fnSave = function() {
+			$(".btn_save").addClass("disabled");
+			var uploadList = [];
+			var upload = (async () => {
+				// 폴더 생성
+				var objectPath = [$("input[name='naBzplc']").val(), $("input[name='sraIndvAmnno']").val()];
+				var folderName = objectPath.join("/");
+				var fileList = $("#preview_list").find("canvas");
+				for (file of fileList) {
+					var name = $(file).parent().attr("class").split(" ")[1];
+					
+					var fileDataUrl = file.toDataURL("image/png");
+					var fileName = self.crypto.randomUUID();
+					var objectName = folderName + "/" + fileName + ".png";
+					// upload file
+					await S3.putObject({Bucket: bucket_name, Key: objectName,ACL: 'public-read',// ACL을 지우면 전체 공개되지 않습니다.
+										Body: dataURLtoBlob(fileDataUrl)
+					})
+					.promise()
+					.then(() => {
+						var thumbnail = thumbNode.find("div." + name).find("canvas")[0].toDataURL("image/png");
+						var thumbObjectName = folderName + "/thumb/" + fileName + ".png";
+							S3.putObject({Bucket: bucket_name, Key: thumbObjectName, ACL: 'public-read',// ACL을 지우면 전체 공개되지 않습니다.
+										Body: dataURLtoBlob(thumbnail)
+						}).promise();
+					})
+					.then(()=>{
+						console.log("upload success");
+						var obj = new Object();
+						obj["filePath"] = folderName + "/";
+						obj["fileNm"] = fileName;
+						obj["fileExtNm"] = ".png"
+						uploadList.push(obj);
+					});
+				}
+			})();
+			
+			upload.then(()=>{fnSaveUploadInfo(uploadList)});
+		};
+		
+		var fnSaveUploadInfo = async function(uploadList) {
+			var frm = $("form[name='frm']").serializeObject();
+			frm["uploadList"] = uploadList;
+			
+			$.ajax({
+				url : '/office/task/uploadImageInfoAjax',
+				data : JSON.stringify(frm),
+				type : 'POST',
+				dataType : 'json',
+				beforeSend: function (xhr) {
+					xhr.setRequestHeader("Accept", "application/json");
+					xhr.setRequestHeader("Content-Type", "application/json");
+				},
+				error:function(request,status,error){
+					modalAlert("", "이미지 저장에 실패했습니다.");
+				}
+			}).done(function (body) {
+				modalAlert("", body.message);
+				$(".btn_save").removeClass("disabled");
+				return;
+			});
+		}
+		
 		// 이미지 url로 canvas 추가
 		var addImage = function() {
 			$("input[name='file_url']").each(function(){

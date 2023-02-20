@@ -8,10 +8,6 @@
 		width: 100% !important;
 	}
 </style>
-<script type="text/javascript">
-	let urls = [];
-	let requests;
-</script>
 
 <div class="admin_new_reg admin_pic_reg">
 	<c:if test="${!empty imgList}">
@@ -41,7 +37,7 @@
 			<div id="thumbnail_list" class="inner">
 				<div class="add-item add-pic">
 					<label for="file-input">사진 추가 <span class="num">${fn:length(imgList)} / 8</span></label>
-					<input id="file-input" type="file" accept="image/*" capture="camera" multiple="multiple" max="8" />
+					<input id="file-input" type="file" accept="image/*" multiple="multiple" max="8" />
 				</div>
 				<c:if test="${!empty imgList}">
 					<c:forEach items="${imgList}" var="ivo" varStatus="s">
@@ -65,6 +61,10 @@
 		<div class="top-btns">
 			<button type="button" class="btn_delete">삭제</button>
 			<button type="button" class="btn_rotate">회전</button>
-	</div>
+		</div>
+		<div class="top-btns" style="display:none;">
+			<button type="button" class="btn_list_search">조회</button>
+		</div>
 	</form>
 </div>
+<script src="https://sdk.amazonaws.com/js/aws-sdk-2.1318.0.min.js"></script>
