@@ -13,7 +13,7 @@
 			});
 			
 			$(document).on('click', ".btnApkDownload", function(e){
-				var apk = (active == 'production')?"auctionmanager0.0.2_2-release.apk":"auctionmanager0.0.2_2-debug.apk";
+				var apk = (active == 'production')?"auctionmanager0.0.3-release.apk":"auctionmanager0.0.3-debug.apk";
 			    var pom = document.createElement('a');
 			    pom.setAttribute('href', '/static/apk/'+apk);
 			    pom.setAttribute('type', 'application/vnd.android.package-archive');
