@@ -196,46 +196,46 @@ public class DashBoardServiceImpl implements DashBoardService {
 	@Override
 	public List<Map<String, Object>> findJohapLogoList(Map<String, Object> reqMap) throws SQLException {
 		List<Map<String, Object>> resultList = null;
-		boolean isCache = false;
-		if("1".equals(reqMap.get("searchAucObjDsc")) 
-				&& ("".equals(reqMap.get("searchMonthOldC")) || reqMap.get("searchMonthOldC") == null)
-				&& ("".equals(reqMap.get("searchPlace")) || reqMap.get("searchPlace") == null)
-				) {		//기본 파라미터일 때, 캐시되도록 하기
-			isCache = true;
-		}
-		
-		if(isCache) {
-			long now = System.currentTimeMillis();
-			long loadTime = !JOHAP_LOGO_LIST.isEmpty() ? (long) JOHAP_LOGO_LIST.get("loadTime") : 0L;
-			try {
-				if(JOHAP_LOGO_LIST.isEmpty() || now - loadTime > duration) {
-					synchronized (JOHAP_LOGO_LIST) {
-						if(JOHAP_LOGO_LIST.isEmpty() || now - loadTime > duration) {
-							Map<String, Object> map = new HashMap<String, Object>();
-							List<Map<String, Object>> fileList = this.selectLogoImgList();
-							
-							map.put("list", fileList);
-							
-							JOHAP_LOGO_LIST.clear();
-							JOHAP_LOGO_LIST.putAll(map);
-							loadTime = now;
-						}
-					}
-				}
-				
-				resultList = (List<Map<String, Object>>) JOHAP_LOGO_LIST.get("list");
-			} catch (Exception e) {
-				e.printStackTrace();
-			}
-		}else {
-			try {
-				resultList = this.selectLogoImgList();
-			} catch (SQLException e) {
-				e.printStackTrace();
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
-		}
+//		boolean isCache = false;
+//		if("1".equals(reqMap.get("searchAucObjDsc")) 
+//				&& ("".equals(reqMap.get("searchMonthOldC")) || reqMap.get("searchMonthOldC") == null)
+//				&& ("".equals(reqMap.get("searchPlace")) || reqMap.get("searchPlace") == null)
+//				) {		//기본 파라미터일 때, 캐시되도록 하기
+//			isCache = true;
+//		}
+//		
+//		if(isCache) {
+//			long now = System.currentTimeMillis();
+//			long loadTime = !JOHAP_LOGO_LIST.isEmpty() ? (long) JOHAP_LOGO_LIST.get("loadTime") : 0L;
+//			try {
+//				if(JOHAP_LOGO_LIST.isEmpty() || now - loadTime > duration) {
+//					synchronized (JOHAP_LOGO_LIST) {
+//						if(JOHAP_LOGO_LIST.isEmpty() || now - loadTime > duration) {
+//							Map<String, Object> map = new HashMap<String, Object>();
+//							List<Map<String, Object>> fileList = this.selectLogoImgList();
+//							
+//							map.put("list", fileList);
+//							
+//							JOHAP_LOGO_LIST.clear();
+//							JOHAP_LOGO_LIST.putAll(map);
+//							loadTime = now;
+//						}
+//					}
+//				}
+//				
+//				resultList = (List<Map<String, Object>>) JOHAP_LOGO_LIST.get("list");
+//			} catch (Exception e) {
+//				e.printStackTrace();
+//			}
+//		}else {
+//			try {
+//				resultList = this.selectLogoImgList();
+//			} catch (SQLException e) {
+//				e.printStackTrace();
+//			} catch (IOException e) {
+//				e.printStackTrace();
+//			}
+//		}
 		
 		return resultList;
 	}

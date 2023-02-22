@@ -25,7 +25,6 @@ import com.ishift.auction.service.auction.AuctionService;
 import com.ishift.auction.service.dashboard.DashBoardService;
 import com.ishift.auction.util.DateUtil;
 import com.ishift.auction.util.SessionUtill;
-import com.ishift.auction.vo.AdminUserDetails;
 
 @RestController
 public class DashboardController {
@@ -123,17 +122,17 @@ public class DashboardController {
 		// 3. 금주의 TOP 3
 		List<Map<String, Object>> recentDateTopList = dashboardService.findRecentDateTopList(params);
 		// 4. 조합 Logo 이미지 가져오기
-		List<Map<String, Object>> johapLogoList = dashboardService.findJohapLogoList(params);
+//		List<Map<String, Object>> johapLogoList = dashboardService.findJohapLogoList(params);
 		
-		if(recentDateTopList.size() > 0) {
-			for(Map<String, Object> date : recentDateTopList) {
-				for(Map<String, Object> johap : johapLogoList) {
-					if(date.get("NA_BZPLC").toString().equals(johap.get("file_nm").toString())) {
-						date.put("FILE_PATH", johap.get("file_path"));
-					}
-				}
-			}
-		}
+//		if(recentDateTopList.size() > 0) {
+//			for(Map<String, Object> date : recentDateTopList) {
+//				for(Map<String, Object> johap : johapLogoList) {
+//					if(date.get("NA_BZPLC").toString().equals(johap.get("file_nm").toString())) {
+//						date.put("FILE_PATH", johap.get("file_path"));
+//					}
+//				}
+//			}
+//		}
 		
 		mav.addObject("recentDateTopList", recentDateTopList);
 		

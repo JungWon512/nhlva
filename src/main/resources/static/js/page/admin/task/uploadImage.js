@@ -88,7 +88,7 @@
 				options = {
 					maxWidth: resultNode.width() * 2,
 					canvas: true,
-					pixelRatio: window.devicePixelRatio,
+					pixelRatio: 1,
 					downsamplingRatio: 0.5,
 					orientation: Number(orientationNode.val()) || true,
 					imageSmoothingEnabled: imageSmoothingNode.is(':checked'),
@@ -141,7 +141,7 @@
 					var options = {
 						maxWidth: resultNode.width() * 2,
 						canvas: true,
-						pixelRatio: window.devicePixelRatio,
+						pixelRatio: 1,
 						downsamplingRatio: 0.5,
 						orientation: true,
 						meta: true
@@ -184,8 +184,8 @@
 				if (img) {
 					updateResults(
 						loadImage.scale(img, {
-							maxWidth: resultNode.width() * (window.devicePixelRatio || 1),
-							pixelRatio: window.devicePixelRatio,
+							maxWidth: resultNode.width() * (1 || 1),
+							pixelRatio: 1,
 							orientation: Number(6) || true,
 							imageSmoothingEnabled: true,
 							crossOrigin : 'Anonymous'
@@ -360,7 +360,7 @@
 					$(target).append(loadImage.scale(image, {
 															maxWidth: resultNode.width() * 2,
 															canvas: true,
-															pixelRatio: window.devicePixelRatio,
+															pixelRatio: 1,
 															downsamplingRatio: 0.5,
 															orientation: true,
 															meta: true
