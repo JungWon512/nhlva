@@ -2183,7 +2183,7 @@ Base styles: popup_layer css
 	padding-right: 13px;
 	flex-shrink: 0;
 }
-.modal-wrap.pop_schedule_map .tel:after {
+.modal-wrap.pop_schedule_map .tel a {
 	display: inline-block;
 	margin-left: 4px;
 	width: 24px;

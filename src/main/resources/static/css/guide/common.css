@@ -486,6 +486,23 @@ input[type=checkbox]:checked+label:after {
 	background-size: 25px 25px;
 }
 
+input[type=checkbox]+label.w30 {
+	font-size: 20px;
+	padding-left: 37px;
+	line-height: 1.5;
+}
+
+input[type=checkbox]+label.w30:after {
+	content: "";
+	width: 30px;
+	height: 30px;
+	background-size: 30px 30px;
+}
+
+input[type=checkbox]:checked+label.w30:after {
+	background-size: 30px 30px;
+}
+
 input[type=checkbox]:disabled+label:after, input[type=checkbox] input[type=radio]:disabled+label:after
 	{
 	background: #000;
@@ -506,6 +523,19 @@ input[type=checkbox]:disabled+label:after, input[type=checkbox] input[type=radio
 	}
 	input[type=checkbox]:checked+label:after {
 		background-size: 20px 20px;
+	}
+	input[type=checkbox]+label.w30 {
+		font-size: 18px;
+		padding-left: 31px;
+		padding-top: 0px;
+	}
+	input[type=checkbox]+label:after {
+		width: 25px;
+		height: 25px;
+		background-size: 25px 25px;
+	}
+	input[type=checkbox]:checked+label:after {
+		background-size: 25px 25px;
 	}
 }
 
@@ -1537,14 +1567,20 @@ Base styles: contents layer
 	margin-top: 14px;
 	padding-right: 30px;
 	position: relative;
+	padding-left: 10px;
 }
 
 .login_area .agree_list li:first-child {
 	margin-top: 0 !important;
+	padding-left: 0px;
 }
 
 .login_area .agree_list li label {
 	font-family: "Noto Sans KR", "Roboto", "AppleGothic", "sans-serif";
+	font-weight: 500;
+}
+
+.login_area .agree_list li label.w30 {
 	font-weight: 700;
 }
 
@@ -1565,6 +1601,9 @@ Base styles: contents layer
 	}
 	.login_area .agree_list li label {
 		font-size: 16px;
+	}
+	.login_area .agree_list li label.w30 {
+		font-size: 18px;
 	}
 	.login_area .agree_list li .agree_info {
 		top: 2px;

@@ -526,7 +526,8 @@ var getLocation = function(lat, lng) {
 
 // form append submit
 var appendFormSubmit = function(name, action, params, target) {
-	var form = $("form[name='" + name + "']").length == 0 ? $("<form></form>") : $("form[name='" + name + "']");
+	$("form[name='" + name + "']").remove();
+	var form = $("<form></form>");
 	form.attr("name", name);
 	form.attr("action", action);
 	form.attr("method", "post");
@@ -738,4 +739,27 @@ function fn_xxsDecode(p_str){
     }else{
     	return p_str;
     }
+}
+
+var fnShowLoadingImg = function() {
+	if ($("#loading-prograss").length == 0) {
+		var imgHtml = [];
+		imgHtml.push('<div id="loading-prograss" class="loading-prograss" tabindex="0">               ');
+		imgHtml.push('	<div class="spinner-border text-seconary" role="status">                      ');
+		imgHtml.push('		<img class="loading-image" src="/static/images/guide/loading/Spin-1s-200px.gif">');
+		imgHtml.push('	</div>                                                                        ');
+		imgHtml.push('</div>                                                                          ');
+		$(document.body).append(imgHtml.join(""));
+	}
+	$("#loading-prograss").show();
+}
+
+var fnHideLoadingImg = function() {
+	$("#loading-prograss").hide();
+}
+
+var uuidv4 = function() {
+  return ([1e7]+-1e3+-4e3+-8e3+-1e11).replace(/[018]/g, c =>
+    (c ^ crypto.getRandomValues(new Uint8Array(1))[0] & 15 >> c / 4).toString(16)
+  );
 }

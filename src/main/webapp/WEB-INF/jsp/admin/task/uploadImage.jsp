@@ -7,6 +7,10 @@
 	#preview_list canvas {
 		width: 100% !important;
 	}
+	#thumbnail_list canvas {
+		width: 100px !important;
+		height: 100px !important;
+	}
 </style>
 
 <div class="admin_new_reg admin_pic_reg">
@@ -68,3 +72,45 @@
 	</form>
 </div>
 <script src="https://sdk.amazonaws.com/js/aws-sdk-2.1318.0.min.js"></script>
+<script>
+	const endpoint = new AWS.Endpoint('https://kr.object.ncloudstorage.com');
+	const region = 'kr-standard';
+	const bucket_name = 'smartauction-storage';
+	const access_key = 'LBIYVr5QNEVHjiMOha3w';
+	const secret_key = 'NB06umoPLA89ODh48DlVs7n2OTlKjDs0c4IOArif';
+	
+	const S3 = new AWS.S3({
+		endpoint: endpoint,
+		region: region,
+		credentials: {
+			accessKeyId : access_key,
+			secretAccessKey: secret_key
+		}
+		, maxRetries: 1
+		, httpOptions: {
+			connectionTimeout: 2 * 1000,
+			timeout: 5 * 1000
+		}
+	});
+	
+	const params = {
+		Bucket: bucket_name,
+		CORSConfiguration: {
+			CORSRules: [
+				{
+					AllowedHeaders: ["*"],
+					AllowedMethods: ["GET", "PUT"],
+					AllowedOrigins: ["*"],
+					MaxAgeSeconds: 3000,
+				},
+			],
+		}
+	};
+	
+	(async () => {
+		// Set CORS
+		await S3.putBucketCors(params).promise().then(() => console.log("putBucketCors : succsss")).catch(() => console.log("putBucketCors : error"));
+		// Get CORS
+	//	const response = await S3.getBucketCors({ Bucket: bucket_name }).promise();
+	})();
+</script>

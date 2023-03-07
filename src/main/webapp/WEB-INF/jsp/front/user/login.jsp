@@ -23,7 +23,7 @@
 			</dl>
 			<ul class="agree_list">
 				<li>
-					<input type="checkbox" id="agree_chkAll"><label for="agree_chkAll">전체 동의하기</label>
+					<input type="checkbox" id="agree_chkAll"><label for="agree_chkAll" class="w30">전체 동의하기</label>
 				</li>
 				<li>
 					<input type="checkbox" id="agree_chk1" class="agree_chk"><label for="agree_chk1">[필수] 개인정보 이용약관 동의</label>

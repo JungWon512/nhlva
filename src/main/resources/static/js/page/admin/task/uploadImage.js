@@ -12,42 +12,6 @@
 		const arrExt = ["jpg", "png", "gif", "jpeg"];	// 업로드 가능 확장자 리스트
 		const limitSize = 10 * 1024 * 1024; 			// TODO :: 업로드 가능한 파일 최대 크기를 적용할지?
 		
-		const endpoint = new AWS.Endpoint('https://kr.object.ncloudstorage.com');
-		const region = 'kr-standard';
-		const bucket_name = 'smartauction-storage';
-		const access_key = 'LBIYVr5QNEVHjiMOha3w';
-		const secret_key = 'NB06umoPLA89ODh48DlVs7n2OTlKjDs0c4IOArif';
-		
-		const S3 = new AWS.S3({
-			endpoint: endpoint,
-			region: region,
-			credentials: {
-				accessKeyId : access_key,
-				secretAccessKey: secret_key
-			}
-		});
-		
-//		const params = {
-//			Bucket: bucket_name,
-//			CORSConfiguration: {
-//				CORSRules: [
-//					{
-//						AllowedHeaders: ["*"],
-//						AllowedMethods: ["GET", "PUT"],
-//						AllowedOrigins: ["*"],
-//						MaxAgeSeconds: 3000,
-//					},
-//				],
-//			}
-//		};
-		
-		(async () => {
-			// Set CORS
-//			await S3.putBucketCors(params).promise();
-			// Get CORS
-//			const response = await S3.getBucketCors({ Bucket: bucket_name }).promise();
-		})();
-		
 		// 썸네일 이미지 생성
 		function makeThumbnailImage() {
 			var previewList = resultNode.find("div.item > canvas");
@@ -282,19 +246,23 @@
 		
 		// 이미지 저장
 		var fnSave = function() {
+			fnShowLoadingImg();
 			$(".btn_save").addClass("disabled");
 			var uploadList = [];
+			var failList = [];
 			var upload = (async () => {
 				// 폴더 생성
 				var objectPath = [$("input[name='naBzplc']").val(), $("input[name='sraIndvAmnno']").val()];
 				var folderName = objectPath.join("/");
 				var fileList = $("#preview_list").find("canvas");
+				console.log(fileList);
 				for (file of fileList) {
 					var name = $(file).parent().attr("class").split(" ")[1];
 					
 					var fileDataUrl = file.toDataURL("image/png");
-					var fileName = self.crypto.randomUUID();
+					var fileName = uuidv4();
 					var objectName = folderName + "/" + fileName + ".png";
+					var obj = { filePath : folderName + "/", fileNm : fileName, fileExtNm : ".png" };
 					// upload file
 					await S3.putObject({Bucket: bucket_name, Key: objectName,ACL: 'public-read',// ACL을 지우면 전체 공개되지 않습니다.
 										Body: dataURLtoBlob(fileDataUrl)
@@ -307,18 +275,12 @@
 										Body: dataURLtoBlob(thumbnail)
 						}).promise();
 					})
-					.then(()=>{
-						console.log("upload success");
-						var obj = new Object();
-						obj["filePath"] = folderName + "/";
-						obj["fileNm"] = fileName;
-						obj["fileExtNm"] = ".png"
-						uploadList.push(obj);
-					});
+					.then(() => {uploadList.push(obj);})
+					.catch(() => {(e) => console.log(e)});
 				}
 			})();
 			
-			upload.then(()=>{fnSaveUploadInfo(uploadList)});
+			upload.then(()=>{fnSaveUploadInfo(uploadList)}).catch(() => fnHideLoadingImg());
 		};
 		
 		var fnSaveUploadInfo = async function(uploadList) {
@@ -335,9 +297,11 @@
 					xhr.setRequestHeader("Content-Type", "application/json");
 				},
 				error:function(request,status,error){
+					fnHideLoadingImg();
 					modalAlert("", "이미지 저장에 실패했습니다.");
 				}
 			}).done(function (body) {
+				fnHideLoadingImg();
 				modalAlert("", body.message);
 				$(".btn_save").removeClass("disabled");
 				return;
