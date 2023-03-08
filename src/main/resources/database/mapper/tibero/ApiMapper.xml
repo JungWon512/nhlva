@@ -71,12 +71,20 @@
 	<select id="selectAucStnList" parameterType="map" resultType="map">
 		SELECT A.*
 			 , MAX(A.DDL_QCN) OVER(PARTITION BY A.NA_BZPLC, A.AUC_OBJ_DSC, A.AUC_DT, A.RG_SQNO) AS MAX_DDL_QCN
+			 , B.SIMP_CNM AS AUC_OBJ_DSCNM
 		  FROM TB_LA_IS_MH_AUC_STN A
+		  LEFT OUTER JOIN TB_LA_IS_MH_COMN_APL B
+			ON ( B.SIMP_TPC = 'AUC_OBJ_DSC'
+				  AND
+				  B.SIMP_C = A.AUC_OBJ_DSC
+				  AND
+				  B.SIMP_C_GRP_SQNO = '3'
+			 )
 		 WHERE A.AUC_DT = #{aucDt}
 		   AND A.NA_BZPLC = #{naBzplc}
-		   AND A.AUC_OBJ_DSC = #{aucObjDsc}
+		   AND A.AUC_OBJ_DSC = CASE WHEN #{aucObjDsc} = '0' THEN A.AUC_OBJ_DSC ELSE #{aucObjDsc} END
 		   AND A.DEL_YN = '0'
-		 ORDER BY A.RG_SQNO ASC 
+		 ORDER BY A.RG_SQNO ASC
 	</select>
 	
 	<select id="sealectAuctCowCnt" parameterType="map" resultType="java.lang.Integer">
@@ -233,7 +241,21 @@
 							  FROM TB_LA_IS_MH_ATDR_LOG A
 							 WHERE A.NA_BZPLC = #{naBzplc}
 							   AND A.AUC_DT = #{aucDt}
+						<choose>
+						<when test="aucObjDscStn != null and aucObjDscStn != ''">
+							<choose>
+							<when test='"4".equals(aucObjDscStn)'>
+							   AND A.AUC_OBJ_DSC <![CDATA[<>]]> '1'
+							</when> 
+							<otherwise>
+							   AND A.AUC_OBJ_DSC = CASE WHEN #{aucObjDscStn} = '0' THEN A.AUC_OBJ_DSC ELSE #{aucObjDscStn} END
+							</otherwise>
+							</choose>
+						</when>
+						<otherwise>
 							   AND A.AUC_OBJ_DSC = CASE WHEN #{aucObjDsc} = '0' THEN A.AUC_OBJ_DSC ELSE #{aucObjDsc} END
+						</otherwise>
+						</choose>
 							   AND A.RG_SQNO NOT IN ('0', '99999999')
 						 ) B
 					 WHERE B.BID_NUM = 1
@@ -254,7 +276,21 @@
 				ON ( A.NA_BZPLC = J.NA_BZPLC )
 			 WHERE A.NA_BZPLC = #{naBzplc}
 			   AND A.AUC_DT  = #{aucDt}
+		<choose>
+		<when test="aucObjDscStn != null and aucObjDscStn != ''">
+			<choose>
+			<when test='"4".equals(aucObjDscStn)'>
+			   AND A.AUC_OBJ_DSC <![CDATA[<>]]> '1'
+			</when> 
+			<otherwise>
+			   AND A.AUC_OBJ_DSC = CASE WHEN #{aucObjDscStn} = '0' THEN A.AUC_OBJ_DSC ELSE #{aucObjDscStn} END
+			</otherwise>
+			</choose>
+		</when>
+		<otherwise>
 			   AND A.AUC_OBJ_DSC = CASE WHEN #{aucObjDsc} = '0' THEN A.AUC_OBJ_DSC ELSE #{aucObjDsc} END
+		</otherwise>
+		</choose>
 			   AND A.DEL_YN = '0'
 			<if test="mAuctionResult !=null and !mAuctionResult.equals('')">
 			   AND A.SEL_STS_DSC = #{mAuctionResult}
@@ -496,7 +532,21 @@
 			 , LSCHG_DTM = SYSDATE
 			 , LS_CMENO = #{lsCmeno}
 		 WHERE NA_BZPLC = #{naBzPlc}
+	<choose>
+	<when test="aucObjDscStn != null and aucObjDscStn != ''">
+		<choose>
+		<when test='"4".equals(aucObjDscStn)'>
+		   AND AUC_OBJ_DSC <![CDATA[<>]]> '1'
+		</when> 
+		<otherwise>
+		   AND AUC_OBJ_DSC = CASE WHEN #{aucObjDscStn} = '0' THEN AUC_OBJ_DSC ELSE #{aucObjDscStn} END
+		</otherwise>
+		</choose>
+	</when>
+	<otherwise>
 		   AND AUC_OBJ_DSC = CASE WHEN #{aucObjDsc} = '0' THEN AUC_OBJ_DSC ELSE #{aucObjDsc} END
+	</otherwise>
+	</choose>
 		   AND AUC_DT = #{aucDt}
 		<if test='"start".equals(status)'>
 		<![CDATA[
@@ -520,7 +570,21 @@
 			, LSCHG_DTM = SYSDATE
 			, LS_CMENO = #{lsCmeno}
 		WHERE NA_BZPLC = #{naBzPlc}
-		AND AUC_OBJ_DSC = CASE WHEN #{aucObjDsc} = '0' THEN AUC_OBJ_DSC ELSE #{aucObjDsc} END
+	<choose>
+	<when test="aucObjDscStn != null and aucObjDscStn != ''">
+		<choose>
+		<when test='"4".equals(aucObjDscStn)'>
+		   AND AUC_OBJ_DSC <![CDATA[<>]]> '1'
+		</when> 
+		<otherwise>
+		   AND AUC_OBJ_DSC = CASE WHEN #{aucObjDscStn} = '0' THEN AUC_OBJ_DSC ELSE #{aucObjDscStn} END
+		</otherwise>
+		</choose>
+	</when>
+	<otherwise>
+		   AND AUC_OBJ_DSC = CASE WHEN #{aucObjDsc} = '0' THEN AUC_OBJ_DSC ELSE #{aucObjDsc} END
+	</otherwise>
+	</choose>
 		AND AUC_DT = #{aucDt}
 		<![CDATA[
 		AND LOWS_SBID_LMT_AM > 0
@@ -877,7 +941,21 @@
 						  FROM TB_LA_IS_MH_ATDR_LOG A
 						 WHERE NA_BZPLC = #{naBzplc}
 						   AND AUC_DT = #{aucDt}
+					<choose>
+					<when test="aucObjDscStn != null and aucObjDscStn != ''">
+						<choose>
+						<when test='"4".equals(aucObjDscStn)'>
+						   AND A.AUC_OBJ_DSC <![CDATA[<>]]> '1'
+						</when> 
+						<otherwise>
+						   AND A.AUC_OBJ_DSC = CASE WHEN #{aucObjDscStn} = '0' THEN A.AUC_OBJ_DSC ELSE #{aucObjDscStn} END
+						</otherwise>
+						</choose>
+					</when>
+					<otherwise>
 						   AND A.AUC_OBJ_DSC = CASE WHEN #{aucObjDsc} = '0' THEN A.AUC_OBJ_DSC ELSE #{aucObjDsc} END
+					</otherwise>
+					</choose>
 						   AND RG_SQNO NOT IN ('0', '99999999')
 					 ) B
 				 WHERE BID_NUM = 1
@@ -902,7 +980,21 @@
 		   )
 		 WHERE A.NA_BZPLC = #{naBzplc}
 		   AND A.AUC_DT = #{aucDt}
+	<choose>
+	<when test="aucObjDscStn != null and aucObjDscStn != ''">
+		<choose>
+		<when test='"4".equals(aucObjDscStn)'>
+		   AND A.AUC_OBJ_DSC <![CDATA[<>]]> '1'
+		</when> 
+		<otherwise>
+		   AND A.AUC_OBJ_DSC = CASE WHEN #{aucObjDscStn} = '0' THEN A.AUC_OBJ_DSC ELSE #{aucObjDscStn} END
+		</otherwise>
+		</choose>
+	</when>
+	<otherwise>
 		   AND A.AUC_OBJ_DSC = CASE WHEN #{aucObjDsc} = '0' THEN A.AUC_OBJ_DSC ELSE #{aucObjDsc} END
+	</otherwise>
+	</choose>
 		   AND A.SEL_STS_DSC <![CDATA[<>]]> '22'
 		   AND A.AUC_PRG_SQ BETWEEN #{stAucNo} AND #{edAucNo}
 		   AND A.LOWS_SBID_LMT_AM > 0
@@ -1200,10 +1292,21 @@
 							  FROM TB_LA_IS_MH_ATDR_LOG A
 							 WHERE A.NA_BZPLC = #{naBzplc}
 							   AND A.AUC_DT = #{aucDt}
-							   <if test="trmnAmnno !=null and !trmnAmnno.equals('')">
-							 	  AND A.TRMN_AMNNO = #{trmnAmnno}
-							   </if>
+						<choose>
+						<when test="aucObjDscStn != null and aucObjDscStn != ''">
+							<choose>
+							<when test='"4".equals(aucObjDscStn)'>
+							   AND A.AUC_OBJ_DSC <![CDATA[<>]]> '1'
+							</when> 
+							<otherwise>
+							   AND A.AUC_OBJ_DSC = CASE WHEN #{aucObjDscStn} = '0' THEN A.AUC_OBJ_DSC ELSE #{aucObjDscStn} END
+							</otherwise>
+							</choose>
+						</when>
+						<otherwise>
 							   AND A.AUC_OBJ_DSC = CASE WHEN #{aucObjDsc} = '0' THEN A.AUC_OBJ_DSC ELSE #{aucObjDsc} END
+						</otherwise>
+						</choose>
 							   AND A.RG_SQNO NOT IN ('0', '99999999')
 						 ) B
 					 WHERE B.BID_NUM = 1
@@ -1236,7 +1339,21 @@
 				ON ( A.NA_BZPLC = J.NA_BZPLC )
 			 WHERE A.NA_BZPLC = #{naBzplc}
 			   AND A.AUC_DT  = #{aucDt}
+		<choose>
+		<when test="aucObjDscStn != null and aucObjDscStn != ''">
+			<choose>
+			<when test='"4".equals(aucObjDscStn)'>
+			   AND A.AUC_OBJ_DSC <![CDATA[<>]]> '1'
+			</when> 
+			<otherwise>
+			   AND A.AUC_OBJ_DSC = CASE WHEN #{aucObjDscStn} = '0' THEN A.AUC_OBJ_DSC ELSE #{aucObjDscStn} END
+			</otherwise>
+			</choose>
+		</when>
+		<otherwise>
 			   AND A.AUC_OBJ_DSC = CASE WHEN #{aucObjDsc} = '0' THEN A.AUC_OBJ_DSC ELSE #{aucObjDsc} END
+		</otherwise>
+		</choose>
 			<if test="stAucNo !=null and !stAucNo.equals('') and edAucNo !=null and !edAucNo.equals('')">
 			   AND A.AUC_PRG_SQ <![CDATA[>=]]> #{stAucNo}
 			   AND A.AUC_PRG_SQ <![CDATA[<=]]> #{edAucNo}

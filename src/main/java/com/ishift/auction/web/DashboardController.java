@@ -620,4 +620,12 @@ public class DashboardController {
 		}
 		return resultMap;
 	}
+	
+	@RequestMapping(value = "/dashboard/staticInfo/excel")
+	public ModelAndView dashboardStaticInfoExcel(@RequestParam Map<String, Object> params) {
+		final ModelAndView mav = new ModelAndView();
+		mav.setViewName("");
+		mav.addObject("params", params);
+		return mav;
+	}
 }

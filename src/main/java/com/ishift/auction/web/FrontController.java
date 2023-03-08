@@ -127,4 +127,10 @@ public class FrontController {
 		return resultMap;
 	}
 	
+	@RequestMapping(value = "/excelDownload")
+	public ModelAndView excelDownload(@RequestParam final Map<String, Object> params) {
+		final ModelAndView mav = new ModelAndView("excelDownload");
+		mav.addObject("params", params);
+		return mav;
+	}
 }

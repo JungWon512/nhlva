@@ -763,3 +763,7 @@ var uuidv4 = function() {
     (c ^ crypto.getRandomValues(new Uint8Array(1))[0] & 15 >> c / 4).toString(16)
   );
 }
+
+var fnCall = function(num) {
+	location.href = "tel:" + num;
+}

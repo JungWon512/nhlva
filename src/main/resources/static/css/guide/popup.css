@@ -2117,7 +2117,7 @@ Base styles: popup_layer css
 
 .modal-wrap.pop_cow_input .pop_ad_mod .modal-foot .btn_area a {
 	display: inline-block;
-	width: 33.33%;
+	width: 50%;
 	text-align: center;
 	height: 50px;
 	line-height: 50px;
@@ -2283,6 +2283,74 @@ Base styles: popup_layer css
 }
 
 
+.modal-wrap.pop_Co_info .modal-content {
+	max-width: 330px;
+	width: calc(100% - 20px);
+	padding: 17px 0 95px;
+	min-height: 273px;
+	border-radius: 20px;
+	overflow: hidden;
+	position: relative;
+}
+
+.modal-wrap.pop_Co_info .name {
+	margin-top: 20px;
+	margin-bottom: 15px;
+	padding: 0 15px;
+	font-size: 20px;
+	line-height: 1.75;
+	letter-spacing: -1px;
+	font-weight: 700;
+	color: #1a1a1a;
+	text-align: center;
+}
+
+.modal-wrap.pop_Co_info dl {
+	display: flex;
+	padding: 5px 15px;
+	font-size: 16px;
+	font-weight: 500;
+	line-height: 1.63;
+	letter-spacing: -0.45px;
+}
+
+.modal-wrap.pop_Co_info dt {
+	position: relative;
+	padding-right: 16px;
+	font-size: 18px;
+	line-height: 1.44;
+	flex-shrink: 0;
+}
+
+.modal-wrap.pop_Co_info dt:after {
+	position: absolute;
+	right: 6px;
+	top: 0;
+	content: ':';
+}
+
+.modal-wrap.pop_Co_info .btn_area {
+	position: absolute;
+	bottom: 0;
+	left: 0;
+	right: 0;
+	text-align: center;
+}
+
+.modal-wrap.pop_Co_info .btn_ok {
+	display: block;
+	width: 100%;
+	height: 60px;
+	font-size: 18px;
+	font-weight: 700;
+	line-height: 1.07;
+	letter-spacing: -0.9px;
+	color: #fff;
+	background-color: #007eff;
+}
+
+
+/* 고도화 20221227 사업자정보 팝업 선적용 */
 .modal-wrap.pop_Co_info .modal-content {
 	max-width: 330px;
 	width: calc(100% - 20px);
