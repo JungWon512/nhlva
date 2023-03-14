@@ -87,9 +87,11 @@ public class AuctionController extends CommonController {
 		List<Map<String,Object>> datelist=auctionService.selectAucDateList(map); 
 		if(param.get("searchDate") != null && param != null) {
 			map.put("searchDate", param.get("searchDate"));
-		}else if(nearAucDate != null){ 
-			map.put("searchDate", nearAucDate.get("AUC_DT"));
-		}else {
+		}
+//		else if(nearAucDate != null){ 
+//			map.put("searchDate", nearAucDate.get("AUC_DT"));
+//		}
+		else {
 			map.put("searchDate",datelist.size() > 0 ? datelist.get(0).get("AUC_DT") :null);
 		}
 		
@@ -456,6 +458,7 @@ public class AuctionController extends CommonController {
 			mav.addObject("auctionList", auctionService.entrySelectList(params));
 			mav.addObject("johapData",johap);
 			mav.addObject("trmnAmnno", sessionUtill.getUserId());
+			mav.addObject("authRole", sessionUtill.getRoleConfirm());
 			mav.addObject("subheaderTitle",johap.get("CLNTNM"));
 		}catch (RuntimeException re) {
 			return super.makeMessageResult(mav, params, "/main", "", "경매 서비스 준비중입니다.", "pageMove('/main');");
@@ -583,7 +586,6 @@ public class AuctionController extends CommonController {
 				param.put("date", today);
 				map.put("searchDate", today);
 			}
-			
 			//map.put("searchDate", param.get("date"));
 			Map<String,Object> johap=adminService.selectOneJohap(map);
 			//List<Map<String,Object>> list=auctionService.entrySelectList(map);
@@ -915,24 +917,26 @@ public class AuctionController extends CommonController {
 				case "auc":
 					//중도매인번호 초기화(출장우내역시에 미사용)
 					param.put("searchTrmnAmnNo", "");
-					param.put("authRole", sessionUtill.getRoleConfirm());
+					mav.addObject("inputParam", param);
+					//param.put("authRole", sessionUtill.getRoleConfirm());
 					List<Map<String,Object>> list = auctionService.entrySelectList(param);
 					mav.addObject("aucList", list);
 				break;
 				case "sold":
-					param.put("authRole", sessionUtill.getRoleConfirm());
+					mav.addObject("inputParam", param);
 					List<Map<String,Object>> soldList = auctionService.entrySelectList(param);
 					mav.addObject("soldList", soldList);
 					mav.addObject("buyCnt",auctionService.selectCountEntry(param));
 				break;
 				case "bid": 
+					param.put("aucYn", "1");
+					mav.addObject("inputParam", param);
 					List<Map<String,Object>> bidList = auctionService.selectBidLogList(param);
 					mav.addObject("bidList", bidList);
 					mav.addObject("bidCnt", auctionService.selectBidLogListCnt(param));
 				break;
 			}
 			mav.addObject("dateList", datelist);
-			mav.addObject("inputParam", param);		
 		}catch(SQLException |RuntimeException  e) {
 			log.error("AuctionController.bidPopupDetail : {} ",e);			
 		}
@@ -947,7 +951,7 @@ public class AuctionController extends CommonController {
         Map<String,Object> map = new HashMap<>();
         map.put("naBzPlcNo", param.get("place"));        
         Map<String, Object> johap = adminService.selectOneJohap(map);
-        //map.put("naBzplc", param.get("naBzplc"));
+        map.put("naBzplc", param.get("naBzplc"));
         //map.put("sraIndvAmnno", param.get("sraIndvAmnno"));
 		//Map<String,Object> indvData=auctionService.selectIndvDataInfo(map);
 		//map.put("sraIndvAmnno", param.get("sraIndvAmnno"));

@@ -23,43 +23,29 @@
 	<tbody>
 		<tr>
 			<td class="seller val">
-				<p class="fz40">${johapData.CLNTNM}</p>
+				<p class="fz40 bold">${johapData.CLNTNM}</p>
 				<p class="fz96 auctionNum"> - </p>
 			</td>
 			<td>
-				<p class="txt-green fz40">최저금액</p>
-				<p class="fz64 lowsSbidLmtAm"> - </p>
+				<p class="txt-green fz40 bold">예정가</p>
+				<p class="fz70 lowsSbidLmtAm bold"> - </p>
 			</td>
 			<td class="complate">
-				<p class="txt-green fz40">낙찰금액</p>
-				<p class="fz64 tdBiddAmt"> - </p>
+				<p class="txt-green fz40 bold">낙찰금액</p>
+				<p class="fz70 tdBiddAmt bold"> - </p>
 			</td>
 			<td class="complate">
-				<p class="txt-green fz40">낙찰번호</p>
-				<p class="fz64 tdBiddNum">-</p>
+				<p class="txt-green fz40 bold">낙찰번호</p>
+				<p class="fz70 tdBiddNum bold">-</p>
 			</td>
 			<td class="auctionTxt" colspan="2">
 				<!-- <p class="txt-white fz96">유찰입니다</p> -->
 				<!-- <p class="txt-green fz96">경매 대기중</p> -->
-				<p class="txt-green fz96">경매 대기중</p>
+				<p class="txt-green fz96 bold">경매 대기중</p>
 			</td>
 		</tr>
 		<tr>
 			<td colspan="4" rowspan="4" class="td_video">
-				<!--<div class="bg_yotube">
-					<iframe width="100%" height="100%" src="https://www.youtube.com/embed/kTHYB632Uws?autoplay=1" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
-				</div>-->
-				<div class="seeBox_bottom vidioSlide">
-					<div class="seeBox_slick">
-						<ul class="slider">									
-							<li class="video_item" style="/* width: 100%; *//* height: auto; */">
-								<video id="remoteVideo1" style="/* width: 100%; */height: 73vh;background: black;" poster="/static/images/assets/no_video_18980.png" muted="muted" autoplay="" playsinline="" webkit-playsinline="">
-									Your browser does not support HTML5 video.
-								</video>
-							</li>
-						</ul>
-					</div> 
-				</div>
 			</td>
 			<td>
 				<p class="txt-green fz40">지역</p>

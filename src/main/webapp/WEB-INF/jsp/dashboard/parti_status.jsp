@@ -1,10 +1,15 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
 <%@ include file="/WEB-INF/__system/taglibs.jsp"%>
 
+<!-- 현재날짜 처리 -->
+<jsp:useBean id="now" class="java.util.Date" />
+<fmt:formatDate value="${now}" pattern="yyyyMM" var="nowMonth" />
+
 <form name="frm" action="" method="post">
 	<input type="hidden" name="searchMonth" 	id="searchMonth" 		value="${inputParam.searchMonth}">
 	<input type="hidden" name="searchFlag" 		id="searchFlag" 			value="${inputParam.searchFlag}">
 	<input type="hidden" name="searchPlace" 		id="searchPlace" 			value="${inputParam.searchPlace}">
+	<input type="hidden" name="nowMonth" 		id="nowMonth" 			value="${nowMonth}" />
 	<input type="hidden" name="sbid_per" id="sbid_per" value="${bidderInfo.SBID_PER}"/>
 </form>
 <div class="board-main pt-0">
@@ -14,7 +19,8 @@
 				<div class="has-btn">
 					<button class="btn-prev btn-chg"><span class="sr-only">이전</span></button>
 						<span class="month_txt_title">${searchMonTxt }</span>
-					<button class="btn-next btn-chg"><span class="sr-only">다음</span></button>
+<!-- 					<button class="btn-next btn-chg"><span class="sr-only">다음</span></button> -->
+					<button class="btn-next btn-chg" <c:if test="${nowMonth eq inputParam.searchMonth}">style="display:none;"</c:if>><span class="sr-only">다음</span></button>
 				</div>
 			</div>
 		</div>
@@ -22,15 +28,14 @@
 			<div class="gap-area">
 				<div class="gap-box">
 					<em>총 출장두수</em>
-					<strong class="tot_sog_cnt">${empty bidderInfo ? 0 : bidderInfo.TOT_SOG_CNT} 두</strong>
+					<strong class="tot_sog_cnt"><fmt:formatNumber value="${empty bidderInfo ? 0 : bidderInfo.TOT_SOG_CNT}" type="number" /> 두</strong>
 				</div>
 				<div>
-					<span class="gap ico-red up bid_minus_cnt">+ ${bidderInfo.TOT_SOG_CNT - bidderInfo.TOT_SBID_CNT}</span>
-					<!-- <span class="gap ico-red down">- 999</span> -->
+					<span class="gap ico-red down bid_minus_cnt">- <fmt:formatNumber value="${bidderInfo.TOT_SOG_CNT - bidderInfo.TOT_SBID_CNT}" type="number" /></span>
 				</div>
 				<div class="gap-box">
 					<em>낙찰두수</em>
-					<strong class="tot_sbid_cnt">${empty bidderInfo ? 0 : bidderInfo.TOT_SBID_CNT} 두</strong>
+					<strong class="tot_sbid_cnt"><fmt:formatNumber value="${empty bidderInfo ? 0 : bidderInfo.TOT_SBID_CNT}" type="number" /> 두</strong>
 				</div>
 			</div>
 		</div>
@@ -42,7 +47,7 @@
 					<div class="chart_area">
 						<canvas id="myDoughnutSample1"></canvas>
 					</div>
-					<span class="total douhnut_txt">전체<br>${empty bidderInfo ? 0 : bidderInfo.TOT_SOG_CNT}두</span>
+					<span class="total douhnut_txt">전체<br><fmt:formatNumber value="${empty bidderInfo ? 0 : bidderInfo.TOT_SOG_CNT}" type="number" />두</span>
 				</div>
 				<div class="txt">
 					낙찰율
@@ -56,10 +61,10 @@
 		<div class="table-simple">
 			<table>
 				<colgroup>
+					<col width="15%">
+					<col width="30%">
+					<col width="30%">
 					<col width="25%">
-					<col width="26%">
-					<col width="35%">
-					<col>
 				</colgroup>
 				<thead>
 					<tr>
@@ -73,8 +78,8 @@
 					<c:forEach items="${bidderPerList}" var="perVo">
 						<tr>
 							<td>${perVo.NA_BZPLCLOC_NM}</td>
-							<td>${perVo.TOT_SBID_CNT}</td>
-							<td>${perVo.MINUS_SOG_BID}</td>
+							<td><fmt:formatNumber value="${perVo.TOT_SBID_CNT}" type="number" /></td>
+							<td><fmt:formatNumber value="${perVo.MINUS_SOG_BID}" type="number" /></td>
 							<td>${perVo.SBID_PER}%</td>
 						</tr>
 					</c:forEach>

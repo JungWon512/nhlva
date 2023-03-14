@@ -125,6 +125,7 @@ public class KioskApiController<T> {
 			return this.createResultSetListData(list);
 		}
 		catch (RuntimeException | SQLException e) {
+			log.error("KioskApiController.sogCow error : {}", e.getMessage());
 			return this.createResultSetListData(null);
 		}
 	}
@@ -145,6 +146,7 @@ public class KioskApiController<T> {
 			return this.createResultCUD(result);
 		}
 		catch (RuntimeException | SQLException e) {
+			log.error("KioskApiController.mwmnAuthNum error : {}", e.getMessage());
 			return this.createResultCUD(null);
 		}
 	}
@@ -163,6 +165,7 @@ public class KioskApiController<T> {
 			return this.createResultCUD(result);
 		}
 		catch (RuntimeException | SQLException e) {
+			log.error("KioskApiController.mwmnEntry error : {}", e.getMessage());
 			return this.createResultCUD(null);
 		}
 	}
@@ -181,6 +184,7 @@ public class KioskApiController<T> {
 			return this.createResultSetMapData(info);
 		}
 		catch (RuntimeException | SQLException e) {
+			log.error("KioskApiController.mwmnStateAcc error : {}", e.getMessage());
 			return this.createResultSetMapData(null);
 		}
 	}
@@ -200,6 +204,7 @@ public class KioskApiController<T> {
 			return this.createResultCUD(result);
 		}
 		catch (RuntimeException | SQLException e) {
+			log.error("KioskApiController.fhsAuthNum error : {}", e.getMessage());
 			return this.createResultCUD(null);
 		}
 	}
@@ -218,6 +223,7 @@ public class KioskApiController<T> {
 			return this.createResultSetMapData(info);
 		}
 		catch (RuntimeException | SQLException e) {
+			log.error("KioskApiController.fhsStateAcc error : {}", e.getMessage());
 			return this.createResultSetMapData(null);
 		}
 	}

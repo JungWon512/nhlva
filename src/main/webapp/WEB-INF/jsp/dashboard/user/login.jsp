@@ -11,7 +11,7 @@
 <input type="hidden" id="RSAExponent" value="${RSAExponent }"/>
 <div class="login_section">
 	<div class="login_box">
-		<h1>로그인<span>스마트가축시장</span></h1>
+		<h1>조합 로그인<span>스마트가축시장</span></h1>
 		<form class="form-signin" method="post">
 			<fieldset>
 				<input type="text" id="usrid" name="usrid" class="inp inp_id" placeholder="아이디" required autofocus />
@@ -19,6 +19,7 @@
 				<input type="checkbox" id="save_id">
 				<label for="save_id">아이디 저장</label>
 				<button type="button" class="btn_login action-submit">로그인</button>
+				<button type="button" class="btn_login action-close">닫기</button>
 			</fieldset>			
 		</form>
 	</div>

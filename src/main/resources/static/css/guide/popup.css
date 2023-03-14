@@ -2020,7 +2020,7 @@ Base styles: popup_layer css
 }
 
 .modal-wrap.pop_cow_input .pop_ad_mod .modal-body .table-mod td {
-	background: #e6efff;
+	/* 	background: #e6efff; */
 	color: #1a1a1a;
 	font-size: 24px;
 	font-weight: 700;

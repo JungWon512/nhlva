@@ -71,7 +71,8 @@ public class KioskApiServiceImpl implements KioskApiService {
 											.auctionHouseCode(authNoInfo.get("NA_BZPLC").toString())
 											.userMemNum(authNoInfo.get("USER_MEM_NUM").toString())
 											.userRole(params.get("userRole").toString())
-											.mbIntgNo(authNoInfo.get("MB_INTG_NO").toString())
+											.mbIntgNo(ObjectUtils.isEmpty(authNoInfo.get("MB_INTG_NO")) ? "" : authNoInfo.get("MB_INTG_NO").toString())
+//											.mbIntgNo(authNoInfo.get("MB_INTG_NO").toString())
 										  .build();
 
 //		String token = jwtTokenUtil.generateToken(jwtTokenVo, "");

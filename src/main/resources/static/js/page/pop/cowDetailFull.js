@@ -7,8 +7,8 @@
     		$('div.tab_area.cowTab_2').show();
     		//epdChartDraw();
     	}
-		//getAiakInfo();
-    	
+		getAiakInfo();
+    	/* s: 종축개량 로직추가로 인한 주석처리  
     	var indvData = getInfMca({cgtrmCd : '4700', SRA_INDV_AMNNO : $('input[name=sraIndvAmnno]').val()});
     	if(indvData && indvData.success){
 			var json = JSON.parse(indvData.data);
@@ -31,7 +31,7 @@
     	}else{
 			modalAlert('',indvData.message);
 			return;
-    	}    	
+    	}
     	
     	if($('td.mCowSraIndvData').html().trim().length >= 15){
 	    	var sibIndvData = getInfMca({cgtrmCd : '4900', SRA_INDV_AMNNO : $('td.mCowSraIndvData').html().trim()});    	
@@ -175,6 +175,7 @@
 			modalAlert('',epdData.message);
 			return;
     	}    	
+    	*/
     };
 
     var namespace = win.auction;
@@ -182,6 +183,27 @@
     namespace[__COMPONENT_NAME] = (function () {
         var init = function(){
             setLayout();
+    		$(document).off('click','div.winpop button.winpop_back');
+			$(document).on('click','div.winpop button.winpop_back',function(){
+				var target = 'cowDetail';
+				window.open('',target, 'width=600, height=800, toolbar=no, menubar=no, scrollbars=no, resizable=yes');
+				let obj = JSON.parse($('input[name=parentObj]').val());
+				$('form[name=frm_parent]').append('<input type="hidden" name="place" value="'+obj.place+'" />');
+				$('form[name=frm_parent]').append('<input type="hidden" name="naBzplc" value="'+obj.naBzplc+'" />');
+				$('form[name=frm_parent]').append('<input type="hidden" name="aucDt" value="'+obj.aucDt+'" />');
+				$('form[name=frm_parent]').append('<input type="hidden" name="aucObjDsc" value="'+obj.aucObjDsc+'" />');
+				$('form[name=frm_parent]').append('<input type="hidden" name="sraIndvAmnno" value="'+obj.sraIndvAmnno+'" />');
+				$('form[name=frm_parent]').append('<input type="hidden" name="aucPrgSq" value="'+obj.aucPrgSq+'" />');
+				$('form[name=frm_parent]').append('<input type="hidden" name="oslpNo" value="'+obj.oslpNo+'" />');
+				$('form[name=frm_parent]').append('<input type="hidden" name="ledSqno" value="'+obj.ledSqno+'" />');
+				$('form[name=frm_parent]').append('<input type="hidden" name="bidPopYn" value="'+obj.bidPopYn+'" />');
+				$('form[name=frm_parent]').append('<input type="hidden" name="resultPopYn" value="'+obj.resultPopYn+'" />');
+				$('form[name=frm_parent]').append('<input type="hidden" name="tabId" value="1" />');
+				var form = document.frm_parent;
+				form.action = "/cowDetail";
+				form.target=target;
+				form.submit();
+			});
         };
         return {
             init: init
@@ -213,7 +235,8 @@ function getInfMca(params){
 	return result;
 }
 
-var getAiakInfo = function(){
+var getAiakInfo = function(callback){
+	fnShowLoadingImg();
 	var param = new Object();
 	param.barcode = ($('form[name="frm"] input[name=sraIndvAmnno]').val()||'').substr(3);
 	$.ajax({
@@ -221,77 +244,86 @@ var getAiakInfo = function(){
 		data: param,
 		type: 'POST',
 		dataType: 'html',
-		async : false,
+		async : true,
 		success : function(html) {
-			var bloodInfo = $(html).find('table').get(1);
-			$(bloodInfo).find('tbody tr').each((i,e)=>{
-				var bloodTxt ='';
-				if(i != '2' && i != '4' && i != '5'){
-					bloodTxt+='[KPN]'+($(e).find('td:eq(1)').text()||'-').trim()+'<br/>';
+			if($(html).find('table') && $(html).find('table').length > 0){		
+				var bloodInfo = $(html).find('table').get(1);
+				$(bloodInfo).find('tbody tr').each((i,e)=>{
+					var bloodTxt ='';
+					if(i != '2' && i != '4' && i != '5'){
+						bloodTxt+='[KPN] '+($.trim($(e).find('td:eq(1)').text())||'-')+'<br/>';
+					}
+					bloodTxt+=' '+($.trim($(e).find('td:eq(3)').text())||'-')||'-';					
+					$('td[name=blInfo_'+(i)+']').html(bloodTxt);
+				});
+				var postIndvInfo = $(html).find('table').get(6);
+				$('table.postIndvTable tbody').empty();
+				var postHtml = '<tr><td rowspan="2" colspan="5" class="ta-C">-</td></tr>';
+				if($(postIndvInfo).find('tbody tr td').length > 1){
+					postHtml='';
+					$(postIndvInfo).find('tbody tr').each((i,e)=>{
+						postHtml += '<tr>';
+						postHtml += '	<td rowspan="2" class="ta-C bg-gray matime">'+(($(e).find('td:eq(0)').text()||'-'))+'</td>';
+						postHtml += '	<td rowspan="2" class="ta-C sraIndvAmnno">'+(($(e).find('td:eq(2)').text()||'-'))+'</td>';
+						postHtml += '	<td class="ta-C rgDsc">'+(($.trim($(e).find('td:eq(3)').text())||'-'))+'</td>';
+						postHtml += '	<td class="ta-C indvSexC">'+(($.trim($(e).find('td:eq(4)').text())||'-'))+'</td>';
+						postHtml += '	<td class="ta-C birth">'+(($.trim($(e).find('td:eq(5)').text())||'-'))+'</td>';
+						postHtml += '</tr>';
+						postHtml += '<tr>';
+						postHtml += '	<td class="ta-C metrbMetqltGrd">'+(($.trim($(e).find('td:eq(9)').text())||'-'))+'</td>';
+						postHtml += '	<td class="ta-C metrbBbdyWt">'+(($.trim($(e).find('td:eq(8)').text())||'-'))+'</td>';
+						postHtml += '	<td class="ta-C mifBtcDt">'+(($.trim($(e).find('td:eq(10)').text())||'-'))+'</td>';
+						postHtml += '</tr>';
+					});
 				}
-				bloodTxt+=($(e).find('td:eq(3)').text()||'-').trim();
-				$('td[name=blInfo_'+(i)+']').html(bloodTxt);
-			});
-			
-			var epdInfo = $(html).find('table').get(4);
-			$(epdInfo).find('tbody tr:eq(0) td:not(.t1)').each((i,e)=>{
-				var txt = ($(e).text()||'').trim();
-				$('td[name=reProduct'+(i+1)+']').text(txt);
-			});
-			$(epdInfo).find('tbody tr:eq(1) td:not(.t1)').each((i,e)=>{
-				var txt = ($(e).text()||'').trim();
-				$('td[name=dscReProduct'+(i+1)+'] span').text(txt);
-			});
-			
-			var postIndvInfo = $(html).find('table').get(6);
-			$('table.postIndvTable tbody').empty();
-			var postHtml = '<tr><td rowspan="2" colspan="5" class="ta-C">등록된 후대정보가 없습니다.</td></tr>';
-			if($(postIndvInfo).find('tbody tr td').length > 1){
-				postHtml='';
-				$(postIndvInfo).find('tbody tr').each((i,e)=>{
-					postHtml += '<tr>';
-					postHtml += '	<td rowspan="2" class="ta-C bg-gray matime">'+($(e).find('td:eq(0)').text()?.trim()||'-')+'</td>';
-					postHtml += '	<td rowspan="2" class="ta-C sraIndvAmnno">'+($(e).find('td:eq(2)').text()?.trim()||'-')+'</td>';
-					postHtml += '	<td class="ta-C rgDsc">'+($(e).find('td:eq(3)').text()?.trim()||'-').trim()+'</td>';
-					postHtml += '	<td class="ta-C indvSexC">'+($(e).find('td:eq(4)').text()?.trim()||'-')+'</td>';
-					postHtml += '	<td class="ta-C birth">'+($(e).find('td:eq(5)').text()?.trim()||'-')+'</td>';
-					postHtml += '</tr>';
-					postHtml += '<tr>';
-					postHtml += '	<td class="ta-C metrbMetqltGrd">'+($(e).find('td:eq(9)').text()?.trim()||'-')+'</td>';
-					postHtml += '	<td class="ta-C metrbBbdyWt">'+($(e).find('td:eq(8)').text()?.trim()||'-')+'</td>';
-					postHtml += '	<td class="ta-C mifBtcDt">'+($(e).find('td:eq(10)').text()?.trim()||'-')+'</td>';
-					postHtml += '</tr>';
+				$('table.postIndvTable tbody').append(postHtml);
+	
+				var sibIndvInfo = $(html).find('table').get(7);
+				$('table.sibIndvTable tbody').empty(); 
+				var sibHtml = '<tr><td rowspan="2" colspan="5" class="ta-C">-</td></tr>';
+				if($(sibIndvInfo).find('tbody tr td').length > 1){
+					sibHtml='';
+					$(sibIndvInfo).find('tbody tr').each((i,e)=>{						
+						sibHtml += '<tr>';
+						sibHtml += '	<td rowspan="2" class="ta-C bg-gray matime">'+(($(e).find('td:eq(0)').text()||'-'))+'</td>';
+						sibHtml += '	<td rowspan="2" class="ta-C sraIndvAmnno">'+(($(e).find('td:eq(2)').text()||'-'))+'</td>';
+						sibHtml += '	<td class="ta-C rgDsc">'+(($.trim($(e).find('td:eq(3)').text())||'-'))+'</td>';
+						sibHtml += '	<td class="ta-C indvSexC">'+(($.trim($(e).find('td:eq(4)').text())||'-'))+'</td>';
+						sibHtml += '	<td class="ta-C birth">'+(($.trim($(e).find('td:eq(5)').text())||'-'))+'</td>';
+						sibHtml += '</tr>';
+						sibHtml += '<tr>';
+						sibHtml += '	<td class="ta-C metrbMetqltGrd">'+(($.trim($(e).find('td:eq(9)').text())||'-'))+'</td>';
+						sibHtml += '	<td class="ta-C metrbBbdyWt">'+(($.trim($(e).find('td:eq(8)').text())||'-'))+'</td>';
+						sibHtml += '	<td class="ta-C mifBtcDt">'+(($.trim($(e).find('td:eq(10)').text())||'-'))+'</td>';
+						sibHtml += '</tr>';
+					});
+				}
+				$('table.sibIndvTable tbody').append(sibHtml);				
+				var epdInfo = $(html).find('table').get(4);
+				$(epdInfo).find('tbody tr:eq(0) td:not(.t1)').each((i,e)=>{
+					var txt = $.trim($(e).text()||'-');
+					$('td[name=reProduct'+(i+1)+']').text(txt);
 				});
-			}
-			$('table.postIndvTable tbody').append(postHtml);
-
-			var sibIndvInfo = $(html).find('table').get(7);
-			$('table.sibIndvTable tbody').empty(); 
-			var sibHtml = '<tr><td rowspan="2" colspan="5" class="ta-C">등록된 형매정보가 없습니다.</td></tr>';
-			if($(sibIndvInfo).find('tbody tr td').length > 1){
-				sibHtml='';
-				$(sibIndvInfo).find('tbody tr').each((i,e)=>{
-					sibHtml += '<tr>';
-					sibHtml += '	<td rowspan="2" class="ta-C bg-gray matime">'+($(e).find('td:eq(0)').text()?.trim()||'-')+'</td>';
-					sibHtml += '	<td rowspan="2" class="ta-C sraIndvAmnno">'+($(e).find('td:eq(2)').text()?.trim()||'-')+'</td>';
-					sibHtml += '	<td class="ta-C rgDsc">'+($(e).find('td:eq(3)').text()?.trim()||'-').trim()+'</td>';
-					sibHtml += '	<td class="ta-C indvSexC">'+($(e).find('td:eq(4)').text()?.trim()||'-')+'</td>';
-					sibHtml += '	<td class="ta-C birth">'+($(e).find('td:eq(5)').text()?.trim()||'-')+'</td>';
-					sibHtml += '</tr>';
-					sibHtml += '<tr>';
-					sibHtml += '	<td class="ta-C metrbMetqltGrd">'+($(e).find('td:eq(9)').text()?.trim()||'-')+'</td>';
-					sibHtml += '	<td class="ta-C metrbBbdyWt">'+($(e).find('td:eq(8)').text()?.trim()||'-')+'</td>';
-					sibHtml += '	<td class="ta-C mifBtcDt">'+($(e).find('td:eq(10)').text()?.trim()||'-')+'</td>';
-					sibHtml += '</tr>';
+				$(epdInfo).find('tbody tr:eq(1) td:not(.t1)').each((i,e)=>{
+					var txt = $.trim($(e).text()||'');
+					$('td[name=dscReProduct'+(i+1)+'] span').text(txt);
 				});
+				$('div.tab_area h3.tit2:eq(0) .subTxt').html('※한국종축개량협회 제공');
+			}else{
+				$('div.tab_area h3.tit2:eq(0) .subTxt').html('※축산경제통합시스템 제공');
 			}
-			$('table.sibIndvTable tbody').append(sibHtml);
 		},
 		error: function(xhr, status, error) {
+			$('div.tab_area h3.tit2:eq(0) .subTxt').html('※축산경제통합시스템 제공');
 		}
 	}).done(function (json) {
+		if(callback)callback();	
+		setTimeout(function(){
+			fnHideLoadingImg();
+		},1000);
 	});
 };
+
 function epdChartDraw(){
 
 	//차트 생성

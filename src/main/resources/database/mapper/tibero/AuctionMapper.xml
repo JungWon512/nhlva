@@ -115,6 +115,7 @@
 			, SUBSTR(B.SRA_PDMNM,1,1)||'*'||SUBSTR(B.SRA_PDMNM,3,LENGTH(B.SRA_PDMNM)-2) SRA_PDMNM /* 축산생산자명 (출하주명)*/
 			, B.SRA_PDMNM AS SRA_PDMNM_ORI /* 출하주명 */
 			, B.SRA_PD_RGNNM /* 축산생산지역 (출하지역) */
+			, REGEXP_SUBSTR(G.DONGUP ,'.+([^ ]+[시|군|구])')||' ***' ADDRESS
 			, B.SRA_SBID_AM /* 축산낙찰금액 (낙찰단가-원단위) */
 			, B.SRA_SBID_UPR /* 축산낙찰단가 (낙찰단가-만단위) */
 			, B.SEL_STS_DSC /* 판매상태구분코드: 11대기,22낙찰,23보류 */
@@ -318,15 +319,21 @@
 				</if>
 			</otherwise>
 		</choose>
-		<if
-			test="stAucNo !=null and !stAucNo.equals('') and edAucNo !=null and !edAucNo.equals('')">
+		<if test="stAucNo !=null and !stAucNo.equals('') and edAucNo !=null and !edAucNo.equals('')">
 			AND B.AUC_PRG_SQ <![CDATA[>=]]>
 			#{stAucNo}
 			AND B.AUC_PRG_SQ <![CDATA[<=]]>
 			#{edAucNo}
 		</if>
 		<if test="searchSelStsDsc != null and searchSelStsDsc != ''">
-			AND B.SEL_STS_DSC=#{searchSelStsDsc}
+			<choose>
+				<when test='"N".equals(searchSelStsDsc)'>
+					AND B.SEL_STS_DSC = '23'
+				</when>
+				<otherwise>
+					AND B.SEL_STS_DSC = '22'				
+				</otherwise>
+			</choose>
 		</if>
 		<if test="aucYn != null and aucYn != ''">
 			<!-- AND B.AUC_YN = #{aucYn} -->
@@ -349,10 +356,8 @@
 			<!-- </choose> -->
 		</if>
 		<if test="nextBidYn != null and nextBidYn != ''">
-			AND B.SEL_STS_DSC <![CDATA[<>]]>
-			'22'
-			AND NVL(B.LOWS_SBID_LMT_AM, 0) <![CDATA[>]]>
-			0
+			AND B.SEL_STS_DSC <![CDATA[<>]]> '22'
+			AND NVL(B.LOWS_SBID_LMT_AM, 0) <![CDATA[>]]> 0
 		</if>
 		<if test='"Y".equals(mCowYn)'>
 			AND (
@@ -396,7 +401,7 @@
 			)
 		</if>
 		<if test="startDate != null and startDate != ''">
-			AND  G.GAP_MONTH <![CDATA[>=]]> #{startDate} AND G.GAP_MONTH <![CDATA[<=]]> #{endDate} 
+			AND  G.GAP_MONTH <![CDATA[>=]]> #{startDate} AND G.GAP_MONTH <![CDATA[<=]]> #{endDate} -1
 		</if>
 		<if test="lowPrice != null and lowPrice != ''">
 			AND NVL(G.LOWS_SBID_LMT_UPR,0) BETWEEN #{lowPrice} and #{highPrice}
@@ -423,11 +428,11 @@
 			<when test="upDownFlag =='price'">
 				ORDER BY AUC_DT
 				<if test='priceUpDown == "1" '>
-					,G.LOWS_SBID_LMT_AM ASC
+					,TO_NUMBER(NVL(G.LOWS_SBID_LMT_UPR,0)) ASC
 				</if>
 				<if
 					test='priceUpDown == "2"  or  priceUpDown == "" '>
-					,G.LOWS_SBID_LMT_AM DESC
+					,TO_NUMBER(NVL(G.LOWS_SBID_LMT_UPR,0)) DESC
 				</if>
 			</when>
 			<when test="upDownFlag =='num'">
@@ -446,8 +451,7 @@
 	</select>
 
 
-	<select id="selectCountEntry" parameterType="map"
-		resultType="map">
+	<select id="selectCountEntry" parameterType="map" resultType="map">
 		SELECT T.*
 		, DECODE(CNT,0,0,ROUND(CNT_STAND_ELSE / CNT * 100)) AS CNT_PERCENT
 		FROM
@@ -471,7 +475,7 @@
 				, COUNT(CASE WHEN TEMP.SEL_STS_DSC != 22 THEN 1 END) CNT_HOLD	/* 보류/유찰	*/
 				, COUNT(CASE WHEN TEMP.COW_SOG_WT = 0 AND TEMP.LOWS_SBID_LMT_AM = 0 THEN 1 END) CNT_ABSENT	/* 미출장	*/
 				, COUNT(CASE WHEN (TEMP.INDV_SEX_C = 1 OR TEMP.INDV_SEX_C = 4 OR TEMP.INDV_SEX_C = 6) THEN 1 END) CNT_SEX_STATE_W /* 정산서 암컷 출장우 */
-				, COUNT(CASE WHEN (TEMP.INDV_SEX_C = 2 OR TEMP.INDV_SEX_C = 3 OR TEMP.INDV_SEX_C = 5) THEN 1 END) CNT_SEX_STATE_M /* 정산서 수컷 출장우 */
+				, COUNT(CASE WHEN (TEMP.INDV_SEX_C != 1 AND TEMP.INDV_SEX_C != 4 AND TEMP.INDV_SEX_C != 6) THEN 1 END) CNT_SEX_STATE_M /* 정산서 수컷 출장우 */
 				, MAX(TEMP.SRA_SBID_UPR) MAX_SRA_SBID_UPR	/* 최대 낙찰가	*/
 				, MIN(TEMP.SRA_SBID_UPR) MIN_SRA_SBID_UPR	/* 최소 낙찰가	*/
 				, MAX(TEMP.LOWS_SBID_LMT_UPR) MAX_LOWS_SBID_LMT_UPR	/* 최대 예정가	*/
@@ -518,9 +522,14 @@
 			<if test="naBzplc != null and naBzplc != ''">
 				AND B.NA_BZPLC = #{naBzplc}
 			</if>
-			<if test="searchDate != null and searchDate != ''">
-				AND B.AUC_DT = #{searchDate}
-			</if>
+			<choose>
+				<when test="searchDate != null and searchDate != ''">
+					AND B.AUC_DT = #{searchDate}
+				</when>
+				<otherwise>
+					AND B.AUC_DT = TO_CHAR(SYSDATE, 'YYYYMMDD')
+				</otherwise>
+			</choose>
 			<choose>
 				<when test="searchMbIntgNo != null and searchMbIntgNo != ''">
 					AND EXISTS (
@@ -564,13 +573,13 @@
 			</if>
 	
 			<if test="lowPrice != null and lowPrice != ''">
-				AND TEMP.LOWS_SBID_LMT_UPR BETWEEN #{lowPrice} and #{highPrice}
+				AND NVL(TEMP.LOWS_SBID_LMT_UPR,0) BETWEEN #{lowPrice} and #{highPrice}
 			</if>
 	
 			<if test="startDate != null and startDate != ''">
 				AND (
 					TEMP.MTCN <![CDATA[>=]]> #{startDate}
-					AND TEMP.MTCN <![CDATA[<=]]> #{endDate}
+					AND TEMP.MTCN <![CDATA[<=]]> #{endDate} -1
 				)
 			</if>
 			<if test="searchTxt != null and searchTxt != '' ">
@@ -625,8 +634,7 @@
 		ORDER BY NA_BZPLC,FSRG_DTM DESC
 	</select>
 
-	<select id="selectOneNotice" parameterType="map"
-		resultType="map">
+	<select id="selectOneNotice" parameterType="map" resultType="map">
 		SELECT
 			NA_BZPLC
 			, BLBD_DSC
@@ -696,8 +704,7 @@
 		GROUP BY TEMP.NA_BZPLCNO
 	</select>
 
-	<select id="selectAucDateList" parameterType="map"
-		resultType="map">
+	<select id="selectAucDateList" parameterType="map" resultType="map">
 		SELECT AUC_DT
 			, NA_BZPLC
 			, TO_CHAR(TO_DATE(AUC_DT,'YYYYMMDD'),'YY.MM.DD') AUC_DT_STR
@@ -714,7 +721,7 @@
 				</when>
 				<when test='entryType == "B"'>
 					AND AUC_DT BETWEEN TO_CHAR(ADD_MONTHS(SYSDATE + 7,-6),'YYYYMMDD')
-					AND TO_CHAR(SYSDATE+7,'YYYYMMDD')
+					AND TO_CHAR(SYSDATE+14,'YYYYMMDD')
 				</when>
 				<otherwise>
 					AND AUC_DT BETWEEN TO_CHAR(ADD_MONTHS(SYSDATE,-6),'YYYYMMDD')
@@ -748,10 +755,9 @@
 				, AREANM
 				, ( SELECT COUNT(*) FROM (
 						SELECT NA_BZPLC,AUC_DT FROM TB_LA_IS_MH_AUC_QCN
-						UNION ALL
-						SELECT NA_BZPLC,AUC_DT FROM TB_LA_IS_MH_AUC_STN
 					) AUC_DT
 					WHERE NA_BZPLC = LOC.NA_BZPLC
+					AND LOC.AUC_YN = 1
 					AND AUC_DT = TO_CHAR(SYSDATE,'YYYYMMDD')
 				) AUC_CNT
 				, ( SELECT AGGR_CONCAT(AUC_INFMSG, ',') FROM (
@@ -780,7 +786,7 @@
 	<!-- Front home화면 지역 리스트 1 -->
 	<select id="selectBizList" parameterType="map" resultType="map">
 		SELECT NA_BZPLCLOC
-		, CASE WHEN NA_BZPLCLOC = 'A31' THEN '경기/인천'
+		, CASE WHEN NA_BZPLCLOC = 'A31' THEN '경기'
 			WHEN NA_BZPLCLOC = 'A33' THEN '강원'
 			WHEN NA_BZPLCLOC = 'A41' THEN '충남'
 			WHEN NA_BZPLCLOC = 'A43' THEN '충북'
@@ -800,6 +806,7 @@
 				, (SELECT COUNT(*) FROM TB_LA_IS_MH_AUC_QCN QCN
 				WHERE QCN.NA_BZPLC = LOC.NA_BZPLC
 				AND QCN.AUC_DT = TO_CHAR(SYSDATE,'YYYYMMDD')
+				AND LOC.AUC_YN = 1
 			) QCN_CNT
 			FROM TB_LA_IS_BM_BZLOC LOC
 			WHERE LOC.DEL_YN = 0
@@ -808,8 +815,7 @@
 		ORDER BY NA_BZPLCLOC
 	</select>
 
-	<select id="selectCalendarList" parameterType="map"
-		resultType="map">
+	<select id="selectCalendarList" parameterType="map" resultType="map">
 		SELECT
 		A.NA_BZPLC
 		,A.AUC_DT
@@ -970,6 +976,16 @@
 					, LSCHG_DTM = SYSDATE /* 최종 변경일시 */
 				</otherwise>
 			</choose>
+			<if test="lowsSbidLmtUpr != null and lowsSbidLmtUpr != ''">
+			, LOWS_SBID_LMT_AM = (SELECT CASE WHEN TO_CHAR(#{aucObjDsc}) = '1' THEN TO_NUMBER(#{lowsSbidLmtUpr}) * B.CALF_AUC_ATDR_UNT_AM
+											  WHEN TO_CHAR(#{aucObjDsc}) = '2' THEN TO_NUMBER(#{lowsSbidLmtUpr}) * B.NBFCT_AUC_ATDR_UNT_AM
+											  WHEN TO_CHAR(#{aucObjDsc}) = '3' THEN TO_NUMBER(#{lowsSbidLmtUpr}) * B.PPGCOW_AUC_ATDR_UNT_AM
+											  ELSE TO_NUMBER(#{lowsSbidLmtUpr}) * 10000
+										  END
+									  FROM TB_LA_IS_MM_ENV_EST B
+									 WHERE B.NA_BZPLC = #{naBzPlc}
+									)
+			</if>
 			, LS_CMENO = #{lsCmeno} /* 최종 변경자 */
 		WHERE NA_BZPLC = #{naBzPlc} /* 사업장코드 */
 		AND AUC_OBJ_DSC = TO_CHAR(#{aucObjDsc}) /* 경매대상 구분코드 */
@@ -979,194 +995,180 @@
 	</update>
 
 	<!-- 출품 정보 리스트 -->
-	<select id="selectAuctionEntry" parameterType="map"
-		resultType="map">
+	<select id="selectAuctionEntry" parameterType="map" resultType="map">
 		SELECT C.*
-		, CASE WHEN C.GAP_DAY = 0 THEN C.BIRTH_STR || '(' || C.GAP_MONTH ||
-		'개월)'
-		ELSE C.BIRTH_STR || '(' || C.GAP_MONTH || '개월 ' || C.GAP_DAY || '일)'
-		END BIRTH_FMT
+			, CASE 
+				WHEN C.GAP_DAY = 0 THEN C.BIRTH_STR || '(' || C.GAP_MONTH || '개월)'
+				ELSE C.BIRTH_STR || '(' || C.GAP_MONTH || '개월 ' || C.GAP_DAY || '일)'
+			END BIRTH_FMT
 		FROM (
-		SELECT A.NA_BZPLC /* 조합 구분 코드 */
-		, A.OSLP_NO /* 출품번호 */
-		, A.AUC_DT
-		, (SELECT C.QCN
-		FROM TB_LA_IS_MH_AUC_QCN C
-		WHERE C.NA_BZPLC = A.NA_BZPLC
-		AND C.AUC_DT = A.AUC_DT
-		AND C.AUC_OBJ_DSC = NVL(#{aucObjDsc}, C.AUC_OBJ_DSC)
-		AND ROWNUM = 1) AS QCN
-		, A.AUC_PRG_SQ /* 경매순번 */
-		, A.AUC_OBJ_DSC /* 경매대상구분코드 */
-		, A.SRA_INDV_AMNNO /* 축산개체관리번호 */
-		, A.SRA_SRS_DSC /* 축상축종구분코드 */
-		, A.FHS_ID_NO /* 농가식별번호 */
-		, A.FARM_AMNNO /* 농장관리번호 */
-		, (SELECT C.FTSNM
-		FROM TB_LA_IS_MM_FHS C
-		WHERE C.NA_BZPLC = A.NA_BZPLC
-		AND C.FHS_ID_NO = A.FHS_ID_NO
-		AND C.FARM_AMNNO = A.FARM_AMNNO
-		) AS FTSNM /* 농가명 */
-		, A.BRANDNM /* 브랜드명 */
-		, B.BIRTH /* 생년월일 */
-		, RTRIM(LTRIM(B.KPN_NO)) AS KPN_NO /* KPN번호 */
-		, B.INDV_SEX_C /* 개체성별코드 */
-		, CASE WHEN B.INDV_SEX_C = '0' THEN '없음' WHEN B.INDV_SEX_C = '1' THEN
-		'암'
-		WHEN B.INDV_SEX_C = '2' THEN '수' WHEN B.INDV_SEX_C = '3' THEN '거세'
-		WHEN B.INDV_SEX_C = '4' THEN '미경산' WHEN B.INDV_SEX_C = '5' THEN '비거세'
-		WHEN B.INDV_SEX_C = '6' THEN '프리마틴' WHEN B.INDV_SEX_C = '9' THEN '공통'
-		ELSE '-'
-		END AS INDV_SEX_NAME /* 개체성별코드명 */
-		, B.MCOW_DSC /* 어미소구분코드*/
-		, B.MCOW_SRA_INDV_AMNNO /* 어미축산개체관리번호 */
-		, CASE WHEN B.MCOW_DSC = '01' THEN '기초'
-		WHEN B.MCOW_DSC = '02' THEN '혈통'
-		WHEN B.MCOW_DSC = '03' THEN '고등'
-		WHEN B.MCOW_DSC = '09' THEN '미등록우'
-		ELSE ''
-		END AS MCOW_DSC_NM
-		, ROUND(B.MATIME) AS MATIME /* 산차 */
-		, ROUND(A.PRNY_MTCN) AS PRNY_MTCN /* 임신개월수 */
-		, B.SRA_INDV_PASG_QCN /* 계대 */
-		, B.INDV_ID_NO /* 계체식벌번호 */
-		, B.SRA_INDV_BRDSRA_RG_NO /* 축산개체종축등록번호 */
-		, B.RG_DSC /* 등록구분번호 */
-		, CASE WHEN B.RG_DSC = '01' THEN '기초'
-		WHEN B.RG_DSC = '02' THEN '혈통'
-		WHEN B.RG_DSC = '03' THEN '고등'
-		WHEN B.RG_DSC = '09' THEN '미등록우'
-		ELSE ''
-		END AS RG_DSC_NM
-		, A.SRA_PDMNM
-		, A.SRA_PD_RGNNM /* 축산생산지역 */
-		, A.DNA_YN /* 친자검사결과여부 */
-		, B.ANW_YN /* 신규여부 */
-		, ROUND(A.COW_SOG_WT) AS COW_SOG_WT /* 우출하중량 */
-		, A.RMK_CNTN /* 비고내용 */
-		, DECODE(A.AUC_YN,'1','11',A.SEL_STS_DSC) SEL_STS_DSC /* 낙유찰결과 */
-		, (SELECT D.SRA_MWMNNM
-		FROM TB_LA_IS_MM_MWMN D
-		WHERE D.NA_BZPLC = A.NA_BZPLC
-		AND D.TRMN_AMNNO = A.TRMN_AMNNO
-		) AS SRA_MWMNNM /* 낙찰자 */
-		, A.LVST_AUC_PTC_MN_NO /* 낙찰자 참가 번호 */
-		, A.TRMN_AMNNO /* 낙찰자 중도매인 번호 */
-		, A.SRA_SBID_UPR /* 낙찰금액 */
-		, CASE WHEN A.AUC_OBJ_DSC = '1' THEN ROUND(A.FIR_LOWS_SBID_LMT_AM /
-		NVL(J.CALF_AUC_ATDR_UNT_AM, 10000))
-		WHEN A.AUC_OBJ_DSC = '2' THEN ROUND(A.FIR_LOWS_SBID_LMT_AM /
-		NVL(J.NBFCT_AUC_ATDR_UNT_AM, 1))
-		WHEN A.AUC_OBJ_DSC = '3' THEN ROUND(A.FIR_LOWS_SBID_LMT_AM /
-		NVL(J.PPGCOW_AUC_ATDR_UNT_AM, 10000))
-		ELSE ROUND(A.FIR_LOWS_SBID_LMT_AM / 10000)
-		END AS FIR_LOWS_SBID_LMT_AM
-		, CASE WHEN A.AUC_OBJ_DSC = '1' THEN ROUND(A.LOWS_SBID_LMT_AM /
-		NVL(J.CALF_AUC_ATDR_UNT_AM, 10000))
-		WHEN A.AUC_OBJ_DSC = '2' THEN ROUND(A.LOWS_SBID_LMT_AM /
-		NVL(J.NBFCT_AUC_ATDR_UNT_AM, 1))
-		WHEN A.AUC_OBJ_DSC = '3' THEN ROUND(A.LOWS_SBID_LMT_AM /
-		NVL(J.PPGCOW_AUC_ATDR_UNT_AM, 10000))
-		ELSE ROUND(A.LOWS_SBID_LMT_AM / 10000)
-		END AS LOWS_SBID_LMT_AM
-		, A.SRA_SBID_AM
-		, A.SRA_SBID_UPR
-		, D.ATDR_DTM
-		, TO_CHAR(TO_DATE(B.BIRTH,'YYYYMMDD'),'YY.MM.DD') BIRTH_STR
-		, CASE WHEN MONTHS_BETWEEN(TO_DATE(A.AUC_DT,'YYYYMMDD'),
-		TO_DATE(B.BIRTH,'YYYYMMDD')) <![CDATA[<=]]>
-		4 THEN 4
-		ELSE TRUNC(MONTHS_BETWEEN(TO_DATE(A.AUC_DT,'YYYYMMDD'),
-		TO_DATE(B.BIRTH,'YYYYMMDD')))
-		END GAP_MONTH
-		, CASE WHEN MONTHS_BETWEEN(TO_DATE(A.AUC_DT,'YYYYMMDD'),
-		TO_DATE(B.BIRTH,'YYYYMMDD')) <![CDATA[<]]>
-		4 THEN 0
-		ELSE GREATEST(TO_DATE(A.AUC_DT,'YYYYMMDD') -
-		ADD_MONTHS(TO_DATE(B.BIRTH,'YYYYMMDD'),
-		TRUNC(MONTHS_BETWEEN(TO_DATE(A.AUC_DT,'YYYYMMDD'),
-		TO_DATE(B.BIRTH,'YYYYMMDD')))) + 1, 0) - 1
-		END GAP_DAY
-		, A.LED_SQNO
-		, NVL(A.MODL_NO, A.AUC_PRG_SQ) AS MODL_NO
-		, TO_CHAR(A.LSCHG_DTM, 'YYYYMMDDHH24MISS') AS LSCHG_DTM
-		FROM TB_LA_IS_MH_SOG_COW A
-		LEFT OUTER JOIN TB_LA_IS_MM_INDV B
-		ON (
-		A.NA_BZPLC = B.NA_BZPLC
-		AND
-		A.SRA_INDV_AMNNO = B.SRA_INDV_AMNNO
-		AND
-		A.SRA_SRS_DSC = B.SRA_SRS_DSC
-		)
-		LEFT OUTER JOIN TB_LA_IS_MM_ENV_EST J
-		ON ( A.NA_BZPLC = J.NA_BZPLC )
-		LEFT JOIN (
-		SELECT
-		ROW_NUMBER() OVER(PARTITION BY E.NA_BZPLC, E.AUC_OBJ_DSC , E.AUC_DT, E.OSLP_NO
-		,E.AUC_PRG_SQ , E.TRMN_AMNNO , E.LVST_AUC_PTC_MN_NO ORDER BY
-		E.ATDR_DTM DESC) AS N_NUM
-		,E.NA_BZPLC
-		,E.AUC_OBJ_DSC
-		,E.AUC_DT
-		,E.OSLP_NO
-		,E.TRMN_AMNNO
-		,E.LVST_AUC_PTC_MN_NO
-		,E.ATDR_AM
-		,E.AUC_PRG_SQ
-		,E.ATDR_DTM
-		FROM
-		TB_LA_IS_MH_ATDR_LOG E
-		WHERE 1=1
-		AND E.NA_BZPLC = #{naBzplc}
-		<choose>
-			<when test="searchDate != null and searchDate != ''">
-				AND E.AUC_DT = #{searchDate}
-			</when>
-			<otherwise>
-				AND E.AUC_DT = TO_CHAR(SYSDATE,'YYYYMMDD')
-			</otherwise>
-		</choose>
-		) D
-		ON (
-		A.NA_BZPLC = D.NA_BZPLC
-		AND A.AUC_OBJ_DSC = D.AUC_OBJ_DSC
-		AND A.AUC_DT = D.AUC_DT
-		AND A.OSLP_NO = D.OSLP_NO
-		AND A.AUC_PRG_SQ = D.AUC_PRG_SQ
-		AND A.TRMN_AMNNO = D.TRMN_AMNNO
-		AND A.LVST_AUC_PTC_MN_NO = D.LVST_AUC_PTC_MN_NO
-		AND A.SRA_SBID_UPR = D.ATDR_AM
-		AND D.N_NUM = 1
-		)
-		WHERE A.NA_BZPLC = #{naBzplc}
-		<if test="aucObjDsc != null and aucObjDsc != ''">
-			AND A.AUC_OBJ_DSC = DECODE(#{aucObjDsc}, '0', A.AUC_OBJ_DSC,
-			#{aucObjDsc})
-		</if>
-		<choose>
-			<when test="searchDate != null and searchDate != ''">
-				AND A.AUC_DT = #{searchDate}
-			</when>
-			<otherwise>
-				AND A.AUC_DT = TO_CHAR(SYSDATE,'YYYYMMDD')
-			</otherwise>
-		</choose>
-		<if
-			test="stAucNo !=null and !stAucNo.equals('') and edAucNo !=null and !edAucNo.equals('')">
-			AND A.AUC_PRG_SQ <![CDATA[>=]]>
-			#{stAucNo}
-			AND A.AUC_PRG_SQ <![CDATA[<=]]>
-			#{edAucNo}
-		</if>
+			SELECT A.NA_BZPLC /* 조합 구분 코드 */
+				, A.OSLP_NO /* 출품번호 */
+				, A.AUC_DT
+				, (SELECT C.QCN
+					FROM TB_LA_IS_MH_AUC_QCN C
+					WHERE C.NA_BZPLC = A.NA_BZPLC
+					AND C.AUC_DT = A.AUC_DT
+					AND C.AUC_OBJ_DSC = NVL(#{aucObjDsc}, C.AUC_OBJ_DSC)
+					AND ROWNUM = 1
+				) AS QCN
+				, A.AUC_PRG_SQ /* 경매순번 */
+				, A.AUC_OBJ_DSC /* 경매대상구분코드 */
+				, A.SRA_INDV_AMNNO /* 축산개체관리번호 */
+				, A.SRA_SRS_DSC /* 축상축종구분코드 */
+				, A.FHS_ID_NO /* 농가식별번호 */
+				, A.FARM_AMNNO /* 농장관리번호 */
+				, (	SELECT C.FTSNM
+					FROM TB_LA_IS_MM_FHS C
+					WHERE C.NA_BZPLC = A.NA_BZPLC
+					AND C.FHS_ID_NO = A.FHS_ID_NO
+					AND C.FARM_AMNNO = A.FARM_AMNNO
+				) AS FTSNM /* 농가명 */
+				, A.BRANDNM /* 브랜드명 */
+				, B.BIRTH /* 생년월일 */
+				, RTRIM(LTRIM(B.KPN_NO)) AS KPN_NO /* KPN번호 */
+				, B.INDV_SEX_C /* 개체성별코드 */
+				, CASE 
+					WHEN B.INDV_SEX_C = '0' THEN '없음' 
+					WHEN B.INDV_SEX_C = '1' THEN '암'
+					WHEN B.INDV_SEX_C = '2' THEN '수' 
+					WHEN B.INDV_SEX_C = '3' THEN '거세'
+					WHEN B.INDV_SEX_C = '4' THEN '미경산' 
+					WHEN B.INDV_SEX_C = '5' THEN '비거세'
+					WHEN B.INDV_SEX_C = '6' THEN '프리마틴' 
+					WHEN B.INDV_SEX_C = '9' THEN '공통'
+					ELSE '-'
+				END AS INDV_SEX_NAME /* 개체성별코드명 */
+				, B.MCOW_DSC /* 어미소구분코드*/
+				, B.MCOW_SRA_INDV_AMNNO /* 어미축산개체관리번호 */
+				, CASE 
+					WHEN B.MCOW_DSC = '01' THEN '기초'
+					WHEN B.MCOW_DSC = '02' THEN '혈통'
+					WHEN B.MCOW_DSC = '03' THEN '고등'
+					WHEN B.MCOW_DSC = '09' THEN '미등록우'
+					ELSE ''
+				END AS MCOW_DSC_NM
+				, ROUND(B.MATIME) AS MATIME /* 산차 */
+				, ROUND(A.PRNY_MTCN) AS PRNY_MTCN /* 임신개월수 */
+				, B.SRA_INDV_PASG_QCN /* 계대 */
+				, B.INDV_ID_NO /* 계체식벌번호 */
+				, B.SRA_INDV_BRDSRA_RG_NO /* 축산개체종축등록번호 */
+				, B.RG_DSC /* 등록구분번호 */
+				, CASE 
+					WHEN B.RG_DSC = '01' THEN '기초'
+					WHEN B.RG_DSC = '02' THEN '혈통'
+					WHEN B.RG_DSC = '03' THEN '고등'
+					WHEN B.RG_DSC = '09' THEN '미등록우'
+					ELSE ''
+				END AS RG_DSC_NM
+				, A.SRA_PDMNM
+				, A.SRA_PD_RGNNM /* 축산생산지역 */
+				, A.DNA_YN /* 친자검사결과여부 */
+				, B.ANW_YN /* 신규여부 */
+				, ROUND(A.COW_SOG_WT) AS COW_SOG_WT /* 우출하중량 */
+				, A.RMK_CNTN /* 비고내용 */
+				, DECODE(A.AUC_YN,'1','11',A.SEL_STS_DSC) SEL_STS_DSC /* 낙유찰결과 */
+				, (	SELECT D.SRA_MWMNNM FROM TB_LA_IS_MM_MWMN D
+					WHERE D.NA_BZPLC = A.NA_BZPLC
+					AND D.TRMN_AMNNO = A.TRMN_AMNNO
+				) AS SRA_MWMNNM /* 낙찰자 */
+				, A.LVST_AUC_PTC_MN_NO /* 낙찰자 참가 번호 */
+				, A.TRMN_AMNNO /* 낙찰자 중도매인 번호 */
+				, A.SRA_SBID_UPR /* 낙찰금액 */
+				, CASE 
+					WHEN A.AUC_OBJ_DSC = '1' THEN ROUND(A.FIR_LOWS_SBID_LMT_AM / NVL(J.CALF_AUC_ATDR_UNT_AM, 10000))
+					WHEN A.AUC_OBJ_DSC = '2' THEN ROUND(A.FIR_LOWS_SBID_LMT_AM / NVL(J.NBFCT_AUC_ATDR_UNT_AM, 1))
+					WHEN A.AUC_OBJ_DSC = '3' THEN ROUND(A.FIR_LOWS_SBID_LMT_AM / NVL(J.PPGCOW_AUC_ATDR_UNT_AM, 10000))
+					ELSE ROUND(A.FIR_LOWS_SBID_LMT_AM / 10000)
+				END AS FIR_LOWS_SBID_LMT_AM
+				, CASE 
+					WHEN A.AUC_OBJ_DSC = '1' THEN ROUND(A.LOWS_SBID_LMT_AM / NVL(J.CALF_AUC_ATDR_UNT_AM, 10000))
+					WHEN A.AUC_OBJ_DSC = '2' THEN ROUND(A.LOWS_SBID_LMT_AM / NVL(J.NBFCT_AUC_ATDR_UNT_AM, 1))
+					WHEN A.AUC_OBJ_DSC = '3' THEN ROUND(A.LOWS_SBID_LMT_AM / NVL(J.PPGCOW_AUC_ATDR_UNT_AM, 10000))
+					ELSE ROUND(A.LOWS_SBID_LMT_AM / 10000)
+				END AS LOWS_SBID_LMT_AM
+				, A.SRA_SBID_AM
+				, A.SRA_SBID_UPR
+				, D.ATDR_DTM
+				, TO_CHAR(TO_DATE(B.BIRTH,'YYYYMMDD'),'YY.MM.DD') BIRTH_STR
+				, CASE 
+					WHEN MONTHS_BETWEEN(TO_DATE(A.AUC_DT,'YYYYMMDD'), TO_DATE(B.BIRTH,'YYYYMMDD')) <![CDATA[<=]]> 4 THEN 4
+					ELSE TRUNC(MONTHS_BETWEEN(TO_DATE(A.AUC_DT,'YYYYMMDD'), TO_DATE(B.BIRTH,'YYYYMMDD')))
+				END GAP_MONTH
+				, CASE 
+					WHEN MONTHS_BETWEEN(TO_DATE(A.AUC_DT,'YYYYMMDD'), TO_DATE(B.BIRTH,'YYYYMMDD')) <![CDATA[<]]> 4 THEN 0
+					ELSE GREATEST(TO_DATE(A.AUC_DT,'YYYYMMDD') - ADD_MONTHS(TO_DATE(B.BIRTH,'YYYYMMDD'), TRUNC(MONTHS_BETWEEN(TO_DATE(A.AUC_DT,'YYYYMMDD'), TO_DATE(B.BIRTH,'YYYYMMDD')))) + 1, 0) - 1
+				END GAP_DAY
+				, A.LED_SQNO
+				, NVL(A.MODL_NO, A.AUC_PRG_SQ) AS MODL_NO
+				, TO_CHAR(A.LSCHG_DTM, 'YYYYMMDDHH24MISS') AS LSCHG_DTM
+			FROM TB_LA_IS_MH_SOG_COW A
+			LEFT OUTER JOIN TB_LA_IS_MM_INDV B
+			ON (
+				A.NA_BZPLC = B.NA_BZPLC
+				AND A.SRA_INDV_AMNNO = B.SRA_INDV_AMNNO
+				AND A.SRA_SRS_DSC = B.SRA_SRS_DSC
+			)
+			LEFT OUTER JOIN TB_LA_IS_MM_ENV_EST J
+			ON ( A.NA_BZPLC = J.NA_BZPLC )
+			LEFT JOIN (
+				SELECT
+					ROW_NUMBER() OVER(PARTITION BY E.NA_BZPLC, E.AUC_OBJ_DSC , E.AUC_DT, E.OSLP_NO
+					,E.AUC_PRG_SQ , E.TRMN_AMNNO , E.LVST_AUC_PTC_MN_NO ORDER BY E.ATDR_DTM DESC) AS N_NUM
+					,E.NA_BZPLC
+					,E.AUC_OBJ_DSC
+					,E.AUC_DT
+					,E.OSLP_NO
+					,E.TRMN_AMNNO
+					,E.LVST_AUC_PTC_MN_NO
+					,E.ATDR_AM
+					,E.AUC_PRG_SQ
+					,E.ATDR_DTM
+				FROM TB_LA_IS_MH_ATDR_LOG E
+				WHERE 1=1
+				AND E.NA_BZPLC = #{naBzplc}
+				<choose>
+					<when test="searchDate != null and searchDate != ''">
+						AND E.AUC_DT = #{searchDate}
+					</when>
+					<otherwise>
+						AND E.AUC_DT = TO_CHAR(SYSDATE,'YYYYMMDD')
+					</otherwise>
+				</choose>
+			) D
+			ON (
+				A.NA_BZPLC = D.NA_BZPLC
+				AND A.AUC_OBJ_DSC = D.AUC_OBJ_DSC
+				AND A.AUC_DT = D.AUC_DT
+				AND A.OSLP_NO = D.OSLP_NO
+				AND A.AUC_PRG_SQ = D.AUC_PRG_SQ
+				AND A.TRMN_AMNNO = D.TRMN_AMNNO
+				AND A.LVST_AUC_PTC_MN_NO = D.LVST_AUC_PTC_MN_NO
+				AND A.SRA_SBID_UPR = D.ATDR_AM
+				AND D.N_NUM = 1
+			)
+			WHERE A.NA_BZPLC = #{naBzplc}
+			<if test="aucObjDsc != null and aucObjDsc != ''">
+				AND A.AUC_OBJ_DSC = DECODE(#{aucObjDsc}, '0', A.AUC_OBJ_DSC,#{aucObjDsc})
+			</if>
+			<choose>
+				<when test="searchDate != null and searchDate != ''">
+					AND A.AUC_DT = #{searchDate}
+				</when>
+				<otherwise>
+					AND A.AUC_DT = TO_CHAR(SYSDATE,'YYYYMMDD')
+				</otherwise>
+			</choose>
+			<if test="stAucNo !=null and !stAucNo.equals('') and edAucNo !=null and !edAucNo.equals('')">
+				AND A.AUC_PRG_SQ <![CDATA[>=]]> #{stAucNo}
+				AND A.AUC_PRG_SQ <![CDATA[<=]]> #{edAucNo}
+			</if>
 		) C
 		ORDER BY C.AUC_DT DESC, C.AUC_PRG_SQ ASC
 	</select>
 
 	<!-- 나의 찜 정보 - api요청 -->
-	<select id="selectMyFavoriteInfo" parameterType="map"
-		resultType="map">
+	<select id="selectMyFavoriteInfo" parameterType="map" resultType="map">
 		SELECT SBID_UPR
 		FROM TB_LA_IS_MH_SOG_ZIM
 		WHERE NA_BZPLC = #{naBzplc}
@@ -1185,90 +1187,83 @@
 	</select>
 
 	<!-- App 버전 정보 -->
-	<select id="selectAppVersionInfo" parameterType="map"
-		resultType="map">
+	<select id="selectAppVersionInfo" parameterType="map" resultType="map">
 		SELECT
-		APP_VERSION_ID
-		, OS_TYPE
-		, DEPLOY_DATE
-		, MAX_VERSION
-		, MIN_VERSION
-		, FSRG_DTM
-		, FSRGMN_ENO
-		, LSCHG_DTM
-		, LS_CMENO
-		, NET_HOST
-		, NET_PORT
+			APP_VERSION_ID
+			, OS_TYPE
+			, DEPLOY_DATE
+			, MAX_VERSION
+			, MIN_VERSION
+			, FSRG_DTM
+			, FSRGMN_ENO
+			, LSCHG_DTM
+			, LS_CMENO
+			, NET_HOST
+			, NET_PORT
 		FROM TB_APP_VERSION
 		WHERE OS_TYPE = #{osType}
 	</select>
 
 	<!-- 나의 구매현황 -->
-	<select id="selectMyBuyList" parameterType="map"
-		resultType="map">
+	<select id="selectMyBuyList" parameterType="map" resultType="map">
 		SELECT B.NA_BZPLC
-		, B.AUC_OBJ_DSC
-		, B.N_CNT
-		, C.CLNTNM
-		, C.LAT
-		, C.LNG
+			, B.AUC_OBJ_DSC
+			, B.N_CNT
+			, C.CLNTNM
+			, C.LAT
+			, C.LNG
 		FROM (
-		SELECT A.NA_BZPLC
-		, A.AUC_OBJ_DSC
-		, A.TRMN_AMNNO
-		, A.N_CNT
-		, RANK() OVER (PARTITION BY A.NA_BZPLC ORDER BY A.N_CNT DESC,
-		A.TRMN_AMNNO ASC) AS N_RANK
-		FROM (
-		SELECT NA_BZPLC
-		, AUC_OBJ_DSC
-		, TRMN_AMNNO
-		, COUNT(*) AS N_CNT
-		FROM TB_LA_IS_MH_SOG_COW
-		WHERE TRMN_AMNNO IS NOT NULL
-		<if test="searchAucObjDsc != null and searchAucObjDsc != ''">
-			AND AUC_OBJ_DSC = TO_CHAR(#{searchAucObjDsc})
-		</if>
-		<if
-			test="searchStDt != null and searchStDt != '' and searchEnDt != null and searchEnDt != ''">
-			AND AUC_DT BETWEEN REPLACE(#{searchStDt}, '.', '') AND
-			REPLACE(#{searchEnDt}, '.', '')
-		</if>
-		GROUP BY NA_BZPLC, AUC_OBJ_DSC, TRMN_AMNNO
-		) A
+			SELECT A.NA_BZPLC
+				, A.AUC_OBJ_DSC
+				, A.TRMN_AMNNO
+				, A.N_CNT
+				, RANK() OVER (PARTITION BY A.NA_BZPLC ORDER BY A.N_CNT DESC,A.TRMN_AMNNO ASC) AS N_RANK
+			FROM (
+				SELECT NA_BZPLC
+					, AUC_OBJ_DSC
+					, TRMN_AMNNO
+					, COUNT(*) AS N_CNT
+				FROM TB_LA_IS_MH_SOG_COW
+				WHERE TRMN_AMNNO IS NOT NULL
+				<if test="searchAucObjDsc != null and searchAucObjDsc != ''">
+					AND AUC_OBJ_DSC = TO_CHAR(#{searchAucObjDsc})
+				</if>
+				<if
+					test="searchStDt != null and searchStDt != '' and searchEnDt != null and searchEnDt != ''">
+					AND AUC_DT BETWEEN REPLACE(#{searchStDt}, '.', '') AND
+					REPLACE(#{searchEnDt}, '.', '')
+				</if>
+				GROUP BY NA_BZPLC, AUC_OBJ_DSC, TRMN_AMNNO
+			) A
 		) B
-		INNER JOIN TB_LA_IS_BM_BZLOC C
-		ON ( C.NA_BZPLC = B.NA_BZPLC)
+		INNER JOIN TB_LA_IS_BM_BZLOC C ON ( C.NA_BZPLC = B.NA_BZPLC)
 		WHERE B.N_RANK = 1
 	</select>
 
 	<!-- 나의 평균 응찰단가 -->
-	<select id="selectMyAvgBidAmtInfo" parameterType="map"
-		resultType="map">
+	<select id="selectMyAvgBidAmtInfo" parameterType="map" resultType="map">
 		SELECT A.AUC_MONTH
-		, ROUND(AVG(A.SRA_SBID_AM)) AS AVG_SRA_SBID_AM
-		, ROUND(AVG(A.COW_SOG_WT)) AS AVG_COW_SOG_WT
-		, ROUND(AVG(A.AVG_SBID_AM)) AS AVG_SBID_AM
+			, ROUND(AVG(A.SRA_SBID_AM)) AS AVG_SRA_SBID_AM
+			, ROUND(AVG(A.COW_SOG_WT)) AS AVG_COW_SOG_WT
+			, ROUND(AVG(A.AVG_SBID_AM)) AS AVG_SBID_AM
 		FROM (
-		SELECT SUBSTR(AUC_DT, 1, 6) AS AUC_MONTH
-		, SRA_SBID_AM
-		, COW_SOG_WT
-		, CASE WHEN COW_SOG_WT <![CDATA[<=]]>
-		0 THEN 1
-		ELSE SRA_SBID_AM/COW_SOG_WT
-		END AS AVG_SBID_AM
-		FROM TB_LA_IS_MH_SOG_COW
-		WHERE SEL_STS_DSC = '22'
-		AND COW_SOG_WT <![CDATA[>]]>
-		0
-		<if test="searchAucObjDsc != null and searchAucObjDsc != ''">
-			AND AUC_OBJ_DSC = TO_CHAR(#{searchAucObjDsc})
-		</if>
-		<if
-			test="searchStDt != null and searchStDt != '' and searchEnDt != null and searchEnDt != ''">
-			AND AUC_DT BETWEEN REPLACE(#{searchStDt}, '.', '') AND
-			REPLACE(#{searchEnDt}, '.', '')
-		</if>
+			SELECT SUBSTR(AUC_DT, 1, 6) AS AUC_MONTH
+				, SRA_SBID_AM
+				, COW_SOG_WT
+				, CASE 
+					WHEN COW_SOG_WT <![CDATA[<=]]> 0 THEN 1
+					ELSE SRA_SBID_AM/COW_SOG_WT
+				END AS AVG_SBID_AM
+			FROM TB_LA_IS_MH_SOG_COW
+			WHERE SEL_STS_DSC = '22'
+			AND COW_SOG_WT <![CDATA[>]]> 0
+			<if test="searchAucObjDsc != null and searchAucObjDsc != ''">
+				AND AUC_OBJ_DSC = TO_CHAR(#{searchAucObjDsc})
+			</if>
+			<if
+				test="searchStDt != null and searchStDt != '' and searchEnDt != null and searchEnDt != ''">
+				AND AUC_DT BETWEEN REPLACE(#{searchStDt}, '.', '') AND REPLACE(#{searchEnDt}, '.', '')
+			</if>
 		) A
 		GROUP BY A.AUC_MONTH
 	</select>
@@ -1294,18 +1289,15 @@
 	</select>
 
 	<!-- 반경 2km내 조합 검색 -->
-	<select id="selectNearestBranchInfo" parameterType="map"
-		resultType="map">
+	<select id="selectNearestBranchInfo" parameterType="map" resultType="map">
 		SELECT NA_BZPLCNO
-		, NA_BZPLCLOC
-		, CLNTNM
-		, NA_BZPLC
-		, 'Y' AS AUC_YN
-		, LAT
-		, LNG
-		,
-		(6371*ACOS(COS(RADIANS(#{lat}))*COS(RADIANS(LAT))*COS(RADIANS(LNG)-RADIANS(#{lng}))+SIN(RADIANS(#{lat}))*SIN(RADIANS(LAT))))
-		AS DISTANCE
+			, NA_BZPLCLOC
+			, CLNTNM
+			, NA_BZPLC
+			, 'Y' AS AUC_YN
+			, LAT
+			, LNG
+			, (6371*ACOS(COS(RADIANS(#{lat}))*COS(RADIANS(LAT))*COS(RADIANS(LNG)-RADIANS(#{lng}))+SIN(RADIANS(#{lat}))*SIN(RADIANS(LAT)))) AS DISTANCE
 		FROM TB_LA_IS_BM_BZLOC
 		WHERE LAT IS NOT NULL
 		AND LNG IS NOT NULL
@@ -1313,32 +1305,28 @@
 		AND AUC_YN = '1'
 		<choose>
 			<when test="distance != null and distance != ''">
-				HAVING DISTANCE <![CDATA[<=]]>
-				#{distance}
+				HAVING DISTANCE <![CDATA[<=]]> #{distance}
 			</when>
 			<otherwise>
-				HAVING DISTANCE <![CDATA[<=]]>
-				2
+				HAVING DISTANCE <![CDATA[<=]]> 2
 			</otherwise>
 		</choose>
 		ORDER BY DISTANCE
 	</select>
 
 	<!-- 카카오 커넥트 라이브 서비스 정보 -->
-	<select id="selectKakaoServiceInfo" parameterType="map"
-		resultType="map">
+	<select id="selectKakaoServiceInfo" parameterType="map" resultType="map">
 		SELECT KKO_SVC_ID
-		, KKO_SVC_KEY
-		, KKO_SVC_CNT
-		, NET_HOST
-		, NET_PORT
-		, WEB_PORT
+			, KKO_SVC_KEY
+			, KKO_SVC_CNT
+			, NET_HOST
+			, NET_PORT
+			, WEB_PORT
 		FROM TB_LA_IS_BM_BZLOC
 		WHERE NA_BZPLC = #{naBzplc}
 	</select>
 
-	<select id="selectTestUserList" parameterType="map"
-		resultType="map">
+	<select id="selectTestUserList" parameterType="map" resultType="map">
 		SELECT B.*
 		FROM (
 		SELECT A.*
@@ -1387,126 +1375,115 @@
 
 	<select id="selectCowInfo" parameterType="map" resultType="map">
 		SELECT A.NA_BZPLC /* 조합 구분 코드 */
-		, A.OSLP_NO /* 출품번호 */
-		, (SELECT C.QCN
-		FROM TB_LA_IS_MH_AUC_QCN C
-		WHERE C.NA_BZPLC = A.NA_BZPLC
-		AND C.AUC_DT = A.AUC_DT
-		AND C.AUC_OBJ_DSC = A.AUC_OBJ_DSC) AS QCN
-		, (SELECT D.AUC_OBJ_DSC
-		FROM TB_LA_IS_MH_AUC_QCN D
-		WHERE D.NA_BZPLC = A.NA_BZPLC
-		AND D.AUC_DT = A.AUC_DT
-		AND DECODE(D.AUC_OBJ_DSC,'0',A.AUC_OBJ_DSC,D.AUC_OBJ_DSC) =
-		A.AUC_OBJ_DSC) AS QCN_AUC_OBJ_DSC
-		, A.AUC_PRG_SQ /* 경매순번 */
-		, A.AUC_OBJ_DSC /* 경매대상구분코드 */
-		, A.SRA_INDV_AMNNO /* 축산개체관리번호 */
-		, A.SRA_SRS_DSC /* 축상축종구분코드 */
-		, A.FHS_ID_NO /* 농가식별번호 */
-		, A.FARM_AMNNO /* 농장관리번호 */
-		, (SELECT C.FTSNM
-		FROM TB_LA_IS_MM_FHS C
-		WHERE C.NA_BZPLC = A.NA_BZPLC
-		AND C.FHS_ID_NO = A.FHS_ID_NO
-		AND C.FARM_AMNNO = A.FARM_AMNNO
-		) AS FTSNM /* 농가명 */
-		, A.BRANDNM /* 브랜드명 */
-		, B.BIRTH /* 생년월일 */
-		, RTRIM(LTRIM(B.KPN_NO)) AS KPN_NO /* KPN번호 */
-		, B.INDV_SEX_C /* 개체성별코드 */
-		, CASE WHEN B.INDV_SEX_C = '0' THEN '없음' WHEN B.INDV_SEX_C = '1' THEN
-		'암'
-		WHEN B.INDV_SEX_C = '2' THEN '수' WHEN B.INDV_SEX_C = '3' THEN '거세'
-		WHEN B.INDV_SEX_C = '4' THEN '미경산' WHEN B.INDV_SEX_C = '5' THEN '비거세'
-		WHEN B.INDV_SEX_C = '6' THEN '프리마틴' WHEN B.INDV_SEX_C = '9' THEN '공통'
-		ELSE '-'
-		END AS INDV_SEX_NAME /* 개체성별코드명 */
-		, B.MCOW_DSC /* 어미소구분코드*/
-		, B.MCOW_SRA_INDV_AMNNO /* 어미축산개체관리번호 */
-		, CASE WHEN B.MCOW_DSC = '01' THEN '기초'
-		WHEN B.MCOW_DSC = '02' THEN '혈통'
-		WHEN B.MCOW_DSC = '03' THEN '고등'
-		WHEN B.MCOW_DSC = '09' THEN '미등록우'
-		ELSE '-'
-		END AS MCOW_DSC_NM
-		, ROUND(NVL(B.MATIME, 0)) AS MATIME /* 산차 */
-		, ROUND(NVL(A.PRNY_MTCN, 0)) AS PRNY_MTCN /* 임신개월수 */
-		, B.SRA_INDV_PASG_QCN /* 계대 */
-		, B.INDV_ID_NO /* 계체식벌번호 */
-		, B.SRA_INDV_BRDSRA_RG_NO /* 축산개체종축등록번호 */
-		, B.RG_DSC /* 등록구분번호 */
-		, CASE WHEN B.RG_DSC = '01' THEN '기초'
-		WHEN B.RG_DSC = '02' THEN '혈통'
-		WHEN B.RG_DSC = '03' THEN '고등'
-		WHEN B.RG_DSC = '09' THEN '미등록우'
-		ELSE ''
-		END AS RG_DSC_NM
-		, A.SRA_PDMNM
-		, A.SRA_PD_RGNNM /* 축산생산지역 */
-		, A.DNA_YN /* 친자검사결과여부 */
-		, B.ANW_YN /* 신규여부 */
-		, NVL(ROUND(A.COW_SOG_WT),0) AS COW_SOG_WT /* 우출하중량 */
-		, ROUND(A.FIR_LOWS_SBID_LMT_AM / 10000) AS FIR_LOWS_SBID_LMT_AM_B /*
-		최초최저낙찰한도금액 */
-		, ROUND(A.LOWS_SBID_LMT_AM / 10000) AS LOWS_SBID_LMT_AM_B /* 최저낙찰한도금액
-		*/
-		, A.RMK_CNTN /* 비고내용 */
-		, A.SEL_STS_DSC /* 낙유찰결과 */
-		, A.LVST_AUC_PTC_MN_NO /* 낙찰자 참가 번호 */
-		, A.TRMN_AMNNO /* 낙찰자 중도매인 번호 */
-		, A.SRA_SBID_UPR /* 낙찰금액 */
-		, ROUND(A.SRA_SBID_AM / 10000) AS SRA_SBID_AM_B /* 낙찰금액 */
-		, SUBSTRING(A.SRA_INDV_AMNNO, LENGTH(A.SRA_INDV_AMNNO)-4,4) || '-' ||
-		SUBSTRING(A.SRA_INDV_AMNNO, LENGTH(A.SRA_INDV_AMNNO), 1) AS
-		SRA_INDV_AMNNO_FORMAT
-		,   SUBSTRING(A.SRA_INDV_AMNNO,LENGTH(A.SRA_INDV_AMNNO)-8,4) || '-' ||SUBSTRING(A.SRA_INDV_AMNNO,LENGTH(A.SRA_INDV_AMNNO)-4,4) || '-' 
-				|| SUBSTRING(A.SRA_INDV_AMNNO, LENGTH(A.SRA_INDV_AMNNO), 1) AS SRA_INDV_AMNNO_FORMAT_FULL
-		, NVL(A.MODL_NO, A.AUC_PRG_SQ) AS MODL_NO
-		, CASE WHEN A.AUC_OBJ_DSC = '1' THEN ROUND(A.FIR_LOWS_SBID_LMT_AM /
-		NVL(C.CALF_AUC_ATDR_UNT_AM, 10000))
-		WHEN A.AUC_OBJ_DSC = '2' THEN ROUND(A.FIR_LOWS_SBID_LMT_AM /
-		NVL(C.NBFCT_AUC_ATDR_UNT_AM, 1))
-		WHEN A.AUC_OBJ_DSC = '3' THEN ROUND(A.FIR_LOWS_SBID_LMT_AM /
-		NVL(C.PPGCOW_AUC_ATDR_UNT_AM, 10000))
-		ELSE ROUND(A.FIR_LOWS_SBID_LMT_AM / 10000)
-		END AS FIR_LOWS_SBID_LMT_AM
-		, CASE WHEN A.AUC_OBJ_DSC = '1' THEN ROUND(A.LOWS_SBID_LMT_AM /
-		NVL(C.CALF_AUC_ATDR_UNT_AM, 10000))
-		WHEN A.AUC_OBJ_DSC = '2' THEN ROUND(A.LOWS_SBID_LMT_AM /
-		NVL(C.NBFCT_AUC_ATDR_UNT_AM, 1))
-		WHEN A.AUC_OBJ_DSC = '3' THEN ROUND(A.LOWS_SBID_LMT_AM /
-		NVL(C.PPGCOW_AUC_ATDR_UNT_AM, 10000))
-		ELSE ROUND(A.LOWS_SBID_LMT_AM / 10000)
-		END AS LOWS_SBID_LMT_AM
-		, CASE WHEN A.AUC_OBJ_DSC = '1' THEN ROUND(A.SRA_SBID_AM /
-		NVL(C.CALF_AUC_ATDR_UNT_AM, 10000))
-		WHEN A.AUC_OBJ_DSC = '2' THEN ROUND(A.SRA_SBID_AM /
-		NVL(C.NBFCT_AUC_ATDR_UNT_AM, 1))
-		WHEN A.AUC_OBJ_DSC = '3' THEN ROUND(A.SRA_SBID_AM /
-		NVL(C.PPGCOW_AUC_ATDR_UNT_AM, 10000))
-		ELSE ROUND(A.SRA_SBID_AM / 10000)
-		END AS SRA_SBID_AM
-		, CASE WHEN A.AUC_OBJ_DSC = '1' THEN ROUND(NVL(C.CALF_AUC_ATDR_UNT_AM,
-		10000))
-		WHEN A.AUC_OBJ_DSC = '2' THEN ROUND(NVL(C.NBFCT_AUC_ATDR_UNT_AM, 1))
-		WHEN A.AUC_OBJ_DSC = '3' THEN ROUND(NVL(C.PPGCOW_AUC_ATDR_UNT_AM, 10000))
-		ELSE ROUND(10000)
-		END AS DIVISION_PRICE
-		, A.PPGCOW_FEE_DSC
-		, A.PRNY_YN
-		, A.LED_SQNO
-		, A.LVST_MKT_TRPL_AMNNO /* 가축시장거래처관리번호 */
-		, ( SELECT SMS_BUFFER_2 FROM TB_LA_IS_BM_BZLOC WHERE NA_BZPLC =
-		#{naBzplc}) AS SMS_BUFFER_2
+			, A.OSLP_NO /* 출품번호 */
+			, A.AUC_DT
+			, (SELECT C.QCN FROM TB_LA_IS_MH_AUC_QCN C WHERE C.NA_BZPLC = A.NA_BZPLC AND C.AUC_DT = A.AUC_DT AND C.AUC_OBJ_DSC = A.AUC_OBJ_DSC) AS QCN
+			, (SELECT D.AUC_OBJ_DSC
+				FROM TB_LA_IS_MH_AUC_QCN D
+				WHERE D.NA_BZPLC = A.NA_BZPLC
+				AND D.AUC_DT = A.AUC_DT
+				AND DECODE(D.AUC_OBJ_DSC,'0',A.AUC_OBJ_DSC,D.AUC_OBJ_DSC) =
+				A.AUC_OBJ_DSC
+			) AS QCN_AUC_OBJ_DSC
+			, A.AUC_PRG_SQ /* 경매순번 */
+			, A.AUC_OBJ_DSC /* 경매대상구분코드 */
+			, A.SRA_INDV_AMNNO /* 축산개체관리번호 */
+			, A.SRA_SRS_DSC /* 축상축종구분코드 */
+			, A.FHS_ID_NO /* 농가식별번호 */
+			, A.FARM_AMNNO /* 농장관리번호 */
+			, (SELECT C.FTSNM
+				FROM TB_LA_IS_MM_FHS C
+				WHERE C.NA_BZPLC = A.NA_BZPLC
+				AND C.FHS_ID_NO = A.FHS_ID_NO
+				AND C.FARM_AMNNO = A.FARM_AMNNO
+			) AS FTSNM /* 농가명 */
+			, A.BRANDNM /* 브랜드명 */
+			, B.BIRTH /* 생년월일 */
+			, RTRIM(LTRIM(B.KPN_NO)) AS KPN_NO /* KPN번호 */
+			, B.INDV_SEX_C /* 개체성별코드 */
+			, CASE 
+				WHEN B.INDV_SEX_C = '0' THEN '없음' WHEN B.INDV_SEX_C = '1' THEN '암'
+				WHEN B.INDV_SEX_C = '2' THEN '수' WHEN B.INDV_SEX_C = '3' THEN '거세'
+				WHEN B.INDV_SEX_C = '4' THEN '미경산' WHEN B.INDV_SEX_C = '5' THEN '비거세'
+				WHEN B.INDV_SEX_C = '6' THEN '프리마틴' WHEN B.INDV_SEX_C = '9' THEN '공통'
+				ELSE '-'
+			END AS INDV_SEX_NAME /* 개체성별코드명 */
+			, B.MCOW_DSC /* 어미소구분코드*/
+			, B.MCOW_SRA_INDV_AMNNO /* 어미축산개체관리번호 */
+			, CASE 
+				WHEN B.MCOW_DSC = '01' THEN '기초'
+				WHEN B.MCOW_DSC = '02' THEN '혈통'
+				WHEN B.MCOW_DSC = '03' THEN '고등'
+				WHEN B.MCOW_DSC = '09' THEN '미등록우'
+				ELSE '-'
+			END AS MCOW_DSC_NM
+			, ROUND(NVL(B.MATIME, 0)) AS MATIME /* 산차 */
+			, ROUND(NVL(A.PRNY_MTCN, 0)) AS PRNY_MTCN /* 임신개월수 */
+			, B.SRA_INDV_PASG_QCN /* 계대 */
+			, B.INDV_ID_NO /* 계체식벌번호 */
+			, B.SRA_INDV_BRDSRA_RG_NO /* 축산개체종축등록번호 */
+			, B.RG_DSC /* 등록구분번호 */
+			, CASE 
+				WHEN B.RG_DSC = '01' THEN '기초'
+				WHEN B.RG_DSC = '02' THEN '혈통'
+				WHEN B.RG_DSC = '03' THEN '고등'
+				WHEN B.RG_DSC = '09' THEN '미등록우'
+				ELSE ''
+			END AS RG_DSC_NM
+			, A.SRA_PDMNM
+			, A.SRA_PD_RGNNM /* 축산생산지역 */
+			, A.DNA_YN /* 친자검사결과여부 */
+			, B.ANW_YN /* 신규여부 */
+			, NVL(ROUND(A.COW_SOG_WT),0) AS COW_SOG_WT /* 우출하중량 */
+			, ROUND(A.FIR_LOWS_SBID_LMT_AM / 10000) AS FIR_LOWS_SBID_LMT_AM_B /* 최초최저낙찰한도금액 */
+			, ROUND(A.LOWS_SBID_LMT_AM / 10000) AS LOWS_SBID_LMT_AM_B /* 최저낙찰한도금액 */
+			, A.RMK_CNTN /* 비고내용 */
+			, A.SEL_STS_DSC /* 낙유찰결과 */
+			, A.LVST_AUC_PTC_MN_NO /* 낙찰자 참가 번호 */
+			, A.TRMN_AMNNO /* 낙찰자 중도매인 번호 */
+			, A.SRA_SBID_UPR /* 낙찰금액 */
+			, ROUND(A.SRA_SBID_AM / 10000) AS SRA_SBID_AM_B /* 낙찰금액 */
+			, SUBSTRING(A.SRA_INDV_AMNNO, LENGTH(A.SRA_INDV_AMNNO)-4,4) || '-' || SUBSTRING(A.SRA_INDV_AMNNO, LENGTH(A.SRA_INDV_AMNNO), 1) AS SRA_INDV_AMNNO_FORMAT
+			,   SUBSTRING(A.SRA_INDV_AMNNO,LENGTH(A.SRA_INDV_AMNNO)-8,4) || '-' ||SUBSTRING(A.SRA_INDV_AMNNO,LENGTH(A.SRA_INDV_AMNNO)-4,4) || '-' || SUBSTRING(A.SRA_INDV_AMNNO, LENGTH(A.SRA_INDV_AMNNO), 1) AS SRA_INDV_AMNNO_FORMAT_FULL
+			, NVL(A.MODL_NO, A.AUC_PRG_SQ) AS MODL_NO
+			, CASE 
+				WHEN A.AUC_OBJ_DSC = '1' THEN ROUND(A.FIR_LOWS_SBID_LMT_AM / NVL(C.CALF_AUC_ATDR_UNT_AM, 10000))
+				WHEN A.AUC_OBJ_DSC = '2' THEN ROUND(A.FIR_LOWS_SBID_LMT_AM / NVL(C.NBFCT_AUC_ATDR_UNT_AM, 1))
+				WHEN A.AUC_OBJ_DSC = '3' THEN ROUND(A.FIR_LOWS_SBID_LMT_AM / NVL(C.PPGCOW_AUC_ATDR_UNT_AM, 10000))
+				ELSE ROUND(A.FIR_LOWS_SBID_LMT_AM / 10000)
+			END AS FIR_LOWS_SBID_LMT_AM
+			, CASE WHEN A.AUC_OBJ_DSC = '1' THEN ROUND(A.LOWS_SBID_LMT_AM / NVL(C.CALF_AUC_ATDR_UNT_AM, 10000))
+				WHEN A.AUC_OBJ_DSC = '2' THEN ROUND(A.LOWS_SBID_LMT_AM / NVL(C.NBFCT_AUC_ATDR_UNT_AM, 1))
+				WHEN A.AUC_OBJ_DSC = '3' THEN ROUND(A.LOWS_SBID_LMT_AM / NVL(C.PPGCOW_AUC_ATDR_UNT_AM, 10000))
+				ELSE ROUND(A.LOWS_SBID_LMT_AM / 10000)
+			END AS LOWS_SBID_LMT_AM
+			, CASE WHEN A.AUC_OBJ_DSC = '1' THEN ROUND(A.SRA_SBID_AM / NVL(C.CALF_AUC_ATDR_UNT_AM, 10000))
+				WHEN A.AUC_OBJ_DSC = '2' THEN ROUND(A.SRA_SBID_AM / NVL(C.NBFCT_AUC_ATDR_UNT_AM, 1))
+				WHEN A.AUC_OBJ_DSC = '3' THEN ROUND(A.SRA_SBID_AM / NVL(C.PPGCOW_AUC_ATDR_UNT_AM, 10000))
+				ELSE ROUND(A.SRA_SBID_AM / 10000)
+			END AS SRA_SBID_AM
+			, CASE WHEN A.AUC_OBJ_DSC = '1' THEN ROUND(NVL(C.CALF_AUC_ATDR_UNT_AM, 10000))
+				WHEN A.AUC_OBJ_DSC = '2' THEN ROUND(NVL(C.NBFCT_AUC_ATDR_UNT_AM, 1))
+				WHEN A.AUC_OBJ_DSC = '3' THEN ROUND(NVL(C.PPGCOW_AUC_ATDR_UNT_AM, 10000))
+				ELSE ROUND(10000)
+			END AS DIVISION_PRICE
+			, A.PPGCOW_FEE_DSC
+			, A.PRNY_YN
+			, A.LED_SQNO
+			, A.LVST_MKT_TRPL_AMNNO /* 가축시장거래처관리번호 */
+			, ( SELECT SMS_BUFFER_2 FROM TB_LA_IS_BM_BZLOC WHERE NA_BZPLC = #{naBzplc}) AS SMS_BUFFER_2
+			,CASE WHEN A.AUC_OBJ_DSC='1' THEN '송아지'
+					WHEN A.AUC_OBJ_DSC='2' THEN '비육우'
+					WHEN A.AUC_OBJ_DSC='3' THEN '번식우'
+					WHEN A.AUC_OBJ_DSC='0' THEN '일괄'
+					ELSE ''
+			END AUC_OBJ_DSC_NAME
 		FROM TB_LA_IS_MH_SOG_COW A
 		LEFT OUTER JOIN TB_LA_IS_MM_INDV B
 		ON (
-		A.NA_BZPLC = B.NA_BZPLC
-		AND
-		A.SRA_INDV_AMNNO = B.SRA_INDV_AMNNO
-		AND
-		A.SRA_SRS_DSC = B.SRA_SRS_DSC
+			A.NA_BZPLC = B.NA_BZPLC
+			AND A.SRA_INDV_AMNNO = B.SRA_INDV_AMNNO
+			AND A.SRA_SRS_DSC = B.SRA_SRS_DSC
 		)
 		LEFT OUTER JOIN TB_LA_IS_MM_ENV_EST C
 		ON ( A.NA_BZPLC = C.NA_BZPLC )
@@ -1524,8 +1501,7 @@
 		<if test="aucPrgSq != null and aucPrgSq != ''">
 			AND A.AUC_PRG_SQ = #{aucPrgSq}
 		</if>
-		<if
-			test="regType != null and regType != '' and regType == 'I'.toString()">
+		<if test="regType != null and regType != '' and regType == 'I'.toString()">
 			AND A.AUC_OBJ_DSC = '3'
 		</if>
 	</select>
@@ -1539,7 +1515,7 @@
 			<choose>
 			<when test="regType == 'LW'.toString() or regType == 'AWL'.toString()">
 				 , COW_SOG_WT = #{cowSogWt}
-				 , RMK_CNTN = #{rmkCntn}
+				 , RMK_CNTN = REPLACE(REPLACE(#{rmkCntn}, CHR(10),''), CHR(13),'')
 				 , FIR_LOWS_SBID_LMT_AM = #{firLowsSbidLmtAm} * (SELECT CASE WHEN #{aucObjDsc} = '1' THEN CALF_AUC_ATDR_UNT_AM
 																			 WHEN #{aucObjDsc} = '2' THEN NBFCT_AUC_ATDR_UNT_AM
 																			 WHEN #{aucObjDsc} = '3' THEN PPGCOW_AUC_ATDR_UNT_AM
@@ -1653,101 +1629,89 @@
 	</update>
 
 	<!-- 응찰로그 리스트 -->
-	<select id="selectBidLogList" parameterType="map"
-		resultType="map">
+	<select id="selectBidLogList" parameterType="map" resultType="map">
 		SELECT
-		A.AUC_PRG_SQ
-		,A.AUC_DT
-		, TO_CHAR(TO_DATE(A.AUC_DT,'YYYYMMDD'),'YYYY.MM.DD') AUC_DT_STR
-		,B.INDV_SEX_C
-		, A.SRA_INDV_AMNNO
-		, A.AUC_OBJ_DSC
-		,CASE
-		WHEN A.AUC_OBJ_DSC='1' THEN '송아지'
-		WHEN A.AUC_OBJ_DSC='2' THEN '비육우'
-		WHEN A.AUC_OBJ_DSC='3' THEN '번식우'
-		WHEN A.AUC_OBJ_DSC='0' THEN '일괄'
-		ELSE ''
-		END AUC_OBJ_DSC_NAME
-		, SUBSTRING(A.SRA_INDV_AMNNO,LENGTH(A.SRA_INDV_AMNNO)-4,5)
-		SRA_INDV_AMNNO_STR
-		, SUBSTRING(A.SRA_INDV_AMNNO,LENGTH(A.SRA_INDV_AMNNO)-4,4) || '-' ||
-		SUBSTRING(A.SRA_INDV_AMNNO, LENGTH(A.SRA_INDV_AMNNO), 1) AS
-		SRA_INDV_AMNNO_FORMAT
-		, CASE
-		WHEN B.INDV_SEX_C = 0 THEN '없음'
-		WHEN B.INDV_SEX_C = 1 THEN '암'
-		WHEN B.INDV_SEX_C = 2 THEN '수'
-		WHEN B.INDV_SEX_C = 3 THEN '거세'
-		WHEN B.INDV_SEX_C = 4 THEN '미경산'
-		WHEN B.INDV_SEX_C = 5 THEN '비거세'
-		WHEN B.INDV_SEX_C = 6 THEN '프리마틴'
-		WHEN B.INDV_SEX_C = 9 THEN '공통'
-		ELSE '없음'
-		END INDV_SEX_C_NAME
-		,A.LOWS_SBID_LMT_AM
-		,A.LVST_AUC_PTC_MN_NO
-		,C.TRMN_AMNNO
-		,C.ATDR_AM
-		, C.ATDR_AM/10000 ATDR_UPR
-		,C.ATDR_DTM
-		, A.LOWS_SBID_LMT_AM
-		, CASE WHEN A.AUC_OBJ_DSC = '1' THEN ROUND(A.LOWS_SBID_LMT_AM /
-		NVL(J.CALF_AUC_ATDR_UNT_AM, 10000))
-		WHEN A.AUC_OBJ_DSC = '2' THEN ROUND(A.LOWS_SBID_LMT_AM /
-		NVL(J.NBFCT_AUC_ATDR_UNT_AM, 1))
-		WHEN A.AUC_OBJ_DSC = '3' THEN ROUND(A.LOWS_SBID_LMT_AM /
-		NVL(J.PPGCOW_AUC_ATDR_UNT_AM, 10000))
-		ELSE ROUND(A.LOWS_SBID_LMT_AM / 10000)
-		END AS LOWS_SBID_LMT_UPR
-		, A.SRA_SBID_AM
-		, A.SRA_SBID_UPR
-		, A.COW_SOG_WT
-		, DECODE(#{searchTrmnAmnNo},A.TRMN_AMNNO,'본인낙찰','-') SEL_STS_DSC_NAME
+			A.AUC_PRG_SQ
+			,A.AUC_DT
+			, TO_CHAR(TO_DATE(A.AUC_DT,'YYYYMMDD'),'YYYY.MM.DD') AUC_DT_STR
+			,B.INDV_SEX_C
+			, A.SRA_INDV_AMNNO
+			, A.AUC_OBJ_DSC
+			,CASE WHEN A.AUC_OBJ_DSC='1' THEN '송아지'
+					WHEN A.AUC_OBJ_DSC='2' THEN '비육우'
+					WHEN A.AUC_OBJ_DSC='3' THEN '번식우'
+					WHEN A.AUC_OBJ_DSC='0' THEN '일괄'
+					ELSE ''
+			END AUC_OBJ_DSC_NAME
+			, SUBSTRING(A.SRA_INDV_AMNNO,LENGTH(A.SRA_INDV_AMNNO)-4,5) SRA_INDV_AMNNO_STR
+			, SUBSTRING(A.SRA_INDV_AMNNO,LENGTH(A.SRA_INDV_AMNNO)-4,4) || '-' || SUBSTRING(A.SRA_INDV_AMNNO, LENGTH(A.SRA_INDV_AMNNO), 1) AS SRA_INDV_AMNNO_FORMAT
+		, CASE	WHEN B.INDV_SEX_C = 0 THEN '없음'
+				WHEN B.INDV_SEX_C = 1 THEN '암'
+				WHEN B.INDV_SEX_C = 2 THEN '수'
+				WHEN B.INDV_SEX_C = 3 THEN '거세'
+				WHEN B.INDV_SEX_C = 4 THEN '미경산'
+				WHEN B.INDV_SEX_C = 5 THEN '비거세'
+				WHEN B.INDV_SEX_C = 6 THEN '프리마틴'
+				WHEN B.INDV_SEX_C = 9 THEN '공통'
+				ELSE '없음'
+				END INDV_SEX_C_NAME
+			,A.LOWS_SBID_LMT_AM
+			,A.LVST_AUC_PTC_MN_NO
+			,C.TRMN_AMNNO
+			,C.ATDR_AM
+			, C.ATDR_AM/10000 ATDR_UPR
+			,C.ATDR_DTM
+			, A.LOWS_SBID_LMT_AM
+			, CASE WHEN A.AUC_OBJ_DSC = '1' THEN ROUND(A.LOWS_SBID_LMT_AM / NVL(J.CALF_AUC_ATDR_UNT_AM, 10000))
+						WHEN A.AUC_OBJ_DSC = '2' THEN ROUND(A.LOWS_SBID_LMT_AM /	NVL(J.NBFCT_AUC_ATDR_UNT_AM, 1))
+						WHEN A.AUC_OBJ_DSC = '3' THEN ROUND(A.LOWS_SBID_LMT_AM /	NVL(J.PPGCOW_AUC_ATDR_UNT_AM, 10000))
+				ELSE ROUND(A.LOWS_SBID_LMT_AM / 10000)
+				END AS LOWS_SBID_LMT_UPR
+			, A.SRA_SBID_AM
+			, A.SRA_SBID_UPR
+			, A.COW_SOG_WT
+			, DECODE(#{searchTrmnAmnNo},A.TRMN_AMNNO,'본인낙찰','-') SEL_STS_DSC_NAME
 		FROM (
-		SELECT
-		A.NA_BZPLC
-		, A.AUC_OBJ_DSC
-		, A.AUC_DT
-		, A.OSLP_NO
-		, A.TRMN_AMNNO
-		, A.LVST_AUC_PTC_MN_NO
-		, A.AUC_PRG_SQ
-		, A.ATDR_AM
-		, A.ATDR_DTM
-		, ROW_NUMBER() OVER(PARTITION BY
-		A.NA_BZPLC,A.AUC_OBJ_DSC,A.AUC_DT,A.OSLP_NO,A.AUC_PRG_SQ,A.TRMN_AMNNO
-		ORDER BY A.ATDR_DTM DESC) RNUM
-		FROM TB_LA_IS_MH_ATDR_LOG A
-		INNER JOIN TB_LA_IS_BM_BZLOC B ON A.NA_BZPLC = B.NA_BZPLC
-		WHERE RG_SQNO NOT IN (0,99999999)
-		<if test="naBzPlcNo != null and naBzPlcNo != ''">
-			AND B.NA_BZPLCNO = #{naBzPlcNo}
-		</if>
-		<if test="naBzplc != null and naBzplc != ''">
-			AND A.NA_BZPLC = #{naBzplc}
-		</if>
-		<if test="searchAucObjDsc != null and searchAucObjDsc != ''">
-			AND A.AUC_OBJ_DSC = #{searchAucObjDsc}
-		</if>
-		AND AUC_DT = #{searchDate}
-		AND TRMN_AMNNO = #{searchTrmnAmnNo}
+			SELECT A.NA_BZPLC
+				, A.AUC_OBJ_DSC
+				, A.AUC_DT
+				, A.OSLP_NO
+				, A.TRMN_AMNNO
+				, A.LVST_AUC_PTC_MN_NO
+				, A.AUC_PRG_SQ
+				, A.ATDR_AM
+				, A.ATDR_DTM
+				, ROW_NUMBER() OVER(PARTITION BY A.NA_BZPLC,A.AUC_OBJ_DSC,A.AUC_DT,A.OSLP_NO,A.AUC_PRG_SQ,A.TRMN_AMNNO
+			ORDER BY A.ATDR_DTM DESC) RNUM
+			FROM TB_LA_IS_MH_ATDR_LOG A
+			INNER JOIN TB_LA_IS_BM_BZLOC B ON A.NA_BZPLC = B.NA_BZPLC
+			WHERE RG_SQNO NOT IN (0,99999999)
+			<if test="naBzPlcNo != null and naBzPlcNo != ''">
+				AND B.NA_BZPLCNO = #{naBzPlcNo}
+			</if>
+			<if test="naBzplc != null and naBzplc != ''">
+				AND A.NA_BZPLC = #{naBzplc}
+			</if>
+			<if test="searchAucObjDsc != null and searchAucObjDsc != ''">
+				AND A.AUC_OBJ_DSC = #{searchAucObjDsc}
+			</if>
+			AND AUC_DT = #{searchDate}
+			AND TRMN_AMNNO = #{searchTrmnAmnNo}
 		) C
-		INNER JOIN TB_LA_IS_MH_SOG_COW A ON
-		A.NA_BZPLC = C.NA_BZPLC
-		AND A.AUC_OBJ_DSC = C.AUC_OBJ_DSC
-		AND A.AUC_DT = C.AUC_DT
-		AND A.OSLP_NO = C.OSLP_NO
-		AND A.AUC_PRG_SQ = C.AUC_PRG_SQ
-		LEFT JOIN TB_LA_IS_MM_INDV B ON A.NA_BZPLC
-		= B.NA_BZPLC
-		AND A.SRA_SRS_DSC = B.SRA_SRS_DSC
-		AND A.SRA_INDV_AMNNO = B.SRA_INDV_AMNNO
-		LEFT OUTER JOIN
-		TB_LA_IS_MM_ENV_EST J
-		ON ( A.NA_BZPLC = J.NA_BZPLC )
+		INNER JOIN TB_LA_IS_MH_SOG_COW A 
+			ON A.NA_BZPLC = C.NA_BZPLC
+			AND A.AUC_OBJ_DSC = C.AUC_OBJ_DSC
+			AND A.AUC_DT = C.AUC_DT
+			AND A.OSLP_NO = C.OSLP_NO
+			AND A.AUC_PRG_SQ = C.AUC_PRG_SQ
+		LEFT JOIN TB_LA_IS_MM_INDV B 
+			ON A.NA_BZPLC = B.NA_BZPLC
+			AND A.SRA_SRS_DSC = B.SRA_SRS_DSC
+			AND A.SRA_INDV_AMNNO = B.SRA_INDV_AMNNO
+		LEFT OUTER JOIN TB_LA_IS_MM_ENV_EST J
+			ON ( A.NA_BZPLC = J.NA_BZPLC )
 		WHERE C.RNUM = 1
-		AND C.ATDR_AM != 0
+		AND C.ATDR_AM <![CDATA[>]]> 0
 		<if test="searchTxt != null and searchTxt != ''">
 			AND (
 			SUBSTRING(A.SRA_INDV_AMNNO,LENGTH(A.SRA_INDV_AMNNO)-4,4 ) LIKE '%' || #{searchTxt} ||'%'
@@ -1755,8 +1719,7 @@
 		</if>
 		<if test="aucYn != null and aucYn != ''">
 			<!-- AND A.AUC_YN = #{aucYn} -->
-			AND A.LOWS_SBID_LMT_AM <![CDATA[>]]>
-			0
+			AND A.LOWS_SBID_LMT_AM <![CDATA[>]]> 0
 			AND A.SEL_STS_DSC != '22'
 			AND A.DEL_YN = '0'
 		</if>
@@ -1764,8 +1727,7 @@
 	</select>
 
 	<!-- 응찰내역 통계 -->
-	<select id="selectBidLogListCnt" parameterType="map"
-		resultType="map">
+	<select id="selectBidLogListCnt" parameterType="map" resultType="map">
 		SELECT
 		COUNT(B.INDV_SEX_C) TOT_CNT
 		, COUNT(DECODE(B.INDV_SEX_C,1,1,NULL)) W_CNT
@@ -1891,14 +1853,14 @@
 	<!-- 공통 코드 리스트 조회 -->
 	<select id="selectCodeList" parameterType="map" resultType="map">
 		SELECT BSN_DSC
-		, SIMP_C
-		, SIMP_TPC
-		, SIMP_C_GRP_SQNO
-		, SIMP_C_YN
-		, SIMP_CNM
-		, PRET_SIMP_TPC
-		, PRET_SIMP_C
-		, SORT_SQ
+			, SIMP_C
+			, SIMP_TPC
+			, SIMP_C_GRP_SQNO
+			, SIMP_C_YN
+			, SIMP_CNM
+			, PRET_SIMP_TPC
+			, PRET_SIMP_C
+			, SORT_SQ
 		FROM TB_LA_IS_MH_COMN_APL
 		WHERE SIMP_TPC = #{simpTpc}
 		<choose>
@@ -2132,53 +2094,49 @@
 	</update>
 
 
-	<select id="entryStateSelectList" parameterType="map"
-		resultType="map">
+	<select id="entryStateSelectList" parameterType="map" resultType="map">
 		/* AuctionMapper.entryStateSelectList */
 		SELECT T.*
-		FROM (
-		SELECT B.AUC_DT /* 경매일자 */
-		, TO_CHAR(TO_DATE(B.AUC_DT,'YYYYMMDD'),'YYYY.MM.DD') AUC_DT_STR /* 경매일자
-		(경매일자) FORMAT*/
-		, MIN(B.AUC_OBJ_DSC) AS AUC_OBJ_DSC
-		FROM TB_LA_IS_MH_AUC_QCN B
-		INNER JOIN TB_LA_IS_MH_SOG_COW A ON A.NA_BZPLC = B.NA_BZPLC
-		AND A.AUC_DT = B.AUC_DT
-		AND A.AUC_OBJ_DSC = DECODE(B.AUC_OBJ_DSC,'0',A.AUC_OBJ_DSC,B.AUC_OBJ_DSC)
-		WHERE 1=1
-		<if test="stateFlag != null and stateFlag != ''">
-			<choose>
-				<when test='"entry".equals(stateFlag)'>
-					AND A.FHS_ID_NO = #{searchFhsIdNo}
-					AND A.FARM_AMNNO = #{searchFarmAmnno}
-				</when>
-				<otherwise>
-					AND A.TRMN_AMNNO = #{searchTrmnAmnNo} /* 거래인관리번호(중도매인기준정보번호) */
-					AND A.SEL_STS_DSC = '22' /* 판매상태구분코드 */
-				</otherwise>
-			</choose>
-		</if>
-		AND B.NA_BZPLC = #{naBzPlc} /* 사업장 번호 */
-		GROUP BY B.AUC_DT
-		ORDER BY B.AUC_DT DESC
+			FROM (
+				SELECT B.AUC_DT /* 경매일자 */
+					, TO_CHAR(TO_DATE(B.AUC_DT,'YYYYMMDD'),'YYYY.MM.DD') AUC_DT_STR /* 경매일자(경매일자) FORMAT*/
+					, MIN(B.AUC_OBJ_DSC) AS AUC_OBJ_DSC
+				FROM TB_LA_IS_MH_AUC_QCN B
+				INNER JOIN TB_LA_IS_MH_SOG_COW A ON A.NA_BZPLC = B.NA_BZPLC
+					AND A.AUC_DT = B.AUC_DT
+					AND A.AUC_OBJ_DSC = DECODE(B.AUC_OBJ_DSC,'0',A.AUC_OBJ_DSC,B.AUC_OBJ_DSC)
+				WHERE 1=1
+				<if test="stateFlag != null and stateFlag != ''">
+					<choose>
+						<when test='"entry".equals(stateFlag)'>
+							AND A.FHS_ID_NO = #{searchFhsIdNo}
+							AND A.FARM_AMNNO = #{searchFarmAmnno}
+						</when>
+						<otherwise>
+							AND A.TRMN_AMNNO = #{searchTrmnAmnNo} /* 거래인관리번호(중도매인기준정보번호) */
+							AND A.SEL_STS_DSC = '22' /* 판매상태구분코드 */
+						</otherwise>
+					</choose>
+				</if>
+				AND B.NA_BZPLC = #{naBzPlc} /* 사업장 번호 */
+				GROUP BY B.AUC_DT
+				ORDER BY B.AUC_DT DESC
 		) T
-		WHERE ROWNUM <![CDATA[<=]]>
-		10
+		WHERE ROWNUM <![CDATA[<=]]> 10
 	</select>
 
-	<select id="selectBuyStateInfo" parameterType="map"
-		resultType="map">
+	<select id="selectBuyStateInfo" parameterType="map" resultType="map">
 		/* AuctionMapper.selectBuyStateInfo */
 		SELECT DISTINCT
-		A.LVST_AUC_PTC_MN_NO /* 참가번호 */
-		, B.SRA_MWMNNM AS USER_NM /* 이름 */
-		, B.DONGUP AS USER_DONG_UP /* 주소 */
-		, B.DONGBW AS USER_DONG_BW /* 상세주소 */
-		, B.MB_INTG_NO
+			A.LVST_AUC_PTC_MN_NO /* 참가번호 */
+			, B.SRA_MWMNNM AS USER_NM /* 이름 */
+			, B.DONGUP AS USER_DONG_UP /* 주소 */
+			, B.DONGBW AS USER_DONG_BW /* 상세주소 */
+			, B.MB_INTG_NO
 		FROM TB_LA_IS_MH_AUC_ENTR A
 		LEFT JOIN TB_LA_IS_MM_MWMN B
 		ON A.NA_BZPLC = B.NA_BZPLC
-		AND A.TRMN_AMNNO = B.TRMN_AMNNO
+			AND A.TRMN_AMNNO = B.TRMN_AMNNO
 		WHERE 1=1
 		<choose>
 			<when test="searchMbIntgNo != null and searchMbIntgNo != ''">
@@ -2188,20 +2146,18 @@
 				AND B.TRMN_AMNNO = #{searchTrmnAmnNo} /* 거래인관리번호(중도매인기준정보번호) */
 			</otherwise>
 		</choose>
-		AND A.AUC_DT = #{searchDate} /* 경매일자 */
-		AND A.NA_BZPLC = #{naBzPlc} /* 사업장 번호 */
+			AND A.AUC_DT = #{searchDate} /* 경매일자 */
+			AND A.NA_BZPLC = #{naBzPlc} /* 사업장 번호 */
 		<if test="searchAucObjDsc != null and searchAucObjDsc != ''">
-			AND A.AUC_OBJ_DSC = CASE WHEN TO_CHAR(#{searchAucObjDsc}) = '0' THEN
-			TO_CHAR(#{searchAucObjDsc}) ELSE AUC_OBJ_DSC END
+			AND A.AUC_OBJ_DSC = CASE WHEN TO_CHAR(#{searchAucObjDsc}) = '0' THEN TO_CHAR(#{searchAucObjDsc}) ELSE AUC_OBJ_DSC END
 		</if>
 	</select>
 
-	<select id="selectEntryStateInfo" parameterType="map"
-		resultType="map">
+	<select id="selectEntryStateInfo" parameterType="map" resultType="map">
 		/* AuctionMapper.selectEntryStateInfo */
 		SELECT FTSNM AS USER_NM
-		, DONGUP AS USER_DONG_UP /* 주소 */
-		, DONGBW AS USER_DONG_BW /* 상세주소 */
+			, DONGUP AS USER_DONG_UP /* 주소 */
+			, DONGBW AS USER_DONG_BW /* 상세주소 */
 		FROM TB_LA_IS_MM_FHS
 		WHERE NA_BZPLC = #{naBzPlc}
 		<choose>
@@ -2217,14 +2173,14 @@
 
 	<sql id="selectTotFee">
 		SELECT
-		SUM(NVL(SRA_TR_FEE, 0)* DECODE(ANS_DSC, 1, 1, -1) ) AS SRA_TR_FEE
-		, NA_BZPLC
-		, AUC_OBJ_DSC
-		, AUC_DT
-		, OSLP_NO
-		, LED_SQNO
-		, FEE_APL_OBJ_C
-		FROM TB_LA_IS_MH_FEE_IMPS
+			SUM(NVL(SRA_TR_FEE, 0)* DECODE(ANS_DSC, 1, 1, -1) ) AS SRA_TR_FEE
+			, NA_BZPLC
+			, AUC_OBJ_DSC
+			, AUC_DT
+			, OSLP_NO
+			, LED_SQNO
+			, FEE_APL_OBJ_C
+			FROM TB_LA_IS_MH_FEE_IMPS
 		WHERE 1=1
 		<choose>
 			<when test='"entry".equals(stateFlag)'>
@@ -2234,52 +2190,51 @@
 				AND FEE_APL_OBJ_C = '2'
 			</otherwise>
 		</choose>
-
-		AND AUC_DT = #{searchDate}
-		AND NA_BZPLC = #{naBzPlc} /* 사업장 번호 */
+			AND AUC_DT LIKE '%' || #{searchDate} || '%'
+			<if test="!'all'.equals(searchFlag)">
+				AND NA_BZPLC = #{naBzPlc} /* 사업장 번호 */
+			</if>
 		GROUP BY NA_BZPLC, AUC_OBJ_DSC, AUC_DT, OSLP_NO, LED_SQNO, FEE_APL_OBJ_C
 	</sql>
 
-	<select id="selectTotSoldPriceAndFee" parameterType="map"
-		resultType="map">
+	<select id="selectTotSoldPriceAndFee" parameterType="map" resultType="map">
 		/* AuctionMapper.selectTotSoldPriceAndFee */
 		SELECT A.NA_BZPLC
-		, A.AUC_DT
-		, SUM(NVL(A.SRA_SBID_AM, 0)) AS SRA_SBID_AM
-		, SUM(NVL(C.SRA_TR_FEE, 0)) AS SRA_TR_FEE
+			, A.AUC_DT
+			, SUM(NVL(A.SRA_SBID_AM, 0)) AS SRA_SBID_AM
+			, SUM(NVL(C.SRA_TR_FEE, 0)) AS SRA_TR_FEE
 		FROM TB_LA_IS_MH_SOG_COW A
 		INNER JOIN TB_LA_IS_BM_BZLOC B ON A.NA_BZPLC = B.NA_BZPLC
 		LEFT JOIN (
 		<include refid="selectTotFee"></include>
-
 		) C ON A.NA_BZPLC = C.NA_BZPLC
-		AND A.AUC_OBJ_DSC = C.AUC_OBJ_DSC
-		AND A.AUC_DT = C.AUC_DT
-		AND A.OSLP_NO = C.OSLP_NO
-		AND A.LED_SQNO = C.LED_SQNO
+			AND A.AUC_OBJ_DSC = C.AUC_OBJ_DSC
+			AND A.AUC_DT = C.AUC_DT
+			AND A.OSLP_NO = C.OSLP_NO
+			AND A.LED_SQNO = C.LED_SQNO
 		WHERE 1=1
 		<if test="stateFlag != null and stateFlag != ''">
 			<choose>
 				<when test='"entry".equals(stateFlag)'>
-					AND EXISTS (SELECT 1 FROM TB_LA_IS_MM_FHS WHERE MB_INTG_NO =
-					#{searchMbIntgNo}
-					AND FHS_ID_NO = A.FHS_ID_NO
-					AND FARM_AMNNO = A.FARM_AMNNO
-					AND NA_BZPLC = A.NA_BZPLC)
+					<choose>
+						<when test="searchMbIntgNo != null and searchMbIntgNo != ''">
+							AND EXISTS (SELECT 1 FROM TB_LA_IS_MM_FHS WHERE MB_INTG_NO = #{searchMbIntgNo} AND FHS_ID_NO = A.FHS_ID_NO	AND FARM_AMNNO = A.FARM_AMNNO	AND NA_BZPLC = A.NA_BZPLC)
+						</when>
+						<otherwise>
+							AND A.FHS_ID_NO = #{searchFhsIdNo}
+							AND A.FARM_AMNNO = #{searchFarmAmnno}
+						</otherwise>
+					</choose>
 				</when>
 				<otherwise>
-					AND EXISTS (
-							SELECT 1 FROM TB_LA_IS_MM_MWMN 
-							WHERE 1=1 
-							<choose>
-								<when test="searchMbIntgNo !=null and searchMbIntgNo != ''">
-									AND MB_INTG_NO = #{searchMbIntgNo}
-								</when>
-								<otherwise>
-									AND TRMN_AMNNO = A.TRMN_AMNNO AND NA_BZPLC = A.NA_BZPLC	
-								</otherwise>
-							</choose>
-							)
+					<choose>
+						<when test="searchMbIntgNo != null and searchMbIntgNo != ''">
+							AND EXISTS (SELECT 1 FROM TB_LA_IS_MM_MWMN WHERE MB_INTG_NO = #{searchMbIntgNo} AND TRMN_AMNNO = A.TRMN_AMNNO AND NA_BZPLC = A.NA_BZPLC)
+						</when>
+						<otherwise>
+							AND A.TRMN_AMNNO = #{searchTrmnAmnNo}
+						</otherwise>
+					</choose>
 				</otherwise>
 			</choose>
 		</if>
@@ -2290,7 +2245,6 @@
 		AND B.NA_BZPLC = #{naBzPlc} /* 사업장 번호 */
 		AND A.AUC_DT = #{searchDate} /* 경매일자 */
 		AND A.SEL_STS_DSC = '22' /* 판매상태구분코드 */
-
 		GROUP BY A.NA_BZPLC, A.AUC_DT
 	</select>
 
@@ -2298,52 +2252,48 @@
 		resultType="map">
 		/* AuctionMapper.selectJohapAccInfo */
 		SELECT NA_BZPLNM
-		, ACNO
+			, ACNO
 		FROM TB_LA_IS_MM_WMC
 		WHERE NA_BZPLC = #{naBzPlc}
 	</select>
 
 	<select id="myFeeStateList" parameterType="map" resultType="map">
 		SELECT D.SIMP_CNM AS SRA_TR_FEE_NM
-		, SUM( SRA_TR_FEE * (CASE WHEN ANS_DSC = '1' THEN 1 ELSE - 1 END ) ) AS
-		SRA_TR_FEE
-		, D.SIMP_C
+			, SUM( SRA_TR_FEE * (CASE WHEN ANS_DSC = '1' THEN 1 ELSE - 1 END ) ) AS SRA_TR_FEE
+			, D.SIMP_C
 		FROM TB_LA_IS_MH_SOG_COW A
 		LEFT JOIN TB_LA_IS_MH_FEE_IMPS B ON A.NA_BZPLC = B.NA_BZPLC
-		AND A.AUC_OBJ_DSC = B.AUC_OBJ_DSC
-		AND A.AUC_DT = B.AUC_DT
-		AND A.OSLP_NO = B.OSLP_NO
-		AND A.LED_SQNO = B.LED_SQNO
-
+			AND A.AUC_OBJ_DSC = B.AUC_OBJ_DSC
+			AND A.AUC_DT = B.AUC_DT
+			AND A.OSLP_NO = B.OSLP_NO
+			AND A.LED_SQNO = B.LED_SQNO
 		LEFT JOIN TB_LA_IS_MM_INDV C ON C.NA_BZPLC = A.NA_BZPLC
-		AND C.SRA_SRS_DSC = A.SRA_SRS_DSC
-		AND C.SRA_INDV_AMNNO = A.SRA_INDV_AMNNO
-
-		INNER JOIN TB_LA_IS_MH_COMN_APL D ON SIMP_TPC= 'NA_FEE_C' AND B.NA_FEE_C =
-		D.SIMP_C
+			AND C.SRA_SRS_DSC = A.SRA_SRS_DSC
+			AND C.SRA_INDV_AMNNO = A.SRA_INDV_AMNNO
+		INNER JOIN TB_LA_IS_MH_COMN_APL D ON SIMP_TPC= 'NA_FEE_C' AND B.NA_FEE_C = D.SIMP_C
 		WHERE 1=1
 		<if test="stateFlag != null and stateFlag != ''">
 			<choose>
 				<when test='"entry".equals(stateFlag)'>
-					AND EXISTS (SELECT 1 FROM TB_LA_IS_MM_FHS WHERE MB_INTG_NO =
-					#{searchMbIntgNo}
-					AND FHS_ID_NO = A.FHS_ID_NO
-					AND FARM_AMNNO = A.FARM_AMNNO
-					AND NA_BZPLC = A.NA_BZPLC)
+					<choose>
+						<when test="searchMbIntgNo != null and searchMbIntgNo != ''">
+							AND EXISTS (SELECT 1 FROM TB_LA_IS_MM_FHS WHERE MB_INTG_NO = #{searchMbIntgNo} AND FHS_ID_NO = A.FHS_ID_NO AND FARM_AMNNO = A.FARM_AMNNO AND NA_BZPLC = A.NA_BZPLC)
+						</when>
+						<otherwise>
+							AND A.FHS_ID_NO = #{searchFhsIdNo}
+							AND A.FARM_AMNNO = #{searchFarmAmnno}
+						</otherwise>
+					</choose>
 				</when>
 				<otherwise>
-					AND EXISTS (
-							SELECT 1 FROM TB_LA_IS_MM_MWMN 
-							WHERE 1=1 
-							<choose>
-								<when test="searchMbIntgNo !=null and searchMbIntgNo != ''">
-									AND MB_INTG_NO = #{searchMbIntgNo}
-								</when>
-								<otherwise>
-									AND TRMN_AMNNO = A.TRMN_AMNNO AND NA_BZPLC = A.NA_BZPLC	
-								</otherwise>
-							</choose>
-							)
+					<choose>
+						<when test="searchMbIntgNo != null and searchMbIntgNo != ''">
+							AND EXISTS (SELECT 1 FROM TB_LA_IS_MM_MWMN WHERE MB_INTG_NO = #{searchMbIntgNo} AND TRMN_AMNNO = A.TRMN_AMNNO AND NA_BZPLC = A.NA_BZPLC)
+						</when>
+						<otherwise>
+							AND A.TRMN_AMNNO = #{searchTrmnAmnno}
+						</otherwise>
+					</choose>
 				</otherwise>
 			</choose>
 		</if>
@@ -2367,59 +2317,77 @@
 		ORDER BY D.SIMP_C
 	</select>
 
-	<select id="selectStateBuyList" parameterType="map"
-		resultType="map">
+	<select id="selectStateBuyList" parameterType="map" resultType="map">
 		/* AuctionMapper.selectStateBuyList */
 		SELECT T.NA_BZPLC
-		, T.NA_BZPLCNO
-		,T.CLNTNM
-		, T.AUC_DT
-		, TO_CHAR(TO_DATE(T.AUC_DT,'YYYYMMDD'),'DD') AUC_DAY
-		, TO_CHAR(TO_DATE(T.AUC_DT,'YYYYMMDD'),'DY') AUC_WEEK_DAY
-		, AGGR_CONCAT(DISTINCT T.AUC_OBJ_DSC_NAME, ',') AUC_OBJ_DSC_NAME
-		, COUNT(*) COW_CNT /* 전체 */
-		, SUM(T.SRA_SBID_AM) AS SRA_SBID_AM
+				, T.NA_BZPLCNO
+				, T.CLNTNM
+				, T.AUC_DT
+				, T.AUC_DAY
+				, T.AUC_WEEK_DAY
+				, AGGR_CONCAT(DISTINCT T.AUC_OBJ_DSC_NAME, ',') AUC_OBJ_DSC_NAME
+				, COUNT(*) COW_CNT /* 전체 */
+				, SUM(T.SRA_SBID_AM) AS SRA_SBID_AM
+				, SUM(NVL(T.SRA_TR_FEE, 0)) AS SRA_TR_FEE
 		FROM (
-		SELECT A.NA_BZPLC
-		, B.NA_BZPLCNO
-		, B.CLNTNM
-		, A.AUC_DT
-		, A.AUC_OBJ_DSC
-		, A.SEL_STS_DSC
-		, (CASE WHEN A.AUC_OBJ_DSC='1' THEN '송아지'
-		WHEN A.AUC_OBJ_DSC='2' THEN '비육우'
-		WHEN A.AUC_OBJ_DSC='3' THEN '번식우'
-		WHEN A.AUC_OBJ_DSC='0' THEN '일괄'
-		ELSE '' END ) AS AUC_OBJ_DSC_NAME
-		, NVL(A.SRA_SBID_AM,0) SRA_SBID_AM
-		FROM TB_LA_IS_MH_SOG_COW A
-		INNER JOIN TB_LA_IS_BM_BZLOC B ON A.NA_BZPLC = B.NA_BZPLC
-		INNER JOIN TB_LA_IS_MM_INDV C ON A.NA_BZPLC = C.NA_BZPLC
-		AND A.SRA_SRS_DSC = C.SRA_SRS_DSC
-		AND A.SRA_INDV_AMNNO = C.SRA_INDV_AMNNO
-		LEFT OUTER JOIN TB_LA_IS_MM_MWMN D ON A.TRMN_AMNNO = D.TRMN_AMNNO
-		AND A.NA_BZPLC = D.NA_BZPLC
-		WHERE 1=1
-		<choose>
-			<when
-				test="searchMbIntgNo != null and searchMbIntgNo != '' and 'all'.toString().equals(searchFlag)">
-				AND D.MB_INTG_NO = #{searchMbIntgNo} /* 통합관리번호 */
-			</when>
-			<otherwise>
-				AND A.TRMN_AMNNO = #{searchTrmnAmnNo} /* 거래인관리번호(중도매인기준정보번호) */
-			</otherwise>
-		</choose>
-		AND A.SEL_STS_DSC = '22' /* 판매상태구분코드 */
-		AND SUBSTRING(A.AUC_DT,1,6) = #{searchDateState}
-		<if test="searchFlag != 'all'.toString()">
-			AND A.NA_BZPLC = #{naBzplc} /* 사업장 번호 */
-		</if>
-		) T
-		GROUP BY T.NA_BZPLC,T.CLNTNM, T.AUC_DT, T.NA_BZPLCNO
+				SELECT A.NA_BZPLC
+						, B.NA_BZPLCNO
+						, B.CLNTNM
+						, A.AUC_DT
+						, A.AUC_OBJ_DSC
+						, A.SEL_STS_DSC
+						, TO_CHAR(TO_DATE(A.AUC_DT,'YYYYMMDD'),'DD') AUC_DAY
+						, (CASE WHEN TO_CHAR(TO_DATE(A.AUC_DT,'YYYYMMDD'),'D') = '1' THEN '일'
+									WHEN TO_CHAR(TO_DATE(A.AUC_DT,'YYYYMMDD'),'D') = '2' THEN '월'
+									WHEN TO_CHAR(TO_DATE(A.AUC_DT,'YYYYMMDD'),'D') = '3' THEN '화'
+									WHEN TO_CHAR(TO_DATE(A.AUC_DT,'YYYYMMDD'),'D') = '4' THEN '수'
+									WHEN TO_CHAR(TO_DATE(A.AUC_DT,'YYYYMMDD'),'D') = '5' THEN '목'
+									WHEN TO_CHAR(TO_DATE(A.AUC_DT,'YYYYMMDD'),'D') = '6' THEN '금'
+									WHEN TO_CHAR(TO_DATE(A.AUC_DT,'YYYYMMDD'),'D') = '7' THEN '토'
+									ELSE '' END ) AS AUC_WEEK_DAY
+						, (CASE WHEN A.AUC_OBJ_DSC='1' THEN '송아지'
+									WHEN A.AUC_OBJ_DSC='2' THEN '비육우'
+									WHEN A.AUC_OBJ_DSC='3' THEN '번식우'
+									WHEN A.AUC_OBJ_DSC='0' THEN '일괄'
+									ELSE '' END ) AS AUC_OBJ_DSC_NAME
+						, NVL(A.SRA_SBID_AM,0) SRA_SBID_AM
+						, NVL(FEE.SRA_TR_FEE,0) SRA_TR_FEE
+				FROM TB_LA_IS_MH_SOG_COW A
+				INNER JOIN TB_LA_IS_BM_BZLOC B ON A.NA_BZPLC = B.NA_BZPLC
+				INNER JOIN TB_LA_IS_MM_INDV C 
+					ON A.NA_BZPLC = C.NA_BZPLC
+					AND A.SRA_SRS_DSC = C.SRA_SRS_DSC
+					AND A.SRA_INDV_AMNNO = C.SRA_INDV_AMNNO
+				LEFT JOIN TB_LA_IS_MM_MWMN D 
+					ON A.TRMN_AMNNO = D.TRMN_AMNNO
+					AND A.NA_BZPLC = D.NA_BZPLC
+				LEFT JOIN (
+					<include refid="selectTotFee"></include>
+					) FEE ON A.NA_BZPLC = FEE.NA_BZPLC
+						AND A.AUC_OBJ_DSC = FEE.AUC_OBJ_DSC
+						AND A.AUC_DT = FEE.AUC_DT
+						AND A.OSLP_NO = FEE.OSLP_NO
+						AND A.LED_SQNO = FEE.LED_SQNO
+				WHERE 1=1
+				<choose>
+					<when
+						test="searchMbIntgNo != null and searchMbIntgNo != '' and 'all'.toString().equals(searchFlag)">
+						AND D.MB_INTG_NO = #{searchMbIntgNo} /* 통합관리번호 */
+					</when>
+					<otherwise>
+						AND A.TRMN_AMNNO = #{searchTrmnAmnNo} /* 거래인관리번호(중도매인기준정보번호) */
+					</otherwise>
+				</choose>
+					AND A.SEL_STS_DSC = '22' /* 판매상태구분코드 */
+					AND SUBSTRING(A.AUC_DT,1,6) = #{searchDateState}
+					<if test="searchFlag != 'all'.toString()">
+					AND A.NA_BZPLC = #{naBzplc} /* 사업장 번호 */
+					</if>
+			) T
+		GROUP BY T.NA_BZPLC,T.CLNTNM, T.AUC_DT, T.NA_BZPLCNO, T.AUC_DAY, T.AUC_WEEK_DAY
 	</select>
 
-	<select id="selectStateEntryCntFhs" parameterType="map"
-		resultType="map">
+	<select id="selectStateEntryCntFhs" parameterType="map" resultType="map">
 		SELECT
 		<choose>
 			<when test="searchMbIntgNo != null and searchMbIntgNo != ''">
@@ -2449,54 +2417,74 @@
 		</if>
 	</select>
 
-	<select id="selectStateEntryList" parameterType="map"
-		resultType="map">
+	<select id="selectStateEntryList" parameterType="map" resultType="map">
 		SELECT T.NA_BZPLC
-		, T.NA_BZPLCNO
-		,T.CLNTNM
-		, T.AUC_DT
-		, TO_CHAR(TO_DATE(T.AUC_DT,'YYYYMMDD'),'DD') AUC_DAY
-		, TO_CHAR(TO_DATE(T.AUC_DT,'YYYYMMDD'),'DY') AUC_WEEK_DAY
-		, AGGR_CONCAT (DISTINCT T.AUC_OBJ_DSC_NAME, ',') AUC_OBJ_DSC_NAME
-		, COUNT(*) COW_CNT /* 전체 */
-		, SUM(T.SRA_SBID_AM) AS SRA_SBID_AM
+				, T.NA_BZPLCNO
+				, T.CLNTNM
+				, T.AUC_DT
+				, T.AUC_DAY
+				, T.AUC_WEEK_DAY
+				, AGGR_CONCAT (DISTINCT T.AUC_OBJ_DSC_NAME, ',') AUC_OBJ_DSC_NAME
+				, COUNT(*) COW_CNT /* 전체 */
+				, SUM(T.SRA_SBID_AM) AS SRA_SBID_AM
+				, SUM(NVL(T.SRA_TR_FEE, 0)) AS SRA_TR_FEE
 		FROM (
-		SELECT A.NA_BZPLC
-		, B.NA_BZPLCNO
-		, B.CLNTNM
-		, A.AUC_DT
-		, A.AUC_OBJ_DSC
-		, A.SEL_STS_DSC
-		, CASE WHEN A.AUC_OBJ_DSC='1' THEN '송아지' WHEN A.AUC_OBJ_DSC='2' THEN
-		'비육우' WHEN A.AUC_OBJ_DSC='3' THEN '번식우'
-		WHEN A.AUC_OBJ_DSC='0' THEN '일괄' ELSE '' END AUC_OBJ_DSC_NAME
-		, NVL(A.SRA_SBID_AM,0) SRA_SBID_AM
-		FROM TB_LA_IS_MH_SOG_COW A
-		INNER JOIN TB_LA_IS_BM_BZLOC B ON A.NA_BZPLC = B.NA_BZPLC
-		INNER JOIN TB_LA_IS_MM_INDV C ON A.NA_BZPLC = C.NA_BZPLC
-		AND A.SRA_SRS_DSC = C.SRA_SRS_DSC
-		AND A.SRA_INDV_AMNNO = C.SRA_INDV_AMNNO
-		LEFT OUTER JOIN TB_LA_IS_MM_FHS D ON A.NA_BZPLC = D.NA_BZPLC
-		AND A.FHS_ID_NO = D.FHS_ID_NO
-		AND A.FARM_AMNNO = D.FARM_AMNNO
-		WHERE 1=1
-		<choose>
-			<when
-				test="searchMbIntgNo != null and searchMbIntgNo != '' and 'all'.toString().equals(searchFlag)">
-				AND D.MB_INTG_NO = #{searchMbIntgNo} /* 통합관리번호 */
-			</when>
-			<otherwise>
-				AND A.FHS_ID_NO = #{searchFhsIdNo}
-				AND A.FARM_AMNNO = #{searchFarmAmnno}
-			</otherwise>
-		</choose>
-		AND A.SEL_STS_DSC = '22' /* 판매상태구분코드 */
-		AND SUBSTRING(A.AUC_DT,1,6) = #{searchDateState}
-		<if test="searchFlag != 'all'.toString()">
-			AND A.NA_BZPLC = #{naBzplc} /* 사업장 번호 */
-		</if>
+				SELECT A.NA_BZPLC
+						, B.NA_BZPLCNO
+						, B.CLNTNM
+						, A.AUC_DT
+						, A.AUC_OBJ_DSC
+						, A.SEL_STS_DSC
+						, TO_CHAR(TO_DATE(A.AUC_DT,'YYYYMMDD'),'DD') AUC_DAY
+						, (CASE WHEN TO_CHAR(TO_DATE(A.AUC_DT,'YYYYMMDD'),'D') = '1' THEN '일'
+									WHEN TO_CHAR(TO_DATE(A.AUC_DT,'YYYYMMDD'),'D') = '2' THEN '월'
+									WHEN TO_CHAR(TO_DATE(A.AUC_DT,'YYYYMMDD'),'D') = '3' THEN '화'
+									WHEN TO_CHAR(TO_DATE(A.AUC_DT,'YYYYMMDD'),'D') = '4' THEN '수'
+									WHEN TO_CHAR(TO_DATE(A.AUC_DT,'YYYYMMDD'),'D') = '5' THEN '목'
+									WHEN TO_CHAR(TO_DATE(A.AUC_DT,'YYYYMMDD'),'D') = '6' THEN '금'
+									WHEN TO_CHAR(TO_DATE(A.AUC_DT,'YYYYMMDD'),'D') = '7' THEN '토'
+									ELSE '' END ) AS AUC_WEEK_DAY
+						, CASE WHEN A.AUC_OBJ_DSC='1' THEN '송아지' 
+								WHEN A.AUC_OBJ_DSC='2' THEN '비육우'
+								WHEN A.AUC_OBJ_DSC='3' THEN '번식우'
+								WHEN A.AUC_OBJ_DSC='0' THEN '일괄' ELSE '' END AUC_OBJ_DSC_NAME
+						, NVL(A.SRA_SBID_AM,0) SRA_SBID_AM
+						, NVL(FEE.SRA_TR_FEE,0) SRA_TR_FEE
+				FROM TB_LA_IS_MH_SOG_COW A
+				INNER JOIN TB_LA_IS_BM_BZLOC B ON A.NA_BZPLC = B.NA_BZPLC
+				INNER JOIN TB_LA_IS_MM_INDV C 
+					ON A.NA_BZPLC = C.NA_BZPLC
+					AND A.SRA_SRS_DSC = C.SRA_SRS_DSC
+					AND A.SRA_INDV_AMNNO = C.SRA_INDV_AMNNO
+				LEFT OUTER JOIN TB_LA_IS_MM_FHS D 
+					ON A.NA_BZPLC = D.NA_BZPLC
+					AND A.FHS_ID_NO = D.FHS_ID_NO
+					AND A.FARM_AMNNO = D.FARM_AMNNO
+				LEFT JOIN (
+					<include refid="selectTotFee"></include>
+					) FEE ON A.NA_BZPLC = FEE.NA_BZPLC
+						AND A.AUC_OBJ_DSC = FEE.AUC_OBJ_DSC
+						AND A.AUC_DT = FEE.AUC_DT
+						AND A.OSLP_NO = FEE.OSLP_NO
+						AND A.LED_SQNO = FEE.LED_SQNO
+				WHERE 1=1
+				<choose>
+					<when
+						test="searchMbIntgNo != null and searchMbIntgNo != '' and 'all'.toString().equals(searchFlag)">
+						AND D.MB_INTG_NO = #{searchMbIntgNo} /* 통합관리번호 */
+					</when>
+					<otherwise>
+						AND A.FHS_ID_NO = #{searchFhsIdNo}
+						AND A.FARM_AMNNO = #{searchFarmAmnno}
+					</otherwise>
+				</choose>
+				AND A.SEL_STS_DSC = '22' /* 판매상태구분코드 */
+				AND SUBSTRING(A.AUC_DT,1,6) = #{searchDateState}
+				<if test="searchFlag != 'all'.toString()">
+					AND A.NA_BZPLC = #{naBzplc} /* 사업장 번호 */
+				</if>
 		) T
-		GROUP BY T.NA_BZPLC,T.CLNTNM, T.AUC_DT, T.NA_BZPLCNO
+		GROUP BY T.NA_BZPLC,  T.CLNTNM, T.AUC_DT, T.NA_BZPLCNO, T.AUC_DAY, T.AUC_WEEK_DAY
 	</select>
 
 	<!-- 후대정보 -->
@@ -2504,8 +2492,7 @@
 		SELECT
 		A.SRA_INDV_AMNNO
 		, A.POST_SRA_INDV_AMNNO
-		, SUBSTRING(A.POST_SRA_INDV_AMNNO,7,LENGTH(A.POST_SRA_INDV_AMNNO)-7)
-		POST_SRA_INDV_AMNNO_STR
+		, SUBSTRING(TRIM(A.POST_SRA_INDV_AMNNO),3,LENGTH(TRIM(A.POST_SRA_INDV_AMNNO))-3) POST_SRA_INDV_AMNNO_STR
 		, A.MATIME
 		, A.SRA_INDV_PASG_QCN
 		, A.RG_DSC
@@ -2551,8 +2538,7 @@
 		SELECT
 			A.SRA_INDV_AMNNO
 			, A.SIB_SRA_INDV_AMNNO
-			, SUBSTRING(A.SIB_SRA_INDV_AMNNO,7,LENGTH(A.SIB_SRA_INDV_AMNNO)-7)
-			SIB_SRA_INDV_AMNNO_STR
+			, SUBSTRING(TRIM(A.SIB_SRA_INDV_AMNNO),3,LENGTH(TRIM(A.SIB_SRA_INDV_AMNNO))-3) SIB_SRA_INDV_AMNNO_STR
 			, A.MATIME
 			, A.SRA_INDV_PASG_QCN
 			, A.RG_DSC
@@ -2623,22 +2609,25 @@
 	</select>
 
 	<!-- 출장우 이동정보 -->
-	<select id="selectListIndvMove" parameterType="map"
-		resultType="map">
+	<select id="selectListIndvMove" parameterType="map" resultType="map">
 		SELECT
-		A.SRA_INDV_AMNNO
-		, A.MV_SEQ
-		, A.REGTYPE
-		, A.REGYMD
-		, A.FARMERNM
-		, A.FARMADDR
-		, A.FARMNO
-		, A.FSRG_DTM
-		, A.FSRGMN_ENO
+			A.SRA_INDV_AMNNO
+			, A.MV_SEQ
+			, A.REGTYPE
+			, A.REGYMD
+			, A.FARMERNM		
+			,CASE WHEN LENGTH(A.FARMERNM) > 1 THEN SUBSTRING(A.FARMERNM,1,1) || '*' || SUBSTRING(A.FARMERNM,3)
+				WHEN LENGTH(A.FARMERNM) = 1 THEN A.FARMERNM
+				ELSE '-' 
+			END FARMERNM_MASKING
+			, A.FARMADDR
+			, REGEXP_SUBSTR(A.FARMADDR ,'.+([^ ]+[시|군|구])')||' ***' FARMADDR_MASKING
+			, A.FARMNO
+			, A.FSRG_DTM
+			, A.FSRGMN_ENO
 		FROM TB_LA_IS_MM_INDV_MVH A
 		WHERE 1=1
-		AND A.SRA_INDV_AMNNO
-		= #{sraIndvAmnno}
+		AND A.SRA_INDV_AMNNO = #{sraIndvAmnno}
 	</select>
 
 	<!-- 출장우 상세 페이지 노출 탭 리스트 -->
@@ -2733,9 +2722,9 @@
 					, A.AUC_YN
 					, B.AUCDT_DET
 					, B.SCHE_DT_GB
-					, NVL(B.TELNO,A.TEL_NO) TELNO
+					, NVL(B.TELNO,C.TELNO) TELNO
 					, B.ZIPCODE
-					, NVL(B.ADDR1,C.DONGUP) ADDR1					 
+					, NVL(B.ADDR1,C.DONGUP) ADDR1 
 					, B.ADDR2
 					, B.AUC_OBJ_DSC
 				FROM TB_LA_IS_BM_BZLOC A
@@ -3315,11 +3304,13 @@
 			, B.AUC_DSC
 			, B.AUC_YN
 			, TO_CHAR(TO_DATE(A.AUC_DT),'YYYY-MM-DD') AUCDT_DET
-			, B.TEL_NO TELNO
-			, C.DONGUP ADDR1
+			, NVL(D.TELNO, C.TELNO) AS TELNO
+			, NVL(D.ADDR1, C.DONGUP) AS ADDR1
+			, NVL(D.ADDR2, C.DONGBW) AS ADDR2
 		FROM TB_LA_IS_MH_AUC_QCN A
 		INNER JOIN TB_LA_IS_BM_BZLOC B ON A.NA_BZPLC = B.NA_BZPLC
 		LEFT JOIN TB_LA_IS_MM_WMC C ON A.NA_BZPLC = C.NA_BZPLC
+		LEFT JOIN TB_LA_IS_MM_BZSCH D ON C.NA_BZPLC = D.NA_BZPLC
 		WHERE 1=1
 		<choose>
 			<when test='type.equals("today")'>

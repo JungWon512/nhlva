@@ -11,6 +11,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
+import org.springframework.util.ObjectUtils;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -21,10 +22,12 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.ModelAndView;
 
+import com.ishift.auction.service.admin.AdminService;
 import com.ishift.auction.service.auction.AuctionService;
 import com.ishift.auction.service.dashboard.DashBoardService;
 import com.ishift.auction.util.DateUtil;
 import com.ishift.auction.util.SessionUtill;
+import com.ishift.auction.vo.AdminUserDetails;
 
 @RestController
 public class DashboardController {
@@ -38,10 +41,10 @@ public class DashboardController {
 	DashBoardService dashboardService;
 	
 	@Autowired
-	private DateUtil dateUtil;
+	private AdminService adminService;
 	
 	@Autowired
-	private SessionUtill sessionUtil;
+	private SessionUtill sessionUtill;
 	
 	/**
 	 * 대시보드 기본 월 설정하는 메소드
@@ -109,7 +112,8 @@ public class DashboardController {
 		// 기준 날짜 range (초기값 10)
 		int range = Integer.parseInt(StringUtils.isEmpty(params.get("searchRaDate")) ? "10" : params.get("searchRaDate").toString().replaceAll("range", "")); 
 		
-		String searchDate = LocalDate.now().format(DateTimeFormatter.ofPattern("yyyyMMdd"));
+		// 데이터는 오늘 -1이 들어오기때문에 minusDays(1) 설정
+		String searchDate = LocalDate.now().minusDays(1).format(DateTimeFormatter.ofPattern("yyyyMMdd"));
 		String searchPreDate = LocalDate.now().minusDays(range).format(DateTimeFormatter.ofPattern("yyyyMMdd"));
 		String title = "최근 " + range + "일 (" + DateUtil.addSlashYYMMDD(searchPreDate) + " ~ " + DateUtil.addSlashYYMMDD(searchDate) + " 까지)";
 		
@@ -120,21 +124,7 @@ public class DashboardController {
 		// 2. 지역별 평균 낙찰가
 		mav.addObject("avgPlaceBidAmList", dashboardService.findAvgPlaceBidAmList(params));
 		// 3. 금주의 TOP 3
-		List<Map<String, Object>> recentDateTopList = dashboardService.findRecentDateTopList(params);
-		// 4. 조합 Logo 이미지 가져오기
-//		List<Map<String, Object>> johapLogoList = dashboardService.findJohapLogoList(params);
-		
-//		if(recentDateTopList.size() > 0) {
-//			for(Map<String, Object> date : recentDateTopList) {
-//				for(Map<String, Object> johap : johapLogoList) {
-//					if(date.get("NA_BZPLC").toString().equals(johap.get("file_nm").toString())) {
-//						date.put("FILE_PATH", johap.get("file_path"));
-//					}
-//				}
-//			}
-//		}
-		
-		mav.addObject("recentDateTopList", recentDateTopList);
+		mav.addObject("recentDateTopList", dashboardService.findRecentDateTopList(params));
 		
 		mav.addObject("range", range);
 		mav.addObject("title", title);
@@ -151,7 +141,8 @@ public class DashboardController {
 			// 기준 날짜 range (초기값 10)
 			int range = Integer.parseInt(StringUtils.isEmpty(params.get("searchRaDate")) ? "10" : params.get("searchRaDate").toString().replaceAll("range", "")); 
 			
-			String searchDate = LocalDate.now().format(DateTimeFormatter.ofPattern("yyyyMMdd"));
+			// 데이터는 오늘 -1이 들어오기때문에 minusDays(1) 설정
+			String searchDate = LocalDate.now().minusDays(1).format(DateTimeFormatter.ofPattern("yyyyMMdd"));
 			String searchPreDate = LocalDate.now().minusDays(range).format(DateTimeFormatter.ofPattern("yyyyMMdd"));
 			String title = "최근 " + range + "일 (" + DateUtil.addSlashYYMMDD(searchPreDate) + " ~ " + DateUtil.addSlashYYMMDD(searchDate) + " 까지)";
 			
@@ -160,21 +151,7 @@ public class DashboardController {
 			// 2. 지역별 평균 낙찰가
 			resultMap.put("avgPlaceBidAmList", dashboardService.findAvgPlaceBidAmList(params));
 			// 3. 금주의 TOP 3
-			List<Map<String, Object>> recentDateTopList = dashboardService.findRecentDateTopList(params);
-			// 4. 조합 Logo 이미지 가져오기
-			List<Map<String, Object>> johapLogoList = dashboardService.findJohapLogoList(params);
-			
-			if(recentDateTopList.size() > 0) {
-				for(Map<String, Object> date : recentDateTopList) {
-					for(Map<String, Object> johap : johapLogoList) {
-						if(date.get("NA_BZPLC").toString().equals(johap.get("file_nm").toString())) {
-							date.put("FILE_PATH", johap.get("file_src"));
-						}
-					}
-				}
-			}
-			
-			resultMap.put("recentDateTopList", recentDateTopList);
+			resultMap.put("recentDateTopList", dashboardService.findRecentDateTopList(params));
 			
 			resultMap.put("range", range);
 			resultMap.put("title", title);
@@ -296,7 +273,7 @@ public class DashboardController {
 		
 		mav.addObject("bidderInfo", bidderInfo);
 		mav.addObject("bidderPerList", bidderPerList);
-		mav.addObject("dashheaderTitle", "참가(응찰)현황");
+		mav.addObject("dashheaderTitle", "낙찰 현황");
 		mav.addObject("searchMonTxt", params.get("searchMonTxt"));
 		mav.addObject("inputParam", params);	
 		return mav;
@@ -326,7 +303,7 @@ public class DashboardController {
 	}
 
 	/**
-	 * 낙찰가 현황
+	 * 낙찰시세
 	 * @param params
 	 * @return
 	 * @throws Exception
@@ -339,23 +316,23 @@ public class DashboardController {
 		
 		params.putIfAbsent("aucObjDsc", "1");
 		Map<String, Object> sbidInfo = dashboardService.findSbidPriceInfo(params);		//가축시장 낙찰가 시세
-		List<Map<String, Object>> areaSbidList = dashboardService.findAreaSbidList(params);		//지역별 평균 시세
-		List<Map<String, Object>> monSbidPriceList = dashboardService.findMonthlySbidPriceList(params);		//월별 낙찰가 현황
-		List<Map<String, Object>> monSogCowList = dashboardService.findMonthlySogCowList(params);		//월별 출장우 현황
+		List<Map<String, Object>> areaSbidList = dashboardService.findAreaSbidList(params);		//지역별 평균 낙찰가
+		List<Map<String, Object>> monSbidPriceList = dashboardService.findMonthlySbidPriceList(params);		//월별 평균 낙찰가
+		List<Map<String, Object>> monSogCowList = dashboardService.findMonthlySogCowList(params);		//월별 장두수
 		
 		mav.addObject("sbidInfo", sbidInfo);
 		mav.addObject("areaSbidList", areaSbidList);
 		mav.addObject("monSbidPriceList", monSbidPriceList);
 		mav.addObject("monSogCowList", monSogCowList);
 		
-		mav.addObject("dashheaderTitle", "낙찰가 현황");
+		mav.addObject("dashheaderTitle", "낙찰시세");
 		mav.addObject("searchMonTxt", params.get("searchMonTxt"));
 		mav.addObject("inputParam", params);	
 		return mav;
 	}
 	
 	/**
-	 * 낙찰가 현황 데이터 가져오기 ajax
+	 * 낙찰시세 데이터 가져오기 ajax
 	 * @param params
 	 * @return
 	 * @throws Exception
@@ -368,9 +345,9 @@ public class DashboardController {
 		
 		try {
 			Map<String, Object> sbidInfo = dashboardService.findSbidPriceInfo(params);		//가축시장 낙찰가 시세
-			List<Map<String, Object>> areaSbidList = dashboardService.findAreaSbidList(params);		//지역별 평균 시세
-			List<Map<String, Object>> monSbidPriceList = dashboardService.findMonthlySbidPriceList(params);		//월별 낙찰가 현황
-			List<Map<String, Object>> monSogCowList = dashboardService.findMonthlySogCowList(params);		//월별 출장우 현황
+			List<Map<String, Object>> areaSbidList = dashboardService.findAreaSbidList(params);		//지역별 평균 낙찰가
+			List<Map<String, Object>> monSbidPriceList = dashboardService.findMonthlySbidPriceList(params);		//월별 평균 낙찰가
+			List<Map<String, Object>> monSogCowList = dashboardService.findMonthlySogCowList(params);		//월별 장두수
 			
 			resultMap.put("sbidInfo", sbidInfo);
 			resultMap.put("areaSbidList", areaSbidList);
@@ -471,8 +448,8 @@ public class DashboardController {
 		ModelAndView mav = new ModelAndView("pop/dashTop10");
 		Map<String, Object> paramMap = new HashMap<>();		
 		paramMap.putAll(params);
-		// 금주의 TOP 10
-		mav.addObject("recentDateTopList", dashboardService.findRecentDateTopList(paramMap));
+		// 3. 금주의 TOP 3
+		mav.addObject("recentDateTopList", dashboardService.findRecentDateTopList(params));
 		return mav;
 	}
 	
@@ -482,9 +459,9 @@ public class DashboardController {
 		this.setDayToSearchMonth(params);
 		
 		Map<String, Object> sbidInfo = dashboardService.findSbidPriceInfo(params);		//가축시장 낙찰가 시세
-		List<Map<String, Object>> areaSbidList = dashboardService.findAreaSbidList(params);		//지역별 평균 시세
-		List<Map<String, Object>> monSbidPriceList = dashboardService.findMonthlySbidPriceList(params);		//월별 낙찰가 현황
-		List<Map<String, Object>> monSogCowList = dashboardService.findMonthlySogCowList(params);		//월별 출장우 현황
+		List<Map<String, Object>> areaSbidList = dashboardService.findAreaSbidList(params);		//지역별 평균 낙찰가
+		List<Map<String, Object>> monSbidPriceList = dashboardService.findMonthlySbidPriceList(params);		//월별 평균 낙찰가
+		List<Map<String, Object>> monSogCowList = dashboardService.findMonthlySogCowList(params);		//월별 장두수
 		
 		mav.addObject("sbidInfo", sbidInfo);
 		mav.addObject("areaSbidList", areaSbidList);
@@ -519,27 +496,57 @@ public class DashboardController {
 	 * @return
 	 * @throws SQLException 
 	 */
-	@RequestMapping(value = "/dashboard/staticInfo",method = { RequestMethod.GET, RequestMethod.POST })
+	@RequestMapping(value = "/dashboard/status/staticInfo",method = { RequestMethod.GET, RequestMethod.POST })
 	public ModelAndView dashboardStaticInfo(@RequestParam Map<String, Object> params) throws Exception {
 		// 메인화면 현황
 		ModelAndView mav = new ModelAndView("dashboard/static_info");
+		if("ROLE_ADMIN".equals(sessionUtill.getRoleConfirm())) {
+			AdminUserDetails userVo = (AdminUserDetails) sessionUtill.getUserVo();
+			if(userVo != null) {
+				Map<String,Object> temp = new HashMap<String, Object>();
+				temp.put("naBzplc", userVo.getNaBzplc());
+				Map<String,Object> johap = adminService.selectOneJohap(temp);
+				mav.addObject("loginJohapData", johap);
+				mav.addObject("loginGrpC", userVo.getGrpC());				
+			}			
+		}
 		mav.addObject("bizList", auctionService.selectBizList(params));
-		mav.addObject("dashheaderTitle", "사용자 접속현황");
+		mav.addObject("dashheaderTitle", "참가자현황");
 		return mav;
 	}
-	@RequestMapping(value = "/dashboard/aucBidStaticInfo",method = { RequestMethod.GET, RequestMethod.POST })
+	@RequestMapping(value = "/dashboard/status/aucBidStaticInfo",method = { RequestMethod.GET, RequestMethod.POST })
 	public ModelAndView aucBidStaticInfo(@RequestParam Map<String, Object> params) throws Exception {
 		// 메인화면 현황
 		ModelAndView mav = new ModelAndView("dashboard/auc_static_info");
+		if("ROLE_ADMIN".equals(sessionUtill.getRoleConfirm())) {
+			AdminUserDetails userVo = (AdminUserDetails) sessionUtill.getUserVo();
+			if(userVo != null) {
+				Map<String,Object> temp = new HashMap<String, Object>();
+				temp.put("naBzplc", userVo.getNaBzplc());
+				Map<String,Object> johap = adminService.selectOneJohap(temp);
+				mav.addObject("loginJohapData", johap);				
+				mav.addObject("loginGrpC", userVo.getGrpC());
+			}			
+		}
 		mav.addObject("bizList", auctionService.selectBizList(params));
 		mav.addObject("dashheaderTitle", "경매 낙찰현황");
 		return mav;
 	}
 
-	@RequestMapping(value = "/dashboard/aucStaticInfo",method = { RequestMethod.GET, RequestMethod.POST })
+	@RequestMapping(value = "/dashboard/status/aucStaticInfo",method = { RequestMethod.GET, RequestMethod.POST })
 	public ModelAndView aucCowStaticInfo(@RequestParam Map<String, Object> params) throws Exception {
 		// 메인화면 현황
 		ModelAndView mav = new ModelAndView("dashboard/auc_cow_static_info");
+		if("ROLE_ADMIN".equals(sessionUtill.getRoleConfirm())) {
+			AdminUserDetails userVo = (AdminUserDetails) sessionUtill.getUserVo();
+			if(userVo != null) {
+				Map<String,Object> temp = new HashMap<String, Object>();
+				temp.put("naBzplc", userVo.getNaBzplc());
+				Map<String,Object> johap = adminService.selectOneJohap(temp);
+				mav.addObject("loginJohapData", johap);			
+				mav.addObject("loginGrpC", userVo.getGrpC());	
+			}			
+		}
 		mav.addObject("bizList", auctionService.selectBizList(params));
 		mav.addObject("dashheaderTitle", "출장우 내역");
 		return mav;
@@ -619,13 +626,5 @@ public class DashboardController {
 			return resultMap;
 		}
 		return resultMap;
-	}
-	
-	@RequestMapping(value = "/dashboard/staticInfo/excel")
-	public ModelAndView dashboardStaticInfoExcel(@RequestParam Map<String, Object> params) {
-		final ModelAndView mav = new ModelAndView();
-		mav.setViewName("");
-		mav.addObject("params", params);
-		return mav;
 	}
 }

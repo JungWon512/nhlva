@@ -1,5 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ include file="/WEB-INF/__system/taglibs.jsp"%>
+<jsp:useBean id="now" class="java.util.Date" />
+<fmt:formatDate value="${now}" pattern="yyyyMMddHH" var="version" />
 <!DOCTYPE html>
 <html>
 <head>
@@ -25,7 +27,7 @@
 	
 	
 	<tiles:insertAttribute name="body_footer_script"/>
-    <script src="<tiles:getAsString name="page_footer_script"/>" type="text/javascript"></script>
+    <script src="<tiles:getAsString name="page_footer_script"/>?v=${version}" type="text/javascript"></script>
 </body>
 <!-- <footer class="text-center text-lg-start bg-light text-muted w-100" style="position: fixed; bottom:0;"> -->
 <!--     <figure class="text-center">Copyright all right reserved. <cite title="Source Title">가축시장.kr</cite></figure> -->

@@ -4,6 +4,8 @@
 <html lang="en">
 <c:set var="URL" value="${pageContext.request.requestURL}" />
 <c:set var="requestPath" value="${requestScope['javax.servlet.forward.request_uri']}"/>
+<jsp:useBean id="now" class="java.util.Date" />
+<fmt:formatDate value="${now}" pattern="yyyyMMddHHmmss" var="version" />
 <!--begin::Head-->
 <head>
     <!-- Google Tag Manager -->
@@ -18,7 +20,6 @@
     <meta name="viewport" content="width=device-width,initial-scale=1.0,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no">
     <meta name="HandheldFriendly" content="true" />
     <meta name="apple-mobile-web-app-capable" content="yes">
-    <meta name="format-detection" content="telephone=no">
     <!--end::Layout Themes-->
     <tiles:insertAttribute name="head_footer_script"/>
 </head>
@@ -45,7 +46,7 @@
 	</div>	
 	<!-- //wrap e -->
 	<tiles:insertAttribute name="body_footer_script"/>
-	<script src="<tiles:getAsString name="page_footer_script"/>" type="text/javascript"></script>
+	<script src="<tiles:getAsString name="page_footer_script"/>?v=${version}" type="text/javascript"></script>
 	<input type="hidden" value="" id="windowWidth">
 	<input type="hidden" value="" id="deviceMode"/>
 </body>

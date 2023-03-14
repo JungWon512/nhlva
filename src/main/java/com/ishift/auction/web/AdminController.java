@@ -235,7 +235,7 @@ public class AdminController {
 					if(userVo.getPlace() != null) map.put("naBzPlcNo", userVo.getPlace());
 					if(userVo.getUsrid() != null) usrid = userVo.getUsrid();
 				}
-				map.put("aucDscFlag", "Y");
+				//map.put("aucDscFlag", "Y");
 				Map<String,Object> johap = adminService.selectOneJohap(map);
 				String aucGubun = (String) johap.getOrDefault("AUC_DSC","");
 				
@@ -493,34 +493,62 @@ public class AdminController {
 		mav.addObject("subheaderTitle", "방송");
 		return mav;
 	}
-	
-	@PreAuthorize("hasRole('ROLE_ADMIN')")
+
 	@RequestMapping(value = "/office/auction/stream_2" ,method = { RequestMethod.GET, RequestMethod.POST })
-	public ModelAndView streamPage2() throws Exception{
+	public ModelAndView streamPage2(HttpServletResponse response , @RequestParam final Map<String,Object> params) throws Exception{
 		final ModelAndView mav = new ModelAndView();
 		final Map<String,Object> map = new HashMap<>();
 		map.put("delYn", "0");
-		final AdminUserDetails userVo = (AdminUserDetails)sessionUtill.getUserVo();
-        String today = LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyyMMdd"));
-        
-		if(userVo != null) map.put("naBzPlcNo", userVo.getPlace());
-		
-		Map<String,Object> johap  = adminService.selectOneJohap(map);
-        JwtTokenVo jwtTokenVo = JwtTokenVo.builder()
-				.auctionHouseCode(johap.get("NA_BZPLC").toString())
-				.userMemNum("WATCHER")
-				.userRole(Constants.UserRole.WATCHER)
-				.build();
-        String token = jwtTokenUtil.generateToken(jwtTokenVo, Constants.JwtConstants.ACCESS_TOKEN);
 
-		map.put("searchDate", today);
-		Map<String,Object> count =auctionService.selectCountEntry(map);
+		try {
 
-		mav.addObject("johapData", johap);
-        mav.addObject("token",token);
-        mav.addObject("count",count);
-		mav.setViewName("admin/auction/stream/stream_2");
-		mav.addObject("subheaderTitle", "방송");
+			boolean loginChk = false;
+			if(params.get("usrid") != null && params.get("pw") != null) {
+				loginChk = this.adminUserLoginProc(response, params);				
+			}else if(params.get("ea") != null && params.get("eb") != null){
+				String decUsrId = new String(Base64.getDecoder().decode((String)params.getOrDefault("ea","")));
+				String decPw = new String(Base64.getDecoder().decode((String)params.getOrDefault("eb","")));
+				params.put("usrid",decUsrId);
+				params.put("pw",decPw);
+				loginChk = this.adminUserLoginProc(response, params);				
+			}
+			
+			final AdminUserDetails userVo = (AdminUserDetails)sessionUtill.getUserVo();
+
+			if(userVo != null || loginChk) {
+		        String today = LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyyMMdd"));
+		        
+				if(userVo != null) map.put("naBzPlcNo", userVo.getPlace());
+				
+				Map<String,Object> johap  = adminService.selectOneJohap(map);
+		        JwtTokenVo jwtTokenVo = JwtTokenVo.builder()
+						.auctionHouseCode(johap.get("NA_BZPLC").toString())
+						.userMemNum("WATCHER")
+						.userRole(Constants.UserRole.WATCHER)
+						.build();
+		        String token = jwtTokenUtil.generateToken(jwtTokenVo, Constants.JwtConstants.ACCESS_TOKEN);
+
+				map.put("searchDate", today);
+				Map<String,Object> count =auctionService.selectCountEntry(map);
+
+				mav.addObject("johapData", johap);
+		        mav.addObject("token",token);
+		        mav.addObject("count",count);
+				mav.setViewName("admin/auction/stream/stream_2");
+				mav.addObject("subheaderTitle", "방송");	
+			}
+			else {
+				mav.setViewName("redirect:/office/main");
+				return mav;
+			}
+		}catch(RuntimeException e) {
+			log.error("유튜브(R) 에러..",e);
+			mav.setViewName("redirect:/office/main");
+			return mav;			
+		}catch(Exception e) {
+			mav.setViewName("redirect:/office/main");
+			return mav;			
+		}
 		return mav;
 	}
 		

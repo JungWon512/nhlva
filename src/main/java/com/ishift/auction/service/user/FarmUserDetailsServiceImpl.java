@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
+import org.springframework.util.ObjectUtils;
 
 import com.ishift.auction.service.login.LoginService;
 import com.ishift.auction.vo.FarmUserDetails;
@@ -43,8 +44,8 @@ public class FarmUserDetailsServiceImpl implements FarmUserDetailsService {
 											 .farmAmnno(Long.parseLong(farmUser.get("FARM_AMNNO").toString()))
 											 .ftsnm(farmUser.get("FTSNM").toString())
 											 .place(farmUser.get("NA_BZPLCNO").toString())
-											 .cusMpno(farmUser.get("CUS_MPNO").toString())
-											 .mbIntgNo(farmUser.get("MB_INTG_NO").toString())
+											 .cusMpno(ObjectUtils.isEmpty(farmUser.get("CUS_MPNO")) ? "" : farmUser.get("CUS_MPNO").toString())
+											 .mbIntgNo(ObjectUtils.isEmpty(farmUser.get("MB_INTG_NO")) ? "" : farmUser.get("MB_INTG_NO").toString())
 											 .build();
 			}
 			else {

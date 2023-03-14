@@ -57,10 +57,6 @@
 					<th>성명</th>
 					<td class="info nm">${ empty stateInfo.USER_NM ? '내용이 없습니다.' : stateInfo.USER_NM }</td>
 				</tr>
-				<tr>
-					<th>주소</th>
-					<td class="info addr">${ empty stateInfo.USER_DONG_UP ? '' : stateInfo.USER_DONG_UP } ${ empty stateInfo.USER_DONG_BW ? '내용이 없습니다.' : stateInfo.USER_DONG_BW } </td>
-				</tr>
 			</tbody>
 		</table>
 	</div>

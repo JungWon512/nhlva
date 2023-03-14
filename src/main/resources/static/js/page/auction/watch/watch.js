@@ -74,9 +74,9 @@ $(function() {
 			$(".m_sound").toggleClass('off');
 		});
 		
-		$("button.btn_reload").click(function(){
-			location.reload();
-		});
+//		$("button.btn_reload").click(function(){
+//			location.reload();
+//		});
 		
 		if($('#aucDate').val() != getTodayStr().replaceAll('-','')){
 			modalAlert('','경매일이 아닙니다.',function(){pageMove('/main', false);});

@@ -21,12 +21,15 @@ import org.springframework.util.StringUtils;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.ishift.auction.configuration.security.token.AdminUserAuthenticationToken;
+import com.ishift.auction.service.auction.AuctionDAO;
 import com.ishift.auction.service.auction.AuctionService;
 import com.ishift.auction.service.login.LoginService;
+import com.ishift.auction.util.AlarmTalkForm;
 import com.ishift.auction.util.Constants;
 import com.ishift.auction.util.HttpUtils;
 import com.ishift.auction.util.JsonUtils;
 import com.ishift.auction.util.JwtTokenUtil;
+import com.ishift.auction.util.McaUtil;
 import com.ishift.auction.util.SessionUtill;
 import com.ishift.auction.util.RSACriptoConfig;
 import com.ishift.auction.vo.AdminJwtTokenVo;
@@ -89,6 +92,12 @@ public class ApiController {
 	
 	@Autowired
 	HttpUtils httpUtils;
+	@Autowired
+	McaUtil mcaUtil;
+	@Autowired
+	AuctionDAO auctionDao;
+	@Autowired
+	private AlarmTalkForm alarmTalkForm;
 	
 	@Value("${spring.profiles.active}")
 	private String profile;
@@ -337,7 +346,8 @@ public class ApiController {
 					  .append(this.getStringValue(vo.get("MODL_NO")).replace("|", ",")).append('|')	// 계류대 번호
 					  .append("N").append('|')								// 초과 줄장우 여부
 					  .append(this.getStringValue(vo.get("SRA_SBID_AM")).replace("|", ",")).append('|')	//실-낙찰금액
-					  .append(this.getStringValue(vo.get("LSCHG_DTM")).replace("|", ","));	// 최종변경일시
+					  .append(this.getStringValue(vo.get("LSCHG_DTM")).replace("|", ",")).append('|')
+					  .append(this.getStringValue(vo.get("SRA_MWMNNM")).replace("|", ","));	// 낙찰자 이름
 
 					entryList.add(sb.toString());
 				}
@@ -974,11 +984,6 @@ public class ApiController {
 				result.put("message", "변경된 정보가 없습니다.");
 			}
 			int cnt = auctionService.updateLowSbidAmt(params);
-			
-			// TODO :: 하한가 변경시 알림톡 보내기
-			if (cnt > 0 ) {
-				
-			}
 
 			result.put("success", true);
 			result.put("data", cnt);
@@ -2019,6 +2024,87 @@ public class ApiController {
 			}
 		}catch (SQLException | RuntimeException re) {
 			log.error("error - selectAuctBidNum : {}", re);
+			result.put("success", false);
+			result.put("message", "작업중 오류가 발생했습니다. 관리자에게 문의하세요.");
+			return result;
+		}
+		return result;
+	}
+
+	@ResponseBody
+	@PostMapping(value = "/api/{version}/biz/mca/{infterfaceId}"
+				, consumes = MediaType.APPLICATION_JSON_VALUE
+				, produces = MediaType.APPLICATION_JSON_VALUE)
+	public Map<String, Object> getMcaInfo(@RequestBody Map<String, Object> params
+			, @PathVariable(name = "version") String version
+			, @PathVariable(name = "infterfaceId") String infterfaceId
+			) {
+		final Map<String, Object> result = new HashMap<String, Object>();
+		try {
+			Map<String,Object> mcaResult =null;
+			switch(infterfaceId) {
+			case "4700":	//SRA_INDV_AMNNO
+				mcaResult = mcaUtil.tradeMcaMsg(infterfaceId, params);
+				break;
+			case "4900":	//SRA_INDV_AMNNO
+				mcaResult = mcaUtil.tradeMcaMsg(infterfaceId, params);
+				break;
+			case "5100"://ADJ_BRC ,RECV_MPNO, SEND_MPNO
+				Map<String, Object> msgMap = new HashMap<String, Object>();
+				String templateId="NHKKO00252";
+				// 알림톡 전문키 생성 (YYMMDD + 연번4자리)
+				Map<String, Object> map = new HashMap<String, Object>();	
+				// 알림톡 전문키 생성 (YYMMDD + 연번4자리)
+				Map<String, Object> tempMap = auctionDao.selelctMca5100AlarmTalkId(map);
+				msgMap.put("IO_TGRM_KEY", tempMap.get("IO_TGRM_KEY"));	// IO_TGRM_KEY (SEQ - 전문키 YYMMDD + 연번4자리)
+				map.put("code", templateId);
+				
+				tempMap = auctionDao.selectTemplateInfo(map);				
+
+				map.put("NA_BZPLC", params.get("NA_BZPLC"));
+				map.put("AUC_DT", params.get("AUC_DT"));
+				map.put("AUC_OBJ_DSC", params.get("AUC_OBJ_DSC"));
+				map.put("OSLP_NO", params.get("OSLP_NO"));
+				map.put("LED_SQNO", params.get("LED_SQNO"));
+				
+				final Map<String, Object> msgCntnInfo = auctionDao.selectMsgCntnInfo(map);
+
+				msgCntnInfo.put("MSG", " 낙찰내역을 ");
+				msgCntnInfo.put("REVE_USR_NM", params.get("REVE_USR_NM"));
+				msgCntnInfo.put("COW_INFO1", "경매번호 : " + msgCntnInfo.get("AUC_PRG_SQ")+"번");
+				msgCntnInfo.put("COW_INFO2", "등록구분 : " + msgCntnInfo.get("AUC_OBJ_DSCNM")+"("+msgCntnInfo.get("INDV_SEX_CNM")+")");
+				msgCntnInfo.put("COW_INFO3", "개체번호 : " + msgCntnInfo.get("SRA_INDV_AMNNO_FORMAT"));
+				msgCntnInfo.put("COW_INFO4", "낙찰금액 : " + msgCntnInfo.get("SRA_SBID_AM_FORMAT")+"원");
+				
+				// SMS 로그테이블(TB_LA_IS_MM_SMS) 에 필요한 파라미터
+				msgMap.put("MSG_CNTN", alarmTalkForm.makeAlarmMsgCntn(msgCntnInfo, tempMap.get("TALK_CONTENT").toString()));
+				msgMap.put("KAKAO_MSG_CNTN", alarmTalkForm.getAlarmTalkTemplateToJson(templateId, msgMap));
+				msgMap.put("KAKAO_TPL_C", templateId);								// 템플릿 코드
+				msgMap.put("ADJ_BRC", params.get("ADJ_BRC"));						// 사무소 코드 
+				msgMap.put("RLNO", params.get("RLNO"));							// RLNO (사용자 사번)
+				msgMap.put("IO_TIT","");											// 제목 : 미사용이라 space로 채움
+				msgMap.put("IO_DPAMN_MED_ADR", params.get("RECV_MPNO") );		// 수신 휴대폰번호
+				msgMap.put("IO_SDMN_MED_ADR", params.get("SEND_MPNO") );				// 발신 조합전화번호
+
+				// fail-back 필요 파라메터(알람톡 실패시 문자 전송)
+				msgMap.put("FBK_UYN", "Y");			//fail-back 사용여부
+				msgMap.put("FBK_TIT","");
+				msgMap.put("FBK_MSG_DSC","7");		//3:SMS, 7:LMS
+				msgMap.put("UMS_FWDG_CNTN", msgMap.get("MSG_CNTN"));	// UMS_FWDG_CNTN fail-back 메세지 내용
+
+				msgMap.put("IO_ATGR_ITN_TGRM_LEN", msgMap.getOrDefault("UMS_FWDG_CNTN","").toString().getBytes().length);	// IO_ATGR_ITN_TGRM_LEN (UMS_FWDG_CNTN의 바이트 수)
+				
+				mcaResult = mcaUtil.tradeMcaMsg(infterfaceId, msgMap);
+				break;
+			default:
+				
+				break;
+			}
+			result.put("success", true);
+			result.put("data", mcaResult);
+		}
+		catch (Exception e) {
+			log.error(e.getMessage(),e);
 			result.put("success", false);
 			result.put("message", "작업중 오류가 발생했습니다. 관리자에게 문의하세요.");
 			return result;

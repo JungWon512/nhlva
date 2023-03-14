@@ -126,7 +126,7 @@ public class MainDao {
         map.put("regUsrid", map.getOrDefault("regUsrid", sessionUtill.getUserId()));
     	map.put("uptUsrid", map.getOrDefault("uptUsrid", sessionUtill.getUserId()));
     	map.put("lsCmeno", sessionUtill.getEno());
-    	map.put("authRole", sessionUtill.getRoleConfirm());
+    	map.put("authRole", map.getOrDefault("authRole", sessionUtill.getRoleConfirm()));
     	map.put("naBzplc", map.getOrDefault("naBzplc", sessionUtill.getNaBzplc()));
     }
 }

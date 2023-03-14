@@ -43,9 +43,9 @@
 										<span><em class="fc-blue">${vo.COW_CNT}</em>두</span>
 									</li>
 									<li>
-										<strong>낙찰금액</strong>
-										<fmt:formatNumber value="${vo.SRA_SBID_AM}" type="number" var="SRA_SBID_AM"/>
-										<span><em class="fc-red">${empty SRA_SBID_AM ? '0':SRA_SBID_AM}</em>원</span>
+										<strong>정산금액</strong>
+										<fmt:formatNumber value="${vo.SRA_SBID_AM + vo.SRA_TR_FEE}" type="number" var="TOT_SBID_AM"/>
+										<span><em class="fc-red">${empty TOT_SBID_AM ? '0' : TOT_SBID_AM}</em>원</span>
 									</li>
 								</ul>
 							</dd>

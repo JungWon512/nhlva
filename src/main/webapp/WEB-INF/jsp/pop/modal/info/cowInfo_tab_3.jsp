@@ -6,10 +6,10 @@
 	<input type="hidden" id="imgTotal" value="${ imgList.size() }"/>
 	<div class="slide-detail">
 		<c:if test="${ imgList.size() <= 0 }">
-			<div class="item" name="sample_0"><img src="/static/images/guide/v2/sample01.jpg" alt=""></div>
+			<div class="item" name="sample_0"><img src="/static/images/guide/v2/sample01.jpg" alt="" style="min-height:65vh;"></div>
         </c:if>
 		<c:forEach items="${ imgList }" var="item" varStatus="st">
-			<div class="item" name="${item.NA_BZPLC}_${item.OSLP_NO}_${item.IMG_SQNO}"><img src="${item.FILE_URL}" alt=""></div>
+			<div class="item" name="${item.NA_BZPLC}_${item.OSLP_NO}_${item.IMG_SQNO}"><img src="${item.FILE_URL}" alt="" style="min-height:65vh;"></div>
 		</c:forEach>
 	</div>
 	<span class="slideNumber"></span>

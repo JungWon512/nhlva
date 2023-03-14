@@ -56,7 +56,7 @@
 		<div class="white-box">
 			<h2 class="sec-tit">축종별 나의 낙찰 현황</h2>
 			<div class="barChart" style="margin-top: 20px;">
-				<canvas id="myChartSample4"></canvas>
+				<canvas id="myChartSample4" class="bar_chart"></canvas>
 			</div>
 		</div>
 	</div>

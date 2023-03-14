@@ -44,7 +44,7 @@ public class BidUserDetailsServiceImpl implements BidUserDetailsService {
 										 .trmnAmnno(Long.parseLong(wholesaler.get("TRMN_AMNNO").toString()))
 										 .place(wholesaler.get("NA_BZPLCNO").toString())
 										 .mbIntgNo(ObjectUtils.isEmpty(wholesaler.get("MB_INTG_NO")) ? "" : wholesaler.get("MB_INTG_NO").toString())
-										 .cusMpno(wholesaler.get("CUS_MPNO").toString())
+										 .cusMpno(ObjectUtils.isEmpty(wholesaler.get("CUS_MPNO")) ? "" : wholesaler.get("CUS_MPNO").toString())
 										 .build();
 			}
 			else {

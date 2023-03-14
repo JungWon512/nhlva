@@ -1,37 +1,38 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
 <%@ include file="/WEB-INF/__system/taglibs.jsp" %>
 
-
-<STYLE type="text/css">
+<style type="text/css">
 	html body{margin:0 auto;}
 	li{list-style:none;}
-	.ft22{font-size:11px;}
+	.ft11{font-size:11px;}
+	.ft20{font-size:20px; font-weight: 700; }
 	.ft14{font-size:14px;}
 	.ft12{font-size:12px;}
 	.pd15{padding: 15px;}
 	.mt10{margin-top:10px;}
+	.mt3{margin-top:3px;}
 	.mt25{margin-top:25px;}
 	.db{display: block;}
-</STYLE>
+	.contents{padding: 10px;}
+	.headSt {padding: 10px;}
+	.closeBtn{ background-size: 20px 20px !important; position: absolute; right: 7px; top: 8px; }
+	.gray{padding:10px;}
+	.tdLine{border : 1px solid #000000 ; padding: 1.4pt 5.1pt 1.4pt 5.1pt ;}
+</style>
 
-<div id="" class="modal-wrap terms open"
-	style="overflow: auto; display: block;">
-	<div class="modal-content">
-		<h3 style="font-weight: 700; font-size: 20px;">개인정보 처리방침</h3>
-		<button class="modal_popup_close right_70"
-			onclick="window.close();return false;">닫기</button>
+<div id="privacy" class="winpop terms open" >
+		<h3 class="ft20 headSt">개인정보 처리방침</h3>
+		<button type="button" class="winpop_close closeBtn"><span class="sr-only">윈도우 팝업 닫기</span></button>
 		<section class="contents">
-			<div class="termsBox mCustomScrollBox"
-				style="background: #f1f1f1; !important;">
+			<div class="termsBox gray" style="background: #f1f1f1; !important;">
 				<div>
-					<span class="ft14" style="margin-bottom: 10px;">제1조 (개인정보의
-						처리 목적)</span>
+					<span class="ft14" style="margin-bottom: 10px;">제1조 (개인정보의 처리 목적)</span>
 					<div class="ft12">&nbsp;</div>
-					<p class="ft12">개인정보를 다음의 목적을 위해 처리합니다. 처리한 개인정보는 다음의 목적 이외의
-						용도로는 사용되지 않으며 이용 목적이 변경될 시에는 사전 동의를 구할 예정입니다.</p>
-					<p class="ft12">당 플랫폼은 서비스 제공을 목적으로 “이용약관”에 제시하는 내용에 따라 최소한의
-						개인정보를 수집합니다.</p>
-					<p class="ft12">각 정보는 플랫폼을 통해 수집하며 수집목적은 다음과 같습니다.</p>
+					<div  class="pd15">
+						<p class="ft12">개인정보를 다음의 목적을 위해 처리합니다. 처리한 개인정보는 다음의 목적 이외의 용도로는 사용되지 않으며 이용 목적이 변경될 시에는 사전 동의를 구할 예정입니다.</p>
+						<p class="ft12">당 플랫폼은 서비스 제공을 목적으로 “이용약관”에 제시하는 내용에 따라 최소한의 개인정보를 수집합니다.</p>
+						<p class="ft12">각 정보는 플랫폼을 통해 수집하며 수집목적은 다음과 같습니다.</p>
+					</div>
 					<ul class="pd15">
 						<li class="ft12">· 스마트 가축시장 플랫폼 서비스 이용</li>
 						<li class="ft12 mt10">· 경매 및 대금의 정산 관리</li>
@@ -40,69 +41,69 @@
 					<table border="1" cellspacing="0" cellpadding="0"
 						style='border-collapse: collapse; border: none; width: 100%;'>
 						<tr>
-							<td valign="middle" bgcolor="#c1d6ed"
-								style='width: 225; height: 49; border-left: solid #000000 0.4pt; border-right: solid #000000 0.4pt; border-top: solid #000000 0.4pt; border-bottom: solid #000000 0.4pt; padding: 1.4pt 5.1pt 1.4pt 5.1pt'>
+							<td class="tdLine" valign="middle" bgcolor="#c1d6ed"
+								style='width: 225; height: 49; '>
 								<P style='text-align: center;'>
-									<span class="ft22"
+									<span class="ft11"
 										style='font-family: "Noto Sans CJK KR Medium"; line-height: 100%'>수집항목</span>
 								</P>
 							</td>
-							<td valign="middle" bgcolor="#c1d6ed"
-								style='width: 225; height: 49; border-left: solid #000000 0.4pt; border-right: solid #000000 0.4pt; border-top: solid #000000 0.4pt; border-bottom: solid #000000 0.4pt; padding: 1.4pt 5.1pt 1.4pt 5.1pt'>
+							<td class="tdLine" valign="middle" bgcolor="#c1d6ed"
+								style='width: 225; height: 49; '>
 								<P style='text-align: center;'>
-									<span class="ft22"
+									<span class="ft11"
 										style='font-family: "Noto Sans CJK KR Medium"; line-height: 100%'>처리목적</span>
 								</P>
 							</td>
-							<td valign="middle" bgcolor="#c1d6ed"
-								style='width: 225; height: 49; border-left: solid #000000 0.4pt; border-right: solid #000000 0.4pt; border-top: solid #000000 0.4pt; border-bottom: solid #000000 0.4pt; padding: 1.4pt 5.1pt 1.4pt 5.1pt'>
+							<td class="tdLine" valign="middle" bgcolor="#c1d6ed"
+								style='width: 225; height: 49;'>
 								<P style='text-align: center;'>
-									<span class="ft22"
+									<span class="ft11"
 										style='font-family: "Noto Sans CJK KR Medium"; line-height: 100%'>보유
 										및 이용기간</span>
 								</P>
 							</td>
 						</tr>
 						<tr>
-							<td rowspan="3" valign="middle"
-								style='width: 225; height: 245; border-left: solid #000000 0.4pt; border-right: solid #000000 0.4pt; border-top: solid #000000 0.4pt; border-bottom: solid #000000 0.4pt; padding: 1.4pt 5.1pt 1.4pt 5.1pt'>
+							<td class="tdLine" rowspan="3" valign="middle"
+								style='width: 225; height: 245; '>
 								<P>
-									<span class="ft22"
+									<span class="ft11"
 										style='font-family: "Noto Sans CJK KR"; line-height: 100%'>성명,ID,비밀번호,농장명,농장주소,통신사,휴대폰번호,생년월일</span>
 								</P>
 							</td>
-							<td valign="middle"
-								style='width: 225; height: 55; border-left: solid #000000 0.4pt; border-right: solid #000000 0.4pt; border-top: solid #000000 0.4pt; border-bottom: solid #000000 0.4pt; padding: 1.4pt 5.1pt 1.4pt 5.1pt'>
+							<td class="tdLine" valign="middle"
+								style='width: 225; height: 55;'>
 								<P>
-									<span class="ft22"
+									<span class="ft11"
 										style='font-family: "Noto Sans CJK KR"; line-height: 100%'>가축시장
 										서비스 이용</span>
 								</P>
 							</td>
-							<td rowspan="3" valign="middle"
-								style='width: 225; height: 245; border-left: solid #000000 0.4pt; border-right: solid #000000 0.4pt; border-top: solid #000000 0.4pt; border-bottom: solid #000000 0.4pt; padding: 1.4pt 5.1pt 1.4pt 5.1pt'>
+							<td class="tdLine" rowspan="3" valign="middle"
+								style='width: 225; height: 245; '>
 								<P>
-									<span class="ft22"
+									<span class="ft11"
 										style='font-family: "Noto Sans CJK KR"; line-height: 100%'>회원
 										탈퇴, 서비스 종료, 기타 관계법령에 따른 보유기간까지</span>
 								</P>
 							</td>
 						</tr>
 						<tr>
-							<td valign="middle"
-								style='width: 225; height: 55; border-left: solid #000000 0.4pt; border-right: solid #000000 0.4pt; border-top: solid #000000 0.4pt; border-bottom: solid #000000 0.4pt; padding: 1.4pt 5.1pt 1.4pt 5.1pt'>
+							<td class="tdLine" valign="middle"
+								style='width: 225; height: 55;'>
 								<P>
-									<span class="ft22"
+									<span class="ft11"
 										style='font-family: "Noto Sans CJK KR"; line-height: 100%'>경매
 										및 대금의 정산관리</span>
 								</P>
 							</td>
 						</tr>
 						<tr>
-							<td valign="middle"
-								style='width: 225; height: 134; border-left: solid #000000 0.4pt; border-right: solid #000000 0.4pt; border-top: solid #000000 0.4pt; border-bottom: solid #000000 0.4pt; padding: 1.4pt 5.1pt 1.4pt 5.1pt'>
+							<td class="tdLine" valign="middle"
+								style='width: 225; height: 134;'>
 								<P>
-									<span class="ft22"
+									<span class="ft11"
 										style='font-family: "Noto Sans CJK KR"; line-height: 100%'>경매
 										전후 매수인, 매도인에 경매정보, 낙찰 및 정산서 정보 제공을 위한 문자(SMS, 카카오톡) 알림</span>
 								</P>
@@ -144,83 +145,83 @@
 					<table border="1" cellspacing="0" cellpadding="0"
 						style='border-collapse: collapse; border: none; width: 100%;'>
 						<tr>
-							<td valign="middle" bgcolor="#c1d6ed"
-								style='width: 387; height: 38; border-left: solid #000000 0.4pt; border-right: solid #000000 0.4pt; border-top: solid #000000 0.4pt; border-bottom: solid #000000 0.4pt; padding: 1.4pt 5.1pt 1.4pt 5.1pt'>
+							<td class="tdLine" valign="middle" bgcolor="#c1d6ed"
+								style='width: 387; height: 38; '>
 								<p style='text-align: center;'>
-									<span class="ft22"
+									<span class="ft11"
 										style='font-family: "Noto Sans CJK KR Medium"; line-height: 100%'>수탁기관</SPAN>
 								</P>
 							</td>
-							<td valign="middle" bgcolor="#c1d6ed"
-								style='width: 289; height: 38; border-left: solid #000000 0.4pt; border-right: solid #000000 0.4pt; border-top: solid #000000 0.4pt; border-bottom: solid #000000 0.4pt; padding: 1.4pt 5.1pt 1.4pt 5.1pt'>
+							<td class="tdLine" valign="middle" bgcolor="#c1d6ed"
+								style='width: 289; height: 38;'>
 								<p style='text-align: center;'>
-									<span class="ft22"
+									<span class="ft11"
 										style='font-family: "Noto Sans CJK KR Medium"; line-height: 100%'>위탁업무의
 										내용</SPAN>
 								</P>
 							</td>
 						</tr>
 						<tr>
-							<td valign="middle"
-								style='width: 387; height: 128; border-left: solid #000000 0.4pt; border-right: solid #000000 0.4pt; border-top: solid #000000 0.4pt; border-bottom: solid #000000 0.4pt; padding: 1.4pt 5.1pt 1.4pt 5.1pt'>
+							<td class="tdLine" valign="middle"
+								style='width: 387; height: 128; '>
 								<p>
-									<span class="ft22"
+									<span class="ft11"
 										style='font-family: "Noto Sans CJK KR"; line-height: 160%'>업체명
 										: ㈜농협정보시스템</SPAN>
 								</P>
 								<p>
-									<span class="ft22"
+									<span class="ft11"
 										style='font-family: "Noto Sans CJK KR"; line-height: 160%'>주소
 										: 서울 서초구 매헌로24 2층</SPAN>
 								</P>
 								<p>
-									<span class="ft22"
+									<span class="ft11"
 										style='font-family: "Noto Sans CJK KR"; line-height: 160%'>전화번호
 										: 031-738-8163</SPAN>
 								</P>
 								<p>
-									<span class="ft22"
+									<span class="ft11"
 										style='font-family: "Noto Sans CJK KR"; line-height: 160%'>위탁업무
 										: 스마트 가축시장 플랫폼 운영</SPAN>
 								</P>
 							</td>
-							<td valign="middle"
-								style='width: 289; height: 128; border-left: solid #000000 0.4pt; border-right: solid #000000 0.4pt; border-top: solid #000000 0.4pt; border-bottom: solid #000000 0.4pt; padding: 1.4pt 5.1pt 1.4pt 5.1pt'>
+							<td class="tdLine" valign="middle"
+								style='width: 289; height: 128; '>
 								<p>
-									<span class="ft22"
+									<span class="ft11"
 										style='font-family: "Noto Sans CJK KR"; line-height: 160%'>스마트
 										가축시장 플랫폼 운영</SPAN>
 								</P>
 							</td>
 						</tr>
 						<tr>
-							<td valign="middle"
-								style='width: 387; height: 119; border-left: solid #000000 0.4pt; border-right: solid #000000 0.4pt; border-top: solid #000000 0.4pt; border-bottom: solid #000000 0.4pt; padding: 1.4pt 5.1pt 1.4pt 5.1pt'>
+							<td class="tdLine" valign="middle"
+								style='width: 387; height: 119; '>
 								<p>
-									<span class="ft22"
+									<span class="ft11"
 										style='font-family: "Noto Sans CJK KR"; line-height: 160%'>업체명
 										: ㈜아이시프트</SPAN>
 								</P>
 								<p>
-									<span class="ft22"
+									<span class="ft11"
 										style='font-family: "Noto Sans CJK KR"; line-height: 160%'>주소
 										: 서울 구로구 디지털로32길 30, 607호 608호</SPAN>
 								</P>
 								<p>
-									<span class="ft22"
+									<span class="ft11"
 										style='font-family: "Noto Sans CJK KR"; line-height: 160%'>전화번호
 										: 02-2103-5350</SPAN>
 								</P>
 								<p>
-									<span class="ft22"
+									<span class="ft11"
 										style='font-family: "Noto Sans CJK KR"; line-height: 160%'>위탁업무
 										: 스마트 가축시장 플랫폼 유지보수</SPAN>
 								</P>
 							</td>
-							<td valign="middle"
-								style='width: 289; height: 119; border-left: solid #000000 0.4pt; border-right: solid #000000 0.4pt; border-top: solid #000000 0.4pt; border-bottom: solid #000000 0.4pt; padding: 1.4pt 5.1pt 1.4pt 5.1pt'>
+							<td class="tdLine" valign="middle"
+								style='width: 289; height: 119; '>
 								<p>
-									<span class="ft22"
+									<span class="ft11"
 										style='font-family: "Noto Sans CJK KR"; line-height: 160%'>스마트
 										가축시장 플랫폼 유지보수</SPAN>
 								</P>
@@ -292,31 +293,17 @@
 						<li class="ft12">1. 스마트 가축시장 플랫폼은 개인정보 처리에 관한 업무를 총괄해서 책임지고,
 							개인정보 처리와 관련한 정보주체의 불만처리 및 피해구제 등을 위하여 아래와 같이 개인정보 보호책임자를 지정하고
 							있습니다.</li>
-						<li class="ft12 mt10">개인정보 보호책임자 : 축산지원부장</li>
-						<li class="ft12 mt10">개인정보 보호 담당부서</li>
-						<li class="ft12 mt10">부서명 : 축산지원부</li>
-						<li class="ft12 mt10">담당자 : 이철규 차장</li>
-						<li class="ft12 mt10">연락처 : 02-2080-6554</li>
-						<li class="ft12 mt10">팩스 : 02-2080-6560</li>
-						<li class="ft12 mt10">2. 정보주체께서는 스마트 가축시장 플랫폼 서비스(또는 사업)을
+						<li class="ft12 mt3">&nbsp;&nbsp;&nbsp;개인정보 보호책임자 : 축산지원부장</li>
+						<li class="ft12 mt3">&nbsp;&nbsp;&nbsp;개인정보 보호 담당부서</li>
+						<li class="ft12 mt3">&nbsp;&nbsp;&nbsp;부서명 : 축산지원부</li>
+						<li class="ft12 mt3">&nbsp;&nbsp;&nbsp;담당자 : 최진 차장</li>
+						<li class="ft12 mt3">&nbsp;&nbsp;&nbsp;연락처 : 02-2080-6554</li>
+						<li class="ft12 mt3">&nbsp;&nbsp;&nbsp;팩스 : 02-2080-6560</li>
+						<li class="ft12 mt3">2. 정보주체께서는 스마트 가축시장 플랫폼 서비스(또는 사업)을
 							이용하시면서 발생한 모든 개인정보 보호 관련 문의, 불만처리, 피해구제 등에 관한 사항을 개인정보 보호책임자 및
-							담당부서로 문의하실 수 있습니다.</li>
-					</ul>
-					<span class="ft14 db mt10">제8조 (개인정보 보호책임자)</span>
-					<ul class="pd15">
-						<li class="ft12">1. 스마트 가축시장 플랫폼은 개인정보 처리에 관한 업무를 총괄해서 책임지고,
-							개인정보 처리와 관련한 정보주체의 불만처리 및 피해구제 등을 위하여 아래와 같이 개인정보 보호책임자를 지정하고
-							있습니다.</li>
-						<li class="ft12 mt10">개인정보 보호책임자 : 축산지원부장</li>
-						<li class="ft12 mt10">개인정보 보호 담당부서</li>
-						<li class="ft12 mt10">부서명 : 축산지원부</li>
-						<li class="ft12 mt10">담당자 : 이철규 차장</li>
-						<li class="ft12 mt10">연락처 : 02-2080-6554</li>
-						<li class="ft12 mt10">팩스 : 02-2080-6560</li>
-						<li class="ft12 mt10">2. 정보주체께서는 스마트 가축시장 플랫폼 서비스(또는 사업)을
-							이용하시면서 발생한 모든 개인정보 보호 관련 문의, 불만처리, 피해구제 등에 관한 사항을 개인정보 보호책임자 및
-							담당부서로 문의하실 수 있습니다.</li>
-						<li class="ft12 mt10">스마트 가축시장 플랫폼은 정보주체의 문의에 대해 지체 없이 답변 및
+							담당부서로 문의하실 수 있습니다.
+						</li>
+						<li class="ft12 mt3">스마트 가축시장 플랫폼은 정보주체의 문의에 대해 지체 없이 답변 및
 							처리해드릴 것입니다.</li>
 					</ul>
 					<span class="ft14 db mt10">제9조 (권익침해 구제방법)</span>
@@ -325,13 +312,10 @@
 							분쟁조정위원회, 한국인터넷진흥원 개인정보 침해-신고센터 등에 분쟁해결이나 상담 등을 신청할 수 있습니다.</li>
 					</ul>
 					<ul class="pd15">
-						<li class="ft12">개인정보 분쟁조정위원회 : 1833-6972 (www.kopico.go.kr)</li>
-						<li class="ft12 mt10">개인정보 침해신고센터 : (국번없이) 118
-							(privacy.kisa.or.kr</li>
-						<li class="ft12 mt10">대검찰청 사이버수사과 : (국번없이) 1301,
-							cid@spo.go.kr, (www.spo.go.kr)</li>
-						<li class="ft12 mt10">경찰청 사이버안전국 : (국번없이) 182,
-							(cyberbureau.police.go.kr)</li>
+						<li class="ft12">개인정보 분쟁조정위원회 : </br>1833-6972 (www.kopico.go.kr)</li>
+						<li class="ft12 mt10">개인정보 침해신고센터 : </br>(국번없이) 118(privacy.kisa.or.kr</li>
+						<li class="ft12 mt10">대검찰청 사이버수사과 : </br>(국번없이) 1301,cid@spo.go.kr, (www.spo.go.kr)</li>
+						<li class="ft12 mt10">경찰청 사이버안전국 : </br>(국번없이) 182,(cyberbureau.police.go.kr)</li>
 						<li class="ft12 mt10">또한, 개인정보의 열람, 정정·삭제, 처리정지 등에 대한 정보주체자의
 							요구에 대하여 공공기관의 장이 행한 처분 또는 부작위로 인하여 권리 또는 이익을 침해 받은 자는 행정심판법이 정하는
 							바에 따라 행정심판을 청구할 수 있습니다.</li>
@@ -348,19 +332,18 @@
 				</div>
 			</div>
 
-			<div class=""
-				style="margin-top: 15px; font-size: 16px; font-weight: 500; line-height: 1.2; letter-spacing: -0.8px; color: #007eff;">
+			<div class="" style="margin-top: 15px; font-size: 16px; font-weight: 500; line-height: 1.2; letter-spacing: -0.8px; color: #007eff;">
 				<ul class="">
-					<li>2021.10.07 이용약관 <a
-						href="#" id="20230213" 
-						onclick="window.open('/privacy230213', '개인정보 처리 방침', 'width=800, height=700, toolbar=no, menubar=no, scrollbars=no, resizable=yes' );return false;" 
-						style="color: #007eff;">[변경내용보기]</a></li>
-					<li style="margin-top: 10px; font-size: 18px; color: #e07303;">※
-						개인정보 수집이용 동의서 <a href="#" onclick="window.open('/agreement/210620', '개인정보 처리 방침', 'width=800, height=700, toolbar=no, menubar=no, scrollbars=no, resizable=yes' );return false;" 
-						id="20230213" style="color: #e07303;">[내용보기]</a>
+					<li>2021.10.07 개인정보 처리방침
+						<a  href="#" onclick="location.href='/privacy230213';return false;"  id="20230213" style="color: #007eff;">[내용보기]</a>
+<!-- 						<a href="javascript:;" onclick="window.open('/privacy230213', '개인정보 처리 방침', 'width=800, height=700, toolbar=no, menubar=no, scrollbars=no, resizable=yes',  true);return false;" id="20230213" style="color: #007eff;">[변경내용보기]</a> -->
+					</li>
+					<li style="margin-top: 10px; font-size: 18px; color: #e07303;">※개인정보 수집이용 동의서
+ 						<a href="#" onclick="location.href='/privacyAgreement'; return false;"  id="20230213" style="color: #e07303;">[내용보기]</a>
+<!-- 						<a href="javascript:;" onclick="window.open('/agreement/210620', '개인정보 처리 방침', 'width=800, height=700, toolbar=no, menubar=no, scrollbars=no, resizable=yes', true);return false;" id="20230213" style="color: #007eff;">[내용보기]</a> -->
 					</li>
 				</ul>
 			</div>
+			<button id="btn_top_move"><span class="sr-only">TOP</span></button>
 		</section>
-	</div>
 </div>

@@ -75,7 +75,7 @@
 				
 				if(aucPrgSq ==null || aucPrgSq == ''){
 					modalAlert("", '경매번호를 입력해주세요.');
-					return
+					return;
 				}
 				$("form[name='frm_select']").find("input[name='aucPrgSq']").val(aucPrgSq);
 				$("form[name='frm_select']").find("input[name='regType']").val("S");
@@ -209,7 +209,7 @@
 			popHtml.push('						<th>번호</th>');
 			popHtml.push('						<td class="input-td">');
 			popHtml.push('							<ul class="num_scr">');
-			popHtml.push('								<li><input type="text" name="aucPrgSq" class="required" id="aucPrgSq" alt="경매번호" maxlength="4" pattern="\d*" inputmode="numeric" value="" /></li>'); 
+			popHtml.push('								<li><input type="text" name="aucPrgSq" class="required onlyNumber" id="aucPrgSq" alt="경매번호" maxlength="4" pattern="\d*" inputmode="numeric" value="" /></li>'); 
 			popHtml.push('								<li><a href="javascript:;" class="btn_cow_search">조회</a></li>');
 			popHtml.push('							</ul>');
 			popHtml.push('						</td>');
@@ -345,7 +345,7 @@
 			
 			$("body").append(popHtml.join(""));
 			modalPopup("." + className);
-			$("." + className).find("input:first").focus();
+			$("." + className).find("input[type=text]:first").focus();
 			$("select").selectric("refresh");
 		};
 		
@@ -377,7 +377,12 @@
 		
 		// 출장우 정보 set
 		var fnSetCowInfo = function(data) {
-			var cowInfo = data.cowInfo;
+			if (data.cowInfo.length == 0) {
+				modalAlert("", '출장우 정보가 없습니다.');
+				return;
+			};
+			
+			var cowInfo = data.cowInfo[0];
 			var ppgcowList = data.ppgcowList;
 			var indvList = data.indvList;
 			var vetList = data.vetList;
@@ -569,7 +574,7 @@
 				modalAlert("", message, fnReset);
 			}
 			else {
-				var cowInfo = data.cowInfo;
+				var cowInfo = data.cowInfo[0];
 				
 				$("input[name='qcnAucObjDsc']", $("form[name='frm_cow_info']")).val(cowInfo.QCN_AUC_OBJ_DSC);
 				$("input[name='aucObjDsc']", $("form[name='frm_cow_info']")).val(cowInfo.AUC_OBJ_DSC);
@@ -684,6 +689,12 @@
 	}();
 
 	jQuery(document).ready(function () {
+		// 새로고침시 경매일자가 사라지는 경우 기능이 제한되므로 날짜선택페이지로 이동
+		if(!$('input[name=aucDt]').val()){
+			modalAlert('','경매일자를 선택해주십시오.',function(){pageMove('/office/task/main', false);});
+			return;
+		}
+		
 		Select.init();
 	});
 })(window, window.jQuery);

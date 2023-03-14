@@ -24,8 +24,8 @@
 				<li><a href="javascript:;" class="card-link btn_move act" data-type="AL">예정가일괄등록</a></li>
 			</c:when>
 			<c:when test="${params.menuId == 'SM'}">
-				<li><a href="javascript:;" class="card-link btn_move act" data-type="SB">낙찰결과 조회</a></li>
-				<li><a href="javascript:;" class="card-link btn_move act" data-type="SCOW">출장우 리스트</a></li>
+				<li><a href="javascript:;" class="card-link btn_move act" data-type="SB">경매결과 조회</a></li>
+				<li><a href="javascript:;" class="card-link btn_move act" data-type="SCOW">출장우 목록</a></li>
 				<li><a href="javascript:;" class="card-link btn_move act" data-type="SMCOW">미감정 임신우</a></li>
 			</c:when>
 			<c:when test="${params.menuId == 'SG'}">

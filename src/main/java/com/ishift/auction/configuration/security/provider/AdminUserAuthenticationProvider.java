@@ -50,9 +50,10 @@ public class AdminUserAuthenticationProvider implements AuthenticationProvider {
 			throw new BadCredentialsException("패스워드를 입력해주세요.");
 		}
 
-		AdminUserDetails adminUserDetails = null;
-
+		//final AdminUserDetails adminUserDetails = (AdminUserDetails)adminUserDetailsService.loadUserByUsername(authentication.getName());
 		final String password = authentication.getCredentials() == null ? "" : authentication.getCredentials().toString();		
+		AdminUserDetails adminUserDetails = null;
+		
 		if ("tibero".equals(serviceName)) {
 			adminUserDetails = (AdminUserDetails)adminUserDetailsService.loadUserByUsername(authentication.getName());
 		
@@ -71,6 +72,11 @@ public class AdminUserAuthenticationProvider implements AuthenticationProvider {
 				throw new InternalAuthenticationServiceException("아이디 또는 패스워드를 확인해주세요.");
 			}
 		}
+		
+//		log.debug("encode pw : {}", passwordEncoder.encode(password));
+//		if (!passwordEncoder.matches(password, adminUserDetails.getPw())) {
+//			throw new BadCredentialsException("아이디 또는 패스워드를 확인해주세요.");
+//		}
 		
 		// 인증 완료된 토큰을 리턴한다.
 		UsernamePasswordAuthenticationToken auth = new UsernamePasswordAuthenticationToken(adminUserDetails, null, adminUserDetails.getAuthorities());

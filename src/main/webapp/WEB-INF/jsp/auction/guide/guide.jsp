@@ -32,11 +32,11 @@ span.txt {
 <div class="guide">
 	<img src="/static/images/assets/guid_18477.png" srcset="/static/images/assets/guid_18477@2x.png 2x, /static/images/assets/guid_18477@3x.png 3x" class="img_2">
    <!-- jpg -->
-	<img src="/static/images/assets/11-1.경매응찰_테이블_1.png" srcset="/static/images/assets/11-1.경매응찰_테이블_1@2x.png 2x, /static/images/assets/11-1.경매응찰_테이블_1@3x.png 3x" class="img_1">
+	<img src="/static/images/assets/bid_image.png" class="img_1">
 	<div class="txt">
 		<span class="txt">① 경매에 참가한 중도매인의 참가번호<br/>② 출하우의 정보·영상</span>
 	</div>
-	<img src="/static/images/assets/11-1.경매응찰_테이블2.png" srcset="/static/images/assets/11-1.경매응찰_테이블2@2x.png 2x, /static/images/assets/11-1.경매응찰_테이블2@3x.png 3x" class="img_1">
+	<img src="/static/images/assets/11-1_bidTable2.png" srcset="/static/images/assets/11-1_bidTable2@2x.png 2x, /static/images/assets/11-1_bidTable2@3x.png 3x" class="img_1">
 	<div class="txt">
 		<span class="txt">
 			③ 경매 진행 상황 <br/>
@@ -45,14 +45,14 @@ span.txt {
 			⑥ 아이콘 클릭 시 예정조회·결과조회·응찰내역을 볼 수 있습니다. 예정조회에서 '찜가격'(응찰 예정가)을 미리 입력할 수 있습니다.
 		</span>
 	</div>
-	<img src="/static/images/assets/11.경매응찰_레이어팝업창.png" srcset="/static/images/assets/11.경매응찰_레이어팝업창@2x.png 2x, /static/images/assets/11.경매응찰_레이어팝업창@3x.png 3x" class="img_1">
+	<img src="/static/images/assets/11_bidLayerPop.png" srcset="/static/images/assets/11_bidLayerPop@2x.png 2x, /static/images/assets/11_bidLayerPop@3x.png 3x" class="img_1">
 	<div class="txt">
 		<span class="txt">
 			⑦ 찜가격의 하트 아이콘 클릭 시  '찜가격'(응찰 예정가)을 미리 입력할 수 있는 팝업창이 켜집니다.
 		</span>
 	</div>
 	<img src="/static/images/assets/11.png" srcset="/static/images/assets/11@2x.png 2x, /static/images/assets/11@3x.png 3x" class="img_2">
-	<img src="/static/images/assets/11.경매응찰_레이어팝업창2.png" srcset="/static/images/assets/11.경매응찰_레이어팝업창2@2x.png 2x, /static/images/assets/11.경매응찰_레이어팝업창2@3x.png 3x" class="img_3">
+	<img src="/static/images/assets/11_bidLayerPop2.png" srcset="/static/images/assets/11_bidLayerPop2@2x.png 2x, /static/images/assets/11_bidLayerPop2@3x.png 3x" class="img_3">
 	<div class="txt">
 		<span class="\-">
 			⑧ 금액 입력 후 확인 버튼 클릭 시 해당 출하우에 대한 '찜가격'이 설정됩니다.<br/>

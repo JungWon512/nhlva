@@ -17,6 +17,7 @@
 	<input type="hidden" id="naBzplc" name="naBzplc" value="<sec:authentication property="principal.naBzplc"/>" />
 	<input type="hidden" id="loginNo" name="loginNo" value="<sec:authentication property="principal.trmnAmnno"/>" />
 	<input type="hidden" id="bidPopYn" name="bidPopYn" value="Y" />
+	<input type="hidden" id="authRole" name="authRole" value="${authRole}" />
 </form>
 <!-- //auction_list s : 경매 응찰 본 화면 -->
 <div class="auction_list has_auction_see">

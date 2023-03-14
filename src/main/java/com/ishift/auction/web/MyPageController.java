@@ -128,6 +128,9 @@ public class MyPageController {
 		// 2. 나의 경매내역 > 정산서
 		paramMap.put("searchDateState", today);
 		
+		// 정산서 리스트 수수료용 파라메터
+		paramMap.put("searchDate", today);
+		
 		mav.addObject("calendarList", auctionService.selectStateList(paramMap));
 		mav.addObject("title",formatUtil.dateAddDotLenSix(today));
 		
@@ -183,6 +186,10 @@ public class MyPageController {
 			
 			paramMap.put("searchDateState", yyyyMM);
 			params.put("searchDateState", yyyyMM);
+			
+			// 정산서 리스트 수수료용 파라메터
+			paramMap.put("searchDate", yyyyMM);
+			paramMap.put("naBzPlc", paramMap.getOrDefault("naBzplc", sessionUtill.getNaBzplc()));
 
 			List<Map<String,Object>> calendarList = auctionService.selectStateList(paramMap);
 			
@@ -405,16 +412,16 @@ public class MyPageController {
 				FarmUserDetails userVo = (FarmUserDetails)sessionUtill.getUserVo();
 				if(userVo != null) {
 					paramMap.put("searchMbIntgNo", userVo.getMbIntgNo());
-					params.put("searchFhsIdNo", userVo.getFhsIdNo());
-					params.put("searchFarmAmnno", userVo.getFarmAmnno());
+					paramMap.put("searchFhsIdNo", userVo.getFhsIdNo());
+					paramMap.put("searchFarmAmnno", userVo.getFarmAmnno());
 				}
 				paramMap.put("feeFlag", "Y");
 			} else {
 				BidUserDetails userVo = (BidUserDetails)sessionUtill.getUserVo();
 				if(userVo != null) {
 					paramMap.put("searchMbIntgNo", userVo.getMbIntgNo());
+					paramMap.put("searchTrmnAmnno", sessionUtill.getUserId());
 				}
-				paramMap.put("searchTrmnAmnno", sessionUtill.getUserId());
 			}
 			
 			paramMap.put("naBzPlcNo", params.get("searchnaBzPlcNo").toString());
@@ -562,8 +569,8 @@ public class MyPageController {
 				BidUserDetails userVo = ((BidUserDetails) sessionUtill.getUserVo());
 				if(userVo != null) {
 					paramMap.put("searchMbIntgNo", userVo.getMbIntgNo());
+					paramMap.put("searchTrmnAmnNo", sessionUtill.getUserId());
 				}
-	    		paramMap.put("searchTrmnAmnNo", sessionUtill.getUserId());
 	    		
 	    		// > 연/월단위 기준 전체 낙찰두수, 송아지, 비육우, 번식우의 낙찰두수
 	    		result.put("cowBidCnt", myPageService.selectCowBidCnt(paramMap));
@@ -731,6 +738,10 @@ public class MyPageController {
 			
 			paramMap.put("searchDateState", yyyyMM);
 			params.put("searchDateState", yyyyMM);
+			
+			// 정산서 리스트 수수료용 파라메터
+			paramMap.put("searchDate", yyyyMM);
+			paramMap.put("naBzPlc", paramMap.getOrDefault("naBzplc", sessionUtill.getNaBzplc()));
 			
 			List<Map<String,Object>> calendarList = auctionService.selectStateList(paramMap);
 			if (calendarList != null) {

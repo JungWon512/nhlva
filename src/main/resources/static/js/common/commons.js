@@ -88,7 +88,7 @@
 				//history back 해야하는 pathname (, 하고 추가하기)
 				var backPathNm = "/my/buyInfo, /my/entryInfo, /cowDetail, /my/secAply, /my/secWithdraw";
 				
-				if(window.location.pathname.indexOf('/agreement') > -1){pageMove('/agreement/new'); return;} 
+				if(window.location.pathname.indexOf('/agreement') > -1){pageMove('/privacy'); return;} 
 				if(window.location.pathname.indexOf('/dashboard') > -1 || window.location.search.indexOf('dashYn') > -1){dashboardProc('/dashboard/main'); return;} 
 				if(window.location.pathname == '/main'){pageMove('/home'); return;} 
 				else if(backPathNm.indexOf(window.location.pathname) > -1){history.back(); return;}

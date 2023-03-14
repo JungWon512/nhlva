@@ -22,7 +22,7 @@
 			fn_Load(tabId);
 		});
                 
-      	$(document).on("click",".tab_area.auc .schedule_tb_mo .list_body .pd_ea a", function(){
+      	$(document).on("click",".tab_area.auc .schedule_tb_mo .list_body li dl dd:not(.pd_pav)", function(){
 			var pdEa = new String($(this).find('span').attr('fullstr'));	
 			var tr = $(this).closest('li');
         	if(tr.find('.commitYn').val() != '1'){
@@ -117,7 +117,7 @@
 				}								
 				
 				params.inputUpr   = inputUpr;
-				modalComfirm('찜삭제',"찜가격을 삭제하시겠습니까?",function(){
+				//modalComfirm('찜삭제',"찜가격을 삭제하시겠습니까?",function(){
 					 COMMONS.callAjax("/auction/api/deleteZimPrice", "post", params, 'application/json', 'json', function(data){
 						modalPopupClose('.popup .modal-wrap.pop_jjim_input.zim');
 						if(data.aucInfo){
@@ -136,7 +136,7 @@
 							else li.find('.pd_pav a').removeClass('act');
 						}					
 					 });	
-				 });
+				 //});
 			});
 	        $('.modal-wrap.pop_jjim_input.zim .btn_ok').on("click", function(){
 				var inputUpr = $('.modal-wrap.pop_jjim_input.zim input[name=inputUpr]').val();
@@ -263,6 +263,7 @@ var fn_Load = function(tabId){
 	param.naBzplc = $('#johpCd').val();
 	param.naBzPlc = $('#johpCd').val();
 	param.loginNo = $('#loginNo').val();
+	param.authRole = $('#authRole').val();
 	
 	
 	if(tabId =='auc'){

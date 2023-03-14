@@ -99,10 +99,17 @@ var searchAjax = function(flag){
 	
 			var tot_sog_cnt = body.bidderInfo == null ? "0" : body.bidderInfo.TOT_SOG_CNT;
 			var tot_sbid_cnt = body.bidderInfo == null ? "0" : body.bidderInfo.TOT_SBID_CNT;
-			$(".tot_sog_cnt").text(tot_sog_cnt+ " 두");
-			$(".tot_sbid_cnt").text(tot_sbid_cnt + " 두");
-			$(".bid_minus_cnt").text("+ " + (tot_sog_cnt - tot_sbid_cnt));
-			$(".douhnut_txt").html("전체<br/>"+ tot_sog_cnt + "두")
+			$(".tot_sog_cnt").text(fnSetComma(tot_sog_cnt)+ " 두");
+			$(".tot_sbid_cnt").text(fnSetComma(tot_sbid_cnt) + " 두");
+			$(".bid_minus_cnt").text("- " + fnSetComma(tot_sog_cnt - tot_sbid_cnt));
+			$(".douhnut_txt").html("전체<br/>"+ fnSetComma(tot_sog_cnt) + "두")
+
+			//Next 버튼 처리
+			if ($('#nowMonth').val() == body.inputParam.searchMonth) {
+				$("button.btn-next").hide();
+			} else {
+				$("button.btn-next").show();
+			}
 
 			//낙찰율 현황 그리기
 			var arrHtml = [];
@@ -113,8 +120,8 @@ var searchAjax = function(flag){
 				for(var i = 0; i < bidderPerList.length; i++){
 					arrHtml.push("<tr>");
 					arrHtml.push("	<td>" + bidderPerList[i].NA_BZPLCLOC_NM + "</td>");
-					arrHtml.push("	<td>" + bidderPerList[i].TOT_SBID_CNT + "</td>");
-					arrHtml.push("	<td>" + bidderPerList[i].MINUS_SOG_BID + "</td>");
+					arrHtml.push("	<td>" + fnSetComma(bidderPerList[i].TOT_SBID_CNT) + "</td>");
+					arrHtml.push("	<td>" + fnSetComma(bidderPerList[i].MINUS_SOG_BID) + "</td>");
 					arrHtml.push("	<td>" + bidderPerList[i].SBID_PER + "%</td>");
 					arrHtml.push("</tr>");
 				}

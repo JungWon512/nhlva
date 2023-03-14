@@ -137,7 +137,6 @@
        * @param {Error} err Error object
        */
       function fetchBlobCallback(blob, err) {
-		console.log(blob);
         if (err && $.console) console.log(err) // eslint-disable-line no-console
         if (blob && isInstanceOf('Blob', blob)) {
           file = blob // eslint-disable-line no-param-reassign
@@ -148,7 +147,6 @@
             img.crossOrigin = options.crossOrigin
           }
         }
-        console.log(url);
         img.src = url;
       }
       img.onerror = function (event) {
@@ -156,7 +154,6 @@
         if (reject) reject.call(img, event)
       }
       img.onload = function () {
-		console.log("onload");
         revokeHelper(url, options)
         var data = {
           originalWidth: img.naturalWidth || img.width,

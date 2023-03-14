@@ -25,7 +25,7 @@
 		<c:forEach items="${ locList }" var="vo" varStatus="st">	
 			<li>
 				<a href="javascript:pageMove('/main?place=${vo.NA_BZPLCNO }',true);" class="${vo.AUC_YN==1 ? 'act':'' }" >				
-					${vo.AUC_CNT > 0 ? '<span class="tag">경매일</span>' : '' }
+					${(vo.AUC_YN==1 && vo.AUC_CNT > 0) ? '<span class="tag">경매일</span>' : '' }
 					${fn:replace(vo.AREANM ,'.','<br/>')}
 				</a>
 			</li>

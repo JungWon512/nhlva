@@ -172,6 +172,10 @@ $(document).ready(function() {
 			$(document).on('click','div.winpop button.winpop_back',function(){
 				history.back();
 			});
+		
+			$(document).find("div.watchList button.btn_reload").click(function(){
+				location.reload();
+			});
 //			if(kko_id) Kakao.init(kko_id);
 			if(kko_id) try{Kakao.init(kko_id)}catch(e){console.log(e);};
 		},

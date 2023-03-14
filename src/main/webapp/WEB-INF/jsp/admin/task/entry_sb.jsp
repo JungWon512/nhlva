@@ -6,9 +6,10 @@
 		<dl>
 			<dd class="col1">번호</dd>
 			<dd class="col3">귀표</dd>
-			<dd class="col4">응찰번호</dd>
+			<dd class="col4">참가번호</dd>
 			<dd class="col4">낙찰자</dd>
 			<dd class="col4">낙찰가</dd>
+			<dd class="col3">상태</dd>
 		</dl>
 	</div>
 	<div class="list_body">
@@ -28,6 +29,7 @@
 						<dd class="col4">${item.LVST_AUC_PTC_MN_NO}</dd>
 						<dd class="col4">${item.SRA_MWMNNM}</dd>
 						<dd class="col4">${item.SRA_SBID_UPR}</dd>
+						<dd class="col4">${item.SEL_STS_DSC_NAME}</dd>
 					</dl>
 				</li>
 			</c:forEach>

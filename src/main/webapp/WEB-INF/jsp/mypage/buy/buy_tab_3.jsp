@@ -66,7 +66,7 @@
 				</div>
 			</div>
 			<div class="barChart" style="margin-top: 20px;">
-				<canvas id="myChartSample3"></canvas>
+				<canvas id="myChartSample3" class="bar_chart"></canvas>
 			</div>
 			
 		</div>
@@ -87,8 +87,8 @@
 					<tr>
 						<th scope="col">조합</th>
 						<th scope="col" class="ta-C">출장두수</th>
-						<th scope="col" class="ta-C">응찰두수</th>
 						<th scope="col" class="ta-C">낙찰두수</th>
+						<th scope="col" class="ta-C">응찰두수</th>
 					</tr>
 				</thead>
 				<tfoot class="top-tfoot"></tfoot>

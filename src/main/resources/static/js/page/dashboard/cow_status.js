@@ -172,6 +172,31 @@
 					
 					$("tbody.sogCowInfoList").append(sHtml.join(""));
 				}
+				else{		//데이터가 null 인 경우
+					$("tbody.sogCowInfoList").empty();
+					
+					let sHtml = [];
+					sHtml.push('<tr class="sogCow">');
+					sHtml.push('	<th>송아지</th>');
+					sHtml.push('	<td class="ta-C">0</td>');
+					sHtml.push('	<td class="ta-C">0</td>');
+					sHtml.push('	<td class="ta-C on">0</td>');
+					sHtml.push('</tr>');
+					sHtml.push('<tr class="sogCow">');
+					sHtml.push('	<th>비육우</th>');
+					sHtml.push('	<td class="ta-C">0</td>');
+					sHtml.push('	<td class="ta-C">0</td>');
+					sHtml.push('	<td class="ta-C on">0</td>');
+					sHtml.push('</tr>');
+					sHtml.push('<tr class="sogCow">');
+					sHtml.push('	<th>번식우</th>');
+					sHtml.push('	<td class="ta-C">0</td>');
+					sHtml.push('	<td class="ta-C">0</td>');
+					sHtml.push('	<td class="ta-C on">0</td>');
+					sHtml.push('</tr>');
+					
+					$("tbody.sogCowInfoList").append(sHtml.join(""));
+				}
 				
 				//지역별 평균 시세
 				var areaSbidList = body.areaSbidList;
@@ -203,7 +228,7 @@
 		//초기화
 		$(".chart_area").empty();
 		$("#chart_area1").append('<canvas id="myPieSample1"></canvas>');
-		$("#chart_area2").append('<canvas id="myCharSample1"></canvas>');
+		$("#chart_area2").append('<canvas id="myCharSample1" class="bar_chart"></canvas>');
 	
 		// 막대 차트 생성
 		var labelData = [];
@@ -294,34 +319,64 @@
 		
 		// 도넛 차트 생성
 		const ctx2 = document.getElementById('myPieSample1');
-		const sogCowInfoList = body.sogCowInfoList;
+		const sogCowInfoList = (body.sogCowInfoList == null || body.sogCowInfoList == undefined) ? [] : body.sogCowInfoList;
 		
 		let aucData = [];
-		aucData.push(sogCowInfoList[0].CNT_3, sogCowInfoList[1].CNT_3, sogCowInfoList[2].CNT_3);
-		
-		new Chart(ctx2, {
-				type: 'pie',
-			data: {
-				labels: ['송아지', '비육우', '번식우'],
-				datasets: [
-					{
-						data: aucData,
-						borderColor: ['#ffcd56','#ff9f40','#ff4069'],
-						backgroundColor: ['#ffcd56','#ff9f40','#ff4069'],
-						borderWidth: 0,
+		if(sogCowInfoList.length <= 0
+			|| (sogCowInfoList.length > 0 && sogCowInfoList[0].CNT_3 == 0 && sogCowInfoList[1].CNT_3 == 0 && sogCowInfoList[2].CNT_3 == 0)){
+			
+			new Chart(ctx2, {
+					type: 'pie',
+				data: {
+					labels: ['등록된 출장두수가 없습니다'],
+					datasets: [
+						{
+							data: [100],
+							borderColor: ['#ffcd56'],
+							backgroundColor: ['#ffcd56'],
+							borderWidth: 0,
+						}
+					]
+				},
+				options: {
+					responsive: true,
+					maintainAspectRatio: true,
+					plugins: {
+						legend: {
+							position: 'right'
+						},
 					}
-				]
-			},
-			options: {
-				responsive: true,
-				maintainAspectRatio: true,
-				plugins: {
-					legend: {
-						position: 'right'
-					},
-				}
-			},
-		});
+				},
+			});
+		}
+		else{
+			
+			aucData.push(sogCowInfoList[0].CNT_3, sogCowInfoList[1].CNT_3, sogCowInfoList[2].CNT_3);
+			
+			new Chart(ctx2, {
+					type: 'pie',
+				data: {
+					labels: ['송아지', '비육우', '번식우'],
+					datasets: [
+						{
+							data: aucData,
+							borderColor: ['#ffcd56','#ff9f40','#ff4069'],
+							backgroundColor: ['#ffcd56','#ff9f40','#ff4069'],
+							borderWidth: 0,
+						}
+					]
+				},
+				options: {
+					responsive: true,
+					maintainAspectRatio: true,
+					plugins: {
+						legend: {
+							position: 'right'
+						},
+					}
+				},
+			});
+		}
 	}
 
 	//sogCowInfo 가 아예 null 인 경우, 기본 0 셋팅

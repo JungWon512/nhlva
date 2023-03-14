@@ -1,6 +1,13 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
 <%@ include file="/WEB-INF/__system/taglibs.jsp"%>
-
+<style>
+	.nonData{background-color: #eee;
+    height: 200px;
+    border-radius: 10px;
+    text-align: center;
+    vertical-align: center;
+    padding-top: 87px;}
+</style>
 <form name="frm" action="" method="post">
 	<input type="hidden" name="searchRaDate" 	id="searchRaDate" 		value="${inputParam.searchRaDate}">
 	<input type="hidden" name="searchFlag" 		id="searchFlag" 			value="${inputParam.searchFlag}">
@@ -9,7 +16,14 @@
 </form>
 <div class="board-main pt-0">
 	<div class="sec-board">
-		<h2 class="sec-tit">가축시장 도축장시세</h2>
+		<h2 class="sec-tit">가축시장 도축장시세 <span style="font-weight:400; font-size:14px;">(농협 4대 공판장 기준)</span></h2>
+		<c:choose>
+			<c:when test="${empty btcAucDate }">
+		<div class="nonData">
+			<p>최근 도축 데이터가 없습니다.</p>
+		</div>	
+			</c:when>
+			<c:otherwise>
 		<div class="btnBox btnSex">
 			<button class="on" id="1">암</button>
 			<button id="2">수</button>
@@ -33,7 +47,11 @@
 				</c:forEach>
 			</select>	
 		</div>
+			</c:otherwise>
+		</c:choose>
 	</div>
+	
+	<c:if test="${!empty btcAucDate }">
 	<div class="sec-board">
 		<div class="white-box">
 			<div class="market-price col-1">
@@ -112,7 +130,7 @@
 	<div class="sec-board">
 		<div class="white-box">
 			<div class="chart_area" style="margin-bottom: 30px;">
-				<canvas id="myCharSample5"></canvas>
+				<canvas id="myCharSample5" class="bar_chart"></canvas>
 			</div>
 			<div class="table-simple m-0">
 				<table>
@@ -148,6 +166,9 @@
 			</div>
 		</div>
 	</div>
+	
+	</c:if>
+	
 </div>
 <script src="/static/js/common/chart/chart.js"></script>
 <script type="text/javascript">

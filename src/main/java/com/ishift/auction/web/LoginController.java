@@ -7,7 +7,6 @@ import com.ishift.auction.util.CookieUtil;
 import com.ishift.auction.util.HttpUtils;
 import com.ishift.auction.util.JsonUtils;
 import com.ishift.auction.util.JwtTokenUtil;
-import com.ishift.auction.util.PasswordEncoding;
 
 import java.io.IOException;
 import java.sql.SQLException;
@@ -39,12 +38,6 @@ import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 import org.springframework.web.servlet.ModelAndView;
 
-import com.ishift.auction.service.admin.AdminService;
-import com.ishift.auction.service.login.LoginService;
-import com.ishift.auction.util.Constants;
-import com.ishift.auction.util.CookieUtil;
-import com.ishift.auction.util.JwtTokenUtil;
-
 import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
 
@@ -58,9 +51,6 @@ public class LoginController {
 
 	@Autowired
 	private LoginService loginService;
-
-	@Autowired
-	private PasswordEncoding passwordEncoding;
 	
 	@Autowired
 	private JwtTokenUtil jwtTokenUtil;
@@ -70,9 +60,6 @@ public class LoginController {
 
 	@Autowired
 	private AdminService adminService;
-
-	@Autowired
-	private AuctionController auctionController;
 
 	@Autowired
 	private HttpUtils httpUtils;
@@ -116,7 +103,7 @@ public class LoginController {
 			apiResult = httpUtils.callApiKauth("POST", "client_id="+kkoClientIdApp+tempParm);
 			if(apiResult != null) {
 				json = JsonUtils.getJsonObjectFromString(apiResult);
-				if(json.get("error_code") != null) {
+				if(json.get("error_code") == null) {
 					apiResult = httpUtils.callApiKauth( "POST", "client_id="+kkoClientIdApp+"&grant_type=authorization_code&redirect_uri="+kkoRedirectUrl+"&code="+code);
 					json = JsonUtils.getJsonObjectFromString(apiResult);
 					
@@ -125,8 +112,9 @@ public class LoginController {
 					log.info("KAKAO ACCESS : TOKEN : "+aToken);
 					log.info("KAKAO REFRESH : TOKEN : "+rToken);
 					if(!StringUtils.isEmpty(rToken)) {
-						cookieUtil.createCookie("nhlva_k_r_token", rToken);
+						response.addCookie(cookieUtil.createCookie("nhlva_k_r_token", rToken));
 					}
+					//response.addCookie(cookieUtil.createCookie("nhlva_k_a_token", aToken));
 					tokenData= httpUtils.callApiKakaoTokenInfo("GET", aToken);
 				}
 			}
@@ -134,15 +122,18 @@ public class LoginController {
 			apiResult = httpUtils.callApiKauth("POST", "client_id="+kkoClientIdApp+tempParm);
 			if(apiResult != null) {
 				json = JsonUtils.getJsonObjectFromString(apiResult);
-				
-				aToken = (String) json.get("access_token");
-				rToken = (String) json.get("refresh_token");
-				log.info("KAKAO ACCESS : TOKEN : "+aToken);
-				log.info("KAKAO REFRESH : TOKEN : "+rToken);
-				if(!StringUtils.isEmpty(rToken)) {
-					cookieUtil.createCookie("nhlva_k_r_token", rToken);
+
+				if(json.get("error_code") == null) {
+					aToken = (String) json.get("access_token");
+					rToken = (String) json.get("refresh_token");
+					log.info("KAKAO ACCESS : TOKEN : "+aToken);
+					log.info("KAKAO REFRESH : TOKEN : "+rToken);
+					if(!StringUtils.isEmpty(rToken)) {
+						response.addCookie(cookieUtil.createCookie("nhlva_k_r_token", rToken));
+					}
+					//response.addCookie(cookieUtil.createCookie("nhlva_k_a_token", aToken));
+					tokenData= httpUtils.callApiKakaoTokenInfo("GET", aToken);
 				}
-				tokenData= httpUtils.callApiKakaoTokenInfo("GET", aToken);
 			}
 		}
 		String place="";
@@ -158,7 +149,7 @@ public class LoginController {
 		//mav.addObject("inputParam", params);
 		//mav.addObject("place", place);
 		String message ="";
-		if(tokenData != null) {
+		if(!StringUtils.isEmpty(tokenData)) {
 			JSONObject token = JsonUtils.getJsonObjectFromString(tokenData);
 			JSONObject accountInfo = (JSONObject) token.get("kakao_account");
 
@@ -223,7 +214,6 @@ public class LoginController {
 	 * @throws Exception
 	 */
 	@ResponseBody
-	@SuppressWarnings("unchecked")
 	@PostMapping(value="/user/kkologinProc", produces = MediaType.APPLICATION_JSON_VALUE)
 	public Map<String, Object> kkologinProc(HttpServletRequest request
 										, HttpServletResponse response
@@ -394,8 +384,9 @@ public class LoginController {
 			params.put("token", request.getParameter("token"));
 			params.put("inOutGb", "2");
 			loginService.insertLoginConnHistory(request, params);		//로그아웃 이력 남기기
-			
+
 			Cookie cookie = cookieUtil.deleteCookie(request, Constants.JwtConstants.ACCESS_TOKEN);
+			response.addCookie(cookieUtil.deleteCookie(request, "nhlva_k_r_token"));
 			response.addCookie(cookie);
 			response.sendRedirect("/home");
 			

@@ -373,6 +373,7 @@ function modalComfirm(title,content,succCallBack,failCallBack){
 		modalPopupClose('.popup .modal-wrap.confirm');
 	});
 }
+
 function modalBzInfo(){
 	modalPopupClose('.popup .modal-wrap.pop_Co_info');
 	$('.popup .modal-wrap.pop_Co_info').remove();
@@ -526,7 +527,7 @@ var getLocation = function(lat, lng) {
 
 // form append submit
 var appendFormSubmit = function(name, action, params, target) {
-	$("form[name='" + name + "']").remove();
+	if ($("form[name='" + name + "']").length != 0) $("form[name='" + name + "']").remove();
 	var form = $("<form></form>");
 	form.attr("name", name);
 	form.attr("action", action);
@@ -579,6 +580,7 @@ var toast = function(string, sec, top) {
 }
 
 var fnSetComma = function(str) {
+	return (str != undefined && str.toString().replace(/[^0-9]/gi, '') != "") ? str.toString().replace(/[^0-9]/gi, '').replace(/\B(?=(\d{3})+(?!\d))/g, ",") : (str ? str : "0");
 	if (!str || str.toString().replace(/[^0-9]/gi, '') == "") {
 		return (str ? str : "0");
 	}
@@ -741,29 +743,25 @@ function fn_xxsDecode(p_str){
     }
 }
 
+// 로딩 이미지
 var fnShowLoadingImg = function() {
 	if ($("#loading-prograss").length == 0) {
 		var imgHtml = [];
-		imgHtml.push('<div id="loading-prograss" class="loading-prograss" tabindex="0">               ');
-		imgHtml.push('	<div class="spinner-border text-seconary" role="status">                      ');
-		imgHtml.push('		<img class="loading-image" src="/static/images/guide/loading/Spin-1s-200px.gif">');
-		imgHtml.push('	</div>                                                                        ');
-		imgHtml.push('</div>                                                                          ');
+		imgHtml.push('<div id="loading-prograss" class="loading-prograss" tabindex="0">');
+		imgHtml.push('    <div class="overlay"></div>');
+		imgHtml.push('    <div class="spinner-border text-seconary" role="status">');
+		imgHtml.push('        <img class="loading-image" src="/static/images/guide/loading/Spin-1s-200px.gif">');
+		imgHtml.push('    </div>');
+		imgHtml.push('</div>');
 		$(document.body).append(imgHtml.join(""));
 	}
+	
 	$("#loading-prograss").show();
-}
+	$('body').css('overflow-y','hidden');
+};
 
+// 로딩 이미지 숨기기
 var fnHideLoadingImg = function() {
 	$("#loading-prograss").hide();
-}
-
-var uuidv4 = function() {
-  return ([1e7]+-1e3+-4e3+-8e3+-1e11).replace(/[018]/g, c =>
-    (c ^ crypto.getRandomValues(new Uint8Array(1))[0] & 15 >> c / 4).toString(16)
-  );
-}
-
-var fnCall = function(num) {
-	location.href = "tel:" + num;
-}
+	$('body').css('overflow-y','auto');
+};

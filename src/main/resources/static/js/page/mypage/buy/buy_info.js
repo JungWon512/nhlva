@@ -50,7 +50,6 @@
 			if(data.stateInfo) {
 				$("div.auction_result table.stateInfo td.no").text(data.stateInfo.LVST_AUC_PTC_MN_NO);
 				$("div.auction_result table.stateInfo td.nm").text(data.stateInfo.USER_NM);
-				$("div.auction_result table.stateInfo td.addr").text(data.stateInfo.USER_DONG_UP + data.stateInfo.USER_DONG_BW);
 			}else{
 				$("div.auction_result table.stateInfo td.info").text('-');
 			}

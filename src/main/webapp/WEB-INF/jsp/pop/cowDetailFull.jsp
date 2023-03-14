@@ -4,19 +4,34 @@
 <!--${data} -->
 <!--end::Container-->
 <form name="frm" action="" method="post">
-	<input type="hidden" name="place" value="<c:out value="${param.place}" />" />
-	<input type="hidden" name="naBzplc" value="<c:out value="${param.naBzplc}" />" />
-	<input type="hidden" name="aucDt" value="<c:out value="${param.aucDt}" />" />
-	<input type="hidden" name="aucObjDsc" value="<c:out value="${param.aucObjDsc}" />" />
-	<input type="hidden" name="sraIndvAmnno" value="<c:out value="${param.sraIndvAmnno}" />" />		
-	<input type="hidden" name="aucPrgSq" value="<c:out value="${param.aucPrgSq}" />" />
-	<input type="hidden" name="oslpNo" value="<c:out value="${param.oslpNo}" />" />
-	<input type="hidden" name="ledSqno" value="<c:out value="${param.ledSqno}" />" />
+	<input type="hidden" name="place" value="<c:out value="${inputParam.place}" />" />
+	<input type="hidden" name="naBzplc" value="<c:out value="${inputParam.naBzplc}" />" />
+	<input type="hidden" name="aucDt" value="<c:out value="${inputParam.aucDt}" />" />
+	<input type="hidden" name="aucObjDsc" value="<c:out value="${inputParam.aucObjDsc}" />" />
+	<input type="hidden" name="sraIndvAmnno" value="<c:out value="${inputParam.sraIndvAmnno}" />" />		
+	<input type="hidden" name="aucPrgSq" value="<c:out value="${inputParam.aucPrgSq}" />" />
+	<input type="hidden" name="oslpNo" value="<c:out value="${inputParam.oslpNo}" />" />
+	<input type="hidden" name="ledSqno" value="<c:out value="${inputParam.ledSqno}" />" />
 	<input type="hidden" name="bidPopYn" value="<c:out value="${inputParam.bidPopYn}" />" />
+	<input type="hidden" name="parentObj" value="<c:out value="${inputParam.parentObj}" />" />
+	<input type="hidden" name="tabId" value="1" />
 </form>
+<form name="frm_parent" action="" method="post">
+</form>
+<style>
+div.save-box {
+    text-align: center;
+	font-size: 18px;
+}
+div.save-box .info em {
+	color: #1a1a1a;
+	font-weight: 700;
+}
+</style>
 <div class="winpop cow-detail">
-	<button type="button" class="winpop_back"><span class="sr-only">윈도우 팝업 닫기</span></button>
-	<h2 class="winpop_tit">${subheaderTitle}</h2>
+	<button type="button" class="winpop_back"><span class="sr-only">윈도우 팝업 닫기</span>
+		<h2 class="winpop_tit">${subheaderTitle}</h2>
+	</button>
 	<div class="tab_list item-${tabList[0].TOT_CNT+1}" style="display:none;">
 		<ul>
 			<c:forEach items="${ tabList }" var="item" varStatus="st">			
@@ -27,8 +42,16 @@
 		</ul>
 	</div>
 	<!-- //tab_list e -->
-	<div class="tab_area not mo-pd bloodInfo cowTab_1">	
-		<h3 class="tit">혈통정보</h3>
+	<div class="tab_area not mo-pd bloodInfo cowTab_1">
+		<div class="save-box">
+			<div class="info">
+				<em>${inputParam.title} |</em>
+				<em>${fn:substring(inputParam.sraIndvAmnno, 3, 6)} ${fn:substring(inputParam.sraIndvAmnno, 6, 10)} ${fn:substring(inputParam.sraIndvAmnno, 10, 14)} ${fn:substring(inputParam.sraIndvAmnno, 14, 15)} </em>
+			</div>
+		</div>
+		<h3 class="tit2"><span class="subTxt" style="position: absolute;right: 10px;"></span></h3>
+		<h3 class="tit top">혈통정보			
+		</h3>		
 		<div class="cow-father">
 			<table class="table-detail">
 				<colgroup>
@@ -130,8 +153,8 @@
 		<div class="cow-sibiling">
 			<table class="table-detail sibIndvTable">
 				<colgroup>
-					<col width="13%">
-					<col width="28%">
+					<col width="8%">
+					<col width="33%">
 					<col width="14%">
 					<col width="15%">
 					<col width="30%">
@@ -175,8 +198,8 @@
 		<div class="cow-sibiling">
 			<table class="table-detail postIndvTable">
 				<colgroup>
-					<col width="13%">
-					<col width="28%">
+					<col width="8%">
+					<col width="33%">
 					<col width="14%">
 					<col width="15%">
 					<col width="30%">

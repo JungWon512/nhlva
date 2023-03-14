@@ -11,6 +11,7 @@ import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
+import org.springframework.util.ObjectUtils;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -20,7 +21,6 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.amazonaws.SdkClientException;
-import com.amazonaws.services.s3.model.AmazonS3Exception;
 import com.ishift.auction.service.admin.AdminService;
 import com.ishift.auction.service.admin.task.AdminTaskService;
 import com.ishift.auction.service.auction.AuctionService;
@@ -140,8 +140,8 @@ public class AdminTaskController extends CommonController {
 					put("AW", "중량 일괄 등록");
 					put("AL", "예정가 일괄 등록");
 					put("AWL", "일괄 등록");
-					put("SB", "낙찰결과 조회");
-					put("SCOW", "출장우 리스트");
+					put("SB", "경매결과 조회");
+					put("SCOW", "출장우 목록");
 					put("SMCOW", "미감정 임신우");
 			}
 		};
@@ -153,8 +153,9 @@ public class AdminTaskController extends CommonController {
 			if(userVo != null) params.put("naBzplc", userVo.getNaBzplc());
 			if(params.get("aucDt") != null) params.put("searchDate", params.get("aucDt"));
 			if(params.get("aucObjDsc") != null) params.put("searchAucObjDsc", params.get("aucObjDsc"));
+			// null일 경우 22(낙찰)건으로 조회
 			if(params.get("regType") != null && "SB".equals(params.get("regType"))) {
-				params.put("searchSelStsDsc", "22");
+				params.put("searchSelStsDsc", params.getOrDefault("selStsDsc", "22"));
 			}
 			if(params.get("regType") != null && "SMCOW".equals(params.get("regType"))) {
 				params.put("mCowYn", "Y");
@@ -215,17 +216,17 @@ public class AdminTaskController extends CommonController {
 			final AdminUserDetails userVo = (AdminUserDetails)sessionUtill.getUserVo();
 			if(userVo != null) params.put("naBzplc", userVo.getNaBzplc());
 
-			final Map<String, Object> cowInfo = auctionService.selectCowInfo(params);
+			//final Map<String, Object> cowInfo = auctionService.selectCowInfo(params);
+			final List<Map<String, Object>> cowInfo = auctionService.selectCowInfoList(params);
 
-			if (cowInfo == null) {
+			if (ObjectUtils.isEmpty(cowInfo)) {
 				result.put("success", false);
 				result.put("message", "출장우 정보가 없습니다.");
 			}
 			else {
 				result.put("success", true);
 				result.put("message", "조회에 성공했습니다.");
-				result.put("cowInfo", cowInfo);
-				
+				result.put("cowInfo", cowInfo);				
 				result.put("ppgcowList", this.getCommonCode("PPGCOW_FEE_DSC", "1"));
 				result.put("indvList", this.getCommonCode("INDV_SEX_C", "1"));
 				result.put("vetList", auctionService.selectVetList(params));	// 수의사 리스트

@@ -11,7 +11,7 @@
 <input type="hidden" id="RSAExponent" value="${RSAExponent }"/>
 <div class="login_section">
 	<div class="login_box">
-		<h1>로그인<span>스마트가축시장</span></h1>
+		<h1>모바일업무<span>스마트가축시장 로그인</span></h1>
 		<form class="form-signin" method="post">
 			<fieldset>
 				<input type="text" id="usrid" name="usrid" class="inp inp_id" placeholder="아이디" required autofocus />

@@ -55,7 +55,7 @@
 					</select>
 				</li>
 				</c:if>
-				<c:if test="${ params.regType ne 'AW' && params.regType ne 'AL' && params.regType ne 'AWL' }">
+				<c:if test="${ params.regType ne 'AW' && params.regType ne 'AL'}">
 				<li class="barcoad">
 <!-- 					<p>바코드</p> -->
 					<div class="barcoad_input">
@@ -70,6 +70,14 @@
 			</ul>
 			<!-- sch_area [e] -->
 		</div>
+		<c:if test="${ params.regType eq 'SB' }">
+			<div class="tab_list">
+				<ul class="sb tab_2">
+					<li><a href="javascript:;" class="${ empty params.selStsDsc || params.selStsDsc eq 'Y' ? 'act' : '' }" data-tab-id="Y">낙찰</a></li>
+					<li><a href="javascript:;" class="${ params.selStsDsc eq 'N' ? 'act' : '' }" data-tab-id="N">유찰</a></li>
+				</ul>
+			</div>
+		</c:if>
 		<!-- sub_search [e] -->
 		<!-- list_table [s] -->
 		<c:choose>

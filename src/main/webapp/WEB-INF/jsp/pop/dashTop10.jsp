@@ -13,7 +13,7 @@
 					<c:forEach items="${ recentDateTopList }" var="vo" varStatus="i">
 						<li>
 							<dl class="union">
-								<dt><img src="/static/images/guide/v2/sample_logo.jpg" alt=""></dt>
+								<dt>	<img src="https://kr.object.ncloudstorage.com/smartauction-storage/logo/${vo.NA_BZPLC}.png" onerror="this.src='/static/images/guide/v2/sample_logo.jpg'" /></dt>
 								<dd class="name">${ vo.CLNTNM }</dd>
 								<fmt:formatNumber value="${empty vo.AMT ? 0 : vo.AMT}" type="number" var="AMT"/>
 								<c:choose>

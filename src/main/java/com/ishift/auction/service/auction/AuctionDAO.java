@@ -835,5 +835,9 @@ public class AuctionDAO {
 	public void insertSmsInfo(Map<String, Object> params) throws SQLException {
 		mainDao.insert("auction.insertSmsInfo", params);
 	}
+
+	public List<Map<String, Object>> selectCowInfoList(Map<String, Object> params) throws SQLException {
+		return mainDao.selectList("auction.selectCowInfo", params);
+	}
 	
 }

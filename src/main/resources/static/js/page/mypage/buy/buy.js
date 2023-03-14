@@ -187,6 +187,11 @@
     
      // 구매내역 조회
     var fnSearchBuy = function(){
+		if (!$("#searchDateBuy").val()) {
+			modalAlert('','경매일자를 선택해주세요.');
+			return;
+		} 
+	
 		var param = {naBzPlcNo : $("#naBzPlcNo").val()
 			, place : $("#naBzPlcNo").val()
 			, loginNo : $("#loginNo").val()
@@ -250,6 +255,11 @@
 	
 	// 응찰내역 조회
 	var fnSearchBid = function(){
+		if (!$("#searchDateBid").val()) {
+			modalAlert('','경매일자를 선택해주세요.');
+			return;
+		} 
+		
 		var param = {
 			naBzPlcNo : $("#naBzPlcNo").val()
 			, place : $("#naBzPlcNo").val()
@@ -271,7 +281,7 @@
 			data.data.forEach(function(item,i){
 				var sHtml = [];							
 				if (item.SEL_STS_DSC_NAME == '-') {
-					sHtml.push("<li><dl>");					
+					sHtml.push("<li style=''><dl>");					
 				} else{
 					sHtml.push("<li style='background-color:#fbfbb0;'><dl>");					
 				}
@@ -341,8 +351,8 @@
 					sHtml.push('							<span><em class="fc-blue">'+ item.COW_CNT +'</em>두</span>');
 					sHtml.push('						</li>');
 					sHtml.push('						<li>');
-					sHtml.push('							<strong>낙찰금액</strong>');
-					sHtml.push('							<span><em class="fc-red">'+ fnSetComma(item.SRA_SBID_AM) +'</em>원</span>');
+					sHtml.push('							<strong>정산금액</strong>');
+					sHtml.push('							<span><em class="fc-red">'+ fnSetComma(item.SRA_SBID_AM + item.SRA_TR_FEE) +'</em>원</span>');
 					sHtml.push('						</li>');
 					sHtml.push('					</ul>');
 					sHtml.push('				</dd>');
@@ -380,7 +390,7 @@
     	$('div.doughnut div.graph').append('<canvas id="myDoughnutsample2"></canvas><span class="total"></span>');
     	
     	$('div.barChart').empty();
-    	$('div.barChart').append('<canvas id="myChartSample3"></canvas>');
+    	$('div.barChart').append('<canvas id="myChartSample3" class="bar_chart"></canvas>');
 		
 		//도넛 차트 생성
 	    const ctx = $("#myDoughnutsample2");
@@ -388,33 +398,36 @@
 	    // 전체 낙찰율 데이터
 	    var doughData = ""; 
 	    // 송아지 낙찰두수 및 응찰두수
-	    var barData1 = "";
-	    var barData2 = "";
+	    var barData1 = 0;
+	    var barData2 = 0;
 	    // 비육우 낙찰두수 및 응찰두수
-	    var barData3 = "";
-	    var barData4 = "";
+	    var barData3 = 0;
+	    var barData4 = 0;
 	    // 번식우 낙찰두수 및 응찰두수
-	    var barData5 = "";
-	    var barData6 = "";
+	    var barData5 = 0;
+	    var barData6 = 0;
 	    // 송아지, 비육우, 번식우 map 만들기
 	    let cowData1 = bidList.forEach(item => {
 			if (!item.AUC_OBJ_DSC) {
 				doughData = item.SEL_STS_PERCENT ?? 0
-			} else if (item.AUC_OBJ_DSC == '1') {
-				barData1 = item.SEL_STS_CNT ?? 0;
-	   			barData2 = item.TOT_ATDR_CNT ?? 0;
-			} else if (item.AUC_OBJ_DSC == '2') {
-				barData3 = item.SEL_STS_CNT ?? 0;
-	   			barData4 = item.TOT_ATDR_CNT ?? 0;
-			} else if (item.AUC_OBJ_DSC == '3') {
-				barData5 = item.SEL_STS_CNT ?? 0;
-	   			barData6 = item.TOT_ATDR_CNT ?? 0;
+			} else {
+				if (item.AUC_OBJ_DSC == '1') {
+					barData1 = item.SBID_COW_CNT ?? 0;
+	   				barData2 = item.TOT_ATDR_CNT ?? 0;
+				} else if (item.AUC_OBJ_DSC == '2') {
+					barData3 = item.SBID_COW_CNT ?? 0;
+	   				barData4 = item.TOT_ATDR_CNT ?? 0;
+				} else if (item.AUC_OBJ_DSC == '3') {
+					barData5 = item.SBID_COW_CNT ?? 0;
+		   			barData6 = item.TOT_ATDR_CNT ?? 0;
+				}	
 			}
 		})
 
 	    var config = {
-	        type : 'doughnut',
+	        type : 'doughnut', 
 	        data : {
+//				labels: ['낙찰율', '유찰율'],
 	            datasets:[
 		           	{
 		                data: [100 - doughData, doughData],
@@ -422,7 +435,18 @@
 						borderWidth: 0
 		            }
 	            ]
-	        }
+	        },
+			options: {
+				tooltips: {
+					callbacks: {
+						label : function(tooltipItem, data){
+							var dataset = data.datasets[tooltipItem.datasetIndex];
+							var currentValue = dataset.data[tooltipItem.index];
+							return Math.floor(((currentValue / 100) * 100)) + "%";
+						}
+					}
+				}
+			}
 	    };
 	    doughChart = new Chart(ctx, config);
 	    
@@ -438,50 +462,15 @@
 						label: '낙찰두수',
 						data: [barData1, barData3, barData5],
 						borderColor: '#ffcf9f',
-						backgroundColor: '#ffcf9f',
-						yAxisID: 'y-left'
+						backgroundColor: '#ffcf9f'
 					},
 					{
 						label: '응찰두수',
 						data: [barData2, barData4, barData6],
 						borderColor: '#9ad0f5',
-						backgroundColor: '#9ad0f5',
-						yAxisID: 'y-left'
+						backgroundColor: '#9ad0f5'
 					}
 				]
-			},
-			options: {
-				interaction: {
-					intersect: false,
-					mode: 'index'
-				},
-				scales: {
-					yAxes: [
-						{
-							id: 'y-left',
-							position: 'left',
-							display: true,
-							suggetedMin: 0,
-							ticks: {
-								beginAtZero: true,
-								steps: 10,
-								stepValue: 5,
-								callback: function(value, index) {
-									return parseInt(value, 10).toLocaleString();
-								}
-							}
-						}
-					]
-				},
-				tooltips: {
-					enabled: true,
-					callbacks: {
-						label: function(tooltipItem, data) {
-							const tooltipValue = data.datasets[tooltipItem.datasetIndex].data[tooltipItem.index];
-							return parseInt(tooltipValue, 10).toLocaleString();
-						}
-					}
-				}
 			}
 		};
 	
@@ -500,8 +489,8 @@
 			fHtml.push('					<tr>                                                                                        ');
 			fHtml.push('						<td>'+ list[0].CLNTNM +'</td>                                                 ');
 			fHtml.push('						<td class="ta-C">'+ list[0].TOT_COW_CNT +'</td>                               ');
-			fHtml.push('						<td class="ta-C">'+ list[0].TOT_ATDR_CNT +'</td>                              ');
 			fHtml.push('						<td class="ta-C">'+ list[0].SBID_COW_CNT +'</td>                              ');
+			fHtml.push('						<td class="ta-C">'+ list[0].TOT_ATDR_CNT +'</td>                              ');
 			fHtml.push('					</tr>                                                                                       ');
 		} else {
 			fHtml.push('					<tr>                                                                                        ');
@@ -515,15 +504,15 @@
 					sHtml.push('			<tr>                                                                                            ');
 					sHtml.push('				<td><a href="javascript:;" id="'+ list[i].NA_BZPLC +'" class="link johapLink">'+ list[i].CLNTNM +'</a></td>       ');				
 					sHtml.push('				<td class="ta-C">'+ list[i].TOT_COW_CNT +'</td>                                                   ');
-					sHtml.push('				<td class="ta-C">'+ list[i].TOT_ATDR_CNT +'</td>                                                   ');
-					sHtml.push('				<td class="ta-C">'+ list[i].SBID_COW_CNT +'</td>                                                  ');
+					sHtml.push('				<td class="ta-C">'+ list[i].SBID_COW_CNT +'</td>                                                   ');
+					sHtml.push('				<td class="ta-C">'+ list[i].TOT_ATDR_CNT +'</td>                                                  ');
 					sHtml.push('			</tr>                                                                                           ');
 				} else {
 					sHtml.push('			<tr style="background-color:#ffcf9f;">                                                                                            ');
 					sHtml.push('				<td>'+ list[i].CLNTNM +'</td>       ');									
 					sHtml.push('				<td class="ta-C">'+ list[i].TOT_COW_CNT +'</td>                                                   ');
-					sHtml.push('				<td class="ta-C">'+ list[i].TOT_ATDR_CNT +'</td>                                                   ');
-					sHtml.push('				<td class="ta-C">'+ list[i].SBID_COW_CNT +'</td>                                                  ');
+					sHtml.push('				<td class="ta-C">'+ list[i].SBID_COW_CNT +'</td>                                                   ');
+					sHtml.push('				<td class="ta-C">'+ list[i].TOT_ATDR_CNT +'</td>                                                  ');
 					sHtml.push('			</tr>                                                                                           ');
 				}
 			}
@@ -551,7 +540,7 @@
 				modalAlert('','작업중 오류가 발생했습니다. <br/>관리자에게 문의하세요.');
 				return;
 			}
-
+			
 			let searchDateFormat = data.inputParam.searchDateMy.length > 4 ? (data.inputParam.searchDateMy.substring(0, 4) + "년 " + data.inputParam.searchDateMy.substring(4)) : data.inputParam.searchDateMy; 
 			
 			$('input[name=searchDateMy]').val(data.inputParam.searchDateMy);
@@ -559,7 +548,7 @@
 			// 나의 구매현황			
 			$("h3.johapNm").html(data.myJohapData.CLNTNM + '<i class="dash searchYearMonth">'+ searchDateFormat + (data.inputParam.ymFlag == 'M' ? "월" : "년") +'</i>');
 			$("span.searchYearMonth").html(searchDateFormat + (data.inputParam.ymFlag == 'M' ? "월" : "년"));
-			$("div.txt > .percent").html((data.cowBidPercent.length > 0 ? data.cowBidPercent[0].SEL_STS_PERCENT : 0) + " %");
+			$("div.txt > strong.percent").html((data.cowBidPercent.length > 0 ? data.cowBidPercent[0].SEL_STS_PERCENT : 0) + " %");
 			
 			$("div.simple-board > dl.top > dt").html( + (data.inputParam.ymFlag == 'M' ? "이번달" : "이번해"));
 			$("div.simple-board > dl.top .totSraSbidAm").html((data.cowBidCnt.length > 0 ? data.cowBidCnt[0].TOT_SRA_SBID_AM_FORMAT : 0) + " 원");

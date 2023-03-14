@@ -35,7 +35,7 @@
 				</li>
 				<li>
 					<input type="checkbox" id="agree_chk3" class="agree_chk"><label for="agree_chk3">[필수] 가축시장 제3자 정보제공 동의</label>
-					<a href="#" onclick="window.open('/agreement/new', '이용약관', 'width=800, height=700, toolbar=no, menubar=no, scrollbars=no, resizable=yes' );return false;"  class="agree_info" >팝업</a>	
+					<a href="#" onclick="window.open('/thirdAgreement', '제3자 정보제공 동의', 'width=800, height=700, toolbar=no, menubar=no, scrollbars=no, resizable=yes' );return false;"  class="agree_info" >팝업</a>	
 					<!-- 제3자 정보제공 동의 내용 팝업 필요함 -->
 				</li>
 			</ul>

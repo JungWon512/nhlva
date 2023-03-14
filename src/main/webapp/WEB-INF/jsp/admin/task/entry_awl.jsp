@@ -32,7 +32,7 @@
 							<input type="text" name="firLowsSbidLmtAm" id="firLowsSbidLmtAm${item.AUC_PRG_SQ}" class="onlyNumber noPop" value="${item.LOWS_SBID_LMT_UPR ne 0 && item.LOWS_SBID_LMT_UPR ne null ? fn:split(item.LOWS_SBID_LMT_UPR,'.')[0] : ''}" maxlength="5" pattern="\d*" inputmode="numeric"/>
 						</dd>
 						<dd class="col3">${item.SRA_INDV_AMNNO_FORMAT}</dd>
-						<dd class="col4">${item.FTSNM}</dd>
+						<dd class="col4">${item.FTSNM_ORI}</dd>
 					</dl>
 				</li>
 			</c:forEach>

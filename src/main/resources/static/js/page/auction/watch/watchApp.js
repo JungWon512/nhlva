@@ -27,11 +27,11 @@ $(function() {
 					console.log(e);
 				};
 		});
-	}
+	}	
 		
-	$("button.btn_reload").click(function(){
-		location.reload();
-	});
+//	$(document).find("button.btn_reload").click(function(){
+//		location.reload();
+//	});
 	socketStart();
 });
 
@@ -137,12 +137,14 @@ var messageHandler = function(data) {
 				fnAuctionReload(params,tmpAsDAta,function(){
 					var tr = getTrRow(auctionConfig.asData.curAucSeq);
 					tr.find('dl dd.lowsSbidLmtAm').text(fnSetComma(Math.round(tmpAsDAta.lowsSbidLmtAm))+'');
-					if($('#aucDsc').val() == '1') changeTrRow(tr);					
+					if($('#aucDsc').val() == '1') changeTrRow(tr);
+					calcPiePercent();					
 				});
 			}else if($('#aucDsc').val() == '1'){
 				var tr = getTrRow(auctionConfig.asData.curAucSeq);
 				tr.find('dl dd.lowsSbidLmtAm').text(fnSetComma(Math.round(tmpAsDAta.lowsSbidLmtAm))+'');
 				changeTrRow(tr);
+				calcPiePercent();
 			}
 			
 
@@ -167,6 +169,7 @@ var messageHandler = function(data) {
 			//if(tmpAsDAta.selSts && oSelSts != tmpAsDAta.selSts){
 			tr.find('dl dd.selSts').text(tmpAsDAta.selSts);
 			tr.find('dl dd.sraSbidAm').text(fnSetComma(Math.round(tmpAsDAta.sraSbidAm)));
+			calcPiePercent();
 			changeTrRow(tr);	
 		break;	
 		default:break;
@@ -212,6 +215,8 @@ var scLoad = function(dataArr){
 	tr.find('dl dd.lowsSbidLmtAm').text(fnSetComma(dataArr[27])+'');
 	tr.find('dl dd.sraSbidAm').text(fnSetComma(dataArr[31])+'');
 	tr.find('dl dd.rmkCntn').text(dataArr[28]);
+	
+	calcPiePercent();
 }
 
 var fnAuctionReload = function(params,tmpAsDAta,callback){		
@@ -273,4 +278,14 @@ var fnAuctionReload = function(params,tmpAsDAta,callback){
 			if(callback) callback();						
 		}	
 	});
+}
+
+
+function calcPiePercent(){
+	var totCnt = $('.tblAuction li').length; //table 전체 row 수
+	var stantNotCnt = $('.tblAuction li:not(.noInfo)').filter(function(i,obj){var text = $(obj).find('.selSts').text(); if(text !='대기') return obj;}).length; //table 대기 상태가아닌 row수
+	var stantCnt = $('.tblAuction li').filter(function(i,obj){var text = $(obj).find('.selSts').text(); if(text =='대기') return obj;}).length; //table 대기 상태인 row 수
+
+	$('div.stats-box div.num.stand span').text(stantCnt);
+	$('div.stats-box div.num.bid span').text(stantNotCnt);
 }

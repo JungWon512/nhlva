@@ -26,7 +26,8 @@
 <div class="board-main page-board-main">
 	<div class="sec-board">
 		<div class="tit-area">
-			<h2 class="sec-tit">최근 가축시장 시세</h2>
+			<h2 class="sec-tit" style="margin-bottom:10px;">최근 가축시장 시세</h2>
+			<h5 style="font-size:82%;margin-bottom:8px;">※ 가축시장 실거래 데이터 기반입니다.</h5>
 			<a href="javascript:;" id="dashboard_filter" class="btn-more"
 				style="width: 30px;height: 30px;background: url(/static/images/guide/v2/ico-filter.svg) no-repeat 50% 50%;background-size: 23px auto;"></a>
 		</div>
@@ -46,22 +47,24 @@
 						<li class="row_${c.count}">
 							<dl class="item">
 								<dt>${cowPriceVo.MONTH_OLD_C_NM}</dt>		
+									<c:set var="acs_sbid_am" value="${ cowPriceVo.PRE_AVG_SBID_AM eq 0 && cowPriceVo.THIS_AVG_SBID_AM > 0 ? 100 : cowPriceVo.ACS_SBID_AM }" />
+									<c:set var="acs_sbid_cnt" value="${ cowPriceVo.PRE_SUM_SBID_CNT eq 0 && cowPriceVo.THIS_SUM_SBID_CNT > 0 ? 100 : cowPriceVo.ACS_SBID_CNT }" />
 								<dd>
 									<c:choose>
-										<c:when test="${cowPriceVo.ACS_SBID_AM > 0 }">
-									<div class="price"><fmt:formatNumber value="${cowPriceVo.THIS_AVG_SBID_AM}" type="number" /> 원 <span class="per fc-red">▲ ${cowPriceVo.ACS_SBID_AM} %</span></div>
+										<c:when test="${acs_sbid_am > 0 }">
+											<div class="price"><fmt:formatNumber value="${cowPriceVo.THIS_AVG_SBID_AM}" type="number" /> 원 <span class="per fc-red">▲ ${acs_sbid_am} %</span></div>
 										</c:when>
 										<c:otherwise>
-									<div class="price"><fmt:formatNumber value="${cowPriceVo.THIS_AVG_SBID_AM}" type="number" /> 원 <span class="per fc-blue">▼ ${cowPriceVo.ACS_SBID_AM} %</span></div>
+											<div class="price"><fmt:formatNumber value="${cowPriceVo.THIS_AVG_SBID_AM}" type="number" /> 원 <span class="per fc-blue">▼ ${acs_sbid_am} %</span></div>
 										</c:otherwise>
 									</c:choose>
 									
 									<c:choose>
-										<c:when test="${cowPriceVo.ACS_SBID_CNT > 0}">
-									<div class="num"><fmt:formatNumber value="${cowPriceVo.THIS_SUM_SBID_CNT}" type="number" /> 두 <span class="per fc-red">▲ ${cowPriceVo.ACS_SBID_CNT} %</span></div>
+										<c:when test="${acs_sbid_cnt > 0}">
+											<div class="num"><fmt:formatNumber value="${cowPriceVo.THIS_SUM_SBID_CNT}" type="number" /> 두 <span class="per fc-red">▲ ${acs_sbid_cnt} %</span></div>
 										</c:when>
 										<c:otherwise>
-									<div class="num"><fmt:formatNumber value="${cowPriceVo.THIS_SUM_SBID_CNT}" type="number" /> 두 <span class="per fc-blue">▼ ${cowPriceVo.ACS_SBID_CNT} %</span></div>
+											<div class="num"><fmt:formatNumber value="${cowPriceVo.THIS_SUM_SBID_CNT}" type="number" /> 두 <span class="per fc-blue">▼ ${acs_sbid_cnt} %</span></div>
 										</c:otherwise>
 									</c:choose>
 								</dd>		
@@ -84,7 +87,7 @@
 		</div>
 		<h2 class="sec-tit">지역별 평균 낙찰가</h2>
 		<div class="white-box">
-			<canvas id="myChart1"></canvas>
+			<canvas id="myChart1" class="bar_chart"></canvas>
 		</div>
 	</div>
 	<div class="sec-board">
@@ -99,16 +102,7 @@
 					<c:if test="${i.index < 3}">
 						<li>
 							<dl class="union">
-								<dt>
-								<c:choose>
-									<c:when test="${!empty vo.FILE_URL}">
-										<img src="${vo.FILE_URL}" alt="">
-									</c:when>
-									<c:otherwise>
-										<img src="/static/images/guide/v2/sample_logo.jpg" alt="">
-									</c:otherwise>
-								</c:choose>
-								</dt>
+								<dt>	<img src="https://kr.object.ncloudstorage.com/smartauction-storage/logo/${vo.NA_BZPLC}.png" onerror="this.src='/static/images/guide/v2/sample_logo.jpg'" /></dt>
 								<dd class="name">${ vo.CLNTNM }</dd>
 								<fmt:formatNumber value="${empty vo.AMT ? 0 : vo.AMT}" type="number" var="AMT"/>
 								<c:choose>
@@ -145,7 +139,7 @@
 	<div class="sec-board">
 		<div class="tit-area">
 			<h2 class="sec-tit">가축 시장의 더 많은 정보들 ...</h2>
-			<div class="login-btn-area">
+			<div class="login-btn-area" >
 				<sec:authorize access="hasAnyRole('ROLE_ADMIN')">
 					<a href="javascript:pageMove('/dashboard/user/logoutProc');" class="btn-logout"><span class="sr-only">로그아웃</span></a>
 				</sec:authorize>
@@ -156,8 +150,8 @@
 		</div>
 		<div class="list-link">
 			<div>
-				<a id="/dashboard/cow_status" href="javascript:;"><span class="icon"><img src="/static/images/guide/v2/ico-main-link1.svg" alt=""></span>출장우 현황</a>
-				<a id="/dashboard/btc_price" href="javascript:;"><span class="icon"><img src="/static/images/guide/v2/ico-main-link2.svg" alt=""></span>도축장 시세</a>
+				<a id="/dashboard/cow_status" href="javascript:;" class="row2"><span class="icon"><img src="/static/images/guide/v2/ico-main-link1.svg" alt=""></span>출장우 현황</a>
+				<!-- <a id="/dashboard/btc_price" href="javascript:;"><span class="icon"><img src="/static/images/guide/v2/ico-main-link2.svg" alt=""></span>도축장 시세</a> -->
 			</div>
 			<div>
 				<a id="/dashboard/sbid_status" href="javascript:;" class="row2"><span class="icon"><img src="/static/images/guide/v2/ico-main-link3.svg" alt=""></span>낙찰시세</a>
@@ -166,14 +160,14 @@
 				<a id="/guide" href="javascript:;"><span class="icon"><img src="/static/images/guide/v2/ico-main-link4.svg" alt=""></span>사용 안내</a>
 			</div>
 			<div>
-				<a id="/dashboard/parti_status" href="javascript:;"><span class="icon"><img src="/static/images/guide/v2/ico-main-link5.svg" alt=""></span>가축시장<br>참가현황</a>
+				<a id="/dashboard/parti_status" href="javascript:;"><span class="icon"><img src="/static/images/guide/v2/ico-main-link5.svg" alt=""></span>가축시장<br>낙찰현황</a>
 			</div>
 		</div>
 		<sec:authorize access="hasAnyRole('ROLE_ADMIN')">
 			<div class="list-link is-bottom">
-				<a href="javascript:pageMove('/dashboard/staticInfo');"><span class="icon"><img src="/static/images/guide/v2/ico-main-link6.svg" alt=""></span>사용자 접속현황</a>
-				<a href="javascript:pageMove('/dashboard/aucBidStaticInfo');"><span class="icon"><img src="/static/images/guide/v2/ico-main-link7.svg" alt=""></span>경매 낙찰현황</a>
-				<a href="javascript:pageMove('/dashboard/aucStaticInfo');"><span class="icon"><img src="/static/images/guide/v2/ico-main-link7.svg" alt=""></span>출장우 내역</a>
+				<a href="javascript:pageMove('/dashboard/status/staticInfo');"><span class="icon"><img src="/static/images/guide/v2/ico-main-link6.svg" alt=""></span>참가자현황</a>
+				<a href="javascript:pageMove('/dashboard/status/aucBidStaticInfo');"><span class="icon"><img src="/static/images/guide/v2/ico-main-link7.svg" alt=""></span>경매 낙찰현황</a>
+				<a href="javascript:pageMove('/dashboard/status/aucStaticInfo');"><span class="icon"><img src="/static/images/guide/v2/ico-main-link7.svg" alt=""></span>출장우 내역</a>
 			</div>
 		</sec:authorize>
 	</div>

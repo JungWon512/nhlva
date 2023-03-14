@@ -13,7 +13,7 @@
 		</dl>
 	</div>
 	<div class="list_body">
-		<ul style="overflow-y:scroll;">
+		<ul style="overflow-y:scroll;" class="mCustomScrollBox">
 			<c:if test="${entryList.size() <= 0}">
 				<li>
 					<dl>
@@ -43,7 +43,7 @@
 							</c:choose>
 						</dd>
 						<dd class="col3">${item.SRA_INDV_AMNNO_FORMAT}</dd>
-						<dd class="col4">${item.FTSNM}</dd>
+						<dd class="col4">${item.FTSNM_ORI}</dd>
 						<dd class="col4 col5"></dd>
 	<!-- 									<dd class="col4 col5"><button type="button" class="btn_modify">수정</button></dd> -->
 					</dl>

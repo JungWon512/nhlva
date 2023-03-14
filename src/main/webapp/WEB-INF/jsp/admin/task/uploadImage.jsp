@@ -71,8 +71,8 @@
 		</div>
 	</form>
 </div>
-<script src="https://sdk.amazonaws.com/js/aws-sdk-2.1318.0.min.js"></script>
-<script>
+<script src="/static/js/common/aws/aws-sdk-2.1318.0.min.js"></script>
+<script type="text/javascript">
 	const endpoint = new AWS.Endpoint('https://kr.object.ncloudstorage.com');
 	const region = 'kr-standard';
 	const bucket_name = 'smartauction-storage';
@@ -85,12 +85,8 @@
 		credentials: {
 			accessKeyId : access_key,
 			secretAccessKey: secret_key
-		}
-		, maxRetries: 1
-		, httpOptions: {
-			connectionTimeout: 2 * 1000,
-			timeout: 5 * 1000
-		}
+		},
+		maxRetries: 1
 	});
 	
 	const params = {
@@ -109,7 +105,7 @@
 	
 	(async () => {
 		// Set CORS
-		await S3.putBucketCors(params).promise().then(() => console.log("putBucketCors : succsss")).catch(() => console.log("putBucketCors : error"));
+		await S3.putBucketCors(params).promise().then(() => debugConsole("putBucketCors Success")).catch(() => debugConsole("putBucketCors error"));
 		// Get CORS
 	//	const response = await S3.getBucketCors({ Bucket: bucket_name }).promise();
 	})();

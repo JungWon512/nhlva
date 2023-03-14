@@ -80,16 +80,16 @@ public class CommonServiceImpl implements CommonService {
 			
 			// 5. 형매정보 저장
 			// 조회한 개체정보에 어미소 개체번호가 있는 경우
-			if (!"".equals(dataMap4700.getOrDefault("MCOW_SRA_INDV_EART_NO", "").toString().trim())) {
-				Map<String,Object> tempParam = new HashMap<>();				
-				tempParam.put("SRA_INDV_AMNNO", dataMap4700.getOrDefault("MCOW_SRA_INDV_EART_NO","").toString().trim());
-				tempParam.put("SRA_INDV_AMNNO_ORI", dataMap4700.getOrDefault("SRA_INDV_AMNNO","").toString().trim());
-				this.updateIndvSibInfo(tempParam);
-			}
+			//if (!"".equals(dataMap4700.getOrDefault("MCOW_SRA_INDV_EART_NO", "").toString().trim())) {
+			//	Map<String,Object> tempParam = new HashMap<>();				
+			//	tempParam.put("SRA_INDV_AMNNO", dataMap4700.getOrDefault("MCOW_SRA_INDV_EART_NO","").toString().trim());
+			//	tempParam.put("SRA_INDV_AMNNO_ORI", dataMap4700.getOrDefault("SRA_INDV_AMNNO","").toString().trim());
+			//	this.updateIndvSibInfo(tempParam);
+			//}
 
-			params.put("SRA_INDV_AMNNO", params.get("sra_indv_amnno"));
 			// 6. 후대정보 저장
-			this.updateIndvPostInfo(params);
+			//params.put("SRA_INDV_AMNNO", params.get("sra_indv_amnno"));
+			//this.updateIndvPostInfo(params);
 		}
 		catch(RuntimeException re) {
 			result.put("success", false);

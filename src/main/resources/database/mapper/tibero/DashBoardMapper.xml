@@ -7,6 +7,7 @@
 		SELECT DISTINCT A.NA_BZPLCLOC
 				, A.LOCNM
 		FROM TB_LA_IS_BM_BZLOC A
+		WHERE DEL_YN = '0'
 	</select>
 
 	<select id="findCowPriceList" parameterType="map" resultType="map">
@@ -50,13 +51,13 @@
 					</if>
 			        <choose>
 						<when test='"range20".equals(searchRaDate)'>
-							AND A.AUC_DT BETWEEN TO_CHAR(SYSDATE - 21, 'YYYYMMDD') AND TO_CHAR(SYSDATE-1, 'YYYYMMDD')
+							AND A.AUC_DT BETWEEN TO_CHAR(SYSDATE - 21, 'YYYYMMDD') AND TO_CHAR(SYSDATE-2, 'YYYYMMDD')
 						</when>
 						<when test='"range30".equals(searchRaDate)'>
-							AND A.AUC_DT BETWEEN TO_CHAR(SYSDATE - 31, 'YYYYMMDD') AND TO_CHAR(SYSDATE-1, 'YYYYMMDD')
+							AND A.AUC_DT BETWEEN TO_CHAR(SYSDATE - 31, 'YYYYMMDD') AND TO_CHAR(SYSDATE-2, 'YYYYMMDD')
 						</when>
 						<otherwise>
-							AND A.AUC_DT BETWEEN TO_CHAR(SYSDATE - 11, 'YYYYMMDD') AND TO_CHAR(SYSDATE-1, 'YYYYMMDD')
+							AND A.AUC_DT BETWEEN TO_CHAR(SYSDATE - 11, 'YYYYMMDD') AND TO_CHAR(SYSDATE-2, 'YYYYMMDD')
 						</otherwise>
 					</choose>
 					AND NVL(A.SBID_SUM_AMT, 0) <![CDATA[>]]> 0
@@ -94,13 +95,13 @@
 				</if>
 		        <choose>
 					<when test='"range20".equals(searchRaDate)'>
-						AND A.AUC_DT BETWEEN TO_CHAR(SYSDATE - 20, 'YYYYMMDD') AND TO_CHAR(SYSDATE, 'YYYYMMDD')
+						AND A.AUC_DT BETWEEN TO_CHAR(SYSDATE - 20, 'YYYYMMDD') AND TO_CHAR(SYSDATE-1, 'YYYYMMDD')
 					</when>
 					<when test='"range30".equals(searchRaDate)'>
-						AND A.AUC_DT BETWEEN TO_CHAR(SYSDATE - 30, 'YYYYMMDD') AND TO_CHAR(SYSDATE, 'YYYYMMDD')
+						AND A.AUC_DT BETWEEN TO_CHAR(SYSDATE - 30, 'YYYYMMDD') AND TO_CHAR(SYSDATE-1, 'YYYYMMDD')
 					</when>
 					<otherwise>
-						AND A.AUC_DT BETWEEN TO_CHAR(SYSDATE - 10, 'YYYYMMDD') AND TO_CHAR(SYSDATE, 'YYYYMMDD')
+						AND A.AUC_DT BETWEEN TO_CHAR(SYSDATE - 10, 'YYYYMMDD') AND TO_CHAR(SYSDATE-1, 'YYYYMMDD')
 					</otherwise>
 				</choose>
 			WHERE 1=1
@@ -126,16 +127,17 @@
 		</if>
 		<choose>
 			<when test='"range20".equals(searchRaDate)'>
-				AND B.AUC_DT BETWEEN TO_CHAR(SYSDATE - 20, 'YYYYMMDD') AND TO_CHAR(SYSDATE, 'YYYYMMDD')
+				AND B.AUC_DT BETWEEN TO_CHAR(SYSDATE - 20, 'YYYYMMDD') AND TO_CHAR(SYSDATE-1, 'YYYYMMDD')
 			</when>
 			<when test='"range30".equals(searchRaDate)'>
-				AND B.AUC_DT BETWEEN TO_CHAR(SYSDATE - 30, 'YYYYMMDD') AND TO_CHAR(SYSDATE, 'YYYYMMDD')
+				AND B.AUC_DT BETWEEN TO_CHAR(SYSDATE - 30, 'YYYYMMDD') AND TO_CHAR(SYSDATE-1, 'YYYYMMDD')
 			</when>
 			<otherwise>
-				AND B.AUC_DT BETWEEN TO_CHAR(SYSDATE - 10, 'YYYYMMDD') AND TO_CHAR(SYSDATE, 'YYYYMMDD')
+				AND B.AUC_DT BETWEEN TO_CHAR(SYSDATE - 10, 'YYYYMMDD') AND TO_CHAR(SYSDATE-1, 'YYYYMMDD')
 			</otherwise>
 		</choose>
 		WHERE 1=1
+		AND A.DEL_YN = '0'
 		GROUP BY A.LOCNM, A.NA_BZPLCLOC
   		ORDER BY A.NA_BZPLCLOC
 	</select>
@@ -155,7 +157,7 @@
 								ELSE '' END AS AUC_OBJ_DSC_NM
 						, A.INDV_SEX_C
 						, CASE WHEN A.INDV_SEX_C IN (1,4,6) THEN '암'
-											ELSE '숫'
+											ELSE '수'
 											END AS INDV_SEX_C_NM
 						, (SELECT TRUNC(MONTHS_BETWEEN(A.CR_DT,	B.BIRTH)) +1 FROM DUAL) AS MONTH_C
 						, A.SBID_AMT
@@ -166,24 +168,17 @@
 								WHEN B.RG_DSC = '03' THEN '고등'
 								WHEN B.RG_DSC = '09' THEN '미등록우'
 								ELSE '없음' END AS RG_DSC_NAME
-						, ROW_NUMBER() OVER(ORDER BY NVL(A.SBID_AMT,0) DESC, B.BIRTH DESC) RANK_NO
+						, A.RANK_NO
 				FROM TB_LA_IS_MM_DB_BDPRTOP A
 				LEFT JOIN TB_LA_IS_MM_INDV B ON A.NA_BZPLC = B.NA_BZPLC AND A.SRA_INDV_AMNNO = B.SRA_INDV_AMNNO
-				INNER JOIN TB_LA_IS_BM_BZLOC C ON A.NA_BZPLC = C.NA_BZPLC
+				INNER JOIN TB_LA_IS_BM_BZLOC C ON A.NA_BZPLC = C.NA_BZPLC AND C.DEL_YN = '0'
 				WHERE 1=1
-				<if test='"R".equals(searchFlag) and (searchPlace != null and searchPlace != "")'>
-					AND A.NA_BZPLCLOC = #{searchPlace}
-				</if>
 				<if test="searchAucObjDsc != null and searchAucObjDsc != ''">
 					AND A.AUC_OBJ_DSC = #{searchAucObjDsc}
 				</if>
-				<if test="searchMonthOldC != null and searchMonthOldC != ''">
-					AND A.MONTH_OLD_C = #{searchMonthOldC}
-				</if>
-<!-- 					AND A.CR_DT BETWEEN TO_CHAR(SYSDATE-7, 'YYYYMMDD') AND TO_CHAR(SYSDATE-1, 'YYYYMMDD') -->
+					AND A.CR_DT = TO_CHAR(SYSDATE, 'YYYYMMDD')
 		) T
 		WHERE 1=1
-			AND T.RANK_NO <![CDATA[<=]]> 10
 		ORDER BY T.RANK_NO
 	</select>
 	
@@ -204,7 +199,7 @@
 	
 	<select id="findPartiBidderPerList" parameterType="map" resultType="map">
 		SELECT DS.NA_BZPLCLOC
-			, CASE WHEN DS.NA_BZPLCLOC = 'A31' THEN '경기/인천'
+			, CASE WHEN DS.NA_BZPLCLOC = 'A31' THEN '경기'
 				WHEN DS.NA_BZPLCLOC = 'A33' THEN '강원'
 				WHEN DS.NA_BZPLCLOC = 'A41' THEN '충남'
 				WHEN DS.NA_BZPLCLOC = 'A43' THEN '충북'
@@ -218,7 +213,7 @@
 			, SUM(NVL(TOT_SBID_CNT, 0)) TOT_SBID_CNT
 			, SUM(NVL(TOT_SOG_CNT, 0) - NVL(TOT_SBID_CNT,0)) MINUS_SOG_BID
 			, CASE WHEN SUM(NVL(TOT_SBID_CNT, 0)) = 0 THEN 0
-				ELSE ROUND(SUM(NVL(TOT_SBID_CNT, 0))/ SUM(NVL(TOT_SOG_CNT,0)), 2) * 100
+				ELSE TRUNC(SUM(NVL(TOT_SBID_CNT, 0))/ SUM(NVL(TOT_SOG_CNT,0)), 2) * 100
 				END SBID_PER
 		FROM TB_LA_IS_MM_DB_SUM DS
 		WHERE DS.AUC_DT BETWEEN #{searchMonth} || '01' AND #{searchMonth} || '31'
@@ -370,7 +365,7 @@
 	
 	<select id="findSbidPriceInfo" parameterType="map" resultType="map">
 		SELECT M.* 
-			, (M.TOT_SBID_CNT - M.TOT_SBID_CNT_B) AS TOT_SBID_CHG
+			, '-1000' AS TOT_SBID_CHG
 			, (M.MAX_SBID_UPR - M.MAX_SBID_UPR_B) AS MAX_SBID_CHG
 			, (M.MIN_SBID_UPR - M.MIN_SBID_UPR_B) AS MIN_SBID_CHG
 			, (M.AVG_SBID_UPR - M.AVG_SBID_UPR_B) AS AVG_SBID_CHG
@@ -483,6 +478,7 @@
 		FROM (
 				SELECT DISTINCT NA_BZPLCLOC, LOCNM
    				FROM TB_LA_IS_BM_BZLOC
+   				WHERE DEL_YN = '0'
 			) BZ
 			LEFT OUTER JOIN TB_LA_IS_MM_DB_SUM DS
 			ON(BZ.NA_BZPLCLOC = DS.NA_BZPLCLOC
@@ -561,7 +557,7 @@
 			, SUM(ENTR_CNT) ENTR_CNT
 		FROM (
 			SELECT 
-				COUNT(*) QCN_CNT
+				COUNT(DISTINCT A.AUC_DT) QCN_CNT
 				, 0 COW_CNT
 				, 0 BID_CNT
 				, 0 NO_BID_CNT
@@ -583,42 +579,62 @@
 				AND B.NA_BZPLCLOC = #{naBzplcloc}
 			</if>
 			UNION ALL
-			SELECT 
-				0 QCN_CNT
-				, COUNT(*) COW_CNT
-				, COUNT(DECODE(A.SEL_STS_DSC,'22',1)) 
-				, COUNT(DECODE(A.SEL_STS_DSC,'23',1)) 
-				, SUM(NVL(C.ATDR_CNT,0)) ENTR_CNT
-			FROM TB_LA_IS_MH_SOG_COW A
-			INNER JOIN TB_LA_IS_BM_BZLOC B ON A.NA_BZPLC = B.NA_BZPLC				
-			LEFT OUTER JOIN (
-				SELECT NA_BZPLC
-						, AUC_OBJ_DSC
-						, AUC_DT
-						, OSLP_NO
-						, TRMN_AMNNO
-						, COUNT(*) ATDR_CNT
-				FROM TB_LA_IS_MH_ATDR_LOG
-				GROUP BY NA_BZPLC, AUC_OBJ_DSC, AUC_DT, OSLP_NO, TRMN_AMNNO
-			) C ON A.NA_BZPLC = C.NA_BZPLC
-				AND A.AUC_OBJ_DSC = C.AUC_OBJ_DSC
-				AND A.AUC_DT = C.AUC_DT
-				AND A.OSLP_NO = C.OSLP_NO
-				AND A.TRMN_AMNNO = C.TRMN_AMNNO		
-			WHERE 1=1
-			<if test="stSearchDt !=null and !stSearchDt.equals('') and edSearchDt !=null and !edSearchDt.equals('')">
-				AND A.AUC_DT <![CDATA[>=]]> #{stSearchDt}
-				AND A.AUC_DT <![CDATA[<=]]> #{edSearchDt}
-			</if>
-			<if test="aucObjDsc !='' and aucObjDsc != null">
-				AND A.AUC_OBJ_DSC = #{aucObjDsc}
-			</if>
-			<if test="naBzplc !='' and naBzplc != null">
-				AND A.NA_BZPLC = #{naBzplc}
-			</if>
-			<if test="naBzplcloc !='' and naBzplcloc != null">
-				AND B.NA_BZPLCLOC = #{naBzplcloc}
-			</if>
+			SELECT
+				0
+				, SUM(TEMP.COW_CNT)
+				, SUM(TEMP.BID_CNT)
+				, SUM(TEMP.NO_BID_CNT)
+				, SUM(C.ENTR_CNT)
+			FROM
+			(
+				SELECT 
+					0 QCN_CNT
+					, COUNT(*) COW_CNT
+					, COUNT(DECODE(A.SEL_STS_DSC,'22',1)) BID_CNT
+					, COUNT(DECODE(A.SEL_STS_DSC,'23',1)) NO_BID_CNT
+					, A.NA_BZPLC
+					, A.AUC_DT
+				FROM TB_LA_IS_MH_SOG_COW A
+				INNER JOIN TB_LA_IS_BM_BZLOC B ON A.NA_BZPLC = B.NA_BZPLC	
+				WHERE 1=1
+				AND A.LOWS_SBID_LMT_AM <![CDATA[>]]> 0
+				<if test="stSearchDt !=null and !stSearchDt.equals('') and edSearchDt !=null and !edSearchDt.equals('')">
+					AND A.AUC_DT <![CDATA[>=]]> #{stSearchDt}
+					AND A.AUC_DT <![CDATA[<=]]> #{edSearchDt}
+				</if>
+				<if test="aucObjDsc !='' and aucObjDsc != null">
+					AND A.AUC_OBJ_DSC = #{aucObjDsc}
+				</if>
+				<if test="naBzplc !='' and naBzplc != null">
+					AND A.NA_BZPLC = #{naBzplc}
+				</if>
+				<if test="naBzplcloc !='' and naBzplcloc != null">
+					AND B.NA_BZPLCLOC = #{naBzplcloc}
+				</if>
+				GROUP BY A.NA_BZPLC , A.AUC_DT
+			) TEMP
+			LEFT JOIN (
+				SELECT A.NA_BZPLC
+					, A.AUC_DT
+					, COUNT(DISTINCT TRMN_AMNNO) ENTR_CNT
+				FROM TB_LA_IS_MH_AUC_ENTR A
+				INNER JOIN TB_LA_IS_BM_BZLOC B ON A.NA_BZPLC = B.NA_BZPLC
+				WHERE 1=1
+				<if test="stSearchDt !=null and !stSearchDt.equals('') and edSearchDt !=null and !edSearchDt.equals('')">
+					AND A.AUC_DT <![CDATA[>=]]> #{stSearchDt}
+					AND A.AUC_DT <![CDATA[<=]]> #{edSearchDt}
+				</if>
+				<if test="aucObjDsc !='' and aucObjDsc != null">
+					AND A.AUC_OBJ_DSC = #{aucObjDsc}
+				</if>
+				<if test="naBzplc !='' and naBzplc != null">
+					AND A.NA_BZPLC = #{naBzplc}
+				</if>
+				<if test="naBzplcloc !='' and naBzplcloc != null">
+					AND B.NA_BZPLCLOC = #{naBzplcloc}
+				</if>
+				GROUP BY A.NA_BZPLC , A.AUC_DT 
+			) C ON TEMP.NA_BZPLC = C.NA_BZPLC AND TEMP.AUC_DT = C.AUC_DT
 		)
 	</select>	
 	
@@ -633,46 +649,67 @@
 				ELSE ROUND(BID_COW_CNT/ COW_CNT, 3) * 100 
 			END COW_PER
 		FROM	
-		(	SELECT 
-				A.NA_BZPLC
-				, B.CLNTNM
-				, A.AUC_DT 
-				, COUNT(*) COW_CNT
-				, COUNT(DECODE(SEL_STS_DSC,'22',1)) BID_COW_CNT
-				, SUM(NVL(C.ATDR_CNT,0)) ATDR_CNT
-				, COUNT(DISTINCT DECODE(A.SEL_STS_DSC,'22',A.TRMN_AMNNO)) BID_ATDR_CNT
-			FROM TB_LA_IS_MH_SOG_COW A
-			INNER JOIN TB_LA_IS_BM_BZLOC B ON A.NA_BZPLC = B.NA_BZPLC			
-			LEFT OUTER JOIN (
-				SELECT NA_BZPLC
-						, AUC_OBJ_DSC
-						, AUC_DT
-						, OSLP_NO
-						, TRMN_AMNNO
-						, COUNT(*) ATDR_CNT
-				FROM TB_LA_IS_MH_ATDR_LOG
-				GROUP BY NA_BZPLC, AUC_OBJ_DSC, AUC_DT, OSLP_NO, TRMN_AMNNO
-			) C ON A.NA_BZPLC = C.NA_BZPLC
-				AND A.AUC_OBJ_DSC = C.AUC_OBJ_DSC
-				AND A.AUC_DT = C.AUC_DT
-				AND A.OSLP_NO = C.OSLP_NO
-				AND A.TRMN_AMNNO = C.TRMN_AMNNO
-			WHERE 1=1
-			<if test="stSearchDt !=null and !stSearchDt.equals('') and edSearchDt !=null and !edSearchDt.equals('')">
-				AND A.AUC_DT <![CDATA[>=]]> #{stSearchDt}
-				AND A.AUC_DT <![CDATA[<=]]> #{edSearchDt}
-			</if>
-			<if test="aucObjDsc !='' and aucObjDsc != null">
-				AND A.AUC_OBJ_DSC = #{aucObjDsc}
-			</if>
-			<if test="naBzplc !='' and naBzplc != null">
-				AND A.NA_BZPLC = #{naBzplc}
-			</if>
-			<if test="naBzplcloc !='' and naBzplcloc != null">
-				AND B.NA_BZPLCLOC = #{naBzplcloc}
-			</if>
-			GROUP BY  A.NA_BZPLC,B.CLNTNM, A.AUC_DT 
+		(	SELECT
+				TEMP.NA_BZPLC
+				, TEMP.CLNTNM
+				, TEMP.AUC_DT
+				, SUM(TEMP.COW_CNT) COW_CNT
+				, SUM(TEMP.BID_COW_CNT) BID_COW_CNT
+				, SUM(C.ENTR_CNT) ATDR_CNT
+				, SUM(TEMP.BID_ATDR_CNT) BID_ATDR_CNT
+			FROM
+			(
+				SELECT 
+					A.NA_BZPLC
+					, B.CLNTNM
+					, A.AUC_DT 
+					, COUNT(*) COW_CNT
+					, COUNT(DECODE(SEL_STS_DSC,'22',1)) BID_COW_CNT
+					, 0
+					, COUNT(DISTINCT DECODE(A.SEL_STS_DSC,'22',A.TRMN_AMNNO)) BID_ATDR_CNT
+				FROM TB_LA_IS_MH_SOG_COW A
+				INNER JOIN TB_LA_IS_BM_BZLOC B ON A.NA_BZPLC = B.NA_BZPLC
+				WHERE 1=1
+				AND A.LOWS_SBID_LMT_AM <![CDATA[>]]> 0
+				<if test="stSearchDt !=null and !stSearchDt.equals('') and edSearchDt !=null and !edSearchDt.equals('')">
+					AND A.AUC_DT <![CDATA[>=]]> #{stSearchDt}
+					AND A.AUC_DT <![CDATA[<=]]> #{edSearchDt}
+				</if>
+				<if test="aucObjDsc !='' and aucObjDsc != null">
+					AND A.AUC_OBJ_DSC = #{aucObjDsc}
+				</if>
+				<if test="naBzplc !='' and naBzplc != null">
+					AND A.NA_BZPLC = #{naBzplc}
+				</if>
+				<if test="naBzplcloc !='' and naBzplcloc != null">
+					AND B.NA_BZPLCLOC = #{naBzplcloc}
+				</if>
+				GROUP BY  A.NA_BZPLC,B.CLNTNM, A.AUC_DT
+			) TEMP
+			LEFT JOIN (
+				SELECT A.NA_BZPLC
+					, A.AUC_DT
+					, COUNT(DISTINCT A.TRMN_AMNNO) ENTR_CNT
+				FROM TB_LA_IS_MH_AUC_ENTR A
+				INNER JOIN TB_LA_IS_BM_BZLOC B ON A.NA_BZPLC = B.NA_BZPLC		
+				<if test="stSearchDt !=null and !stSearchDt.equals('') and edSearchDt !=null and !edSearchDt.equals('')">
+					AND A.AUC_DT <![CDATA[>=]]> #{stSearchDt}
+					AND A.AUC_DT <![CDATA[<=]]> #{edSearchDt}
+				</if>
+				<if test="aucObjDsc !='' and aucObjDsc != null">
+					AND A.AUC_OBJ_DSC = #{aucObjDsc}
+				</if>
+				<if test="naBzplc !='' and naBzplc != null">
+					AND A.NA_BZPLC = #{naBzplc}
+				</if>
+				<if test="naBzplcloc !='' and naBzplcloc != null">
+					AND B.NA_BZPLCLOC = #{naBzplcloc}
+				</if>
+				GROUP BY A.NA_BZPLC , A.AUC_DT 
+			) C ON TEMP.NA_BZPLC = C.NA_BZPLC AND TEMP.AUC_DT = C.AUC_DT		
+			GROUP BY TEMP.NA_BZPLC, TEMP.CLNTNM , TEMP.AUC_DT 
 		) T	
+		ORDER BY T.AUC_DT
 	</select>
 	
 	<select id="selAucStaticInfo" parameterType="map" resultType="map">
@@ -741,6 +778,7 @@
 					AND A.OSLP_NO = FEE_M.OSLP_NO
 					AND A.LED_SQNO = FEE_M.LED_SQNO
 			WHERE 1=1
+			AND A.LOWS_SBID_LMT_AM <![CDATA[>]]> 0
 			<if test="stSearchDt !=null and !stSearchDt.equals('') and edSearchDt !=null and !edSearchDt.equals('')">
 				AND A.AUC_DT <![CDATA[>=]]> #{stSearchDt}
 				AND A.AUC_DT <![CDATA[<=]]> #{edSearchDt}
@@ -972,6 +1010,7 @@
 					AND SOG.LED_SQNO = FEE_M.LED_SQNO
 			INNER JOIN TB_LA_IS_BM_BZLOC LOC ON SOG.NA_BZPLC = LOC.NA_BZPLC
 		WHERE 1=1
+			AND SOG.LOWS_SBID_LMT_AM <![CDATA[>]]> 0
 			<if test="stSearchDt !=null and !stSearchDt.equals('') and edSearchDt !=null and !edSearchDt.equals('')">
 				AND SOG.AUC_DT <![CDATA[>=]]> #{stSearchDt}
 				AND SOG.AUC_DT <![CDATA[<=]]> #{edSearchDt}
@@ -988,5 +1027,6 @@
 			<if test="selStsDsc !='' and selStsDsc != null">
 				AND SOG.SEL_STS_DSC = #{selStsDsc}
 			</if>
+		ORDER BY SOG.AUC_DT , SOG.AUC_OBJ_DSC, SOG.AUC_PRG_SQ
     </select>
 </mapper>

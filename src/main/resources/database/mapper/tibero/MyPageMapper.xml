@@ -36,45 +36,55 @@
 	<!-- 나의 경매내역 > My 현황 > 축종별 낙찰퍼센트 -->
 	<select id="selectCowBidPercent" parameterType="map" resultType="map">
 		SELECT T.*
-				, CASE WHEN TOT_ATDR_CNT !=0 THEN TRUNC((T.SEL_STS_CNT / T.TOT_ATDR_CNT) * 100, 0)
+				, CASE WHEN TOT_ATDR_CNT !=0 THEN TRUNC((T.SBID_COW_CNT / T.TOT_ATDR_CNT) * 100, 0)
 						ELSE 0 END AS SEL_STS_PERCENT
 		FROM (
 				SELECT A.NA_BZPLC
 						, A.AUC_OBJ_DSC
-						, COUNT(DECODE(A.SEL_STS_DSC, '22', 1, NULL)) AS SEL_STS_CNT
-						, COUNT(CASE WHEN B.ATDR_CNT > 0 THEN 1 END) AS TOT_ATDR_CNT
+						, COUNT(CASE WHEN A.SEL_STS_DSC = '22' AND (A.NA_BZPLC, A.TRMN_AMNNO) IN (
+							<choose>
+								<when test="searchMbIntgNo != null and searchMbIntgNo != ''">
+									(SELECT NA_BZPLC, TRMN_AMNNO FROM TB_LA_IS_MM_MWMN WHERE MB_INTG_NO = #{searchMbIntgNo})
+								</when>
+								<otherwise>
+									(#{searchNaBzplc}, #{searchTrmnAmnNo})							
+								</otherwise>
+							</choose>
+							) THEN 1 END) AS SBID_COW_CNT
+						, COUNT(CASE WHEN B.ATDR_AM > 0 THEN 1 END) AS TOT_ATDR_CNT
 						, COUNT(*) AS TOT_COW_CNT
-						, GROUPING_ID(A.NA_BZPLC, A.AUC_OBJ_DSC) AS GROUPINGID
 				FROM TB_LA_IS_MH_SOG_COW A
 				LEFT OUTER JOIN (
-											SELECT NA_BZPLC
-													, AUC_OBJ_DSC
-													, AUC_DT
-													, OSLP_NO
-													, TRMN_AMNNO
-													, COUNT(*) ATDR_CNT
-											FROM TB_LA_IS_MH_ATDR_LOG
-											GROUP BY NA_BZPLC, AUC_OBJ_DSC, AUC_DT, OSLP_NO, TRMN_AMNNO
+					SELECT NA_BZPLC
+							, AUC_OBJ_DSC
+							, AUC_DT
+							, OSLP_NO
+							, TRMN_AMNNO
+							, ATDR_AM
+							, ROW_NUMBER() OVER(PARTITION BY NA_BZPLC, AUC_OBJ_DSC, AUC_DT, OSLP_NO, AUC_PRG_SQ, TRMN_AMNNO ORDER BY ATDR_DTM DESC) RNUM
+					FROM TB_LA_IS_MH_ATDR_LOG LOG
+					WHERE 1=1
+					<choose>
+						<when test="searchMbIntgNo != null and searchMbIntgNo != ''">
+							AND EXISTS (SELECT 1 FROM TB_LA_IS_MM_MWMN WHERE MB_INTG_NO = #{searchMbIntgNo} AND LOG.NA_BZPLC = NA_BZPLC AND LOG.TRMN_AMNNO = TRMN_AMNNO)
+						</when>
+						<otherwise>
+							AND LOG.TRMN_AMNNO = #{searchTrmnAmnNo} 
+							AND LOG.NA_BZPLC = #{searchNaBzplc}						
+						</otherwise>
+					</choose>
 				) B ON A.NA_BZPLC = B.NA_BZPLC
 					AND A.AUC_OBJ_DSC = B.AUC_OBJ_DSC
 					AND A.AUC_DT = B.AUC_DT
 					AND A.OSLP_NO = B.OSLP_NO
-					AND A.TRMN_AMNNO = B.TRMN_AMNNO
+					AND B.RNUM = 1
 				WHERE 1=1
 						AND A.AUC_DT LIKE #{searchDateMy} ||'%'
-						<choose>
-							<when test="searchMbIntgNo != null and searchMbIntgNo != ''">
-								AND EXISTS (SELECT 1 FROM TB_LA_IS_MM_MWMN WHERE MB_INTG_NO = #{searchMbIntgNo} AND TRMN_AMNNO = A.TRMN_AMNNO AND NA_BZPLC = A.NA_BZPLC)
-							</when>
-							<otherwise>
-								AND A.TRMN_AMNNO = #{searchTrmnAmnNo}							
-							</otherwise>
-						</choose>
 						AND A.NA_BZPLC = #{searchNaBzplc}
 					GROUP BY ROLLUP(A.NA_BZPLC, A.AUC_OBJ_DSC)
 					HAVING GROUPING_ID(A.NA_BZPLC, A.AUC_OBJ_DSC) IN ('0','1')
 		) T
-		ORDER BY T.GROUPINGID DESC, T.AUC_OBJ_DSC
+		ORDER BY T.AUC_OBJ_DSC NULLS FIRST
 	</select>
 
 	<!-- 나의 경매내역 > My 현황 > 가축시장 나의 응찰 현황(전체조합별) -->
@@ -84,38 +94,49 @@
 		FROM (
 					SELECT A.NA_BZPLC
 							, COUNT(*) AS TOT_COW_CNT
-							, COUNT(DECODE(A.SEL_STS_DSC, '22', 1, NULL)) AS SBID_COW_CNT
-							, COUNT(CASE WHEN B.ATDR_CNT > 0 THEN 1 END) AS TOT_ATDR_CNT
+							, COUNT(CASE WHEN A.SEL_STS_DSC = '22' 
+							<choose>
+								<when test="searchMbIntgNo != null and searchMbIntgNo != ''">
+									AND (A.NA_BZPLC, A.TRMN_AMNNO) IN (SELECT NA_BZPLC, TRMN_AMNNO FROM TB_LA_IS_MM_MWMN WHERE MB_INTG_NO = #{searchMbIntgNo})
+								</when>
+								<otherwise>
+									AND (A.TRMN_AMNNO) IN (#{searchTrmnAmnNo})
+								</otherwise>
+							</choose>
+							THEN 1 END) AS SBID_COW_CNT
+							, COUNT(CASE WHEN B.ATDR_AM > 0 THEN 1 END) AS TOT_ATDR_CNT
 					FROM TB_LA_IS_MH_SOG_COW A
 					LEFT OUTER JOIN (
 									SELECT NA_BZPLC
-											, AUC_OBJ_DSC
-											, AUC_DT
-											, OSLP_NO
-											, TRMN_AMNNO
-											, COUNT(*) ATDR_CNT
-									FROM TB_LA_IS_MH_ATDR_LOG
-									GROUP BY NA_BZPLC, AUC_OBJ_DSC, AUC_DT, OSLP_NO, TRMN_AMNNO
+												, AUC_OBJ_DSC
+												, AUC_DT
+												, OSLP_NO
+												, TRMN_AMNNO
+												, ATDR_AM
+												, ROW_NUMBER() OVER(PARTITION BY NA_BZPLC, AUC_OBJ_DSC, AUC_DT, OSLP_NO, AUC_PRG_SQ, TRMN_AMNNO ORDER BY ATDR_DTM DESC) RNUM
+										FROM TB_LA_IS_MH_ATDR_LOG LOG
+										WHERE 1=1
+										<choose>
+											<when test="searchMbIntgNo != null and searchMbIntgNo != ''">
+												AND EXISTS (SELECT 1 FROM TB_LA_IS_MM_MWMN WHERE MB_INTG_NO = #{searchMbIntgNo} AND LOG.NA_BZPLC = NA_BZPLC AND LOG.TRMN_AMNNO = TRMN_AMNNO)
+											</when>
+											<otherwise>
+												AND LOG.TRMN_AMNNO = #{searchTrmnAmnNo}					
+											</otherwise>
+										</choose>			
 							) B ON A.NA_BZPLC = B.NA_BZPLC
 								AND A.AUC_OBJ_DSC = B.AUC_OBJ_DSC
 								AND A.AUC_DT = B.AUC_DT
 								AND A.OSLP_NO = B.OSLP_NO
-								AND A.TRMN_AMNNO = B.TRMN_AMNNO
+								AND B.RNUM = 1
 					WHERE 1=1
 							AND A.AUC_DT LIKE #{searchDateMy} ||'%'
-							<choose>
-								<when test="searchMbIntgNo != null and searchMbIntgNo != ''">
-									AND EXISTS (SELECT 1 FROM TB_LA_IS_MM_MWMN WHERE MB_INTG_NO = #{searchMbIntgNo} AND TRMN_AMNNO = A.TRMN_AMNNO AND NA_BZPLC = A.NA_BZPLC)
-								</when>
-								<otherwise>
-									AND A.TRMN_AMNNO = #{searchTrmnAmnNo}							
-								</otherwise>
-							</choose>
 					GROUP BY ROLLUP(A.NA_BZPLC)
 					HAVING GROUPING_ID(A.NA_BZPLC) IN ('0', '1')
 		) T
 		LEFT JOIN TB_LA_IS_BM_BZLOC C ON T.NA_BZPLC = C.NA_BZPLC
 		WHERE 1=1
+			AND (T.SBID_COW_CNT > 0 OR T.TOT_ATDR_CNT > 0)
 		ORDER BY T.NA_BZPLC DESC
 	</select>
 	

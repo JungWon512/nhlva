@@ -167,7 +167,7 @@ var searchAjax = function () {
 				if (i < 3) {
 					tHtml.push('<li>');
 					tHtml.push('	<dl class="union">');
-					tHtml.push('		<dt><img src="/static/images/guide/v2/sample_logo.jpg" alt=""></dt>');
+					tHtml.push('		<dt><img src="https://kr.object.ncloudstorage.com/smartauction-storage/logo/' + data.recentDateTopList[i].NA_BZPLC +'.png" onerror="this.src=\'/static/images/guide/v2/sample_logo.jpg\'" /></dt>');
 					tHtml.push('		<dd class="name">'+ data.recentDateTopList[i].CLNTNM +'</dd>');
 					if (data.recentDateTopList[i].AMT > 0) {
 						tHtml.push('		<dd class="change fc-red">+'+ fnSetComma(data.recentDateTopList[i].AMT ?? 0) +' 원</dd>');
@@ -208,7 +208,7 @@ var setChart =  function(avgPlaceBidAmList) {
 	
 	// 초기화
     $('.white-box').empty();
-    $('.white-box').append('<canvas id="myChart1"></canvas>');
+    $('.white-box').append('<canvas id="myChart1" class="bar_chart"></canvas>');
     
     // 막대 차트 생성
 	const ctx = $('#myChart1');

@@ -1,6 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
 <%@ include file="/WEB-INF/__system/taglibs.jsp"%>
-<meta name = "format-detection" content="telephone=yes">
+
 <style type="text/css">
 	.list_table .list_body ul {
 		min-height: 42px !important;

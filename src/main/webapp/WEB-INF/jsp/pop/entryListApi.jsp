@@ -5,6 +5,7 @@
 <input type="hidden" id="johpCdVal" value="${johapData.NA_BZPLCNO}"/>
 <input type="hidden" id="johpCd" value="${johapData.NA_BZPLC}"/>
 <input type="hidden" id="searchDate" value="${inputParam.date}"/>
+<input type="hidden" id="authRole" value="${inputParam.authRole}"/>
 
 <form name="frm_select" action="" method="post">
 	<input type="hidden" name="place" value="<c:out value="${param.place}" />" />

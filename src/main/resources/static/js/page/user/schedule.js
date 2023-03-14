@@ -9,7 +9,7 @@
 				var telno = $(this).parent().siblings(".s_telno").text();
 				var addr = $(this).parent().siblings(".s_addr").text();
 				$(".pop_schedule_map").find("p.name").text(name);
-				$(".pop_schedule_map").find("dd.tel").html(telno.replace(/[^0-9|-]|/gi, "") + "<a href='tel:" + telno.replace(/[^0-9|-]/gi, "") + "'></a>");
+				$(".pop_schedule_map").find("dd.tel").html(telno.replace(/[^0-9|-]/gi, "") + "<a href='tel:" + telno.replace(/[^0-9|-]/gi, "") + "'></a>");
 				$(".pop_schedule_map").find("dd.addr").text(addr);
 			});
 			
@@ -17,11 +17,6 @@
 			$(".btn_tab").click(function() {
 				var params = {type : $(this).data("type")};
 				appendFormSubmit("frm_move", "/schedule", params);
-			});
-			
-			$(".call").click(function(){
-				alert("123")
-				$(location).attr('href', "tel:010-8965-3832");
 			});
 		};
 

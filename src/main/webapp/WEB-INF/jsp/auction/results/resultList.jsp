@@ -15,6 +15,7 @@
 		<input type="hidden" name="ledSqno" value="" />
 		<input type="hidden" name="johpCdVal" id="johpCdVal" value="${johapData.NA_BZPLCNO}"/>
 		<input type="hidden" id="bidPopYn" name="bidPopYn" value="N" />
+		<input type="hidden" id="resultPopYn" name="resultPopYn" value="Y" />
 	</form>
 		
 		<!-- 필터 데이터 -->
@@ -61,7 +62,7 @@
 			</div>
 		</div>
 		
-		<div class="filter-box <c:if test= "${ inputParam.searchTxt != null || inputParam.indvSexC != null || inputParam.startKg != null || inputParam.endKg != null || inputParam.lowPrice != null || inputParam.highPrice != null }"> active </c:if>">
+		<div class="filter-box <c:if test= "${ inputParam.searchTxt != null || inputParam.indvSexC != null || inputParam.startDate != null || inputParam.endDate != null || inputParam.lowPrice != null || inputParam.highPrice != null }"> active </c:if>">
 			<div class="filter-text">
 				<input type="text" id="searchTxt" name="searchTxt" class="searchTxt" maxlength="12" placeholder="출하주/KPN/개체번호/경매번호" value="<c:if test="${inputParam.searchTxt  != ''}">${inputParam.searchTxt }</c:if>">
 				<button class="btn_del"></button>

@@ -17,6 +17,8 @@ import org.codehaus.jettison.json.JSONException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.ObjectUtils;
 
 import com.ishift.auction.service.admin.AdminService;
 import com.ishift.auction.service.auction.AuctionDAO;
@@ -129,58 +131,68 @@ public class LoginServiceImpl implements LoginService {
 		final List<Map<String, Object>> list = "0".equals(type) ? this.selectWholesalerList(params) : this.selectFarmUserList(params);
 		
 		if (list.size() > 0) {
-			
-			//[s] gypark : 회원통합 확인 로직
-			params.put("regUsrid", "SYSTEM");
-			params.put("MB_INTG_GB", intg_gubun);	//통합회원구분
-			params.put("MB_INTG_NM", "01".equals(intg_gubun) ? list.get(0).get("SRA_MWMNNM") : list.get(0).get("FTSNM"));	//회원명
-			params.put("MB_RLNO", "01".equals(intg_gubun) ? list.get(0).get("CUS_RLNO") : list.get(0).get("BIRTH"));	//생년월일
-			params.put("OHSE_TELNO", list.get(0).get("OHSE_TELNO"));		//자택전화번호
-			params.put("MB_MPNO", list.get(0).get("CUS_MPNO"));		//휴대전화번호
-			// 통합회원 테이블에서 이름, 생년월일, 휴대전화번호로 통합회원 정보 조회
-			final Map<String, Object> mbIntgNoInfo = commonDao.getIntgNoInfo(params);
-			
-			if(list.get(0).get("MB_INTG_NO") != null && !"".equals(list.get(0).get("MB_INTG_NO"))) {
-				mb_intg_no = list.get(0).get("MB_INTG_NO").toString();
-				params.put("MB_INTG_NO", mb_intg_no);
-				final Map<String, Object> intgNumInfo = commonDao.getIntgNoInfoForNum(params);
-				//휴면회원이면
-				if("1".equals(intgNumInfo.get("DORMACC_YN")) && "0".equals(intgNumInfo.get("DELACC_YN"))){
-					//휴면해제 프로세스
-					commonService.updateDormcUserFhsClear(params);
-				}
-				
-				//최종접속일자, 휴면예정일자 update
-				loginDAO.updateMbintgConDormInfo(params);
-				
-			}else {
-				//중도매인 이름, 생년월일 or 출하주 이름, 연락처로 통합회원 조회 했을 때도 데이터가 없는 경우 => 신규가입
-				if(mbIntgNoInfo == null || mbIntgNoInfo.isEmpty()) {
-					//회원 통합 데이터 insert
-					if (!"".equals(params.get("MB_INTG_NM")) && !"".equals(params.get("MB_RLNO")) && !"".equals(params.get("MB_MPNO"))) {
-						int mb_intg_no_i = commonDao.insertIntgInfo(params);
-						mb_intg_no = String.valueOf(mb_intg_no_i);
-					}
-				}
-				else {  //다른 조합에서 가입한 통합회원 정보가 있으면 해당 회원통합번호만 업데이트 
-					mb_intg_no = mbIntgNoInfo.get("MB_INTG_NO").toString();
-				}
-				
-				//중도매인 or 출하주 회원통합번호 update
-				if(!"".equals(mb_intg_no)) {
-					params.put("MB_INTG_NO", mb_intg_no);
-					if("01".equals(params.get("MB_INTG_GB"))) {
-						loginDAO.updateMmMwmnMbintgNo(params);
-					}else {
-						loginDAO.updateMmFhsMbintgNo(params);
-					}
+			//TODO : 농가를 아예 통합회원에서 제거하게 되면 수정 or 제거해야 할 부분
+			if (!ObjectUtils.isEmpty("01".equals(intg_gubun) ? list.get(0).get("SRA_MWMNNM") : list.get(0).get("FTSNM"))
+			&& !ObjectUtils.isEmpty("01".equals(intg_gubun) ? list.get(0).get("CUS_RLNO") : list.get(0).get("BIRTH"))
+			&& !ObjectUtils.isEmpty(list.get(0).get("CUS_MPNO"))) {
+				//[s] gypark : 회원통합 확인 로직
+				try {
+					params.put("regUsrid", "SYSTEM");
+					params.put("MB_INTG_GB", intg_gubun);	//통합회원구분
+					params.put("MB_INTG_NM", "01".equals(intg_gubun) ? list.get(0).get("SRA_MWMNNM") : list.get(0).get("FTSNM"));	//회원명
+					params.put("MB_RLNO", "01".equals(intg_gubun) ? list.get(0).get("CUS_RLNO") : list.get(0).get("BIRTH"));	//생년월일
+					params.put("OHSE_TELNO", list.get(0).get("OHSE_TELNO"));		//자택전화번호
+					params.put("MB_MPNO", list.get(0).get("CUS_MPNO"));		//휴대전화번호
+					// 통합회원 테이블에서 이름, 생년월일, 휴대전화번호로 통합회원 정보 조회
+					final Map<String, Object> mbIntgNoInfo = commonDao.getIntgNoInfo(params);
 					
-					//최종접속일자, 휴면예정일자 update
-					loginDAO.updateMbintgConDormInfo(params);
+					if(list.get(0).get("MB_INTG_NO") != null && !"".equals(list.get(0).get("MB_INTG_NO"))) {
+						mb_intg_no = list.get(0).get("MB_INTG_NO").toString();
+						params.put("MB_INTG_NO", mb_intg_no);
+						final Map<String, Object> intgNumInfo = commonDao.getIntgNoInfoForNum(params);
+						//휴면회원이면
+						if("1".equals(intgNumInfo.get("DORMACC_YN")) && "0".equals(intgNumInfo.get("DELACC_YN"))){
+							//휴면해제 프로세스
+							commonService.updateDormcUserFhsClear(params);
+						}
+						
+						//최종접속일자, 휴면예정일자 update
+						loginDAO.updateMbintgConDormInfo(params);
+						
+					}else {
+						//중도매인 이름, 생년월일 or 출하주 이름, 연락처로 통합회원 조회 했을 때도 데이터가 없는 경우 => 신규가입
+						if(mbIntgNoInfo == null || mbIntgNoInfo.isEmpty()) {
+							//회원 통합 데이터 insert
+							if (!"".equals(params.get("MB_INTG_NM")) && !"".equals(params.get("MB_RLNO")) && !"".equals(params.get("MB_MPNO"))) {
+								int mb_intg_no_i = commonDao.insertIntgInfo(params);
+								mb_intg_no = String.valueOf(mb_intg_no_i);
+							}
+						}
+						else {  //다른 조합에서 가입한 통합회원 정보가 있으면 해당 회원통합번호만 업데이트 
+							mb_intg_no = mbIntgNoInfo.get("MB_INTG_NO").toString();
+						}
+						
+						//중도매인 or 출하주 회원통합번호 update
+						if(!"".equals(mb_intg_no)) {
+							params.put("MB_INTG_NO", mb_intg_no);
+							if("01".equals(params.get("MB_INTG_GB"))) {
+								loginDAO.updateMmMwmnMbintgNo(params);
+							}else {
+								loginDAO.updateMmFhsMbintgNo(params);
+							}
+							
+							//최종접속일자, 휴면예정일자 update
+							loginDAO.updateMbintgConDormInfo(params);
+						}
+					}
+					//[e] gypark : 회원통합 확인 로직
+					
+				}
+				catch(SQLException | RuntimeException e) {
+					e.printStackTrace();
+					log.error("LoginServiceImpl.loginProc : {} ", e);
 				}
 			}
-			//[e] gypark : 회원통합 확인 로직
-			
 			JwtTokenVo jwtTokenVo = JwtTokenVo.builder()
 												.auctionHouseCode(list.get(0).get("NA_BZPLC").toString())
 												.userMemNum(list.get(0).get("TRMN_AMNNO").toString())

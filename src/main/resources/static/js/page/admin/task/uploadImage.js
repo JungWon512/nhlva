@@ -52,6 +52,7 @@
 				options = {
 					maxWidth: resultNode.width() * 2,
 					canvas: true,
+//					pixelRatio: window.devicePixelRatio,
 					pixelRatio: 1,
 					downsamplingRatio: 0.5,
 					orientation: Number(orientationNode.val()) || true,
@@ -148,7 +149,8 @@
 				if (img) {
 					updateResults(
 						loadImage.scale(img, {
-							maxWidth: resultNode.width() * (1 || 1),
+							maxWidth: resultNode.width() * (window.devicePixelRatio || 1),
+//							pixelRatio: window.devicePixelRatio,
 							pixelRatio: 1,
 							orientation: Number(6) || true,
 							imageSmoothingEnabled: true,
@@ -246,7 +248,7 @@
 		
 		// 이미지 저장
 		var fnSave = function() {
-			fnShowLoadingImg();
+//			fnShowLoadingImg();
 			$(".btn_save").addClass("disabled");
 			var uploadList = [];
 			var failList = [];
@@ -255,14 +257,13 @@
 				var objectPath = [$("input[name='naBzplc']").val(), $("input[name='sraIndvAmnno']").val()];
 				var folderName = objectPath.join("/");
 				var fileList = $("#preview_list").find("canvas");
-				console.log(fileList);
 				for (file of fileList) {
 					var name = $(file).parent().attr("class").split(" ")[1];
 					
 					var fileDataUrl = file.toDataURL("image/png");
-					var fileName = uuidv4();
+					var fileName = self.crypto.randomUUID();
 					var objectName = folderName + "/" + fileName + ".png";
-					var obj = { filePath : folderName + "/", fileNm : fileName, fileExtNm : ".png" };
+					var saveObj = {filePath : folderName + "/", fileNm : fileName, fileExtNm : ".png"}
 					// upload file
 					await S3.putObject({Bucket: bucket_name, Key: objectName,ACL: 'public-read',// ACL을 지우면 전체 공개되지 않습니다.
 										Body: dataURLtoBlob(fileDataUrl)
@@ -275,17 +276,22 @@
 										Body: dataURLtoBlob(thumbnail)
 						}).promise();
 					})
-					.then(() => {uploadList.push(obj);})
-					.catch(() => {(e) => console.log(e)});
+					.then(()=>{
+						uploadList.push(saveObj);
+					})
+					.catch((e) => {
+						failList.push(saveObj);
+					});
 				}
 			})();
 			
-			upload.then(()=>{fnSaveUploadInfo(uploadList)}).catch(() => fnHideLoadingImg());
+			upload.then(()=>{fnSaveUploadInfo(uploadList, failList)}).catch((e) => console.log(e));
 		};
 		
-		var fnSaveUploadInfo = async function(uploadList) {
+		var fnSaveUploadInfo = async function(uploadList, failList) {
 			var frm = $("form[name='frm']").serializeObject();
 			frm["uploadList"] = uploadList;
+			frm["failList"] = failList;
 			
 			$.ajax({
 				url : '/office/task/uploadImageInfoAjax',
@@ -297,11 +303,11 @@
 					xhr.setRequestHeader("Content-Type", "application/json");
 				},
 				error:function(request,status,error){
-					fnHideLoadingImg();
+//					fnHideLoadingImg();
 					modalAlert("", "이미지 저장에 실패했습니다.");
 				}
 			}).done(function (body) {
-				fnHideLoadingImg();
+//				fnHideLoadingImg();
 				modalAlert("", body.message);
 				$(".btn_save").removeClass("disabled");
 				return;
@@ -324,6 +330,7 @@
 					$(target).append(loadImage.scale(image, {
 															maxWidth: resultNode.width() * 2,
 															canvas: true,
+//															pixelRatio: window.devicePixelRatio,
 															pixelRatio: 1,
 															downsamplingRatio: 0.5,
 															orientation: true,

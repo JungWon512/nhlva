@@ -373,7 +373,6 @@ public class HttpUtils {
 	
 	public String sendPostJson(Map<String, Object> param,String ctgrmCd) throws Exception{
 
-    	//개발
         URL url = new URL(mcaUrl);
         HttpURLConnection con = (HttpURLConnection) url.openConnection();
         String responseBody = "";
@@ -553,7 +552,7 @@ public class HttpUtils {
     public String callApiKauth(String type,String jsonMessage) {
         try {
             URL url = new URL("https://kauth.kakao.com/oauth/token");
-            SSLVaildBypass();            
+            this.SSLVaildBypass();
             HttpURLConnection con = (HttpURLConnection) url.openConnection();
             con.setConnectTimeout(5000); //서버에 연결되는 Timeout 시간 설정
             con.setReadTimeout(5000); // InputStream 읽어 오는 Timeout 시간 설정
@@ -617,7 +616,7 @@ public class HttpUtils {
         try {
             //get 요청할 url을 적어주시면 됩니다. 형태를 위해 저는 그냥 아무거나 적은 겁니다.
             URL url = new URL("https://kapi.kakao.com/v2/user/me");
-            SSLVaildBypass();
+            this.SSLVaildBypass();
             HttpURLConnection con = (HttpURLConnection) url.openConnection();
             con.setConnectTimeout(5000); //서버에 연결되는 Timeout 시간 설정
             con.setReadTimeout(5000); // InputStream 읽어 오는 Timeout 시간 설정
@@ -718,15 +717,14 @@ public class HttpUtils {
 		return nodeMap;
 	}
 	
-
+	//종축개량 인터페이스
 	public String callApiAiak(String barcode) {
 		BufferedReader br = null;
 		HttpURLConnection con = null;
         try {
         	
-            URL url = new URL("https://aiak.or.kr/ka_hims/hapcheon_auction.jsp?barcode="+barcode);
-            SSLVaildBypass();
-            
+            URL url = new URL("http://aiak.or.kr/ka_hims/hapcheon_auction.jsp?barcode="+barcode);
+            this.SSLVaildBypass();
             con = (HttpURLConnection) url.openConnection();
             con.setConnectTimeout(5000); //서버에 연결되는 Timeout 시간 설정
             con.setReadTimeout(5000); // InputStream 읽어 오는 Timeout 시간 설정
@@ -774,8 +772,7 @@ public class HttpUtils {
         try {
         	
             URL url = new URL(pUrl);
-            SSLVaildBypass();
-            
+            this.SSLVaildBypass();
             con = (HttpURLConnection) url.openConnection();
             con.setConnectTimeout(5000); //서버에 연결되는 Timeout 시간 설정
             con.setReadTimeout(5000); // InputStream 읽어 오는 Timeout 시간 설정

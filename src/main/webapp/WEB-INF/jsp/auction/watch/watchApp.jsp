@@ -7,7 +7,7 @@
 	}
 </style>
 
-<div class="auction_list">
+<div class="auction_list watchList">
 	<input type="hidden" id="token" value="${watchToken }"/>
 	<input type="hidden" id="naBzPlc" value="${johapData.NA_BZPLC}" />
 	<input type="hidden" id="aucDsc" value="${johapData.AUC_DSC}" />

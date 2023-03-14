@@ -31,7 +31,7 @@ public class RestApiJsonController {
 	private static Logger logger = LoggerFactory.getLogger(RestApiJsonController.class);
 	//String ctrn_cd = "";// 거래코드
 	//String responseBody = "";
-
+	
 	@Value("${mca.url}")
 	private String mcaUrl;
 	

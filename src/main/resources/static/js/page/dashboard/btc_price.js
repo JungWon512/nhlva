@@ -212,7 +212,7 @@ var setChart =  function(areaList) {
 	var labelData = [];
 	var barData = [];
 	$(".chart_area").empty();
-	$(".chart_area").append('<canvas id="myCharSample5"></canvas>');
+	$(".chart_area").append('<canvas id="myCharSample5" class="bar_chart"></canvas>');
 	
 	const ctx = $('#myCharSample5');
 	

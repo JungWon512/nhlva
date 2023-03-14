@@ -120,12 +120,14 @@
 				$(".tot_sbid_cnt").text(fnSetComma(sbidInfo.TOT_SBID_CNT) + " 두");
 				if(sbidInfo.TOT_SBID_CHG > 0) {
 					totChgHtml = "▲ "+ sbidInfo.TOT_SBID_CHG + " 두";
+					$(".tot_sbid_chg_txt").text(totChgHtml).removeClass("fc-blue fc-red").addClass("fc-red");
 				}else if(sbidInfo.TOT_SBID_CHG == 0){
 					totChgHtml = "- "+ sbidInfo.TOT_SBID_CHG + " 두";
+					$(".tot_sbid_chg_txt").text(totChgHtml).removeClass("fc-blue fc-red").addClass("fc-blue");
 				}else{
 					totChgHtml = "▼ "+ Math.abs(sbidInfo.TOT_SBID_CHG) + " 두";
+					$(".tot_sbid_chg_txt").text(totChgHtml).removeClass("fc-blue fc-red").addClass("fc-blue");
 				}
-				$(".tot_sbid_chg_txt").text(totChgHtml);
 				$(".month_old_c_nm").text(sbidInfo.MONTH_OLD_C_NM == null ? "전체" : sbidInfo.MONTH_OLD_C_NM);
 				
 				//최고, 평균, 최저 가격 
@@ -172,16 +174,16 @@
 				$(".expri_sbid_sum_amt").text(fnSetComma(sbidInfo.EXPRI_SBID_SUM_AMT) + " 원");
 				$(".avg_sbid_upr").text(fnSetComma(sbidInfo.AVG_SBID_UPR) + " 원");
 				var expri_gap = sbidInfo.AVG_SBID_UPR - sbidInfo.EXPRI_SBID_SUM_AMT;
-				$(".expri_gap").removeClass("up down");
-				if(expri_gap >= 0){
+				$(".expri_gap").removeClass("up down fc-red fc-blue");
+				if(expri_gap > 0){
 					$(".expri_gap").text("+ " + fnSetComma(expri_gap));
-					$(".expri_gap").addClass("down");
+					$(".expri_gap").addClass("up");
 				}else{
 					$(".expri_gap").text(fnSetComma(expri_gap));
-					$(".expri_gap").addClass("up");
+					$(".expri_gap").addClass("down");
 				}
 				
-				//지역별 평균 시세
+				//지역별 평균 낙찰가
 				var areaSbidList = body.areaSbidList;
 				var arrHtml = [];
 				$("#area_sbid_list").empty();
@@ -211,9 +213,9 @@
 	
     var setChart =  function(body) {
 		$(".chart_area").empty();
-		$("#chart_area_2").append('<canvas id="myChartSample2"></canvas>');
-		$("#chart_area_3").append('<canvas id="myChartSample3"></canvas>');
-		$("#chart_area_4").append('<canvas id="myChartSample4"></canvas>');
+		$("#chart_area_2").append('<canvas id="myChartSample2" class="bar_chart"></canvas>');
+		$("#chart_area_3").append('<canvas id="myChartSample3" class="bar_chart"></canvas>');
+		$("#chart_area_4").append('<canvas id="myChartSample4" class="bar_chart"></canvas>');
 		
 		var labelData = [];
 		var barSbidData = [];	//평균 낙찰가
@@ -237,14 +239,15 @@
 		new Chart(ctx2, {
 			type: 'bar',
 			data: {
-				labels: labelData,
+				labels: ['1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12'],
 				datasets: [
 					{
 						label: '평균예상가(만원)',
 						data: barExpriData,
 						borderColor: '#37a2eb',
 						type: 'line',
-						order: 0
+						order: 0,
+						yAxisID: 'y-left'
 					},
 					{
 						label: '평균낙찰가(만원)',
@@ -253,7 +256,8 @@
 						backgroundColor: '#a5dfdf',
 						type: 'bar',
 						borderWidth: 0,
-						order: 1
+						order: 1,
+						yAxisID: 'y-left'
 					}
 				]
 			},
@@ -267,6 +271,30 @@
 				legend: {
 					labels:{
 						fontSize : 10
+					}
+				},
+				scales: {
+					yAxes: [
+						{
+							id: 'y-left',
+							position: 'left',
+							display: true,
+							ticks: {
+								beginAtZero: true,
+								callback: function(value, index) {
+									return parseInt(value, 10).toLocaleString();
+								}
+							}
+						}
+					]
+				},
+				tooltips: {
+					enabled: true,
+					callbacks: {
+						label: function(tooltipItem, data) {
+							const tooltipValue = data.datasets[tooltipItem.datasetIndex].data[tooltipItem.index];
+							return parseInt(tooltipValue, 10).toLocaleString();
+						}
 					}
 				}
 			},
@@ -298,7 +326,8 @@
 						data: preCntData,
 						borderColor: '#37a2eb',
 						type: 'line',
-						order: 0
+						order: 0,
+						yAxisID: 'y-left'
 					},
 					{
 						label: '출장우',
@@ -307,7 +336,8 @@
 						backgroundColor: '#ffb1c1',
 						type: 'bar',
 						borderWidth: 0,
-						order: 1
+						order: 1,
+						yAxisID: 'y-left'
 					}
 				]
 			},
@@ -322,8 +352,32 @@
 					labels:{
 						fontSize : 10
 					}
-				}
+				},
+				scales: {
+					yAxes: [
+					{
+						id: 'y-left',
+						position: 'left',
+						display: true,
+						ticks: {
+							beginAtZero: true,
+							callback: function(value, index) {
+								return parseInt(value, 10).toLocaleString();
+							}
+						}
+					}
+				]
 			},
+				tooltips: {
+					enabled: true,
+					callbacks: {
+						label: function(tooltipItem, data) {
+							const tooltipValue = data.datasets[tooltipItem.datasetIndex].data[tooltipItem.index];
+							return parseInt(tooltipValue, 10).toLocaleString();
+						}
+					}
+				}
+			}
 		});
 		
 		const ctx4 = document.getElementById('myChartSample4');
@@ -332,8 +386,8 @@
 		var sbidInfo = body.sbidInfo;
 		
 		currData.push(Math.round(sbidInfo.MAX_SBID_UPR / 10000) ?? 0);
-		currData.push(Math.round(sbidInfo.MIN_SBID_UPR / 10000) ?? 0);
 		currData.push(Math.round(sbidInfo.AVG_SBID_UPR / 10000) ?? 0);
+		currData.push(Math.round(sbidInfo.MIN_SBID_UPR / 10000) ?? 0);
 		
 		prevData.push(Math.round(sbidInfo.MAX_SBID_UPR_B / 10000) ?? 0);
 		prevData.push(Math.round(sbidInfo.MIN_SBID_UPR_B / 10000) ?? 0);
@@ -342,7 +396,7 @@
 		new Chart(ctx4, {
 			type: 'bar',
 			data: {
-				labels: ['최고', '최저', '평균'],
+				labels: ['최고', '평균', '최저'],
 				datasets: [
 					{
 						label: '현재(만원)',

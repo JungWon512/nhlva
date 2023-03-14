@@ -3,23 +3,15 @@ var COMMONS = window.auction["commons"];
 (function ($, win, doc) {
     var setLayout = function() {
     	addCalendarEvent();
-    	var today= new Date();
-    	var preDate= new Date();
-    	preDate.setMonth(preDate.getMonth()-3);
-    	$('input#stSearchDt').val(getDateStr(preDate)).datepicker({dateFormat: 'yy-mm-dd'});
-    	$('input#edSearchDt').val(getDateStr(today)).datepicker({dateFormat: 'yy-mm-dd'});
-    	
+		fnSetInit();
     };
     
     var setBinding = function() {
     	$(document).on('click','button[name=btnInit]',function(){
     		$('div.aucObjDscBtn button').removeClass("on");
     		$('div.aucObjDscBtn button[name=btnAucObjDscAll]').addClass("on");
-	    	var today= new Date();    	
-	    	var preDate= new Date();
-	    	preDate.setMonth(preDate.getMonth()-3);    	
-	    	$('input#stSearchDt').val(getDateStr(preDate));
-	    	$('input#edSearchDt').val(getDateStr(today));
+    		fnSetInit();
+    		$('button[name=btnSearch]').click();
     	});
     	$(document).on('click','button[name=btnSearch]',function(){
     		getAucStaticInfo();
@@ -32,18 +24,7 @@ var COMMONS = window.auction["commons"];
     		$(this).addClass("on");
     	});
     	$(document).on('change','select[name=loc]',function(){
-    		
-			COMMONS.callAjax("/dashboard/getBzLocList", "post", {naBzPlcLoc:$(this).val()}, 'application/json', 'json', function(data){
-				console.log(data);
-				$('select#bzLoc').empty();
-				$('select#bzLoc').append('<option value="">전체</option>');
-				if(data && data.locList){
-					data.locList.forEach((e,i)=>{
-						$('select#bzLoc').append('<option value="'+e.NA_BZPLC+'">'+e.AREANM+'</option>');
-					});
-					$("select").selectric("refresh");
-				}
-			});
+    		fnLocChage($(this).val());
     	});
     };
 
@@ -71,7 +52,7 @@ var getAucStaticInfo = function(){
 	chkEdDate.setMonth(chkEdDate.getMonth()-3);
 	
 	if(chkEdDate > chkStDate){
-		modalAlert('','검색기간을 3개월이상<br/>조회하실수없습니다.');
+		modalAlert('','조회기간을 3개월이상<br/>조회하실수 없습니다.');
 		return;
 	}
 
@@ -263,4 +244,28 @@ var getAucStaticList = function(){
 		console.log(body);
 		reportExcel('출장우 내역',head,body);
 	});
+}
+var fnLocChage = function(naBzPlcLoc,initYn){
+	COMMONS.callAjax("/dashboard/getBzLocList", "post", {naBzPlcLoc: naBzPlcLoc}, 'application/json', 'json', function(data){
+		$('select#bzLoc').empty();
+		if(data && data.locList){
+			data.locList.forEach((e,i)=>{
+				$('select#bzLoc').append('<option value="'+e.NA_BZPLC+'" '+((initYn && e.NA_BZPLC == $('#naBzplc').val())?'selected':'')+'>'+e.AREANM+'</option>');
+			});
+			$("select").selectric("refresh");
+		}
+		if(initYn) getAucStaticInfo();
+	});
+}
+var fnSetInit = function(){
+	var today= new Date();
+	var preDate= new Date();
+	preDate.setMonth(preDate.getMonth()-1);
+	$('input#stSearchDt').val(getDateStr(preDate)).datepicker({dateFormat: 'yy-mm-dd'});
+	$('input#edSearchDt').val(getDateStr(today)).datepicker({dateFormat: 'yy-mm-dd'});
+	
+	$('select[name=loc]').val($('#naBzplcloc').val());
+	fnLocChage($('#naBzplcloc').val(),true);
+	if($('input#loginGrpC').val() != '001') $('select').attr('disabled',true);
+	$("select").selectric("refresh");
 }

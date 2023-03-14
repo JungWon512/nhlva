@@ -51,7 +51,6 @@
 			// 매수인정보	
 			if(data.stateInfo) {
 				$("div.auction_result table.stateInfo td.nm").text(data.stateInfo.USER_NM);
-				$("div.auction_result table.stateInfo td.addr").text(data.stateInfo.USER_DONG_UP + data.stateInfo.USER_DONG_BW);
 			}else{
 				$("div.auction_result table.stateInfo td.info").text('-');
 			}

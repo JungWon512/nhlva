@@ -1,73 +1,126 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
 <%@ include file="/WEB-INF/__system/taglibs.jsp" %>
 
+<STYLE type="text/css">
+	html body{margin:0 auto;}
+	li{list-style:none;}
+	.ft22{font-size:11px;}
+	.ft14{font-size:14px;}
+	.ft12{font-size:12px;}
+	.pd15{padding: 15px;}
+	.mt10{margin-top:10px;}
+	.mt25{margin-top:25px;}
+	.db{display: block;}
+</STYLE>
+
 <section class="contents" style="margin: 0px 40px;">
-	<h3 style="font-weight: 700; font-size: 20px;">이용약관 2021.06.20</h3>
-	<br />
+	<h3 style="font-weight: 700; font-size: 20px;">개인정보 수집이용 동의서</h3>
+
 	<div class="termsBox mCustomScrollBox "
-		style="margin: 0px 0px; overflow: hidden auto; height: 700px; min-height: 70px; background: #f1f1f1; !important;">
+		style="margin: 0px 0px; background: #f1f1f1; !important;">
 
-		<p>
-			2 제1조 (정의)<br /> &nbsp;&nbsp;1. “개설자”라 함은 「축산법」 제34조에 의거 가축시장을 개설한
-			축산업협동조합을(이하 “조합”이라 한다) 말한다.<br /> &nbsp;&nbsp;2. “가축거래”라 함은 가축의 매매를
-			말한다.<br /> &nbsp;&nbsp;3. “가축시장”이라 함은 가축거래를 위해 개설되는 시장으로서, 일정 공간과
-			시설을 마련하고 정기적 또는 지속적으로 개장되는 시장을 말한다.<br /> &nbsp;&nbsp;4. “대상가축”이라 함은
-			매매를 목적으로 가축시장에 출장된 한우를 말한다.<br /> &nbsp;&nbsp;5. “매도인”이라 함은 사육 중인
-			대상가축을 조합에 판매위탁을 요청한 생산자를 말한다.<br /> &nbsp;&nbsp;6. “매수인”이라 함은 가축시장에서
-			거래를 통하여 대상가축을 매입한 농업인 및 가축거래상인을 말한다.<br /> &nbsp;&nbsp;7. “사고적립금”이라
-			함은 가축시장에서 거래한 대상가축이 질병, 사고 등으로 인하여 피해를 본 경우 또는 매매대금을 회수하지 못한 경우 발생하는
-			손해를 보전하기 위하여 개설자가 정하여 조합에 적립하는 기금을 말한다.<br /> &nbsp;&nbsp;8. “출장”이라
-			함은 가축시장에 매매를 목적으로 대상가축을 출하하는 것을 말한다.<br /> <br /> 제2조 (대상가축신고)<br />
-			① 매도인은 대상가축의 특징(개월령, 외모, 혈통, 친자확인 등), 질병 및 약물투입, 기타 거래 가격 형성에 영향을 미칠
-			수 있는 사항 등을 개설자에게 신고하여야 한다.<br /> ② 개설자는 제1항에 의한 신고사항을 가축시장 이용자에게 충분히
-			공표하여야 한다.<br /> <br /> 제3조 (가축의 검사)<br /> ① 개설자는 가축시장 특성에 따라 기본적인
-			검사 기준을 정하여 운영할 수 있다.<br /> ② 개설자는 가축거래 당사자의 요구가 있을 때에는 언제든지 대상가축의
-			질병여부 및 임신감정 등 경매가 원활히 진행될 수 있는 검사를 할 수 있다.<br /> ③ 개설자는 가격사정 또는 수의사
-			검사 후 이상 징후 발견 시 매도인에게 즉시 알려야 하며, 가축시장 자체 방침에 의거 출장 제외할 수 있다.<br /> ④
-			개설자가 이상 징후 등 하자가축임을 알렸음에도 불구하고 경매가 진행될 경우에는 응찰자에게 반드시 알려야 한다. 이때 응찰자는
-			하자가축에 대한 내용을 인지하고 경락 받은 경우 반품·응찰포기 및 추후 이의제기를 할 수 없다.<br /> <br />
-			제4조 (경매)<br /> ① 경매는 공정하고 객관적인 가격이 형성될 수 있는 방법에 의하여야 한다.<br /> ②
-			경매사는 경매 실시 전 대상가축의 축주, 품종 등과 경락 후 경락사항 등을 경매에 참가한 모든 사람에게 공표하여야 한다.<br />
-			③ 대상가축의 경락은 최고가격 응찰자로 한다. 다만, 가축시장 운영 특성에 따라 경매 시작 전매도인이 서면으로 거래 성립
-			예정가격을 제시한 경우에는 그 가격 미만으로 판매할 수 없다.<br /> <br /> 제5조 (예정가격 결정)<br />
-			① 경매 예정가격 결정을 위하여 예정가격사정위원을 운용할 수 있다.<br /> ② 예정가격사정위원은 개설자가 지정하되,
-			인원은 2인 이상으로 운용하여야 한다.<br /> ③ 예정가격은 예정가격사정위원이 정한 시세와 방법을 기준으로 한다.<br />
-			<br /> 제6조 (가축매매수수료 징수 및 정리)<br /> ① 개설자는 가축시장 운영과 유지관리를 위하여 대상가축
-			매도인·매수인으로부터 가축매매수수료를 징수할 수 있으며, 영수증을 발급할 수 있다.<br /> ② 개설자가 징수하는
-			가축매매수수료는 거래금액의 1,000분의 10이내에서 정액으로 정한다. 다만, 제1항 목적 이외에 출자적립금, 출하장려금,
-			운송지원비, 친자확인비, 백신접종비 등 기타 추가비용으로 가축매매수수료가 1,000분의 10을 초과할 경우 이사회 의결을
-			거쳐 따로 정할 수 있다.<br /> ③ 제2항 거래금액의 기준은 개설자가 정한다.<br /> ④ 가축매매수수료는
-			매도인수수료, 매수인수수료, 사고적립금, 운송료, 감정료 등으로 구분하여 정리 할 수 있다.<br /> 제7조 (대금의
-			정산관리)<br /> ① 대금의 정산은 현금지급 또는 송금을 원칙으로 한다.<br /> ② 대금은 경락 후 즉시
-			정산하여야 한다. 다만, 가축시장 운영상 불가피한 경우 이사회의 승인을 얻어 대금결제기한을 별도로 정할 수 있다.<br />
-			③ 개설자는 경매대금 회수가 불가능 할 경우 응찰자의 재산조사를 실시하여 채권보전을 할 수 있는 조치를 하여야 한다.<br />
-			<br /> 제8조 (담합행위의 금지 등)<br /> ① 가축시장에서 가축을 거래하고자 하는 자는 공정한 가격이 성립하는
-			것을 저해할 목적 또는 부정한 이익을 얻을 목적으로 담합하여서는 아니된다.<br /> ② 개설자는 가축시장의 질서를
-			유지하고 제1항에 의한 부정행위를 방지하기 위하여 필요한 조치를 하여야 한다.<br /> <br /> 제9조 (가축시장
-			이용제한)<br /> 개설자는 대상가축의 방역 및 공정한 거래확립을 위하여 일부가축의 입장을 금지하거나 다음 각 호에
-			해당하는 경우 가축시장 이용을 제한 할 수 있다.<br /> &nbsp;&nbsp;1. 가축시장 업무를 방해하거나 질서를
-			문란하게 한 자 또는 그러할 우려가 있는 자<br /> &nbsp;&nbsp;2. 고의로 가축시장 시설을 파손한 자 또는
-			그러할 우려가 있는 자 <br /> &nbsp;&nbsp;3. 제11조 제1항에 의한 신고를 고의로 회피한 자<br />
-			&nbsp;&nbsp;4. 기타 정당한 사유 없이 가축거래 및 가축시장 시설이용에 관한 개설자의 지시사항을 준수하지 아니한
-			자<br /> &nbsp;&nbsp;5.「가축전염병 예방법」에 따라 격리 조치가 필요하다고 인정될 때<br /> <br />
-			제10조 (경매 후 하자가축)<br /> ① 경매 후 하자가축이라 함은 다음 각 호로 한다.<br />
-			&nbsp;&nbsp;1. 제2조 제1항에 의하여 신고를 정확히 하지 않은 개체<br /> &nbsp;&nbsp;2.
-			외관상 확인이 어려운 하자(프리마틴, 복강내 고환, 외고환, 맹목(장님) 등)<br /> &nbsp;&nbsp;3.
-			수의사진단서나 객관적으로 판단했을 때 분명히 이상이 있다고 판단되는 개체<br /> &nbsp;&nbsp;4. 기타
-			개설자가 정한 사항<br /> ② 경매 후 낙찰자가 하자가축을 반송하고자 할 때는 경매당일로부터 개설자가 정한 기일 이내에
-			조합으로 연락해야 한다. 경매당일로부터 개설자가 정한 기일 이후 발생하는 하자에 대해서는 조합에서 책임을 지지 않는다.<br />
-			③ 하자가축 유형은 개설자가 정하여 공시·공포한다.<br /> ④ 경매낙찰 후 개설자가 정한 기일 이내 경매진행시 공지하지
-			않은 하자가 발생하여 매수인이 이의를 제기하는 경우 매수인은 매도인(출하주)과 협의하여 가격을 조정하거나 반송할 수 있으며,
-			그에 따른 비용은 협의하여 정할 수 있다. 가격조정이 안 될 경우 개설자는 운영협의회를 통하여 가격을 조정하거나 반송 등을
-			할 수 있다. 단, 하자 내용을 경매 전 고지하여 이를 알고 거래된 개체와 수송 스트레스나 매수자 과실로 인한 하자는
-			이의제기를 할 수 없다.<br /> <br /> 개정일자 : 2021년 10월 7일
-		</p>
+		<div>
+			<span class="ft14">개인정보 수집이용 동의서(필수)</span>
+			<div class="ft12">&nbsp;</div>
+			<p class="ft12">본인은 스마트 가축시장 플랫폼 서비스를 이용하기 위해, 아래의 내용과 같이 본인의
+				개인정보를 수집이용하는 것에 동의합니다.</p>
+			<p class="ft12">※ 이용자는 개인정보 제공 동의를 거부할 권리가 있으며, 동의 거부 시 “스마트 가축시장
+				플랫폼” 이용이 불가합니다.</p>
+			<TABLE border="1" cellspacing="0" cellpadding="0"
+				style='border-collapse: collapse; border: none; width: 100%;'>
+				<TR>
+					<TD valign="middle" bgcolor="#c1d6ed"
+						style='width: 225; height: 49; border-left: solid #000000 0.4pt; border-right: solid #000000 0.4pt; border-top: solid #000000 0.4pt; border-bottom: solid #000000 0.4pt; padding: 1.4pt 5.1pt 1.4pt 5.1pt'>
+						<P CLASS=HStyle0 STYLE='text-align: center; line-height: 100%;'>
+							<span class="ft22"
+								style='font-family: "Noto Sans CJK KR Medium"; line-height: 100%'>수집항목</SPAN>
+						</P>
+					</TD>
+					<TD valign="middle" bgcolor="#c1d6ed"
+						style='width: 225; height: 49; border-left: solid #000000 0.4pt; border-right: solid #000000 0.4pt; border-top: solid #000000 0.4pt; border-bottom: solid #000000 0.4pt; padding: 1.4pt 5.1pt 1.4pt 5.1pt'>
+						<P CLASS=HStyle0 STYLE='text-align: center; line-height: 100%;'>
+							<span class="ft22"
+								style='font-family: "Noto Sans CJK KR Medium"; line-height: 100%'>처리목적</SPAN>
+						</P>
+					</TD>
+					<TD valign="middle" bgcolor="#c1d6ed"
+						style='width: 225; height: 49; border-left: solid #000000 0.4pt; border-right: solid #000000 0.4pt; border-top: solid #000000 0.4pt; border-bottom: solid #000000 0.4pt; padding: 1.4pt 5.1pt 1.4pt 5.1pt'>
+						<P CLASS=HStyle0 STYLE='text-align: center; line-height: 100%;'>
+							<span class="ft22"
+								style='font-family: "Noto Sans CJK KR Medium"; line-height: 100%'>보유
+								및 이용기간</SPAN>
+						</P>
+					</TD>
+				</TR>
+				<TR>
+					<TD rowspan="3" valign="middle"
+						style='width: 225; height: 245; border-left: solid #000000 0.4pt; border-right: solid #000000 0.4pt; border-top: solid #000000 0.4pt; border-bottom: solid #000000 0.4pt; padding: 1.4pt 5.1pt 1.4pt 5.1pt'>
+						<P CLASS=HStyle0 STYLE='line-height: 100%;'>
+							<span class="ft22"
+								style='font-family: "Noto Sans CJK KR"; line-height: 100%'>성명,ID,비밀번호,농장명,농장주소,통신사,휴대폰번호,생년월일</SPAN>
+						</P>
+					</TD>
+					<TD valign="middle"
+						style='width: 225; height: 55; border-left: solid #000000 0.4pt; border-right: solid #000000 0.4pt; border-top: solid #000000 0.4pt; border-bottom: solid #000000 0.4pt; padding: 1.4pt 5.1pt 1.4pt 5.1pt'>
+						<P CLASS=HStyle0 STYLE='line-height: 100%;'>
+							<span class="ft22"
+								style='font-family: "Noto Sans CJK KR"; line-height: 100%'>가축시장
+								서비스 이용</SPAN>
+						</P>
+					</TD>
+					<TD rowspan="3" valign="middle"
+						style='width: 225; height: 245; border-left: solid #000000 0.4pt; border-right: solid #000000 0.4pt; border-top: solid #000000 0.4pt; border-bottom: solid #000000 0.4pt; padding: 1.4pt 5.1pt 1.4pt 5.1pt'>
+						<P CLASS=HStyle0 STYLE='line-height: 100%;'>
+							<span class="ft22"
+								style='font-family: "Noto Sans CJK KR"; line-height: 100%'>회원
+								탈퇴, 서비스 종료, 기타 관계법령에 따른 보유기간까지</SPAN>
+						</P>
+					</TD>
+				</TR>
+				<TR>
+					<TD valign="middle"
+						style='width: 225; height: 55; border-left: solid #000000 0.4pt; border-right: solid #000000 0.4pt; border-top: solid #000000 0.4pt; border-bottom: solid #000000 0.4pt; padding: 1.4pt 5.1pt 1.4pt 5.1pt'>
+						<P CLASS=HStyle0 STYLE='line-height: 100%;'>
+							<span class="ft22"
+								style='font-family: "Noto Sans CJK KR"; line-height: 100%'>경매
+								및 대금의 정산관리</SPAN>
+						</P>
+					</TD>
+				</TR>
+				<TR>
+					<TD valign="middle"
+						style='width: 225; height: 134; border-left: solid #000000 0.4pt; border-right: solid #000000 0.4pt; border-top: solid #000000 0.4pt; border-bottom: solid #000000 0.4pt; padding: 1.4pt 5.1pt 1.4pt 5.1pt'>
+						<P CLASS=HStyle0 STYLE='line-height: 100%;'>
+							<span class="ft22"
+								style='font-family: "Noto Sans CJK KR"; line-height: 100%'>경매
+								전후 매수인, 매도인에 경매정보, 낙찰 및 정산서 정보 제공을 위한 문자(SMS, 카카오톡) 알림</SPAN>
+						</P>
+					</TD>
+				</TR>
+			</TABLE>
+			<span class="ft14 db mt25">※ 관계법령에 의한 개인정보 보존기간</span>
+			<ul class="pd15">
+				<li class="ft12">⇒ 계약 또는 청약철회 등에 관한 기록(전자상거래법 : 5년)</li>
+				<li class="ft12 mt10">⇒ 대금결제 및 재화 등의 공급에 관한 기록(전자상거래법 : 5년)</li>
+				<li class="ft12 mt10">⇒ 소비자의 불만 또는 분쟁처리에 관한 기록(전자상거래법 : 3년)</li>
+				<li class="ft12 mt10">⇒ 서비스 이용기록, 접속로그, 접속IP정보(통신비밀보호법 : 3개월)</li>
+				<li class="ft12 mt10">⇒ 기타 회원의 동의를 받은 경우 : 동의를 받은 기간까지(농협과의
+					거래종료일로부터 5년)</li>
+				<li class="ft12 mt10">개인정보를 목적 외의 용도로 이용하거나 이를 제3자에게 제공하지 아니하면
+					다른 법률에서 정하는 소관 업무를 수행할 수 없는 경우로서 보호위원회의 심의·의결을 거친 경우</li>
+				<li class="ft12 mt10">범죄의 수사와 공소의 제기 및 유지를 위하여 필요한 경우</li>
+				<li class="ft12 mt10">법원의 재판업무 수행을 위하여 필요한 경우</li>
+				<li class="ft12 mt10">형(刑) 및 감호, 보호처분의 집행을 위하여 필요한 경우</li>
+			</ul>
+			<span class="ft14">개정일자 : 2023년 2월 13일</span>
+
+		</div>
 
 	</div>
 
-	<div class=""style="margin-top: 15px; font-size: 18px; font-weight: 500; line-height: 1.2; letter-spacing: -0.8px; color: #007eff;">
-		<ul class="">
-			<li>2022.09.17 이용약관 <a href="javascript:pageMove('/agreement/220917');" id="20220917" style=" color: #007eff;">[변경내용보기]</a></li>
-		</ul>
-	</div>
+	<!-- 	<div class=""style="margin-top: 15px; font-size: 18px; font-weight: 500; line-height: 1.2; letter-spacing: -0.8px; color: #007eff;"> -->
+<!-- 		<ul class=""> -->
+<!-- 			<li>2022.09.17 이용약관 <a href="javascript:pageMove('/agreement/220917');" id="20220917" style=" color: #007eff;">[변경내용보기]</a></li> -->
+<!-- 		</ul> -->
+<!-- 	</div> -->
 </section>

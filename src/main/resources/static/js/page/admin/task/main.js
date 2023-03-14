@@ -35,7 +35,7 @@
 			// 작업 선택 페이지 이동
 			$(".btn_start").on(clickEvent, function(){
 				if ($("select[name='searchDate']").val() == "") {
-					alert("경매일자를 선택하세요");
+					modalAlert("","경매일자를 선택하세요");
 					return;
 				}
 				var params = {

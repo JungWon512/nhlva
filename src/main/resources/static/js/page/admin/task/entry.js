@@ -15,8 +15,8 @@
 //						$('.btn_input_reset').show();
 //					});	
 			
-			// tab 이동 이벤트
-			$(document).on("click", ".tab_list ul.tab_2 > li", function() {
+			// 일괄등록 Tab 이벤트
+			$(document).on("click", ".tab_list ul.entry.tab_2 > li", function() {
 				var tabId = $(this).find('a.act').attr('data-tab-id');
 				
 				//tab 이동시 새로 고침
@@ -26,8 +26,15 @@
 				$('dd.awl#'+tabId).show();
 			});
 			
+			// 경매결과조회 Tab 이벤트
+			$(document).on("click", ".tab_list ul.sb.tab_2 > li", function() {
+				$(this).siblings("button").removeClass();
+				$(this).addClass("on");
+				fnSearchSBList($(this).find('a.act').attr('data-tab-id'));
+			});
+			
 			// 중량/예정가 팝업 비고버튼 이벤트
-			$(document).on("click", ".winpop_reg .admin_new_reg .tag button", function(e){
+			$(document).on("click", ".winpop_reg .tag button", function(e){
 				let rmkCntn = $('textarea[name=rmkCntn]').val();
 				
 				let oriStr = rmkCntn.toString().trim();
@@ -60,6 +67,8 @@
 				var regType = $('input[name=regType]').val();
 				if (regType == 'AW' || regType == 'AL' || regType == 'AWL') {
 					fnSearchAwlList();
+				} else if (regType == 'SB') {					
+					fnSearchSBList($("ul.sb.tab_2 > li").find('a.act').attr('data-tab-id'));					
 				} else {					
 					$("form[name='frm']").attr("action", "/office/task/entry").submit();					
 				}
@@ -73,49 +82,15 @@
 
 			// 정보 조회
 			$(document).on(clickEvent, ".btn_cow_search", function() {
-				
-				const regExp = /^[0-9]*$/;
-				const aucPrgSq = $("input[name='aucPrgSq2']").val();
-				
-				if(!regExp.test(aucPrgSq)){
-					modalAlert("", '숫자만 입력해 주세요.');
-					return false;
-				}
-				
-				if(aucPrgSq ==null || aucPrgSq == '0'){
-					modalAlert("", '경매번호를 입력해주세요.');
-					return false;
-				}
-				$("form[name='frm_cow']").find("input[name='oslpNo']").val(aucPrgSq);
-				$("form[name='frm_cow']").find("input[name='aucPrgSq']").val(aucPrgSq);
-				$("form[name='frm_cow']").find("input[name='aucDt']").val( $("input[name='aucDt']").val() );
-				$("form[name='frm_cow']").find("input[name='aucObjDsc']").val( $("input[name='aucObjDsc']").val() );
-				
-		
-				
-				$.ajax({
-					url: '/office/task/cowInfo',
-					data: JSON.stringify($("form[name='frm_cow']").serializeObject()),
-					type: 'POST',
-					dataType: 'json',
-					beforeSend: function (xhr) {
-						xhr.setRequestHeader("Accept", "application/json");
-						xhr.setRequestHeader("Content-Type", "application/json");
-					}
-				}).done(function (body) {
-					var success = body.success;
-					var message = body.message;
-					if (!success) {
-						modalAlert("", message, fnReset2);
-					}
-					else {
-						fnLWLayerPop(body.params,body.cowInfo);
-					}
-				});
+				fn_CowSearch();
 			});
+			$(document).on('change', "select.cowAmnno", function() {
+				fn_CowSearch($(this).val());
+			});			
 
 		//중량 예정가 등록 리셋 함수
 		var fnReset2 = function() {
+			$("form[name='frm_cow']").find("input[type=hidden]").val("");
 			$("form[name='frm_cow']").find("input").text("");
 			$('.rs').text('');
 			$('.rs').val('');
@@ -124,13 +99,15 @@
 			// 검색어 지우기
 			$(".btn_input_reset").on("click", function(e) {
 				$("input[name='searchTxt']").val("");
-				$("form[name='frm']").attr("action", "/office/task/entry").submit();
+//				if($('input[name=regType]').val() != 'AWL' && $('input[name=regType]').val() != 'LW'){
+//					$("form[name='frm']").attr("action", "/office/task/entry").submit();
+//				}
 			});
 			
 			// 리스트 선택
 			$(document).on("dblclick", ".list_body > ul > li", function(e){
 				var regType = $("input[name='regType']").val();
-				if (regType == "AW" || regType == "AL") return;
+				if (regType != "LW") return;
 				$(".list_body ul li").not(this).removeClass("act");
 				$(this).toggleClass("act");
 				
@@ -159,7 +136,7 @@
 				fnModifyPop($(this).closest("li"));
 			});
 			
-			// 변경 팝업
+			// 변경 팝업 (이전 팝업)
 			$(".btn_modify_pop").on("click", function(){
 				if ($(".list_body > ul").find("li.act").length == 0) {
 					modalAlert("", "변경할 대상을 선택하세요.");
@@ -237,6 +214,12 @@
 					return;
 				}
 				
+				// 경매번호 미조회시 Validation
+				if(regType == "LW" && !$("input[name=oslpNo]").val()){
+					modalAlert("", '경매번호를 조회하세요.');
+					return;
+				}
+				
 				$.ajax({
 					url : '/office/task/saveCowInfo',
 					data : JSON.stringify($("form[name='frm_cow']").serializeObject()),
@@ -279,7 +262,7 @@
 				if(!$(this).val() || $(this).val() == '0') $(this).val('') ;
 				var li = $(this).closest("li");
 				var params = {
-					regType : $("input[name='regType']").val()
+					regType : "AW"
 					, naBzplc : $("input[name='naBzplc']").val()
 					, aucDt : $("input[name='aucDt']").val()
 					, aucObjDsc : '' + li.find("dd.col1").data("aucObjDsc")
@@ -313,7 +296,7 @@
 				if(!$(this).val() || $(this).val() == '0') $(this).val('');
 				var li = $(this).closest("li");
 				var params = {
-					regType : $("input[name='regType']").val()
+					regType : "AL"
 					, naBzplc : $("input[name='naBzplc']").val()
 					, aucDt : $("input[name='aucDt']").val()
 					, aucObjDsc : '' + li.find("dd.col1").data("aucObjDsc")
@@ -352,131 +335,94 @@
 				}, 500);
 			});
 		};
-		
-		var fnModifyPop = function(obj) {
-			var amnno = obj.find("dd.col1").data("amnno");
-			var aucObjDsc = obj.find("dd.col1").data("aucObjDsc");
-			var ledSqno = obj.find("dd.col1").data("ledSqno");
-			var oslpNo = obj.find("dd.col1").data("oslpNo");
+
+		function fn_CowSearch(amnno){
+			const regExp = /^[0-9]*$/;
+			const aucPrgSq = $("input[name='aucPrgSq2']").val();
+			const oslpNo = $("input[name='oslpNo']").val();
 			
-			var params = {
-				aucDt : $("input[name='aucDt']").val(),
-				regType : $("input[name='regType']").val(),
-				aucObjDsc : aucObjDsc,
-				oslpNo : oslpNo,
-				ledSqno : ledSqno,
-				amnno : amnno,
-				searchTxt : $("input[name='searchTxt']").val(),
-				searchAucObjDsc : $("select#aucObjDsc").val()
+			if(!regExp.test(aucPrgSq)){
+				modalAlert("", '숫자만 입력해 주세요.');
+				return false;
+			}
+			
+			if(aucPrgSq ==null || aucPrgSq == '0'){
+				modalAlert("", '경매번호를 입력해주세요.');
+				return false;
+			}
+			
+			var param = {
+				aucPrgSq : aucPrgSq
+				, aucDt : $("input[name='aucDt']").val()
+				, naBzplc : $("input[name='naBzplc']").val()
+				, amnno : amnno		
 			}
 			
 			$.ajax({
 				url: '/office/task/cowInfo',
-				data: JSON.stringify(params),
+				data: JSON.stringify(param),
 				type: 'POST',
 				dataType: 'json',
 				beforeSend: function (xhr) {
 					xhr.setRequestHeader("Accept", "application/json");
 					xhr.setRequestHeader("Content-Type", "application/json");
-				},
-				success : function() {
-				},
-				error: function(xhr, status, error) {
 				}
 			}).done(function (body) {
 				var success = body.success;
 				var message = body.message;
-				if (!success) {
-					modalAlert("", message);
+				if(body.cowInfo && body.cowInfo.length > 0){
+					fnLWLayerPop(body.params,body.cowInfo);
+				}else{
+					modalAlert("", "조회된 출장우 정보가 없습니다.", function(){});
 				}
-				else {
-					// layer popup 그리기
-//					fnLayerPop(body.params, body.cowInfo);
-					fnLWLayerPop(body.params, body.cowInfo);
-				}
+				//if (!success) {
+				//	modalAlert("", message, fnReset2);
+				//}
+				//else {
+				//	fnLayerPop(body.params,body.cowInfo);
+				//}
 			});
 		}
 		
-		var fnReload = function(data) {
-			modalPopupClose('.pop_mod_weight');
-			var entryList = data.entryList;
-			var regType = data.params.regType;
-			var aucPrgSq = data.params.aucPrgSq;
-			
-			var listHtml = [];
-			if (entryList != undefined) {
-				for (var i = 0; i < entryList.length; i++) {
-					var item  = entryList[i];
-					listHtml.push('<li id="' + item.AUC_PRG_SQ + '">');
-					if (regType != "AW" && regType != 'AL') {
-						listHtml.push('<span><button type="button" class="btn_modify" >수정</button></span>');
-					}
-					listHtml.push('	<dl>');
-					listHtml.push('		<dd class="col1" data-amnno="' + item.SRA_INDV_AMNNO+ '" data-auc-obj-dsc="' + item.AUC_OBJ_DSC+ '" data-oslp-no="' + item.OSLP_NO+ '" data-led-sqno="' + item.LED_SQNO+ '">' + item.AUC_PRG_SQ + '</dd>');
-					if (regType == "LW") {
-						listHtml.push('<dd class="col2">' + (item.COW_SOG_WT == null || parseInt(item.COW_SOG_WT) == '0' || parseInt(item.COW_SOG_WT) == 'NaN' ? '-' : fnSetComma(parseInt(item.COW_SOG_WT))) + '</dd>');
-						listHtml.push('<dd class="col2">' + (item.LOWS_SBID_LMT_UPR == null || parseInt(item.LOWS_SBID_LMT_UPR) == '0' || parseInt(item.LOWS_SBID_LMT_UPR) == 'NaN' ? '-' : fnSetComma(item.LOWS_SBID_LMT_UPR)) + '</dd>');
-					}
-					else {
-						listHtml.push('<dd class="col2" '+(item.MODL_NO != item.AUC_PRG_SQ?'style="color:#ff0000"':'')+'>' + item.MODL_NO + '</dd>');
-					}
-					listHtml.push('		<dd class="col3">' + item.SRA_INDV_AMNNO_FORMAT + '</dd>');
-					listHtml.push('		<dd class="col4">' + item.FTSNM + '</dd>');
-					if(regType != "AW" && regType != "AL") {
-						listHtml.push('		<dd class="col4 col5"></dd>');
-					}
-					listHtml.push('	</dl>');
-					if(regType == "LW") {
-						listHtml.push('		<div class="pd_etc"><p>'+(item.RMK_CNTN ? item.RMK_CNTN:'')+'</p></div>');
-					}
-					listHtml.push('</li>');
-				}
-				
-				$(".admin_weight_list").find(".list_body > ul").html(listHtml.join(""));
-			}
-			var li = $(".list_body > ul").find("li#" + aucPrgSq).next() == undefined ? $(".list_body > ul").find("li#" + aucPrgSq) : $(".list_body > ul").find("li#" + aucPrgSq).next();
-			$(".list_body > ul").animate({
-				scrollTop : $(".list_body > ul").find("li#" + aucPrgSq).offset().top - $(".list_body > ul > li:first").offset().top
-			}, 500);
-			
-			$(".list_body > ul").find("li#" + aucPrgSq).addClass("act");
-		};
-		
 		// 중량/예정가 등록 수정 팝업창
-		var fnLWLayerPop = function(params,cowInfo) {
+		var fnLWLayerPop = function(params,cowList) {
 			var title = '예정가/중량등록';
-		
+			var cowInfo = cowList[0];
 			modalPopupClose('.pop_reg');
 			$('.pop_reg').remove();
-			
+			indvListStr ='';
+			cowList.forEach((e,i)=>{
+				if(params.amnno == e.SRA_INDV_AMNNO){
+					cowInfo = e;
+				}
+				indvListStr  +='<option '+(params.amnno == e.SRA_INDV_AMNNO?'selected':'')+' value="'+e.SRA_INDV_AMNNO+'">'+e.SRA_INDV_AMNNO_FORMAT_FULL+'</option>';
+			})
+			 
 			// 예정가 / 중량등록 비고부분 , 자르기
 			let smsBufferArray = [];
 			if (cowInfo.SMS_BUFFER_2 != null && cowInfo.SMS_BUFFER_2 != '') {
 				smsBufferArray = cowInfo.SMS_BUFFER_2.replaceAll(" ","").split(',');
 			}
-
 			var sHtml = [];
 			
-			sHtml.push('<div id="" class="modal-wrap pop_reg">																													');
-			sHtml.push('	<div class="modal-content">');
+			sHtml.push('<div id="" class="modal-wrap pop_reg pop_cow_input">																													');
 			sHtml.push('		<form name="frm_cow" method="post">');
-			sHtml.push('			<input type="hidden" name="regType" value="' + params.regType + '" />');
-			sHtml.push('			<input type="hidden" name="aucDt" value="' + params.aucDt + '" />');
-			sHtml.push('			<input type="hidden" name="naBzplc" value="' + params.naBzplc + '" />');
-			sHtml.push('			<input type="hidden" name="aucObjDsc" value="' + params.aucObjDsc + '" />');
-			sHtml.push('			<input type="hidden" name="oslpNo" value="' + params.oslpNo + '" />');
-			sHtml.push('			<input type="hidden" name="ledSqno" value="' + params.ledSqno + '" />');
+			sHtml.push('			<input type="hidden" name="regType" value="LW" />');
+			sHtml.push('			<input type="hidden" name="aucDt" value="' + cowInfo.AUC_DT + '" />');
+			sHtml.push('			<input type="hidden" name="naBzplc" value="' + cowInfo.NA_BZPLC + '" />');			
+			sHtml.push('			<input type="hidden" name="aucObjDsc" value="' + cowInfo.AUC_OBJ_DSC + '" />');
+			sHtml.push('			<input type="hidden" name="oslpNo" value="' + cowInfo.OSLP_NO + '" />');
+			sHtml.push('			<input type="hidden" name="ledSqno" value="' + cowInfo.LED_SQNO + '" />');
 			sHtml.push('			<input type="hidden" name="aucPrgSq" value="' + cowInfo.AUC_PRG_SQ + '" />');
-			sHtml.push('			<input type="hidden" name="searchTxt" value="' + params.searchTxt + '" />');
-			sHtml.push('			<input type="hidden" name="searchAucObjDsc" value="' + params.searchAucObjDsc + '" />');
-			
-			sHtml.push('			<div class="winpop winpop_reg">                                                                                                                 ');
-			sHtml.push('				<div class="winpop-head ta-C">                                                                                                              ');
-			sHtml.push('					<button type="button" class="winpop_close ta-R" onclick="modalPopupClose(\'.pop_reg\');return false;"><span class="sr-only">팝업 닫기</span></button>                                         ');
-			sHtml.push('					<h2 class="winpop_tit">중량 / 예정가 등록</h2>                                                                                          ');
+			sHtml.push('			<input type="hidden" name="searchTxt" value="' + $("input[name='searchTxt']").val() + '" />');
+			sHtml.push('			<input type="hidden" name="searchAucObjDsc" value="' + $("select#aucObjDsc").val() + '" />');
+			sHtml.push('			<div class="modal-content pop_ad_mod">                                                                                                                 ');
+			sHtml.push('				<div class="modal-head">                                                                                                              ');
+			sHtml.push('					<button type="button" class="winpop_close ta-R modal_popup_close" onclick="modalPopupClose(\'.pop_reg\');return false;"><span class="sr-only">팝업 닫기</span></button>                                         ');
+			sHtml.push('					<h3>중량 / 예정가 등록</h3>                                                                                          ');
 			sHtml.push('				</div>                                                                                                                                      ');
-			sHtml.push('				<div class="admin_new_reg">                                                                                                                 ');
-			sHtml.push('					<div class="cow-basic">                                                                                                                 ');
+			sHtml.push('				<div class="modal-body admin_new_reg winpop_reg">                                                                                                                 ');
+			sHtml.push('					<div class="table-mod cow-basic">                                                                                                                 ');
 			sHtml.push('						<table class="table-detail">                                                                                                        ');
 			sHtml.push('							<colgroup>                                                                                                                      ');
 			sHtml.push('								<col width="31%">                                                                                                           ');
@@ -489,14 +435,21 @@
 			sHtml.push('											<ul class="num_scr">');
 			sHtml.push('												<li><input type="text" name="aucPrgSq2" class="required onlyNumber inp"  id="aucPrgSq2" alt="경매번호" maxlength="4" pattern="\d*" inputmode="numeric" value="'+ cowInfo.AUC_PRG_SQ +'" /></li>'); 
 			sHtml.push('												<li><a href="javascript:;" class="btn_cow_search">조회</a></li>');
+			sHtml.push('												<li><a href="javascript:;" class="btn_save">저장</a></li>');
 			sHtml.push('											</ul>');
 			sHtml.push('										</td>');
-//			sHtml.push('									<td class="bg-lilac">'+ cowInfo.AUC_PRG_SQ +'</td>                                                                                             ');
+			//sHtml.push('									<td class="bg-lilac">'+ cowInfo.OSLP_NO +'</td>                                                                                             ');
 			sHtml.push('								</tr>                                                                                                                       ');
 			sHtml.push('								<tr>                                                                                                                        ');
 			sHtml.push('									<th>귀표번호</th>                                                                                                       ');
-			sHtml.push('									<td class="rs bg-lilac">'+ cowInfo.SRA_INDV_AMNNO_FORMAT_FULL +'</td>                                                                                          ');
+			sHtml.push('									<td class="rs">	');
+			sHtml.push('										<select class=\'cowAmnno\'>'+indvListStr+'</select>		');
+			sHtml.push('									</td>                       ');
 			sHtml.push('								</tr>                                                                                                                       ');
+			//sHtml.push('								<tr>                                                                                                                        ');
+			//sHtml.push('									<th>경매구분</th>                                                                                                       ');
+			//sHtml.push('									<td class="auc_obj_dsc bg-lilac">'+ cowInfo.AUC_OBJ_DSC_NAME + '</td>                                                                                     ');
+			//sHtml.push('								</tr>                                                                                                                       ');
 			sHtml.push('								<tr>                                                                                                                        ');
 			sHtml.push('									<th>어미/성별</th>                                                                                                      ');
 			sHtml.push('									<td class="rs bg-lilac">'+ cowInfo.MCOW_DSC_NM + ' / ' + cowInfo.INDV_SEX_NAME + '</td>                                                                                     ');
@@ -533,7 +486,7 @@
 			sHtml.push('					<div class="tag">                                                                                                                       ');
 			sHtml.push('						<button type="button">친자일치</button>                                                                                             ');
 			sHtml.push('						<button type="button">이모색</button>                                                                                               ');
-			sHtml.push('						<button type="button">자연분배</button>                                                                                             ');
+			sHtml.push('						<button type="button">자연분만</button>                                                                                             ');
 			sHtml.push('						<button type="button">임신우</button>                                                                                               ');
 			if (smsBufferArray.length > 0) {
 				for (var i = 0; i < smsBufferArray.length; i++) {
@@ -547,13 +500,13 @@
 			sHtml.push('					</div>                                                                                                                                  ');
 			sHtml.push('				</div>                                                                                                                                      ');
 			sHtml.push('			</div>                                                                                                                                          ');
-			sHtml.push('		</div>                                                                                                                                              ');
 			sHtml.push('	</form>                                                                                                                                              ');
 			sHtml.push('</div>                                                                                                                                                  ');
 			
 			$("body").append(sHtml.join(""));
 			modalPopup('.pop_reg');
-
+			$('select.cowAmnno').selectric();
+		
 			$(".pop_reg").find("input.required").focus();
 			$(".pop_reg").find("input.required").on('keydown',function(){
 				if(!$(this).val() || $(this).val() == '0') $(this).val('');
@@ -561,22 +514,125 @@
 			$(".pop_reg").find("input.required:not([name=modlNo])").on('focusout',function(){
 				if(!$(this).val() || $(this).val() == '') $(this).val('0');
 			});
-			var len = $(".pop_reg").find("input.required").val()?.length;
-			$(".pop_reg").find("input.required")[0]?.setSelectionRange(len,len);
+			var len = $(".pop_reg").find("input.required").val() ? $(".pop_reg").find("input.required").val().length : 0;
+			if($(".pop_reg").find("input.required")[0]){
+				$(".pop_reg").find("input.required")[0].setSelectionRange(len,len);
+			}
 		}
 		
-		var fnLayerPop = function(params, cowInfo) {
+		var fnModifyPop = function(obj) {
+			var amnno = obj.find("dd.col1").data("amnno");
+			var aucObjDsc = obj.find("dd.col1").data("aucObjDsc");
+			var ledSqno = obj.find("dd.col1").data("ledSqno");
+			var oslpNo = obj.find("dd.col1").data("oslpNo");
+			
+			var params = {
+				aucDt : $("input[name='aucDt']").val()
+				, regType : $("input[name='regType']").val()
+				, aucPrgSq : obj.find("dd.col1").text().trim()
+				, amnno : amnno
+			}
+			if($("input[name='regType']").val() =='N'){
+				params.oslpNo = oslpNo;
+			}
+			
+			$.ajax({
+				url: '/office/task/cowInfo',
+				data: JSON.stringify(params),
+				type: 'POST',
+				dataType: 'json',
+				beforeSend: function (xhr) {
+					xhr.setRequestHeader("Accept", "application/json");
+					xhr.setRequestHeader("Content-Type", "application/json");
+				},
+				success : function() {
+				},
+				error: function(xhr, status, error) {
+				}
+			}).done(function (body) {
+				var success = body.success;
+				var message = body.message;
+				if (!success) {
+					modalAlert("", message);
+				}
+				else {
+					// layer popup 그리기
+					if(params.regType =='LW'){
+						fnLWLayerPop(body.params, body.cowInfo);
+					}else{
+						fnLayerPop(body.params, body.cowInfo);
+					}
+				}
+			});
+		}
+		
+		var fnReload = function(data) {
+			//modalPopupClose('.pop_mod_weight');
+			if($('input[name=regType]').val() == 'LW'){
+				modalPopupClose('.pop_reg');
+			}
+			var entryList = data.entryList;
+			var regType = data.params.regType;
+			var aucPrgSq = data.params.aucPrgSq;
+			
+			var listHtml = [];
+			if (entryList != undefined) {
+				for (var i = 0; i < entryList.length; i++) {
+					var item  = entryList[i];
+					listHtml.push('<li id="' + item.AUC_PRG_SQ + '">');
+					if (regType != "AW" && regType != 'AL') {
+						listHtml.push('<span><button type="button" class="btn_modify" >수정</button></span>');
+					}
+					listHtml.push('	<dl>');
+					listHtml.push('		<dd class="col1" data-amnno="' + item.SRA_INDV_AMNNO+ '" data-auc-obj-dsc="' + item.AUC_OBJ_DSC+ '" data-oslp-no="' + item.OSLP_NO+ '" data-led-sqno="' + item.LED_SQNO+ '">' + item.AUC_PRG_SQ + '</dd>');
+					if (regType == "LW") {
+						listHtml.push('<dd class="col2">' + (item.COW_SOG_WT == null || parseInt(item.COW_SOG_WT) == '0' || parseInt(item.COW_SOG_WT) == 'NaN' ? '-' : fnSetComma(parseInt(item.COW_SOG_WT))) + '</dd>');
+						listHtml.push('<dd class="col2">' + (item.LOWS_SBID_LMT_UPR == null || parseInt(item.LOWS_SBID_LMT_UPR) == '0' || parseInt(item.LOWS_SBID_LMT_UPR) == 'NaN' ? '-' : fnSetComma(item.LOWS_SBID_LMT_UPR)) + '</dd>');
+					}
+					else {
+						listHtml.push('<dd class="col2" '+(item.MODL_NO != item.AUC_PRG_SQ?'style="color:#ff0000"':'')+'>' + item.MODL_NO + '</dd>');
+					}
+					listHtml.push('		<dd class="col3">' + item.SRA_INDV_AMNNO_FORMAT + '</dd>');
+					listHtml.push('		<dd class="col4">' + item.FTSNM_ORI + '</dd>');
+					if(regType != "AW" && regType != "AL") {
+						listHtml.push('		<dd class="col4 col5"></dd>');
+					}
+					listHtml.push('	</dl>');
+					if(regType == "LW") {
+						listHtml.push('		<div class="pd_etc"><p>'+(item.RMK_CNTN ? item.RMK_CNTN:'')+'</p></div>');
+					}
+					listHtml.push('</li>');
+				}
+				
+				$(".admin_weight_list").find(".list_body > ul").html(listHtml.join(""));
+			}
+			
+			if(regType == "LW") {
+				var li = $(".list_body > ul li[id="+aucPrgSq+"] dd.col1[data-oslp-no="+(data.params.oslpNo)+"]").closest('li');
+				$('html').animate({ scrollTop : li.offset().top - $('html').offset().top -50 }, 500);
+				li.addClass('act');
+			}else{
+				var li = $(".list_body > ul").find("li#" + aucPrgSq).next() == undefined ? $(".list_body > ul").find("li#" + aucPrgSq) : $(".list_body > ul").find("li#" + aucPrgSq).next();
+				$(".list_body > ul").animate({
+					scrollTop : $(".list_body > ul").find("li#" + aucPrgSq).offset().top - $(".list_body > ul > li:first").offset().top
+				}, 500);
+				$(".list_body > ul").find("li#" + aucPrgSq).addClass("act");
+			}
+		};
+		
+		var fnLayerPop = function(params, cowList) {
 			var title = '';
 			switch(params.regType){
 				case 'W': title='중량 등록'; break;
 				case 'AW': title='중량 등록'; break;
 				case 'N': title='계류대 변경'; break;
-				case 'SB': title='낙찰결과'; break;
+				case 'SB': title='경매결과'; break;
 				case 'L': title='예정가등록'; break;
 //				case 'LW': title='예정가/중량등록'; break;
 			}
 			modalPopupClose('.pop_mod_weight');
 			$('.pop_mod_weight').remove();
+			cowInfo = cowList[0];
 			
 			// 예정가 / 중량등록 비고부분 , 자르기
 			let smsBufferArray = [];
@@ -589,21 +645,21 @@
 			sHtml.push('	<div class="modal-content pop_ad_mod">');
 			sHtml.push('		<form name="frm_cow" method="post">');
 			sHtml.push('			<input type="hidden" name="regType" value="' + params.regType + '" />');
-			sHtml.push('			<input type="hidden" name="aucDt" value="' + params.aucDt + '" />');
-			sHtml.push('			<input type="hidden" name="naBzplc" value="' + params.naBzplc + '" />');
-			sHtml.push('			<input type="hidden" name="aucObjDsc" value="' + params.aucObjDsc + '" />');
-			sHtml.push('			<input type="hidden" name="oslpNo" value="' + params.oslpNo + '" />');
-			sHtml.push('			<input type="hidden" name="ledSqno" value="' + params.ledSqno + '" />');
+			sHtml.push('			<input type="hidden" name="aucDt" value="' + cowInfo.AUC_DT + '" />');
+			sHtml.push('			<input type="hidden" name="naBzplc" value="' + cowInfo.NA_BZPLC + '" />');
+			sHtml.push('			<input type="hidden" name="aucObjDsc" value="' + cowInfo.AUC_OBJ_DSC + '" />');
+			sHtml.push('			<input type="hidden" name="oslpNo" value="' + cowInfo.OSLP_NO + '" />');
+			sHtml.push('			<input type="hidden" name="ledSqno" value="' + cowInfo.LED_SQNO + '" />');
 			sHtml.push('			<input type="hidden" name="aucPrgSq" value="' + cowInfo.AUC_PRG_SQ + '" />');
-			sHtml.push('			<input type="hidden" name="searchTxt" value="' + params.searchTxt + '" />');
-			sHtml.push('			<input type="hidden" name="searchAucObjDsc" value="' + params.searchAucObjDsc + '" />');
+			sHtml.push('			<input type="hidden" name="searchTxt" value="' + $("input[name='searchTxt']").val() + '" />');
+			sHtml.push('			<input type="hidden" name="searchAucObjDsc" value="' + $("select#aucObjDsc").val() + '" />');
 			
 			sHtml.push('			<div class="modal-head">');
 			sHtml.push('				<h3>' + title + '</h3>');
 			sHtml.push('				<button class="modal_popup_close btn_pop_close" type="button">닫기</button>');
 			sHtml.push('			</div>');
 			// modal-body [s]
-			sHtml.push('			<div class="modal-body winpop_reg admin_new_reg">');
+			sHtml.push('			<div class="modal-body admin_new_reg">');
 			// table-mod [s]
 			sHtml.push('				<div class="table-mod">');
 			sHtml.push('					<table>');
@@ -773,7 +829,7 @@
 		
 		// 초기 탭 설정
 		var setLayout = function(){
-			var tabId = $('div.tab_list li a.act').attr('data-tab-id');
+			var tabId = $('div.tab_list ul.entry li a.act').attr('data-tab-id');
 			$('dd.awl#'+tabId).show();
 		};
 		
@@ -801,7 +857,7 @@
 		var fnSearchAwlList = function(){
 			var params = {
 				searchDate : $("input[name='aucDt']").val(),
-				regType : $('div.tab_list li a.act').attr('data-tab-id'),
+				regType : $('div.tab_list ul.entry li a.act').attr('data-tab-id'),
 				searchTxt : $("input[name='searchTxt']").val(),
 				searchAucObjDsc : $("select#aucObjDsc").val()
 			}
@@ -853,7 +909,7 @@
 							sHtml.push('							<input type="text" name="firLowsSbidLmtAm" id="firLowsSbidLmtAm'+ item.AUC_PRG_SQ +'" class="onlyNumber noPop" value="'+ lowSbidUpr +'" maxlength="5" pattern="\d*" inputmode="numeric"/>');
 							sHtml.push('						</dd>');
 							sHtml.push('						<dd class="col3">'+ item.SRA_INDV_AMNNO_FORMAT +'</dd>');
-							sHtml.push('						<dd class="col4">'+ (item.FTSNM ? item.FTSNM : "") +'</dd>');
+							sHtml.push('						<dd class="col4">'+ (item.FTSNM_ORI ? item.FTSNM_ORI : "") +'</dd>');
 							sHtml.push('					</dl>');
 							sHtml.push('				</li>');
 						}
@@ -870,7 +926,113 @@
 				}
 			})
 		}
+		
+		// 경매결과 조회
+		var fnSearchSBList = function(selStsDsc){
+			var params = {
+				searchDate : $("input[name='aucDt']").val(),
+				searchTxt : $("input[name='searchTxt']").val(),
+				searchAucObjDsc : $("select#aucObjDsc").val(),
+				searchSelStsDsc : selStsDsc ?? 'Y', // Y : 낙찰(22) / N : 유찰(23)
+			}
 
+			$.ajax({
+				url : '/office/task/entryInfo',
+				data : JSON.stringify(params),
+				type : 'POST',
+				dataType : 'json',
+				beforeSend: function (xhr) {
+					xhr.setRequestHeader("Accept", "application/json");
+					xhr.setRequestHeader("Content-Type", "application/json");
+				},
+				success : function(data) {
+					$('div.list_table').empty();
+
+					sHtml = [];
+					
+					// 낙찰 탭
+					if (data.params.searchSelStsDsc != "N") {
+						sHtml.push('		<div class="list_head">');
+						sHtml.push('			<dl>');
+						sHtml.push('				<dd class="col1">번호</dd>');
+						sHtml.push('				<dd class="col3">귀표</dd>');
+						sHtml.push('				<dd class="col4">참가번호</dd>');
+						sHtml.push('				<dd class="col4">낙찰자</dd>');
+						sHtml.push('				<dd class="col4">낙찰가</dd>');
+						sHtml.push('				<dd class="col4">상태</dd>');
+						sHtml.push('			</dl>');
+						sHtml.push('		</div>');
+	
+						sHtml.push('		<div class="list_body">');
+						sHtml.push('			<ul style="overflow-y:scroll;">');
+						if (data.entryList.length <= 0) {
+							sHtml.push('					<li>');
+							sHtml.push('						<dl>');
+							sHtml.push('							<dd>검색결과가 없습니다.</dd>');
+							sHtml.push('						</dl>');
+							sHtml.push('					</li>');													
+						} else {
+							for(var item of data.entryList) {
+								sHtml.push('				<li id="'+ (item.AUC_PRG_SQ ? item.AUC_PRG_SQ : "") + '">');
+								sHtml.push('					<dl>');
+								sHtml.push('						<dd class="col1" data-amnno="'+ item.SRA_INDV_AMNNO +'" data-auc-obj-dsc="'+ item.AUC_OBJ_DSC +'" data-oslp-no="'+ item.OSLP_NO +'" data-led-sqno="'+ item.LED_SQNO +'">'+ item.AUC_PRG_SQ +'</dd>');
+								sHtml.push('						<dd class="col3">'+ item.SRA_INDV_AMNNO_FORMAT ?? '-' +'</dd>');
+								sHtml.push('						<dd class="col4">'+ item.LVST_AUC_PTC_MN_NO ?? '-' +'</dd>');
+								sHtml.push('						<dd class="col4">'+ item.SRA_MWMNNM ?? '-' +'</dd>');
+								sHtml.push('						<dd class="col4">'+ item.SRA_SBID_UPR ?? '-' +'</dd>');
+								sHtml.push('						<dd class="col4">'+ item.SEL_STS_DSC_NAME ?? '-' +'</dd>');
+								sHtml.push('					</dl>');
+								sHtml.push('				</li>');
+							}
+						}
+						sHtml.push('		</ul>');
+						sHtml.push('	</div>');	
+					} else {
+						// 유찰/결장 탭
+						sHtml.push('		<div class="list_head">');
+						sHtml.push('			<dl>');
+						sHtml.push('				<dd class="col1">번호</dd>');
+						sHtml.push('				<dd class="col3">귀표</dd>');
+						sHtml.push('				<dd class="col4">출하주</dd>');
+						sHtml.push('				<dd class="col4">예정가</dd>');
+						sHtml.push('				<dd class="col4">상태</dd>');
+						sHtml.push('			</dl>');
+						sHtml.push('		</div>');
+	
+						sHtml.push('		<div class="list_body">');
+						sHtml.push('			<ul style="overflow-y:scroll;">');
+						if (data.entryList.length <= 0) {
+							sHtml.push('					<li>');
+							sHtml.push('						<dl>');
+							sHtml.push('							<dd>검색결과가 없습니다.</dd>');
+							sHtml.push('						</dl>');
+							sHtml.push('					</li>');													
+						} else {
+							for(var item of data.entryList) {
+								sHtml.push('				<li id="'+ (item.AUC_PRG_SQ ? item.AUC_PRG_SQ : "") + '">');
+								sHtml.push('					<dl>');
+								sHtml.push('						<dd class="col1" data-amnno="'+ item.SRA_INDV_AMNNO +'" data-auc-obj-dsc="'+ item.AUC_OBJ_DSC +'" data-oslp-no="'+ item.OSLP_NO +'" data-led-sqno="'+ item.LED_SQNO +'">'+ item.AUC_PRG_SQ +'</dd>');
+								sHtml.push('						<dd class="col3">'+ item.SRA_INDV_AMNNO_FORMAT ?? '-' +'</dd>');
+								sHtml.push('						<dd class="col4">'+ item.FTSNM_ORI ?? '-' +'</dd>');
+								sHtml.push('						<dd class="col4">'+ fnSetComma(getStringValue(item.LOWS_SBID_LMT_UPR == 0 ? '-' : item.LOWS_SBID_LMT_UPR)) +'</dd>');
+								sHtml.push('						<dd class="col4">'+ item.SEL_STS_DSC_NAME ?? '-' +'</dd>');
+								sHtml.push('					</dl>');
+								sHtml.push('				</li>');
+							}
+						}
+						sHtml.push('		</ul>');
+						sHtml.push('	</div>');
+					}
+					
+					$('div.list_table').append(sHtml.join(""));
+					
+					setLayout();
+				},
+				error: function(xhr, status, error) {
+					modalAlert('','작업중 오류가 발생했습니다. <br/>관리자에게 문의하세요.');
+				}
+			})
+		}
 		return {
 			// public functions
 			init: function () {

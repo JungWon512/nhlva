@@ -64,36 +64,45 @@ public class FrontController {
 		return mav;
 	}
 
-	@RequestMapping(value = "/privacy", method = { RequestMethod.GET, RequestMethod.POST })
-	public ModelAndView privacy() {
+	@RequestMapping(value = "/privacy{date}", method = { RequestMethod.GET, RequestMethod.POST })
+	public ModelAndView privacy(@PathVariable String date) {
 		ModelAndView mav = new ModelAndView();
-		mav.setViewName("pop/privacy");
+		if(date == null || "".equals(date)) {
+			mav.setViewName("pop/privacy");			
+		}else {
+			mav.setViewName("pop/privacy"+date);			
+		}
 		return mav;
 	}
 
-	// 이용약관 old ver
-//	@RequestMapping(value = "/agreement", method = { RequestMethod.GET, RequestMethod.POST })
-//	public ModelAndView agreement() {
-//		ModelAndView mav = new ModelAndView();
-//		mav.setViewName("pop/agreement_bak");
-//		return mav;
-//	}
+	// 이용약관
+	@RequestMapping(value = "/agreement", method = { RequestMethod.GET, RequestMethod.POST })
+	public ModelAndView agreement() {
+		ModelAndView mav = new ModelAndView();
+		mav.setViewName("pop/agreement"); // 팝업용
+		return mav;
+	}
 	
 	// 이용약관 new ver
 	@RequestMapping(value =  {"/agreement/{date}"}, method = { RequestMethod.GET, RequestMethod.POST })
 	public ModelAndView agreement(@PathVariable String date) {
 		ModelAndView mav = new ModelAndView();
-		
 		if("new".equals(date)) {
-			mav.setViewName("front/user/agreement");
-			mav.setViewName("pop/agreement"); // 팝업용
+			mav.setViewName("pop/agreement"); // 이용약관동의
 		} else {
-			mav.setViewName("front/user/agreement"+date);
-			mav.addObject("subheaderTitle","이용약관"); // 뒤로가기용
+			mav.setViewName("front/user/agreement"+date);  // 현재 개인정보이용방침
+			mav.addObject("subheaderTitle","개인정보 처리방침"); // 뒤로가기용
 		}
 		return mav;
 	}
-	
+
+	// 제3자 이용약관
+	@RequestMapping(value = "/thirdAgreement", method = { RequestMethod.GET, RequestMethod.POST })
+	public ModelAndView thirdAgreement() {
+		ModelAndView mav = new ModelAndView();
+		mav.setViewName("pop/thirdAgreement"); // 팝업용
+		return mav;
+	}
 	/**
 	 * 전국 가축시장 경매안내 페이지
 	 * @return
@@ -127,10 +136,4 @@ public class FrontController {
 		return resultMap;
 	}
 	
-	@RequestMapping(value = "/excelDownload")
-	public ModelAndView excelDownload(@RequestParam final Map<String, Object> params) {
-		final ModelAndView mav = new ModelAndView("excelDownload");
-		mav.addObject("params", params);
-		return mav;
-	}
 }

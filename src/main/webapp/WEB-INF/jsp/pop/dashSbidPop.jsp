@@ -12,22 +12,26 @@
 				<span class="sort1">${searchMonTxt} 기준</span>
 				<div><strong class="sort2">${empty sbidInfo ? inputParam.aucObjDscNm : sbidInfo.AUC_OBJ_DSC_NM}</strong><span class="sort3">${empty sbidInfo.MONTH_OLD_C_NM ? inputParam.monthOldCNm : sbidInfo.MONTH_OLD_C_NM}</span></div>
 			</div>
-			<div class="white-box">
+			<div class="white-box chart_area">
 				<div class="cow-board-top">
 					<c:set var="TOT_SBID_CNT" value="${empty sbidInfo ? 0 : sbidInfo.TOT_SBID_CNT}" />
 					<c:set var="TOT_SBID_CHG" value="${empty sbidInfo ? 0 : sbidInfo.TOT_SBID_CHG}" />
+					<strong><fmt:formatNumber value="${TOT_SBID_CNT}" type="number" /> 두</strong>
 					<c:choose>
 						<c:when test="${TOT_SBID_CHG > 0 }">
 							<c:set var="tot_sbid_chg_txt" value="▲ ${TOT_SBID_CHG} 두" />
+							<span class="tot_sbid_chg_txt fc-red">${tot_sbid_chg_txt }</span>
 						</c:when>
 						<c:when test="${sbidInfo.TOT_SBID_CHG eq 0 }">
 							<c:set var="tot_sbid_chg_txt" value="- ${TOT_SBID_CHG} 두" />
+							<span class="tot_sbid_chg_txt fc-blue">${tot_sbid_chg_txt }</span>
 						</c:when>
 						<c:otherwise>
 							<c:set var="tot_sbid_chg_txt" value="▼ ${fn:replace(TOT_SBID_CHG, '-', '')} 두" />
+							<span class="tot_sbid_chg_txt fc-blue">${tot_sbid_chg_txt }</span>
 						</c:otherwise>
 					</c:choose>
-					<strong><fmt:formatNumber value="${TOT_SBID_CNT}" type="number" /> 두</strong>  ${tot_sbid_chg_txt }<br>(<span class="sort3">${empty sbidInfo.MONTH_OLD_C_NM ? inputParam.monthOldCNm : sbidInfo.MONTH_OLD_C_NM}</span>)
+					<br>(<span class="sort3">${empty sbidInfo.MONTH_OLD_C_NM ? inputParam.monthOldCNm : sbidInfo.MONTH_OLD_C_NM}</span>)
 				</div>
 				<ul class="board-number col-3">
 					<li>
@@ -89,7 +93,7 @@
 					</li>
 				</ul>
 				<div style="margin-top: 20px;">
-					<canvas id="myChartSample4"></canvas>
+					<canvas id="myChartSample4" class="bar_chart"></canvas>
 				</div>
 				<div class="gap-area mt50">
 					<div class="gap-box">
@@ -113,14 +117,14 @@
 		</div>
 		<div class="sec-board">
 			<h2 class="sec-tit">월별 낙찰가 현황</h2>
-			<div class="white-box">
-				<canvas id="myChartSample2"></canvas>
+			<div class="white-box chart_area">
+				<canvas id="myChartSample2" class="bar_chart"></canvas>
 			</div>
 		</div>
 		<div class="sec-board">
 			<h2 class="sec-tit">월별 출장우 현황</h2>
-			<div class="white-box">
-				<canvas id="myChartSample3"></canvas>
+			<div class="white-box chart_area">
+				<canvas id="myChartSample3" class="bar_chart"></canvas>
 			</div>
 		</div>
 		<div class="bottom-btn">
@@ -149,14 +153,15 @@ const ctx2 = document.getElementById('myChartSample2');
 new Chart(ctx2, {
 	type: 'bar',
 	data: {
-		labels: labelData,
+		labels: ['1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12'],
 		datasets: [
 			{
 				label: '평균예상가(만원)',
 				data: barExpriData,
 				borderColor: '#37a2eb',
 				type: 'line',
-				order: 0
+				order: 0,
+				yAxisID: 'y-left'
 			},
 			{
 				label: '평균낙찰가(만원)',
@@ -165,7 +170,8 @@ new Chart(ctx2, {
 				backgroundColor: '#a5dfdf',
 				type: 'bar',
 				borderWidth: 0,
-				order: 1
+				order: 1,
+				yAxisID: 'y-left'
 			}
 		]
 	},
@@ -179,6 +185,30 @@ new Chart(ctx2, {
 		legend: {
 			labels:{
 				fontSize : 10
+			}
+		}
+		, scales: {
+			yAxes: [
+				{
+					id: 'y-left',
+					position: 'left',
+					display: true,
+					ticks: {
+						beginAtZero: true,
+						callback: function(value, index) {
+							return parseInt(value, 10).toLocaleString();
+						}
+					}
+				}
+			]
+		}
+		, tooltips: {
+			enabled: true,
+			callbacks: {
+				label: function(tooltipItem, data) {
+					const tooltipValue = data.datasets[tooltipItem.datasetIndex].data[tooltipItem.index];
+					return parseInt(tooltipValue, 10).toLocaleString();
+				}
 			}
 		}
 	},
@@ -196,9 +226,7 @@ var thisCntData = [];	// 올해 출장우
 	preCntData.push(preCowCnt);
 	thisCntData.push(thisCowCnt);
 </c:forEach>
-
 const ctx3 = document.getElementById('myChartSample3');
-
 new Chart(ctx3, {
 	type: 'bar',
 	data: {
@@ -209,7 +237,8 @@ new Chart(ctx3, {
 				data: preCntData,
 				borderColor: '#37a2eb',
 				type: 'line',
-				order: 0
+				order: 0,
+				yAxisID: 'y-left'
 			},
 			{
 				label: '출장우',
@@ -218,7 +247,8 @@ new Chart(ctx3, {
 				backgroundColor: '#ffb1c1',
 				type: 'bar',
 				borderWidth: 0,
-				order: 1
+				order: 1,
+				yAxisID: 'y-left'
 			}
 		]
 	},
@@ -233,6 +263,30 @@ new Chart(ctx3, {
 			labels:{
 				fontSize : 10
 			}
+		},
+		scales: {
+			yAxes: [
+				{
+					id: 'y-left',
+					position: 'left',
+					display: true,
+					ticks: {
+						beginAtZero: true,
+						callback: function(value, index) {
+							return parseInt(value, 10).toLocaleString();
+						}
+					}
+				}
+			]
+		},
+		tooltips: {
+			enabled: true,
+			callbacks: {
+				label: function(tooltipItem, data) {
+					const tooltipValue = data.datasets[tooltipItem.datasetIndex].data[tooltipItem.index];
+					return parseInt(tooltipValue, 10).toLocaleString();
+				}
+			}
 		}
 	},
 });
@@ -241,8 +295,8 @@ var currData = [];
 var prevData = [];
 
 currData.push("${sbidInfo.MAX_SBID_UPR}" == undefined ? 0 : Math.round("${sbidInfo.MAX_SBID_UPR}" / 10000));
-currData.push("${sbidInfo.MIN_SBID_UPR}" == undefined ? 0 : Math.round("${sbidInfo.MIN_SBID_UPR}" / 10000));
 currData.push("${sbidInfo.AVG_SBID_UPR}" == undefined ? 0 : Math.round("${sbidInfo.AVG_SBID_UPR}" / 10000));
+currData.push("${sbidInfo.MIN_SBID_UPR}" == undefined ? 0 : Math.round("${sbidInfo.MIN_SBID_UPR}" / 10000));
 
 prevData.push("${sbidInfo.MAX_SBID_UPR_B}" == undefined ? 0 : Math.round("${sbidInfo.MAX_SBID_UPR_B}" / 10000));
 prevData.push("${sbidInfo.MIN_SBID_UPR_B}" == undefined ? 0 : Math.round("${sbidInfo.MIN_SBID_UPR_B}" / 10000));
@@ -251,7 +305,7 @@ prevData.push("${sbidInfo.AVG_SBID_UPR_B}" == undefined ? 0 : Math.round("${sbid
 new Chart(ctx4, {
 	type: 'bar',
 	data: {
-		labels: ['최고', '최저', '평균'],
+		labels: ['최고', '평균', '최저'],
 		datasets: [
 			{
 				label: '현재(만원)',
@@ -272,12 +326,24 @@ new Chart(ctx4, {
 			yAxes : [{
 				ticks : {
 					beginAtZero: true
+					, callback: function(value, index) {
+						return parseInt(value, 10).toLocaleString();
+					}
 				}
 			}]
 		},
 		legend: {
 			labels:{
 				fontSize : 10
+			}
+		}
+		, tooltips: {
+			enabled: true,
+			callbacks: {
+				label: function(tooltipItem, data) {
+					const tooltipValue = data.datasets[tooltipItem.datasetIndex].data[tooltipItem.index];
+					return parseInt(tooltipValue, 10).toLocaleString();
+				}
 			}
 		}
 	}

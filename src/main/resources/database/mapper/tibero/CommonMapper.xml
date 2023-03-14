@@ -331,7 +331,7 @@
 		   AND REPLACE(TRIM(MB_INTG_NM),' ','') = REPLACE(TRIM(#{MB_INTG_NM}),' ','')
 		   AND REGEXP_REPLACE(MB_MPNO, '[^0-9]') = REGEXP_REPLACE(#{MB_MPNO}, '[^0-9]')
 		   <if test="MB_RLNO != null and MB_RLNO != ''">
-		   AND MB_RLNO = #{MB_RLNO}
+		   AND REGEXP_REPLACE(MB_RLNO, '[^0-9]') = REGEXP_REPLACE(#{MB_RLNO}, '[^0-9]')
 		   </if>
 	</select>
 	

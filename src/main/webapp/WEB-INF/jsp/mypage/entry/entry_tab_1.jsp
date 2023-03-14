@@ -15,7 +15,7 @@
 			<div class="btns">
 				<p style="color:red; font-size:18px; margin-bottom: 10px;">*최근 6개월 내 정산서만 검색 가능합니다.</p>
 				<button type="button" id="johap" class="btn_flag act"><c:out value="${ johapData.AREANM }축협" /></button>
-				<button type="button" id="all" class="btn_flag">전체축협</button>
+				<button type="button" id="all" class="btn_flag">전체축협</button>		<!-- TODO : 농가를 아예 통합회원에서 제거하게 되면 수정 or 제거해야 할 부분 -->
 			</div>
 		</div>
 		<p class="txt-result"><span class="fc-red">${calendarList.size()}</span>건이 조회되었습니다.</p>
@@ -43,9 +43,9 @@
 										<span><em class="fc-blue">${vo.COW_CNT}</em>두</span>
 									</li>
 									<li>
-										<strong>낙찰금액</strong>
-										<fmt:formatNumber value="${vo.SRA_SBID_AM}" type="number" var="SRA_SBID_AM"/>
-										<span><em class="fc-red">${empty SRA_SBID_AM ? '0':SRA_SBID_AM}</em>원</span>
+										<strong>정산금액</strong>
+										<fmt:formatNumber value="${vo.SRA_SBID_AM - vo.SRA_TR_FEE}" type="number" var="TOT_SBID_AM"/>
+										<span><em class="fc-red">${empty TOT_SBID_AM ? '0' : TOT_SBID_AM}</em>원</span>
 									</li>
 								</ul>
 							</dd>

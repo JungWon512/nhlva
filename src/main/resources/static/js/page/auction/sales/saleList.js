@@ -12,6 +12,7 @@
     };
 
     var setBinding = function() {
+		$(".filter-box ").removeClass("active"); // 검색 후 필터 박스 초기화
         $(document).on("keydown","li.txt input", function(e){
 			if(e.keyCode == 13){
 				fnSearch();				
@@ -123,47 +124,48 @@
 				var oldJjimPrice = $('.modal-wrap.pop_jjim_input.zim input[name=oldJjimPrice]').val();
 				if(!oldJjimPrice || oldJjimPrice == 0){
 					modalPopupClose('.popup .modal-wrap.pop_jjim_input.zim');					
-					location.reload();
+					//location.reload();
 					return;
 				}
 				
 				params.inputUpr   = inputUpr;
-				modalComfirm('찜삭제',"찜가격을 삭제하시겠습니까?",function(){
+				//modalComfirm('찜삭제',"찜가격을 삭제하시겠습니까?",function(){
 					 COMMONS.callAjax("/auction/api/deleteZimPrice", "post", params, 'application/json', 'json', function(data){
 						modalPopupClose('.popup .modal-wrap.pop_jjim_input.zim');					
-						location.reload();
+						//location.reload();
+						fnSearch();
 					 });	
-				 });
+				 //});
 			});
 	        $('.modal-wrap.pop_jjim_input.zim .btn_ok').on("click", function(){
 				var inputUpr = $('.modal-wrap.pop_jjim_input.zim input[name=inputUpr]').val();
 				var lowsSbidLmtUpr = $('.modal-wrap.pop_jjim_input.zim input[name=lowsSbidLmtUpr]').val();
 				params.inputUpr   = inputUpr;		
 				if(inputUpr && parseInt(lowsSbidLmtUpr) <= parseInt(inputUpr)) {
-					modalComfirm('찜하기',"찜가격을 저장하시겠습니까?",function(){
+					//modalComfirm('찜하기',"찜가격을 저장하시겠습니까?",function(){
 						 COMMONS.callAjax("/auction/api/inserttZimPrice", "post", params, 'application/json', 'json', function(data){
 							modalPopupClose('.popup .modal-wrap.pop_jjim_input.zim');
 							if(data && !data.success){
 								modalAlert('', data.message);
 								return;
 							}
-							location.reload();
+							//location.reload();
+							fnSearch();
 						 });
-					 });
+					 //});
 				 }else{
 					modalAlert('',"예정가 이상의 가격을 입력해주세요.");
 				}
 			});
         });
                 
-        $(document).on("click",".list_body .pd_ea a", function(){
+        $(document).on("click",".list_body li dl dd:not(.pd_pav)", function(){
 			var pdEa = new String($(this).find('span').attr('fullstr'));
 			var tr = $(this).closest('li');
 			
         	if(tr.find('.commitYn').val() != '1'){
         		return;
         	}
-			
 			
 			var pdEa = new String($(this).find('span').attr('fullstr'));
 			$("form[name='frm_select'] input[name='naBzplc']").val(tr.find('.naBzPlc').val());
@@ -187,7 +189,7 @@
 			
 			return;
 			
-		});		
+		});
         
       //-------------------------------------
         //          필터 관련 이벤트.
@@ -200,14 +202,14 @@
 				}else {
 					$(".filter-box").addClass("active");
 				}
-        });
+		});
         
         // 성별활성시 삭제버튼 생성 
          $(document).on("click",".indvSexC", function(){
 			$('.sexBtn').show();
 		});
 		        
-        // 활성중인 필터  삭제 & 초기화
+        // 활성중인 필터  삭제 & 초기화 & 삭제와 동시에 조회
         $(document).on("click",".del_btn", function(){
 				$(this).hide();
 				if( $(this).text() == "검색" ) {
@@ -229,6 +231,7 @@
 						$("span.rangePrice").html( "0 ~ 1000만 원" );
 						rangeSetPrice();
 				}
+				fnSearch();		
         });
         
         // 검색 초기화 버튼 hiden block

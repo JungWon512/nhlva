@@ -90,11 +90,11 @@
 	</div>
 	<hr class="hr-line" />
 	<div class="sec-board">
-		<h2 class="sec-tit">지역별 출장우 현황</h2>
+		<h2 class="sec-tit">월별 출장우 현황</h2>
 		<div class="sort-area">
 			<div class="btnBox auc_obj_dsc">
 				<button id="11" class="on">암송아지</button>
-				<button id="12">숫송아지</button>
+				<button id="12">수송아지</button>
 				<button id="2">비육우</button>
 				<button id="3">번식우</button>
 			</div>
@@ -106,7 +106,7 @@
 				<button id="03">8개월 이상</button>
 			</div>
 		</div>
-		<div class="white-box">
+		<div class="white-box" style="display:none;">
 			<ul class="board-number average" id="area_scow_list">
 				<c:forEach items="${areaSbidList}" var="areaVo" varStatus="a">
 				<li class="sCowPop" id="${areaVo.NA_BZPLCLOC}">
@@ -121,9 +121,9 @@
 		</div>
 	</div>
 	<div class="sec-board">
-		<h2 class="sec-tit">월별 출장우 현황</h2>
+<!-- 		<h2 class="sec-tit">월별 출장우 현황</h2> -->
 		<div id="chart_area2" class="white-box chart_area">
-			<canvas id="myCharSample1"></canvas>
+			<canvas id="myCharSample1" class="bar_chart"></canvas>
 		</div>
 	</div>
 </div>
@@ -216,31 +216,64 @@ new Chart(ctx1, {
 
 
 const ctx2 = document.getElementById('myPieSample1');
-const auc1Data = ${sogCowInfoList[0].CNT_3}
-const auc2Data = ${sogCowInfoList[1].CNT_3}
-const auc3Data = ${sogCowInfoList[2].CNT_3}
-
-new Chart(ctx2, {
+const sogCowInfoList = ("${sogCowInfoList}" == null || "${sogCowInfoList}" == undefined) ? [] : "${sogCowInfoList}";
+if( sogCowInfoList.length <= 0 
+		|| (sogCowInfoList.length > 0 && "${sogCowInfoList[0].CNT_3}" == 0 && "${sogCowInfoList[1].CNT_3}" == 0 && "${sogCowInfoList[2].CNT_3}" == 0) ){
+	
+	new Chart(ctx2, {
 		type: 'pie',
-	data: {
-		labels: ['송아지', '비육우', '번식우'],
-		datasets: [
-			{
-				data: [auc1Data,auc2Data,auc3Data],
-				borderColor: ['#ffcd56','#ff9f40','#ff4069'],
-				backgroundColor: ['#ffcd56','#ff9f40','#ff4069'],
-				borderWidth: 0,
+		data: {
+			labels: ['등록된 출장두수가 없습니다'],
+			datasets: [
+				{
+					data: [100],
+					borderColor: ['#ffcd56'],
+					backgroundColor: ['#ffcd56'],
+					borderWidth: 0,
+				}
+			]
+		},
+		options: {
+			responsive: true,
+			maintainAspectRatio: true,
+			plugins: {
+				legend: {
+					position: 'right'
+				},
 			}
-		]
-	},
-	options: {
-		responsive: true,
-		maintainAspectRatio: true,
-		plugins: {
-			legend: {
-				position: 'right'
-			},
-		}
-	},
-});	
+		},
+	});
+	
+}
+else{
+	const auc1Data = ${sogCowInfoList[0].CNT_3};
+	const auc2Data = ${sogCowInfoList[1].CNT_3};
+	const auc3Data = ${sogCowInfoList[2].CNT_3};
+
+	new Chart(ctx2, {
+			type: 'pie',
+		data: {
+			labels: ['송아지', '비육우', '번식우'],
+			datasets: [
+				{
+					data: [auc1Data,auc2Data,auc3Data],
+					borderColor: ['#ffcd56','#ff9f40','#ff4069'],
+					backgroundColor: ['#ffcd56','#ff9f40','#ff4069'],
+					borderWidth: 0,
+				}
+			]
+		},
+		options: {
+			responsive: true,
+			maintainAspectRatio: true,
+			plugins: {
+				legend: {
+					position: 'right'
+				},
+			}
+		},
+	});
+}
+	
+	
 </script>

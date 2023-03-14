@@ -13,6 +13,10 @@
 			});
 			
 			// 로그인 버튼
+			$(document).on('click', ".action-close", function(e){
+				pageMove('/dashboard/main');
+			});
+			// 로그인 버튼
 			$(document).on('click', ".action-submit", function(e){
 				e.preventDefault();
 			var rsa = new RSAKey();    	

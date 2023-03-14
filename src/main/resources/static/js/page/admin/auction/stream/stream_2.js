@@ -113,9 +113,21 @@ var messageHandler = function(data) {
 			}
 			switch(dataArr[6]){
 				case "8001" : $('table.tblAuctionSt tbody tr td.auctionTxt p').removeClass('txt-red txt-green').addClass('txt-green').text(aucStConfig.t8001); break; 
-				case "8002" : $('table.tblAuctionSt tbody tr td.auctionTxt p').removeClass('txt-red txt-green').addClass('txt-green').text(aucStConfig.t8002); break; 
-				case "8003" : $('table.tblAuctionSt tbody tr td.auctionTxt p').removeClass('txt-red txt-green').addClass('txt-green').text(aucStConfig.t8003); break; 
-				case "8004" : $('table.tblAuctionSt tbody tr td.auctionTxt p').removeClass('txt-red txt-green').addClass('txt-red').text(aucStConfig.t8004); break; 
+				case "8002" : 
+					$('table.tblAuctionSt tbody tr td.auctionTxt p').removeClass('txt-red txt-green').addClass('txt-green').text(aucStConfig.t8002); 
+					$('table.tblAuctionSt tbody tr td.complate p.tdBiddNum').html('-');
+					$('table.tblAuctionSt tbody tr td.complate p.tdBiddAmt').html('-');
+				break; 
+				case "8003" : 
+					$('table.tblAuctionSt tbody tr td.auctionTxt p').removeClass('txt-red txt-green').addClass('txt-green').text(aucStConfig.t8003); 
+					$('table.tblAuctionSt tbody tr td.complate p.tdBiddNum').html('-');
+					$('table.tblAuctionSt tbody tr td.complate p.tdBiddAmt').html('-');
+				break; 
+				case "8004" : 
+					$('table.tblAuctionSt tbody tr td.auctionTxt p').removeClass('txt-red txt-green').addClass('txt-red').text(aucStConfig.t8004); 
+					$('table.tblAuctionSt tbody tr td.complate p.tdBiddNum').html('-');
+					$('table.tblAuctionSt tbody tr td.complate p.tdBiddAmt').html('-'); 
+				break; 
 				case "8005" : $('table.tblAuctionSt tbody tr td.auctionTxt p').removeClass('txt-red txt-green').addClass('txt-green').text(aucStConfig.t8005); break; 
 				case "8006" : $('table.tblAuctionSt tbody tr td.auctionTxt p').removeClass('txt-red txt-green').addClass('txt-green').text(aucStConfig.t8006); break; 
 				case "8007" : 
@@ -130,7 +142,7 @@ var messageHandler = function(data) {
 			if(dataArr[3]=='22'){ //낙찰
 				var user =dataArr[5],price = dataArr[6];
 				$('table.tblAuctionSt tbody tr td.complate p.tdBiddNum').html(''+ user);
-				$('table.tblAuctionSt tbody tr td.complate p.tdBiddAmt').html(''+ price);
+				$('table.tblAuctionSt tbody tr td.complate p.tdBiddAmt').html(''+ fnSetComma(price));
 				$('table.tblAuctionSt tbody tr td.auctionTxt p').removeClass('txt-red txt-green').addClass('txt-green').text('낙찰');	
 			}else{
 				$('table.tblAuctionSt tbody tr td.complate p.tdBiddNum').html('-');

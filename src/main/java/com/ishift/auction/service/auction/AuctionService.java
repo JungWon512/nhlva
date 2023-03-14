@@ -562,5 +562,7 @@ public interface AuctionService {
 	 * @throws SQLException
 	 */
 	List<Map<String, Object>> selectJohqpList(Map<String, Object> map) throws SQLException;
+
+	List<Map<String, Object>> selectCowInfoList(Map<String, Object> params) throws SQLException;
 	
 }

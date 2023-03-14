@@ -65,7 +65,11 @@
 				};
 				appendFormSubmit("frm_main", "/office/task/uploadImage", params);
 			});
-			
+			// 검색어 지우기
+			$(".btn_input_reset").on("click", function(e) {
+				$("input[name='searchTxt']").val("");
+				$("form[name='frm']").attr("action", "/office/task/cowList").submit();
+			});
 			/******************************************** 낙찰변경 팝업 페이지 이벤트 [s] ********************************************/
 			// 경매상태 변경 이벤트
 			$(document).on("change", "select[name=selStsDsc]", function() {
@@ -251,7 +255,7 @@
 			popHtml.push('			</div>');
 			popHtml.push('			<div class="modal-foot">');
 			popHtml.push('				<div class="btn_area">');
-			popHtml.push('					<a href="javascript:;" class="btn_reset">초기화</a>');
+			//popHtml.push('					<a href="javascript:;" class="btn_reset">초기화</a>');		//초기화 버튼 삭제
 			popHtml.push('					<a href="javascript:;" class="btn_save">저장</a>');
 			popHtml.push('					<a href="javascript:fnLayerClose(\'pop_cow_input\');">종료</a>');
 			popHtml.push('				</div>');

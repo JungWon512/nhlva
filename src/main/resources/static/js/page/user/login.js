@@ -1,9 +1,10 @@
 ;(function (win, $,COMMONS) {
 // Class definition
 	var Login = function () {	
-		//if($('input[name=type]').val() =='0' || !isIos()){
-		//	$('div.sns_login').show();
-		//}
+		if($('input[name=type]').val() =='0' && !isIos()){
+		//if(($('input[name=type]').val() =='0' || !isIos()) && $('input[name=place]').val() == '114'){
+			$('div.sns_login').show();
+		}
 		var get_msg = function(message) {
 			if(message!=undefined){
 				alert(message);
@@ -12,6 +13,19 @@
 		};
 
 		var addEvent = function(){
+			
+			// 전체동의 클릭시, [필수]해제
+			$(document).find('ul.agree_list li:not(:first-child) input[type=checkbox]').click(function(){
+				var chkekedLen = $('ul.agree_list li:not(:first-child) input[type=checkbox]:checked').length;
+				var allChkLen = $('ul.agree_list li:not(:first-child) input[type=checkbox]').length;
+				
+				if(allChkLen > chkekedLen){
+					$('ul.agree_list li:first-child input[type=checkbox]').attr('checked',false);
+				}else if(allChkLen == chkekedLen){
+					$('ul.agree_list li:first-child input[type=checkbox]').attr('checked',true);
+				}
+			});
+			
 			$(document).on('keydown', "input[name=userName],input[name=birthDate]",function(e){
 				if(e.keyCode == '13') $('.btn_login').click();
 			});
@@ -58,6 +72,7 @@
 				
 			});
 		};
+		
 		
 		// 로그인 처리
 		var fnLoginProc = function() {
@@ -237,6 +252,9 @@ function loginWithKakao() {
 	url+='&redirect_uri='+kko_redirect_url;
 	url+='&response_type=code';
 	url+='&state='+location.search.substr(1);
+	if(!getCookie('nhlva_k_r_token')){
+		url+='&prompt=login';		
+	}
 	location.href=url;
   }
   

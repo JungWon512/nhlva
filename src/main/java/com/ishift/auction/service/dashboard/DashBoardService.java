@@ -13,8 +13,6 @@ public interface DashBoardService {
 	
 	List<Map<String,Object>> findRecentDateTopList(Map<String, Object> reqMap) throws SQLException;
 	
-	List<Map<String,Object>> findJohapLogoList(Map<String, Object> reqMap) throws SQLException;
-
 	Map<String, Object> findPartiBidderInfo(Map<String, Object> params) throws SQLException;
 
 	List<Map<String, Object>> findPartiBidderPerList(Map<String, Object> params) throws SQLException;

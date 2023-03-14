@@ -45,17 +45,19 @@
 			</tr>
 			<tr>
 				<th>지역</th>
-				<td colspan="3">${infoData.SRA_PD_RGNNM }</td>
+				<td colspan="3">${infoData.ADDRESS }</td>
 			</tr>
 			<tr>
 				<th>등록구분</th>
-				<td colspan="3">${infoData.RG_DSC_NAME }</td>
+				<td class="ta-C bdr-y">${infoData.RG_DSC_NAME }</td>
+				<th>어미구분</th>
+				<td class="ta-C bdr-y">${infoData.MCOW_DSC_NAME }</td>
 			</tr>
 			<tr>
 				<th>중량</th>
 				<td class="ta-C bdr-y">${infoData.COW_SOG_WT }Kg</td>
 				<th>KPN</th>
-				<td class="ta-C">${infoData.KPN_NO }</td>
+				<td class="ta-C">${infoData.KPN_NO_STR }</td>
 			</tr>
 			<c:if test="${bdln_yn eq '1'}">
 			<tr>
@@ -71,6 +73,14 @@
 				<th>산차</th>
 				<td class="ta-C">${infoData.MATIME }</td>
 			</tr>
+			<c:if test="${inputParam.resultPopYn eq 'Y' }">
+				<tr>
+					<th>낙찰가</th>
+					<td class="ta-C bdr-y"><span class="c-red">${infoData.SRA_SBID_UPR }</span></td>
+					<th>낙찰자</th>
+					<td class="ta-C bdr-y"><span class="">${infoData.LVST_AUC_PTC_MN_NO }</span></td>
+				</tr>
+			</c:if>
 			<tr>
 				<th>비고</th>
 				<td colspan="3">${infoData.RMK_CNTN }</td>
@@ -170,11 +180,11 @@
 					<th class="ta-C bdr-n">사육지</th>
 				</tr>			
 				<c:forEach items="${ moveList }" var="item" varStatus="st">
-				<tr>
-					<td class="ta-C bdr-y">${ item.REGTYPE }</td>
-					<td class="ta-C bdr-y">${ item.FARMERNM }<br><span class="fz-32">${item.REGYMD}</span></td>
-					<td class="fz-32">${ item.FARMADDR }</td>
-				</tr>
+					<tr>
+						<td class="ta-C bdr-y">${ item.REGTYPE }</td>
+						<td class="ta-C bdr-y">${ item.FARMERNM_MASKING }<br><span class="fz-32">${item.REGYMD}</span></td>
+						<td class="fz-32">${ item.FARMADDR_MASKING }</td>
+					</tr>
 				</c:forEach>
 			</tbody>
 		</table>

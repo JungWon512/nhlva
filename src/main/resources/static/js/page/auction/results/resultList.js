@@ -14,6 +14,7 @@
     };
 
     var setBinding = function() {
+		$(".filter-box ").removeClass("active"); // 검색 후 필터 박스 초기화
         $(document).on("keydown","li.txt input", function(e){
 			if(e.keyCode == 13){
 				fnSearch();				
@@ -61,7 +62,7 @@
 			reportExcel('경매결과',head,body);
         });
                 
-      	$(document).on("click",".list_body .pd_ea a", function(){			
+      	$(document).on("click",".list_body li dl dd:not(.pd_pav)", function(){			
 			var pdEa = new String($(this).find('span').attr('fullstr'));	
 			var tr = $(this).closest('li');
 			
@@ -131,6 +132,7 @@
 					$("span.rangePrice").html( "0 ~ 1000만 원" );
 					rangeSetPrice();
 			}
+			fnSearch();		
         });
         
         $(document).on("keyup",".searchTxt", function(){
@@ -305,6 +307,8 @@
 				$("span.rangeDate").html(startDate.val() +"~"+ endDate.val() + "개월");
 				if (startDate[0].defaultValue == '0' && endDate[0].defaultValue == '10') {
 					$('.dateBtn').hide();
+					$("#startDate").val('');
+					$("#endDate").val('');
 				}  else {
 					$('.dateBtn').show();
 				}
@@ -330,6 +334,8 @@
 				$("span.rangePrice").html(startPrice.val() +"~"+ endPrice.val() + "만원");
 				if (startPrice[0].defaultValue == '0' && endPrice[0].defaultValue == '1000') {
 					$('.priceBtn').hide();
+					$("#highPrice").val('');
+					$("#lowPrice").val('');
 				} else {
 					$('.priceBtn').show();
 				}

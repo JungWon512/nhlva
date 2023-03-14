@@ -188,7 +188,7 @@
 			sHtml += '	<div class="btns">';
 			sHtml += '	<p style="color:red; font-size:18px; margin-bottom: 10px;">*최근 6개월 내 정산서만 검색 가능합니다.</p>';
 			sHtml += '	<button type="button" id="johap" class="btn_flag '+ (params.searchFlag == 'johap' ? "act" : "") +'">'+ data.johapData.AREANM +'축협</button>';
-			sHtml += '	<button type="button" id="all" class="btn_flag '+ (params.searchFlag == 'all' ? "act" : "") +'">전체축협</button>';
+			sHtml += '	<button type="button" id="all" class="btn_flag '+ (params.searchFlag == 'all' ? "act" : "") +'">전체축협</button>';		//TODO : 농가를 아예 통합회원에서 제거하게 되면 수정 or 제거해야 할 부분
 			sHtml += '</div>';
 			sHtml += '<p class="txt-result"><span class="fc-red">'+ data.info.length +'</span>건이 조회되었습니다.</p>';
 			sHtml += '<div class="date_bottom">';
@@ -210,7 +210,7 @@
 					sHtml += '						</li>';
 					sHtml += '						<li>';
 					sHtml += '							<strong>낙찰금액</strong>';
-					sHtml += '							<span><em class="fc-red">'+ fnSetComma(item.SRA_SBID_AM) +'</em>원</span>';
+					sHtml += '							<span><em class="fc-red">'+ fnSetComma(item.SRA_SBID_AM - item.SRA_TR_FEE) +'</em>원</span>';
 					sHtml += '						</li>';
 					sHtml += '					</ul>';
 					sHtml += '				</dd>';
@@ -232,6 +232,11 @@
 	}
 	
 	var fnSearch = function(){
+		if (!$("#searchDate").val()) {
+			modalAlert('','경매일자를 선택해주세요.');
+			return;
+		} 
+		
 		var param = {
 			naBzPlcNo : $("#naBzPlcNo").val()
 			, place : $("#naBzPlcNo").val()
@@ -262,7 +267,7 @@
 				sHtml += " <dd class='pd_kpn'>"+getStringValue(item.KPN_NO_STR)+"</dd>";	
 				sHtml += " <dd class='pd_num1'>"+getStringValue(item.SRA_INDV_PASG_QCN)+"</dd>";	
 				sHtml += " <dd class='pd_pay1 textNumber'>"+fnSetComma(getStringValue(item.LOWS_SBID_LMT_UPR))+"</dd>";	
-				sHtml += " <dd class='pd_pay2 textNumber'>"+fnSetComma(getStringValue(item.SRA_SBID_UPR))+"</dd>";	
+				sHtml += " <dd class='pd_pay2 textNumber'>"+fnSetComma(getStringValue(item.SRA_SBID_UPR == 0 ? '-' : item.SRA_SBID_UPR))+"</dd>";	
 				sHtml += " <dd class='pd_state'>"+getStringValue(item.SEL_STS_DSC_NAME)+"</dd>";	
 				sHtml += " <dd class='pd_etc'>"+getStringValue(item.RMK_CNTN)+"</dd>";	
 				sHtml += "</dl></li>";
@@ -278,31 +283,31 @@
 		var barChart;
 		
 	    // 송아지 낙찰평균 및 평균시세
-	    var barData1 = "";
-	    var barData2 = "";
+	    var barData1 = 0;
+	    var barData2 = 0;
 	    // 비육우 낙찰평균 및 평균시세
-	    var barData3 = "";
-	    var barData4 = "";
+	    var barData3 = 0;
+	    var barData4 = 0;
 	    // 번식우 낙찰평균 및 평균시세
-	    var barData5 = "";
-	    var barData6 = "";
+	    var barData5 = 0;
+	    var barData6 = 0;
 	    // 송아지, 비육우, 번식우 map 만들기
 	    let cowData1 = entryList.forEach(item => {
 			if (item.AUC_OBJ_DSC == '1') {
-				barData1 = item.AVG_MY_SBID_AM ?? 0;
-	   			barData2 = item.AVG_SBID_AM ?? 0;
+				barData1 = (Math.round(item.AVG_MY_SBID_AM / 1000 ?? 0));
+	   			barData2 = (Math.round(item.AVG_SBID_AM / 1000 ?? 0));
 			} else if (item.AUC_OBJ_DSC == '2') {
-				barData3 = item.AVG_MY_SBID_AM ?? 0;
-	   			barData4 = item.AVG_SBID_AM ?? 0;
+				barData3 = (Math.round(item.AVG_MY_SBID_AM / 1000 ?? 0));
+	   			barData4 = (Math.round(item.AVG_SBID_AM / 1000 ?? 0));
 			} else if (item.AUC_OBJ_DSC == '3') {
-				barData5 = item.AVG_MY_SBID_AM ?? 0;
-	   			barData6 = item.AVG_SBID_AM ?? 0;
+				barData5 = (Math.round(item.AVG_MY_SBID_AM / 1000 ?? 0));
+	   			barData6 = (Math.round(item.AVG_SBID_AM / 1000 ?? 0));
 			}
 		});
 		
 		// 차트 초기화
 		$('div.barChart').empty();
-    	$('div.barChart').append('<canvas id="myChartSample4"></canvas>');
+    	$('div.barChart').append('<canvas id="myChartSample4" class="bar_chart"></canvas>');
 	    
 	    // 막대 차트 생성
 		const ctx = $('#myChartSample4');
@@ -313,14 +318,14 @@
 				labels: ['송아지', '비육우', '번식우'],
 				datasets: [
 					{
-						label: '낙찰평균',
+						label: '낙찰평균(천원)',
 						data: [barData1, barData3, barData5],
 						borderColor: '#a5dfdf',
 						backgroundColor: '#a5dfdf',
 						yAxisID: 'y-left'
 					},
 					{
-						label: '평균시세',
+						label: '평균시세(천원)',
 						data: [barData2, barData4, barData6],
 						borderColor: '#9ad0f5',
 						backgroundColor: '#9ad0f5',

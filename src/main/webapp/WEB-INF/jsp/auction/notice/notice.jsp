@@ -15,7 +15,7 @@
 						<a href="javascript:;">
 							<dl>
 								<dt><c:out value="${vo.BBRD_TINM }" escapeXml="true" /></dt>
-								<dd>${vo.LSCHG_DTM }</dd>
+								<dd>${vo.FSRG_DTM }</dd>
 							</dl>
 						</a>
 					</div>

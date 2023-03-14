@@ -1,11 +1,11 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
 <%@ include file="/WEB-INF/__system/taglibs.jsp" %>
 <div class="kt-container">
-   <form name="frm_info" id="frm_info">
-   		<input type="hidden" name="place" value="${naBzPlcNo}" />
-   		<input type="hidden" name="auth_no" value="${authNoYmd.AUTH_NO}" />
-   		<input type="hidden" name="auth_ymd" value="${authNoYmd.AUTH_YMD}" />
-   		<div class="my_info">
+	<form name="frm_info" id="frm_info">
+		<input type="hidden" name="place" value="${naBzPlcNo}" />
+		<input type="hidden" name="auth_no" value="${authNoYmd.AUTH_NO}" />
+		<input type="hidden" name="auth_ymd" value="${authNoYmd.AUTH_YMD}" />
+		<div class="my_info">
 			<dl class="profile">
 				<dt class="photo">
 					<img src="/static/images/guide/v2/ic_my.svg" alt="기본프로필" />
@@ -20,8 +20,9 @@
 						</sec:authorize>
 					</sec:authorize>
 				</dd>
-				<dd class="mpno"><sec:authentication property="principal.cusMpno"/></dd>
+				<dd class="mpno" style="min-height:26px;"><sec:authentication property="principal.cusMpno"/></dd>
 				<dd class="intg_no">(회원번호 : <sec:authentication property="principal.mbIntgNo"/>)</dd>
+				<!-- TODO : 농가를 아예 통합회원에서 제거하게 되면 수정 or 제거해야 할 부분-->
 			</dl>
 			<a href="javascript:logoutProc();" role="button" class="btn-logout">로그아웃</a>
 			<ul class="menu_1">
@@ -61,5 +62,5 @@
 				</sec:authorize>
 			</ul>
 		</div>
-   </form>
+	</form>
 </div>
