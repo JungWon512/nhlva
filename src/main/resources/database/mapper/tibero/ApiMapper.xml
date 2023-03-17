@@ -58,7 +58,14 @@
 		   AND A.AUC_DT = TO_CHAR(SYSDATE, 'YYYYMMDD')
 		</otherwise>
 		</choose>
+		<choose>
+		<when test="aucObjDscStn != null and aucObjDscStn != ''">
+		   AND A.AUC_OBJ_DSC = #{aucObjDscStn}
+		</when>
+		<otherwise>
 		   AND A.AUC_OBJ_DSC = #{aucObjDsc}
+		</otherwise>
+		</choose>
 		   AND A.DEL_YN = '0'
 		<if test="rgSqno !=null and !rgSqno.equals('')">
 			AND A.RG_SQNO = #{rgSqno}
@@ -71,12 +78,20 @@
 	<select id="selectAucStnList" parameterType="map" resultType="map">
 		SELECT A.*
 			 , MAX(A.DDL_QCN) OVER(PARTITION BY A.NA_BZPLC, A.AUC_OBJ_DSC, A.AUC_DT, A.RG_SQNO) AS MAX_DDL_QCN
+			 , B.SIMP_CNM AS AUC_OBJ_DSCNM
 		  FROM TB_LA_IS_MH_AUC_STN A
+		  LEFT OUTER JOIN TB_LA_IS_MH_COMN_APL B
+			ON ( B.SIMP_TPC = 'AUC_OBJ_DSC'
+				  AND
+				  B.SIMP_C = A.AUC_OBJ_DSC
+				  AND
+				  B.SIMP_C_GRP_SQNO = '3'
+			 )
 		 WHERE A.AUC_DT = #{aucDt}
 		   AND A.NA_BZPLC = #{naBzplc}
-		   AND A.AUC_OBJ_DSC = #{aucObjDsc}
+		   AND A.AUC_OBJ_DSC = CASE WHEN #{aucObjDsc} = '0' THEN A.AUC_OBJ_DSC ELSE #{aucObjDsc} END
 		   AND A.DEL_YN = '0'
-		 ORDER BY A.RG_SQNO ASC 
+		 ORDER BY A.RG_SQNO ASC
 	</select>
 	
 	<select id="sealectAuctCowCnt" parameterType="map" resultType="java.lang.Integer">
@@ -166,6 +181,7 @@
 				C.INDV_ID_NO,                   <!--  개체식별번호     -->
 				C.SRA_INDV_BRDSRA_RG_NO,                <!-- 축산개체종축등록번호    -->
 				C.RG_DSC,                    <!--  등록구분코드     -->
+				D.SIMP_CNM AS RG_DSC_NM,     <!--  등록구분코드명 -->
 				C.ANW_YN,                    <!--  신규여부(데이터전환시 구데이터인지) -->
 				CASE WHEN C.INDV_SEX_C = '0' THEN '없음' WHEN C.INDV_SEX_C = '1' THEN '암'
 				WHEN C.INDV_SEX_C = '2' THEN '수'   WHEN C.INDV_SEX_C = '3' THEN '거세'
@@ -173,10 +189,11 @@
 				WHEN C.INDV_SEX_C = '6' THEN '프리마틴'  WHEN C.INDV_SEX_C = '9' THEN '공통' END INDV_SEX_C_NAME, <!--  성별 문자열  -->
 				E.SIMP_C,                      <!-- 혈통코드 -->
 				E.SIMP_CNM AS MCOW_DSC ,                  <!-- 혈통명  -->
+				E.SIMP_CNM AS MCOW_DSC_NM ,                  <!-- 혈통명  -->
 				TO_CHAR(TO_DATE(C.BIRTH,'YYYYMMDD'),'YY.MM.DD') BIRTH_STR,
 				CASE WHEN MONTHS_BETWEEN(TO_DATE(A.AUC_DT,'YYYYMMDD'), TO_DATE(C.BIRTH,'YYYYMMDD')) <![CDATA[<=]]> 4 THEN 4
 					 ELSE TRUNC(MONTHS_BETWEEN(TO_DATE(A.AUC_DT,'YYYYMMDD'), TO_DATE(C.BIRTH,'YYYYMMDD')))
-				 END GAP_MONTH,
+				 END GAP_MONTH2,
 				CASE WHEN MONTHS_BETWEEN(TO_DATE(A.AUC_DT,'YYYYMMDD'), TO_DATE(C.BIRTH,'YYYYMMDD')) <![CDATA[<]]> 4 THEN 0
 					 ELSE GREATEST(TO_DATE(A.AUC_DT,'YYYYMMDD') - ADD_MONTHS(TO_DATE(C.BIRTH,'YYYYMMDD'), TRUNC(MONTHS_BETWEEN(TO_DATE(A.AUC_DT,'YYYYMMDD'), TO_DATE(C.BIRTH,'YYYYMMDD')))) + 1, 0) - 1
 				 END GAP_DAY
@@ -199,6 +216,12 @@
 						ELSE ROUND(A.SRA_SBID_AM / 10000)
 					END AS SRA_SBID_AM
 				 , (SELECT F.QCN FROM TB_LA_IS_MH_AUC_QCN F WHERE F.NA_BZPLC = A.NA_BZPLC AND F.AUC_DT = A.AUC_DT AND F.AUC_OBJ_DSC = NVL(#{aucObjDsc}, F.AUC_OBJ_DSC) AND ROWNUM = 1) AS QCN
+				 , CASE WHEN A.SEL_STS_DSC = '22' THEN (SELECT Z.SRA_MWMNNM FROM TB_LA_IS_MM_MWMN Z WHERE Z.NA_BZPLC = A.NA_BZPLC AND Z.TRMN_AMNNO = A.TRMN_AMNNO)
+						ELSE ''
+					END AS SRA_MWMNNM
+				 , CASE WHEN TRUNC(MONTHS_BETWEEN(TO_DATE(A.AUC_DT,'YYYYMMDD'), TO_DATE(C.BIRTH,'YYYYMMDD'))) +1 <![CDATA[<= 4]]> AND A.NA_BZPLC NOT IN ('8808990656199', '8808990656434') THEN 4 
+						ELSE TRUNC(MONTHS_BETWEEN(TO_DATE(A.AUC_DT,'YYYYMMDD'), TO_DATE(C.BIRTH,'YYYYMMDD'))) +1
+					END AS GAP_MONTH
 			  FROM TB_LA_IS_MH_SOG_COW A
 			  LEFT OUTER JOIN TB_LA_IS_MM_FHS B
 				ON (
@@ -233,7 +256,21 @@
 							  FROM TB_LA_IS_MH_ATDR_LOG A
 							 WHERE A.NA_BZPLC = #{naBzplc}
 							   AND A.AUC_DT = #{aucDt}
+						<choose>
+						<when test="aucObjDscStn != null and aucObjDscStn != ''">
+							<choose>
+							<when test='"4".equals(aucObjDscStn)'>
+							   AND A.AUC_OBJ_DSC <![CDATA[<>]]> '1'
+							</when> 
+							<otherwise>
+							   AND A.AUC_OBJ_DSC = CASE WHEN #{aucObjDscStn} = '0' THEN A.AUC_OBJ_DSC ELSE #{aucObjDscStn} END
+							</otherwise>
+							</choose>
+						</when>
+						<otherwise>
 							   AND A.AUC_OBJ_DSC = CASE WHEN #{aucObjDsc} = '0' THEN A.AUC_OBJ_DSC ELSE #{aucObjDsc} END
+						</otherwise>
+						</choose>
 							   AND A.RG_SQNO NOT IN ('0', '99999999')
 						 ) B
 					 WHERE B.BID_NUM = 1
@@ -254,7 +291,21 @@
 				ON ( A.NA_BZPLC = J.NA_BZPLC )
 			 WHERE A.NA_BZPLC = #{naBzplc}
 			   AND A.AUC_DT  = #{aucDt}
+		<choose>
+		<when test="aucObjDscStn != null and aucObjDscStn != ''">
+			<choose>
+			<when test='"4".equals(aucObjDscStn)'>
+			   AND A.AUC_OBJ_DSC <![CDATA[<>]]> '1'
+			</when> 
+			<otherwise>
+			   AND A.AUC_OBJ_DSC = CASE WHEN #{aucObjDscStn} = '0' THEN A.AUC_OBJ_DSC ELSE #{aucObjDscStn} END
+			</otherwise>
+			</choose>
+		</when>
+		<otherwise>
 			   AND A.AUC_OBJ_DSC = CASE WHEN #{aucObjDsc} = '0' THEN A.AUC_OBJ_DSC ELSE #{aucObjDsc} END
+		</otherwise>
+		</choose>
 			   AND A.DEL_YN = '0'
 			<if test="mAuctionResult !=null and !mAuctionResult.equals('')">
 			   AND A.SEL_STS_DSC = #{mAuctionResult}
@@ -496,7 +547,21 @@
 			 , LSCHG_DTM = SYSDATE
 			 , LS_CMENO = #{lsCmeno}
 		 WHERE NA_BZPLC = #{naBzPlc}
+	<choose>
+	<when test="aucObjDscStn != null and aucObjDscStn != ''">
+		<choose>
+		<when test='"4".equals(aucObjDscStn)'>
+		   AND AUC_OBJ_DSC <![CDATA[<>]]> '1'
+		</when> 
+		<otherwise>
+		   AND AUC_OBJ_DSC = CASE WHEN #{aucObjDscStn} = '0' THEN AUC_OBJ_DSC ELSE #{aucObjDscStn} END
+		</otherwise>
+		</choose>
+	</when>
+	<otherwise>
 		   AND AUC_OBJ_DSC = CASE WHEN #{aucObjDsc} = '0' THEN AUC_OBJ_DSC ELSE #{aucObjDsc} END
+	</otherwise>
+	</choose>
 		   AND AUC_DT = #{aucDt}
 		<if test='"start".equals(status)'>
 		<![CDATA[
@@ -520,7 +585,21 @@
 			, LSCHG_DTM = SYSDATE
 			, LS_CMENO = #{lsCmeno}
 		WHERE NA_BZPLC = #{naBzPlc}
-		AND AUC_OBJ_DSC = CASE WHEN #{aucObjDsc} = '0' THEN AUC_OBJ_DSC ELSE #{aucObjDsc} END
+	<choose>
+	<when test="aucObjDscStn != null and aucObjDscStn != ''">
+		<choose>
+		<when test='"4".equals(aucObjDscStn)'>
+		   AND AUC_OBJ_DSC <![CDATA[<>]]> '1'
+		</when> 
+		<otherwise>
+		   AND AUC_OBJ_DSC = CASE WHEN #{aucObjDscStn} = '0' THEN AUC_OBJ_DSC ELSE #{aucObjDscStn} END
+		</otherwise>
+		</choose>
+	</when>
+	<otherwise>
+		   AND AUC_OBJ_DSC = CASE WHEN #{aucObjDsc} = '0' THEN AUC_OBJ_DSC ELSE #{aucObjDsc} END
+	</otherwise>
+	</choose>
 		AND AUC_DT = #{aucDt}
 		<![CDATA[
 		AND LOWS_SBID_LMT_AM > 0
@@ -877,7 +956,21 @@
 						  FROM TB_LA_IS_MH_ATDR_LOG A
 						 WHERE NA_BZPLC = #{naBzplc}
 						   AND AUC_DT = #{aucDt}
+					<choose>
+					<when test="aucObjDscStn != null and aucObjDscStn != ''">
+						<choose>
+						<when test='"4".equals(aucObjDscStn)'>
+						   AND A.AUC_OBJ_DSC <![CDATA[<>]]> '1'
+						</when> 
+						<otherwise>
+						   AND A.AUC_OBJ_DSC = CASE WHEN #{aucObjDscStn} = '0' THEN A.AUC_OBJ_DSC ELSE #{aucObjDscStn} END
+						</otherwise>
+						</choose>
+					</when>
+					<otherwise>
 						   AND A.AUC_OBJ_DSC = CASE WHEN #{aucObjDsc} = '0' THEN A.AUC_OBJ_DSC ELSE #{aucObjDsc} END
+					</otherwise>
+					</choose>
 						   AND RG_SQNO NOT IN ('0', '99999999')
 					 ) B
 				 WHERE BID_NUM = 1
@@ -902,7 +995,21 @@
 		   )
 		 WHERE A.NA_BZPLC = #{naBzplc}
 		   AND A.AUC_DT = #{aucDt}
+	<choose>
+	<when test="aucObjDscStn != null and aucObjDscStn != ''">
+		<choose>
+		<when test='"4".equals(aucObjDscStn)'>
+		   AND A.AUC_OBJ_DSC <![CDATA[<>]]> '1'
+		</when> 
+		<otherwise>
+		   AND A.AUC_OBJ_DSC = CASE WHEN #{aucObjDscStn} = '0' THEN A.AUC_OBJ_DSC ELSE #{aucObjDscStn} END
+		</otherwise>
+		</choose>
+	</when>
+	<otherwise>
 		   AND A.AUC_OBJ_DSC = CASE WHEN #{aucObjDsc} = '0' THEN A.AUC_OBJ_DSC ELSE #{aucObjDsc} END
+	</otherwise>
+	</choose>
 		   AND A.SEL_STS_DSC <![CDATA[<>]]> '22'
 		   AND A.AUC_PRG_SQ BETWEEN #{stAucNo} AND #{edAucNo}
 		   AND A.LOWS_SBID_LMT_AM > 0
@@ -1132,6 +1239,7 @@
 				C.INDV_ID_NO,                   <!--  개체식별번호     -->
 				C.SRA_INDV_BRDSRA_RG_NO,                <!-- 축산개체종축등록번호    -->
 				C.RG_DSC,                    <!--  등록구분코드     -->
+				D.SIMP_CNM AS RG_DSC_NM,     <!--  등록구분코드명    -->
 				C.ANW_YN,                    <!--  신규여부(데이터전환시 구데이터인지) -->
 				CASE WHEN C.INDV_SEX_C = '0' THEN '없음' WHEN C.INDV_SEX_C = '1' THEN '암'
 				WHEN C.INDV_SEX_C = '2' THEN '수'   WHEN C.INDV_SEX_C = '3' THEN '거세'
@@ -1139,6 +1247,7 @@
 				WHEN C.INDV_SEX_C = '6' THEN '프리마틴'  WHEN C.INDV_SEX_C = '9' THEN '공통' END INDV_SEX_C_NAME, <!--  성별 문자열  -->
 				E.SIMP_C,                      <!-- 혈통코드 -->
 				E.SIMP_CNM AS MCOW_DSC ,                  <!-- 혈통명  -->
+				E.SIMP_CNM AS MCOW_DSC_NM ,                  <!-- 혈통명  -->
 				(SELECT C.QCN FROM TB_LA_IS_MH_AUC_QCN C WHERE C.NA_BZPLC = A.NA_BZPLC AND C.AUC_DT = A.AUC_DT AND C.AUC_OBJ_DSC = #{aucObjDsc} AND ROWNUM = 1) AS QCN,  <!-- 차수 -->	     
 				TO_CHAR(TO_DATE(C.BIRTH,'YYYYMMDD'),'YY.MM.DD') BIRTH_STR,
 				CASE WHEN MONTHS_BETWEEN(TO_DATE(A.AUC_DT,'YYYYMMDD'), TO_DATE(C.BIRTH,'YYYYMMDD')) <![CDATA[<=]]> 4 THEN 4
@@ -1166,6 +1275,9 @@
 						WHEN A.AUC_OBJ_DSC = '3' THEN ROUND(A.SRA_SBID_AM / NVL(J.PPGCOW_AUC_ATDR_UNT_AM, 10000))
 						ELSE ROUND(A.SRA_SBID_AM / 10000)
 					END AS SRA_SBID_AM
+				 , CASE WHEN A.SEL_STS_DSC = '22' THEN (SELECT Z.SRA_MWMNNM FROM TB_LA_IS_MM_MWMN Z WHERE Z.NA_BZPLC = A.NA_BZPLC AND Z.TRMN_AMNNO = A.TRMN_AMNNO)
+						ELSE ''
+					END AS SRA_MWMNNM
 			  FROM TB_LA_IS_MH_SOG_COW A
 			  LEFT OUTER JOIN TB_LA_IS_MM_FHS B
 				ON (
@@ -1200,10 +1312,24 @@
 							  FROM TB_LA_IS_MH_ATDR_LOG A
 							 WHERE A.NA_BZPLC = #{naBzplc}
 							   AND A.AUC_DT = #{aucDt}
-							   <if test="trmnAmnno !=null and !trmnAmnno.equals('')">
-							 	  AND A.TRMN_AMNNO = #{trmnAmnno}
-							   </if>
+							<if test="trmnAmnno !=null and !trmnAmnno.equals('')">
+							   AND A.TRMN_AMNNO = #{trmnAmnno}
+							</if>
+						<choose>
+						<when test="aucObjDscStn != null and aucObjDscStn != ''">
+							<choose>
+							<when test='"4".equals(aucObjDscStn)'>
+							   AND A.AUC_OBJ_DSC <![CDATA[<>]]> '1'
+							</when> 
+							<otherwise>
+							   AND A.AUC_OBJ_DSC = CASE WHEN #{aucObjDscStn} = '0' THEN A.AUC_OBJ_DSC ELSE #{aucObjDscStn} END
+							</otherwise>
+							</choose>
+						</when>
+						<otherwise>
 							   AND A.AUC_OBJ_DSC = CASE WHEN #{aucObjDsc} = '0' THEN A.AUC_OBJ_DSC ELSE #{aucObjDsc} END
+						</otherwise>
+						</choose>
 							   AND A.RG_SQNO NOT IN ('0', '99999999')
 						 ) B
 					 WHERE B.BID_NUM = 1
@@ -1236,7 +1362,21 @@
 				ON ( A.NA_BZPLC = J.NA_BZPLC )
 			 WHERE A.NA_BZPLC = #{naBzplc}
 			   AND A.AUC_DT  = #{aucDt}
+		<choose>
+		<when test="aucObjDscStn != null and aucObjDscStn != ''">
+			<choose>
+			<when test='"4".equals(aucObjDscStn)'>
+			   AND A.AUC_OBJ_DSC <![CDATA[<>]]> '1'
+			</when> 
+			<otherwise>
+			   AND A.AUC_OBJ_DSC = CASE WHEN #{aucObjDscStn} = '0' THEN A.AUC_OBJ_DSC ELSE #{aucObjDscStn} END
+			</otherwise>
+			</choose>
+		</when>
+		<otherwise>
 			   AND A.AUC_OBJ_DSC = CASE WHEN #{aucObjDsc} = '0' THEN A.AUC_OBJ_DSC ELSE #{aucObjDsc} END
+		</otherwise>
+		</choose>
 			<if test="stAucNo !=null and !stAucNo.equals('') and edAucNo !=null and !edAucNo.equals('')">
 			   AND A.AUC_PRG_SQ <![CDATA[>=]]> #{stAucNo}
 			   AND A.AUC_PRG_SQ <![CDATA[<=]]> #{edAucNo}

@@ -347,7 +347,9 @@ public class ApiController {
 					  .append("N").append('|')								// 초과 줄장우 여부
 					  .append(this.getStringValue(vo.get("SRA_SBID_AM")).replace("|", ",")).append('|')	//실-낙찰금액
 					  .append(this.getStringValue(vo.get("LSCHG_DTM")).replace("|", ",")).append('|')
-					  .append(this.getStringValue(vo.get("SRA_MWMNNM")).replace("|", ","));	// 낙찰자 이름
+					  .append(this.getStringValue(vo.get("SRA_MWMNNM")).replace("|", ",")).append('|')	// 낙찰자 이름
+					  .append(this.getStringValue(vo.get("MTCN")).replace("|", ",")).append('|')	// 월령(이력제)
+					  .append(this.getStringValue(vo.get("RG_DSC_NM")).replace("|", ","));	// 등록 구분
 
 					entryList.add(sb.toString());
 				}
