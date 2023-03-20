@@ -365,7 +365,7 @@
 	
 	<select id="findSbidPriceInfo" parameterType="map" resultType="map">
 		SELECT M.* 
-			, '-1000' AS TOT_SBID_CHG
+			, (M.TOT_SBID_CNT - M.TOT_SBID_CNT_B) AS TOT_SBID_CHG
 			, (M.MAX_SBID_UPR - M.MAX_SBID_UPR_B) AS MAX_SBID_CHG
 			, (M.MIN_SBID_UPR - M.MIN_SBID_UPR_B) AS MIN_SBID_CHG
 			, (M.AVG_SBID_UPR - M.AVG_SBID_UPR_B) AS AVG_SBID_CHG
