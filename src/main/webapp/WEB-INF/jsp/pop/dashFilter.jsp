@@ -14,13 +14,13 @@
 	<div class="filter-area">
 		<ul class="radio_group step1">
 			<li>
-				<input type="radio" name="radioG1" id="ra1_1" value="range10" <c:if test="${inputParam.searchRaDate eq 'range10' || inputParam.searchRaDate eq ''}">checked</c:if>><label for="ra1_1">10일</label>
+				<input type="radio" name="radioG1" id="ra1_1" value="range10" <c:if test="${inputParam.searchRaDate eq 'range10'}">checked</c:if>><label for="ra1_1">10일</label>
 			</li>
 			<li>
 				<input type="radio" name="radioG1" id="ra1_2" value="range20" <c:if test="${inputParam.searchRaDate eq 'range20'}">checked</c:if>><label for="ra1_2">20일</label>
 			</li>
 			<li>
-				<input type="radio" name="radioG1" id="ra1_3" value="range30" <c:if test="${inputParam.searchRaDate eq 'range30'}">checked</c:if>><label for="ra1_3">30일</label>
+				<input type="radio" name="radioG1" id="ra1_3" value="range30" <c:if test="${inputParam.searchRaDate eq 'range30' || inputParam.searchRaDate eq ''}">checked</c:if>><label for="ra1_3">30일</label>
 			</li>
 		</ul>
 		<ul class="radio_group step2">

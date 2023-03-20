@@ -119,7 +119,6 @@
 					<!-- <li style="margin-top:5px;">2021.06.20 이용약관 <a href="javascript:pageMove('/agreement/210620');" id="20210620" style=" color: #007eff;">[변경내용보기]</a></li> -->
 				</ul>
 			</div>
-			<button id="btn_top_move"><span class="sr-only">TOP</span></button>
 		</section>
 	</div>
 </div>

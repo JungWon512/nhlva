@@ -29,6 +29,7 @@
 			<tiles:insertAttribute name="content"/>
 		</section>
 		<!-- //footer e -->
+		<button id="btn_top_move"><span class="sr-only">TOP</span></button>
 	</div>	
 	<!-- //wrap e -->
 	<tiles:insertAttribute name="body_footer_script"/>

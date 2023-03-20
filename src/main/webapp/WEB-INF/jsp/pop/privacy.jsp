@@ -344,6 +344,5 @@
 					</li>
 				</ul>
 			</div>
-			<button id="btn_top_move"><span class="sr-only">TOP</span></button>
 		</section>
 </div>

@@ -50,14 +50,17 @@
 						AND A.NA_BZPLCLOC = #{searchPlace}
 					</if>
 			        <choose>
-						<when test='"range20".equals(searchRaDate)'>
-							AND A.AUC_DT BETWEEN TO_CHAR(SYSDATE - 21, 'YYYYMMDD') AND TO_CHAR(SYSDATE-2, 'YYYYMMDD')
-						</when>
 						<when test='"range30".equals(searchRaDate)'>
 							AND A.AUC_DT BETWEEN TO_CHAR(SYSDATE - 31, 'YYYYMMDD') AND TO_CHAR(SYSDATE-2, 'YYYYMMDD')
 						</when>
-						<otherwise>
+						<when test='"range20".equals(searchRaDate)'>
+							AND A.AUC_DT BETWEEN TO_CHAR(SYSDATE - 21, 'YYYYMMDD') AND TO_CHAR(SYSDATE-2, 'YYYYMMDD')
+						</when>
+						<when test='"range10".equals(searchRaDate)'>
 							AND A.AUC_DT BETWEEN TO_CHAR(SYSDATE - 11, 'YYYYMMDD') AND TO_CHAR(SYSDATE-2, 'YYYYMMDD')
+						</when>
+						<otherwise>
+							AND A.AUC_DT BETWEEN TO_CHAR(SYSDATE - 31, 'YYYYMMDD') AND TO_CHAR(SYSDATE-2, 'YYYYMMDD')
 						</otherwise>
 					</choose>
 					AND NVL(A.SBID_SUM_AMT, 0) <![CDATA[>]]> 0
@@ -94,6 +97,9 @@
 					AND A.NA_BZPLCLOC = #{searchPlace}
 				</if>
 		        <choose>
+					<when test='"range10".equals(searchRaDate)'>
+						AND A.AUC_DT BETWEEN TO_CHAR(SYSDATE - 10, 'YYYYMMDD') AND TO_CHAR(SYSDATE-1, 'YYYYMMDD')
+					</when>
 					<when test='"range20".equals(searchRaDate)'>
 						AND A.AUC_DT BETWEEN TO_CHAR(SYSDATE - 20, 'YYYYMMDD') AND TO_CHAR(SYSDATE-1, 'YYYYMMDD')
 					</when>
@@ -101,7 +107,7 @@
 						AND A.AUC_DT BETWEEN TO_CHAR(SYSDATE - 30, 'YYYYMMDD') AND TO_CHAR(SYSDATE-1, 'YYYYMMDD')
 					</when>
 					<otherwise>
-						AND A.AUC_DT BETWEEN TO_CHAR(SYSDATE - 10, 'YYYYMMDD') AND TO_CHAR(SYSDATE-1, 'YYYYMMDD')
+						AND A.AUC_DT BETWEEN TO_CHAR(SYSDATE - 30, 'YYYYMMDD') AND TO_CHAR(SYSDATE-1, 'YYYYMMDD')
 					</otherwise>
 				</choose>
 			WHERE 1=1
@@ -126,6 +132,9 @@
 			AND B.AUC_OBJ_DSC = #{searchAucObjDsc}
 		</if>
 		<choose>
+			<when test='"range10".equals(searchRaDate)'>
+				AND B.AUC_DT BETWEEN TO_CHAR(SYSDATE - 10, 'YYYYMMDD') AND TO_CHAR(SYSDATE-1, 'YYYYMMDD')
+			</when>
 			<when test='"range20".equals(searchRaDate)'>
 				AND B.AUC_DT BETWEEN TO_CHAR(SYSDATE - 20, 'YYYYMMDD') AND TO_CHAR(SYSDATE-1, 'YYYYMMDD')
 			</when>
@@ -133,7 +142,7 @@
 				AND B.AUC_DT BETWEEN TO_CHAR(SYSDATE - 30, 'YYYYMMDD') AND TO_CHAR(SYSDATE-1, 'YYYYMMDD')
 			</when>
 			<otherwise>
-				AND B.AUC_DT BETWEEN TO_CHAR(SYSDATE - 10, 'YYYYMMDD') AND TO_CHAR(SYSDATE-1, 'YYYYMMDD')
+				AND B.AUC_DT BETWEEN TO_CHAR(SYSDATE - 30, 'YYYYMMDD') AND TO_CHAR(SYSDATE-1, 'YYYYMMDD')
 			</otherwise>
 		</choose>
 		WHERE 1=1

@@ -27,7 +27,7 @@
 	<div class="sec-board">
 		<div class="tit-area">
 			<h2 class="sec-tit" style="margin-bottom:10px;">최근 가축시장 시세</h2>
-			<h5 style="font-size:82%;margin-bottom:8px;">※ 가축시장 실거래 데이터 기반입니다.</h5>
+			<h5 style="font-size:82%;margin-bottom:8px;">※ 가축시장 실거래 데이터(89개 축협) 기반입니다.</h5>
 			<a href="javascript:;" id="dashboard_filter" class="btn-more"
 				style="width: 30px;height: 30px;background: url(/static/images/guide/v2/ico-filter.svg) no-repeat 50% 50%;background-size: 23px auto;"></a>
 		</div>
@@ -58,6 +58,7 @@
 											<div class="price"><fmt:formatNumber value="${cowPriceVo.THIS_AVG_SBID_AM}" type="number" /> 원 <span class="per fc-blue">▼ ${acs_sbid_am} %</span></div>
 										</c:otherwise>
 									</c:choose>
+									<div class="pre price"><fmt:formatNumber value="${cowPriceVo.PRE_AVG_SBID_AM}" type="number" /> 원 <span class="per"></span></div>
 									
 									<c:choose>
 										<c:when test="${acs_sbid_cnt > 0}">
@@ -67,6 +68,7 @@
 											<div class="num"><fmt:formatNumber value="${cowPriceVo.THIS_SUM_SBID_CNT}" type="number" /> 두 <span class="per fc-blue">▼ ${acs_sbid_cnt} %</span></div>
 										</c:otherwise>
 									</c:choose>
+									<div class="pre num"><fmt:formatNumber value="${cowPriceVo.PRE_SUM_SBID_CNT}" type="number" /> 두 <span class="per"></span></div>
 								</dd>		
 							</dl>
 						</li>

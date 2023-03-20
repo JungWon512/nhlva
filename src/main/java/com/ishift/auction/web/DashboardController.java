@@ -110,7 +110,7 @@ public class DashboardController {
 		// 메인화면 현황
 		ModelAndView mav = new ModelAndView("dashboard/main");
 		// 기준 날짜 range (초기값 10)
-		int range = Integer.parseInt(StringUtils.isEmpty(params.get("searchRaDate")) ? "10" : params.get("searchRaDate").toString().replaceAll("range", "")); 
+		int range = Integer.parseInt(StringUtils.isEmpty(params.get("searchRaDate")) ? "30" : params.get("searchRaDate").toString().replaceAll("range", "")); 
 		
 		// 데이터는 오늘 -1이 들어오기때문에 minusDays(1) 설정
 		String searchDate = LocalDate.now().minusDays(1).format(DateTimeFormatter.ofPattern("yyyyMMdd"));

@@ -2158,6 +2158,11 @@ canvas.bar_chart {
 	font-size: 16px;
 	font-weight: 700;
 }
+.list-market .item div.pre {
+	color: #6b5a5a;
+	font-size: 10px;
+	font-weight: 300;
+}
 
 .list-market .item dt {
 	position: absolute;
@@ -2184,6 +2189,10 @@ canvas.bar_chart {
 
 .list-market .item .price {
 	margin-bottom: 16px;
+	color: #007eff;
+}
+.list-market .item .price {
+	margin-bottom: 0px;
 	color: #007eff;
 }
 
@@ -4083,10 +4092,15 @@ canvas.bar_chart {
 	.list-market .item .price {
 		margin-bottom: 8px;
 	}
+	.list-market .item .pre.price {
+		margin-bottom: 4px;
+	}
 	
 	.list-market .item .per {
-		/* width: 70px; */
-		width: 50px;
+	    position: relative;
+	    top: 5px;
+/* 		width: 70px; */
+		width: 60px;
 		font-size: 12px;
 	}
 	
@@ -4747,6 +4761,7 @@ canvas.bar_chart {
 
 	.page-board-main .sec-board:nth-of-type(2) {
 		margin-bottom: 70px;
+		padding-top: 55px;
 	}
 
 	.page-board-main .sec-board:nth-of-type(2) .white-box {

@@ -119,13 +119,13 @@
 				//낙찰 총 두수 (증감두수 표시)
 				$(".tot_sbid_cnt").text(fnSetComma(sbidInfo.TOT_SBID_CNT) + " 두");
 				if(sbidInfo.TOT_SBID_CHG > 0) {
-					totChgHtml = "▲ "+ sbidInfo.TOT_SBID_CHG + " 두";
+					totChgHtml = "▲ "+ fnSetComma(sbidInfo.TOT_SBID_CHG) + " 두";
 					$(".tot_sbid_chg_txt").text(totChgHtml).removeClass("fc-blue fc-red").addClass("fc-red");
 				}else if(sbidInfo.TOT_SBID_CHG == 0){
-					totChgHtml = "- "+ sbidInfo.TOT_SBID_CHG + " 두";
+					totChgHtml = "- "+ fnSetComma(sbidInfo.TOT_SBID_CHG) + " 두";
 					$(".tot_sbid_chg_txt").text(totChgHtml).removeClass("fc-blue fc-red").addClass("fc-blue");
 				}else{
-					totChgHtml = "▼ "+ Math.abs(sbidInfo.TOT_SBID_CHG) + " 두";
+					totChgHtml = "▼ "+ fnSetComma(Math.abs(sbidInfo.TOT_SBID_CHG)) + " 두";
 					$(".tot_sbid_chg_txt").text(totChgHtml).removeClass("fc-blue fc-red").addClass("fc-blue");
 				}
 				$(".month_old_c_nm").text(sbidInfo.MONTH_OLD_C_NM == null ? "전체" : sbidInfo.MONTH_OLD_C_NM);

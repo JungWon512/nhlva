@@ -19,15 +19,21 @@
 					<strong><fmt:formatNumber value="${TOT_SBID_CNT}" type="number" /> 두</strong>
 					<c:choose>
 						<c:when test="${TOT_SBID_CHG > 0 }">
-							<c:set var="tot_sbid_chg_txt" value="▲ ${TOT_SBID_CHG} 두" />
+							<c:set var="tot_sbid_chg_txt">
+								▲ <fmt:formatNumber value="${TOT_SBID_CHG}" type="number" /> 두
+							</c:set>
 							<span class="tot_sbid_chg_txt fc-red">${tot_sbid_chg_txt }</span>
 						</c:when>
 						<c:when test="${sbidInfo.TOT_SBID_CHG eq 0 }">
-							<c:set var="tot_sbid_chg_txt" value="- ${TOT_SBID_CHG} 두" />
+							<c:set var="tot_sbid_chg_txt">
+								- <fmt:formatNumber value="${TOT_SBID_CHG}" type="number" /> 두
+							</c:set>
 							<span class="tot_sbid_chg_txt fc-blue">${tot_sbid_chg_txt }</span>
 						</c:when>
 						<c:otherwise>
-							<c:set var="tot_sbid_chg_txt" value="▼ ${fn:replace(TOT_SBID_CHG, '-', '')} 두" />
+							<c:set var="tot_sbid_chg_txt">							
+								▼ <fmt:formatNumber value="${fn:replace(TOT_SBID_CHG, '-', '')}" type="number" /> 두
+							</c:set>
 							<span class="tot_sbid_chg_txt fc-blue">${tot_sbid_chg_txt }</span>
 						</c:otherwise>
 					</c:choose>
