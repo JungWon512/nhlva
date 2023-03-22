@@ -24,14 +24,14 @@
 							</c:set>
 							<span class="tot_sbid_chg_txt fc-red">${tot_sbid_chg_txt }</span>
 						</c:when>
-						<c:when test="${sbidInfo.TOT_SBID_CHG eq 0 }">
+						<c:when test="${TOT_SBID_CHG eq 0 }">
 							<c:set var="tot_sbid_chg_txt">
 								- <fmt:formatNumber value="${TOT_SBID_CHG}" type="number" /> 두
 							</c:set>
 							<span class="tot_sbid_chg_txt fc-blue">${tot_sbid_chg_txt }</span>
 						</c:when>
 						<c:otherwise>
-							<c:set var="tot_sbid_chg_txt">							
+							<c:set var="tot_sbid_chg_txt">
 								▼ <fmt:formatNumber value="${fn:replace(TOT_SBID_CHG, '-', '')}" type="number" /> 두
 							</c:set>
 							<span class="tot_sbid_chg_txt fc-blue">${tot_sbid_chg_txt }</span>
@@ -305,8 +305,8 @@ currData.push("${sbidInfo.AVG_SBID_UPR}" == undefined ? 0 : Math.round("${sbidIn
 currData.push("${sbidInfo.MIN_SBID_UPR}" == undefined ? 0 : Math.round("${sbidInfo.MIN_SBID_UPR}" / 10000));
 
 prevData.push("${sbidInfo.MAX_SBID_UPR_B}" == undefined ? 0 : Math.round("${sbidInfo.MAX_SBID_UPR_B}" / 10000));
-prevData.push("${sbidInfo.MIN_SBID_UPR_B}" == undefined ? 0 : Math.round("${sbidInfo.MIN_SBID_UPR_B}" / 10000));
 prevData.push("${sbidInfo.AVG_SBID_UPR_B}" == undefined ? 0 : Math.round("${sbidInfo.AVG_SBID_UPR_B}" / 10000));
+prevData.push("${sbidInfo.MIN_SBID_UPR_B}" == undefined ? 0 : Math.round("${sbidInfo.MIN_SBID_UPR_B}" / 10000));
 
 new Chart(ctx4, {
 	type: 'bar',

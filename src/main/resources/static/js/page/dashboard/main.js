@@ -143,13 +143,11 @@ var searchAjax = function () {
 				} else {
 					sHtml.push('		<div class="price">'+ fnSetComma(e.THIS_AVG_SBID_AM || 0) +' 원 <span class="per fc-blue">▼ '+ e.ACS_SBID_AM +' %</span></div>');										
 				}
-				sHtml.push('		<div class="pre price">'+ fnSetComma(e.PRE_AVG_SBID_AM || 0) +' 원 <span class="per"></span></div>');
 				if (e.ACS_SBID_CNT > 0) {
 					sHtml.push('		<div class="num">'+ fnSetComma(e.THIS_SUM_SBID_CNT || 0) +' 두 <span class="per fc-red">▲ '+ e.ACS_SBID_CNT +' %</span></div>');
 				} else {
 					sHtml.push('		<div class="num">'+ fnSetComma(e.THIS_SUM_SBID_CNT || 0) +' 두 <span class="per fc-blue">▼ '+ e.ACS_SBID_CNT +' %</span></div>');
 				}
-				sHtml.push('		<div class="pre num">'+ fnSetComma(e.PRE_SUM_SBID_CNT || 0) +' 두 <span class="per"></span></div>');
 				sHtml.push('		</dd>');
 				sHtml.push('	</dl>');
 				sHtml.push('</li>');

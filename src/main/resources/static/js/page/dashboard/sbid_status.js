@@ -390,8 +390,8 @@
 		currData.push(Math.round(sbidInfo.MIN_SBID_UPR / 10000) ?? 0);
 		
 		prevData.push(Math.round(sbidInfo.MAX_SBID_UPR_B / 10000) ?? 0);
-		prevData.push(Math.round(sbidInfo.MIN_SBID_UPR_B / 10000) ?? 0);
 		prevData.push(Math.round(sbidInfo.AVG_SBID_UPR_B / 10000) ?? 0);
+		prevData.push(Math.round(sbidInfo.MIN_SBID_UPR_B / 10000) ?? 0);
 		
 		new Chart(ctx4, {
 			type: 'bar',
