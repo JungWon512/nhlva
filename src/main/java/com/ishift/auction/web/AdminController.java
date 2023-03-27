@@ -341,6 +341,7 @@ public class AdminController {
 	        temp.put("rgSqno", params.get("rgSqno"));
 	        temp.put("aucObjDsc", params.get("aucObjDsc"));
 	        temp.put("aucYn", params.get("aucYn"));
+	        temp.put("aucObjDscStn", params.get("aucObjDscStn"));
 			Map<String,Object> info=auctionService.getStnInfo(temp);
 			
 			if(info == null || info.isEmpty()) {		

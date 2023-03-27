@@ -285,6 +285,23 @@
 			AND A.SRA_INDV_AMNNO = #{sraIndvAmnno}
 		</if>
 		<choose>
+		<when test="aucObjDscStn != null and aucObjDscStn != ''">
+			<choose>
+			<when test='"4".equals(aucObjDscStn)'>
+			   AND B.AUC_OBJ_DSC <![CDATA[<>]]> '1'
+			</when> 
+			<otherwise>
+			   AND B.AUC_OBJ_DSC = CASE WHEN #{aucObjDscStn} = '0' THEN B.AUC_OBJ_DSC ELSE #{aucObjDscStn} END
+			</otherwise>
+			</choose>
+		</when>
+		<otherwise>
+		<if test="searchAucObjDsc != null and searchAucObjDsc != ''">
+			AND B.AUC_OBJ_DSC = CASE WHEN TO_CHAR(#{searchAucObjDsc}) = '0' THEN B.AUC_OBJ_DSC ELSE TO_CHAR(#{searchAucObjDsc}) END
+		</if>
+		</otherwise>
+		</choose>
+		<choose>
 			<when test="searchDate != null and searchDate != ''">
 				AND B.AUC_DT = #{searchDate}
 			</when>
@@ -292,10 +309,6 @@
 				AND B.AUC_DT = TO_CHAR(SYSDATE,'YYYYMMDD')
 			</otherwise>
 		</choose>
-		<if test="searchAucObjDsc != null and searchAucObjDsc != ''">
-			AND B.AUC_OBJ_DSC = CASE WHEN TO_CHAR(#{searchAucObjDsc}) = '0' THEN
-			B.AUC_OBJ_DSC ELSE TO_CHAR(#{searchAucObjDsc}) END
-		</if>
 		<if test="searchAucPrgSq != null and searchAucPrgSq != ''">
 			AND B.AUC_PRG_SQ =#{searchAucPrgSq}
 		</if>

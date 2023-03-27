@@ -517,10 +517,16 @@
 			#{fsrgmnEno},
 			A.LSCHG_DTM,
 			#{lsCmeno}
-		FROM
-			TB_LA_IS_MH_AUC_STN A
+		FROM TB_LA_IS_MH_AUC_STN A
 		WHERE A.NA_BZPLC = #{naBzPlc}
-		AND A.AUC_OBJ_DSC = #{aucObjDsc}
+		<choose>
+		<when test="aucObjDscStn != null and aucObjDscStn != ''">
+		   AND A.AUC_OBJ_DSC = #{aucObjDscStn}
+		</when>
+		<otherwise>
+		   AND A.AUC_OBJ_DSC = #{aucObjDsc}
+		</otherwise>
+		</choose>
 		AND A.AUC_DT = #{aucDt}
 		AND A.RG_SQNO = #{rgSqno}
 	</update>
@@ -535,7 +541,14 @@
 			 , LSCHG_DTM = SYSDATE
 			 , LS_CMENO = #{lsCmeno}
 		 WHERE NA_BZPLC = #{naBzPlc}
+		<choose>
+		<when test="aucObjDscStn != null and aucObjDscStn != ''">
+		   AND AUC_OBJ_DSC = #{aucObjDscStn}
+		</when>
+		<otherwise>
 		   AND AUC_OBJ_DSC = #{aucObjDsc}
+		</otherwise>
+		</choose>
 		   AND AUC_DT = #{aucDt}
 		   AND RG_SQNO = #{rgSqno}
 	</update>
@@ -747,8 +760,22 @@
 			#{chgPgid} || '['||TO_CHAR(SYSDATE,'YYYY-MM-DD HH24:MI:SS')||']'||#{chgRmkCntn}
 		FROM TB_LA_IS_MH_SOG_COW A
 		WHERE A.AUC_DT = #{aucDt}
-		AND NA_BZPLC = #{naBzPlc} 
-		AND AUC_OBJ_DSC = #{aucObjDsc}
+		AND A.NA_BZPLC = #{naBzPlc} 
+		<choose>
+		<when test="aucObjDscStn != null and aucObjDscStn != ''">
+			<choose>
+			<when test='"4".equals(aucObjDscStn)'>
+			   AND A.AUC_OBJ_DSC <![CDATA[<>]]> '1'
+			</when> 
+			<otherwise>
+			   AND A.AUC_OBJ_DSC = CASE WHEN #{aucObjDscStn} = '0' THEN A.AUC_OBJ_DSC ELSE #{aucObjDscStn} END
+			</otherwise>
+			</choose>
+		</when>
+		<otherwise>
+			   AND A.AUC_OBJ_DSC = CASE WHEN #{aucObjDsc} = '0' THEN A.AUC_OBJ_DSC ELSE #{aucObjDsc} END
+		</otherwise>
+		</choose>
 		AND NVL(A.DDL_QCN, '0') = #{maxDdlQcn} + 1
 		<choose>
 			<when test='"Y".equals(soldChkYn)'>

@@ -262,6 +262,7 @@ var fnReloadView = function(rgSqno,aucObjDsc,aucYn,nextBidYn){
 		naBzplc : $('#naBzPlc').val()
 		, rgSqno : rgSqno			
 		, aucObjDsc : aucObjDsc
+		, aucObjDscStn : aucObjDsc
 		, aucYn : aucYn
 		, nextBidYn : nextBidYn
 		//, stAucNo : stAucNo		
