@@ -51,16 +51,16 @@
 					</if>
 			        <choose>
 						<when test='"range30".equals(searchRaDate)'>
-							AND A.AUC_DT BETWEEN TO_CHAR(SYSDATE - 31, 'YYYYMMDD') AND TO_CHAR(SYSDATE-2, 'YYYYMMDD')
+							AND A.AUC_DT BETWEEN TO_CHAR(SYSDATE - 60, 'YYYYMMDD') AND TO_CHAR(SYSDATE-31, 'YYYYMMDD')
 						</when>
 						<when test='"range20".equals(searchRaDate)'>
-							AND A.AUC_DT BETWEEN TO_CHAR(SYSDATE - 21, 'YYYYMMDD') AND TO_CHAR(SYSDATE-2, 'YYYYMMDD')
+							AND A.AUC_DT BETWEEN TO_CHAR(SYSDATE - 40, 'YYYYMMDD') AND TO_CHAR(SYSDATE-21, 'YYYYMMDD')
 						</when>
 						<when test='"range10".equals(searchRaDate)'>
-							AND A.AUC_DT BETWEEN TO_CHAR(SYSDATE - 11, 'YYYYMMDD') AND TO_CHAR(SYSDATE-2, 'YYYYMMDD')
+							AND A.AUC_DT BETWEEN TO_CHAR(SYSDATE - 20, 'YYYYMMDD') AND TO_CHAR(SYSDATE-11, 'YYYYMMDD')
 						</when>
 						<otherwise>
-							AND A.AUC_DT BETWEEN TO_CHAR(SYSDATE - 31, 'YYYYMMDD') AND TO_CHAR(SYSDATE-2, 'YYYYMMDD')
+							AND A.AUC_DT BETWEEN TO_CHAR(SYSDATE - 61, 'YYYYMMDD') AND TO_CHAR(SYSDATE-31, 'YYYYMMDD')
 						</otherwise>
 					</choose>
 					AND NVL(A.SBID_SUM_AMT, 0) <![CDATA[>]]> 0

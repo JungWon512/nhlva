@@ -58,6 +58,7 @@
 											<div class="price"><fmt:formatNumber value="${cowPriceVo.THIS_AVG_SBID_AM}" type="number" /> 원 <span class="per fc-blue">▼ ${acs_sbid_am} %</span></div>
 										</c:otherwise>
 									</c:choose>
+									<div class="pre price"><fmt:formatNumber value="${cowPriceVo.PRE_AVG_SBID_AM}" type="number" /> 원 <span class="per"></span></div>
 									
 									<c:choose>
 										<c:when test="${acs_sbid_cnt > 0}">
@@ -67,6 +68,7 @@
 											<div class="num"><fmt:formatNumber value="${cowPriceVo.THIS_SUM_SBID_CNT}" type="number" /> 두 <span class="per fc-blue">▼ ${acs_sbid_cnt} %</span></div>
 										</c:otherwise>
 									</c:choose>
+									<div class="pre num"><fmt:formatNumber value="${cowPriceVo.PRE_SUM_SBID_CNT}" type="number" /> 두 <span class="per"></span></div>
 								</dd>		
 							</dl>
 						</li>

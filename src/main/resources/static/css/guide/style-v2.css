@@ -4748,7 +4748,8 @@ canvas.bar_chart {
 	}
 
 	.page-board-main .sec-board:nth-of-type(1) .btnBox {
-		margin-bottom: 70px;
+/* 		margin-bottom: 70px; */
+		margin-bottom: 130px;
 	}
 
 	.page-board-main .btnBox {
