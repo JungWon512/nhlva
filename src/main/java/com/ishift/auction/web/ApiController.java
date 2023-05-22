@@ -273,7 +273,8 @@ public class ApiController {
 									, @RequestParam(name = "date", required = false) final String searchDate
 									, @RequestParam(name = "aucDsc", required = false) final String aucDsc
 									, @RequestParam(name = "aucObjDsc", required = false) final String aucObjDsc
-									, @RequestParam(name = "rgSqno", required = false) final String rgSqno) {
+									, @RequestParam(name = "rgSqno", required = false) final String rgSqno
+									, @RequestParam(name = "aucObjDscStn", required = false) final String aucObjDscStn) {
 		final Map<String, Object> result = new HashMap<String, Object>();
 		final List<String> entryList = new ArrayList<String>();
 		try {
@@ -288,6 +289,7 @@ public class ApiController {
 			params.put("naBzplc", naBzplc);
 			params.put("searchDate", searchDate);
 			params.put("aucObjDsc", aucObjDsc);
+			params.put("aucObjDscStn", aucObjDscStn);
 
 			// 일괄경매인 경우 구간정보 조회 추가
 			if ("10".equals(aucDsc)) {
