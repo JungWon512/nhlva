@@ -1596,6 +1596,7 @@
 															   FROM TB_LA_IS_MM_ENV_EST
 															  WHERE NA_BZPLC = #{naBzplc})
 			</when>
+			<!-- 큰소정보입력 -->
 			<when test="regType == 'I'.toString()">
 				<if test="sraPdmnm != null and sraPdmnm != ''">
 				 , SRA_PDMNM = #{sraPdmnm}
@@ -1604,8 +1605,8 @@
 				 , LVST_MKT_TRPL_AMNNO = #{lvstMktTrplAmnno}
 				</if>
 				 , PPGCOW_FEE_DSC = #{ppgcowFeeDsc}
-				 , PRNY_JUG_YN = #{prnyJugYn}
-				 , PRNY_YN = #{prnyYn}
+				<!--  큰소입력화면에서 임신감정여부 변경안되게 수정	 -->
+<!-- 					 , PRNY_JUG_YN = #{prnyJugYn} -->
 				 , PRNY_MTCN = #{prnyMtcn}
 				 , RMK_CNTN = #{rmkCntn}
 			</when>

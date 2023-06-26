@@ -251,7 +251,8 @@
 				popHtml.push('					<tr style="display:none;">');
 				popHtml.push('						<th>임신감정/임신 여부</th>');
 				popHtml.push('						<td class="input-td">');
-				popHtml.push('							<input type="text" name="prnyJugYn" id="prnyJugYn" value="" alt="임신감정여부" readonly="readonly" />');
+				// 2023.06.13 임신감정여부는 변경안되게 수정
+				//popHtml.push('							<input type="text" name="prnyJugYn" id="prnyJugYn" value="" alt="임신감정여부" readonly="readonly" />');
 				popHtml.push('							<input type="text" name="prnyYn" id="prnyYn" value="" alt="임신여부" readonly="readonly" />');
 				popHtml.push('						</td>');
 				popHtml.push('					<tr>');
@@ -526,7 +527,8 @@
 			rmkCntn.val(uniqueArr.join(","));
 			
 			$("#prnyYn").val((prnyMtcn > 0) ? "1" : "0");
-			$("#prnyJugYn").val(["1", "3"].includes(ppgcowFeeDsc) ? "1" : "0");
+			//2023.06.14 : 임신감정여부는 제외
+			//$("#prnyJugYn").val(["1", "3"].includes(ppgcowFeeDsc) ? "1" : "0");
 		};
 		
 		// 저장
