@@ -62,41 +62,15 @@ div.save-box .info em {
 				<tbody>
 					<tr>
 						<th>부</th>
-						<td colspan="2" class="bg-gray fz-32 fCowSraIndvData" name="blInfo_1">
-							<c:choose>
-								<c:when test="${empty infoData.MIF_FCOW_SRA_INDV_EART_NO_FORMAT }">
-								</c:when>
-								<c:otherwise>
-									[KPN] ${infoData.KPN_NO } 
-									<br/>${infoData.MIF_FCOW_SRA_INDV_EART_NO_FORMAT }
-								</c:otherwise>
-							</c:choose>
-						</td>
+						<td colspan="2" class="bg-gray fz-32 fCowSraIndvData" name="blInfo_1">-</td>
 					</tr>
 					<tr>
 						<th colspan="2">조부</th>
-						<td class="fz-32 grfCowSraIndvData" name="blInfo_0">
-							<c:choose>
-								<c:when test="${empty infoData.GRFA_SRA_INDV_EART_NO_FORMAT }">
-								</c:when>
-								<c:otherwise>
-									[KPN] ${infoData.GRFA_SRA_KPN_NO }  
-									<br/>${infoData.GRFA_SRA_INDV_EART_NO_FORMAT }
-								</c:otherwise>
-							</c:choose>
-						</td>
+						<td class="fz-32 grfCowSraIndvData" name="blInfo_0">-</td>
 					</tr>
 					<tr>
 						<th colspan="2">조모</th>
-						<td class="fz-32 grmCowSraIndvData" name="blInfo_2">
-							<c:choose>
-								<c:when test="${empty infoData.GRMO_SRA_INDV_EART_NO_FORMAT }">
-								</c:when>
-								<c:otherwise>
-									${infoData.GRMO_SRA_INDV_EART_NO_FORMAT } 
-								</c:otherwise>
-							</c:choose>
-						</td>
+						<td class="fz-32 grmCowSraIndvData" name="blInfo_2">-</td>
 					</tr>
 				</tbody>
 			</table>
@@ -111,40 +85,15 @@ div.save-box .info em {
 				<tbody>
 					<tr>
 						<th>모</th>
-						<td colspan="2" class="bg-gray fz-32 mCowSraIndvData" name="blInfo_4">
-							<c:choose>
-								<c:when test="${empty infoData.MCOW_SRA_INDV_AMNNO_FORMAT }">
-								</c:when>
-								<c:otherwise>
-									${infoData.MCOW_SRA_INDV_AMNNO_FORMAT }
-								</c:otherwise>
-							</c:choose>
-						</td>
+						<td colspan="2" class="bg-gray fz-32 mCowSraIndvData" name="blInfo_4">-</td>
 					</tr>
 					<tr>
 						<th colspan="2">외조부</th>
-						<td class="fz-32 mgrfCowSraIndvData" name="blInfo_3">
-							<c:choose>
-								<c:when test="${empty infoData.MTGRFA_SRA_INDV_EART_NO_FORMAT }">
-								</c:when>
-								<c:otherwise>
-									[KPN] ${infoData.MTGRFA_SRA_KPN_NO } 
-									<br/>${infoData.MTGRFA_SRA_INDV_EART_NO_FORMAT }
-								</c:otherwise>
-							</c:choose>
-						</td>
+						<td class="fz-32 mgrfCowSraIndvData" name="blInfo_3">-</td>
 					</tr>
 					<tr>
 						<th colspan="2">외조모</th>
-						<td class="fz-32 mgrmCowSraIndvData" name="blInfo_5">
-							<c:choose>
-								<c:when test="${empty infoData.MTGRMO_SRA_INDV_EART_NO_FORMAT }">
-								</c:when>
-								<c:otherwise>
-									${infoData.MTGRMO_SRA_INDV_EART_NO_FORMAT }
-								</c:otherwise>
-							</c:choose>
-						</td>
+						<td class="fz-32 mgrmCowSraIndvData" name="blInfo_5">-</td>
 					</tr>
 				</tbody>
 			</table>
@@ -177,20 +126,9 @@ div.save-box .info em {
 					<tr>
 						<td rowspan="2" colspan="5" class="ta-C"></td>
 					</tr>
-					<c:forEach items="${ sibList }" var="item" varStatus="st">
-						<tr>
-							<td rowspan="2" class="ta-C bg-gray">${item.MATIME }</td>
-							<td rowspan="2" class="ta-C">${item.SIB_SRA_INDV_AMNNO_STR }</td>
-							<td class="ta-C">${item.RG_DSC_NAME }</td>
-							<td class="ta-C">${item.INDV_SEX_C_NAME }</td>
-							<td class="ta-C">${item.BIRTH_STR }</td>
-						</tr>
-						<tr>
-							<td class="ta-C">${item.METRB_METQLT_GRD ? item.METRB_METQLT_GRD :'-' }</td>
-							<td class="ta-C">${item.METRB_BBDY_WT ? item.METRB_BBDY_WT :'-' }</td>
-							<td class="ta-C">${item.MIF_BTC_DT}</td>
-						</tr>
-					</c:forEach>
+					<tr>
+						<td rowspan="2" colspan="5" class="ta-C">-</td>
+					</tr>
 				</tbody>
 			</table>
 		</div>	
@@ -222,20 +160,9 @@ div.save-box .info em {
 					<tr>
 						<td rowspan="2" colspan="5" class="ta-C"></td>
 					</tr>
-					<c:forEach items="${ postList }" var="item" varStatus="st">
-						<tr>
-							<td rowspan="2" class="ta-C bg-gray">${item.MATIME }</td>
-							<td rowspan="2" class="ta-C">${item.POST_SRA_INDV_AMNNO_STR }</td>
-							<td class="ta-C">${item.RG_DSC_NAME }</td>
-							<td class="ta-C">${item.INDV_SEX_C_NAME }</td>
-							<td class="ta-C">${item.BIRTH_STR }</td>
-						</tr>
-						<tr>
-							<td class="ta-C">${item.METRB_METQLT_GRD ? item.METRB_METQLT_GRD :'-' }</td>
-							<td class="ta-C">${item.METRB_BBDY_WT ? item.METRB_BBDY_WT :'-' }</td>
-							<td class="ta-C">${item.MIF_BTC_DT}</td>
-						</tr>
-					</c:forEach>
+					<tr>
+						<td rowspan="2" colspan="5" class="ta-C">-</td>
+					</tr>
 				</tbody>
 			</table>
 		</div>
@@ -255,23 +182,23 @@ div.save-box .info em {
 				<tbody>
 					<tr>
 						<th><i class="dot" style="background-color: #ffaf00;"></i>냉도체중(Kg)</th>
-						<td name="reProduct1" class="ta-C bdr-y">${infoData.RE_PRODUCT_1 }</td>
-						<td class="ta-C dscReProduct1" name="dscReProduct1"><span class="c-blue">${infoData.RE_PRODUCT_1_1 }</span></td>
+						<td name="reProduct1" class="ta-C bdr-y">-</td>
+						<td class="ta-C dscReProduct1" name="dscReProduct1"><span class="c-blue">-</span></td>
 					</tr>
 					<tr>
 						<th><i class="dot" style="background-color: #a4d509;"></i>배최장근(cm2)</th>
-						<td name="reProduct2" class="ta-C bdr-y">${infoData.RE_PRODUCT_2}</td>
-						<td class="ta-C dscReProduct2" name="dscReProduct2"><span class="c-blue">${infoData.RE_PRODUCT_2_1 }</span></td>
+						<td name="reProduct2" class="ta-C bdr-y">-</td>
+						<td class="ta-C dscReProduct2" name="dscReProduct2"><span class="c-blue">-</span></td>
 					</tr>
 					<tr>
 						<th><i class="dot" style="background-color: #5bacff;"></i>등지방두께(mm)</th>
-						<td name="reProduct3" class="ta-C bdr-y">${infoData.RE_PRODUCT_3 }</td>
-						<td class="ta-C dscReProduct3" name="dscReProduct3"><span class="c-blue">${infoData.RE_PRODUCT_3_1 }</span></td>
+						<td name="reProduct3" class="ta-C bdr-y">-</td>
+						<td class="ta-C dscReProduct3" name="dscReProduct3"><span class="c-blue">-</span></td>
 					</tr>
 					<tr>
 						<th><i class="dot" style="background-color: #ff7bc2;"></i>근내지방도(점)</th>
-						<td name="reProduct4" class="ta-C bdr-y">${infoData.RE_PRODUCT_4 }</td>
-						<td class="ta-C dscReProduct4" name="dscReProduct4"><span class="c-blue">${infoData.RE_PRODUCT_4_1 }</span></td>
+						<td name="reProduct4" class="ta-C bdr-y">-</td>
+						<td class="ta-C dscReProduct4" name="dscReProduct4"><span class="c-blue">-</span></td>
 					</tr>
 				</tbody>
 			</table>

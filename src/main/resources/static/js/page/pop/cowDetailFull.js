@@ -308,13 +308,15 @@ var getAiakInfo = function(callback){
 					var txt = $.trim($(e).text()||'');
 					$('td[name=dscReProduct'+(i+1)+'] span').text(txt);
 				});
-				$('div.tab_area h3.tit2:eq(0) .subTxt').html('※한국종축개량협회 제공');
+				$('div.tab_area h3.tit2:eq(0) .subTxt').html('※한국종축개량협회 제공');	
 			}else{
-				$('div.tab_area h3.tit2:eq(0) .subTxt').html('※축산경제통합시스템 제공');
+				//$('div.tab_area h3.tit2:eq(0) .subTxt').html('※축산경제통합시스템 제공');
+				modalAlert('', '종축개량협회 등재 내역에<br/> 조회되지 않는 개체입니다.<br/>확인바랍니다.');
 			}
 		},
 		error: function(xhr, status, error) {
-			$('div.tab_area h3.tit2:eq(0) .subTxt').html('※축산경제통합시스템 제공');
+			//$('div.tab_area h3.tit2:eq(0) .subTxt').html('※축산경제통합시스템 제공');
+			modalAlert('', '종축개량협회 등재 내역에<br/> 조회되지 않는 개체입니다.<br/>확인바랍니다.');
 		}
 	}).done(function (json) {
 		if(callback)callback();	

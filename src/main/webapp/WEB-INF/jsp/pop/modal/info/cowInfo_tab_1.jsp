@@ -33,53 +33,15 @@ div.save-box .info em {
 		<tbody>
 			<tr>
 				<th>부</th>
-				<td colspan="2" class="bg-gray fz-32" name="blInfo_1">
-					<c:choose>
-						<c:when test="${empty infoData.MIF_FCOW_SRA_INDV_EART_NO_FORMAT }">
-							-
-						</c:when>
-						<c:otherwise>
-							[KPN] ${infoData.KPN_NO }
-							<br/>${fn:substring(infoData.MIF_FCOW_SRA_INDV_EART_NO, 3, 15)}
-							<c:if test="${'N' eq inputParam.bidPopYn }"> 
-								<button type="button" class="btn-search btnCowSearch" data-indv-no="${infoData.MIF_FCOW_SRA_INDV_EART_NO}"><span class="sr-only">검색</span></button>
-							</c:if>
-						</c:otherwise>
-					</c:choose>
-				</td>
+				<td colspan="2" class="bg-gray fz-32" name="blInfo_1"> - </td>
 			</tr>
 			<tr>
 				<th colspan="2">조부</th>
-				<td class="fz-32" name="blInfo_0">
-					<c:choose>
-						<c:when test="${empty infoData.GRFA_SRA_INDV_EART_NO_FORMAT }">
-							-
-						</c:when>
-						<c:otherwise>
-							[KPN] ${infoData.GRFA_SRA_KPN_NO }
-							<br/>${fn:substring(infoData.GRFA_SRA_INDV_EART_NO, 3, 15)}
-							<c:if test="${'N' eq inputParam.bidPopYn }"> 
-								<button type="button" class="btn-search btnCowSearch" data-indv-no="${infoData.GRFA_SRA_INDV_EART_NO}"><span class="sr-only">검색</span></button>
-							</c:if>
-						</c:otherwise>
-					</c:choose>
-				</td>
+				<td class="fz-32" name="blInfo_0"> - </td>
 			</tr>
 			<tr>
 				<th colspan="2">조모</th>
-				<td class="fz-32" name="blInfo_2">
-					<c:choose>
-						<c:when test="${empty infoData.GRMO_SRA_INDV_EART_NO_FORMAT }">
-							-
-						</c:when>
-						<c:otherwise>
-							${fn:substring(infoData.GRMO_SRA_INDV_EART_NO, 3, 15)}
-							<c:if test="${'N' eq inputParam.bidPopYn }">
-								<button type="button" class="btn-search btnCowSearch" data-indv-no="${infoData.GRMO_SRA_INDV_EART_NO}"><span class="sr-only">검색</span></button>
-							</c:if>
-						</c:otherwise>
-					</c:choose>
-				</td>
+				<td class="fz-32" name="blInfo_2"> - </td>
 			</tr>
 		</tbody>
 	</table>
@@ -94,52 +56,15 @@ div.save-box .info em {
 		<tbody>
 			<tr>
 				<th>모</th>
-				<td colspan="2" class="bg-gray fz-32" name="blInfo_4">
-					<c:choose>
-						<c:when test="${empty infoData.MCOW_SRA_INDV_AMNNO_FORMAT }">
-							-
-						</c:when>
-						<c:otherwise> 
-							${fn:substring(infoData.MCOW_SRA_INDV_AMNNO, 3, 15)}
-							<c:if test="${'N' eq inputParam.bidPopYn }">
-								<button type="button" class="btn-search btnCowSearch" data-indv-no="${infoData.MCOW_SRA_INDV_AMNNO}"><span class="sr-only">검색</span></button>
-							</c:if>
-						</c:otherwise>
-					</c:choose>
-				</td>
+				<td colspan="2" class="bg-gray fz-32" name="blInfo_4"> - </td>
 			</tr>
 			<tr>
 				<th colspan="2">외조부</th>
-				<td class="fz-32" name="blInfo_3">
-					<c:choose>
-						<c:when test="${empty infoData.MTGRFA_SRA_INDV_EART_NO_FORMAT }">
-							-
-						</c:when>
-						<c:otherwise>
-							[KPN] ${infoData.MTGRFA_SRA_KPN_NO } 
-							<br/>${fn:substring(infoData.MTGRFA_SRA_INDV_EART_NO, 3, 15)}
-							<c:if test="${'N' eq inputParam.bidPopYn }">
-								<button type="button" class="btn-search btnCowSearch" data-indv-no="${infoData.MTGRFA_SRA_INDV_EART_NO}"><span class="sr-only">검색</span></button>
-							</c:if>
-						</c:otherwise>
-					</c:choose>
-				</td>
+				<td class="fz-32" name="blInfo_3"> - </td>
 			</tr>
 			<tr>
 				<th colspan="2">외조모</th>
-				<td class="fz-32" name="blInfo_5">
-					<c:choose>
-						<c:when test="${empty infoData.MTGRMO_SRA_INDV_EART_NO_FORMAT }">
-							-
-						</c:when>
-						<c:otherwise>
-							${fn:substring(infoData.MTGRMO_SRA_INDV_EART_NO, 3, 15)}
-							<c:if test="${'N' eq inputParam.bidPopYn }">
-								<button type="button" class="btn-search btnCowSearch" data-indv-no="${infoData.MTGRMO_SRA_INDV_EART_NO}"><span class="sr-only">검색</span></button>
-							</c:if>
-						</c:otherwise>
-					</c:choose>
-				</td>
+				<td class="fz-32" name="blInfo_5"> - </td>
 			</tr>
 		</tbody>
 	</table>
@@ -169,25 +94,9 @@ div.save-box .info em {
 			</tr>
 		</thead>
 		<tbody>
-			<c:if test="${ sibList.size() == '0' }">
-				<tr>
-					<td rowspan="2" colspan="5" class="ta-C">-</td>
-				</tr>
-			</c:if>
-			<c:forEach items="${ sibList }" var="item" varStatus="st">
-				<tr>
-					<td rowspan="2" class="ta-C bg-gray matime">${item.MATIME }</td>
-					<td rowspan="2" class="ta-C sraIndvAmnno">${item.SIB_SRA_INDV_AMNNO_STR }</td>
-					<td class="ta-C rgDsc">${item.RG_DSC_NAME }</td>
-					<td class="ta-C indvSexC">${item.INDV_SEX_C_NAME }</td>
-					<td class="ta-C birth">${not empty item.BIRTH_STR ? item.BIRTH_STR :'-' }</td>
-				</tr>
-				<tr>
-					<td class="ta-C metrbMetqltGrd">${not empty item.METRB_METQLT_GRD ? item.METRB_METQLT_GRD :'-' }</td>
-					<td class="ta-C metrbBbdyWt">${not empty item.METRB_BBDY_WT ? item.METRB_BBDY_WT :'-' }</td>
-					<td class="ta-C mifBtcDt">${not empty item.MIF_BTC_DT_STR ? item.MIF_BTC_DT_STR : '-'}</td>
-				</tr>
-			</c:forEach>
+			<tr>
+				<td rowspan="2" colspan="5" class="ta-C">-</td>
+			</tr>
 		</tbody>
 	</table>
 </div>	
@@ -216,25 +125,9 @@ div.save-box .info em {
 			</tr>
 		</thead>
 		<tbody>
-			<c:if test="${ postList.size() == '0' }">
-				<tr>
-					<td rowspan="2" colspan="5" class="ta-C">-</td>
-				</tr>
-			</c:if>
-			<c:forEach items="${ postList }" var="item" varStatus="st">
-				<tr>
-					<td rowspan="2" class="ta-C bg-gray matime">${item.MATIME }</td>
-					<td rowspan="2" class="ta-C sraIndvAmnno">${item.POST_SRA_INDV_AMNNO_STR }</td>
-					<td class="ta-C rgDsc">${item.RG_DSC_NAME }</td>
-					<td class="ta-C indvSexC">${item.INDV_SEX_C_NAME }</td>
-					<td class="ta-C birth">${not empty item.BIRTH_STR ? item.BIRTH_STR :'-' }</td>
-				</tr>
-				<tr>
-					<td class="ta-C metrbMetqltGrd">${not empty item.METRB_METQLT_GRD ? item.METRB_METQLT_GRD :'-' }</td>
-					<td class="ta-C metrbBbdyWt">${not empty item.METRB_BBDY_WT ? item.METRB_BBDY_WT :'-' }</td>
-					<td class="ta-C mifBtcDt">${not empty item.MIF_BTC_DT_STR ? item.MIF_BTC_DT_STR : '-'}</td>
-				</tr>
-			</c:forEach>
+			<tr>
+				<td rowspan="2" colspan="5" class="ta-C">-</td>
+			</tr>
 		</tbody>
 	</table>
 </div>
