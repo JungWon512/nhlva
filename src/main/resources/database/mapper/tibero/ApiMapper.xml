@@ -129,8 +129,8 @@
 	
 	<select id="selectAuctCowList" parameterType="map" resultType="map">
 		SELECT H.*
-			 , CASE WHEN H.GAP_DAY = 0 THEN H.BIRTH_STR || '(' || TO_CHAR(H.GAP_MONTH ) || '개월)' 
-					ELSE H.BIRTH_STR || '(' || TO_CHAR(H.GAP_MONTH) || '개월 ' || TO_CHAR(H.GAP_DAY) || '일)'
+			 , CASE WHEN H.GAP_DAY = 0 THEN H.BIRTH_STR || '(' || TO_CHAR(H.GAP_MONTH2 ) || '개월)' 
+					ELSE H.BIRTH_STR || '(' || TO_CHAR(H.GAP_MONTH2) || '개월 ' || TO_CHAR(H.GAP_DAY) || '일)'
 				END AS BIRTH_FMT
 		  FROM (
 			SELECT

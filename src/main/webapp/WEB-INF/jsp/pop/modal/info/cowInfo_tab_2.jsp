@@ -27,7 +27,7 @@
 			<tr>
 				<th><i class="dot" style="background-color: #5bacff;"></i>등지방두께(mm)</th>
 				<td name="reProduct3" class="ta-C bdr-y">-</td>
-				<td class="ta-C dscReProduct3" name="dscReProduct3"><span class="c-blue">${infoData.RE_PRODUCT_3_1 }</span></td>
+				<td class="ta-C dscReProduct3" name="dscReProduct3"><span class="c-blue">-</span></td>
 			</tr>
 			<tr>
 				<th><i class="dot" style="background-color: #ff7bc2;"></i>근내지방도(점)</th>
