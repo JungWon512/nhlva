@@ -1,11 +1,13 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
 <%@ include file="/WEB-INF/__system/taglibs.jsp" %>
+<link rel="stylesheet" type="text/css" href="/static/css/guide/style-dashboard.css">
 
 <div class="winpop winpop_top10">
 	<div class="inner">
 		<div class="winpop-head ta-C">
 			<button type="button" class="winpop_close ta-R"><span class="sr-only">윈도우 팝업 닫기</span></button>
 			<h2 class="winpop_tit">금주의 TOP 10</h2>
+			<p class="annotation top">(전주 TOP3와 비교)</p>
 		</div>
 		<ol class="list-top10">
 			<c:choose>

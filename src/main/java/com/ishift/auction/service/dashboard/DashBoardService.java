@@ -4,6 +4,8 @@ import java.sql.SQLException;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.ibatis.session.SqlSessionException;
+
 public interface DashBoardService {
 	List<Map<String,Object>> findFilterRegionList(Map<String, Object> reqMap) throws SQLException;
 	
@@ -48,5 +50,23 @@ public interface DashBoardService {
 	List<Map<String, Object>> selMhSogCowRowDataList(Map<String, Object> params) throws SQLException;
 
 	public void invalidateCacheMap(String cacheName);
+	List<Map<String, Object>> findSbidPriceList(Map<String, Object> params) throws SQLException;
+
+	/**
+	 * @methodName    : selCowBzplcCnt
+	 * @author        : Jung JungWon
+	 * @date          : 2023.08.21
+	 * @Comments      : 
+	 */
+	int selCowBzplcCnt(Map<String, Object> params) throws SQLException;
+
+	/**
+	 * @methodName    : selSbidNaBzplcCnt
+	 * @author        : Jung JungWon
+	 * @date          : 2023.08.21
+	 * @Comments      : 
+	 */
+	int selSbidNaBzplcCnt(Map<String, Object> params) throws SQLException;
+	
 	
 }

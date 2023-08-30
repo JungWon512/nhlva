@@ -253,4 +253,18 @@ public class DashBoardServiceImpl implements DashBoardService {
 	public List<Map<String, Object>> selMhSogCowRowDataList(Map<String, Object> params) throws SQLException{
 		return dashBoardDAO.selMhSogCowRowDataList(params);
 	}
+	@Override
+	public List<Map<String, Object>> findSbidPriceList(Map<String, Object> params) throws SQLException {
+		return dashBoardDAO.findSbidPriceList(params);
+	}
+	
+	@Override
+	public int selCowBzplcCnt(Map<String, Object> params) throws SQLException{
+		return dashBoardDAO.selCowBzplcCnt(params);		
+	}
+	@Override
+	public int selSbidNaBzplcCnt(Map<String, Object> params) throws SQLException{
+		return dashBoardDAO.selSbidNaBzplcCnt(params);		
+	}
 }
+

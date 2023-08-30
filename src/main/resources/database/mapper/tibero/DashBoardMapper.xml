@@ -198,6 +198,7 @@
 			, CASE WHEN SUM(TOT_SBID_CNT) = 0  THEN 0
 				ELSE ROUND(SUM(TOT_SBID_CNT)/ SUM(TOT_SOG_CNT),2) * 100
 				END SBID_PER
+			, COUNT(DISTINCT NA_BZPLC) CNT_NABZPLC
 		FROM TB_LA_IS_MM_DB_SUM
 		WHERE AUC_DT BETWEEN #{searchMonth} || '01' AND #{searchMonth} || '31'
 			<if test="searchPlace != null and searchPlace != ''">
@@ -207,14 +208,97 @@
 	</select>
 	
 	<select id="findPartiBidderPerList" parameterType="map" resultType="map">
+		SELECT 
+			TEMP.*
+			,COUNT(*) OVER(PARTITION BY TEMP.NA_BZPLCLOC) CNT_NABZPLC 
+			,ROW_NUMBER () OVER(PARTITION BY TEMP.NA_BZPLCLOC ORDER BY NA_BZPLCLOC,GUBUN) NUM_NABZPLC
+		FROM
+		(SELECT T.*
+			, CASE
+				WHEN T.NA_BZPLCLOC = 'A31' THEN '경기'
+				WHEN T.NA_BZPLCLOC = 'A33' THEN '강원'
+				WHEN T.NA_BZPLCLOC = 'A41' THEN '충남'
+				WHEN T.NA_BZPLCLOC = 'A43' THEN '충북'
+				WHEN T.NA_BZPLCLOC = 'A52' THEN '울산'
+				WHEN T.NA_BZPLCLOC = 'A55' THEN '경남'
+				WHEN T.NA_BZPLCLOC = 'A54' THEN '경북'
+				WHEN T.NA_BZPLCLOC = 'A61' THEN '전남'
+				WHEN T.NA_BZPLCLOC = 'A63' THEN '전북'
+				WHEN T.NA_BZPLCLOC = 'A64' THEN '제주'
+				ELSE ''
+			END NA_BZPLCLOC_NM
+			,CASE
+				WHEN T.AUC_OBJ_DSC = '1' AND T.INDV_SEX_C = '1' THEN '송아지(암)'
+				WHEN T.AUC_OBJ_DSC = '1' AND T.INDV_SEX_C = '2' THEN '송아지(수)'
+				WHEN T.AUC_OBJ_DSC = '1' AND T.INDV_SEX_C IS NULL THEN '송아지(합계)'
+				WHEN T.AUC_OBJ_DSC = '2' THEN '비육우'
+				WHEN T.AUC_OBJ_DSC = '3' THEN '번식우'
+				WHEN T.G_ID = '3' THEN '계'
+				ELSE ''
+			END GUBUN
+		FROM 
+		(
+			SELECT 				
+				DS.NA_BZPLCLOC	 
+				, DS.AUC_OBJ_DSC
+				, DS.INDV_SEX_C
+				, SUM(NVL(DS.TOT_SBID_CNT, 0)) TOT_SBID_CNT 
+				, SUM(NVL(DS.TOT_SOG_CNT, 0)) TOT_SOG_CNT  
+				, SUM(NVL(DS.TOT_SOG_CNT, 0) - NVL(DS.TOT_SBID_CNT, 0)) MINUS_SOG_BID
+				, CASE
+					WHEN SUM(NVL(DS.TOT_SBID_CNT, 0)) = 0 THEN 0
+					ELSE TRUNC(SUM(NVL(DS.TOT_SBID_CNT, 0))/ SUM(NVL(DS.TOT_SOG_CNT,0)), 2) * 100
+				END SBID_PER
+				, GROUPING_ID(DS.NA_BZPLCLOC,DS.AUC_OBJ_DSC, DS.INDV_SEX_C) G_ID
+			FROM TB_LA_IS_MM_DB_SUM DS
+			WHERE DS.AUC_DT BETWEEN #{searchMonth} || '01' AND #{searchMonth} || '31'
+			GROUP BY ROLLUP(DS.NA_BZPLCLOC,DS.AUC_OBJ_DSC, DS.INDV_SEX_C)
+			HAVING (DS.AUC_OBJ_DSC = '1' AND GROUPING_ID(DS.NA_BZPLCLOC,DS.AUC_OBJ_DSC, DS.INDV_SEX_C) IN ('0','1'))
+			OR (DS.AUC_OBJ_DSC != '1' AND GROUPING_ID(DS.NA_BZPLCLOC,DS.AUC_OBJ_DSC, DS.INDV_SEX_C) ='1')
+			OR GROUPING_ID(DS.NA_BZPLCLOC,DS.AUC_OBJ_DSC, DS.INDV_SEX_C) IN ('3')
+		) T
+		UNION ALL
+			SELECT
+				'Z99' NA_BZPLCLOC
+				, DS.AUC_OBJ_DSC
+				, DS.INDV_SEX_C
+				, SUM(NVL(DS.TOT_SBID_CNT, 0)) TOT_SBID_CNT 
+				, SUM(NVL(DS.TOT_SOG_CNT, 0)) TOT_SOG_CNT  
+				, SUM(NVL(DS.TOT_SOG_CNT, 0) - NVL(DS.TOT_SBID_CNT, 0)) MINUS_SOG_BID
+				, CASE
+					WHEN SUM(NVL(DS.TOT_SBID_CNT, 0)) = 0 THEN 0
+					ELSE TRUNC(SUM(NVL(DS.TOT_SBID_CNT, 0))/ SUM(NVL(DS.TOT_SOG_CNT,0)), 2) * 100
+				END SBID_PER
+				, GROUPING_ID(DS.AUC_OBJ_DSC, DS.INDV_SEX_C) G_ID
+				, '합계' NA_BZPLCLOC_NM
+				,CASE
+					WHEN DS.AUC_OBJ_DSC = '1' AND DS.INDV_SEX_C = '1' THEN '송아지(암)'
+					WHEN DS.AUC_OBJ_DSC = '1' AND DS.INDV_SEX_C = '2' THEN '송아지(수)'
+					WHEN DS.AUC_OBJ_DSC = '1' AND DS.INDV_SEX_C IS NULL THEN '송아지(합계)'
+					WHEN DS.AUC_OBJ_DSC = '2' THEN '비육우'
+					WHEN DS.AUC_OBJ_DSC = '3' THEN '번식우'
+					WHEN DS.AUC_OBJ_DSC IS NULL AND DS.INDV_SEX_C IS NULL THEN '계'
+					ELSE ''
+				END GUBUN
+			FROM TB_LA_IS_MM_DB_SUM DS
+			WHERE DS.AUC_DT BETWEEN #{searchMonth} || '01' AND #{searchMonth} || '31'
+			GROUP BY ROLLUP(DS.AUC_OBJ_DSC, DS.INDV_SEX_C)
+			HAVING (DS.AUC_OBJ_DSC = '1' AND GROUPING_ID(DS.AUC_OBJ_DSC, DS.INDV_SEX_C) IN ('0','1'))
+			OR (DS.AUC_OBJ_DSC != '1' AND GROUPING_ID(DS.AUC_OBJ_DSC, DS.INDV_SEX_C) ='1')
+			OR GROUPING_ID(DS.AUC_OBJ_DSC, DS.INDV_SEX_C) IN ('3')
+		) TEMP
+ORDER BY NA_BZPLCLOC,NVL(AUC_OBJ_DSC,0),NVL(INDV_SEX_C,0)
+	</select>
+	
+	<select id="findPartiBidderPerList_bak" parameterType="map" resultType="map">
 		SELECT DS.NA_BZPLCLOC
 			, CASE WHEN DS.NA_BZPLCLOC = 'A31' THEN '경기'
 				WHEN DS.NA_BZPLCLOC = 'A33' THEN '강원'
 				WHEN DS.NA_BZPLCLOC = 'A41' THEN '충남'
 				WHEN DS.NA_BZPLCLOC = 'A43' THEN '충북'
 				WHEN DS.NA_BZPLCLOC = 'A52' THEN '울산'
-				WHEN DS.NA_BZPLCLOC = 'A55' THEN '경남'
 				WHEN DS.NA_BZPLCLOC = 'A54' THEN '경북'
+				WHEN DS.NA_BZPLCLOC = 'A55' THEN '경남'
 				WHEN DS.NA_BZPLCLOC = 'A61' THEN '전남'
 				WHEN DS.NA_BZPLCLOC = 'A63' THEN '전북'
 				WHEN DS.NA_BZPLCLOC = 'A64' THEN '제주'
@@ -431,10 +515,120 @@
 		) M	
 	</select>
 	
+	<select id="findSbidPriceList" parameterType="map" resultType="map">
+		SELECT M.* 
+			, (M.TOT_SBID_CNT - M.TOT_SBID_CNT_B) AS TOT_SBID_CHG
+			, (M.MAX_SBID_UPR - M.MAX_SBID_UPR_B) AS MAX_SBID_CHG
+			, (M.MIN_SBID_UPR - M.MIN_SBID_UPR_B) AS MIN_SBID_CHG
+			, (M.AVG_SBID_UPR - M.AVG_SBID_UPR_B) AS AVG_SBID_CHG
+			, (M.SBID_SUM_AMT - M.SBID_SUM_AMT_B) AS SBID_SUM_CHG
+		FROM (
+			SELECT AUC_OBJ_DSC				
+				, CASE
+					WHEN AUC_OBJ_DSC = '1' AND INDV_SEX_C = '1' THEN '암송아지'
+					WHEN AUC_OBJ_DSC = '1' AND INDV_SEX_C = '2' THEN '수송아지'
+					WHEN AUC_OBJ_DSC = '1' AND INDV_SEX_C IS NULL THEN '합계'
+					WHEN AUC_OBJ_DSC = '2' THEN '비육우'
+					WHEN AUC_OBJ_DSC = '3' THEN '번식우'
+				END AUC_OBJ_DSC_NM
+				<if test="monthOldC != null and monthOldC != ''">
+				, MONTH_OLD_C
+				, (SELECT SIMP_CNM FROM TB_LA_IS_MH_COMN_APL WHERE SIMP_TPC = 'MONTH_OLD_C' AND SIMP_C = MONTH_OLD_C) AS MONTH_OLD_C_NM
+				</if>
+				<if test="searchPlace != null and searchPlace != ''">
+				, NA_BZPLCLOC
+				, (SELECT DISTINCT LOCNM FROM TB_LA_IS_BM_BZLOC WHERE NA_BZPLCLOC = DS.NA_BZPLCLOC) NA_BZPLCLOC_NM
+				</if>
+				, NVL(SUM(DECODE(AUC_DT, #{searchMonth}, TOT_SBID_CNT)), 0) AS TOT_SBID_CNT
+				, NVL(SUM(DECODE(AUC_DT, #{beforeMonth}, TOT_SBID_CNT)), 0) AS TOT_SBID_CNT_B
+				, NVL(MAX(DECODE(AUC_DT, #{searchMonth}, MAX_SBID_UPR)), 0) AS MAX_SBID_UPR
+				, NVL(MAX(DECODE(AUC_DT, #{beforeMonth}, MAX_SBID_UPR)), 0) AS MAX_SBID_UPR_B
+				, NVL(MIN(DECODE(AUC_DT, #{searchMonth}, MIN_SBID_UPR)), 0) AS MIN_SBID_UPR
+				, NVL(MIN(DECODE(AUC_DT, #{beforeMonth}, MIN_SBID_UPR)), 0) AS MIN_SBID_UPR_B
+				, NVL(SUM(DECODE(AUC_DT, #{searchMonth}, SBID_SUM_AMT)), 0) AS SBID_SUM_AMT
+				, NVL(SUM(DECODE(AUC_DT, #{beforeMonth}, SBID_SUM_AMT)), 0) AS SBID_SUM_AMT_B
+				, CASE 
+					WHEN SUM(DECODE(AUC_DT, #{searchMonth}, TOT_SBID_CNT, 0)) = 0  THEN 0 
+					ELSE 
+						NVL(ROUND(SUM(DECODE(AUC_DT, #{searchMonth}, SBID_SUM_AMT)) / SUM(DECODE(AUC_DT, #{searchMonth}, TOT_SBID_CNT))), 0)		
+					END  AVG_SBID_UPR
+				, CASE 
+					WHEN SUM(DECODE(AUC_DT, #{beforeMonth}, TOT_SBID_CNT, 0)) = 0  THEN 0 
+					ELSE 
+						NVL(ROUND(SUM(DECODE(AUC_DT, #{beforeMonth}, SBID_SUM_AMT)) / SUM(DECODE(AUC_DT, #{beforeMonth}, TOT_SBID_CNT))), 0)		
+					END  AVG_SBID_UPR_B
+				, CASE WHEN SUM(DECODE(AUC_DT, #{searchMonth}, TOT_SBID_CNT, 0)) = 0 THEN 0 
+					ELSE NVL(ROUND(SUM(DECODE(AUC_DT, #{searchMonth}, EXPRI_SBID_SUM_AMT))	 / SUM(DECODE(AUC_DT, #{searchMonth}, TOT_SBID_CNT))), 0) 
+					END EXPRI_SBID_SUM_AMT
+			FROM TB_LA_IS_MM_DB_SUM DS
+			WHERE AUC_DT IN(#{searchMonth} , #{beforeMonth})
+				AND AUC_OBJ_DSC = #{aucObjDsc}
+				AND MONTH_SUM_YN = '1'
+				<if test="monthOldC != null and monthOldC != ''">
+				AND MONTH_OLD_C = #{monthOldC}
+				</if>
+				<if test="searchPlace != null and searchPlace != ''">
+					AND NA_BZPLCLOC = #{searchPlace}
+				</if>			
+			<choose>
+<!-- 				<when test='"1".equals(aucObjDsc) and monthOldC != null and monthOldC != ""'> -->
+<!-- 					GROUP BY ROLLUP (NA_BZPLCLOC,AUC_OBJ_DSC ,INDV_SEX_C ,MONTH_OLD_C) -->
+<!-- 					HAVING GROUPING_ID(NA_BZPLCLOC,AUC_OBJ_DSC ,INDV_SEX_C ,MONTH_OLD_C) IN (1,3) -->
+<!-- 					ORDER BY AUC_OBJ_DSC,NVL(INDV_SEX_C,0) -->
+<!-- 				</when>				 -->
+<!-- 				<when test='"1".equals(aucObjDsc)'> -->
+<!-- 					GROUP BY ROLLUP (NA_BZPLCLOC,AUC_OBJ_DSC ,INDV_SEX_C) -->
+<!-- 					HAVING GROUPING_ID(NA_BZPLCLOC,AUC_OBJ_DSC ,INDV_SEX_C ) IN (0,1) -->
+<!-- 					ORDER BY AUC_OBJ_DSC,NVL(INDV_SEX_C,0) -->
+<!-- 				</when> -->
+				<when test='"1".equals(aucObjDsc)'>
+					GROUP BY ROLLUP (
+						AUC_OBJ_DSC
+						<if test="monthOldC != null and monthOldC != ''">
+						, MONTH_OLD_C
+						</if>
+						<if test="searchPlace != null and searchPlace != ''">
+						, NA_BZPLCLOC
+						</if>						
+						,INDV_SEX_C	)
+					HAVING AUC_OBJ_DSC = #{aucObjDsc}
+					<if test="monthOldC != null and monthOldC != ''">
+						AND MONTH_OLD_C = #{monthOldC}
+					</if>
+					<if test="searchPlace != null and searchPlace != ''">
+						AND NA_BZPLCLOC = #{searchPlace}
+					</if>
+					ORDER BY AUC_OBJ_DSC,NVL(INDV_SEX_C,0)
+				</when>
+				<otherwise>
+					GROUP BY ROLLUP(
+						AUC_OBJ_DSC
+						<if test="monthOldC != null and monthOldC != ''">
+						, MONTH_OLD_C
+						</if>
+						<if test="searchPlace != null and searchPlace != ''">
+						, NA_BZPLCLOC
+						</if>						
+						,INDV_SEX_C	
+					)
+					HAVING AUC_OBJ_DSC = #{aucObjDsc}
+					<if test="monthOldC != null and monthOldC != ''">
+						AND MONTH_OLD_C = #{monthOldC}
+					</if>
+					<if test="searchPlace != null and searchPlace != ''">
+						AND NA_BZPLCLOC = #{searchPlace}
+					</if>			
+					AND INDV_SEX_C IS NULL
+				</otherwise>
+			</choose>			
+		) M	
+	</select>
+	
 	<select id="findSogCowInfo" parameterType="map" resultType="map">
 		SELECT 
 			NVL(SUM(DECODE(A.AUC_DT, #{searchMonth}, A.TOT_SOG_CNT, NULL)),0) AS TOT_SOG_CNT
 			, (NVL(SUM(DECODE(A.AUC_DT, #{searchMonth}, A.TOT_SOG_CNT, NULL)),0) - NVL(SUM(DECODE(A.AUC_DT, #{beforeMonth}, A.TOT_SOG_CNT, NULL)),0)) AS ASC_SOG_CNT
+			, COUNT(DISTINCT DECODE(A.AUC_DT,#{searchMonth},A.NA_BZPLC)) CNT_NABZPLC
 		FROM TB_LA_IS_MM_DB_SUM A
 		WHERE A.AUC_DT IN (#{beforeMonth}, #{searchMonth})
 			AND A.MONTH_SUM_YN = '1'
@@ -456,6 +650,34 @@
 	</select>
 	
 	<select id="findSogCowInfoList" parameterType="map" resultType="map">
+		SELECT 
+			A.AUC_OBJ_DSC
+			, A.INDV_SEX_C
+			, GROUPING_ID(A.AUC_OBJ_DSC, A.INDV_SEX_C) G_ID
+			, CASE
+				WHEN A.AUC_OBJ_DSC='1' AND A.INDV_SEX_C IS NULL THEN '송아지'
+				WHEN A.AUC_OBJ_DSC='1' AND A.INDV_SEX_C = '1' THEN '송아지(암)'
+				WHEN A.AUC_OBJ_DSC='1' AND A.INDV_SEX_C = '2' THEN '송아지(수)'
+				WHEN A.AUC_OBJ_DSC='2' THEN '비육우'
+				WHEN A.AUC_OBJ_DSC='3' THEN '번식우'
+				ELSE ''
+			END AUC_OBJ_DSC_NAME
+			, NVL(SUM(DECODE(A.AUC_DT, #{before2Month}, A.TOT_SOG_CNT, NULL)),0) AS CNT_1
+			, NVL(SUM(DECODE(A.AUC_DT, #{beforeMonth}, A.TOT_SOG_CNT, NULL)),0) AS CNT_2
+			, NVL(SUM(DECODE(A.AUC_DT, #{searchMonth}, A.TOT_SOG_CNT, NULL)),0) AS CNT_3
+		FROM TB_LA_IS_MM_DB_SUM A
+		WHERE A.AUC_DT IN (#{before2Month}, #{beforeMonth}, #{searchMonth})
+		AND A.MONTH_SUM_YN = '1'
+		<if test="searchPlace != null and searchPlace != ''">
+			AND A.NA_BZPLCLOC = #{searchPlace}
+		</if>
+		GROUP BY ROLLUP (A.AUC_OBJ_DSC, A.INDV_SEX_C)
+		HAVING (A.AUC_OBJ_DSC = 1 AND GROUPING_ID(A.AUC_OBJ_DSC, A.INDV_SEX_C) IN (0,1))
+				OR (A.AUC_OBJ_DSC != 1 AND GROUPING_ID(A.AUC_OBJ_DSC, A.INDV_SEX_C) IN (1))
+		ORDER BY A.AUC_OBJ_DSC, NVL(A.INDV_SEX_C,0)
+	</select>
+	
+	<select id="findSogCowInfoList_bak" parameterType="map" resultType="map">
 		SELECT 
 			A.AUC_OBJ_DSC
 			, CASE
@@ -1038,4 +1260,47 @@
 			</if>
 		ORDER BY SOG.AUC_DT , SOG.AUC_OBJ_DSC, SOG.AUC_PRG_SQ
     </select>
+    
+    <select id="selCowBzplcCnt" parameterType="map" resultType="java.lang.Integer">
+		SELECT
+			COUNT(DISTINCT NA_BZPLC) CNT
+		FROM TB_LA_IS_MM_DB_SUM A 
+		WHERE 1=1 
+		AND A.MONTH_SUM_YN = '0'
+		<if test="searchAucObjDsc != null and searchAucObjDsc != ''">
+			AND A.AUC_OBJ_DSC = #{searchAucObjDsc}
+		</if>
+		<if test="searchPlace != null and searchPlace != ''"> 
+			AND A.NA_BZPLCLOC = #{searchPlace}
+		</if>
+	       <choose>
+			<when test='"range30".equals(searchRaDate)'>
+				AND A.AUC_DT BETWEEN TO_CHAR(SYSDATE - 30, 'YYYYMMDD') AND TO_CHAR(SYSDATE-31, 'YYYYMMDD')
+			</when>
+			<when test='"range20".equals(searchRaDate)'>
+				AND A.AUC_DT BETWEEN TO_CHAR(SYSDATE - 20, 'YYYYMMDD') AND TO_CHAR(SYSDATE-21, 'YYYYMMDD')
+			</when>
+			<when test='"range10".equals(searchRaDate)'>
+				AND A.AUC_DT BETWEEN TO_CHAR(SYSDATE - 10, 'YYYYMMDD') AND TO_CHAR(SYSDATE-11, 'YYYYMMDD')
+			</when>
+			<otherwise>
+				AND A.AUC_DT BETWEEN TO_CHAR(SYSDATE - 30, 'YYYYMMDD') AND TO_CHAR(SYSDATE-31, 'YYYYMMDD')
+			</otherwise>
+		</choose>
+		AND NVL(A.SBID_SUM_AMT, 0) <![CDATA[>]]> 0
+    </select>
+    
+	<select id="selSbidNaBzplcCnt" parameterType="map" resultType="java.lang.Integer">
+		SELECT COUNT(DISTINCT NA_BZPLC) CNT
+		FROM TB_LA_IS_MM_DB_SUM DS
+		WHERE AUC_DT IN(#{searchMonth})
+			AND AUC_OBJ_DSC = #{aucObjDsc}
+			AND MONTH_SUM_YN = '1'
+			<if test="monthOldC != null and monthOldC != ''">
+				AND MONTH_OLD_C = #{monthOldC}
+			</if>
+			<if test="searchPlace != null and searchPlace != ''">
+				AND NA_BZPLCLOC = #{searchPlace}
+			</if>
+	</select>
 </mapper>

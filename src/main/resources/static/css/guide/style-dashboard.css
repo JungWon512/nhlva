@@ -1,0 +1,57 @@
+@charset "UTF-8";
+.w-100 {
+	width: 100%;
+}
+.bdr tr td{
+	border-right: 1px solid #ccc;
+	border-bottom: 1px solid #ccc;
+}
+.bdr tr td:last-child{
+	border-right: none;
+}
+.total td{
+	background: #eee;
+}
+.total td:first-child {
+	/* background: #fff; */
+}
+.l-spacing {
+	letter-spacing: -.5px;
+}
+.d-block {
+	display: block;
+}
+.tar {
+	text-align: right;
+}
+.sec-board .sec-tit.v2 {
+	display: flex;
+	align-items: center;
+	flex-wrap: wrap;
+}
+.sec-board .annotation{
+	width: 100%;
+	font-size: 15px;
+	color: #999;
+	margin-left: 0;
+	margin-top: 2px;
+}
+.annotation.top{
+	width: 100%;
+	font-size: 15px;
+	color: #999;
+	margin-left: 0;
+	margin-top: 2px;
+}
+.sec-board .annotation.mark {
+	color: #464646;
+	font-size: 82%;
+}
+.sec-board .sec-tit.v2 .annotation.status{
+	width: auto;
+	margin-top: 0;
+	margin-left: 3px;
+}
+.sec-board .sec-tit.v2 .span{
+	width: 100%;
+}

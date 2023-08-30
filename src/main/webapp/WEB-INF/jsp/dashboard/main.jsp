@@ -1,5 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
 <%@ include file="/WEB-INF/__system/taglibs.jsp"%>
+<link rel="stylesheet" type="text/css" href="/static/css/guide/style-dashboard.css">
 
 <form name="frm" action="" method="post">
 	<input type="hidden" name="loginYn" 						id="loginYn" 						value="${inputParam.loginYn}">
@@ -27,7 +28,8 @@
 	<div class="sec-board">
 		<div class="tit-area">
 			<h2 class="sec-tit" style="margin-bottom:10px;">최근 가축시장 시세</h2>
-			<h5 style="font-size:82%;margin-bottom:8px;">※ 가축시장 실거래 데이터(89개 축협) 기반입니다.</h5>
+			<p class="annotation mark">※ 최근 30 ~ 60일전 자료와 비교 증감</p>
+			<h5 style="font-size:82%;margin-bottom:8px;">※ 가축시장 실거래 데이터(<span class="cntNaBzplc">${cntNaBzplc}</span>개 축협) 기반입니다.</h5>
 			<a href="javascript:;" id="dashboard_filter" class="btn-more"
 				style="width: 30px;height: 30px;background: url(/static/images/guide/v2/ico-filter.svg) no-repeat 50% 50%;background-size: 23px auto;"></a>
 		</div>
@@ -94,7 +96,7 @@
 	</div>
 	<div class="sec-board">
 		<div class="tit-area">
-			<h2 class="sec-tit">금주의 TOP 3</h2>
+			<h2 class="sec-tit">금주의 TOP 3<p class="annotation">(전주 TOP3와 비교)</p></h2>
 			<a href="javascript:;" id="btn-top10" class="btn-top3">Top 10</a>
 		</div>
 		<ol class="list-top10">

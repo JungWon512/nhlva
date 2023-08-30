@@ -118,7 +118,7 @@
 			if (!success) {
 				modalAlert("", message);
 			} else {
-				$("#searchMonth").val(body.inputParam.searchMonth)
+				$("#searchMonth").val(body.inputParam.searchMonth);				
 				$(".month_txt_title").text(body.inputParam.searchMonTxt);
 				
 				var sogCowInfo = body.sogCowInfo;
@@ -126,7 +126,7 @@
 					sogCowInfo = setsogCowInfoNull(body);
 					body["sogCowInfo"] = sogCowInfo;
 				}
-				
+								
 				//Next 버튼 처리
 				if ($('#nowMonth').val() == body.inputParam.searchMonth) {
 //					$("button.btn-next").attr("disabled", true);
@@ -135,6 +135,7 @@
 //					$("button.btn-next").attr("disabled", false);
 					$("button.btn-next").show();
 				}
+				$("div.tit-area span.cntNaBzplc").text(body.sogCowInfo.CNT_NABZPLC);
 				
 				var totChgHtml = "";
 				//출장우 총 두수 (증감두수 표시)
@@ -178,6 +179,18 @@
 					let sHtml = [];
 					sHtml.push('<tr class="sogCow">');
 					sHtml.push('	<th>송아지</th>');
+					sHtml.push('	<td class="ta-C">0</td>');
+					sHtml.push('	<td class="ta-C">0</td>');
+					sHtml.push('	<td class="ta-C on">0</td>');
+					sHtml.push('</tr>');
+					sHtml.push('<tr class="sogCow">');
+					sHtml.push('	<th>송아지(암)</th>');
+					sHtml.push('	<td class="ta-C">0</td>');
+					sHtml.push('	<td class="ta-C">0</td>');
+					sHtml.push('	<td class="ta-C on">0</td>');
+					sHtml.push('</tr>');
+					sHtml.push('<tr class="sogCow">');
+					sHtml.push('	<th>송아지(수)</th>');
 					sHtml.push('	<td class="ta-C">0</td>');
 					sHtml.push('	<td class="ta-C">0</td>');
 					sHtml.push('	<td class="ta-C on">0</td>');
@@ -239,7 +252,7 @@
 		
 		var monSogCowList = body.monSogCowList;
 		
-		monSogCowList.forEach(item => {
+		monSogCowList.forEach((item,index) => {
 			var month = item.MONTH;
 			var preCowCnt = item.PRE_COW_CNT;
 			var thisCowCnt = item.THIS_COW_CNT ;
@@ -323,7 +336,7 @@
 		
 		let aucData = [];
 		if(sogCowInfoList.length <= 0
-			|| (sogCowInfoList.length > 0 && sogCowInfoList[0].CNT_3 == 0 && sogCowInfoList[1].CNT_3 == 0 && sogCowInfoList[2].CNT_3 == 0)){
+			|| (sogCowInfoList.length > 0 && sogCowInfoList[0].CNT_3 == 0 && sogCowInfoList[3].CNT_3 == 0 && sogCowInfoList[4].CNT_3 == 0)){
 			
 			new Chart(ctx2, {
 					type: 'pie',
@@ -351,7 +364,7 @@
 		}
 		else{
 			
-			aucData.push(sogCowInfoList[0].CNT_3, sogCowInfoList[1].CNT_3, sogCowInfoList[2].CNT_3);
+			aucData.push(sogCowInfoList[0].CNT_3, sogCowInfoList[3].CNT_3, sogCowInfoList[4].CNT_3);
 			
 			new Chart(ctx2, {
 					type: 'pie',
@@ -386,6 +399,7 @@
 		sogCowInfo["MONTH_OLD_C"] = body.inputParam.monthOldC == null ? "전체" : body.inputParam.monthOldC;
 		sogCowInfo["TOT_SOG_CNT"] = 0;
 		sogCowInfo["ASC_SOG_CNT"] = 0;
+		sogCowInfo["CNT_NABZPLC"] = 0;
 		return sogCowInfo;
 	}
 

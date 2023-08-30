@@ -98,7 +98,8 @@
 				modalAlert("", message);
 			}
 			else {
-				$("#searchMonth").val(body.inputParam.searchMonth)
+				$("#searchMonth").val(body.inputParam.searchMonth);
+				$("div.tit-area span.cntNaBzplc").text(body.cntNaBzplc);
 				$(".month_txt_title").text(body.inputParam.searchMonTxt);
 				if($("#nowMonth").val() == body.inputParam.searchMonth){
 //					$(".btn-next").attr("disabled", true);
@@ -129,47 +130,7 @@
 					$(".tot_sbid_chg_txt").text(totChgHtml).removeClass("fc-blue fc-red").addClass("fc-blue");
 				}
 				$(".month_old_c_nm").text(sbidInfo.MONTH_OLD_C_NM == null ? "전체" : sbidInfo.MONTH_OLD_C_NM);
-				
-				//최고, 평균, 최저 가격 
-				$(".max_sbid_upr").text(fnSetComma(sbidInfo.MAX_SBID_UPR) + " 원");
-				$(".max_sbid_chg").removeClass("fc-blue fc-red fc-zero");
-				if(sbidInfo.MAX_SBID_CHG > 0) {
-					$(".max_sbid_chg").text("+ " + fnSetComma(sbidInfo.MAX_SBID_CHG) + " 원");
-					$(".max_sbid_chg").addClass("fc-red");
-				}else if(sbidInfo.MAX_SBID_CHG == 0){
-					$(".max_sbid_chg").text(fnSetComma(sbidInfo.MAX_SBID_CHG) + " 원");
-					$(".max_sbid_chg").addClass("fc-zero");
-				}else{
-					$(".max_sbid_chg").text("- " + fnSetComma(Math.abs(sbidInfo.MAX_SBID_CHG)) + " 원");
-					$(".max_sbid_chg").addClass("fc-blue");
-				}
-				
-				$(".avg_sbid_upr").text(fnSetComma(sbidInfo.AVG_SBID_UPR) + " 원");
-				$(".avg_sbid_chg").removeClass("fc-blue fc-red fc-zero");
-				if(sbidInfo.AVG_SBID_CHG > 0) {
-					$(".avg_sbid_chg").text("+ " + fnSetComma(sbidInfo.AVG_SBID_CHG) + " 원");
-					$(".avg_sbid_chg").addClass("fc-red");
-				}else if(sbidInfo.AVG_SBID_CHG == 0){
-					$(".avg_sbid_chg").text(fnSetComma(sbidInfo.AVG_SBID_CHG) + " 원");
-					$(".avg_sbid_chg").addClass("fc-zero");
-				}else{
-					$(".avg_sbid_chg").text("- " + fnSetComma(Math.abs(sbidInfo.AVG_SBID_CHG)) + " 원");
-					$(".avg_sbid_chg").addClass("fc-blue");
-				}
-				
-				$(".min_sbid_upr").text(fnSetComma(sbidInfo.MIN_SBID_UPR) + " 원");
-				$(".min_sbid_chg").removeClass("fc-blue fc-red fc-zero");
-				if(sbidInfo.MIN_SBID_CHG > 0) {
-					$(".min_sbid_chg").text("+ " + fnSetComma(sbidInfo.MIN_SBID_CHG) + " 원");
-					$(".min_sbid_chg").addClass("fc-red");
-				}else if(sbidInfo.MIN_SBID_CHG == 0){
-					$(".min_sbid_chg").text(fnSetComma(sbidInfo.MIN_SBID_CHG) + " 원");
-					$(".min_sbid_chg").addClass("fc-zero");
-				}else{
-					$(".min_sbid_chg").text("- " + fnSetComma(Math.abs(sbidInfo.MIN_SBID_CHG)) + " 원");
-					$(".min_sbid_chg").addClass("fc-blue");
-				}
-				
+								
 				//낙찰예정가, 낙찰평균가
 				$(".expri_sbid_sum_amt").text(fnSetComma(sbidInfo.EXPRI_SBID_SUM_AMT) + " 원");
 				$(".avg_sbid_upr").text(fnSetComma(sbidInfo.AVG_SBID_UPR) + " 원");
@@ -182,6 +143,64 @@
 					$(".expri_gap").text(fnSetComma(expri_gap));
 					$(".expri_gap").addClass("down");
 				}
+				
+				//출장우 구분 최고,최저,평균
+				var sbidList = body.sbidList;
+				console.log(sbidList);
+				var sogCowInfoList = $('tbody.sogCowInfoList');
+				var cowHtml = "";		
+				sogCowInfoList.empty();
+				sbidList.forEach((o)=>{
+					var clsNm ="";
+					var giho ="";
+													
+					cowHtml += "<tr class=\"sogCow\">";
+					cowHtml += "	<th>"+ o.AUC_OBJ_DSC_NM +"</th>";
+					cowHtml += "	<td class=\"ta-C\">";
+					cowHtml += "		<span class=\"won l-spacing d-block tar\">"+fnSetComma(o.MAX_SBID_UPR)+"원</span>";
+					if(o.MAX_SBID_CHG > 0 ){
+						clsNm ="fc-red";
+						giho ="+";
+					}else if(o.MAX_SBID_CHG < 0 ){
+						clsNm ="fc-blue";
+						giho ="-";						
+					}else{
+						clsNm ="fc-zero";
+						giho ="";						
+					}
+					cowHtml += "				<span class=\""+clsNm+" max_sbid_chg l-spacing d-block tar\">"+giho+ fnSetComma(o.MAX_SBID_CHG)+" 원</span>";
+					cowHtml += "	</td>";
+					cowHtml += "	<td class=\"ta-C l-spacing\">";
+					cowHtml += "		<span class=\"won l-spacing d-block tar\">"+fnSetComma(o.MIN_SBID_UPR)+"원</span>";			
+					if(o.MIN_SBID_CHG > 0 ){
+						clsNm ="fc-red";
+						giho ="+";
+					}else if(o.MIN_SBID_CHG < 0 ){
+						clsNm ="fc-blue";
+						giho ="-";						
+					}else{
+						clsNm ="fc-zero";
+						giho ="";						
+					}					
+					cowHtml += "				<span class=\""+clsNm+" max_sbid_chg l-spacing d-block tar\">"+giho+ fnSetComma(o.MIN_SBID_CHG)+" 원</span>";
+					cowHtml += "	</td>";
+					cowHtml += "	<td class=\"ta-C\">";
+					cowHtml += "		<span class=\"won l-spacing d-block tar\">"+fnSetComma(o.AVG_SBID_UPR)+"원</span>";			
+					if(o.AVG_SBID_CHG > 0 ){
+						clsNm ="fc-red";
+						giho ="+";
+					}else if(o.AVG_SBID_CHG < 0 ){
+						clsNm ="fc-blue";
+						giho ="-";						
+					}else{
+						clsNm ="fc-zero";
+						giho ="";						
+					}							
+					cowHtml += "				<span class=\""+clsNm+" max_sbid_chg l-spacing d-block tar\">"+giho+ fnSetComma(o.AVG_SBID_CHG)+" 원</span>";
+					cowHtml += "	</td>";
+					cowHtml += "</tr>";					
+				});
+				sogCowInfoList.append(cowHtml);
 				
 				//지역별 평균 낙찰가
 				var areaSbidList = body.areaSbidList;

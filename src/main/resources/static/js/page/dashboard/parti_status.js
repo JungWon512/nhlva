@@ -89,7 +89,8 @@ var searchAjax = function(flag){
 			modalAlert("", message);
 		}
 		else {
-			$("#searchMonth").val(body.inputParam.searchMonth)
+			$("#searchMonth").val(body.inputParam.searchMonth);
+			$("div.tit-area span.cntNaBzplc").text(body.bidderInfo == null ? "0" : body.bidderInfo.CNT_NABZPLC);
 			$(".month_txt_title").text(body.inputParam.searchMonTxt);
 			$(".mon_txt_block").text(body.inputParam.searchMonTxt + " 기준");
 			
@@ -118,15 +119,16 @@ var searchAjax = function(flag){
 			
 			if(bidderPerList != null && bidderPerList.length > 0){
 				for(var i = 0; i < bidderPerList.length; i++){
-					arrHtml.push("<tr>");
-					arrHtml.push("	<td>" + bidderPerList[i].NA_BZPLCLOC_NM + "</td>");
+					arrHtml.push("<tr class='"+(bidderPerList[i].NUM_NABZPLC == '1'?'total':'')+"'>");
+					if(bidderPerList[i].NUM_NABZPLC == '1') arrHtml.push("	<td rowspan="+bidderPerList[i].CNT_NABZPLC+">" + bidderPerList[i].NA_BZPLCLOC_NM + "</td>");
+					arrHtml.push("	<td>" + bidderPerList[i].GUBUN + "</td>");
 					arrHtml.push("	<td>" + fnSetComma(bidderPerList[i].TOT_SBID_CNT) + "</td>");
 					arrHtml.push("	<td>" + fnSetComma(bidderPerList[i].MINUS_SOG_BID) + "</td>");
 					arrHtml.push("	<td>" + bidderPerList[i].SBID_PER + "%</td>");
 					arrHtml.push("</tr>");
 				}
 			}else{
-				arrHtml.push("<tr><td colspan='4' style='text-align:center;'>조회된 결과가 없습니다.</td></tr>");	
+				arrHtml.push("<tr><td colspan='5' style='text-align:center;'>조회된 결과가 없습니다.</td></tr>");	
 			}
 			
 			$("#bidder_list").append(arrHtml.join(""));

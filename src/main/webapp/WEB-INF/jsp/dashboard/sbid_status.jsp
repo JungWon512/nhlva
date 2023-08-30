@@ -1,5 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
 <%@ include file="/WEB-INF/__system/taglibs.jsp"%>
+<link rel="stylesheet" type="text/css" href="/static/css/guide/style-dashboard.css">
+
 <jsp:useBean id="now" class="java.util.Date" />
 <fmt:formatDate value="${now}" pattern="yyyyMM" var="nowMonth" />
 <input type="hidden" name="searchPlaceNm" 		id="searchPlaceNm" 			value="">
@@ -16,7 +18,7 @@
 <div class="board-main pt-0">
 	<div class="sec-board">
 		<div class="tit-area">
-			<h2 class="sec-tit">가축시장 낙찰가 시세</h2>
+			<h2 class="sec-tit">가축시장 낙찰가 시세<p class="annotation">(<span class="cntNaBzplc">${cntNaBzplc}</span>개 조합, 전월대비 <span>증감</span>)</p></h2>
 		</div>
 		<div class="dark-box calendar-box sty-round">
 			<div class="c-months">
@@ -69,59 +71,154 @@
 					<br>(<span class="month_old_c_nm">${empty sbidInfo.MONTH_OLD_C_NM ? '전체' : sbidInfo.MONTH_OLD_C_NM}</span>)
 				</div>
 			
-				<ul class="board-number col-3">
-					<li>
-						<dl>
-							<dt>최고</dt>
-							<dd class="won max_sbid_upr"><fmt:formatNumber value="${sbidInfo.MAX_SBID_UPR}" type="number" /> 원</dd>
+				<div class="table-simple m-0">
+					<table>
+						<colgroup>
+							<col>
+							<col width="27%">
+							<col width="27%">
+							<col width="27%">
+						</colgroup>
+						<thead>
+							<tr>
+								<th scope="col" class="ta-C">구분</th>
+								
+								<th scope="col" class="before2Month ta-C">최고</th>
+								
+								<th scope="col" class="beforeMonth ta-C">최저</th>
+								
+								<th scope="col" class="searchMonth ta-C">평균</th>
+							</tr>
+						</thead>
+						<tbody class="sogCowInfoList">
 							<c:choose>
-								<c:when test="${sbidInfo.MAX_SBID_CHG > 0}">
-									<dd><span class="fc-red max_sbid_chg">+ <fmt:formatNumber value="${sbidInfo.MAX_SBID_CHG}" type="number" /> 원</span></dd>	
+								<c:when test="${empty sbidList}">
+									<c:choose>
+										<c:when test="${inputParam.aucObjDsc eq '1' }">										
+											<tr class="sogCow">
+												<th>합계</th>
+												<td class="ta-C">
+													<span class="won l-spacing d-block tar">0 원</span>											
+													<span class="fc-zero max_sbid_chg l-spacing d-block tar">0 원</span>
+												</td>
+												<td class="ta-C l-spacing">													
+													<span class="won l-spacing d-block tar">0 원</span>											
+													<span class="fc-zero max_sbid_chg l-spacing d-block tar">0 원</span>
+												</td>
+												<td class="ta-C">	
+													<span class="won l-spacing d-block tar">0 원</span>											
+													<span class="fc-zero max_sbid_chg l-spacing d-block tar">0 원</span>
+												</td>
+											</tr>
+											<tr class="sogCow">
+												<th>송아지(수)</th>
+												<td class="ta-C">
+													<span class="won l-spacing d-block tar">0 원</span>											
+													<span class="fc-zero max_sbid_chg l-spacing d-block tar">0 원</span>
+												</td>
+												<td class="ta-C l-spacing">													
+													<span class="won l-spacing d-block tar">0 원</span>											
+													<span class="fc-zero max_sbid_chg l-spacing d-block tar">0 원</span>
+												</td>
+												<td class="ta-C">	
+													<span class="won l-spacing d-block tar">0 원</span>											
+													<span class="fc-zero max_sbid_chg l-spacing d-block tar">0 원</span>
+												</td>
+											</tr>
+											<tr class="sogCow">
+												<th>송아지(암)</th>
+												<td class="ta-C">
+													<span class="won l-spacing d-block tar">0 원</span>											
+													<span class="fc-zero max_sbid_chg l-spacing d-block tar">0 원</span>
+												</td>
+												<td class="ta-C l-spacing">													
+													<span class="won l-spacing d-block tar">0 원</span>											
+													<span class="fc-zero max_sbid_chg l-spacing d-block tar">0 원</span>
+												</td>
+												<td class="ta-C">	
+													<span class="won l-spacing d-block tar">0 원</span>											
+													<span class="fc-zero max_sbid_chg l-spacing d-block tar">0 원</span>
+												</td>
+											</tr>
+										</c:when>
+										<c:otherwise>
+											<tr class="sogCow">
+												<th>${empty sbidInfo ? inputParam.aucObjDscNm : sbidInfo.AUC_OBJ_DSC_NM}</th>
+												<td class="ta-C">
+													<span class="won l-spacing d-block tar">0 원</span>											
+													<span class="fc-zero max_sbid_chg l-spacing d-block tar">0 원</span>
+												</td>
+												<td class="ta-C l-spacing">													
+													<span class="won l-spacing d-block tar">0 원</span>											
+													<span class="fc-zero max_sbid_chg l-spacing d-block tar">0 원</span>
+												</td>
+												<td class="ta-C">	
+													<span class="won l-spacing d-block tar">0 원</span>											
+													<span class="fc-zero max_sbid_chg l-spacing d-block tar">0 원</span>
+												</td>
+											</tr>
+										</c:otherwise>
+									</c:choose>
 								</c:when>
-								<c:when test="${sbidInfo.MAX_SBID_CHG < 0}">
-									<dd><span class="fc-blue max_sbid_chg">- <fmt:formatNumber value="${fn:replace(sbidInfo.MAX_SBID_CHG, '-', '')}" type="number" /> 원</span></dd>	
-								</c:when>
-								<c:otherwise>
-									<dd><span class="fc-zero max_sbid_chg"><fmt:formatNumber value="${sbidInfo.MAX_SBID_CHG}" type="number" /> 원</span></dd>
+								<c:otherwise>										
+									<c:forEach items="${sbidList}" var="sbidVo">										
+										<tr class="sogCow">
+											<th>${sbidVo.AUC_OBJ_DSC_NM } ${sbidVo.INDV_SEX_C }</th>
+											<td class="ta-C">
+												<c:set var="MAX_SBID_UPR" value="${sbidVo.MAX_SBID_UPR}" />
+												<c:set var="MAX_SBID_CHG" value="${sbidVo.MAX_SBID_CHG}" />
+												<span class="won l-spacing d-block tar"><fmt:formatNumber value="${MAX_SBID_UPR}" type="number" /> 원</span>											
+												<c:choose>
+													<c:when test="${MAX_SBID_CHG > 0}">
+														<span class="fc-red max_sbid_chg l-spacing d-block tar">+ <fmt:formatNumber value="${MAX_SBID_CHG}" type="number" /> 원</span>	
+													</c:when>
+													<c:when test="${MAX_SBID_CHG < 0}">
+														<span class="fc-blue max_sbid_chg l-spacing d-block tar">- <fmt:formatNumber value="${fn:replace(MAX_SBID_CHG, '-', '')}" type="number" /> 원</span>
+													</c:when>
+													<c:otherwise>
+														<span class="fc-zero max_sbid_chg l-spacing d-block tar"><fmt:formatNumber value="${MAX_SBID_CHG}" type="number" /> 원</span>
+													</c:otherwise>
+												</c:choose>
+											</td>
+											<td class="ta-C l-spacing">
+												<c:set var="MIN_SBID_UPR" value="${sbidVo.MIN_SBID_UPR}" />
+												<c:set var="MIN_SBID_CHG" value="${sbidVo.MIN_SBID_CHG}" />
+												<span class="won l-spacing d-block tar"><fmt:formatNumber value="${MIN_SBID_UPR}" type="number" /> 원</span>								
+												<c:choose>
+													<c:when test="${MIN_SBID_CHG > 0}">
+														<span class="fc-red max_sbid_chg l-spacing d-block tar">+ <fmt:formatNumber value="${MIN_SBID_CHG}" type="number" /> 원</span>	
+													</c:when>
+													<c:when test="${MIN_SBID_CHG < 0}">
+														<span class="fc-blue max_sbid_chg l-spacing d-block tar">- <fmt:formatNumber value="${fn:replace(MIN_SBID_CHG, '-', '')}" type="number" /> 원</span>
+													</c:when>
+													<c:otherwise>
+														<span class="fc-zero max_sbid_chg l-spacing d-block tar"><fmt:formatNumber value="${MIN_SBID_CHG}" type="number" /> 원</span>
+													</c:otherwise>
+												</c:choose>
+											</td>
+											<td class="ta-C">
+												<c:set var="AVG_SBID_UPR" value="${sbidVo.AVG_SBID_UPR}" />
+												<c:set var="AVG_SBID_CHG" value="${sbidVo.AVG_SBID_CHG}" />
+												<span class="won l-spacing d-block tar"><fmt:formatNumber value="${AVG_SBID_UPR}" type="number" /> 원</span>									
+												<c:choose>
+													<c:when test="${AVG_SBID_CHG > 0}">
+														<span class="fc-red max_sbid_chg l-spacing d-block tar">+ <fmt:formatNumber value="${AVG_SBID_CHG}" type="number" /> 원</span>	
+													</c:when>
+													<c:when test="${AVG_SBID_CHG < 0}">
+														<span class="fc-blue max_sbid_chg l-spacing d-block tar">- <fmt:formatNumber value="${fn:replace(AVG_SBID_CHG, '-', '')}" type="number" /> 원</span>
+													</c:when>
+													<c:otherwise>
+														<span class="fc-zero max_sbid_chg l-spacing d-block tar"><fmt:formatNumber value="${AVG_SBID_CHG}" type="number" /> 원</span>
+													</c:otherwise>
+												</c:choose>
+											</td>
+										</tr>
+									</c:forEach>
 								</c:otherwise>
 							</c:choose>
-						</dl>
-					</li>
-					<li>
-						<dl>
-							<dt>평균</dt>
-							<dd class="won avg_sbid_upr"><fmt:formatNumber value="${sbidInfo.AVG_SBID_UPR}" type="number" /> 원</dd>
-							<c:choose>
-								<c:when test="${sbidInfo.AVG_SBID_CHG > 0}">
-									<dd><span class="fc-red avg_sbid_chg">+ <fmt:formatNumber value="${sbidInfo.AVG_SBID_CHG}" type="number" /> 원</span></dd>	
-								</c:when>
-								<c:when test="${sbidInfo.AVG_SBID_CHG < 0}">
-									<dd><span class="fc-blue avg_sbid_chg">- <fmt:formatNumber value="${fn:replace(sbidInfo.AVG_SBID_CHG, '-', '')}" type="number" /> 원</span></dd>	
-								</c:when>
-								<c:otherwise>
-									<dd><span class="fc-zero avg_sbid_chg"><fmt:formatNumber value="${sbidInfo.AVG_SBID_CHG}" type="number" /> 원</span></dd>
-								</c:otherwise>
-							</c:choose>
-						</dl>
-					</li>
-					<li>
-						<dl>
-							<dt>최저</dt>
-							<dd class="won min_sbid_upr"><fmt:formatNumber value="${sbidInfo.MIN_SBID_UPR}" type="number" /> 원</dd>
-							<c:choose>
-								<c:when test="${sbidInfo.MIN_SBID_CHG > 0}">
-									<dd><span class="fc-red min_sbid_chg">+ <fmt:formatNumber value="${sbidInfo.MIN_SBID_CHG}" type="number" /> 원</span></dd>	
-								</c:when>
-								<c:when test="${sbidInfo.MIN_SBID_CHG < 0}">
-									<dd><span class="fc-blue min_sbid_chg">- <fmt:formatNumber value="${fn:replace(sbidInfo.MIN_SBID_CHG, '-', '')}" type="number" /> 원</span></dd>	
-								</c:when>
-								<c:otherwise>
-									<dd><span class="fc-zero min_sbid_chg"><fmt:formatNumber value="${sbidInfo.MIN_SBID_CHG}" type="number" /> 원</span></dd>
-								</c:otherwise>
-							</c:choose>
-						</dl>
-					</li>
-				</ul>
+						</tbody>
+					</table>
+				</div>
 			</div>
 			<div id="chart_area_4" class="chart_area" style="margin-top: 20px;">
 				<canvas id="myChartSample4" class="bar_chart"></canvas>

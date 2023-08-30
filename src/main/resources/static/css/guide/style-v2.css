@@ -1927,6 +1927,57 @@ canvas.bar_chart {
 	font-weight: 700;
 }
 
+
+.board-number.col-4 {
+	position: relative;
+	padding-top: 18px;
+}
+
+.board-number.col-4:before {
+	position: absolute;
+	left: 50%;
+	top: 0;
+	transform: translateX(-50%);
+	width: calc(100% - 40px);
+	border-top: 1px dotted #939292;
+	content: '';
+}
+
+.board-number.col-4 li {
+	width: 29%;
+	padding: 0 20px;
+}
+.board-number.col-4 li.calf_tit {
+	width: 13%;
+}
+
+.board-number.col-4 li ~ li {
+	border-left: 1px solid #ccc;
+}
+
+.board-number.col-4 dl {
+	font-size: 16px;
+	color: #515457;
+}
+
+.board-number.col-4 dt {
+	margin-bottom: 14px;
+}
+.board-number.col-4 li.calf_tit dt {
+    position: absolute;
+    bottom: 21%;
+}
+
+.board-number.col-4 dd {
+	text-align: right;
+}
+
+.board-number.col-4 dd.won {
+	margin-bottom: 8px;
+	font-size: 18px;
+	font-weight: 700;
+}
+
 .board-number + .gap-area {
 	margin-top: 40px;
 	padding-top: 40px;

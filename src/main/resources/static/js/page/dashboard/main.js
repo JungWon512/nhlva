@@ -115,7 +115,8 @@ var searchAjax = function () {
 			modalAlert('','작업중 오류가 발생했습니다. <br/>관리자에게 문의하세요.');
 			return;
 		}
-		
+		$("div.tit-area span.cntNaBzplc").text(data.cntNaBzplc);
+		$("div.tit-area p.annotation.mark").text('※ 최근 '+data.range+' ~ '+(data.range * 2)+'일전 자료와 비교 증감');
 		const placeNm = $("input[name=placeNm]").val() || '전국';
 		
 		$(".period-area").html(data.title + '<strong>'+ placeNm +'</strong>');

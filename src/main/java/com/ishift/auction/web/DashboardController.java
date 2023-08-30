@@ -125,6 +125,9 @@ public class DashboardController {
 		mav.addObject("avgPlaceBidAmList", dashboardService.findAvgPlaceBidAmList(params));
 		// 3. 금주의 TOP 3
 		mav.addObject("recentDateTopList", dashboardService.findRecentDateTopList(params));
+
+		// 4.최근 가축시장 시세 기준 조합수
+		mav.addObject("cntNaBzplc", dashboardService.selCowBzplcCnt(params));
 		
 		mav.addObject("range", range);
 		mav.addObject("title", title);
@@ -152,6 +155,9 @@ public class DashboardController {
 			resultMap.put("avgPlaceBidAmList", dashboardService.findAvgPlaceBidAmList(params));
 			// 3. 금주의 TOP 3
 			resultMap.put("recentDateTopList", dashboardService.findRecentDateTopList(params));
+
+			// 4.최근 가축시장 시세 기준 조합수
+			resultMap.put("cntNaBzplc", dashboardService.selCowBzplcCnt(params));
 			
 			resultMap.put("range", range);
 			resultMap.put("title", title);
@@ -272,7 +278,7 @@ public class DashboardController {
 		List<Map<String, Object>> bidderPerList = dashboardService.findPartiBidderPerList(params);
 		
 		mav.addObject("bidderInfo", bidderInfo);
-		mav.addObject("bidderPerList", bidderPerList);
+		mav.addObject("bidderPerList", bidderPerList);		
 		mav.addObject("dashheaderTitle", "낙찰 현황");
 		mav.addObject("searchMonTxt", params.get("searchMonTxt"));
 		mav.addObject("inputParam", params);	
@@ -316,14 +322,17 @@ public class DashboardController {
 		
 		params.putIfAbsent("aucObjDsc", "1");
 		Map<String, Object> sbidInfo = dashboardService.findSbidPriceInfo(params);		//가축시장 낙찰가 시세
+		List<Map<String, Object>> sbidList = dashboardService.findSbidPriceList(params);		//가축시장 낙찰가 시세
 		List<Map<String, Object>> areaSbidList = dashboardService.findAreaSbidList(params);		//지역별 평균 낙찰가
 		List<Map<String, Object>> monSbidPriceList = dashboardService.findMonthlySbidPriceList(params);		//월별 평균 낙찰가
 		List<Map<String, Object>> monSogCowList = dashboardService.findMonthlySogCowList(params);		//월별 장두수
 		
 		mav.addObject("sbidInfo", sbidInfo);
+		mav.addObject("sbidList", sbidList);
 		mav.addObject("areaSbidList", areaSbidList);
 		mav.addObject("monSbidPriceList", monSbidPriceList);
 		mav.addObject("monSogCowList", monSogCowList);
+		mav.addObject("cntNaBzplc", dashboardService.selSbidNaBzplcCnt(params));
 		
 		mav.addObject("dashheaderTitle", "낙찰시세");
 		mav.addObject("searchMonTxt", params.get("searchMonTxt"));
@@ -345,14 +354,17 @@ public class DashboardController {
 		
 		try {
 			Map<String, Object> sbidInfo = dashboardService.findSbidPriceInfo(params);		//가축시장 낙찰가 시세
+			List<Map<String, Object>> sbidList = dashboardService.findSbidPriceList(params);		//가축시장 낙찰가 시세
 			List<Map<String, Object>> areaSbidList = dashboardService.findAreaSbidList(params);		//지역별 평균 낙찰가
 			List<Map<String, Object>> monSbidPriceList = dashboardService.findMonthlySbidPriceList(params);		//월별 평균 낙찰가
 			List<Map<String, Object>> monSogCowList = dashboardService.findMonthlySogCowList(params);		//월별 장두수
 			
 			resultMap.put("sbidInfo", sbidInfo);
+			resultMap.put("sbidList", sbidList);
 			resultMap.put("areaSbidList", areaSbidList);
 			resultMap.put("monSbidPriceList", monSbidPriceList);
 			resultMap.put("monSogCowList", monSogCowList);
+			resultMap.put("cntNaBzplc", dashboardService.selSbidNaBzplcCnt(params));
 			
 			resultMap.put("searchMonTxt", params.get("searchMonTxt"));
 			resultMap.put("success", true);
@@ -459,11 +471,14 @@ public class DashboardController {
 		this.setDayToSearchMonth(params);
 		
 		Map<String, Object> sbidInfo = dashboardService.findSbidPriceInfo(params);		//가축시장 낙찰가 시세
+
+		List<Map<String, Object>> sbidList = dashboardService.findSbidPriceList(params);		//가축시장 낙찰가 시세
 		List<Map<String, Object>> areaSbidList = dashboardService.findAreaSbidList(params);		//지역별 평균 낙찰가
 		List<Map<String, Object>> monSbidPriceList = dashboardService.findMonthlySbidPriceList(params);		//월별 평균 낙찰가
 		List<Map<String, Object>> monSogCowList = dashboardService.findMonthlySogCowList(params);		//월별 장두수
-		
+		mav.addObject("cntNaBzplc", dashboardService.selSbidNaBzplcCnt(params));		
 		mav.addObject("sbidInfo", sbidInfo);
+		mav.addObject("sbidList", sbidList);
 		mav.addObject("areaSbidList", areaSbidList);
 		mav.addObject("monSbidPriceList", monSbidPriceList);
 		mav.addObject("monSogCowList", monSogCowList);

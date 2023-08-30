@@ -114,34 +114,98 @@
 			<button class="del_btn dateBtn" style="display : none;">월령</button>
 			<button class="del_btn priceBtn" style="display : none;">예정가</button>
 		</div>
-		<div class="sum_table">
-			<div>
-				<dl>
-					<dt><p>전체</p></dt>
-					<dd>
-						<p><span class="ea">${buyCnt.CNT}</span>두</p>
-					</dd>
-				</dl>
-				<dl>
-					<dt><p>암</p></dt>
-					<dd>
-						<p><span class="ea">${buyCnt.CNT_SEX_W_F}</span>두</p>
-					</dd>
-				</dl>
-				<dl>
-					<dt><p>수</p></dt>
-					<dd>
-						<p><span class="ea">${buyCnt.CNT_SEX_M_F}</span>두</p>
-					</dd>
-				</dl>
-				<dl>
-					<dt><p>기타</p></dt>
-					<dd>
-						<p><span class="ea">${buyCnt.CNT_SEX_ETC_F}</span>두</p>
-					</dd>
-				</dl>
-			</div>
-		</div> 
+		<c:choose>
+			<c:when test="${empty inputParam.searchAucObjDsc }">
+				<div class="sum_table">
+					<div>
+						<dl>
+							<dt><p>구분</p></dt>
+							<dd><p>송아지</p></dd>
+							<dd><p>비육우</p></dd>
+							<dd><p>번식우</p></dd>
+						</dl>
+						<dl>
+							<dt><p>전체</p></dt>
+							<dd>
+								<p><span class="ea">${buyCnt.CNT_CALF}</span>두</p>
+							</dd>
+							<dd>
+								<p><span class="ea">${buyCnt.CNT_NO_COW}</span>두</p>
+							</dd>
+							<dd>
+								<p><span class="ea">${buyCnt.CNT_COW}</span>두</p>
+							</dd>
+						</dl>
+						<dl>
+							<dt><p>암</p></dt>
+							<dd>
+								<p><span class="ea">${buyCnt.CNT_SEX_W_F_1}</span>두</p>
+							</dd>
+							<dd>
+								<p><span class="ea">${buyCnt.CNT_SEX_W_F_2}</span>두</p>
+							</dd>
+							<dd>
+								<p><span class="ea">${buyCnt.CNT_SEX_W_F_3}</span>두</p>
+							</dd>
+						</dl>
+						<dl>
+							<dt><p>수</p></dt>
+							<dd>
+								<p><span class="ea">${buyCnt.CNT_SEX_M_F_1}</span>두</p>
+							</dd>
+							<dd>
+								<p><span class="ea">${buyCnt.CNT_SEX_M_F_2}</span>두</p>
+							</dd>
+							<dd>
+								<p><span class="ea">${buyCnt.CNT_SEX_M_F_3}</span>두</p>
+							</dd>
+						</dl>
+						<dl>
+							<dt><p>기타</p></dt>
+							<dd>
+								<p><span class="ea">${buyCnt.CNT_SEX_ETC_F_1}</span>두</p>
+							</dd>
+							<dd>
+								<p><span class="ea">${buyCnt.CNT_SEX_ETC_F_2}</span>두</p>
+							</dd>
+							<dd>
+								<p><span class="ea">${buyCnt.CNT_SEX_ETC_F_3}</span>두</p>
+							</dd>
+						</dl>
+					</div>
+				</div> 
+			</c:when>
+			<c:otherwise>
+				<div class="sum_table">
+					<div>
+						<dl>
+							<dt><p>전체</p></dt>
+							<dd>
+								<p><span class="ea">${buyCnt.CNT}</span>두</p>
+							</dd>
+						</dl>
+						<dl>
+							<dt><p>암</p></dt>
+							<dd>
+								<p><span class="ea">${buyCnt.CNT_SEX_W_F}</span>두</p>
+							</dd>
+						</dl>
+						<dl>
+							<dt><p>수</p></dt>
+							<dd>
+								<p><span class="ea">${buyCnt.CNT_SEX_M_F}</span>두</p>
+							</dd>
+						</dl>
+						<dl>
+							<dt><p>기타</p></dt>
+							<dd>
+								<p><span class="ea">${buyCnt.CNT_SEX_ETC_F}</span>두</p>
+							</dd>
+						</dl>
+					</div>
+				</div>
+			</c:otherwise>
+		</c:choose>
 		<!-- //list_search e -->
 		<div class="list_downs">
 			<ul>

@@ -101,4 +101,29 @@ public class DashBoardDAO {
 	public List<Map<String, Object>> selMhSogCowRowDataList(Map<String, Object> params) throws SQLException {
 		return mainDao.selectList("dashboard.selMhSogCowRowDataList", params);
 	}
+
+	public List<Map<String, Object>> findSbidPriceList(Map<String, Object> params) throws SQLException{
+		return mainDao.selectList("dashboard.findSbidPriceList", params);
+	}
+
+	/**
+	 * @methodName    : selCowBzplcCnt
+	 * @author        : Jung JungWon
+	 * @throws SQLException 
+	 * @date          : 2023.08.21
+	 * @Comments      : 
+	 */
+	public int selCowBzplcCnt(Map<String, Object> params) throws SQLException {
+		return mainDao.count("dashboard.selCowBzplcCnt", params);
+	}
+
+	/**
+	 * @methodName    : selSbidNaBzplcCnt
+	 * @author        : Jung JungWon
+	 * @date          : 2023.08.21
+	 * @Comments      : 
+	 */
+	public int selSbidNaBzplcCnt(Map<String, Object> params) throws SQLException{
+		return mainDao.count("dashboard.selSbidNaBzplcCnt", params);
+	}
 }

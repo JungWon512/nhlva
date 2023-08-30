@@ -1,5 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
 <%@ include file="/WEB-INF/__system/taglibs.jsp"%>
+<link rel="stylesheet" type="text/css" href="/static/css/guide/style-dashboard.css">
 
 <!-- 현재날짜 처리 -->
 <jsp:useBean id="now" class="java.util.Date" />
@@ -19,7 +20,7 @@
 <div class="board-main pt-0">
 	<div class="sec-board">
 		<div class="tit-area">
-			<h2 class="sec-tit">가축시장 출장우</h2>
+			<h2 class="sec-tit">가축시장 출장우<p class="annotation">(<span class="cntNaBzplc"><fmt:formatNumber value="${empty sogCowInfo ? 0 : sogCowInfo.CNT_NABZPLC}" type="number" /></span>개 조합)</p></h2>			
 		</div>
 		<div class="dark-box calendar-box sty-round">
 			<div class="c-months">
@@ -74,15 +75,27 @@
 							<th scope="col" class="searchMonth ta-C on">${fn:substring(searchMonth,4,6)}월</th>
 						</tr>
 					</thead>
+					
 					<tbody class="sogCowInfoList">
-						<c:forEach items="${sogCowInfoList}" var="cowInfo">
-						<tr class="sogCow">
-							<th>${cowInfo.AUC_OBJ_DSC_NAME}</th>
-							<td class="ta-C"><fmt:formatNumber value="${cowInfo.CNT_1}" type="number" /></td>
-							<td class="ta-C"><fmt:formatNumber value="${cowInfo.CNT_2}" type="number" /></td>
-							<td class="ta-C on"><fmt:formatNumber value="${cowInfo.CNT_3}" type="number" /></td>
-						</tr>
-						</c:forEach>
+						<c:choose>
+							<c:when test="${empty sogCowInfoList }">
+								<tr class="sogCow"><th>송아지</th><td class="ta-C">0</td><td class="ta-C">0</td><td class="ta-C on">0</td></tr>
+								<tr class="sogCow"><th>송아지(암)</th><td class="ta-C">0</td><td class="ta-C">0</td><td class="ta-C on">0</td></tr>
+								<tr class="sogCow"><th>송아지(수)</th><td class="ta-C">0</td><td class="ta-C">0</td><td class="ta-C on">0</td></tr>
+								<tr class="sogCow"><th>비육우</th><td class="ta-C">0</td><td class="ta-C">0</td><td class="ta-C on">0</td></tr>
+								<tr class="sogCow"><th>번식우</th><td class="ta-C">0</td><td class="ta-C">0</td><td class="ta-C on">0</td></tr>
+							</c:when>
+							<c:otherwise>
+								<c:forEach items="${sogCowInfoList}" var="cowInfo">
+									<tr class="sogCow">
+										<th>${cowInfo.AUC_OBJ_DSC_NAME}</th>
+										<td class="ta-C"><fmt:formatNumber value="${cowInfo.CNT_1}" type="number" /></td>
+										<td class="ta-C"><fmt:formatNumber value="${cowInfo.CNT_2}" type="number" /></td>
+										<td class="ta-C on"><fmt:formatNumber value="${cowInfo.CNT_3}" type="number" /></td>
+									</tr>
+								</c:forEach>
+							</c:otherwise>							
+						</c:choose>
 					</tbody>
 				</table>
 			</div>
