@@ -140,7 +140,8 @@
 			</tbody>
 		</table>
 	</div>
-	<p class="info-text">* 입금은 영업일 3일 이내입니다.<br>* ${johapData.CLNTNM} 문의) ${johapData.TEL_NO }</p>
+<%-- 	<p class="info-text">* 입금은 영업일 3일 이내입니다.<br>* ${johapData.CLNTNM} 문의) ${johapData.TEL_NO }</p> --%>
+	<p class="info-text">* ${johapData.CLNTNM} 문의) ${johapData.TEL_NO }</p>
 	<div class="cow-sibiling">
 		<table class="table-detail">
 			<colgroup>
