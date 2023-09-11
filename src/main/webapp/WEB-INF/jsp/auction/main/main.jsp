@@ -29,6 +29,9 @@
 				<a href="javascript:goWatchApp();" class="auction_see">경매 관전</a>
 			</div>
 		</li>
+		<li>
+			<a href="javascript:goWatchApp('agora');" class="auction_see">경매 관전[A]</a>
+		</li>
 		<c:if test="${johapData.KIOSK_YN eq '1'}">
 		<sec:authorize access="hasAnyRole('ROLE_BIDDER', 'ROLE_FARM')">
 			<li>

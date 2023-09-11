@@ -511,7 +511,7 @@ public class AdminController {
 		mav.addObject("johapData", johap);
         mav.addObject("token",token);
         mav.addObject("count",count);
-		mav.setViewName("admin/auction/stream/stream");
+		mav.setViewName("admin/auction/stream/stream_agora");
 		mav.addObject("subheaderTitle", "방송");
 		return mav;
 	}
@@ -670,7 +670,7 @@ public class AdminController {
 			mav.addObject("johapData", johap);
 	        mav.addObject("token",token);
 	        mav.addObject("count",count);
-			mav.setViewName("admin/auction/board/streamOnlyVideo");
+			mav.setViewName("admin/auction/board/streamOnlyVideo_agora");
 			mav.addObject("subheaderTitle", "영상");			
 		}
 		else {

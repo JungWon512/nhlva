@@ -21,6 +21,14 @@
 				영상송출
 			</a>
 		</li>
+		<li class="menu_item mobile">
+			<a href="javascript:pageMove('/office/broad/cast_agora');">
+				<span class="ico">
+					<img src="/static/images/guide/ico_admin_menu_01.svg" alt="">
+				</span>
+				영상송출(A)
+			</a>
+		</li>
 		<li class="menu_item">
 			<a href="javascript:pageMove('/office/auction/monster');">
 				<span class="ico">

@@ -7,7 +7,7 @@ logging:
   config: classpath:config/logback-spring-local.xml
   file:
     name: logExample
-    path: ./data/logs
+    path: /data/logs
 mca:
   url: http://192.168.114.11:18211/http/lvaca-fmec
 open.api: 

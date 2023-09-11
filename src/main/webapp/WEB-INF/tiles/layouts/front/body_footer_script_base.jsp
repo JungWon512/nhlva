@@ -22,4 +22,4 @@
 <script src="/static/js/common/commons.js?v=${version}"></script>
 <script src="/static/js/common/utils.js?v=${version}"></script>
 <script src="/static/js/common/chart/chart.js"></script>
-
+<script src="/static/js/common/AgoraRTC_N-4.17.0.js" type="text/javascript"></script>

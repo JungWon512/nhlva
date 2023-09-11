@@ -13,3 +13,4 @@
 <!-- end::util.js -->
 
 <script src="/static/js/socket.io/socket.io.js" type="text/javascript"></script>
+<script src="/static/js/common/AgoraRTC_N-4.17.0.js" type="text/javascript"></script>
