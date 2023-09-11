@@ -55,3 +55,14 @@
 .sec-board .sec-tit.v2 .span{
 	width: 100%;
 }
+@media only all and (min-width: 1025px) {
+	div.sec-board div.table-simple{
+		background: #ebebeb;
+	    padding: 5px;
+		
+	}
+	div.sec-board div.table-simple table{
+		background: #fff;
+		border: inset 1px;	
+	}
+}
