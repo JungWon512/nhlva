@@ -45,13 +45,29 @@ var preLoadDate;
 		window.document.addEventListener("visibilitychange", function(e) {			
 			if(window.document.visibilityState == 'hidden'){
 				if(location.pathname.indexOf('/watch') >= 0 || location.pathname.indexOf('/groupBid') >= 0 || location.pathname.indexOf('/singlebid') >= 0){
-					$('#remoteVideo1').get(0).muted=true;
+					//$('#remoteVideo1').get(0).muted=true;					
+					if(!$(".m_sound").hasClass('off')){
+						try{
+							if(agoraArr[1].user.audioTrack.isPlaying){
+								agoraArr[1].stopAgora('audio');
+							}
+						}catch(err){
+							console.log(err);
+						}
+						//$(".m_sound").click();
+						//$('#remoteVideo1').get(0).muted=false;
+					}
 				}
 				preLoadDate=new Date();			
 			}else{
 				if(location.pathname.indexOf('/watch') >= 0 || location.pathname.indexOf('/groupBid') >= 0 || location.pathname.indexOf('/singlebid') >= 0){
 					if(!$(".m_sound").hasClass('off')){
-						$('#remoteVideo1').get(0).muted=false;
+						//$(".m_sound").click();
+						try{
+							agoraArr[1].playAgora('audio');
+						}catch(err){
+							console.log(err);
+						}
 					}
 				}
 				var tmpDate = new Date();
@@ -177,14 +193,22 @@ $(document).ready(function() {
 				location.reload();
 			});
 //			if(kko_id) Kakao.init(kko_id);
-			if(kko_id) try{Kakao.init(kko_id)}catch(e){console.log(e);};
+			if(kko_id) {
+				try{
+					Kakao.init(kko_id);
+//					AgoraRTC.setLogLevel(4);				
+				}catch(e){console.log(e);};				
+			}
+			
+			
+			
 		},
 		pdFav: function (e) {
 			$(".pd_pav a").on('click', function(e){ 
 				// $(this).toggleClass('act');
 			});
 			$(window).on("load",function(){
-				if(isApp() || chkOs() != 'web'){
+//				if(isApp() || chkOs() != 'web'){
 					$(".list_table .list_body ul.mCustomScrollBox, div.modal-wrap .pop_TermsBox.mCustomScrollBox").each(function(){
 						$(this).removeClass('mCustomScrollBox');
 												
@@ -209,15 +233,15 @@ $(document).ready(function() {
 						$(this).css('height','  '+ (resultH<0?0:resultH) +'px');
 						$(this).css('min-height','120px');
 					});
-				}else{
-					$(".list_body ul").mCustomScrollbar({
-						theme:"dark-thin",
-						scrollInertia: 200,
-						setTop :0
-						,setWidth: false
-						,setHeight: false
-					});
-				}
+//				}else{
+//					$(".list_body ul").mCustomScrollbar({
+//						theme:"dark-thin",
+//						scrollInertia: 200,
+//						setTop :0
+//						,setWidth: false
+//						,setHeight: false
+//					});
+//				}
 			});
 		},
 		noBid: function (e) {

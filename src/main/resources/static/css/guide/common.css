@@ -7282,7 +7282,7 @@ Base styles: contents layer
 	}
 }
 
-.video_transmission .video_list .item .video_box {
+.video_transmission .video_list .item .video_box:not(.agora) {
 	position: relative;
 	padding-bottom: 44%;
 	background-color: #000
@@ -7296,6 +7296,13 @@ Base styles: contents layer
 	bottom: 0;
 	width: 100%;
 	height: 100%
+}
+
+.video_transmission .video_list .item .video_box.agora {
+	background-color: #000
+}
+.video_transmission .video_list .item .video_box.agora video {
+	position: relative!important;
 }
 
 .video_transmission .video_list .item dl.bot {
@@ -8451,4 +8458,12 @@ div.search.sum_table{display:none;}
 }
 .youtube-view table td p.bold {
 	font-weight: 700!important
+}
+
+.auction_bid .list_body ul li.act{
+	background: #007eff!important;
+}
+.auction_bid .list_body ul li.act dd
+,.auction_bid .list_body ul li.act dd.pd_ea{
+	color: #ffffff!important;
 }
