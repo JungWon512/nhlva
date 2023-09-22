@@ -813,25 +813,25 @@ public class AuctionController extends CommonController {
 		Map<String, Object> cowInfo = null;
         map.put("naBzPlcNo", param.get("place"));
         
-        Map<String, Object> johap = adminService.selectOneJohap(map);
+        //Map<String, Object> johap = adminService.selectOneJohap(map);
         map.put("naBzplc", param.get("naBzplc"));
-        map.put("searchAucObjDsc", param.get("aucObjDsc"));
-        map.put("searchAucPrgSq", param.get("aucPrgSq"));
-        map.put("searchDate", param.get("aucDt"));
-        map.put("sraIndvAmnno", param.get("sraIndvAmnno"));
-		List<Map<String,Object>> list=auctionService.entrySelectList(map);
-		if(list != null && list.size() >0) {
-			cowInfo  = list.get(0);
-		}
+        //map.put("searchAucObjDsc", param.get("aucObjDsc"));
+        //map.put("searchAucPrgSq", param.get("aucPrgSq"));
+        //map.put("searchDate", param.get("aucDt"));
+        //map.put("sraIndvAmnno", param.get("sraIndvAmnno"));
+		//List<Map<String,Object>> list=auctionService.entrySelectList(map);
+		//if(list != null && list.size() >0) {
+		//	cowInfo  = list.get(0);
+		//}
 
 		//출장우 상세 tab항목 표기
         map.put("simpCGrpSqno", "1");
 		List<Map<String,Object>> tabList =auctionService.selectListExpitemSet(map);
 
-		mav.addObject("infoData",cowInfo);
+		//mav.addObject("infoData",cowInfo);
 		mav.addObject("tabList",tabList);
 		
-		mav.addObject("johapData",johap);
+		//mav.addObject("johapData",johap);
 		mav.addObject("subheaderTitle","출장우 상세");
 		//mav.setViewName("auction/sales/cowDetail");
 		mav.addObject("inputParam", param);		
