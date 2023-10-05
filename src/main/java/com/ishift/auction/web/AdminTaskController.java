@@ -26,6 +26,7 @@ import com.ishift.auction.service.admin.task.AdminTaskService;
 import com.ishift.auction.service.auction.AuctionService;
 import com.ishift.auction.util.SessionUtill;
 import com.ishift.auction.vo.AdminUserDetails;
+import com.ishift.auction.util.HttpUtils;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -48,6 +49,9 @@ public class AdminTaskController extends CommonController {
 	
 	@Autowired
 	private SessionUtill sessionUtill;
+	
+	@Autowired
+	HttpUtils httpUtils;
 
 	/**
 	 * 관리자 > 경매업무 > 메인화면
@@ -419,6 +423,7 @@ public class AdminTaskController extends CommonController {
 		mav.addObject("rgDscList", this.getCommonCode("SRA_INDV_BRDSRA_RG_DSC", ""));		// 등록구분 코드
 		mav.addObject("ppgcowFeeDscList", this.getCommonCode("PPGCOW_FEE_DSC", ""));		// 번식우수수료 구분코드
 		mav.addObject("sogCowInfo", adminTaskService.selectSogCowInfo(params));
+
 		mav.addObject("qcnInfo", adminTaskService.selectQcnInfo(params));
 		mav.addObject("params", params);
 		mav.addObject("subheaderTitle", "출장우 간편 등록");
@@ -508,6 +513,29 @@ public class AdminTaskController extends CommonController {
 			log.error("Exception::AdminTaskController.updateResultAjax : {} ", e);
 			result.put("success", false);
 			result.put("message", "저장중 오류가 발생했습니다.<br/>관리자에게 문의하세요.");
+			return result;
+		}
+		return result;
+	}
+
+	/**
+	 * 관리자 > 출장우 조회 > 출장우 간편 등록 > 브루셀라 연동
+	 * @param params
+	 * @return
+	 */
+	@ResponseBody
+	@PostMapping(value = "/office/task/animalTrace")
+	public Map<String, Object> animalTrace(@RequestBody final Map<String, Object> params) {
+		Map<String, Object> result = new HashMap<String, Object>();
+		try {
+			params.put("SRA_INDV_AMNNO", params.get("sraIndvAmnno"));
+			result = httpUtils.getOpenApiAnimalTraceToMap(params);
+			result.put("success", true);
+		}
+		catch (Exception e) {
+			log.error("Exception::AdminTaskController.animalTrace : {} ", e);
+			result.put("success", false);
+			result.put("message", "품평원 정보 조회중 오류가 발생했습니다.<br/>관리자에게 문의하세요.");
 			return result;
 		}
 		return result;

@@ -432,8 +432,8 @@
 		  WHEN MATCHED THEN UPDATE
 		   SET LSCHG_DTM                = SYSDATE
 			 , LS_CMENO                 = #{regUsrid}
-			 , FTSNM                    = #{SRA_FHSNM}
-			 , BIRTH                    = #{SRA_FHS_BIRTH}
+			 , FTSNM                    = TRIM(#{SRA_FHSNM})
+			 , BIRTH                    = TRIM(#{SRA_FHS_BIRTH})
 		<choose>
 		<when test="SMS_BUFFER_1 != null and SMS_BUFFER_1 != ''">
 			<if test="SMS_BUFFER_1.contains('AD'.toString())">

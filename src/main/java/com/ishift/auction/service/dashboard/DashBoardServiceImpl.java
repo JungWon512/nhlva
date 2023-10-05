@@ -38,7 +38,7 @@ public class DashBoardServiceImpl implements DashBoardService {
 		List<Map<String, Object>> resultList = null;
 		boolean isCache = false;
 		if("1".equals(reqMap.get("searchAucObjDsc")) 
-				&& ("range10".equals(reqMap.get("searchRaDate")) || reqMap.get("searchRaDate") == null) 
+				&& ("range30".equals(reqMap.get("searchRaDate")) || reqMap.get("searchRaDate") == null) 
 				&& ("".equals(reqMap.get("searchPlace")) || reqMap.get("searchPlace") == null)
 			) {		//기본 파라미터일 때, 캐시되도록 하기
 			isCache = true;
@@ -83,7 +83,7 @@ public class DashBoardServiceImpl implements DashBoardService {
 		List<Map<String, Object>> resultList = null;
 		boolean isCache = false;
 		if("1".equals(reqMap.get("searchAucObjDsc")) 
-				&& ("range10".equals(reqMap.get("searchRaDate")) || reqMap.get("searchRaDate") == null) 
+				&& ("range30".equals(reqMap.get("searchRaDate")) || reqMap.get("searchRaDate") == null) 
 				&& ("".equals(reqMap.get("searchMonthOldC")) || reqMap.get("searchMonthOldC") == null)
 			) {		//기본 파라미터일 때, 캐시되도록 하기
 			isCache = true;
