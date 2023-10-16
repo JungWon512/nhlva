@@ -179,7 +179,15 @@
 				END AS DIVISION_PRICE
 			 , C.SEL_STS_DSC
 			 , C.LVST_AUC_PTC_MN_NO
-			 , C.SRA_SBID_UPR
+			 , C.SRA_SBID_UPR	
+			 <!-- 20230926 화순축협 요청으로 브루셀라 정보 등록 -->		 
+			, C.BRCL_ISP_DT
+			, C.BRCL_ISP_RZT_C
+			, NVL(C.BRCL_ISP_CTFW_SMT_YN,'0') BRCL_ISP_CTFW_SMT_YN
+			, C.VACN_ORDER
+			, C.VACN_DT
+			, C.BOVINE_DT
+			, C.BOVINE_RSLTNM
 		  FROM TB_LA_IS_MM_INDV A
 		  LEFT OUTER JOIN TB_LA_IS_MM_FHS B
 			ON (
@@ -239,6 +247,7 @@
 	</select>
 	
 	<!-- 출장우 정보 저장 -->
+	 <!-- 20230926 화순축협 요청으로 브루셀라 정보 등록 -->
 	<insert id="insertSogCow" parameterType="hashMap">
 		<selectKey keyColumn="oslpNo" keyProperty="oslpNo" resultType="String" order="BEFORE">
 			SELECT NVL(MAX(OSLP_NO)+1, 1)
@@ -283,6 +292,13 @@
 				, LSCHG_DTM
 				, LS_CMENO
 				, MODL_NO
+				, BRCL_ISP_DT
+				, BRCL_ISP_RZT_C
+				, BRCL_ISP_CTFW_SMT_YN
+				, VACN_ORDER
+				, VACN_DT
+				, BOVINE_DT
+				, BOVINE_RSLTNM
 			)
 			VALUES (
 				#{naBzplc}
@@ -321,10 +337,18 @@
 				, SYSDATE
 				, #{lsCmeno}
 				, #{aucPrgSq}
+				, REPLACE(#{brclIspDt}, '-', '')
+				, #{brclIspRztC}
+				, #{brclIspCtfwSmtYn}
+				, #{vacnOrder}
+				, REPLACE(#{vacnDt}, '-', '')
+				, REPLACE(#{bovineDt}, '-', '')
+				, #{bovineRsltnm}
 			)
 	</insert>
 	
 	<!-- 출장우 정보 수정 -->
+	<!-- 20230926 화순축협 요청으로 브루셀라 정보 등록 -->
 	<update id="updateSogCow" parameterType="hashMap">
 		UPDATE TB_LA_IS_MH_SOG_COW
 		   SET COW_SOG_WT				= #{cowSogWt}
@@ -343,6 +367,14 @@
 			 , LSCHG_DTM				= SYSDATE
 			 , LS_CMENO					= #{lsCmeno}
 			 , MODL_NO					= #{aucPrgSq}
+			 <!-- 20230926 화순축협 요청으로 브루셀라 정보 등록 -->
+			 , BRCL_ISP_DT              = REPLACE(#{brclIspDt}, '-', '')
+			 , BRCL_ISP_RZT_C           = #{brclIspRztC}
+			 , BRCL_ISP_CTFW_SMT_YN     = #{brclIspCtfwSmtYn}
+			 , VACN_ORDER               = #{vacnOrder}
+			 , VACN_DT                  = REPLACE(#{vacnDt}, '-', '')
+			 , BOVINE_DT                = REPLACE(#{bovineDt}, '-', '')
+			 , BOVINE_RSLTNM            = #{bovineRsltnm}
 		 WHERE NA_BZPLC = #{naBzplc}
 		   AND AUC_DT = #{aucDt}
 		   AND AUC_OBJ_DSC = #{aucObjDsc}

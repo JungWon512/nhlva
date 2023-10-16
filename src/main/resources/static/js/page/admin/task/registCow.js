@@ -12,6 +12,7 @@
 		
 		var addEvent = function(){
 //			addCalendarEvent();
+			fnCallBrclIspSrch();
 		};
 		
 		var addBtnEvent = function(){
@@ -163,6 +164,76 @@
 			$("input[name='lowsSbidLmtAm']").val(parseInt(firLowsSbidLmtAm) * parseInt(divisionPrice||'0'));
 			
 			return true;
+		}
+		
+		var fnCallBrclIspSrch = function(){
+			$.ajax({
+				url : '/office/task/animalTrace',
+				data : JSON.stringify($("form[name='frm']").serializeObject()),
+				type : 'POST',
+				dataType : 'json',
+				beforeSend: function (xhr) {
+					xhr.setRequestHeader("Accept", "application/json");
+					xhr.setRequestHeader("Content-Type", "application/json");
+				},
+				success : function() {
+				},
+				error: function(xhr, status, error) {
+				}
+			}).done(function (body) {
+				if (body && body.success) {
+					var vacnInfo = body.vacnInfo;
+		            //$("#brclIspDt").val($.trim(vacnInfo["insepctDt"]));
+		         	if(vacnInfo){
+						console.log(vacnInfo);						
+			            
+			            if(!$('input[name=brclIspDt]').val()){
+				        	$("input[name=brclIspDt]").val(fn_toDate($.trim(vacnInfo["inspectDt"])));						
+				            // 브루셀라 접종결과 추후 추가 0:수기 1:음성 2:양성 9:미접종 brcl_isp_rzt_c
+				            if($.trim(vacnInfo["inspectYn"]) == "음성") {
+				            	$("input[name=brclIspRztC]").val("1");
+				            } else if($.trim(vacnInfo["inspectYn"]) == "양성") {
+				            	$("input[name=brclIspRztC]").val("2");
+				            } else {
+				            	$("input[name=brclIspRztC]").val("0");
+				            }
+						}
+			            if(!$('input[name=vacnDt]').val()){
+				        	$("input[name=vacnDt]").val(fn_toDate($.trim(vacnInfo["injectionYmd"])));
+				        	$("input[name=vacnOrder]").val($.trim(vacnInfo["vaccineorder"]));      
+			        	}
+			            if(!$('input[name=bovineDt]').val()){
+				        	$("input[name=bovineDt]").val(fn_toDate($.trim(vacnInfo["tbcInspctYmd"])));
+				        	$("input[name=bovineRsltnm]").val($.trim(vacnInfo["tbcInspctRsltNm"]));		
+			        	}
+					 }else{						 
+		            	$("input[name=brclIspRztC]").val("0");
+			        	$("input[name=brclIspDt]").val('');			        	
+			        	$("input[name=vacnOrder]").val('');        	
+			        	$("input[name=vacnDt]").val('');
+			        	$("input[name=bovineDt]").val('');
+			        	$("input[name=bovineRsltnm]").val('');						 
+					 }
+				}
+				else {
+					modalAlert("", body.message);
+					return;
+				}
+				function fn_toDate(date,type){
+				  if(!date || date.length == 0){
+				  	return '';
+				  }
+				  var yyyy = date.substr(0,4);
+				  var mm = date.substr(4,2);
+				  var dd = date.substr(6,2);
+				  if(type =="KR"){
+					  return yyyy + '년 ' + mm + '월 ' +dd + '일';  
+				  }else {
+					  return yyyy + '-' + mm + '-' +dd; 
+				  }
+				  
+				}
+			});			
 		}
 
 		return {

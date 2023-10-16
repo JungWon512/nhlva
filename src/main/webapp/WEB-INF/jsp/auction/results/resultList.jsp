@@ -207,6 +207,9 @@
 			</c:otherwise>
 		</c:choose>
 		<!-- //list_search e -->
+		<div class="list_txt">
+			<p>*경매단위 : 송아지(${johapData.CALF_AUC_ATDR_UNT}), 비육우(${johapData.NBFCT_AUC_ATDR_UNT}), 번식우(${johapData.PPGCOW_AUC_ATDR_UNT}).</p>
+		</div>
 		<div class="list_downs">
 			<ul>
 				<li><a href="javascript:;" class="btn_print"><span class="ico_print">인쇄하기</span></a></li>
