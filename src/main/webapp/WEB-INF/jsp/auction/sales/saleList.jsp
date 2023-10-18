@@ -213,7 +213,7 @@
 					</c:otherwise>
 				</c:choose>
 				<!-- // sum_table -->
-				<div class="list_txt">
+				<div class="list_txt" style="text-align: left;">
 					<p>*경매번호는 변경될 수 있으며 <span>경매당일</span> 확정됩니다.</p>
 					<p>*경매단위 : 송아지(${johapData.CALF_AUC_ATDR_UNT}), 비육우(${johapData.NBFCT_AUC_ATDR_UNT}), 번식우(${johapData.PPGCOW_AUC_ATDR_UNT}).</p>
 				</div>

@@ -146,47 +146,51 @@ public class CommonServiceImpl implements CommonService {
 		final Map<String, Object> bzplcInfo = commonDao.getBzplcInfo(params);
 		params.putAll(bzplcInfo);
 		
-		// 2. 출하주 통합회원 정보(TB_LA_IS_MM_MBINTG) 통합회원 구분(MB_INTG_GB)이 02인 데이터 조회
-		// 통합회원 구분 ( 01:중도매인, 02:출하주)
-		params.put("MB_INTG_GB", "02");
-		params.put("MB_INTG_NM", params.getOrDefault("SRA_FHSNM", "").toString().trim());													// 출하주 이름
-		params.put("MB_RLNO", params.getOrDefault("BIRTH", "").toString().trim());															// 생년월일
-		params.put("MB_MPNO", params.getOrDefault("SRA_FHS_REP_MPSVNO", "").toString().trim() + 
-							  params.getOrDefault("SRA_FHS_REP_MPHNO", "").toString().trim() +
-							  params.getOrDefault("SRA_FHS_REP_MPSQNO", "").toString().trim());												// 휴대전화번호
-		params.put("OHSE_TELNO", params.getOrDefault("SRA_FARM_AMN_ATEL", "").toString().trim() + 
-								 params.getOrDefault("SRA_FARM_AMN_HTEL", "").toString().trim() +
-								 params.getOrDefault("SRA_FARM_AMN_STEL", "").toString().trim());											// 자택전화번호
-		params.put("ZIP", params.getOrDefault("SRA_FARM_FZIP", "").toString() + params.getOrDefault("SRA_FARM_RZIP", "").toString());		// 우편번호
+		try {
+			// 2. 출하주 통합회원 정보(TB_LA_IS_MM_MBINTG) 통합회원 구분(MB_INTG_GB)이 02인 데이터 조회
+			// 통합회원 구분 ( 01:중도매인, 02:출하주)
+			params.put("MB_INTG_GB", "02");
+			params.put("MB_INTG_NM", params.getOrDefault("SRA_FHSNM", "").toString().trim());													// 출하주 이름
+			params.put("MB_RLNO", params.getOrDefault("BIRTH", "").toString().trim());															// 생년월일
+			params.put("MB_MPNO", params.getOrDefault("SRA_FHS_REP_MPSVNO", "").toString().trim() + 
+								  params.getOrDefault("SRA_FHS_REP_MPHNO", "").toString().trim() +
+								  params.getOrDefault("SRA_FHS_REP_MPSQNO", "").toString().trim());												// 휴대전화번호
+			params.put("OHSE_TELNO", params.getOrDefault("SRA_FARM_AMN_ATEL", "").toString().trim() + 
+									 params.getOrDefault("SRA_FARM_AMN_HTEL", "").toString().trim() +
+									 params.getOrDefault("SRA_FARM_AMN_STEL", "").toString().trim());											// 자택전화번호
+			params.put("ZIP", params.getOrDefault("SRA_FARM_FZIP", "").toString() + params.getOrDefault("SRA_FARM_RZIP", "").toString());		// 우편번호
 
-		// 농가정보 테이블에서 FHS_ID_NO로 이미 등록된 통합회원 코드가 있는지 조회
-		final Map<String, Object> fhsInfo = commonDao.getFhsInfo(params);
-		// 통합회원 테이블에서 이름, 생년월일 휴대전화번호로 통합회원 정보 조회
-		final Map<String, Object> fhsIntgNoInfo = commonDao.getIntgNoInfo(params);
-		
-		// 3. 농가 정보 테이블에 통합회원 코드가 있는 경우
-		if (fhsInfo != null && !fhsInfo.isEmpty() && !"-1".equals(fhsInfo.get("MB_INTG_NO"))) {
-			params.put("MB_INTG_NO", fhsInfo.get("MB_INTG_NO"));
-			final Map<String, Object> fhsIntgNumInfo = commonDao.getIntgNoInfoForNum(params);
+			// 농가정보 테이블에서 FHS_ID_NO로 이미 등록된 통합회원 코드가 있는지 조회
+			final Map<String, Object> fhsInfo = commonDao.getFhsInfo(params);
+			// 통합회원 테이블에서 이름, 생년월일 휴대전화번호로 통합회원 정보 조회
+			final Map<String, Object> fhsIntgNoInfo = commonDao.getIntgNoInfo(params);
 			
-			// 휴면 또는 탈퇴 회원이 아닌 경우 통합회원 정보 수정
-			if("0".equals(fhsIntgNumInfo.get("DORMACC_YN")) && "0".equals(fhsIntgNumInfo.get("DELACC_YN"))) {
-				commonDao.updateIntgInfo(params);
+			// 3. 농가 정보 테이블에 통합회원 코드가 있는 경우
+			if (fhsInfo != null && !fhsInfo.isEmpty() && !"-1".equals(fhsInfo.get("MB_INTG_NO"))) {
+				params.put("MB_INTG_NO", fhsInfo.get("MB_INTG_NO"));
+				final Map<String, Object> fhsIntgNumInfo = commonDao.getIntgNoInfoForNum(params);
+				
+				// 휴면 또는 탈퇴 회원이 아닌 경우 통합회원 정보 수정
+				if("0".equals(fhsIntgNumInfo.get("DORMACC_YN")) && "0".equals(fhsIntgNumInfo.get("DELACC_YN"))) {
+					commonDao.updateIntgInfo(params);
+				}
+				else if("1".equals(fhsIntgNumInfo.get("DORMACC_YN")) && "0".equals(fhsIntgNumInfo.get("DELACC_YN"))){	
+					//휴면 해제
+					this.updateDormcUserFhsClear(params);
+				}
 			}
-			else if("1".equals(fhsIntgNumInfo.get("DORMACC_YN")) && "0".equals(fhsIntgNumInfo.get("DELACC_YN"))){	
-				//휴면 해제
-				this.updateDormcUserFhsClear(params);
+			// 4. 통합회원 정보가 없으면 통합회원 정보 추가 > 이름, 생년월일, 휴대전화번호가 있는 경우에만 통합 진행
+			else if (fhsIntgNoInfo == null || fhsIntgNoInfo.isEmpty()) {
+				// 통합회원 테이블에 정보가 없고 출하주 테이블에 통합회원 코드가 없는 경우에만 신규 저장
+				if (!"".equals(params.get("MB_INTG_NM")) && !"".equals(params.get("MB_RLNO")) && !"".equals(params.get("MB_MPNO"))) {
+					commonDao.insertIntgInfo(params);
+				}
 			}
-		}
-		// 4. 통합회원 정보가 없으면 통합회원 정보 추가 > 이름, 생년월일, 휴대전화번호가 있는 경우에만 통합 진행
-		else if (fhsIntgNoInfo == null || fhsIntgNoInfo.isEmpty()) {
-			// 통합회원 테이블에 정보가 없고 출하주 테이블에 통합회원 코드가 없는 경우에만 신규 저장
-			if (!"".equals(params.get("MB_INTG_NM")) && !"".equals(params.get("MB_RLNO")) && !"".equals(params.get("MB_MPNO"))) {
-				commonDao.insertIntgInfo(params);
-			}
-		}
-		else {
-			params.put("MB_INTG_NO", fhsIntgNoInfo.get("MB_INTG_NO"));
+			else {
+				params.put("MB_INTG_NO", fhsIntgNoInfo.get("MB_INTG_NO"));
+			}	
+		}catch(Exception e){
+			log.error("updateFhsInfo :: 출하주 추가/수정 :: 통합회원 등록",e);
 		}
 		
 		// 4. 출하주정보 저장
