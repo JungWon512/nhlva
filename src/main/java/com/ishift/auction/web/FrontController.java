@@ -135,5 +135,20 @@ public class FrontController {
 		}
 		return resultMap;
 	}
+
 	
+	@RequestMapping(value = "/home/notice", method = { RequestMethod.GET, RequestMethod.POST })
+	public Map<String,Object> homeNoticeList(@RequestParam Map<String, Object> params) throws Exception {
+		// 전국지도 - 8개군에서 선택
+		Map<String, Object> resultMap = new HashMap<>();
+		resultMap.put("success", true);		
+		try {
+			resultMap.put("result", auctionService.selectNoticeList(params));
+		}catch(RuntimeException re) {		//SQLException | 
+			resultMap.put("success", false);
+			resultMap.put("message", "작업중 오류가 발생했습니다. 관리자에게 문의하세요.");
+			return resultMap;
+		}
+		return resultMap;
+	}
 }
