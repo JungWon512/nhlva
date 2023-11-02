@@ -1,6 +1,3 @@
-//var agoraAppKey='90525e1bc69c452992d212b96e1c4573';
-var agoraAppKey='06ddb0074099434dbb3a6a6cfa54e484';
-
 ;(function ($, win, doc) {
 
 	let videoInputSelect = $(".device-area");
@@ -75,7 +72,8 @@ var agoraAppKey='06ddb0074099434dbb3a6a6cfa54e484';
 				$('.btn_start').filter('[data-view-id="' + viewId + '"]').prop("disabled", true);
 				$('.btn_stop').filter('[data-view-id="' + viewId + '"]').prop("disabled", false);
 				agoraArr[viewId]= new Agora({
-				  appid: agoraAppKey
+//				  appid: agoraAppKey
+				  appid : $('#svcKey').val()
 				  , channel: null
 				  , uid: null
 				  , token: null

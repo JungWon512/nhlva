@@ -1,7 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ include file="/WEB-INF/__system/taglibs.jsp"%>
 <script src="/static/js/common/AgoraRTC_N-4.17.0.js" type="text/javascript"></script>
-<script src="/static/js/common/agora_receive.js"></script>
+<script src="/static/js/common/agoraReceive.js"></script>
 
 <input type="hidden" id="token" value="${token }"/>
 <input type="hidden" id="naBzPlc" value="${johapData.NA_BZPLC}" />

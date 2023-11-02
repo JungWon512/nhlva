@@ -87,12 +87,12 @@ var socket=null,auctionConfig={},scData={};
 var socketStart = function(){
 	if(!$('#naBzPlc').val()) return;        
 	if(socket){ socket.connect(); return;}
-//	var socketHost = (active == 'production')?"cowauction.kr":(active == 'develop')?"xn--e20bw05b.kr":"xn--e20bw05b.kr";
-	var socketHost = '192.168.0.129';
-	//socketHost += ':'+$('#webPort').val();
+	var socketHost = (active == 'production')?"cowauction.kr":(active == 'develop')?"xn--e20bw05b.kr":"xn--e20bw05b.kr";
+//	var socketHost = '192.168.0.129';
+//	socketHost += ':'+$('#webPort').val();
 	socketHost += ':9001';
-//	socket = io.connect('https://'+socketHost+ '/6003' + '?auctionHouseCode='  + $('#naBzPlc').val(), {secure:true});
-	socket = io.connect('http://'+socketHost+ '/6003' + '?auctionHouseCode='  + $('#naBzPlc').val());
+	socket = io.connect('https://'+socketHost+ '/6003' + '?auctionHouseCode='  + $('#naBzPlc').val(), {secure:true});
+//	socket = io.connect('http://'+socketHost+ '/6003' + '?auctionHouseCode='  + $('#naBzPlc').val());
 
 	socket.on('connect_error', connectErr);
 	socket.on('connect', connectHandler);
@@ -283,8 +283,8 @@ var setAgora = function(){
 	for(var i=1;i<=$('#kkoSvcCnt').val();i++){
 		joinChk = true;				 
 		var agoraOptions = {
-		   appid: agoraAppKey
-		  , audienceLatency : 1
+		  audienceLatency : 1
+		  , appid : $('#kkoSvcKey').val()
 		  , channelNum : 'remoteVideo'+ i
 		  , target : '.seeBox_slick ul.slider li.video_item'
 		  , height : videoHeight+'px'

@@ -47,8 +47,8 @@ $(function() {
 		for(var i=1;i<=$('#kkoSvcCnt').val();i++){
 			joinChk = true;				 
 			var agoraOptions = {
-			  appid: agoraAppKey
-			  , channel: null
+			  channel: null
+			  , appid : $('#kkoSvcKey').val()
 			  , uid: null
 			  , token: null
 			  , role: "audience"

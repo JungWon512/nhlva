@@ -1,6 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
 <%@ include file="/WEB-INF/__system/taglibs.jsp" %>
-<script src="/static/js/common/agora_receive.js"></script>
+<script src="/static/js/common/agoraReceive.js"></script>
 <script src="/static/js/socket.io/socket.io.js"></script>
 <style type="text/css">
 	@media only all and (max-width: 1024px) {
@@ -43,7 +43,7 @@
 			<dl>
 				<dt>${johapData.CLNTNM}<span>|</span>참가번호 <b class="join-num" style="font-weight:700;"></b>
 					<span>|</span>
-					<a href="javscript:;" class="m_sound">소리</a>
+					<a href="javscript:;" class="m_sound off">소리</a>
 				</dt>
 				<dd>
 					<div class="auc-txt">

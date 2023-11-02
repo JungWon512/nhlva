@@ -1,8 +1,10 @@
+//var agoraAppKey='bcb724a5f2e2499d895de9a56c386d48';
 
 class Agora {
 	constructor(options) {
 	  this.client = AgoraRTC.createClient({mode: "live",codec: "vp8"});
 	  this.options = options;
+	  //this.options.appid = agoraAppKey
 	  this.options.uid = null;
 	  this.options.token = null;
 	  this.options.role= "audience";
@@ -39,7 +41,7 @@ class Agora {
 			if (mediaType === 'video' && this.user.hasVideo) {
 				this.user.videoTrack.stop();
 				$('#player-'+this.options.channelNum).empty();
-				$('#player-'+this.options.channelNum).append("<video id='remoteVideo"+this.options.channelNum+"' class='init' index='"+this.options.channelNum+"' style=\"width: 100%;background: black;\" poster=\"/static/images/assets/no_video_18980.png\" muted=\"muted\" autoplay playsinline webkit-playsinline controls></video>");
+				$('#player-'+this.options.channelNum).append("<video id='remoteVideo"+this.options.channelNum+"' class='init' index='"+this.options.channelNum+"' style=\"width: 100%;background: black;\" poster=\"/static/images/assets/no_video_18980.png\" muted=\"muted\" autoplay playsinline webkit-playsinline ></video>");
 				$(this.target+' div#player-'+this.options.channelNum).height(this.height);
 			}
 			if (mediaType === 'audio' && this.user.hasAudio) {
@@ -55,11 +57,12 @@ class Agora {
 				if(this.user.hasVideo){
 					this.user.videoTrack.play('player-'+this.options.channelNum, {fit: "contain",mirror:false});
 					$(this.target+' div#player-'+this.options.channelNum).height(this.height);		
-					$(this.target+' #player-'+this.options.channelNum+' video').attr('controls',true);             
+					$(this.target+' #player-'+this.options.channelNum+' video').attr('controls',false);             
 					$(this.target+' #player-'+this.options.channelNum+' video').attr('autopictureinpicture',false);						
 				}else{
 					$('#player-'+this.options.channelNum).empty();
-					$('#player-'+this.options.channelNum).append("<video id='"+this.options.channelNum+"' index='"+this.options.channelNum+"' class='init' style=\"width: 100%;background: black;\" poster=\"/static/images/assets/no_video_18980.png\" muted=\"muted\" autoplay playsinline webkit-playsinline controls></video>");
+					
+					$('#player-'+this.options.channelNum).append("<video id='"+this.options.channelNum+"' index='"+this.options.channelNum+"' class='init' style=\"width: 100%;background: black;\" poster=\"/static/images/assets/no_video_18980.png\" muted=\"muted\" autoplay playsinline webkit-playsinline></video>");
 					$(this.target+' div#player-'+this.options.channelNum).height(this.height);					
 				}
 			}

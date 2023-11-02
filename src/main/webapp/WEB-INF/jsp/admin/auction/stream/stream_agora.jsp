@@ -1,6 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ include file="/WEB-INF/__system/taglibs.jsp"%>
-<script src="/static/js/common/agora_receive.js"></script>
+<script src="/static/js/common/agoraReceive.js"></script>
 <script src="/static/js/socket.io/socket.io.js"></script>
 
 <input type="hidden" id="token" value="${token }"/>

@@ -21,14 +21,15 @@ $(function() {
 		for(var i=1;i<=$('#kkoSvcCnt').val();i++){
 			joinChk = true;				 
 			var agoraOptions = {
-			  appid: agoraAppKey
-			  , channel: null
+			  channel: null
+			  , appid : $('#kkoSvcKey').val()
 			  , uid: null
 			  , token: null
 			  , role: "audience"
 			  , audienceLatency: 2
 			  , channelNum : 'remoteVideo'+ i
 			  , autoPlay : true
+			  , tagNone : true
 			  , target : 'div.seeBox_bottom.vidioSlide .seeBox_slick ul.slider li.video_item'
 			  , height : '93vh'
 			};

@@ -32,7 +32,7 @@ $(function() {
 				agoraArr[index].stopAgora('audio');
 			});
 			if(currentSlide == '0'){
-				if(!$('.m_sound').hasClass('off')) agoraArr[1].playAgora('audio');				
+				if(!$('.m_sound').hasClass('off')) agoraArr[1].playAgora('audio');
 			}else{
 				agoraArr[currentSlide].playAgora('video');
 				if(!$('.m_sound').hasClass('off')) agoraArr[1].playAgora('audio');				
@@ -474,7 +474,7 @@ var messageHandler = function(data) {
 			else {
 				$("b.join-num").find("span").text(dataArr[4]);
 				$(".calculator_head_pc b.join-num").text(dataArr[4]);
-				setLoopJoinEvent();
+				if(!$('.m_sound').hasClass('off')) agoraArr[1].playAgora('audio');
 			}
 			break;
 		case "AS" :
@@ -842,8 +842,8 @@ var setAgora = function(){
 	for(var i=1;i<=$('#kkoSvcCnt').val();i++){
 		joinChk = true;				 
 		var agoraOptions = {
-		  appid: agoraAppKey
-		  , channel: null
+		  channel: null
+		  , appid : $('#kkoSvcKey').val()
 		  , uid: null
 		  , token: null
 		  , role: "audience"
