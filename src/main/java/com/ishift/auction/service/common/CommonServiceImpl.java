@@ -11,6 +11,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.ObjectUtils;
 
 import com.google.common.base.CaseFormat;
+import com.ishift.auction.util.HttpUtils;
 import com.ishift.auction.util.McaUtil;
 import com.ishift.auction.util.SessionUtill;
 
@@ -26,6 +27,9 @@ public class CommonServiceImpl implements CommonService {
 	
 	@Autowired
 	private McaUtil mcaUtil;
+	
+	@Autowired
+	private HttpUtils httpUtils;
 	
 	@Autowired
 	private SessionUtill sessionUtil;
@@ -77,6 +81,13 @@ public class CommonServiceImpl implements CommonService {
 
 			// 4. 출하주 정보 저장
 			this.updateFhsInfo(dataMap4700);
+			
+			//5. 종축개량 API 연계(3대혈통,후대,형매)
+			String sraIndvAmnno = (String) params.get("SRA_INDV_AMNNO");
+			
+			if(!sraIndvAmnno.isEmpty()) {
+				this.updateAiakInfo(params);				
+			}
 			
 			// 5. 형매정보 저장
 			// 조회한 개체정보에 어미소 개체번호가 있는 경우
@@ -307,5 +318,58 @@ public class CommonServiceImpl implements CommonService {
 			String key = keys.next();
 			log.debug("{} : {}", key, map.getOrDefault(key, "").toString().trim());
 		}
+	}
+
+
+	/***
+	 *  2023.10.20 : 종축개량 API 통신후 현재 개체번호 기준으로 데이터 추가/수정
+	 *   - 
+	 */	
+	private void updateAiakInfo(Map<String,Object> params) throws Exception {
+		Map<String,Object> aiakMap= this.getAiakApiDataSet(params);
+		this.insAiakInfo(aiakMap);		
+	}
+	//종축개량 데이터 통신후 도축정보 API마저 수신후 형매/후대 도축정보 데이터셋 
+	public Map<String, Object> getAiakApiDataSet(Map<String, Object> params) throws Exception {		
+		Map<String,Object> aiakMap = httpUtils.getAiakApi(params);
+		List<Map<String, Object>> postData = (List<Map<String, Object>>) aiakMap.get("postData");
+		for(int i=0;i<postData.size();i++) {
+			Map<String, Object> item = postData.get(i);
+			String postSraIndvAmnno = (String) item.get("post_sra_indv_amnno");
+			Map<String, Object> info = httpUtils.getSlaughterInfoApiToMap(item);
+			item.put("POST_SRA_INDV_AMNNO", postSraIndvAmnno);
+			item.put("QGRADE_NM", info.get("qgradeNm"));
+			item.put("BUTCHERY_DT", info.get("butcheryYmd"));
+			item.put("BUTCHERY_WT", info.get("butcheryWeight"));
+		}
+		
+		List<Map<String, Object>> sibData = (List<Map<String, Object>>) aiakMap.get("sibData");
+		for(int i=0;i<sibData.size();i++) {
+			Map<String, Object> item = sibData.get(i);
+			String sibSraIndvAmnno = (String) item.get("sib_sra_indv_amnno");
+			Map<String, Object> info = httpUtils.getSlaughterInfoApiToMap(item);
+			item.put("SIB_SRA_INDV_AMNNO", sibSraIndvAmnno);
+			item.put("QGRADE_NM", info.get("qgradeNm"));
+			item.put("BUTCHERY_DT", info.get("butcheryYmd"));
+			item.put("BUTCHERY_WT", info.get("butcheryWeight"));
+		}
+		
+		return aiakMap;
+	}
+	public int insAiakInfo(Map<String, Object> map) throws Exception{
+		int insertNum = 0;
+		insertNum += commonDao.insAiakInfo(map);
+		commonDao.delAiakPostInfo(map);
+		List<Map<String, Object>> postData = (List<Map<String, Object>>) map.get("postData");
+		for(Map<String, Object> postMap: postData) {
+			insertNum += commonDao.insAiakPostInfo(postMap);			
+		}
+
+		commonDao.delAiakSibInfo(map);
+		List<Map<String, Object>> sibData = (List<Map<String, Object>>) map.get("sibData");
+		for(Map<String, Object> sibMap: sibData) {
+			insertNum += commonDao.insAiakSibInfo(sibMap);			
+		}
+		return insertNum;
 	}
 }

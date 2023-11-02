@@ -790,4 +790,80 @@
 		DELETE FROM TB_LA_IS_BK_DORM_FHS
 		WHERE MB_INTG_NO = #{MB_INTG_NO}
 	</delete>
+	
+	<update id="insAiakInfo" parameterType="hashMap">
+		 MERGE INTO TB_LA_IS_MM_INDV_BLD A
+		 USING DUAL
+			ON (
+				A.SRA_INDV_AMNNO = TRIM(#{SRA_INDV_AMNNO})
+			 )
+		  WHEN MATCHED THEN UPDATE SET
+			MCOW_SRA_INDV_AMNNO         = #{MCOW_SRA_INDV_AMNNO}
+			, FCOW_SRA_INDV_AMNNO         = #{FCOW_SRA_INDV_AMNNO}
+			, FCOW_KPN_NO                 = #{FCOW_KPN_NO}
+			, GRMCOW_SRA_INDV_AMNNO       = #{GRMCOW_SRA_INDV_AMNNO}
+			, GRFCOW_SRA_INDV_AMNNO       = #{GRFCOW_SRA_INDV_AMNNO}
+			, GRFCOW_KPN_NO               = #{GRFCOW_KPN_NO}
+			, MTGRMCOW_SRA_INDV_AMNNO     = #{MTGRMCOW_SRA_INDV_AMNNO}
+			, MTGRFCOW_SRA_INDV_AMNNO     = #{MTGRFCOW_SRA_INDV_AMNNO}
+			, MTGRFCOW_KPN_NO             = #{MTGRFCOW_KPN_NO}
+			, EPD_VAL_1                   = #{EPD_VAL_1}
+			, EPD_GRD_1                   = #{EPD_GRD_1}
+			, EPD_VAL_2                   = #{EPD_VAL_2}
+			, EPD_GRD_2                   = #{EPD_GRD_2}
+			, EPD_VAL_3                   = #{EPD_VAL_3}
+			, EPD_GRD_3                   = #{EPD_GRD_3}
+			, EPD_VAL_4                   = #{EPD_VAL_4}
+			, EPD_GRD_4	                = #{EPD_GRD_4}
+			, LSCHG_DTM					= SYSDATE
+			, LSCHGMN_ENO				=  #{regUsrid}
+		  WHEN NOT MATCHED THEN INSERT
+		  (
+			SRA_INDV_AMNNO
+			, MCOW_SRA_INDV_AMNNO
+			, FCOW_SRA_INDV_AMNNO
+			, FCOW_KPN_NO
+			, GRMCOW_SRA_INDV_AMNNO
+			, GRFCOW_SRA_INDV_AMNNO
+			, GRFCOW_KPN_NO
+			, MTGRMCOW_SRA_INDV_AMNNO
+			, MTGRFCOW_SRA_INDV_AMNNO
+			, MTGRFCOW_KPN_NO
+			, EPD_VAL_1
+			, EPD_GRD_1
+			, EPD_VAL_2
+			, EPD_GRD_2
+			, EPD_VAL_3
+			, EPD_GRD_3
+			, EPD_VAL_4
+			, EPD_GRD_4
+			, FSRG_DTM
+			, FSRGMN_ENO
+			, LSCHG_DTM
+			, LSCHGMN_ENO
+		  )VALUES(
+			#{SRA_INDV_AMNNO}
+			, #{MCOW_SRA_INDV_AMNNO}
+			, #{FCOW_SRA_INDV_AMNNO}
+			, #{FCOW_KPN_NO}
+			, #{GRMCOW_SRA_INDV_AMNNO}
+			, #{GRFCOW_SRA_INDV_AMNNO}
+			, #{GRFCOW_KPN_NO}
+			, #{MTGRMCOW_SRA_INDV_AMNNO}
+			, #{MTGRFCOW_SRA_INDV_AMNNO}
+			, #{MTGRFCOW_KPN_NO}
+			, #{EPD_VAL_1}
+			, #{EPD_GRD_1}
+			, #{EPD_VAL_2}
+			, #{EPD_GRD_2}
+			, #{EPD_VAL_3}
+			, #{EPD_GRD_3}
+			, #{EPD_VAL_4}
+			, #{EPD_GRD_4}
+			, SYSDATE
+			, #{regUsrid}
+			, SYSDATE
+			, #{regUsrid}
+		  )
+	</update>
 </mapper>

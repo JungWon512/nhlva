@@ -8,6 +8,7 @@ import java.io.OutputStreamWriter;
 import java.io.UnsupportedEncodingException;
 import java.net.ConnectException;
 import java.net.HttpURLConnection;
+import java.net.MalformedURLException;
 import java.net.SocketTimeoutException;
 import java.net.URL;
 import java.net.UnknownHostException;
@@ -840,5 +841,146 @@ public class HttpUtils {
     	sc.init(null, trustAllCerts, new SecureRandom());
     	HttpsURLConnection.setDefaultSSLSocketFactory(sc.getSocketFactory());
     	HttpsURLConnection.setDefaultHostnameVerifier(hv);		
+	}
+
+	public String getSlaughterInfoApi(Map<String, Object> map) throws Exception{		
+		String sendUrl = "http://data.ekape.or.kr/openapi-data/service/user/mtrace/breeding/cattle";
+		sendUrl += "?serviceKey=" + openApiServiceKey;
+		sendUrl += "&cattleNo=" + map.get("SRA_INDV_AMNNO");
+		
+		StringBuilder urlBuilder = new StringBuilder(sendUrl);
+        URL url = new URL(urlBuilder.toString());
+        HttpURLConnection conn = null;
+        String result = "";
+				
+		try {
+			
+			conn = (HttpURLConnection) url.openConnection();
+	        conn.setRequestMethod("GET");
+	        conn.setRequestProperty("Content-type", "application/json");
+			conn.setConnectTimeout(5000);
+			conn.setReadTimeout(5000);
+	        log.debug("Response code: " + conn.getResponseCode());
+	        BufferedReader rd = null;
+	        
+	        if(conn.getResponseCode() >= 200 && conn.getResponseCode() <=300 ) {
+				rd = new BufferedReader(new InputStreamReader(conn.getInputStream()));
+			}else {
+				rd = new BufferedReader(new InputStreamReader(conn.getErrorStream()));
+			}
+	        
+	        StringBuilder sb = new StringBuilder();
+	        String line;
+	        while ((line = rd.readLine()) != null) {
+	            sb.append(line);
+	        }
+	        rd.close();
+	        conn.disconnect();
+	        log.debug(sb.toString());
+	        result = sb.toString();
+	       
+			
+		} catch (UnknownHostException | RuntimeException | SocketTimeoutException e) {
+        	log.error(e.getMessage() ,e);
+            throw new Exception("서버 수행중 오류가 발생하였습니다.");			
+        } catch (Exception e) {
+        	log.error(e.getMessage() ,e);
+            throw new RuntimeException("서버 수행중 오류가 발생하였습니다.");        	
+        } finally {
+            if (conn!= null) conn.disconnect();
+        }
+		 	
+        return result;
+    }
+	
+	public Map<String, Object> getSlaughterInfoApiToMap(Map<String, Object> param) {
+		// TODO Auto-generated method stub
+		String response ="";
+		Map<String, Object> nodeMap      = new HashMap<String, Object>();
+		try {
+			response = getSlaughterInfoApi(param);
+			if(response.length() > 0) {
+				JSONObject json = XML.toJSONObject(response);
+		        
+		        if(json != null && json.getJSONObject("response") != null && json.getJSONObject("response").getJSONObject("body") !=null
+		        		&& json.getJSONObject("response").getJSONObject("body").getJSONObject("items") != null) {
+			        JSONObject jItem = json.getJSONObject("response").getJSONObject("body").getJSONObject("items").getJSONObject("item");			        
+		        	//JSONObject jItem = (JSONObject) item;
+	        		Iterator<String> it =jItem.keySet().iterator();
+	        		while(it.hasNext()) {
+	        			String key = (String) it.next();
+	        			nodeMap.put(key, jItem.get(key));			        			
+	        		}
+		        }
+			}
+		}catch(ConnectException ce) {
+        	log.error(ce.getMessage());
+        }catch(RuntimeException re) {
+        	log.error(re.getMessage());
+        }catch (Exception e) {
+			log.debug("OPEN API 통신중 ERROR",e);
+		}
+		return nodeMap;		
+	}
+	
+	/**
+	 * @methodName    : getAiakApi
+	 * @author        : Jung JungWon
+	 * @param map 
+	 * @throws CusException 
+	 * @date          : 2023.10.16
+	 * @Comments      : 
+	 */
+	public Map<String, Object> getAiakApi(Map<String,Object> params) throws Exception {
+		// TODO Auto-generated method stub
+
+		Map<String, Object> nodeMap      = new HashMap<String, Object>();
+		String sendUrl = "";
+		sendUrl += "?serviceKey=" + "7vHI8ukF3BjfpQW8MPs9KtxNwzonZYSbYq6MVPIKshJNeQHkLqxsqd1ru5btfLgIFuLRCzCLJDLYkHp%2FvI6y0A%3D%3D";
+		sendUrl += "&traceNo=" + params.get("SRA_INDV_AMNNO");//  "002125769192";
+        HttpURLConnection conn = null;
+		log.debug("sendUrl: " + sendUrl);
+		try {
+			StringBuilder urlBuilder = new StringBuilder(sendUrl);
+	        URL url = new URL(urlBuilder.toString());
+				
+			
+			conn = (HttpURLConnection) url.openConnection();
+			conn.setConnectTimeout(1000);
+			conn.setReadTimeout(1000);
+	        conn.setRequestMethod("GET");
+	        conn.setRequestProperty("Content-type", "application/json");
+	        log.debug("Response code: " + conn.getResponseCode());
+	        BufferedReader rd = null;
+	        
+	        if(conn.getResponseCode() >= 200 && conn.getResponseCode() <=300 ) {
+				rd = new BufferedReader(new InputStreamReader(conn.getInputStream()));
+			}else {
+				rd = new BufferedReader(new InputStreamReader(conn.getErrorStream()));
+			}
+	        
+	        StringBuilder sb = new StringBuilder();
+	        String line;
+	        while ((line = rd.readLine()) != null) {
+	            sb.append(line);
+	        }
+	        rd.close();
+	        conn.disconnect();
+	        log.debug(sb.toString());
+	        JSONObject json = XML.toJSONObject(sb.toString());
+	        
+	        if(json != null && json.getJSONObject("response") != null && json.getJSONObject("response").getJSONObject("body") !=null
+	        		&& json.getJSONObject("response").getJSONObject("body").getJSONObject("items") != null) {
+	        }	        
+		} catch (RuntimeException | IOException e) {
+			log.debug("openData 접종정보 연계 중 오류가 발생하였습니다.",e);
+			nodeMap = null;
+        } catch (Exception e) {
+        	log.debug("openData 접종정보 연계 중 오류가 발생하였습니다.",e);
+			nodeMap = null;
+        } finally {
+            if (conn!= null) conn.disconnect();
+        }
+		return nodeMap;
 	}
 }

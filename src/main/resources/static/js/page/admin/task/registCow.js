@@ -49,6 +49,12 @@
 			// input 값 초기화 이벤트
 			$(".btn_input_reset").on(clickEvent, function() {
 				$(this).siblings("input").val("");
+				var inNm = $(this).siblings("input").attr('name');
+				if(inNm === 'brclIspDt'){
+					$('input[name=brclElapseDate]').val('');
+				}else if(inNm === 'vacnDt'){
+					$('input[name=vacnElapseDate]').val('');
+				}
 			});
 			
 			// 임신구분 변경 이벤트
@@ -82,6 +88,24 @@
 			$("input:checkbox").on("change", function() {
 				$(this).val($(this).is(":checked") ? "1" : "0");
 				$(this).next("label").text($(this).is(":checked") ? "여" : "부");
+			});
+			
+			//브루셀라 경과일 계산
+			$("input[name='brclIspDt']").on("change", function(){
+				var aucDt = new Date($('td[name=aucDt]').text());
+				if($(this).val()){
+					var brclIspDt = new Date($(this).val());
+					$('input[name=brclElapseDate]').val((aucDt.getTime() - brclIspDt.getTime()) /1000 / 60 / 60 / 24);
+				}
+			});
+			
+			//구제역 경과일 계산
+			$("input[name='vacnDt']").on("change", function(){
+				var aucDt = new Date($('td[name=aucDt]').text());
+				if($(this).val()){
+					var vacnDt = new Date($(this).val());
+					$('input[name=vacnElapseDate]').val((aucDt.getTime() - vacnDt.getTime()) /1000 / 60 / 60 / 24);
+				}
 			});
 		};
 
@@ -208,11 +232,11 @@
 			        	}
 					 }else{						 
 		            	$("input[name=brclIspRztC]").val("0");
-			        	$("input[name=brclIspDt]").val('');			        	
-			        	$("input[name=vacnOrder]").val('');        	
-			        	$("input[name=vacnDt]").val('');
-			        	$("input[name=bovineDt]").val('');
-			        	$("input[name=bovineRsltnm]").val('');						 
+			        	//$("input[name=brclIspDt]").val('');			        	
+			        	//$("input[name=vacnOrder]").val('');        	
+			        	//$("input[name=vacnDt]").val('');
+			        	//$("input[name=bovineDt]").val('');
+			        	//$("input[name=bovineRsltnm]").val('');						 
 					 }
 				}
 				else {
@@ -233,6 +257,18 @@
 				  }
 				  
 				}
+				
+				//브루셀라 경과일
+				var aucDt = new Date($('td[name=aucDt]').text());
+				if($('input[name=brclIspDt]').val()){
+					var brclIspDt = new Date($('input[name=brclIspDt]').val());
+					$('input[name=brclElapseDate]').val((aucDt.getTime() - brclIspDt.getTime()) /1000 / 60 / 60 / 24);
+				}
+				if($('input[name=vacnDt]').val()){
+					var vacnDt = new Date($('input[name=vacnDt]').val());
+					$('input[name=vacnElapseDate]').val((aucDt.getTime() - vacnDt.getTime()) /1000 / 60 / 60 / 24);
+				}
+				;
 			});			
 		}
 

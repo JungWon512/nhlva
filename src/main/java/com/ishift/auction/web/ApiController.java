@@ -2115,4 +2115,24 @@ public class ApiController {
 		}
 		return result;
 	}
+
+
+	@PostMapping(value = "/api/v1/data/traceNoSearch", produces = MediaType.APPLICATION_JSON_VALUE)
+	public Map<String, Object> traceNoSearch(@RequestBody final Map<String, Object> param) {
+		Map<String, Object> result = new HashMap<String, Object>();		
+		
+        try {            
+            result.put("json", httpUtils.getSlaughterInfoApiToMap(param));            
+            log.debug("REST API END"); 
+            
+        }catch (RuntimeException e) {
+        	log.error("",e);
+        	result.put("error", e.getMessage());
+        } catch (Exception e) {
+        	log.error("",e);
+        	result.put("error", e.getMessage());
+        }
+		
+		return result;
+	}
 }

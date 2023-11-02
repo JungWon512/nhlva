@@ -37,11 +37,9 @@
 				<tbody>
 					<tr>
 						<th><strong class="fc-red">*</strong>경매일자</th>
-						<td class="bg-lilac">
-							<fmt:parseDate value="${params.aucDt}" pattern="yyyyMMdd" var="tmpAucDt" />
-							<fmt:formatDate value="${tmpAucDt}" pattern="yyyy-MM-dd" var="aucDt" />
-							${aucDt}
-						</td>
+						<fmt:parseDate value="${params.aucDt}" pattern="yyyyMMdd" var="tmpAucDt" />
+						<fmt:formatDate value="${tmpAucDt}" pattern="yyyy-MM-dd" var="aucDt" />
+						<td class="bg-lilac" name='aucDt'>${aucDt}</td>
 					</tr>
 					<tr>
 						<th><strong class="fc-red">*</strong>경매대상</th>
@@ -342,24 +340,33 @@
 			<table class="table-detail">
 				<colgroup>
 					<col width="31%">
+					<col width="20%">
 					<col>
 				</colgroup>
 				<tbody>
 					<tr>
-						<th>브루셀라검사일</th>
-						<td>
+						<th rowspan='2'>브루셀라 검사일</th>
+						<td colspan='2'>
 							<div class="inp">
 								<fmt:parseDate value="${sogCowInfo.BRCL_ISP_DT}" pattern="yyyyMMdd" var="tmpBrclIspDt" />
 								<fmt:formatDate value="${tmpBrclIspDt}" pattern="yyyy-MM-dd" var="brclIspDt" />
 								<input type="date" name="brclIspDt" class="calendar" value="${brclIspDt}" placeholder="브루셀라 검사일" maxlength="10" max="${params.aucDt}" />
 								<button type="button" class="btn_input_reset"></button>
 							</div>
-							<input type="hidden" name="brclIspRztC" value="${sogCowInfo.BRCL_ISP_RZT_C}" placeholder="브루셀라 결과" maxlength="1">							
+							<input type="hidden" name="brclIspRztC" value="${sogCowInfo.BRCL_ISP_RZT_C}" placeholder="브루셀라 결과" maxlength="1">
+						</td>
+					</tr>
+					<tr>
+						<th>경과일</th>										
+						<td>
+							<div class="inp">
+								<input type="text" name="brclElapseDate" value="" placeholder="경과일" maxlength="" readonly/>
+							</div>
 						</td>
 					</tr>
 					<tr>
 						<th>브루셀라검사증<br>제출여부</th>
-						<td>
+						<td colspan='2'>
 							<div class="inp">
 								<input type="checkbox" name="brclIspCtfwSmtYn" id="brclIspCtfwSmtYn"
 									   value="${empty fn:trim(sogCowInfo.BRCL_ISP_CTFW_SMT_YN) ? '0' : fn:trim(sogCowInfo.BRCL_ISP_CTFW_SMT_YN)}"
@@ -369,18 +376,9 @@
 							</div>
 						</td>
 					</tr>
-					<tr>
-						<th>구제역<br/>접종차수</th>
-						<td>			
-							<div class="inp">
-								<input type="text" name="vacnOrder" value="${sogCowInfo.VACN_ORDER}" placeholder="구제역 접종차수" maxlength="">
-								<button type="button" class="btn_input_reset"></button>
-							</div>						
-						</td>
-					</tr>
 					<tr>					
-						<th>구제역<br/>예방접종일</th>
-						<td>							
+						<th rowspan='2'>구제역<br/>예방접종일</th>
+						<td colspan='2'>
 							<div class="inp">
 								<fmt:parseDate value="${sogCowInfo.VACN_DT}" pattern="yyyyMMdd" var="tmpVacnDt" />
 								<fmt:formatDate value="${tmpVacnDt}" pattern="yyyy-MM-dd" var="vacnDt" />
@@ -389,9 +387,26 @@
 							</div>						
 						</td>
 					</tr>
+					<tr>	
+						<th>경과일</th>
+						<td>
+							<div class="inp">
+								<input type="text" name="vacnElapseDate" value="" placeholder="경과일" maxlength="" readonly />
+							</div>
+						</td>
+					</tr>
+					<tr>
+						<th>구제역<br/>접종차수</th>
+						<td colspan='2'>
+							<div class="inp">
+								<input type="text" name="vacnOrder" value="${sogCowInfo.VACN_ORDER}" placeholder="구제역 접종차수" maxlength="">
+								<button type="button" class="btn_input_reset"></button>
+							</div>						
+						</td>
+					</tr>
 					<tr>
 						<th rowspan="2">우결핵<br/>검사일</th>
-						<td>							
+						<td colspan='2'>
 							<div class="inp">
 								<fmt:parseDate value="${sogCowInfo.BOVINE_DT}" pattern="yyyyMMdd" var="tmpBovineDt" />
 								<fmt:formatDate value="${tmpBovineDt}" pattern="yyyy-MM-dd" var="bovineDt" />
@@ -401,7 +416,7 @@
 						</td>
 					</tr>
 					<tr>
-						<td>
+						<td colspan='2'>
 							<div class="inp">
 								<input type="text" name="bovineRsltnm" value="${sogCowInfo.BOVINE_RSLTNM}" placeholder="우결핵 접종결과" maxlength="">
 								<button type="button" class="btn_input_reset"></button>
