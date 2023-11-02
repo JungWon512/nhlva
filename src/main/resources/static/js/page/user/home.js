@@ -21,7 +21,7 @@
 				if(data && data.result?.length > 0){
 					var noticeInfo = data.result[0];
 					var cntn = noticeInfo.BBRD_CNTN;
-			        cntn = cntn.replace(/&lt;/gi  , "<").replace(/&gt;/gi  , ">");
+			        cntn = cntn.replace(/&lt;/gi  , "<").replace(/&gt;/gi  , ">").replace(/&amp;/gi  , "&");
 					var popHtml = [];
 					popHtml.push("<div id='chg_result' class='modal-wrap pop_cow_input'>");
 					popHtml.push("		<div class='modal-content pop_ad_mod'>");
@@ -31,7 +31,7 @@
 					popHtml.push("			</div>");
 					popHtml.push("			<div class='modal-body'>");
 					popHtml.push("				<ul style='padding:12px;margin-top:-15px;'>");
-					popHtml.push("					<li style='font-size:16px;margin-bottom:10px;'>"+cntn+"</li>");
+					popHtml.push("					<li style='font-size:16px;margin-bottom:10px;'></li>");
 					popHtml.push("				</ul>");
 					popHtml.push("			</div>");
 					popHtml.push("		</div>");
@@ -39,7 +39,7 @@
 					
 					$("body").append(popHtml.join(""));
 					modalPopup(".pop_cow_input");
-					
+					$(document).find(".pop_cow_input .modal-body ul li").html(cntn);
 					//시스템 점검 공지 안내 팝업 닫기 버튼 event
 					$(document).find(".pop_cow_input .modal_popup_close").unbind("click").click(function(){
 						modalPopupClose('.pop_cow_input');
