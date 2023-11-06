@@ -265,48 +265,7 @@ public class AuctionController extends CommonController {
 		}catch (SQLException se) {
 			log.error("AuctionController.watch : {} ",se);
 		}
-		mav.setViewName("auction/watch/watch");
-		return mav;
-	}
-
-	@RequestMapping(value = "/watch_agora",method = { RequestMethod.GET, RequestMethod.POST })
-	public ModelAndView watchAgora(@RequestParam(name = "place", required = false) String place) throws Exception {
-		// 경매관전
-		LOGGER.debug("start of watch.do");
-		ModelAndView mav = new ModelAndView();
-		try {
-	        LocalDateTime date = LocalDateTime.now();
-	        Map<String,Object> map = new HashMap<String,Object>();
-	        String today = date.format(DateTimeFormatter.ofPattern("yyyyMMdd"));
-	        map.put("searchDate", today);
-	        map.put("naBzPlcNo", place);
-	        
-	        Map<String,Object> johap = adminService.selectOneJohap(map);
-			List<Map<String,Object>> list=auctionService.entrySelectList(map);
-			Map<String,Object> count =auctionService.selectCountEntry(map);
-			//Map<String,Object> calendar =auctionService.selectCalendarList(map).get(0);
-	
-	        JwtTokenVo jwtTokenVo = JwtTokenVo.builder()
-					.auctionHouseCode(johap.get("NA_BZPLC").toString())
-					.userMemNum("WATCHER")
-					.userRole(Constants.UserRole.WATCHER)
-					.build();
-	        String token = jwtTokenUtil.generateToken(jwtTokenVo, Constants.JwtConstants.ACCESS_TOKEN);
-
-	        mav.addObject("johapData",johap);
-        	// mav.addObject("dateVo",calendar);
-	        mav.addObject("dateVo",auctionService.selectNearAucDate(map));
-	        mav.addObject("watchList",list);
-	        mav.addObject("watchCount",count);
-	        mav.addObject("watchToken",token);
-	        mav.addObject("subheaderTitle","경매관전");
-	        mav.addObject("today",date.format(DateTimeFormatter.ofPattern("yyyy-MM-dd")));
-		}catch (RuntimeException re) {
-			log.error("AuctionController.watch : {} ",re);
-		}catch (SQLException se) {
-			log.error("AuctionController.watch : {} ",se);
-		}
-		mav.setViewName("auction/watch/watch_agora");
+		mav.setViewName("auction/watch/watch"+"_agora");
 		return mav;
 	}
 	
