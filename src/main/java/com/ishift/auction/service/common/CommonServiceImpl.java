@@ -11,6 +11,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.ObjectUtils;
 
 import com.google.common.base.CaseFormat;
+import com.ishift.auction.util.HttpUtils;
 import com.ishift.auction.util.McaUtil;
 import com.ishift.auction.util.SessionUtill;
 
@@ -26,6 +27,9 @@ public class CommonServiceImpl implements CommonService {
 	
 	@Autowired
 	private McaUtil mcaUtil;
+	
+	@Autowired
+	private HttpUtils httpUtils;
 	
 	@Autowired
 	private SessionUtill sessionUtil;
@@ -90,6 +94,14 @@ public class CommonServiceImpl implements CommonService {
 			// 6. 후대정보 저장
 			//params.put("SRA_INDV_AMNNO", params.get("sra_indv_amnno"));
 			//this.updateIndvPostInfo(params);
+			
+			//5. 종축개량 데이터 조회 후 해당 데이터 기준으로 MERGE
+			String barcode = (String)params.get("sra_indv_amnno");
+			if(barcode.length() == 15) barcode = barcode.substring(3);
+			Map<String,Object> aiakInfo = httpUtils.callApiAiakMap(barcode);
+			if(aiakInfo != null) this.updateIndvAiakInfo(aiakInfo);
+			
+			//6. 후대/ 형매 MERGE이후 산차 재계산하여 UPDATE
 		}
 		catch(RuntimeException re) {
 			result.put("success", false);
@@ -307,5 +319,30 @@ public class CommonServiceImpl implements CommonService {
 			String key = keys.next();
 			log.debug("{} : {}", key, map.getOrDefault(key, "").toString().trim());
 		}
+	}
+
+
+	private void updateIndvAiakInfo(Map<String, Object> map) throws SQLException {
+		List<Map<String,Object>> postArr = (List<Map<String, Object>>) map.get("postInfo");
+		List<Map<String,Object>> sibArr = (List<Map<String, Object>>) map.get("sibInfo");
+		commonDao.updatetIndvAiakInfo(map);
+		for(Map<String,Object> postMap : postArr) {
+			commonDao.updatetIndvAiakPostInfo(postMap);			
+		}
+		for(Map<String,Object> sibMap : sibArr) {
+			commonDao.updatetIndvAiakSibInfo(sibMap);	
+		}
+	}
+	
+	public List<Map<String, Object>> selectBloodInfo(Map<String, Object> params) throws SQLException{
+		return commonDao.selectBloodInfo(params);
+	}
+
+	public List<Map<String, Object>> selectIndvPost(Map<String, Object> params) throws SQLException{
+		return commonDao.selectIndvPost(params);		
+	}
+
+	public List<Map<String, Object>> selectIndvSib(Map<String, Object> params) throws SQLException{
+		return commonDao.selectIndvSib(params);		
 	}
 }

@@ -220,4 +220,28 @@ public class CommonDAO {
 		mainDao.delete("commonMapper.deleteDormFhsBackupData", params);
 	}
 
+	public void updatetIndvAiakInfo(Map<String, Object> params) throws SQLException{
+		mainDao.update("commonMapper.updatetIndvAiakInfo", params);
+	}
+
+	public void updatetIndvAiakPostInfo(Map<String, Object> params) throws SQLException{
+		mainDao.update("commonMapper.updatetIndvAiakPostInfo", params);		
+	}
+
+	public void updatetIndvAiakSibInfo(Map<String, Object> params) throws SQLException{
+		mainDao.update("commonMapper.updatetIndvAiakSibInfo", params);
+	}
+
+	public List<Map<String, Object>> selectBloodInfo(Map<String, Object> params) throws SQLException {
+		return mainDao.selectList("commonMapper.selectBloodInfo", params);
+	}
+
+	public List<Map<String, Object>> selectIndvSib(Map<String, Object> params) throws SQLException {
+		return mainDao.selectList("commonMapper.selectIndvSib", params);
+	}
+
+	public List<Map<String, Object>> selectIndvPost(Map<String, Object> params) throws SQLException {
+		return mainDao.selectList("commonMapper.selectIndvPost", params);
+	}
+
 }

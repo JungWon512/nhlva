@@ -23,6 +23,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.ishift.auction.configuration.security.token.AdminUserAuthenticationToken;
 import com.ishift.auction.service.auction.AuctionDAO;
 import com.ishift.auction.service.auction.AuctionService;
+import com.ishift.auction.service.common.CommonService;
 import com.ishift.auction.service.login.LoginService;
 import com.ishift.auction.util.AlarmTalkForm;
 import com.ishift.auction.util.Constants;
@@ -98,6 +99,9 @@ public class ApiController {
 	AuctionDAO auctionDao;
 	@Autowired
 	private AlarmTalkForm alarmTalkForm;
+
+	@Autowired
+	private CommonService commonService;
 	
 	@Value("${spring.profiles.active}")
 	private String profile;
@@ -2106,6 +2110,86 @@ public class ApiController {
 			}
 			result.put("success", true);
 			result.put("data", mcaResult);
+		}
+		catch (Exception e) {
+			log.error(e.getMessage(),e);
+			result.put("success", false);
+			result.put("message", "작업중 오류가 발생했습니다. 관리자에게 문의하세요.");
+			return result;
+		}
+		return result;
+	}
+
+
+	@ResponseBody
+	@PostMapping(value = "/api/{version}/inf/aiak/info"
+				, consumes = MediaType.APPLICATION_JSON_VALUE
+				, produces = MediaType.APPLICATION_JSON_VALUE)
+	public Map<String, Object> getAiakInfo(@RequestBody Map<String, Object> params
+			, @PathVariable(name = "version") String version
+			//, @RequestParam(name = "barcode", required = false) final String barcode
+			) {
+		final Map<String, Object> result = new HashMap<String, Object>();
+		try {
+			//Map<String,Object> mcaResult =httpUtils.callApiAiakV2(barcode);
+			String barcode= (String)params.get("barcode");
+			Map<String,Object> apiResult =httpUtils.callApiAiakMap(barcode);
+			result.put("success", true);
+			result.put("data", apiResult);
+		}
+		catch (Exception e) {
+			log.error(e.getMessage(),e);
+			result.put("success", false);
+			result.put("message", "작업중 오류가 발생했습니다. 관리자에게 문의하세요.");
+			return result;
+		}
+		return result;
+	}
+
+	@ResponseBody
+	@PostMapping(value = "/api/{version}/inf/open-cattle/info"
+				, consumes = MediaType.APPLICATION_JSON_VALUE
+				, produces = MediaType.APPLICATION_JSON_VALUE)
+	public Map<String, Object> getOpenDataCattle(@RequestBody Map<String, Object> params
+			, @PathVariable(name = "version") String version
+			//, @RequestParam(name = "barcode", required = false) final String barcode
+			) {
+		final Map<String, Object> result = new HashMap<String, Object>();
+		try {
+			//Map<String,Object> mcaResult =httpUtils.callApiAiakV2(barcode);
+			String barcode= (String)params.get("barcode");
+			String serviceKey= (String)params.get("serviceKey");
+			Map<String,Object> apiResult =httpUtils.callApiOpenDataCattle(barcode,serviceKey);
+			result.put("success", true);
+			result.put("data", apiResult);
+		}
+		catch (Exception e) {
+			log.error(e.getMessage(),e);
+			result.put("success", false);
+			result.put("message", "작업중 오류가 발생했습니다. 관리자에게 문의하세요.");
+			return result;
+		}
+		return result;
+	}
+
+
+	@ResponseBody
+	@PostMapping(value = "/api/{version}/data/bld/info"
+				, consumes = MediaType.APPLICATION_JSON_VALUE
+				, produces = MediaType.APPLICATION_JSON_VALUE)
+	public Map<String, Object> getBloodInfo(@RequestBody Map<String, Object> params
+			, @PathVariable(name = "version") String version
+			//, @RequestParam(name = "barcode", required = false) final String barcode
+			) {
+		final Map<String, Object> result = new HashMap<String, Object>();
+		try {
+			Map<String, Object> data = new HashMap<>();
+			data.put("BLOOD_INFO", commonService.selectBloodInfo(params));
+			data.put("POST_INFO", commonService.selectIndvPost(params));
+			data.put("SIB_INFO", commonService.selectIndvSib(params));
+			
+			result.put("success", true);
+			result.put("data", data);
 		}
 		catch (Exception e) {
 			log.error(e.getMessage(),e);

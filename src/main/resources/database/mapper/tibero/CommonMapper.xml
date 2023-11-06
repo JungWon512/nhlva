@@ -790,4 +790,203 @@
 		DELETE FROM TB_LA_IS_BK_DORM_FHS
 		WHERE MB_INTG_NO = #{MB_INTG_NO}
 	</delete>
+	
+	<update id="updatetIndvAiakInfo" parameterType="hashMap">
+		/* CommonMapper.updatetIndvAiakInfo */
+		MERGE INTO TB_LA_IS_MM_INDV_BLD A
+		USING DUAL B
+		ON(
+			A.SRA_INDV_AMNNO = TRIM(#{SRA_INDV_AMNNO})
+		)	
+		WHEN MATCHED THEN 
+			UPDATE SET                         
+				MCOW_SRA_INDV_AMNNO                   =   CASE WHEN TRIM(#{MCOW_SRA_INDV_AMNNO} ) IS NOT NULL THEN '410'||TRIM(#{MCOW_SRA_INDV_AMNNO} ) ELSE NULL END
+				, FCOW_SRA_INDV_AMNNO                   =   CASE WHEN TRIM(#{FCOW_SRA_INDV_AMNNO} ) IS NOT NULL THEN '410'||TRIM(#{FCOW_SRA_INDV_AMNNO} ) ELSE NULL END
+				, GRMCOW_SRA_INDV_AMNNO                 =   CASE WHEN TRIM(#{GRMCOW_SRA_INDV_AMNNO} ) IS NOT NULL THEN '410'||TRIM(#{GRMCOW_SRA_INDV_AMNNO} ) ELSE NULL END
+				, GRFCOW_SRA_INDV_AMNNO                 =   CASE WHEN TRIM(#{GRFCOW_SRA_INDV_AMNNO} ) IS NOT NULL THEN '410'||TRIM(#{GRFCOW_SRA_INDV_AMNNO} ) ELSE NULL END
+				, MTGRMCOW_SRA_INDV_AMNNO               =   CASE WHEN TRIM(#{MTGRMCOW_SRA_INDV_AMNNO} ) IS NOT NULL THEN '410'||TRIM(#{MTGRMCOW_SRA_INDV_AMNNO} ) ELSE NULL END
+				, MTGRFCOW_SRA_INDV_AMNNO               =   CASE WHEN TRIM(#{MTGRFCOW_SRA_INDV_AMNNO} ) IS NOT NULL THEN '410'||TRIM(#{MTGRFCOW_SRA_INDV_AMNNO} ) ELSE NULL END
+				, FCOW_KPN_NO                           =   TRIM(#{FCOW_KPN_NO} )
+				, GRFCOW_KPN_NO                         =   TRIM(#{GRFCOW_KPN_NO} )                        
+				, MTGRFCOW_KPN_NO                       =   TRIM(#{MTGRFCOW_KPN_NO} )                      
+				, EPD_VAL_1                             =   TRIM(#{EPD_VAL_1} )                           
+				, EPD_GRD_1                             =   TRIM(#{EPD_GRD_1} )                           
+				, EPD_VAL_2                             =   TRIM(#{EPD_VAL_2} )                           
+				, EPD_GRD_2                             =   TRIM(#{EPD_GRD_2} )                           
+				, EPD_VAL_3                             =   TRIM(#{EPD_VAL_3} )                           
+				, EPD_GRD_3                             =   TRIM(#{EPD_GRD_3} )                           
+				, EPD_VAL_4                             =   TRIM(#{EPD_VAL_4} )                           
+				, EPD_GRD_4                             =   TRIM(#{EPD_GRD_4} )                           
+				, LSCHG_DTM                             =   SYSDATE                                 
+				, LSCHGMN_ENO                           =   #{regUsrid}                             
+		WHEN NOT MATCHED THEN 
+			INSERT(
+				SRA_INDV_AMNNO
+				, MCOW_SRA_INDV_AMNNO
+				, FCOW_SRA_INDV_AMNNO
+				, GRMCOW_SRA_INDV_AMNNO
+				, GRFCOW_SRA_INDV_AMNNO
+				, MTGRMCOW_SRA_INDV_AMNNO
+				, MTGRFCOW_SRA_INDV_AMNNO
+				, FCOW_KPN_NO
+				, GRFCOW_KPN_NO
+				, MTGRFCOW_KPN_NO
+				, EPD_VAL_1
+				, EPD_GRD_1
+				, EPD_VAL_2
+				, EPD_GRD_2
+				, EPD_VAL_3
+				, EPD_GRD_3
+				, EPD_VAL_4
+				, EPD_GRD_4
+				, FSRG_DTM
+				, FSRGMN_ENO
+				, LSCHG_DTM
+				, LSCHGMN_ENO
+			)VALUES(
+				TRIM(#{SRA_INDV_AMNNO} )
+				, CASE WHEN TRIM(#{MCOW_SRA_INDV_AMNNO} ) IS NOT NULL THEN '410'||TRIM(#{MCOW_SRA_INDV_AMNNO} ) ELSE NULL END
+				, CASE WHEN TRIM(#{FCOW_SRA_INDV_AMNNO} ) IS NOT NULL THEN '410'||TRIM(#{FCOW_SRA_INDV_AMNNO} ) ELSE NULL END
+				, CASE WHEN TRIM(#{GRMCOW_SRA_INDV_AMNNO} ) IS NOT NULL THEN '410'||TRIM(#{GRMCOW_SRA_INDV_AMNNO} ) ELSE NULL END
+				, CASE WHEN TRIM(#{GRFCOW_SRA_INDV_AMNNO} ) IS NOT NULL THEN '410'||TRIM(#{GRFCOW_SRA_INDV_AMNNO} ) ELSE NULL END
+				, CASE WHEN TRIM(#{MTGRMCOW_SRA_INDV_AMNNO} ) IS NOT NULL THEN '410'||TRIM(#{MTGRMCOW_SRA_INDV_AMNNO} ) ELSE NULL END
+				, CASE WHEN TRIM(#{MTGRFCOW_SRA_INDV_AMNNO} ) IS NOT NULL THEN '410'||TRIM(#{MTGRFCOW_SRA_INDV_AMNNO} ) ELSE NULL END 
+				, TRIM(#{FCOW_KPN_NO} )
+				, TRIM(#{GRFCOW_KPN_NO} )
+				, TRIM(#{MTGRFCOW_KPN_NO} )
+				, TRIM(#{EPD_VAL_1} )
+				, TRIM(#{EPD_GRD_1} )
+				, TRIM(#{EPD_VAL_2} )
+				, TRIM(#{EPD_GRD_2} )
+				, TRIM(#{EPD_VAL_3} )
+				, TRIM(#{EPD_GRD_3} )
+				, TRIM(#{EPD_VAL_4} )
+				, TRIM(#{EPD_GRD_4} )
+				, SYSDATE
+				, #{regUsrid}
+				, SYSDATE
+				, #{regUsrid}
+			)
+	</update>
+	
+	<update id="updatetIndvAiakPostInfo" parameterType="hashMap">
+		/* CommonMapper.updatetIndvAiakPostInfo */
+		MERGE INTO TB_LA_IS_MM_INDV_POSTINF A
+		USING DUAL B
+		ON(
+			A.SRA_INDV_AMNNO = TRIM( #{SRA_INDV_AMNNO} )
+			AND A.POST_SRA_INDV_AMNNO = TRIM( #{POST_SRA_INDV_AMNNO} )
+		)	
+		WHEN MATCHED THEN 
+			UPDATE SET                                          
+				MATIME                      = TRIM(#{MATIME})
+				, SRA_INDV_PASG_QCN           = TRIM(#{SRA_INDV_PASG_QCN})                   
+				, RG_DSC                      = TRIM(#{RG_DSC})
+				, KPN_NO                      = TRIM(#{KPN_NO})                              
+				, INDV_SEX_C                  = TRIM(#{INDV_SEX_C})
+				, BIRTH                       = REPLACE(TRIM(#{BIRTH}),'-','')
+				, METRB_BBDY_WT               = TRIM(#{METRB_BBDY_WT})
+				, METRB_METQLT_GRD            = TRIM(#{METRB_METQLT_GRD})
+				, MIF_BTC_DT                  = REPLACE(TRIM(#{MIF_BTC_DT}),'-','')
+				, FSRG_DTM                    = SYSDATE
+				, FSRGMN_ENO                  = #{regUsrid}                                    
+		WHEN NOT MATCHED THEN 
+			INSERT(
+				SRA_INDV_AMNNO
+				, POST_SRA_INDV_AMNNO
+				, MATIME
+				, SRA_INDV_PASG_QCN
+				, RG_DSC
+				, KPN_NO
+				, INDV_SEX_C
+				, BIRTH
+				, METRB_BBDY_WT
+				, METRB_METQLT_GRD
+				, MIF_BTC_DT
+				, FSRG_DTM
+				, FSRGMN_ENO
+			)VALUES(
+				TRIM( #{SRA_INDV_AMNNO} )
+				, TRIM( #{POST_SRA_INDV_AMNNO} )
+				, TRIM( #{MATIME} )
+				, TRIM( #{SRA_INDV_PASG_QCN} )
+				, TRIM( #{RG_DSC} )
+				, TRIM(#{KPN_NO})
+				, TRIM( #{INDV_SEX_C} )
+				, REPLACE(TRIM( #{BIRTH} ),'-','')
+				, TRIM( #{METRB_BBDY_WT} )
+				, TRIM( #{METRB_METQLT_GRD} )
+				, REPLACE(TRIM( #{MIF_BTC_DT} ),'-','')
+				, SYSDATE
+				, #{regUsrid}
+			)
+	</update>
+	
+	<update id="updatetIndvAiakSibInfo" parameterType="hashMap">
+		/* CommonMapper.updatetIndvAiakSibInfo */
+		MERGE INTO TB_LA_IS_MM_INDV_SIBINF A
+		USING DUAL B
+		ON(
+			A.SRA_INDV_AMNNO = TRIM( #{SRA_INDV_AMNNO} )
+			AND A.SIB_SRA_INDV_AMNNO = TRIM( #{SIB_SRA_INDV_AMNNO} )
+		)	
+		WHEN MATCHED THEN 
+			UPDATE SET                                          
+				MATIME                      = TRIM( #{MATIME} )                              
+				, SRA_INDV_PASG_QCN           = TRIM( #{SRA_INDV_PASG_QCN} )                   
+				, RG_DSC                      = TRIM( #{RG_DSC} )
+				, KPN_NO                      = TRIM(#{KPN_NO})
+				, INDV_SEX_C                  = TRIM( #{INDV_SEX_C} )                          
+				, BIRTH                       = REPLACE(TRIM( #{BIRTH} ),'-','')
+				, METRB_BBDY_WT               = TRIM( #{METRB_BBDY_WT} )
+				, METRB_METQLT_GRD            = TRIM( #{METRB_METQLT_GRD} )
+				, MIF_BTC_DT                  = REPLACE(TRIM( #{MIF_BTC_DT} ),'-','')                          
+				, FSRG_DTM                    = SYSDATE
+				, FSRGMN_ENO                  = #{regUsrid}
+		WHEN NOT MATCHED THEN 
+			INSERT(
+				SRA_INDV_AMNNO
+				, SIB_SRA_INDV_AMNNO
+				, MATIME
+				, SRA_INDV_PASG_QCN
+				, RG_DSC
+				, KPN_NO
+				, INDV_SEX_C
+				, BIRTH
+				, METRB_BBDY_WT
+				, METRB_METQLT_GRD
+				, MIF_BTC_DT
+				, FSRG_DTM
+				, FSRGMN_ENO
+			)VALUES(
+				TRIM( #{SRA_INDV_AMNNO} )
+				, TRIM( #{SIB_SRA_INDV_AMNNO} )
+				, TRIM( #{MATIME} )
+				, TRIM( #{SRA_INDV_PASG_QCN} )
+				, TRIM( #{RG_DSC} )
+				, TRIM(#{KPN_NO})
+				, TRIM( #{INDV_SEX_C} )
+				, REPLACE(TRIM( #{BIRTH} ),'-','')
+				, TRIM( #{METRB_BBDY_WT} )
+				, TRIM( #{METRB_METQLT_GRD} )
+				, REPLACE(TRIM( #{MIF_BTC_DT} ),'-','')
+				, SYSDATE
+				, #{regUsrid}
+			)
+	</update>
+	
+	<select id="selectBloodInfo" parameterType="map" resultType="map">
+		SELECT * FROM TB_LA_IS_MM_INDV_BLD
+		WHERE SRA_INDV_AMNNO LIKE '%'|| #{barcode}
+	</select>
+	
+	<select id="selectIndvPost" parameterType="map" resultType="map">
+		SELECT * FROM TB_LA_IS_MM_INDV_SIBINF
+		WHERE SRA_INDV_AMNNO LIKE '%'|| #{barcode}
+	</select>
+	
+	<select id="selectIndvSib" parameterType="map" resultType="map">
+		SELECT * FROM TB_LA_IS_MM_INDV_POSTINF
+		WHERE SRA_INDV_AMNNO LIKE '%'|| #{barcode}
+	</select>
 </mapper>

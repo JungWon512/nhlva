@@ -530,7 +530,7 @@ public class HttpUtils {
 			        		Iterator<String> it =jItem.keySet().iterator();
 			        		while(it.hasNext()) {
 			        			String key = (String) it.next();
-				        		moveMap.put(key, jItem.get(key));			        			
+				        		moveMap.put(key, jItem.get(key));
 			        		}
 			        		nodeMap.put("sra_indv_amnno", param.get("trace_no"));			
 			        		moveList.add(moveMap);
@@ -897,59 +897,8 @@ public class HttpUtils {
 		}
         return result;
 	}
-	
-	public String getSlaughterInfoApi(Map<String, Object> map) throws Exception{		
-		String sendUrl = "http://data.ekape.or.kr/openapi-data/service/user/mtrace/breeding/cattle";
-		sendUrl += "?serviceKey=" + openApiServiceKey;
-//		sendUrl += "?serviceKey=" + "Z5HnEP8ghGMEUD0ukiBNifYlBV6%2BwI7hxE8hlLI71yY3IirWjvlVwaGsbjRcTWhIzVisaI3%2Fyb4cDhdoa%2BYRcg%3D%3D";
-		sendUrl += "&cattleNo=" + map.get("SRA_INDV_AMNNO");
-		
-		StringBuilder urlBuilder = new StringBuilder(sendUrl);
-        URL url = new URL(urlBuilder.toString());
-        HttpURLConnection conn = null;
-        String result = "";
-				
-		try {
-			log.debug(sendUrl);
-			conn = (HttpURLConnection) url.openConnection();
-	        conn.setRequestMethod("GET");
-	        conn.setRequestProperty("Content-type", "application/json");
-			conn.setConnectTimeout(5000);
-			conn.setReadTimeout(5000);
-	        log.debug("Response code: " + conn.getResponseCode());
-	        BufferedReader rd = null;
-	        
-	        if(conn.getResponseCode() >= 200 && conn.getResponseCode() <=300 ) {
-				rd = new BufferedReader(new InputStreamReader(conn.getInputStream()));
-			}else {
-				rd = new BufferedReader(new InputStreamReader(conn.getErrorStream()));
-			}
-	        
-	        StringBuilder sb = new StringBuilder();
-	        String line;
-	        while ((line = rd.readLine()) != null) {
-	            sb.append(line);
-	        }
-	        rd.close();
-	        conn.disconnect();
-	        log.debug(sb.toString());
-	        result = sb.toString();
-	       
-			
-		} catch (UnknownHostException | RuntimeException | SocketTimeoutException e) {
-        	log.error(e.getMessage() ,e);
-            throw new Exception("서버 수행중 오류가 발생하였습니다.");			
-        } catch (Exception e) {
-        	log.error(e.getMessage() ,e);
-            throw new RuntimeException("서버 수행중 오류가 발생하였습니다.");        	
-        } finally {
-            if (conn!= null) conn.disconnect();
-        }
-		 	
-        return result;
-    }
 
-	public Map<String,Object> callApiAiakV2ForMap(String barcode) {
+	public Map<String,Object> callApiAiakMap(String barcode) {
 		Map<String, Object> result = new HashMap<String, Object>();
 		String apiResult = this.callApiAiakV2(barcode);
 		if(!apiResult.isEmpty()) {
@@ -966,27 +915,31 @@ public class HttpUtils {
 					List<Map<String, Object>> sibInfo = new ArrayList<>(); //형매 리스트
 					List<Map<String, Object>> postInfo = new ArrayList<>(); //후대 리스트
 					
-					String balBb = detailInfo.getString("bv");
-					result.put("BV_GRD_1", balBb.substring(0, 1)); //냉도체중
-					result.put("BV_VAL_1", balBb.substring(1, 10));
-					result.put("BV_GRD_2", balBb.substring(10, 11)); //배최장근단면적
-					result.put("BV_VAL_2", balBb.substring(11, 20));
-					result.put("BV_GRD_3", balBb.substring(20, 21)); //등지방두께
-					result.put("BV_VAL_3", balBb.substring(21, 30));
-					result.put("BV_GRD_4", balBb.substring(30, 31)); //근내지방도
-					result.put("BV_VAL_4", balBb.substring(31, 40));
+					result.put("SRA_INDV_AMNNO", "410"+barcode);					
+					if(detailInfo.has("bv")) {
+						String balBb = detailInfo.getString("bv");
+						result.put("EPD_GRD_1", balBb.substring(0, 1)); //냉도체중
+						result.put("EPD_VAL_1", balBb.substring(1, 10));
+						result.put("EPD_GRD_2", balBb.substring(10, 11)); //배최장근단면적
+						result.put("EPD_VAL_2", balBb.substring(11, 20));
+						result.put("EPD_GRD_3", balBb.substring(20, 21)); //등지방두께
+						result.put("EPD_VAL_3", balBb.substring(21, 30));
+						result.put("EPD_GRD_4", balBb.substring(30, 31)); //근내지방도
+						result.put("EPD_VAL_4", balBb.substring(31, 40));						
+					}
 					
 					//개체식별번호
-					result.put("FCOW_SRA_INDV_AMNNO", bloodInfo.getString("sire_barcode")); //부
-					result.put("MCOW_SRA_INDV_AMNNO", bloodInfo.getString("dam_barcode")); //모
-					result.put("GRFA_SRA_INDV_AMNNO", bloodInfo.getString("pgs_barcode")); //조부
-					result.put("GRMO_SRA_INDV_AMNNO", bloodInfo.getString("pgd_barcode")); //조모
-					result.put("MTGRFA_SRA_INDV_AMNNO", bloodInfo.getString("mgs_barcode")); //외조부
-					result.put("MTGRMO_SRA_INDV_AMNNO", bloodInfo.getString("mgd_barcode")); //외조모
+					if(bloodInfo.has("sire_barcode")) result.put("FCOW_SRA_INDV_AMNNO", bloodInfo.getString("sire_barcode")); //부
+					if(bloodInfo.has("dam_barcode")) result.put("MCOW_SRA_INDV_AMNNO", bloodInfo.getString("dam_barcode")); //모
+					if(bloodInfo.has("pgs_barcode")) result.put("GRFCOW_SRA_INDV_AMNNO", bloodInfo.getString("pgs_barcode")); //조부
+					if(bloodInfo.has("pgd_barcode")) result.put("GRMCOW_SRA_INDV_AMNNO", bloodInfo.getString("pgd_barcode")); //조모
+					if(bloodInfo.has("mgs_barcode")) result.put("MTGRFCOW_SRA_INDV_AMNNO", bloodInfo.getString("mgs_barcode")); //외조부
+					if(bloodInfo.has("mgd_barcode")) result.put("MTGRMCOW_SRA_INDV_AMNNO", bloodInfo.getString("mgd_barcode")); //외조모
+
 					//KPN 번호
-					result.put("FCOW_SRA_KPN_NO", bloodInfo.getString("sire_name"));
-					result.put("GRFA_SRA_KPN_NO", bloodInfo.getString("pgs_name"));
-					result.put("MTGRFA_SRA_KPN_NO", bloodInfo.getString("mgs_name"));
+					if(bloodInfo.has("sire_name")) result.put("FCOW_KPN_NO", bloodInfo.getString("sire_name"));
+					if(bloodInfo.has("pgs_name")) result.put("GRFCOW_KPN_NO", bloodInfo.getString("pgs_name"));
+					if(bloodInfo.has("mgs_name")) result.put("MTGRFCOW_KPN_NO", bloodInfo.getString("mgs_name"));
 					
 					//형매정보 저장
 					if(!siblingInfo.isEmpty()) {
@@ -994,12 +947,16 @@ public class HttpUtils {
 							if(item instanceof JSONObject) {
 								Map<String, Object> map = new HashMap<String, Object>();
 								JSONObject obj = (JSONObject) item;
-								map.put("SRA_INDV_AMNNO", barcode);
-								map.put("SIB_SRA_INDV_AMNNO", obj.get("barcode"));
+								map.put("SRA_INDV_AMNNO", "410"+barcode);
+								map.put("SIB_SRA_INDV_AMNNO", "410"+obj.get("barcode"));								
 								map.put("BIRTH", obj.get("birthdate"));
 								map.put("RG_DSC", obj.get("reggu"));
 								map.put("INDV_SEX_C", obj.get("sex"));
-								map.put("BIRTH", obj.get("birthdate"));
+								Map<String,Object> butcherInfo= this.callApiOpenDataCattle((String)obj.get("barcode"),null);
+                        
+								map.put("METRB_BBDY_WT", butcherInfo.get("BUTCHERY_WEIGHT"));
+								map.put("MIF_BTC_DT", butcherInfo.get("BUTCHERY_YMD"));
+								map.put("METRB_METQLT_GRD", butcherInfo.get("Q_GRADE_NM"));
 								sibInfo.add(map);
 							}
 						});					
@@ -1012,12 +969,17 @@ public class HttpUtils {
 							if(item instanceof JSONObject) {
 								Map<String, Object> map = new HashMap<String, Object>();
 								JSONObject obj = (JSONObject) item;
-								map.put("SRA_INDV_AMNNO", barcode);
-								map.put("POST_SRA_INDV_AMNNO", obj.get("barcode"));
+								map.put("SRA_INDV_AMNNO", "410"+barcode);
+								map.put("POST_SRA_INDV_AMNNO", "410"+obj.get("barcode"));
 								map.put("BIRTH", obj.get("birthdate"));
 								map.put("RG_DSC", obj.get("reggu"));
 								map.put("INDV_SEX_C", obj.get("sex"));
-								map.put("BIRTH", obj.get("birthdate"));
+								map.put("KPN_NO", obj.get("sire_name"));
+								Map<String,Object> butcherInfo= this.callApiOpenDataCattle((String)obj.get("barcode"),null);
+
+								map.put("METRB_BBDY_WT", butcherInfo.get("BUTCHERY_WEIGHT"));
+								map.put("MIF_BTC_DT", butcherInfo.get("BUTCHERY_YMD"));
+								map.put("METRB_METQLT_GRD", butcherInfo.get("Q_GRADE_NM"));
 								postInfo.add(map);
 							}
 						});					
@@ -1029,5 +991,78 @@ public class HttpUtils {
 		}
 		log.debug("retun Data",result);
 		return result;
+	}
+
+
+	//종축개량 API_TEST
+	public Map<String,Object> callApiOpenDataCattle(String barcode,String newOpenDataApiKey) {
+		BufferedReader br = null;
+		HttpURLConnection con = null;
+		Map<String,Object> result = new HashMap<String, Object>();
+		String response = "";
+		//String newOpenDataApiKey = "Z5HnEP8ghGMEUD0ukiBNifYlBV6%2BwI7hxE8hlLI71yY3IirWjvlVwaGsbjRcTWhIzVisaI3%2Fyb4cDhdoa%2BYRcg%3D%3D";
+		//"Z5HnEP8ghGMEUD0ukiBNifYlBV6%2BwI7hxE8hlLI71yY3IirWjvlVwaGsbjRcTWhIzVisaI3%2Fyb4cDhdoa%2BYRcg%3D%3D"
+        try {        	
+    		String tempUrl = "http://data.ekape.or.kr/openapi-data/service/user/mtrace/breeding/cattle";
+    		tempUrl += "?cattleNo="+ barcode;
+    		if(newOpenDataApiKey == null || newOpenDataApiKey.isEmpty()) {
+        		tempUrl += "&serviceKey="+openApiServiceKey;    			
+    		}else {
+        		tempUrl += "&serviceKey="+newOpenDataApiKey;    			
+    		}
+            log.info("callApiOpenDataCattle tempUrl code : "+tempUrl);
+        	URL url = new URL(tempUrl);
+            con = (HttpURLConnection) url.openConnection();
+            con.setConnectTimeout(5000); //서버에 연결되는 Timeout 시간 설정
+            con.setReadTimeout(5000); // InputStream 읽어 오는 Timeout 시간 설정
+            con.setRequestMethod("GET");
+            con.setDoOutput(false);            
+
+            StringBuilder sb = new StringBuilder();
+            log.info("callApiOpenDataCattle resp code : "+con.getResponseCode());
+            log.info("callApiOpenDataCattle call URL : "+ url.toString());
+            log.info("callApiOpenDataCattle res URL: "+con.getURL());
+            if (con.getResponseCode() == HttpURLConnection.HTTP_OK) {
+                br = new BufferedReader(new InputStreamReader(con.getInputStream(), "utf-8"));
+                String line;
+                while ((line = br.	readLine()) != null) {
+                    sb.append(line).append("\n");
+                }
+                log.info("callApiOpenDataCattle : "+sb.toString());                
+                response = sb.toString();
+                
+            } else {
+                log.error(con.getResponseMessage());
+            }
+        }
+        catch (Exception e) {
+        	log.error("Exception - 공공데이터 쇠고기이력정보 테스트 : ",e);
+        } finally {
+        	try {
+                if(con != null)con.disconnect();
+                if(br !=null) br.close();
+
+                //정상 수신시 XML 데이터 형변환
+                if(!response.isEmpty()) {
+        	        JSONObject json = XML.toJSONObject(response);
+        	        
+        	        if(json != null && json.has("response")  && json.getJSONObject("response").has("body") && json.getJSONObject("response").getJSONObject("body").has("items")) {
+        	        	Object resultObj = json.getJSONObject("response").getJSONObject("body").getJSONObject("items").get("item");
+        		        if(resultObj instanceof JSONObject) {
+        		        	JSONObject jItem = (JSONObject) resultObj; 
+        		        	
+        	        		result.put("CATTLE_NO", jItem.get("cattleNo"));
+        	        		if(jItem.has("butcheryWeight")) result.put("BUTCHERY_WEIGHT", jItem.get("butcheryWeight"));
+        	        		if(jItem.has("butcheryYmd")) result.put("BUTCHERY_YMD", jItem.get("butcheryYmd"));
+        	        		if(jItem.has("qgradeNm")) result.put("Q_GRADE_NM", jItem.get("qgradeNm"));
+        		        }
+        	        }                	
+                }
+        	}
+        	catch(Exception e) {
+                log.error("Exception - 공공데이터 쇠고기이력정보 테스트 : ",e);
+        	}
+		}
+        return result;
 	}
 }
