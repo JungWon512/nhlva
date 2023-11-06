@@ -9,11 +9,6 @@ cript:
 # dev
 mca:
   url: http://192.168.114.11:18211/http/lvaca-fmec
-
-agora:
-  app:
-    #key: 90525e1bc69c452992d212b96e1c4573
-    key: 06ddb0074099434dbb3a6a6cfa54e484    
   
 server:
   error:

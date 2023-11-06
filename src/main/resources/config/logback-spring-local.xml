@@ -37,21 +37,21 @@
   <springProfile name="production">
     <root level="ERROR">
       <appender-ref ref="CONSOLE" />
-      <appender-ref ref="FILE" />
+<!--       <appender-ref ref="FILE" /> -->
     </root>
   </springProfile>
 
   <springProfile name="develop">
     <root level="WARN">
       <appender-ref ref="CONSOLE" />
-      <appender-ref ref="FILE" />
+<!--       <appender-ref ref="FILE" /> -->
     </root>
   </springProfile>
 
   <springProfile name="local">
     <root level="DEBUG">
       <appender-ref ref="CONSOLE" />
-      <appender-ref ref="FILE" />
+<!--       <appender-ref ref="FILE" /> -->
     </root>
   </springProfile>
 </configuration>
