@@ -8,6 +8,7 @@ import java.io.OutputStreamWriter;
 import java.io.UnsupportedEncodingException;
 import java.net.ConnectException;
 import java.net.HttpURLConnection;
+import java.net.MalformedURLException;
 import java.net.SocketTimeoutException;
 import java.net.URL;
 import java.net.UnknownHostException;
@@ -840,5 +841,193 @@ public class HttpUtils {
     	sc.init(null, trustAllCerts, new SecureRandom());
     	HttpsURLConnection.setDefaultSSLSocketFactory(sc.getSocketFactory());
     	HttpsURLConnection.setDefaultHostnameVerifier(hv);		
+	}
+
+	//종축개량 API_TEST
+	public String callApiAiakV2(String barcode) {
+		BufferedReader br = null;
+		HttpURLConnection con = null;
+		String result = "";
+        try {
+			//String tempUrl = "http://api.aiak.or.kr/v1/hims/detailInfo?barcode="+barcode;	
+			//if(!port.isEmpty()) {
+			//  	tempUrl = "http://api.aiak.or.kr:"+port+"/v1/hims/detailInfo?barcode="+barcode;
+			//}
+        	String tempUrl = "http://api.aiak.or.kr:9080/v1/hims/detailInfo?barcode="+barcode;
+            log.info("callApiAiak tempUrl code : "+tempUrl);
+        	URL url = new URL(tempUrl);
+            //URL url = new URL("http","api.aiak.or.kr/","9080");
+            //if("0".equals(sslFlag)) this.SSLVaildBypass();
+            con = (HttpURLConnection) url.openConnection();
+            con.setConnectTimeout(5000); //서버에 연결되는 Timeout 시간 설정
+            con.setReadTimeout(5000); // InputStream 읽어 오는 Timeout 시간 설정
+            con.setRequestMethod("GET");
+            con.setRequestProperty("apikey", "KAIA_API8b749c8d2c44700f64f564b5dfd5869a6bbda33c927da182cd515be02b2b0b77");
+            con.setDoOutput(false);            
+
+            StringBuilder sb = new StringBuilder();
+            log.info("callApiAiak resp code : "+con.getResponseCode());
+            log.info("callApiAiak call URL : "+ url.toString());
+            log.info("callApiAiak res URL: "+con.getURL());
+            if (con.getResponseCode() == HttpURLConnection.HTTP_OK) {
+                br = new BufferedReader(new InputStreamReader(con.getInputStream(), "utf-8"));
+                String line;
+                while ((line = br.	readLine()) != null) {
+                    sb.append(line).append("\n");
+                }
+                log.info("callApiAiak : "+sb.toString());
+                //return sb.toString();
+                result = sb.toString();
+            } else {
+                log.error(con.getResponseMessage());
+            }
+        }
+        catch (Exception e) {
+            log.error("Exception - https://aiak.or.kr 테스트 : ",e);
+            //return e.getMessage();
+        } finally {
+        	try {
+                if(con != null)con.disconnect();
+                if(br !=null) br.close();
+        	}
+        	catch(Exception e) {
+                log.error("Exception - https://aiak.or.kr 테스트 : ",e);
+                //return e.getMessage();
+        	}
+		}
+        return result;
+	}
+	
+	public String getSlaughterInfoApi(Map<String, Object> map) throws Exception{		
+		String sendUrl = "http://data.ekape.or.kr/openapi-data/service/user/mtrace/breeding/cattle";
+		sendUrl += "?serviceKey=" + openApiServiceKey;
+//		sendUrl += "?serviceKey=" + "Z5HnEP8ghGMEUD0ukiBNifYlBV6%2BwI7hxE8hlLI71yY3IirWjvlVwaGsbjRcTWhIzVisaI3%2Fyb4cDhdoa%2BYRcg%3D%3D";
+		sendUrl += "&cattleNo=" + map.get("SRA_INDV_AMNNO");
+		
+		StringBuilder urlBuilder = new StringBuilder(sendUrl);
+        URL url = new URL(urlBuilder.toString());
+        HttpURLConnection conn = null;
+        String result = "";
+				
+		try {
+			log.debug(sendUrl);
+			conn = (HttpURLConnection) url.openConnection();
+	        conn.setRequestMethod("GET");
+	        conn.setRequestProperty("Content-type", "application/json");
+			conn.setConnectTimeout(5000);
+			conn.setReadTimeout(5000);
+	        log.debug("Response code: " + conn.getResponseCode());
+	        BufferedReader rd = null;
+	        
+	        if(conn.getResponseCode() >= 200 && conn.getResponseCode() <=300 ) {
+				rd = new BufferedReader(new InputStreamReader(conn.getInputStream()));
+			}else {
+				rd = new BufferedReader(new InputStreamReader(conn.getErrorStream()));
+			}
+	        
+	        StringBuilder sb = new StringBuilder();
+	        String line;
+	        while ((line = rd.readLine()) != null) {
+	            sb.append(line);
+	        }
+	        rd.close();
+	        conn.disconnect();
+	        log.debug(sb.toString());
+	        result = sb.toString();
+	       
+			
+		} catch (UnknownHostException | RuntimeException | SocketTimeoutException e) {
+        	log.error(e.getMessage() ,e);
+            throw new Exception("서버 수행중 오류가 발생하였습니다.");			
+        } catch (Exception e) {
+        	log.error(e.getMessage() ,e);
+            throw new RuntimeException("서버 수행중 오류가 발생하였습니다.");        	
+        } finally {
+            if (conn!= null) conn.disconnect();
+        }
+		 	
+        return result;
+    }
+
+	public Map<String,Object> callApiAiakV2ForMap(String barcode) {
+		Map<String, Object> result = new HashMap<String, Object>();
+		String apiResult = this.callApiAiakV2(barcode);
+		if(!apiResult.isEmpty()) {
+			JSONObject jObj = new JSONObject(apiResult);
+			if(jObj != null) {
+				JSONObject resultSt  = jObj.getJSONObject("resultStatus");
+				if("OK".equals(resultSt.get("code"))) {
+					JSONObject resultVal  = jObj.getJSONObject("resultValue");
+					JSONArray posterityInfo = resultVal.getJSONArray("posterity_info");
+					JSONArray siblingInfo = resultVal.getJSONArray("sibling_info");
+					JSONObject detailInfo  = resultVal.getJSONObject("detail_info");
+					JSONObject bloodInfo  = resultVal.getJSONObject("pedigree_info");
+
+					List<Map<String, Object>> sibInfo = new ArrayList<>(); //형매 리스트
+					List<Map<String, Object>> postInfo = new ArrayList<>(); //후대 리스트
+					
+					String balBb = detailInfo.getString("bv");
+					result.put("BV_GRD_1", balBb.substring(0, 1)); //냉도체중
+					result.put("BV_VAL_1", balBb.substring(1, 10));
+					result.put("BV_GRD_2", balBb.substring(10, 11)); //배최장근단면적
+					result.put("BV_VAL_2", balBb.substring(11, 20));
+					result.put("BV_GRD_3", balBb.substring(20, 21)); //등지방두께
+					result.put("BV_VAL_3", balBb.substring(21, 30));
+					result.put("BV_GRD_4", balBb.substring(30, 31)); //근내지방도
+					result.put("BV_VAL_4", balBb.substring(31, 40));
+					
+					//개체식별번호
+					result.put("FCOW_SRA_INDV_AMNNO", bloodInfo.getString("sire_barcode")); //부
+					result.put("MCOW_SRA_INDV_AMNNO", bloodInfo.getString("dam_barcode")); //모
+					result.put("GRFA_SRA_INDV_AMNNO", bloodInfo.getString("pgs_barcode")); //조부
+					result.put("GRMO_SRA_INDV_AMNNO", bloodInfo.getString("pgd_barcode")); //조모
+					result.put("MTGRFA_SRA_INDV_AMNNO", bloodInfo.getString("mgs_barcode")); //외조부
+					result.put("MTGRMO_SRA_INDV_AMNNO", bloodInfo.getString("mgd_barcode")); //외조모
+					//KPN 번호
+					result.put("FCOW_SRA_KPN_NO", bloodInfo.getString("sire_name"));
+					result.put("GRFA_SRA_KPN_NO", bloodInfo.getString("pgs_name"));
+					result.put("MTGRFA_SRA_KPN_NO", bloodInfo.getString("mgs_name"));
+					
+					//형매정보 저장
+					if(!siblingInfo.isEmpty()) {
+						siblingInfo.forEach(item ->{
+							if(item instanceof JSONObject) {
+								Map<String, Object> map = new HashMap<String, Object>();
+								JSONObject obj = (JSONObject) item;
+								map.put("SRA_INDV_AMNNO", barcode);
+								map.put("SIB_SRA_INDV_AMNNO", obj.get("barcode"));
+								map.put("BIRTH", obj.get("birthdate"));
+								map.put("RG_DSC", obj.get("reggu"));
+								map.put("INDV_SEX_C", obj.get("sex"));
+								map.put("BIRTH", obj.get("birthdate"));
+								sibInfo.add(map);
+							}
+						});					
+					}
+					result.put("sibInfo", sibInfo);
+					
+					//후대정보 저장
+					if(!posterityInfo.isEmpty()) {
+						posterityInfo.forEach(item ->{
+							if(item instanceof JSONObject) {
+								Map<String, Object> map = new HashMap<String, Object>();
+								JSONObject obj = (JSONObject) item;
+								map.put("SRA_INDV_AMNNO", barcode);
+								map.put("POST_SRA_INDV_AMNNO", obj.get("barcode"));
+								map.put("BIRTH", obj.get("birthdate"));
+								map.put("RG_DSC", obj.get("reggu"));
+								map.put("INDV_SEX_C", obj.get("sex"));
+								map.put("BIRTH", obj.get("birthdate"));
+								postInfo.add(map);
+							}
+						});					
+					}
+					result.put("postInfo", postInfo);
+					
+				}
+			}
+		}
+		log.debug("retun Data",result);
+		return result;
 	}
 }
