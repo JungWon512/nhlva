@@ -28,8 +28,7 @@
 				<div class="gray">
 					<span class="ft14">개인정보 수집이용 동의서(필수)</span>
 					<div class="ft12">&nbsp;</div>
-					<p class="ft12">본인은 스마트 가축시장 플랫폼 서비스를 이용하기 위해, 아래의 내용과 같이 본인의
-						개인정보를 수집이용하는 것에 동의합니다.</p>
+					<p class="ft12">본인은 NH가축시장 플랫폼 서비스를 이용하기 위해, 아래의 내용과 같이 본인의 개인정보를 수집이용하는 것에 동의합니다.</p>
 					<p class="ft12">※ 이용자는 개인정보 제공 동의를 거부할 권리가 있으며, 동의 거부 시 “스마트 가축시장
 						플랫폼” 이용이 불가합니다.</p>
 					<div class="ft12">&nbsp;</div>
@@ -55,7 +54,7 @@
 						<tr>
 							<td  class="tdLine" rowspan="3" valign="middle" style='width: 225; height: 245;'>
 								<P CLASS=HStyle0 STYLE='line-height: 100%;'>
-									<span class="ft11" style='font-family: "Noto Sans CJK KR"; line-height: 100%'>성명,ID,비밀번호,농장명,농장주소,통신사,휴대폰번호,생년월일</span>
+									<span class="ft11" style='font-family: "Noto Sans CJK KR"; line-height: 100%'>성명,농장명,농장주소,통신사,휴대폰번호,생년월일,축산물개체정보,축산물거래정보</span>
 								</P>
 							</td>
 							<td  class="tdLine" valign="middle" style='width: 225; height: 55;'>
@@ -99,7 +98,7 @@
 						<li class="ft12 mt10">법원의 재판업무 수행을 위하여 필요한 경우</li>
 						<li class="ft12 mt10" >형(刑) 및 감호, 보호처분의 집행을 위하여 필요한 경우</li>
 					</ul>
-					<span class="ft14">개정일자 : 2023년 2월 13일</span>
+					<span class="ft14">개정일자 : 2023년 11월 08일</span>
 				</div>
 			</div>
 			<div class="" style="margin-top: 15px; font-size: 16px; font-weight: 500; line-height: 1.2; letter-spacing: -0.8px; color: #007eff;">
@@ -107,8 +106,8 @@
 					<li>개인정보 처리 방침 
 						<a  href="#" onclick="location.href='/privacy';return false;"  id="20230213" style="color: #007eff;">[내용보기]</a>
 					</li>
-					<li style="margin-top : 10px;">2021.10.07 이용약관
-						<a  href="#" onclick="location.href='/privacy230213';return false;"  id="20230213" style="color: #007eff;">[변경 내용보기]</a>
+					<li style="margin-top : 10px;">2021.10.07 이용약관 <a  href="#" onclick="location.href='/privacy230213';return false;"  id="20230213" style="color: #007eff;">[변경 내용보기]</a>
+					<li style="margin-top : 10px;">2023.02.13 이용약관 <a  href="#" onclick="location.href='/privacy231109';return false;"  id="20231109" style="color: #007eff;">[변경 내용보기]</a>
 					</li>
 				</ul>
 			</div>
