@@ -19,7 +19,10 @@ $(function() {
 				if(!$('.m_sound').hasClass('off')) agoraArr[1].playAgora('audio');				
 			}else{
 				agoraArr[currentSlide].playAgora('video');
-				if(!$('.m_sound').hasClass('off')) agoraArr[1].playAgora('audio');
+				if(!$('.m_sound').hasClass('off')){
+					if(currentSlide == 0) agoraArr[1].playAgora('audio');
+					else agoraArr[currentSlide].playAgora('audio');
+				}
 				//if(!$('.m_sound').hasClass('off') && currentSlide == '1') agoraArr[1].playAgora('audio');				
 			}
 			//currentSlide

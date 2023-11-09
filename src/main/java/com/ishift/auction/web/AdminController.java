@@ -129,28 +129,7 @@ public class AdminController {
 	@PreAuthorize("hasRole('ROLE_ADMIN')")
 	@GetMapping("/office/broad/cast")
 	public ModelAndView adminBroadCast() {
-		final ModelAndView mav = new ModelAndView("admin/broad/cast");
-		try {
-			final AdminUserDetails userVo = (AdminUserDetails)sessionUtill.getUserVo();
-
-			final Map<String, Object> params = new HashMap<>();
-			if(userVo != null) params.put("naBzPlcNo", userVo.getPlace());
-
-			final Map<String, Object> bizInfo = adminService.selectOneJohap(params);
-			mav.addObject("johapData", bizInfo);
-			mav.addObject("naBzplc", bizInfo.get("NA_BZPLC"));
-		}catch (RuntimeException re) {
-			log.error("AdminController.adminBroadCast : {} ",re);
-		} catch (SQLException se) {
-			log.error("AdminController.adminBroadCast : {} ",se);
-		}
-		mav.addObject("subheaderTitle", "영상송출");
-		return mav;
-	}
-	@PreAuthorize("hasRole('ROLE_ADMIN')")
-	@GetMapping("/office/broad/cast_agora")
-	public ModelAndView adminBroadCastAgora() {
-		final ModelAndView mav = new ModelAndView("admin/broad/cast_agora");		
+		final ModelAndView mav = new ModelAndView("admin/broad/cast"+"_agora");
 		try {
 			final AdminUserDetails userVo = (AdminUserDetails)sessionUtill.getUserVo();
 
