@@ -244,4 +244,11 @@ public class CommonDAO {
 		return mainDao.selectList("commonMapper.selectIndvPost", params);
 	}
 
+	public int updateIndvSibMatime(Map<String, Object> params) throws SQLException {
+		return mainDao.update("commonMapper.updateIndvSibMatime", params);		
+	}
+	public int updateIndvPostMatime(Map<String, Object> params) throws SQLException {
+		return mainDao.update("commonMapper.updateIndvPostMatime", params);		
+	}
+
 }

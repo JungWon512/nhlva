@@ -73,11 +73,12 @@ var tabLoad = function(tabId){
 		error: function(xhr, status, error) {
 		}
 	}).done(function (json) {
-		if(tabId == '1'){
-			getAiakInfo();
-		}else if(tabId == '2'){
-			getAiakInfo(drawChart);
-		}
+//		if(tabId == '1'){
+//			//getAiakInfo();
+//		}else if(tabId == '2'){
+//			//getAiakInfo(drawChart);
+//			drawChart();
+//		}
 	});
 };
 

@@ -322,6 +322,14 @@ public class CommonServiceImpl implements CommonService {
 	}
 
 
+	public void callIndvAiakInfo(String barcode) throws SQLException {		
+		if(barcode != null && barcode.length() == 15) {
+			barcode = barcode.substring(3);
+		}	
+		Map<String,Object> aiakInfo = httpUtils.callApiAiakMap(barcode);
+		if(aiakInfo != null) this.updateIndvAiakInfo(aiakInfo);
+	}
+
 	private void updateIndvAiakInfo(Map<String, Object> map) throws SQLException {
 		List<Map<String,Object>> postArr = (List<Map<String, Object>>) map.get("postInfo");
 		List<Map<String,Object>> sibArr = (List<Map<String, Object>>) map.get("sibInfo");
@@ -332,6 +340,8 @@ public class CommonServiceImpl implements CommonService {
 		for(Map<String,Object> sibMap : sibArr) {
 			commonDao.updatetIndvAiakSibInfo(sibMap);	
 		}
+		commonDao.updateIndvSibMatime(map);
+		commonDao.updateIndvPostMatime(map);
 	}
 	
 	public List<Map<String, Object>> selectBloodInfo(Map<String, Object> params) throws SQLException{

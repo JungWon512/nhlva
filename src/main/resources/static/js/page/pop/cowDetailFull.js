@@ -7,7 +7,7 @@
     		$('div.tab_area.cowTab_2').show();
     		//epdChartDraw();
     	}
-		getAiakInfo();
+		//getAiakInfo();
     	/* s: 종축개량 로직추가로 인한 주석처리  
     	var indvData = getInfMca({cgtrmCd : '4700', SRA_INDV_AMNNO : $('input[name=sraIndvAmnno]').val()});
     	if(indvData && indvData.success){

@@ -1833,4 +1833,8 @@ public class AuctionServiceImpl implements AuctionService {
 	public List<Map<String, Object>> selectCowInfoList(Map<String, Object> params) throws SQLException{
 		return  auctionDAO.selectCowInfoList(params);
 	}
+	@Override
+	public Map<String, Object> selectIndvBloodInfo(Map<String, Object> params) throws SQLException{
+		return  auctionDAO.selectIndvBloodInfo(params);		
+	}
 }

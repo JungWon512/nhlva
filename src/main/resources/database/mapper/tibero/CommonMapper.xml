@@ -975,6 +975,44 @@
 			)
 	</update>
 	
+	<update id="updateIndvPostMatime" parameterType="hashMap">
+		/* CommonMapper.updateIndvPostMatime */
+		MERGE INTO TB_LA_IS_MM_INDV_POSTINF A
+		USING (
+			SELECT SRA_INDV_AMNNO
+					, POST_SRA_INDV_AMNNO
+					, MATIME
+					, DENSE_RANK() over(ORDER BY SRA_INDV_AMNNO,BIRTH) NEW_MATIME
+			FROM TB_LA_IS_MM_INDV_POSTINF
+			WHERE SRA_INDV_AMNNO = TRIM( #{SRA_INDV_AMNNO} )
+		) B
+		ON(
+			A.SRA_INDV_AMNNO = B.SRA_INDV_AMNNO
+			AND A.POST_SRA_INDV_AMNNO = B.POST_SRA_INDV_AMNNO
+		)	
+		WHEN MATCHED THEN 
+			UPDATE SET                                          
+				A.MATIME                      = B.NEW_MATIME
+	</update>
+	<update id="updateIndvSibMatime" parameterType="hashMap">
+		/* CommonMapper.updateIndvSibMatime */
+		MERGE INTO TB_LA_IS_MM_INDV_SIBINF A
+		USING (
+			SELECT SRA_INDV_AMNNO
+					, SIB_SRA_INDV_AMNNO
+					, MATIME
+					, DENSE_RANK() over(ORDER BY SRA_INDV_AMNNO,BIRTH) NEW_MATIME
+			FROM TB_LA_IS_MM_INDV_SIBINF
+			WHERE SRA_INDV_AMNNO = TRIM( #{SRA_INDV_AMNNO} )
+		) B
+		ON(
+			A.SRA_INDV_AMNNO = B.SRA_INDV_AMNNO
+			AND A.SIB_SRA_INDV_AMNNO = B.SIB_SRA_INDV_AMNNO
+		)	
+		WHEN MATCHED THEN 
+			UPDATE SET                                          
+				A.MATIME                      = B.NEW_MATIME
+	</update>
 	<select id="selectBloodInfo" parameterType="map" resultType="map">
 		SELECT * FROM TB_LA_IS_MM_INDV_BLD
 		WHERE SRA_INDV_AMNNO LIKE '%'|| #{barcode}
