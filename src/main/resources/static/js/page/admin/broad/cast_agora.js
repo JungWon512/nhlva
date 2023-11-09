@@ -152,7 +152,7 @@ class Agora {
 		    this.localTracks.videoTrack = await AgoraRTC.createCameraVideoTrack({
 				cameraId: cameraList[this.options.cameraIndex].id
 				,mediaStreamTrack: newTrack
-				, width : { max: 1280, min: 720 }
+				,encoderConfig : '720p_1'
 			});
 		    //const newTrack = this.localVideoTrack.getMediaStreamTrack();
 			// Replaces and stops the current video track		    

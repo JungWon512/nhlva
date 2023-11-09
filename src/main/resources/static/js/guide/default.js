@@ -42,18 +42,20 @@ var preLoadDate;
 	}
 	//page unload page reload체크
 	if(location.pathname.indexOf('office') < 0 || location.pathname.indexOf('office/task') > 0)
-		window.document.addEventListener("visibilitychange", function(e) {			
+		window.document.addEventListener("visibilitychange", function(e) {		
+			var curIndex = $('video.agora_video_player').closest('div.player').attr('index');
+			
 			if(window.document.visibilityState == 'hidden'){
 				if(location.pathname.indexOf('/watch') >= 0 || location.pathname.indexOf('/groupBid') >= 0 || location.pathname.indexOf('/singlebid') >= 0){
 					//$('#remoteVideo1').get(0).muted=true;					
 					if(!$(".m_sound").hasClass('off')){
-						try{
-							if(agoraArr[1].user.audioTrack.isPlaying){
-								agoraArr[1].stopAgora('audio');
-							}
-						}catch(err){
-							console.log(err);
-						}
+							try{
+								if(curIndex && agoraArr[curIndex].user.audioTrack.isPlaying){
+									agoraArr[curIndex].stopAgora('audio');
+								}
+							}catch(err){
+								console.log(err);
+							}							
 						//$(".m_sound").click();
 						//$('#remoteVideo1').get(0).muted=false;
 					}
@@ -64,7 +66,7 @@ var preLoadDate;
 					if(!$(".m_sound").hasClass('off')){
 						//$(".m_sound").click();
 						try{
-							agoraArr[1].playAgora('audio');
+							agoraArr[curIndex].playAgora('audio');
 						}catch(err){
 							console.log(err);
 						}
