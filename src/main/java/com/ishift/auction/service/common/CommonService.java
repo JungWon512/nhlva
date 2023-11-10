@@ -44,5 +44,12 @@ public interface CommonService {
 	 * @throws Exception
 	 */
 	void updateDormcUserFhsClear(Map<String, Object> params) throws SQLException, RuntimeException;
+	List<Map<String, Object>> selectBloodInfo(Map<String, Object> params) throws SQLException;
+
+	List<Map<String, Object>> selectIndvPost(Map<String, Object> params) throws SQLException;
+
+	List<Map<String, Object>> selectIndvSib(Map<String, Object> params) throws SQLException;
+	void callIndvAiakInfo(String barcode) throws SQLException, RuntimeException;
+
 
 }

@@ -2544,6 +2544,7 @@
 		, A.MATIME
 		, A.SRA_INDV_PASG_QCN
 		, A.RG_DSC
+		, A.RG_DSC
 		, A.KPN_NO
 		, A.INDV_SEX_C
 		, A.BIRTH
@@ -3499,6 +3500,34 @@
 			#{TMS_TYPE}
 		)
 	</insert>
+	<select id="selectIndvBloodInfo" parameterType="map" resultType="map">
+		SELECT 
+			SRA_INDV_AMNNO
+			, MCOW_SRA_INDV_AMNNO
+			, FCOW_SRA_INDV_AMNNO
+			, FCOW_KPN_NO
+			, GRMCOW_SRA_INDV_AMNNO
+			, GRFCOW_SRA_INDV_AMNNO
+			, GRFCOW_KPN_NO
+			, MTGRMCOW_SRA_INDV_AMNNO
+			, MTGRFCOW_SRA_INDV_AMNNO
+			, MTGRFCOW_KPN_NO
+			, EPD_VAL_1
+			, EPD_GRD_1
+			, EPD_VAL_2
+			, EPD_GRD_2
+			, EPD_VAL_3
+			, EPD_GRD_3
+			, EPD_VAL_4
+			, EPD_GRD_4
+			, FSRG_DTM
+			, FSRGMN_ENO
+			, LSCHG_DTM
+			, LSCHGMN_ENO
+		FROM TB_LA_IS_MM_INDV_BLD A
+		WHERE 1=1
+		AND A.SRA_INDV_AMNNO = #{sraIndvAmnno}
+	</select>
 	
 	
 	<select id="selectNoticeList" parameterType="map" resultType="map">

@@ -50,8 +50,7 @@ div.save-box .info em {
 			</div>
 		</div>
 		<h3 class="tit2"><span class="subTxt" style="position: absolute;right: 10px;"></span></h3>
-		<h3 class="tit top">혈통정보			
-		</h3>		
+		<h3 class="tit top">혈통정보</h3>		
 		<div class="cow-father">
 			<table class="table-detail">
 				<colgroup>
@@ -62,15 +61,53 @@ div.save-box .info em {
 				<tbody>
 					<tr>
 						<th>부</th>
-						<td colspan="2" class="bg-gray fz-32 fCowSraIndvData" name="blInfo_1">-</td>
+						<td colspan="2" class="bg-gray fz-32" name="blInfo_1">
+							<c:choose>
+								<c:when test="${empty bloodInfo.FCOW_SRA_INDV_AMNNO }">
+									-
+								</c:when>
+								<c:otherwise>
+									[KPN] ${bloodInfo.FCOW_KPN_NO }
+									<br/>${fn:substring(bloodInfo.FCOW_SRA_INDV_AMNNO, 3, 15)}
+									<c:if test="${'N' eq inputParam.bidPopYn }"> 
+										<button type="button" class="btn-search btnCowSearch" data-indv-no="${bloodInfo.FCOW_SRA_INDV_AMNNO}"><span class="sr-only">검색</span></button>
+									</c:if>
+								</c:otherwise>
+							</c:choose>
+						</td>
 					</tr>
 					<tr>
 						<th colspan="2">조부</th>
-						<td class="fz-32 grfCowSraIndvData" name="blInfo_0">-</td>
+						<td class="fz-32" name="blInfo_0">
+							<c:choose>
+								<c:when test="${empty bloodInfo.GRFCOW_SRA_INDV_AMNNO }">
+									-
+								</c:when>
+								<c:otherwise>
+									[KPN] ${bloodInfo.GRFCOW_KPN_NO }
+									<br/>${fn:substring(bloodInfo.GRFCOW_SRA_INDV_AMNNO, 3, 15)}
+									<c:if test="${'N' eq inputParam.bidPopYn }"> 
+										<button type="button" class="btn-search btnCowSearch" data-indv-no="${bloodInfo.GRFCOW_SRA_INDV_AMNNO}"><span class="sr-only">검색</span></button>
+									</c:if>
+								</c:otherwise>
+							</c:choose>
+						</td>
 					</tr>
 					<tr>
 						<th colspan="2">조모</th>
-						<td class="fz-32 grmCowSraIndvData" name="blInfo_2">-</td>
+						<td class="fz-32" name="blInfo_2">
+							<c:choose>
+								<c:when test="${empty bloodInfo.GRMCOW_SRA_INDV_AMNNO }">
+									-
+								</c:when>
+								<c:otherwise>
+									${fn:substring(bloodInfo.GRMCOW_SRA_INDV_AMNNO, 3, 15)}
+									<c:if test="${'N' eq inputParam.bidPopYn }">
+										<button type="button" class="btn-search btnCowSearch" data-indv-no="${bloodInfo.GRMCOW_SRA_INDV_AMNNO}"><span class="sr-only">검색</span></button>
+									</c:if>
+								</c:otherwise>
+							</c:choose>
+						</td>
 					</tr>
 				</tbody>
 			</table>
@@ -85,22 +122,60 @@ div.save-box .info em {
 				<tbody>
 					<tr>
 						<th>모</th>
-						<td colspan="2" class="bg-gray fz-32 mCowSraIndvData" name="blInfo_4">-</td>
+						<td colspan="2" class="bg-gray fz-32" name="blInfo_4">
+							<c:choose>
+								<c:when test="${empty bloodInfo.MCOW_SRA_INDV_AMNNO }">
+									-
+								</c:when>
+								<c:otherwise> 
+									${fn:substring(bloodInfo.MCOW_SRA_INDV_AMNNO, 3, 15)}
+									<c:if test="${'N' eq inputParam.bidPopYn }">
+										<button type="button" class="btn-search btnCowSearch" data-indv-no="${bloodInfo.MCOW_SRA_INDV_AMNNO}"><span class="sr-only">검색</span></button>
+									</c:if>
+								</c:otherwise>
+							</c:choose>
+						</td>
 					</tr>
 					<tr>
 						<th colspan="2">외조부</th>
-						<td class="fz-32 mgrfCowSraIndvData" name="blInfo_3">-</td>
+						<td class="fz-32" name="blInfo_3">
+							<c:choose>
+								<c:when test="${empty bloodInfo.MTGRFCOW_SRA_INDV_AMNNO }">
+									-
+								</c:when>
+								<c:otherwise>
+									[KPN] ${bloodInfo.MTGRFCOW_KPN_NO } 
+									<br/>${fn:substring(bloodInfo.MTGRFCOW_SRA_INDV_AMNNO, 3, 15)}
+									<c:if test="${'N' eq inputParam.bidPopYn }">
+										<button type="button" class="btn-search btnCowSearch" data-indv-no="${bloodInfo.MTGRFCOW_SRA_INDV_AMNNO}"><span class="sr-only">검색</span></button>
+									</c:if>
+								</c:otherwise>
+							</c:choose>
+						</td>
 					</tr>
 					<tr>
 						<th colspan="2">외조모</th>
-						<td class="fz-32 mgrmCowSraIndvData" name="blInfo_5">-</td>
+						<td class="fz-32" name="blInfo_5">
+							<c:choose>
+								<c:when test="${empty bloodInfo.MTGRMCOW_SRA_INDV_AMNNO }">
+									-
+								</c:when>
+								<c:otherwise>
+									${fn:substring(bloodInfo.MTGRMCOW_SRA_INDV_AMNNO, 3, 15)}
+									<c:if test="${'N' eq inputParam.bidPopYn }">
+										<button type="button" class="btn-search btnCowSearch" data-indv-no="${bloodInfo.MTGRMCOW_SRA_INDV_AMNNO}"><span class="sr-only">검색</span></button>
+									</c:if>
+								</c:otherwise>
+							</c:choose>
+						</td>
 					</tr>
 				</tbody>
 			</table>
 		</div>
+		
 		<h3 class="tit">형매정보</h3>
 		<div class="cow-sibiling">
-			<table class="table-detail sibIndvTable">
+			<table class="table-detail sibTbl">
 				<colgroup>
 					<col width="8%">
 					<col width="33%">
@@ -123,18 +198,31 @@ div.save-box .info em {
 					</tr>
 				</thead>
 				<tbody>
-					<tr>
-						<td rowspan="2" colspan="5" class="ta-C"></td>
-					</tr>
-					<tr>
-						<td rowspan="2" colspan="5" class="ta-C">-</td>
-					</tr>
+					<c:if test="${ sibList.size() == '0' }">
+						<tr>
+							<td rowspan="2" colspan="5" class="ta-C">-</td>
+						</tr>
+					</c:if>
+					<c:forEach items="${ sibList }" var="item" varStatus="st">
+						<tr>
+							<td rowspan="2" class="ta-C bg-gray matime">${item.MATIME }</td>
+							<td rowspan="2" class="ta-C sraIndvAmnno">${item.SIB_SRA_INDV_AMNNO_STR }</td>
+							<td class="ta-C rgDsc">${item.RG_DSC_NAME }</td>
+							<td class="ta-C indvSexC">${item.INDV_SEX_C_NAME }</td>
+							<td class="ta-C birth">${not empty item.BIRTH_STR ? item.BIRTH_STR :'-' }</td>
+						</tr>
+						<tr>
+							<td class="ta-C metrbMetqltGrd">${not empty item.METRB_METQLT_GRD ? item.METRB_METQLT_GRD :'-' }</td>
+							<td class="ta-C metrbBbdyWt">${not empty item.METRB_BBDY_WT ? item.METRB_BBDY_WT :'-' }</td>
+							<td class="ta-C mifBtcDt">${not empty item.MIF_BTC_DT_STR ? item.MIF_BTC_DT_STR : '-'}</td>
+						</tr>
+					</c:forEach>
 				</tbody>
 			</table>
 		</div>	
 		<h3 class="tit">후대정보</h3>
 		<div class="cow-sibiling">
-			<table class="table-detail postIndvTable">
+			<table class="table-detail postTbl">
 				<colgroup>
 					<col width="8%">
 					<col width="33%">
@@ -157,16 +245,28 @@ div.save-box .info em {
 					</tr>
 				</thead>
 				<tbody>
-					<tr>
-						<td rowspan="2" colspan="5" class="ta-C"></td>
-					</tr>
-					<tr>
-						<td rowspan="2" colspan="5" class="ta-C">-</td>
-					</tr>
+					<c:if test="${ postList.size() == '0' }">
+						<tr>
+							<td rowspan="2" colspan="5" class="ta-C">-</td>
+						</tr>
+					</c:if>
+					<c:forEach items="${ postList }" var="item" varStatus="st">
+						<tr>
+							<td rowspan="2" class="ta-C bg-gray matime">${item.MATIME }</td>
+							<td rowspan="2" class="ta-C sraIndvAmnno">${item.POST_SRA_INDV_AMNNO_STR }</td>
+							<td class="ta-C rgDsc">${item.RG_DSC_NAME }</td>
+							<td class="ta-C indvSexC">${item.INDV_SEX_C_NAME }</td>
+							<td class="ta-C birth">${not empty item.BIRTH_STR ? item.BIRTH_STR :'-' }</td>
+						</tr>
+						<tr>
+							<td class="ta-C metrbMetqltGrd">${not empty item.METRB_METQLT_GRD ? item.METRB_METQLT_GRD :'-' }</td>
+							<td class="ta-C metrbBbdyWt">${not empty item.METRB_BBDY_WT ? item.METRB_BBDY_WT :'-' }</td>
+							<td class="ta-C mifBtcDt">${not empty item.MIF_BTC_DT_STR ? item.MIF_BTC_DT_STR : '-'}</td>
+						</tr>
+					</c:forEach>
 				</tbody>
 			</table>
 		</div>
-	</div>
 	<!-- //tab_area e -->
 	
 	<div class="tab_area not mo-pd epdInfo cowTab_2" style="display:none;">				
@@ -182,23 +282,23 @@ div.save-box .info em {
 				<tbody>
 					<tr>
 						<th><i class="dot" style="background-color: #ffaf00;"></i>냉도체중(Kg)</th>
-						<td name="reProduct1" class="ta-C bdr-y">-</td>
-						<td class="ta-C dscReProduct1" name="dscReProduct1"><span class="c-blue">-</span></td>
+						<td name="reProduct1" class="ta-C bdr-y">${bloodInfo.EPD_VAL_1}</td>
+						<td class="ta-C dscReProduct1" name="dscReProduct1"><span class="c-blue">${bloodInfo.EPD_GRD_1}</span></td>
 					</tr>
 					<tr>
 						<th><i class="dot" style="background-color: #a4d509;"></i>배최장근(cm2)</th>
-						<td name="reProduct2" class="ta-C bdr-y">-</td>
-						<td class="ta-C dscReProduct2" name="dscReProduct2"><span class="c-blue">-</span></td>
+						<td name="reProduct2" class="ta-C bdr-y">${bloodInfo.EPD_VAL_2}</td>
+						<td class="ta-C dscReProduct2" name="dscReProduct2"><span class="c-blue">${bloodInfo.EPD_GRD_2}</span></td>
 					</tr>
 					<tr>
 						<th><i class="dot" style="background-color: #5bacff;"></i>등지방두께(mm)</th>
-						<td name="reProduct3" class="ta-C bdr-y">-</td>
-						<td class="ta-C dscReProduct3" name="dscReProduct3"><span class="c-blue">-</span></td>
+						<td name="reProduct3" class="ta-C bdr-y">${bloodInfo.EPD_VAL_3}</td>
+						<td class="ta-C dscReProduct3" name="dscReProduct3"><span class="c-blue">${bloodInfo.EPD_GRD_3}</span></td>
 					</tr>
 					<tr>
 						<th><i class="dot" style="background-color: #ff7bc2;"></i>근내지방도(점)</th>
-						<td name="reProduct4" class="ta-C bdr-y">-</td>
-						<td class="ta-C dscReProduct4" name="dscReProduct4"><span class="c-blue">-</span></td>
+						<td name="reProduct4" class="ta-C bdr-y">${bloodInfo.EPD_VAL_4}</td>
+						<td class="ta-C dscReProduct4" name="dscReProduct4"><span class="c-blue">${bloodInfo.EPD_GRD_4}</span></td>
 					</tr>
 				</tbody>
 			</table>

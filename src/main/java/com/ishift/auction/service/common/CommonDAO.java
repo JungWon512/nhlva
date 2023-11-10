@@ -220,24 +220,34 @@ public class CommonDAO {
 		mainDao.delete("commonMapper.deleteDormFhsBackupData", params);
 	}
 
-	public int insAiakInfo(Map<String, Object> params) throws SQLException {
-		return mainDao.update("commonMapper.insAiakInfo", params);
+	public void updatetIndvAiakInfo(Map<String, Object> params) throws SQLException{
+		mainDao.update("commonMapper.updatetIndvAiakInfo", params);
 	}
 
-	public int insAiakPostInfo(Map<String, Object> params) throws SQLException {
-		return mainDao.update("commonMapper.insAiakPostInfo", params);
+	public void updatetIndvAiakPostInfo(Map<String, Object> params) throws SQLException{
+		mainDao.update("commonMapper.updatetIndvAiakPostInfo", params);		
 	}
 
-	public int insAiakSibInfo(Map<String, Object> params) throws SQLException {
-		return mainDao.update("commonMapper.insAiakSibInfo", params);
+	public void updatetIndvAiakSibInfo(Map<String, Object> params) throws SQLException{
+		mainDao.update("commonMapper.updatetIndvAiakSibInfo", params);
 	}
 
-	public int delAiakSibInfo(Map<String, Object> params) throws SQLException {
-		return mainDao.delete("commonMapper.delAiakSibInfo", params);
+	public List<Map<String, Object>> selectBloodInfo(Map<String, Object> params) throws SQLException {
+		return mainDao.selectList("commonMapper.selectBloodInfo", params);
 	}
 
-	public int delAiakPostInfo(Map<String, Object> params) throws SQLException {
-		return mainDao.delete("commonMapper.delAiakPostInfo", params);
+	public List<Map<String, Object>> selectIndvSib(Map<String, Object> params) throws SQLException {
+		return mainDao.selectList("commonMapper.selectIndvSib", params);
 	}
 
+	public List<Map<String, Object>> selectIndvPost(Map<String, Object> params) throws SQLException {
+		return mainDao.selectList("commonMapper.selectIndvPost", params);
+	}
+
+	public int updateIndvSibMatime(Map<String, Object> params) throws SQLException {
+		return mainDao.update("commonMapper.updateIndvSibMatime", params);		
+	}
+	public int updateIndvPostMatime(Map<String, Object> params) throws SQLException {
+		return mainDao.update("commonMapper.updateIndvPostMatime", params);		
+	}
 }

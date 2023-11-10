@@ -35,6 +35,7 @@ import org.springframework.web.servlet.ModelAndView;
 
 import com.ishift.auction.service.admin.AdminService;
 import com.ishift.auction.service.auction.AuctionService;
+import com.ishift.auction.service.common.CommonService;
 import com.ishift.auction.util.Constants;
 import com.ishift.auction.util.JwtTokenUtil;
 import com.ishift.auction.util.SessionUtill;
@@ -61,6 +62,9 @@ public class AuctionController extends CommonController {
 	
 	@Autowired
 	HttpUtils httpUtils;
+	
+	@Autowired
+	private CommonService commonService;
 	
 	@RequestMapping(value = "/results",method = { RequestMethod.GET, RequestMethod.POST })	
 	public ModelAndView results(@RequestParam Map<String, Object> param) throws Exception {		
@@ -830,13 +834,20 @@ public class AuctionController extends CommonController {
 					mav.addObject("moveList",moveList);
 					mav.addObject("tabList", tabList);
 				break;
-				case "1":					
+				case "1":
+				case "2":					
 					paramMap.put("naBzplc", param.get("naBzplc"));
 					paramMap.put("sraIndvAmnno", param.get("sraIndvAmnno"));
-					List<Map<String,Object>> postList = auctionService.selectListIndvPost(paramMap);
-					List<Map<String,Object>> sibList = auctionService.selectListIndvSib(paramMap);
-					mav.addObject("sibList",sibList);
-					mav.addObject("postList",postList);
+					Map<String,Object> bloodInfo = auctionService.selectIndvBloodInfo(paramMap);
+					if(bloodInfo == null || bloodInfo.isEmpty()) {
+						commonService.callIndvAiakInfo((String)param.get("sraIndvAmnno"));
+						bloodInfo = auctionService.selectIndvBloodInfo(paramMap);
+					}
+					mav.addObject("bloodInfo",bloodInfo);
+					if("1".equals(tabId)) {
+						mav.addObject("sibList",auctionService.selectListIndvSib(paramMap));
+						mav.addObject("postList",auctionService.selectListIndvPost(paramMap));						
+					}
 				break;
 				case "3": //thumnail만 조회
 					paramMap.put("naBzplc", param.get("naBzplc"));
@@ -952,7 +963,7 @@ public class AuctionController extends CommonController {
         map.put("naBzPlcNo", param.get("place"));        
         Map<String, Object> johap = adminService.selectOneJohap(map);
         map.put("naBzplc", param.get("naBzplc"));
-        //map.put("sraIndvAmnno", param.get("sraIndvAmnno"));
+        map.put("sraIndvAmnno", param.get("sraIndvAmnno"));
 		//Map<String,Object> indvData=auctionService.selectIndvDataInfo(map);
 		//map.put("sraIndvAmnno", param.get("sraIndvAmnno"));
 		
@@ -961,8 +972,14 @@ public class AuctionController extends CommonController {
 		//List<Map<String,Object>> sibList = auctionService.selectListIndvSib(map);
 		
 		//mav.addObject("moveList",moveList);
-		//mav.addObject("sibList",sibList);
-		//mav.addObject("postList",postList);
+		Map<String,Object> bloodInfo = auctionService.selectIndvBloodInfo(map);
+		if(bloodInfo == null || bloodInfo.isEmpty()) {
+			commonService.callIndvAiakInfo((String)param.get("sraIndvAmnno"));
+			bloodInfo = auctionService.selectIndvBloodInfo(map);
+		}
+		mav.addObject("bloodInfo",bloodInfo);
+		mav.addObject("sibList",auctionService.selectListIndvSib(map));
+		mav.addObject("postList",auctionService.selectListIndvPost(map));
 
 		//출장우 상세 tab항목 표기
         map.put("simpCGrpSqno", "1");

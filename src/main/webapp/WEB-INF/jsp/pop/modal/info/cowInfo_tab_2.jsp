@@ -1,7 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
 <%@ include file="/WEB-INF/__system/taglibs.jsp" %>
 	
-<h3 class="tit2"><span class="subTxt" style="position: absolute;right: 10px;"></span></h3>
+<h3 class="tit2"><span class="subTxt" style="position: absolute;right: 10px;">※한국종축개량협회 제공</span></h3>
 <h3 class="tit">
 	유전능력(EPD)	
 </h3>
@@ -16,23 +16,23 @@
 		<tbody>
 			<tr>
 				<th><i class="dot" style="background-color: #ffaf00;"></i>냉도체중(Kg)</th>
-				<td name="reProduct1" class="ta-C bdr-y">-</td>
-				<td class="ta-C dscReProduct1" name="dscReProduct1"><span class="c-blue">-</span></td>
+				<td name="reProduct1" class="ta-C bdr-y">${bloodInfo.EPD_VAL_1}</td>
+				<td class="ta-C dscReProduct1" name="dscReProduct1"><span class="c-blue">${bloodInfo.EPD_GRD_1 }</span></td>
 			</tr>
 			<tr>
 				<th><i class="dot" style="background-color: #a4d509;"></i>배최장근(cm2)</th>
-				<td name="reProduct2" class="ta-C bdr-y">-</td>
-				<td class="ta-C dscReProduct2" name="dscReProduct2"><span class="c-blue">-</span></td>
+				<td name="reProduct2" class="ta-C bdr-y">${bloodInfo.EPD_VAL_2 }</td>
+				<td class="ta-C dscReProduct2" name="dscReProduct2"><span class="c-blue">${bloodInfo.EPD_GRD_2 }</span></td>
 			</tr>
 			<tr>
 				<th><i class="dot" style="background-color: #5bacff;"></i>등지방두께(mm)</th>
-				<td name="reProduct3" class="ta-C bdr-y">-</td>
-				<td class="ta-C dscReProduct3" name="dscReProduct3"><span class="c-blue">-</span></td>
+				<td name="reProduct3" class="ta-C bdr-y">${bloodInfo.EPD_VAL_3 }</td>
+				<td class="ta-C dscReProduct3" name="dscReProduct3"><span class="c-blue">${bloodInfo.EPD_GRD_3 }</span></td>
 			</tr>
 			<tr>
 				<th><i class="dot" style="background-color: #ff7bc2;"></i>근내지방도(점)</th>
-				<td name="reProduct4" class="ta-C bdr-y">-</td>
-				<td class="ta-C dscReProduct4" name="dscReProduct4"><span class="c-blue">-</span></td>
+				<td name="reProduct4" class="ta-C bdr-y">${bloodInfo.EPD_VAL_4 }</td>
+				<td class="ta-C dscReProduct4" name="dscReProduct4"><span class="c-blue">${bloodInfo.EPD_GRD_4 }</span></td>
 			</tr>
 		</tbody>
 	</table>

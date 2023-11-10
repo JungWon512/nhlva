@@ -843,5 +843,9 @@ public class AuctionDAO {
 	public List<Map<String, Object>> selectNoticeList(Map<String, Object> params) throws SQLException {
 		return mainDao.selectList("auction.selectNoticeList", params);
 	}
+
+	public Map<String, Object> selectIndvBloodInfo(Map<String, Object> params) throws SQLException {
+		return mainDao.selectOne("auction.selectIndvBloodInfo", params);
+	}
 	
 }
