@@ -31,17 +31,27 @@
 					popHtml.push("			</div>");
 					popHtml.push("			<div class='modal-body'>");
 					popHtml.push("				<ul style='padding:12px;margin-top:-15px;'>");
-					popHtml.push("					<li style='font-size:16px;margin-bottom:10px;'></li>");
+					popHtml.push("					<li style='font-size:16px;margin-bottom:10px;' class='content'></li>");
+					popHtml.push("					<li style='text-align: center;'>");
+					popHtml.push("						<span class='no_popup'><a href='javascript:;' class='no_popup'>오늘하루 그만볼게요.</a></span>");
+					popHtml.push("					</li>");
 					popHtml.push("				</ul>");
 					popHtml.push("			</div>");
+					
 					popHtml.push("		</div>");
 					popHtml.push("</div>");
-					
+					setCookieLimitDay('appChkDate',getTodayStr());
 					$("body").append(popHtml.join(""));
 					modalPopup(".pop_cow_input");
-					$(document).find(".pop_cow_input .modal-body ul li").html(cntn);
+					$(document).find(".pop_cow_input .modal-body ul li.content").html(cntn);
 					//시스템 점검 공지 안내 팝업 닫기 버튼 event
 					$(document).find(".pop_cow_input .modal_popup_close").unbind("click").click(function(){
+						modalPopupClose('.pop_cow_input');
+						$(".pop_cow_input").remove();
+					});
+	
+					$('div.pop_cow_input .pop_ad_mod .no_popup').click(function(){
+						setCookieLimitDay('noticeChkDate',getTodayStr());
 						modalPopupClose('.pop_cow_input');
 						$(".pop_cow_input").remove();
 					});
@@ -56,8 +66,9 @@
 				$('.w_header .side_menu .login').hide();
 				$('.w_header .side_menu .notice').hide();
 				$('.m_header a').hide();
-				
-				searchNoticeList();
+				if(getCookie('noticeChkDate') != getTodayStr()){
+					searchNoticeList();
+				}
 				addEvent();
 			}
 		};

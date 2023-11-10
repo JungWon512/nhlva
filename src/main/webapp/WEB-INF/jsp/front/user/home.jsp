@@ -1,6 +1,16 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
 <%@ include file="/WEB-INF/__system/taglibs.jsp"%>
-
+<style>
+.modal-wrap.pop_cow_input .modal-content .modal-body span.no_popup {
+	font-family: Noto Sans KR;	
+	line-height: 1.25;
+	letter-spacing: -0.8px;
+	text-align: center;
+	color: #1a1a1a;
+	display: inline-block;
+	border-bottom: 1px solid #1a1a1a;
+}
+</style>
 <c:set var="aucCnt" value="0" />
 <c:forEach items="${ bizList }" var="vo" varStatus="st">
 	<c:if test ="${vo.CUR_AUC_CNT > 0 }">
