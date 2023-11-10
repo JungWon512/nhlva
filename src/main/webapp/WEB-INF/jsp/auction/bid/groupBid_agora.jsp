@@ -42,7 +42,7 @@
 			<dl>
 				<dt>${johapData.CLNTNM}<span>|</span>참가번호 <b class="join-num" style="font-weight:700;"></b>
 					<span>|</span>
-					<a href="javscript:;" class="m_sound">소리</a>
+					<a href="javscript:;" class="m_sound off">소리</a>
 				</dt>
 				<dd>
 					<div class="auc-txt">
