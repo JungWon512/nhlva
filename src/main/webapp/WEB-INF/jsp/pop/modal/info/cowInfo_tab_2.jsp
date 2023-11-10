@@ -1,7 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
 <%@ include file="/WEB-INF/__system/taglibs.jsp" %>
 	
-<h3 class="tit2"><span class="subTxt" style="position: absolute;right: 10px;"></span></h3>
+<h3 class="tit2"><span class="subTxt" style="position: absolute;right: 10px;">※한국종축개량협회 제공</span></h3>
 <h3 class="tit">
 	유전능력(EPD)	
 </h3>

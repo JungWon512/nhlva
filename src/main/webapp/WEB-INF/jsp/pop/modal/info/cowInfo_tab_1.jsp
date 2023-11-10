@@ -18,7 +18,7 @@ div.save-box .info em {
 		<em>${fn:substring(infoData.SRA_INDV_AMNNO, 3, 6)} ${fn:substring(infoData.SRA_INDV_AMNNO, 6, 10)} ${fn:substring(infoData.SRA_INDV_AMNNO, 10, 14)} ${fn:substring(infoData.SRA_INDV_AMNNO, 14, 15)} </em>
 	</div>
 </div>
-<h3 class="tit2"><span class="subTxt" style="position: absolute;right: 10px;"></span></h3>
+<h3 class="tit2"><span class="subTxt" style="position: absolute;right: 10px;">※한국종축개량협회 제공</span></h3>
 <h3 class="tit">
 	혈통정보
 </h3>
