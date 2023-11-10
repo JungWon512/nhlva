@@ -2544,7 +2544,6 @@
 		, A.MATIME
 		, A.SRA_INDV_PASG_QCN
 		, A.RG_DSC
-		, A.RG_DSC
 		, A.KPN_NO
 		, A.INDV_SEX_C
 		, A.BIRTH
