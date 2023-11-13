@@ -35,7 +35,7 @@ $(function() {
 				if(!$('.m_sound').hasClass('off')) agoraArr[1].playAgora('audio');
 			}else{
 				agoraArr[currentSlide].playAgora('video');
-				if(!$('.m_sound').hasClass('off')) agoraArr[1].playAgora('audio');				
+				if(!$('.m_sound').hasClass('off')) agoraArr[currentSlide].playAgora('audio');				
 			}
 		});
 	};
@@ -52,14 +52,16 @@ $(function() {
 	var setBinding = function() {
 		// 관전 영상 음소거
 		$(".m_sound").on(clickEvent, function(e){
-			if(joinChk && agoraArr[1].user && agoraArr[1].user.audioTrack){
-				if(!agoraArr[1].user.audioTrack.isPlaying){
-					agoraArr[1].playAgora('audio');
+			$(".m_sound").toggleClass('off');
+			var curIndex = $('.seeBox_slick ul.slider').slick('slickCurrentSlide');
+			if(curIndex == '0') curIndex = 1;			
+			if(joinChk && agoraArr[curIndex].user?.audioTrack){
+				if(!$(this).hasClass('off') && !agoraArr[curIndex].user.audioTrack.isPlaying){
+					agoraArr[curIndex].playAgora('audio');
 				}else{
-					agoraArr[1].stopAgora('audio');
+					agoraArr[curIndex].stopAgora('audio');
 				}
 			}
-			$(".m_sound").toggleClass('off');
 		});
 		
 		// 숫자 입력

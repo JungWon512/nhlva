@@ -43,15 +43,17 @@ var preLoadDate;
 	//page unload page reload체크
 	if(location.pathname.indexOf('office') < 0 || location.pathname.indexOf('office/task') > 0)
 		window.document.addEventListener("visibilitychange", function(e) {		
-			var curIndex = $('video.agora_video_player').closest('div.player').attr('index');
+			var curIndex = $('.seeBox_slick ul.slider').slick('slickCurrentSlide');
 			
 			if(window.document.visibilityState == 'hidden'){
-				if(location.pathname.indexOf('/watch') >= 0 || location.pathname.indexOf('/groupBid') >= 0 || location.pathname.indexOf('/singlebid') >= 0){
+				if(location.pathname.indexOf('/watch') >= 0 || location.pathname.indexOf('/bid') >= 0){
 					//$('#remoteVideo1').get(0).muted=true;					
 					if(!$(".m_sound").hasClass('off')){
 							try{
-								if(curIndex && agoraArr[curIndex].user.audioTrack.isPlaying){
-									agoraArr[curIndex].stopAgora('audio');
+								for(var i=1;i<=4;i++){
+									if(agoraArr[i].user.audioTrack.isPlaying){
+										agoraArr[i].stopAgora('audio');
+									}									
 								}
 							}catch(err){
 								console.log(err);
@@ -62,11 +64,12 @@ var preLoadDate;
 				}
 				preLoadDate=new Date();			
 			}else{
-				if(location.pathname.indexOf('/watch') >= 0 || location.pathname.indexOf('/groupBid') >= 0 || location.pathname.indexOf('/singlebid') >= 0){
+				if(location.pathname.indexOf('/watch') >= 0 || location.pathname.indexOf('/bid') >= 0){
 					if(!$(".m_sound").hasClass('off')){
+						if(curIndex == '0') curIndex = 1;			
 						//$(".m_sound").click();
 						try{
-							agoraArr[curIndex].playAgora('audio');
+							if(curIndex) agoraArr[curIndex].playAgora('audio');
 						}catch(err){
 							console.log(err);
 						}
