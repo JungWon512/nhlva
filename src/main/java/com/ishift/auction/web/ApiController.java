@@ -2132,8 +2132,12 @@ public class ApiController {
 		try {
 			//Map<String,Object> mcaResult =httpUtils.callApiAiakV2(barcode);
 			String barcode= (String)params.get("barcode");
-			Map<String,Object> apiResult =httpUtils.callApiAiakMap(barcode);
-			result.put("success", true);
+			Map<String,Object> apiResult = httpUtils.callApiAiakMap(barcode);
+			if(!apiResult.isEmpty() ) {
+				result.put("success", true);				
+			}else {
+				result.put("success", false);				
+			}
 			result.put("data", apiResult);
 		}
 		catch (Exception e) {
@@ -2158,7 +2162,7 @@ public class ApiController {
 			//Map<String,Object> mcaResult =httpUtils.callApiAiakV2(barcode);
 			String barcode= (String)params.get("barcode");
 			String serviceKey= (String)params.get("serviceKey");
-			Map<String,Object> apiResult =httpUtils.callApiOpenDataCattle(barcode,serviceKey);
+			Map<String,Object> apiResult =httpUtils.callApiOpenDataCattle(barcode);
 			result.put("success", true);
 			result.put("data", apiResult);
 		}

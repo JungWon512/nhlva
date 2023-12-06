@@ -201,7 +201,7 @@ $(document).ready(function() {
 			if(kko_id) {
 				try{
 					Kakao.init(kko_id);
-//					AgoraRTC.setLogLevel(4);				
+					AgoraRTC.setLogLevel(4);				
 				}catch(e){console.log(e);};				
 			}
 			
@@ -213,7 +213,7 @@ $(document).ready(function() {
 				// $(this).toggleClass('act');
 			});
 			$(window).on("load",function(){
-//				if(isApp() || chkOs() != 'web'){
+				if(isApp() || chkOs() != 'web'){
 					$(".list_table .list_body ul.mCustomScrollBox, div.modal-wrap .pop_TermsBox.mCustomScrollBox").each(function(){
 						$(this).removeClass('mCustomScrollBox');
 												
@@ -238,15 +238,15 @@ $(document).ready(function() {
 						$(this).css('height','  '+ (resultH<0?0:resultH) +'px');
 						$(this).css('min-height','120px');
 					});
-//				}else{
-//					$(".list_body ul").mCustomScrollbar({
-//						theme:"dark-thin",
-//						scrollInertia: 200,
-//						setTop :0
-//						,setWidth: false
-//						,setHeight: false
-//					});
-//				}
+				}else{
+					$(".list_body ul").mCustomScrollbar({
+						theme:"dark-thin",
+						scrollInertia: 200,
+						setTop :0
+						,setWidth: false
+						,setHeight: false
+					});
+				}
 			});
 		},
 		noBid: function (e) {

@@ -3529,7 +3529,7 @@
 	</select>
 	
 	
-	<select id="selectNoticeList" parameterType="map" resultType="map">
+	<select id="selectMainPopNoticeList" parameterType="map" resultType="map">
 	<![CDATA[
 		SELECT 
 			NA_BZPLC
@@ -3550,7 +3550,7 @@
 			, LSCHG_DTM
 			, LS_CMENO
 		FROM TB_LA_IS_MM_BLBD
-		WHERE BLBD_DSC ='4'
+		WHERE BLBD_DSC ='3'
 		AND NA_BZPLC ='0000000000000'
 		AND PUP_UYN ='1'
 		AND NVL(BBRD_DEL_YN,'0') = '0' 

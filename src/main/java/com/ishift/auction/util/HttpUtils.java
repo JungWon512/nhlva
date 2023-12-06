@@ -859,8 +859,8 @@ public class HttpUtils {
             //URL url = new URL("http","api.aiak.or.kr/","9080");
             //if("0".equals(sslFlag)) this.SSLVaildBypass();
             con = (HttpURLConnection) url.openConnection();
-            con.setConnectTimeout(5000); //서버에 연결되는 Timeout 시간 설정
-            con.setReadTimeout(5000); // InputStream 읽어 오는 Timeout 시간 설정
+            con.setConnectTimeout(3000); //서버에 연결되는 Timeout 시간 설정
+            con.setReadTimeout(2000); // InputStream 읽어 오는 Timeout 시간 설정
             con.setRequestMethod("GET");
             con.setRequestProperty("apikey", "KAIA_API8b749c8d2c44700f64f564b5dfd5869a6bbda33c927da182cd515be02b2b0b77");
             con.setDoOutput(false);            
@@ -952,7 +952,7 @@ public class HttpUtils {
 								map.put("BIRTH", obj.get("birthdate"));
 								map.put("RG_DSC", obj.get("reggu"));
 								map.put("INDV_SEX_C", obj.get("sex"));
-								Map<String,Object> butcherInfo= this.callApiOpenDataCattle((String)obj.get("barcode"),null);
+								Map<String,Object> butcherInfo= this.callApiOpenDataCattle((String)obj.get("barcode"));
                         
 								map.put("METRB_BBDY_WT", butcherInfo.get("BUTCHERY_WEIGHT"));
 								map.put("MIF_BTC_DT", butcherInfo.get("BUTCHERY_YMD"));
@@ -975,7 +975,7 @@ public class HttpUtils {
 								map.put("RG_DSC", obj.get("reggu"));
 								map.put("INDV_SEX_C", obj.get("sex"));
 								map.put("KPN_NO", obj.get("sire_name"));
-								Map<String,Object> butcherInfo= this.callApiOpenDataCattle((String)obj.get("barcode"),null);
+								Map<String,Object> butcherInfo= this.callApiOpenDataCattle((String)obj.get("barcode"));
 
 								map.put("METRB_BBDY_WT", butcherInfo.get("BUTCHERY_WEIGHT"));
 								map.put("MIF_BTC_DT", butcherInfo.get("BUTCHERY_YMD"));
@@ -995,12 +995,12 @@ public class HttpUtils {
 
 
 	//종축개량 API_TEST
-	public Map<String,Object> callApiOpenDataCattle(String barcode,String newOpenDataApiKey) {
+	public Map<String,Object> callApiOpenDataCattle(String barcode) {
 		BufferedReader br = null;
 		HttpURLConnection con = null;
 		Map<String,Object> result = new HashMap<String, Object>();
 		String response = "";
-		//String newOpenDataApiKey = "Z5HnEP8ghGMEUD0ukiBNifYlBV6%2BwI7hxE8hlLI71yY3IirWjvlVwaGsbjRcTWhIzVisaI3%2Fyb4cDhdoa%2BYRcg%3D%3D";
+		String newOpenDataApiKey = "Z5HnEP8ghGMEUD0ukiBNifYlBV6%2BwI7hxE8hlLI71yY3IirWjvlVwaGsbjRcTWhIzVisaI3%2Fyb4cDhdoa%2BYRcg%3D%3D";
 		//"Z5HnEP8ghGMEUD0ukiBNifYlBV6%2BwI7hxE8hlLI71yY3IirWjvlVwaGsbjRcTWhIzVisaI3%2Fyb4cDhdoa%2BYRcg%3D%3D"
         try {        	
     		String tempUrl = "http://data.ekape.or.kr/openapi-data/service/user/mtrace/breeding/cattle";

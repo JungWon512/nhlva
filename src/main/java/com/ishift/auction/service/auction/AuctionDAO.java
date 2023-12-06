@@ -840,8 +840,8 @@ public class AuctionDAO {
 		return mainDao.selectList("auction.selectCowInfo", params);
 	}
 
-	public List<Map<String, Object>> selectNoticeList(Map<String, Object> params) throws SQLException {
-		return mainDao.selectList("auction.selectNoticeList", params);
+	public List<Map<String, Object>> selectMainPopNoticeList(Map<String, Object> params) throws SQLException {
+		return mainDao.selectList("auction.selectMainPopNoticeList", params);
 	}
 
 	public Map<String, Object> selectIndvBloodInfo(Map<String, Object> params) throws SQLException {

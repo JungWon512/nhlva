@@ -1834,8 +1834,8 @@ public class AuctionServiceImpl implements AuctionService {
 		return  auctionDAO.selectCowInfoList(params);
 	}
 	@Override
-	public List<Map<String, Object>> selectNoticeList(Map<String, Object> params) throws SQLException{
-		return  auctionDAO.selectNoticeList(params);		
+	public List<Map<String, Object>> selectMainPopNoticeList(Map<String, Object> params) throws SQLException{
+		return  auctionDAO.selectMainPopNoticeList(params);		
 	}
 	@Override
 	public Map<String, Object> selectIndvBloodInfo(Map<String, Object> params) throws SQLException{

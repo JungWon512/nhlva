@@ -565,7 +565,7 @@ public interface AuctionService {
 
 	List<Map<String, Object>> selectCowInfoList(Map<String, Object> params) throws SQLException;
 
-	List<Map<String, Object>> selectNoticeList(Map<String, Object> map) throws SQLException;
+	List<Map<String, Object>> selectMainPopNoticeList(Map<String, Object> map) throws SQLException;
 
 	Map<String, Object> selectIndvBloodInfo(Map<String, Object> paramMap) throws SQLException;
 	
