@@ -250,4 +250,8 @@ public class CommonDAO {
 	public int updateIndvPostMatime(Map<String, Object> params) throws SQLException {
 		return mainDao.update("commonMapper.updateIndvPostMatime", params);		
 	}
+
+	public List<Map<String, Object>> getIntgNoList(Map<String, Object> params) throws SQLException {
+		return mainDao.selectList("commonMapper.getIntgNoInfo", params);
+	}
 }
