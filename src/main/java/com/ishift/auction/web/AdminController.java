@@ -555,7 +555,7 @@ public class AdminController {
 				mav.addObject("johapData", johap);
 		        mav.addObject("token",token);
 		        mav.addObject("count",count);
-				mav.setViewName("admin/auction/stream/stream");
+				mav.setViewName("admin/auction/stream/stream_agora");
 				mav.addObject("subheaderTitle", "방송");
 			}
 			else {

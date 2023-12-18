@@ -1,9 +1,11 @@
 package com.ishift.auction.web;
 
-import java.sql.SQLException; 
+import java.sql.SQLException;
+import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -19,6 +21,7 @@ import com.ishift.auction.vo.JwtTokenVo;
 
 import lombok.extern.slf4j.Slf4j;
 
+import org.joda.time.DateTime;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -805,6 +808,10 @@ public class AuctionController extends CommonController {
 	@RequestMapping(value = "/info/getCowInfo",method = { RequestMethod.GET, RequestMethod.POST })	
 	public ModelAndView getCowInfo(@RequestParam Map<String, Object> param) throws Exception {		
 		LOGGER.debug("start of results.do");
+
+		LocalDateTime date = LocalDateTime.now();
+		String today = date.format(DateTimeFormatter.ofPattern("yyyyMMdd"));
+		
 		String tabId = (String) param.getOrDefault("tabId","");
 		ModelAndView mav = new ModelAndView("pop/modal/info/cowInfo_tab_"+tabId);
 		Map<String, Object> cowInfo = null;
@@ -839,10 +846,23 @@ public class AuctionController extends CommonController {
 					paramMap.put("naBzplc", param.get("naBzplc"));
 					paramMap.put("sraIndvAmnno", param.get("sraIndvAmnno"));
 					Map<String,Object> bloodInfo = auctionService.selectIndvBloodInfo(paramMap);
+					SimpleDateFormat formatter = new SimpleDateFormat("yyyyMMdd");
+					
+					String aucDt = (String) param.get("aucDt");
+					Date aucDate = formatter.parse(aucDt);
+					
 					if(bloodInfo == null || bloodInfo.isEmpty()) {
 						commonService.callIndvAiakInfo((String)param.get("sraIndvAmnno"));
 						bloodInfo = auctionService.selectIndvBloodInfo(paramMap);
+					}else {
+						String lschgDt = (String)bloodInfo.getOrDefault("LSCHG_DT", "");
+						Date lschgDate = formatter.parse(lschgDt);					
+						if((today.equals(aucDt) && lschgDate.before(aucDate) )) {
+							commonService.callIndvAiakInfo((String)param.get("sraIndvAmnno"));
+							bloodInfo = auctionService.selectIndvBloodInfo(paramMap);
+						}						
 					}
+					
 					mav.addObject("bloodInfo",bloodInfo);
 					if("1".equals(tabId)) {
 						mav.addObject("sibList",auctionService.selectListIndvSib(paramMap));

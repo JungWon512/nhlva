@@ -365,7 +365,7 @@ public class CommonServiceImpl implements CommonService {
 			barcode = barcode.substring(3);
 		}	
 		Map<String,Object> aiakInfo = httpUtils.callApiAiakMap(barcode);
-		if(aiakInfo != null) this.updateIndvAiakInfo(aiakInfo);
+		if(aiakInfo != null && !aiakInfo.isEmpty()) this.updateIndvAiakInfo(aiakInfo);
 	}
 
 	private void updateIndvAiakInfo(Map<String, Object> map) throws SQLException {

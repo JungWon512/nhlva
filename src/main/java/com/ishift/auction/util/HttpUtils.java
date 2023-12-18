@@ -947,17 +947,22 @@ public class HttpUtils {
 							if(item instanceof JSONObject) {
 								Map<String, Object> map = new HashMap<String, Object>();
 								JSONObject obj = (JSONObject) item;
-								map.put("SRA_INDV_AMNNO", "410"+barcode);
-								map.put("SIB_SRA_INDV_AMNNO", "410"+obj.get("barcode"));								
-								map.put("BIRTH", obj.get("birthdate"));
-								map.put("RG_DSC", obj.get("reggu"));
-								map.put("INDV_SEX_C", obj.get("sex"));
-								Map<String,Object> butcherInfo= this.callApiOpenDataCattle((String)obj.get("barcode"));
-                        
-								map.put("METRB_BBDY_WT", butcherInfo.get("BUTCHERY_WEIGHT"));
-								map.put("MIF_BTC_DT", butcherInfo.get("BUTCHERY_YMD"));
-								map.put("METRB_METQLT_GRD", butcherInfo.get("Q_GRADE_NM"));
-								sibInfo.add(map);
+								if(obj.has("barcode")) {
+									String sibBarcode = obj.getString("barcode").trim();
+									if(!sibBarcode.isEmpty()) {
+										map.put("SRA_INDV_AMNNO", "410"+barcode);
+										map.put("SIB_SRA_INDV_AMNNO", "410"+obj.get("barcode"));								
+										map.put("BIRTH", obj.get("birthdate"));
+										map.put("RG_DSC", obj.get("reggu"));
+										map.put("INDV_SEX_C", obj.get("sex"));
+										Map<String,Object> butcherInfo= this.callApiOpenDataCattle((String)obj.get("barcode"));
+		                        
+										map.put("METRB_BBDY_WT", butcherInfo.get("BUTCHERY_WEIGHT"));
+										map.put("MIF_BTC_DT", butcherInfo.get("BUTCHERY_YMD"));
+										map.put("METRB_METQLT_GRD", butcherInfo.get("Q_GRADE_NM"));
+										sibInfo.add(map);
+									}
+								}
 							}
 						});					
 					}
@@ -969,18 +974,23 @@ public class HttpUtils {
 							if(item instanceof JSONObject) {
 								Map<String, Object> map = new HashMap<String, Object>();
 								JSONObject obj = (JSONObject) item;
-								map.put("SRA_INDV_AMNNO", "410"+barcode);
-								map.put("POST_SRA_INDV_AMNNO", "410"+obj.get("barcode"));
-								map.put("BIRTH", obj.get("birthdate"));
-								map.put("RG_DSC", obj.get("reggu"));
-								map.put("INDV_SEX_C", obj.get("sex"));
-								map.put("KPN_NO", obj.get("sire_name"));
-								Map<String,Object> butcherInfo= this.callApiOpenDataCattle((String)obj.get("barcode"));
+								if(obj.has("barcode")) {
+									String postBarcode = obj.getString("barcode").trim();
+									if(!postBarcode.isEmpty()) {
+										map.put("SRA_INDV_AMNNO", "410"+barcode);
+										map.put("POST_SRA_INDV_AMNNO", "410"+obj.get("barcode"));
+										map.put("BIRTH", obj.get("birthdate"));
+										map.put("RG_DSC", obj.get("reggu"));
+										map.put("INDV_SEX_C", obj.get("sex"));
+										map.put("KPN_NO", obj.get("sire_name"));
+										Map<String,Object> butcherInfo= this.callApiOpenDataCattle((String)obj.get("barcode"));
 
-								map.put("METRB_BBDY_WT", butcherInfo.get("BUTCHERY_WEIGHT"));
-								map.put("MIF_BTC_DT", butcherInfo.get("BUTCHERY_YMD"));
-								map.put("METRB_METQLT_GRD", butcherInfo.get("Q_GRADE_NM"));
-								postInfo.add(map);
+										map.put("METRB_BBDY_WT", butcherInfo.get("BUTCHERY_WEIGHT"));
+										map.put("MIF_BTC_DT", butcherInfo.get("BUTCHERY_YMD"));
+										map.put("METRB_METQLT_GRD", butcherInfo.get("Q_GRADE_NM"));
+										postInfo.add(map);										
+									}
+								}
 							}
 						});					
 					}
