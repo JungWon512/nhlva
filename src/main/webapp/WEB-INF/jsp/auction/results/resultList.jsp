@@ -123,6 +123,7 @@
 							<dd><p>송아지</p></dd>
 							<dd><p>비육우</p></dd>
 							<dd><p>번식우</p></dd>
+							<dd><p>합계</p></dd>
 						</dl>
 						<dl>
 							<dt><p>전체</p></dt>
@@ -134,6 +135,9 @@
 							</dd>
 							<dd>
 								<p><span class="ea">${buyCnt.CNT_COW}</span>두</p>
+							</dd>
+							<dd>
+								<p><span class="ea">${buyCnt.CNT}</span>두</p>
 							</dd>
 						</dl>
 						<dl>
@@ -147,6 +151,10 @@
 							<dd>
 								<p><span class="ea">${buyCnt.CNT_SEX_W_F_3}</span>두</p>
 							</dd>
+							</dd>
+							<dd>
+								<p><span class="ea">${buyCnt.CNT_SEX_W_F}</span>두</p>
+							</dd>
 						</dl>
 						<dl>
 							<dt><p>수</p></dt>
@@ -159,6 +167,10 @@
 							<dd>
 								<p><span class="ea">${buyCnt.CNT_SEX_M_F_3}</span>두</p>
 							</dd>
+							</dd>
+							<dd>
+								<p><span class="ea">${buyCnt.CNT_SEX_M_F}</span>두</p>
+							</dd>
 						</dl>
 						<dl>
 							<dt><p>기타</p></dt>
@@ -170,6 +182,9 @@
 							</dd>
 							<dd>
 								<p><span class="ea">${buyCnt.CNT_SEX_ETC_F_3}</span>두</p>
+							</dd>
+							<dd>
+								<p><span class="ea">${buyCnt.CNT_SEX_ETC_F}</span>두</p>
 							</dd>
 						</dl>
 					</div>

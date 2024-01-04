@@ -214,12 +214,14 @@
 				tableHtml += '			<dd><p>송아지</p></dd>';
 				tableHtml += '			<dd><p>비육우</p></dd>';
 				tableHtml += '			<dd><p>번식우</p></dd>';
+				tableHtml += '			<dd><p>합계</p></dd>';
 				tableHtml += '		</dl>';
 				tableHtml += '		<dl>';
 				tableHtml += '			<dt><p>전체</p></dt>';
 				tableHtml += '			<dd><p><span class="ea">'+fnSetComma(data.buyCnt.CNT_CALF)+'</span>두</p></dd>';
 				tableHtml += '			<dd><p><span class="ea">'+fnSetComma(data.buyCnt.CNT_NO_COW)+'</span>두</p></dd>';
 				tableHtml += '			<dd><p><span class="ea">'+fnSetComma(data.buyCnt.CNT_COW)+'</span>두</p></dd>';
+				tableHtml += '			<dd><p><span class="ea">'+fnSetComma(data.buyCnt.CNT)+'</span>두</p></dd>';
 				tableHtml += '		</dl>';
 				tableHtml += '		<dl>';
 				tableHtml += '			<dt><p>암</p></dt>';
@@ -232,12 +234,14 @@
 				tableHtml += '			<dd><p><span class="ea">'+fnSetComma(data.buyCnt.CNT_SEX_M_F_1)+'</span>두</p></dd>';
 				tableHtml += '			<dd><p><span class="ea">'+fnSetComma(data.buyCnt.CNT_SEX_M_F_2)+'</span>두</p></dd>';
 				tableHtml += '			<dd><p><span class="ea">'+fnSetComma(data.buyCnt.CNT_SEX_M_F_3)+'</span>두</p></dd>';
+				tableHtml += '			<dd><p><span class="ea">'+fnSetComma(data.buyCnt.CNT_SEX_M_F)+'</span>두</p></dd>';
 				tableHtml += '		</dl>';
 				tableHtml += '		<dl>';
 				tableHtml += '			<dt><p>기타</p></dt>';
 				tableHtml += '			<dd><p><span class="ea">'+fnSetComma(data.buyCnt.CNT_SEX_ETC_F_1)+'</span>두</p></dd>';
 				tableHtml += '			<dd><p><span class="ea">'+fnSetComma(data.buyCnt.CNT_SEX_ETC_F_2)+'</span>두</p></dd>';
 				tableHtml += '			<dd><p><span class="ea">'+fnSetComma(data.buyCnt.CNT_SEX_ETC_F_3)+'</span>두</p></dd>';
+				tableHtml += '			<dd><p><span class="ea">'+fnSetComma(data.buyCnt.CNT_SEX_ETC_F)+'</span>두</p></dd>';
 				tableHtml += '		</dl>';
 			
 				$('.buy_list div.sum_table div').html(tableHtml);

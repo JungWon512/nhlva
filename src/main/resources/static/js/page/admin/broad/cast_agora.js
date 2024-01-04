@@ -135,7 +135,6 @@ class Agora {
 	agoraJoin = async function() {
 		// create Agora client
 		this.client.setClientRole(this.options.role);
-	
 		this.options.uid = await this.client.join(this.options.appid, this.options.channel, null, null);
 		  // create local audio and video tracks
 		  if (!this.localTracks.audioTrack) {
@@ -162,9 +161,15 @@ class Agora {
 		  $('#'+this.options.channelNum).empty();
 		  this.localTracks.videoTrack.play(this.options.channelNum,{fit:'fit'});	
 		  // publish local tracks to channel
-		  await this.client.publish(Object.values(this.localTracks));
-		  console.log("publish success");
-		  $('#'+this.options.channelNum+' video').height(300);
+		  var publicsh = this.client.publish(Object.values(this.localTracks));
+		  var agora = this;
+		  publicsh
+		  .then(()=>{ console.log("publish success"); })
+		  .catch(()=>{ console.log("publish error"); })
+		  .finally(()=>{
+			 console.log("publish finally");  
+		 	 $('#'+agora.options.channelNum+' video').height(300);
+		  });
 	}
 }
 async function leave(agora) {	
@@ -180,6 +185,7 @@ async function leave(agora) {
 	
 	// leave the channel
 	await agora.client.leave();
+	$('#'+agora.options.channelNum).empty();
 	$('#'+agora.options.channelNum).append("<div style='width: 100%; height: 100%; position: relative; overflow: hidden; background-color: black;'><video autoplay muted style='height:300px;'></video></div>");
 	agoraArr[agora.options.channelNum] = undefined;						
 }
