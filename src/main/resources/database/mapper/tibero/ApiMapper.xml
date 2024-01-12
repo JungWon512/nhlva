@@ -450,7 +450,14 @@
 				END AS MAX_DDL_QCN
 		  FROM TB_LA_IS_MH_AUC_STN A
 		 WHERE A.NA_BZPLC = #{naBzPlc}
-		   AND A.AUC_OBJ_DSC = #{aucObjDsc}
+		<choose>
+			<when test="aucObjDscStn != null and aucObjDscStn != ''">
+			   AND A.AUC_OBJ_DSC = #{aucObjDscStn}
+			</when>
+			<otherwise>
+			   AND A.AUC_OBJ_DSC = #{aucObjDsc}
+			</otherwise>
+		</choose>
 		   AND A.AUC_DT = #{aucDt}
 		   AND A.RG_SQNO = #{rgSqno}
 	</select>

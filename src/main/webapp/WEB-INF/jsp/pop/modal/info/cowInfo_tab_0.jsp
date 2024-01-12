@@ -195,6 +195,8 @@
 	<table class="table-detail">
 		<colgroup>
 			<col width="23%">
+			<col width="45%">
+			<col width="13%">
 			<col>
 		</colgroup>
 		<tbody>
@@ -202,9 +204,15 @@
 				<th>브루셀라</th>
 				<td>
 					<c:if test="${not empty infoData.BRCL_ISP_DT_STR}">
-						${infoData.BRCL_ISP_DT_STR } 검사 <span class="c-blue">(${infoData.BRCL_ISP_RZT_C_NM })</span>
+						<span>${infoData.BRCL_ISP_DT_STR }</span> 검사 <span class="c-blue">(${infoData.BRCL_ISP_RZT_C_NM })</span>
 					</c:if>
 				</td>
+				<th>경과일</th>
+				<td class="ta-C">
+					<c:if test="${not empty infoData.BRCL_COMPARE_DT}">
+						${infoData.BRCL_COMPARE_DT }일
+					</c:if>
+				</td>				
 			</tr>
 			<tr>
 				<th>백신접종</th>
@@ -213,14 +221,26 @@
 						${infoData.VACN_DT_STR } 접종 <span class="c-blue">(${infoData.VACN_ORDER })</span>
 					</c:if>
 				</td>
+				<th>경과일</th>
+				<td class="ta-C">
+					<c:if test="${not empty infoData.VACN_COMPARE_DT}">
+						${infoData.VACN_COMPARE_DT }일
+					</c:if>
+				</td>		
 			</tr>
 			<tr>
 				<th>결핵검사</th>
 				<td>
 					<c:if test="${not empty infoData.BOVINE_DT_STR}">
-						${infoData.BOVINE_DT_STR } <span class="c-blue">(${infoData.BOVINE_RSLTNM })</span>
+						${infoData.BOVINE_DT_STR } <span class="c-blue">(${infoData.BOVINE_RSLTNM })</span>						
 					</c:if>
 				</td>
+				<th>경과일</th>
+				<td class="ta-C">
+					<c:if test="${not empty infoData.BOVINE_COMPARE_DT}">
+						${infoData.BOVINE_COMPARE_DT }일
+					</c:if>
+				</td>		
 			</tr>
 		</tbody>
 	</table>
