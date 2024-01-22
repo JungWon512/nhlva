@@ -180,13 +180,13 @@
 							<td class="tdLine" valign="middle"
 								style='width: 387; height: 119; '>
 								<p>
-									<span class="ft11" style='font-family: "Noto Sans CJK KR"; line-height: 160%'>업체명 : ㈜아이시프트</span>
+									<span class="ft11" style='font-family: "Noto Sans CJK KR"; line-height: 160%'>업체명 : ㈜엘케이비티</span>
 								</P>
 								<p>
-									<span class="ft11" style='font-family: "Noto Sans CJK KR"; line-height: 160%'>주소 : 서울 구로구 디지털로32길 30, 607호 608호</SPAN>
+									<span class="ft11" style='font-family: "Noto Sans CJK KR"; line-height: 160%'>주소 : 서울 성동구 광나루로 130, 서울숲 IT캐슬 1504호</SPAN>
 								</P>
 								<p>
-									<span class="ft11" style='font-family: "Noto Sans CJK KR"; line-height: 160%'>전화번호 : 02-2103-5350</SPAN>
+									<span class="ft11" style='font-family: "Noto Sans CJK KR"; line-height: 160%'>전화번호 : 010-2856-2412</SPAN>
 								</P>
 								<p>
 									<span class="ft11" style='font-family: "Noto Sans CJK KR"; line-height: 160%'>위탁업무: NH가축시장 플랫폼 유지보수</SPAN>
@@ -250,12 +250,12 @@
 					<span class="ft14 db mt10">제8조 (개인정보 보호책임자)</span>
 					<ul class="pd15">
 						<li class="ft12">① 회사는 개인정보 처리에 관한 업무를 총괄해서 책임지고, 개인정보 처리와 관련한 이용자의 불만처리 및 피해구제 등을 위하여 아래와 같이 개인정보 보호책임자를 지정하고 있습니다.</li>
-						<li class="ft12 mt3">&nbsp;&nbsp;&nbsp;개인정보 보호책임자 : 축산디지털컨설팅부장</li>
+						<li class="ft12 mt3">&nbsp;&nbsp;&nbsp;개인정보 보호책임자 : 친환경컨설팅방역부장</li>
 						<li class="ft12 mt3">&nbsp;&nbsp;&nbsp;개인정보 보호 담당부서</li>
-						<li class="ft12 mt3">&nbsp;&nbsp;&nbsp;부서명 : 축산디지털컨설팅부</li>
-						<li class="ft12 mt3">&nbsp;&nbsp;&nbsp;담당자 : 유문재 부장</li>
-						<li class="ft12 mt3">&nbsp;&nbsp;&nbsp;연락처 : 02-2080-8510</li>
-						<li class="ft12 mt3">&nbsp;&nbsp;&nbsp;팩스 : 02-2080-8520</li>
+						<li class="ft12 mt3">&nbsp;&nbsp;&nbsp;부서명 : 친환경컨설팅방역부</li>
+						<li class="ft12 mt3">&nbsp;&nbsp;&nbsp;담당자 : 이종현 부장</li>
+						<li class="ft12 mt3">&nbsp;&nbsp;&nbsp;연락처 : 02-2079-8440</li>
+						<li class="ft12 mt3">&nbsp;&nbsp;&nbsp;팩스 : 02-2079-8475</li>
 						<li class="ft12 mt3">② 이용자께서는 회사의 서비스(또는 사업)을 이용하시면서 발생한 모든 개인정보 보호 관련 문의, 불만처리, 피해구제 등에 관한 사항을 개인정보 보호책임자 및 담당부서로 문의하실 수 있습니다.</li>
 						<li class="ft12 mt3">회사는 이용자의 문의에 대해 지체 없이 답변 및 처리해드릴 것입니다.</li>
 					</ul>
@@ -273,17 +273,19 @@
 					</ul>
 					<span class="ft14 db mt10">제10조 (개인정보 처리방침 변경)</span>
 					<ul class="pd15">
-						<li class="ft12">이 개인정보처리방침은 2021년 10월 8일로부터 적용되며, 법령 및 방침에
-							따른 변경내용의 추가, 삭제 및 정정이 있는 경우에는 변경사항의 시행 7일 전부터 공지사항을 통하여 고지할 것입니다.</li>
+						<li class="ft12">이 개인정보처리방침은 2024년 1월 10일로부터 적용되며, 법령 및 방침에 따른 변경내용의 추가, 삭제 및 정정이 있는 경우에는 변경사항의 시행 7일 전부터 공지사항을 통하여 고지할 것입니다.</li>
 						<br>
 					</ul>
 <!-- 					<span class="ft14">별첨 : 개인정보 수집이용 동의서</span> <br>  -->
-					<span class="ft14">개정일자 : 2023년 11월 7일</span>
+					<span class="ft14">개정일자 : 2024년 1월 10일</span>
 				</div>
 			</div>
 
 			<div class="" style="margin-top: 15px; font-size: 16px; font-weight: 500; line-height: 1.2; letter-spacing: -0.8px; color: #007eff;">
 				<ul class="">
+					<li>2023.11.07 개인정보 처리방침
+						<a  href="#" onclick="location.href='/privacy240112';return false;"  id="20240112" style="color: #007eff;">[내용보기]</a>
+					</li>
 					<li>2023.02.13 개인정보 처리방침
 						<a  href="#" onclick="location.href='/privacy231109';return false;"  id="20231109" style="color: #007eff;">[내용보기]</a>
 					</li>

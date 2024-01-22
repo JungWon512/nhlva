@@ -3,7 +3,10 @@
 	let videoInputSelect = $(".device-area");
 	let viewId;
 	let audioMap = new Map();
-
+	chekcTimeAgoraReave();
+	var chkTimeInterval = setInterval(function(){
+		chekcTimeAgoraReave();
+	},30 * 1000); //20초?
 	// 선택 가능한 카메라, 오디오 장치를 가져온다.
 	var getDevices = async function () {
 		if (!navigator.mediaDevices || !navigator.mediaDevices.enumerateDevices) {
@@ -78,7 +81,7 @@
 				  , uid: null
 				  , token: null
 				  , role: "host"
-				  , audienceLatency: 2
+				  , audienceLatency: 1
 				  , channelNum : viewId
 				  , cameraIndex : $('select[data-view-id='+viewId+'] option:checked').data('index')				  
 				});
@@ -135,6 +138,8 @@ class Agora {
 	agoraJoin = async function() {
 		// create Agora client
 		this.client.setClientRole(this.options.role);
+		//1:AUDIENCE_LEVEL_LOW_LATENCY, 2:AUDIENCE_LEVEL_ULTRA_LOW_LATENCY
+		this.options.audienceLatencyLevel = 1;
 		this.options.uid = await this.client.join(this.options.appid, this.options.channel, null, null);
 		  // create local audio and video tracks
 		  if (!this.localTracks.audioTrack) {
@@ -188,4 +193,24 @@ async function leave(agora) {
 	$('#'+agora.options.channelNum).empty();
 	$('#'+agora.options.channelNum).append("<div style='width: 100%; height: 100%; position: relative; overflow: hidden; background-color: black;'><video autoplay muted style='height:300px;'></video></div>");
 	agoraArr[agora.options.channelNum] = undefined;						
+}
+
+function getKoreaDate(){
+	const now = new Date(); // 현재 시간
+	var utcNow = now.getTime() + (now.getTimezoneOffset() * 60 * 1000);
+	// 3. UTC to KST (UTC + 9시간)
+	const koreaTimeDiff = 9 * 60 * 60 * 1000
+	return new Date(utcNow + koreaTimeDiff);	
+}
+
+function chekcTimeAgoraReave(){
+	var kNow = getKoreaDate();
+	console.log(kNow);
+	if(kNow.getHours() > 13 && kNow.getMinutes() == '00'){
+		for(let index in agoraArr){
+			console.log(agoraArr[index]);
+			if(agoraArr[index]) leave(agoraArr[index]);
+		};
+		agoraArr = [];		
+	}
 }
