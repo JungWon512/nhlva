@@ -224,6 +224,6 @@ public class TaskBatch {
 	public void batchTest() {
 		DateTimeFormatter format = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
 		LocalDateTime date = LocalDateTime.now();
-		log.info("TEST :::"+date.format(format)+" ::: TEST");		
+		log.info("TEST :::"+date.format(format)+" ::: TEST 확인중");		
 	}
 }
