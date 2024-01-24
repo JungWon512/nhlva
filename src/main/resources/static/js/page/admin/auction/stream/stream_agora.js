@@ -4,6 +4,9 @@ var joinChk = false;
 $(function() {
 
     var setLayout = function() {
+		var chkTimeInterval = setInterval(function(){
+			chekcTimeAgoraReave();
+		},30 * 1000); //20초?
 		$('div.seeBox_bottom.vidioSlide .seeBox_slick ul.slider li.video_item video').each((i,o)=>{
 			$(o).height('55vh');
 		});
@@ -52,7 +55,6 @@ $(function() {
 			  , uid: null
 			  , token: null
 			  , role: "audience"
-			  , audienceLatency: 2
 			  , channelNum : 'remoteVideo'+ i
 			  , autoPlay : true
 			  , target : 'div.seeBox_bottom.vidioSlide .seeBox_slick ul.slider li.video_item'
@@ -242,4 +244,23 @@ var scLoad = function(dataArr){
 	$('table.tblAuctionSt tbody tr td td p.sraIndvPasgQcn').text(dataArr[18]); //계대	
 	$('table.tblAuctionSt tbody tr td td p.matime').text(dataArr[16]); //산차
 	$('table.tblAuctionSt tbody tr td td p.rmkCntn').text(dataArr[28]); //산차
+}
+
+function getKoreaDate(){
+	const now = new Date(); // 현재 시간
+	var utcNow = now.getTime() + (now.getTimezoneOffset() * 60 * 1000);
+	// 3. UTC to KST (UTC + 9시간)
+	const koreaTimeDiff = 9 * 60 * 60 * 1000
+	return new Date(utcNow + koreaTimeDiff);	
+}
+
+function chekcTimeAgoraReave(){
+	var kNow = getKoreaDate();
+	console.log(kNow);
+	if(kNow.getHours() > 13 && kNow.getMinutes() == '00'){
+		for(let index in agoraArr){
+			if(agoraArr[index]) agoraArr[index].client.leave();
+		};
+		agoraArr = [];		
+	}
 }

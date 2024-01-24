@@ -1,4 +1,4 @@
-$(function() {
+$](function() {
 
     var setLayout = function() {
 		$(".seeBox_slick ul.slider").slick({
@@ -15,6 +15,9 @@ $(function() {
 			});
 			agoraArr[index].playAgora('video');
 		});
+		var chkTimeInterval = setInterval(function(){
+			chekcTimeAgoraReave();
+		},30 * 1000); //20초?
     };
 
     var setBinding = function() {
@@ -26,7 +29,7 @@ $(function() {
 			  , uid: null
 			  , token: null
 			  , role: "audience"
-			  , audienceLatency: 2
+			  , audienceLatency: 1
 			  , channelNum : 'remoteVideo'+ i
 			  , autoPlay : true
 			  , tagNone : true
@@ -42,3 +45,22 @@ $(function() {
     setBinding();
 });
 var agoraArr=[];
+
+function getKoreaDate(){
+	const now = new Date(); // 현재 시간
+	var utcNow = now.getTime() + (now.getTimezoneOffset() * 60 * 1000);
+	// 3. UTC to KST (UTC + 9시간)
+	const koreaTimeDiff = 9 * 60 * 60 * 1000
+	return new Date(utcNow + koreaTimeDiff);	
+}
+
+function chekcTimeAgoraReave(){
+	var kNow = getKoreaDate();
+	console.log(kNow);
+	if(kNow.getHours() > 13 && kNow.getMinutes() == '00'){
+		for(let index in agoraArr){
+			if(agoraArr[index]) agoraArr[index].client.leave();
+		};
+		agoraArr = [];		
+	}
+}

@@ -849,7 +849,6 @@ var setAgora = function(){
 		  , uid: null
 		  , token: null
 		  , role: "audience"
-		  , audienceLatency: 2
 		  , channelNum : 'remoteVideo'+ i
 		  , target : 'div.seeBox_bottom.vidioSlide ul.slider li.video_item'
 		  , height : videoHeight+'px'

@@ -8,7 +8,7 @@ class Agora {
 	  this.options.uid = null;
 	  this.options.token = null;
 	  this.options.role= "audience";
-	  this.options.audienceLatency = this.options.audienceLatency||2;
+	  this.options.audienceLatency = this.options.audienceLatency||1;
 	  
 	  this.options.channel = $('#naBzPlc').val()+'-'+options.channelNum;
 	  this.target = options.target;
@@ -26,6 +26,9 @@ class Agora {
 		});
 		this.client.on("user-unpublished", function(user, mediaType){
 			agora.handleUserUnpublished(user, mediaType,agora);
+		});
+		this.client.on("connection-state-change", function(user, reason){
+			if(reason == 'DISCONNECTING') agora.handleUserUnpublished(user, '',agora);
 		});
 	
 		this.options.uid = await this.client.join(this.options.appid, this.options.channel, null, null);
