@@ -152,6 +152,7 @@ public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
 					.antMatchers("/daemon/api/**/login").permitAll()
 					.antMatchers("/daemon/api/**").hasRole(Constants.UserRole.ADMIN)
 					.antMatchers("/kiosk/api/**/login").permitAll()
+					.antMatchers("/batch/agora/**").permitAll()
 					.antMatchers("/kiosk/api/**").hasRole(Constants.UserRole.ADMIN)
 					.antMatchers("/dashboard/status/**").hasRole(Constants.UserRole.ADMIN)
 					.anyRequest().permitAll()
