@@ -29,11 +29,9 @@
 		<li><a href="javascript:;" class="card-link btn_move act" data-type="AWL">일괄 등록</a></li>
 <%-- 		<li><a href="javascript:pageMove('/office/task/menu?aucDt=${params.aucDt}&aucObjDsc=${params.aucObjDsc}&menuId=AR')" class="card-link act">일괄 등록</a></li> --%>
 		<li><a href="javascript:pageMove('/office/task/menu?aucDt=${params.aucDt}&aucObjDsc=${params.aucObjDsc}&menuId=SM')" class="card-link act">조회 업무</a></li>
-		<!-- 무진장(8808990657202) 축협, 화순(8808990661315) 축협만 노출 -->
-		<c:if test="${naBzplc == '8808990657202' || naBzplc == '8808990661315'}">
-			<li><a href="javascript:;" class="card-link btn_move act" data-type="N">계류대변경</a></li>
+		<li><a href="javascript:;" class="card-link btn_move act" data-type="N">계류대변경</a></li>
 <%-- 			<li><a href="javascript:pageMove('/office/task/menu?aucDt=${params.aucDt}&aucObjDsc=${params.aucObjDsc}&menuId=SG')" class="card-link act">스마트 계류</a></li> --%>
-		</c:if>
+		
 <!-- 		<li><a href="javascript:;">낙찰 조회</a></li> -->
 <!-- 		<li><a href="javascript:;">예비</a></li> -->
 	</ul>
