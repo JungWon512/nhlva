@@ -1,4 +1,4 @@
-$](function() {
+$(function() {
 
     var setLayout = function() {
 		$(".seeBox_slick ul.slider").slick({

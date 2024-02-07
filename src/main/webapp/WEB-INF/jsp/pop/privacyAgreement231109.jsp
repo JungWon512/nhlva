@@ -21,7 +21,7 @@
 </style>
 
 <div id="privacy" class="winpop terms open" >
-		<h3 class="ft20 headSt" >개인정보 수집이용 동의서</h3>
+		<h3 class="ft20 headSt" >2023.02.13 개인정보 수집이용 동의서</h3>
 		<button type="button" class="winpop_close  closeBtn"><span class="sr-only">윈도우 팝업 닫기</span></button>
 		<section class="contents">
 			<div class="termsBox  "style="margin: 0px 0px; background: #f1f1f1; !important;">

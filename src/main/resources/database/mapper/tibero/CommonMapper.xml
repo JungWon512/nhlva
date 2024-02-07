@@ -333,6 +333,7 @@
 		   <if test="MB_RLNO != null and MB_RLNO != ''">
 		   AND REGEXP_REPLACE(MB_RLNO, '[^0-9]') = REGEXP_REPLACE(#{MB_RLNO}, '[^0-9]')
 		   </if>
+		 ORDER BY MB_INTG_NO
 	</select>
 	
 	<!-- 통합회원 정보 조회 : 회원통합번호로 조회 -->

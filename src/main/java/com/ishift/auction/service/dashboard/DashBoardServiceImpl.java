@@ -29,6 +29,11 @@ public class DashBoardServiceImpl implements DashBoardService {
 			case "COW_PRICE_LIST" : COW_PRICE_LIST.clear(); break;
 			case "AVG_PLACE_BID_AM_LIST" : AVG_PLACE_BID_AM_LIST.clear(); break;
 			case "RECENT_DATE_TOP_LIST" : RECENT_DATE_TOP_LIST.clear(); break;
+			case "ALL_LIST" : 
+					COW_PRICE_LIST.clear();
+					AVG_PLACE_BID_AM_LIST.clear();
+					RECENT_DATE_TOP_LIST.clear(); 
+			break;
 		}
 	}
 	

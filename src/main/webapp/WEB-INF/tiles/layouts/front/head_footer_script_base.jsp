@@ -31,5 +31,5 @@
 	var active = "${ACTIVE}";
 	var kko_redirect_url = "${kko_redirectUrl}";
 	var kko_id = "${kko_id_javascript}";
-	var kko_api_id = "${kko_id_api}";	
+	var kko_api_id = "${kko_id_api}";
 </script>

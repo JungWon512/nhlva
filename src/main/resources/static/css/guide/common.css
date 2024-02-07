@@ -8459,11 +8459,3 @@ div.search.sum_table{display:none;}
 .youtube-view table td p.bold {
 	font-weight: 700!important
 }
-
-.auction_bid .list_body ul li.act{
-	background: #007eff!important;
-}
-.auction_bid .list_body ul li.act dd
-,.auction_bid .list_body ul li.act dd.pd_ea{
-	color: #ffffff!important;
-}

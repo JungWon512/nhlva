@@ -84,7 +84,7 @@ var goAuctionApp = function(place) {
 	}
 };
 
-var goWatchApp = function(append) {
+var goWatchApp = function() {
 	try {
 		var params = {
 			"url" : window.location.origin + '/watchApp' + window.location.search
@@ -99,11 +99,11 @@ var goWatchApp = function(append) {
 			window.webkit.messageHandlers.moveAuctionWatch.postMessage(JSON.stringify(params));
 		}
 		else {
-			location.href = window.location.origin + '/watch'+(append?'_'+append:'') + window.location.search;
+			location.href = window.location.origin + '/watch' + window.location.search;
 		}
 	}
 	catch(e) {
-		location.href = window.location.origin + '/watch'+(append?'_'+append:'') + window.location.search;
+		location.href = window.location.origin + '/watch' + window.location.search;
 	}
 }
 

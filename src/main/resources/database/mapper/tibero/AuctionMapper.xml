@@ -19,22 +19,23 @@
 				WHEN G.AUC_OBJ_DSC='0' THEN '일괄'
 				ELSE ''
 			END AUC_OBJ_DSC_NAME
-			, (SELECT COUNT(*)
-			FROM TB_LA_IS_MM_COW_IMG H
-			WHERE H.NA_BZPLC = G.NA_BZPLC
-			AND H.AUC_OBJ_DSC = G.AUC_OBJ_DSC
-			AND H.AUC_DT = G.AUC_DT
-			AND H.OSLP_NO = G.OSLP_NO
-			AND H.LED_SQNO = G.LED_SQNO
-			AND H.SRA_INDV_AMNNO = G.SRA_INDV_AMNNO) AS IMG_CNT
+			, (
+				SELECT COUNT(*)
+				FROM TB_LA_IS_MM_COW_IMG H
+				WHERE H.NA_BZPLC = G.NA_BZPLC
+				AND H.AUC_OBJ_DSC = G.AUC_OBJ_DSC
+				AND H.AUC_DT = G.AUC_DT
+				AND H.OSLP_NO = G.OSLP_NO
+				AND H.LED_SQNO = G.LED_SQNO
+				AND H.SRA_INDV_AMNNO = G.SRA_INDV_AMNNO
+			) AS IMG_CNT
 			FROM (
 			SELECT B.NA_BZPLC /* 사업장번호 */
 			, B.SRA_INDV_AMNNO /* 축산개체관리번호 */
 			, SUBSTRING(B.SRA_INDV_AMNNO,LENGTH(B.SRA_INDV_AMNNO)-4,5) SRA_INDV_AMNNO_STR /* 축산개체관리번호(앞자리 7자 제거) */
 			, SUBSTRING(B.SRA_INDV_AMNNO,LENGTH(B.SRA_INDV_AMNNO)-4,4) || '-' || SUBSTRING(B.SRA_INDV_AMNNO, LENGTH(B.SRA_INDV_AMNNO), 1) AS SRA_INDV_AMNNO_FORMAT
 			, SUBSTRING(B.SRA_INDV_AMNNO,LENGTH(B.SRA_INDV_AMNNO)-4,4) AS SRA_INDV_AMNNO_FORMAT2
-			, SUBSTRING(B.SRA_INDV_AMNNO,LENGTH(B.SRA_INDV_AMNNO)-8,4) || '-' ||SUBSTRING(B.SRA_INDV_AMNNO,LENGTH(B.SRA_INDV_AMNNO)-4,4) || '-' 
-				|| SUBSTRING(B.SRA_INDV_AMNNO, LENGTH(B.SRA_INDV_AMNNO), 1) AS SRA_INDV_AMNNO_FORMAT3
+			, SUBSTRING(B.SRA_INDV_AMNNO,LENGTH(B.SRA_INDV_AMNNO)-8,4) || '-' ||SUBSTRING(B.SRA_INDV_AMNNO,LENGTH(B.SRA_INDV_AMNNO)-4,4) || '-'|| SUBSTRING(B.SRA_INDV_AMNNO, LENGTH(B.SRA_INDV_AMNNO), 1) AS SRA_INDV_AMNNO_FORMAT3
 			, CASE
 				WHEN NVL(I.COMMIT_YN,'1') ='0' THEN '미게시'
 				ELSE SUBSTRING(B.SRA_INDV_AMNNO,LENGTH(B.SRA_INDV_AMNNO)-4,4) || '-' || SUBSTRING(B.SRA_INDV_AMNNO, LENGTH(B.SRA_INDV_AMNNO), 1)
@@ -43,12 +44,7 @@
 			, B.FHS_ID_NO /* 농가식별번호 */
 			, B.FARM_AMNNO /* 농장관리번호 */
 			, B.OSLP_NO /* 원표번호 */
-			, (SELECT C.FTSNM
-				FROM TB_LA_IS_MM_FHS C
-				WHERE C.NA_BZPLC = B.NA_BZPLC
-				AND C.FHS_ID_NO = B.FHS_ID_NO
-				AND C.FARM_AMNNO = B.FARM_AMNNO
-			) AS FTSNM_ORI
+			, G.FTSNM AS FTSNM_ORI
 			, B.LED_SQNO /* 원장일련번호 */
 			, B.AUC_PRG_SQ /* 경매진행순서 (출품번호) */
 			, A.BIRTH /* 생년월일 (생년) */
@@ -158,9 +154,6 @@
 				AND SIMP_C = B.PPGCOW_FEE_DSC 
 				AND SIMP_C_GRP_SQNO = '1'
 			) PPGCOW_FEE_DSC_NM
-			, B.BDLN_VAL
-			, B.BDHT_VAL
-<!-- 			, TRUNC(MONTHS_BETWEEN(B.AUC_DT, A.BIRTH)) AS MTCN -->
 			, CASE WHEN TRUNC(MONTHS_BETWEEN(TO_DATE(B.AUC_DT,'YYYYMMDD'),TO_DATE(A.BIRTH,'YYYYMMDD'))) +1 <![CDATA[<= 4]]> AND A.NA_BZPLC NOT IN ('8808990656199', '8808990656434') THEN 4 
 				   ELSE TRUNC(MONTHS_BETWEEN(TO_DATE(B.AUC_DT,'YYYYMMDD'),TO_DATE(A.BIRTH,'YYYYMMDD'))) +1
 			   END AS MTCN
@@ -182,9 +175,8 @@
 				</choose>
 			) AS SRA_TR_FEE /* 수수료 */
 			, A.MCOW_SRA_INDV_AMNNO
-			
-			<!-- /*20230920 주석처러 불필요한 개체정보 제거 issue : 운영 Out Of Memory shared pool 남*/
-			, SUBSTRING(A.MCOW_SRA_INDV_AMNNO,LENGTH(A.MCOW_SRA_INDV_AMNNO)-8,9) MCOW_SRA_INDV_AMNNO_FORMAT
+			, SUBSTRING(A.MCOW_SRA_INDV_AMNNO,LENGTH(A.MCOW_SRA_INDV_AMNNO)-8,9) MCOW_SRA_INDV_AMNNO_FORMAT			
+			<!--  
 			, A.MIF_FCOW_SRA_INDV_EART_NO
 			, SUBSTRING(A.MIF_FCOW_SRA_INDV_EART_NO,LENGTH(A.MIF_FCOW_SRA_INDV_EART_NO)-8,9) MIF_FCOW_SRA_INDV_EART_NO_FORMAT
 			, A.GRFA_SRA_KPN_NO
@@ -213,7 +205,7 @@
 			, NVL(TO_CHAR(B.RE_PRODUCT_12_1),'-') RE_PRODUCT_12_1 /* EPD(모): 배최장근단면적 등급 */
 			, NVL(TO_CHAR(B.RE_PRODUCT_13_1),'-') RE_PRODUCT_13_1 /* EPD(모): 등지방두께 등급 */
 			, NVL(TO_CHAR(B.RE_PRODUCT_14_1),'-') RE_PRODUCT_14_1 /* EPD(모): 근내지방도 등급 */
-			 -->
+			-->
 			, F.SRA_INDV_AMNNO CALF_SRA_INDV_AMNNO
 			, F.INDV_SEX_C CALF_INDV_SEX_C
 			, F.BIRTH CALF_BIRTH
@@ -222,33 +214,37 @@
 			, B.AFISM_MOD_DT
 			, B.RMHN_YN
 			, A.SRA_INDV_BRDSRA_RG_NO
+			<if test='"Y".equals(cowDetailYn)'> 
+			, B.BDLN_VAL
+			, B.BDHT_VAL
 			, B.BRCL_ISP_RZT_C
 			, CASE WHEN B.BRCL_ISP_RZT_C = '0' THEN '-'
 				WHEN B.BRCL_ISP_RZT_C = '1' THEN '음성'
 				WHEN B.BRCL_ISP_RZT_C = '2' THEN '양성'
-			END BRCL_ISP_RZT_C_NM 
-			, B.BRCL_ISP_DT
-			, CASE WHEN TRIM(B.BRCL_ISP_DT) IS NOT NULL THEN TO_CHAR(TO_DATE(TRIM(B.BRCL_ISP_DT),'YYYYMMDD'),'YYYY.MM.DD')
-				   ELSE ''
-			   END AS BRCL_ISP_DT_STR
-			, CASE WHEN TRIM(B.BRCL_ISP_DT) IS NOT NULL THEN TO_DATE(B.AUC_DT, 'YYYYMMDD') - TO_DATE(B.BRCL_ISP_DT, 'YYYY-MM-DD') 
-				   ELSE ''
-			END BRCL_COMPARE_DT		 
-			, B.VACN_ORDER
-			, B.VACN_DT
-			, CASE WHEN TRIM(B.VACN_DT) IS NOT NULL THEN TO_CHAR(TO_DATE(TRIM(B.VACN_DT),'YYYYMMDD'),'YYYY.MM.DD')
-				   ELSE ''
-			   END AS VACN_DT_STR
-			, CASE WHEN TRIM(B.VACN_DT) IS NOT NULL THEN TO_DATE(B.AUC_DT, 'YYYYMMDD') - TO_DATE(B.VACN_DT, 'YYYY-MM-DD') 
-				   ELSE ''
-			END VACN_COMPARE_DT
-			, B.BOVINE_RSLTNM
-			, CASE WHEN TRIM(B.BOVINE_DT) IS NOT NULL THEN TO_CHAR(TO_DATE(TRIM(B.BOVINE_DT),'YYYYMMDD'),'YYYY.MM.DD')
-				   ELSE ''
-			   END AS BOVINE_DT_STR
-			, CASE WHEN TRIM(B.BOVINE_DT) IS NOT NULL THEN TO_DATE(B.AUC_DT, 'YYYYMMDD') - TO_DATE(B.BOVINE_DT, 'YYYY-MM-DD') 
-				   ELSE ''
-			END BOVINE_COMPARE_DT
+			END BRCL_ISP_RZT_C_NM
+				, B.BRCL_ISP_DT
+				, CASE WHEN TRIM(B.BRCL_ISP_DT) IS NOT NULL THEN TO_CHAR(TO_DATE(TRIM(B.BRCL_ISP_DT),'YYYYMMDD'),'YYYY.MM.DD')
+					   ELSE ''
+				   END AS BRCL_ISP_DT_STR
+				, CASE WHEN TRIM(B.BRCL_ISP_DT) IS NOT NULL THEN TO_DATE(B.AUC_DT, 'YYYYMMDD') - TO_DATE(B.BRCL_ISP_DT, 'YYYY-MM-DD') 
+					   ELSE ''
+				END BRCL_COMPARE_DT		 
+				, B.VACN_ORDER
+				, B.VACN_DT
+				, CASE WHEN TRIM(B.VACN_DT) IS NOT NULL THEN TO_CHAR(TO_DATE(TRIM(B.VACN_DT),'YYYYMMDD'),'YYYY.MM.DD')
+					   ELSE ''
+				   END AS VACN_DT_STR
+				, CASE WHEN TRIM(B.VACN_DT) IS NOT NULL THEN TO_DATE(B.AUC_DT, 'YYYYMMDD') - TO_DATE(B.VACN_DT, 'YYYY-MM-DD') 
+					   ELSE ''
+				END VACN_COMPARE_DT
+				, B.BOVINE_RSLTNM
+				, CASE WHEN TRIM(B.BOVINE_DT) IS NOT NULL THEN TO_CHAR(TO_DATE(TRIM(B.BOVINE_DT),'YYYYMMDD'),'YYYY.MM.DD')
+					   ELSE ''
+				   END AS BOVINE_DT_STR
+				, CASE WHEN TRIM(B.BOVINE_DT) IS NOT NULL THEN TO_DATE(B.AUC_DT, 'YYYYMMDD') - TO_DATE(B.BOVINE_DT, 'YYYY-MM-DD') 
+					   ELSE ''
+				END BOVINE_COMPARE_DT
+			</if>
 			, I.QCN
 			, NVL(I.COMMIT_YN,'1') COMMIT_YN
 		FROM TB_LA_IS_MH_SOG_COW B
@@ -348,10 +344,8 @@
 			</otherwise>
 		</choose>
 		<if test="stAucNo !=null and !stAucNo.equals('') and edAucNo !=null and !edAucNo.equals('')">
-			AND B.AUC_PRG_SQ <![CDATA[>=]]>
-			#{stAucNo}
-			AND B.AUC_PRG_SQ <![CDATA[<=]]>
-			#{edAucNo}
+			AND B.AUC_PRG_SQ <![CDATA[>=]]> #{stAucNo}
+			AND B.AUC_PRG_SQ <![CDATA[<=]]> #{edAucNo}
 		</if>
 		<if test="searchSelStsDsc != null and searchSelStsDsc != ''">
 			<choose>
@@ -365,23 +359,13 @@
 		</if>
 		<if test="aucYn != null and aucYn != ''">
 			<!-- AND B.AUC_YN = #{aucYn} -->
-			AND B.LOWS_SBID_LMT_AM <![CDATA[>]]>
-			0
+			AND B.LOWS_SBID_LMT_AM <![CDATA[>]]> 0
 			AND B.SEL_STS_DSC != '22'
 			AND B.DEL_YN = '0'
 		</if>
 		<if test="aucYnState != null and aucYnState != ''">
 			AND B.DEL_YN = '0'
 			AND B.SEL_STS_DSC = '22'
-			<!-- <choose> -->
-			<!-- <when test="'entry'.equals(stateFlag)"> -->
-			<!-- AND (B.SEL_STS_DSC = '22' OR ( B.SEL_STS_DSC != '22' AND B.LOWS_SBID_LMT_AM 
-				<![CDATA[>]]> 0)) -->
-			<!-- </when> -->
-			<!-- <otherwise> -->
-			<!-- AND B.SEL_STS_DSC = '22' -->
-			<!-- </otherwise> -->
-			<!-- </choose> -->
 		</if>
 		<if test="nextBidYn != null and nextBidYn != ''">
 			AND B.SEL_STS_DSC <![CDATA[<>]]> '22'
@@ -389,15 +373,13 @@
 		</if>
 		<if test='"Y".equals(mCowYn)'>
 			AND (
-			B.LVST_MKT_TRPL_AMNNO IS NULL AND B.PPGCOW_FEE_DSC IN ('1','3')
-			OR B.RMK_CNTN LIKE '%감정불가%'
+				B.LVST_MKT_TRPL_AMNNO IS NULL AND B.PPGCOW_FEE_DSC IN ('1','3')
+				OR B.RMK_CNTN LIKE '%감정불가%'
 			)
 		</if>
 		<if test="searchBidAm != null and searchBidAm != ''">
-			AND B.SRA_SBID_UPR <![CDATA[<=]]>
-			TO_CHAR(#{searchBidAm})
-			AND B.SRA_SBID_UPR <![CDATA[>]]>
-			'0'
+			AND B.SRA_SBID_UPR <![CDATA[<=]]> TO_CHAR(#{searchBidAm})
+			AND B.SRA_SBID_UPR <![CDATA[>]]> '0'
 		</if>
 		<if test="type != null and type != ''">
 			<choose>
@@ -2212,7 +2194,8 @@
 
 	<select id="selectEntryStateInfo" parameterType="map" resultType="map">
 		/* AuctionMapper.selectEntryStateInfo */
-		SELECT FTSNM AS USER_NM
+		SELECT DISTINCT
+			FTSNM AS USER_NM
 			, DONGUP AS USER_DONG_UP /* 주소 */
 			, DONGBW AS USER_DONG_BW /* 상세주소 */
 		FROM TB_LA_IS_MM_FHS
@@ -2220,6 +2203,7 @@
 		<choose>
 			<when test="searchMbIntgNo != null and searchMbIntgNo != ''">
 				AND MB_INTG_NO = #{searchMbIntgNo} /* 통합관리번호 */
+				AND ROWNUM =1
 			</when>
 			<otherwise>
 				AND FHS_ID_NO = #{searchFhsIdNo}
@@ -2549,7 +2533,7 @@
 		SELECT
 		A.SRA_INDV_AMNNO
 		, A.POST_SRA_INDV_AMNNO
-		, SUBSTRING(TRIM(A.POST_SRA_INDV_AMNNO),3,LENGTH(TRIM(A.POST_SRA_INDV_AMNNO))-3) POST_SRA_INDV_AMNNO_STR
+		, SUBSTRING(TRIM(A.POST_SRA_INDV_AMNNO),4) POST_SRA_INDV_AMNNO_STR
 		, A.MATIME
 		, A.SRA_INDV_PASG_QCN
 		, A.RG_DSC
@@ -2571,23 +2555,19 @@
 			WHEN A.INDV_SEX_C = 0 THEN '없음'
 			WHEN A.INDV_SEX_C = 1 THEN '암'
 			WHEN A.INDV_SEX_C = 2 THEN '수'
-			WHEN A.INDV_SEX_C = 3 THEN '거세'
-			WHEN A.INDV_SEX_C = 4 THEN '미경산'
-			WHEN A.INDV_SEX_C = 5 THEN '비거세'
-			WHEN A.INDV_SEX_C = 6 THEN '프리마틴'
-			WHEN A.INDV_SEX_C = 9 THEN '공통'
 			ELSE '없음'
 		END INDV_SEX_C_NAME
 		, CASE
-			WHEN A.RG_DSC = '01' THEN '기초'
-			WHEN A.RG_DSC = '02' THEN '혈통'
-			WHEN A.RG_DSC = '03' THEN '고등'
-			WHEN A.RG_DSC = '09' THEN '미등록우'
+			WHEN A.RG_DSC = '1' THEN '기초'
+			WHEN A.RG_DSC = '2' THEN '혈통'
+			WHEN A.RG_DSC = '3' THEN '고등'
+			WHEN A.RG_DSC = '9' THEN '미등록우'
 			ELSE '-'
 		END RG_DSC_NAME
 		FROM TB_LA_IS_MM_INDV_POSTINF A
 		WHERE 1=1
 		AND A.SRA_INDV_AMNNO = #{sraIndvAmnno}
+		ORDER BY A.MATIME
 	</select>
 
 	<!-- 형매정보 -->
@@ -2595,7 +2575,7 @@
 		SELECT
 			A.SRA_INDV_AMNNO
 			, A.SIB_SRA_INDV_AMNNO
-			, SUBSTRING(TRIM(A.SIB_SRA_INDV_AMNNO),3,LENGTH(TRIM(A.SIB_SRA_INDV_AMNNO))-3) SIB_SRA_INDV_AMNNO_STR
+			, SUBSTRING(TRIM(A.SIB_SRA_INDV_AMNNO),4) SIB_SRA_INDV_AMNNO_STR
 			, A.MATIME
 			, A.SRA_INDV_PASG_QCN
 			, A.RG_DSC
@@ -2617,23 +2597,19 @@
 				WHEN A.INDV_SEX_C = 0 THEN '없음'
 				WHEN A.INDV_SEX_C = 1 THEN '암'
 				WHEN A.INDV_SEX_C = 2 THEN '수'
-				WHEN A.INDV_SEX_C = 3 THEN '거세'
-				WHEN A.INDV_SEX_C = 4 THEN '미경산'
-				WHEN A.INDV_SEX_C = 5 THEN '비거세'
-				WHEN A.INDV_SEX_C = 6 THEN '프리마틴'
-				WHEN A.INDV_SEX_C = 9 THEN '공통'
 				ELSE '없음'
 			END INDV_SEX_C_NAME
 			, CASE
-				WHEN A.RG_DSC = '01' THEN '기초'
-				WHEN A.RG_DSC = '02' THEN '혈통'
-				WHEN A.RG_DSC = '03' THEN '고등'
-				WHEN A.RG_DSC = '09' THEN '미등록우'
+				WHEN A.RG_DSC = '1' THEN '기초'
+				WHEN A.RG_DSC = '2' THEN '혈통'
+				WHEN A.RG_DSC = '3' THEN '고등'
+				WHEN A.RG_DSC = '9' THEN '미등록우'
 				ELSE '-'
 			END RG_DSC_NAME
 		FROM TB_LA_IS_MM_INDV_SIBINF A
 		WHERE 1=1
 		AND A.SRA_INDV_AMNNO = #{sraIndvAmnno}
+		ORDER BY A.MATIME
 	</select>
 
 	<!-- 출장우 이미지 -->

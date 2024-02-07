@@ -423,7 +423,6 @@ public class AdminTaskController extends CommonController {
 		mav.addObject("rgDscList", this.getCommonCode("SRA_INDV_BRDSRA_RG_DSC", ""));		// 등록구분 코드
 		mav.addObject("ppgcowFeeDscList", this.getCommonCode("PPGCOW_FEE_DSC", ""));		// 번식우수수료 구분코드
 		mav.addObject("sogCowInfo", adminTaskService.selectSogCowInfo(params));
-
 		mav.addObject("qcnInfo", adminTaskService.selectQcnInfo(params));
 		mav.addObject("params", params);
 		mav.addObject("subheaderTitle", "출장우 간편 등록");

@@ -59,9 +59,12 @@ public class CommonServiceImpl implements CommonService {
 			// 1. 한우종합에서 개체정보 조회
 			final Map<String, Object> mcaMap4700	= mcaUtil.tradeMcaMsg("4700", params);				// mca 응답 전문
 			final Map<String, Object> dataMap4700	= (Map<String, Object>) mcaMap4700.get("jsonData");	// 한우종합 개체정보 데이터
+
+			String temp = (String) dataMap4700.getOrDefault("INQ_CN", "0");
+			int inqCn = Integer.valueOf(temp);
 			
 			// 2. 조회된 개체가 없는 경우 이 후 프로세스 필요x
-			if (dataMap4700 == null || "0".equals(dataMap4700.getOrDefault("INQ_CN", "0"))) {
+			if (dataMap4700 == null || inqCn == 0) {
 				result.put("success", false);
 				result.put("message", "개체정보가 없습니다.");
 				return result;
@@ -71,6 +74,7 @@ public class CommonServiceImpl implements CommonService {
 			Iterator<String> keys = dataMap4700.keySet().iterator();
 			while(keys.hasNext()) {
 				String key = keys.next();
+				//log.debug("######## ::: "+key);
 				log.debug("{} : {}", key, dataMap4700.get(key).toString().trim());
 			}
 			
@@ -99,7 +103,7 @@ public class CommonServiceImpl implements CommonService {
 			String barcode = (String)params.get("sra_indv_amnno");
 			if(barcode.length() == 15) barcode = barcode.substring(3);
 			Map<String,Object> aiakInfo = httpUtils.callApiAiakMap(barcode);
-			if(aiakInfo != null) this.updateIndvAiakInfo(aiakInfo);
+			if(aiakInfo != null && !aiakInfo.isEmpty()) this.updateIndvAiakInfo(aiakInfo);
 			
 			//6. 후대/ 형매 MERGE이후 산차 재계산하여 UPDATE
 		}
@@ -157,6 +161,8 @@ public class CommonServiceImpl implements CommonService {
 		// 1. 출하주 정보 수정제외 항목 조회 > 가축시장 사업장 테이블(TB_LA_IS_BM_BZLOC)의 출하주 정보 수정 제외항목(SMS_BUFFER_1)
 		final Map<String, Object> bzplcInfo = commonDao.getBzplcInfo(params);
 		params.putAll(bzplcInfo);
+		// 2. 출하주 통합회원 정보(TB_LA_IS_MM_MBINTG) 통합회원 구분(MB_INTG_GB)이 02인 데이터 조회
+		// 통합회원 구분 ( 01:중도매인, 02:출하주)
 		params.put("MB_INTG_GB", "02");
 		params.put("MB_INTG_NM", params.getOrDefault("SRA_FHSNM", "").toString().trim());													// 출하주 이름
 		params.put("MB_RLNO", params.getOrDefault("BIRTH", "").toString().trim());															// 생년월일
@@ -167,58 +173,41 @@ public class CommonServiceImpl implements CommonService {
 								 params.getOrDefault("SRA_FARM_AMN_HTEL", "").toString().trim() +
 								 params.getOrDefault("SRA_FARM_AMN_STEL", "").toString().trim());											// 자택전화번호
 		params.put("ZIP", params.getOrDefault("SRA_FARM_FZIP", "").toString() + params.getOrDefault("SRA_FARM_RZIP", "").toString());		// 우편번호
-		List<Map<String, Object>> list = commonDao.getIntgNoList(params);
-		if(list != null && !list.isEmpty()) {
-			final Map<String, Object> info = list.get(0);
-			params.put("MB_INTG_NO", info.get("MB_INTG_NO"));			
-			
-			// 휴면 또는 탈퇴 회원이 아닌 경우 통합회원 정보 수정
-			if("0".equals(info.get("DORMACC_YN")) && "0".equals(info.get("DELACC_YN"))) {
-				commonDao.updateIntgInfo(params);
-			}
-			else if("1".equals(info.get("DORMACC_YN")) && "0".equals(info.get("DELACC_YN"))){	
-				//휴면 해제
-				this.updateDormcUserFhsClear(params);
-			}
-		}else {
-			if (!"".equals(params.get("MB_INTG_NM")) && !"".equals(params.get("MB_RLNO")) && !"".equals(params.get("MB_MPNO"))) {
-				commonDao.insertIntgInfo(params);
-			}
-		}	
-		
-		// 4. 출하주정보 저장
-		// 수정인 경우 가축시장 사업장 테이블(TB_LA_IS_BM_BZLOC)의 출하주 정보 수정 제외항목(SMS_BUFFER_1)을 체크 후 UPDATE
-		commonDao.updateFhsInfo(params);		
-	}
-	
-	private void updateFhsInfo_bak(Map<String, Object> params) throws SQLException, RuntimeException {
-		// 1. 출하주 정보 수정제외 항목 조회 > 가축시장 사업장 테이블(TB_LA_IS_BM_BZLOC)의 출하주 정보 수정 제외항목(SMS_BUFFER_1)
-		final Map<String, Object> bzplcInfo = commonDao.getBzplcInfo(params);
-		params.putAll(bzplcInfo);
 		
 		try {
-			// 2. 출하주 통합회원 정보(TB_LA_IS_MM_MBINTG) 통합회원 구분(MB_INTG_GB)이 02인 데이터 조회
-			// 통합회원 구분 ( 01:중도매인, 02:출하주)
-			params.put("MB_INTG_GB", "02");
-			params.put("MB_INTG_NM", params.getOrDefault("SRA_FHSNM", "").toString().trim());													// 출하주 이름
-			params.put("MB_RLNO", params.getOrDefault("BIRTH", "").toString().trim());															// 생년월일
-			params.put("MB_MPNO", params.getOrDefault("SRA_FHS_REP_MPSVNO", "").toString().trim() + 
-								  params.getOrDefault("SRA_FHS_REP_MPHNO", "").toString().trim() +
-								  params.getOrDefault("SRA_FHS_REP_MPSQNO", "").toString().trim());												// 휴대전화번호
-			params.put("OHSE_TELNO", params.getOrDefault("SRA_FARM_AMN_ATEL", "").toString().trim() + 
-									 params.getOrDefault("SRA_FARM_AMN_HTEL", "").toString().trim() +
-									 params.getOrDefault("SRA_FARM_AMN_STEL", "").toString().trim());											// 자택전화번호
-			params.put("ZIP", params.getOrDefault("SRA_FARM_FZIP", "").toString() + params.getOrDefault("SRA_FARM_RZIP", "").toString());		// 우편번호
-
 			// 농가정보 테이블에서 FHS_ID_NO로 이미 등록된 통합회원 코드가 있는지 조회
-			final Map<String, Object> fhsInfo = commonDao.getFhsInfo(params);
+			//final Map<String, Object> fhsInfo = commonDao.getFhsInfo(params);
 			// 통합회원 테이블에서 이름, 생년월일 휴대전화번호로 통합회원 정보 조회
-			final Map<String, Object> fhsIntgNoInfo = commonDao.getIntgNoInfo(params);
+			//final Map<String, Object> fhsIntgNoInfo = commonDao.getIntgNoInfo(params);
+			log.debug(params.toString());
+			final List<Map<String, Object>> fhsIntgNoList = commonDao.getIntgNoList(params);
+			log.debug("###### :: "+fhsIntgNoList.toString());
+			if(fhsIntgNoList != null && !fhsIntgNoList.isEmpty()) {
+				final Map<String, Object> info = fhsIntgNoList.get(0);
+				if(info != null && !info.isEmpty()) {
+					params.put("MB_INTG_NO", info.get("MB_INTG_NO"));
+					
+					// 휴면 또는 탈퇴 회원이 아닌 경우 통합회원 정보 수정
+					if("0".equals(info.get("DORMACC_YN")) && "0".equals(info.get("DELACC_YN"))) {
+						commonDao.updateIntgInfo(params);
+					}
+					else if("1".equals(info.get("DORMACC_YN")) && "0".equals(info.get("DELACC_YN"))){	
+						//휴면 해제
+						this.updateDormcUserFhsClear(params);
+					}
+				}else {
+					// 통합회원 테이블에 정보가 없고 출하주 테이블에 통합회원 코드가 없는 경우에만 신규 저장
+					if (!"".equals(params.get("MB_INTG_NM")) && !"".equals(params.get("MB_RLNO")) && !"".equals(params.get("MB_MPNO"))) {
+						commonDao.insertIntgInfo(params);
+					}
+				}			
+			}
 			
+			/*
 			// 3. 농가 정보 테이블에 통합회원 코드가 있는 경우
 			if (fhsInfo != null && !fhsInfo.isEmpty() && !"-1".equals(fhsInfo.get("MB_INTG_NO"))) {
 				params.put("MB_INTG_NO", fhsInfo.get("MB_INTG_NO"));
-				final Map<String, Object> fhsIntgNumInfo = commonDao.getIntgNoInfoForNum(params);
+				//final Map<String, Object> fhsIntgNumInfo = commonDao.getIntgNoInfoForNum(params);
 				
 				// 휴면 또는 탈퇴 회원이 아닌 경우 통합회원 정보 수정
 				if("0".equals(fhsIntgNumInfo.get("DORMACC_YN")) && "0".equals(fhsIntgNumInfo.get("DELACC_YN"))) {
@@ -239,6 +228,7 @@ public class CommonServiceImpl implements CommonService {
 			else {
 				params.put("MB_INTG_NO", fhsIntgNoInfo.get("MB_INTG_NO"));
 			}	
+			*/
 		}catch(Exception e){
 			log.error("updateFhsInfo :: 출하주 추가/수정 :: 통합회원 등록",e);
 		}
@@ -365,6 +355,7 @@ public class CommonServiceImpl implements CommonService {
 			barcode = barcode.substring(3);
 		}	
 		Map<String,Object> aiakInfo = httpUtils.callApiAiakMap(barcode);
+		log.debug(aiakInfo.toString());
 		if(aiakInfo != null && !aiakInfo.isEmpty()) this.updateIndvAiakInfo(aiakInfo);
 	}
 

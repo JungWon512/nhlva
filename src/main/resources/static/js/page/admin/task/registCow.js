@@ -231,7 +231,7 @@
 				        	$("input[name=bovineRsltnm]").val($.trim(vacnInfo["tbcInspctRsltNm"]));		
 			        	}
 					 }else{						 
-		            	$("input[name=brclIspRztC]").val("0");
+		            	$("input[name=brclIspRztC]").val("9");
 			        	//$("input[name=brclIspDt]").val('');			        	
 			        	//$("input[name=vacnOrder]").val('');        	
 			        	//$("input[name=vacnDt]").val('');

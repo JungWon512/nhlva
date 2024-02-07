@@ -39,12 +39,15 @@
 				, A.AUC_DSC /* 경매 구분 (1:단일, 2:일괄) */
 				</otherwise>
 			</choose>
-			, A.KIOSK_YN			
-		 	, DECODE(NVL(B.CALF_AUC_ATDR_UNT_AM, 10000),'1000','천원','1','원','만원') CALF_AUC_ATDR_UNT
-			, DECODE(NVL(B.NBFCT_AUC_ATDR_UNT_AM, 1),10000,'만원',1000,'천원','원') NBFCT_AUC_ATDR_UNT
-			, DECODE(NVL(B.PPGCOW_AUC_ATDR_UNT_AM, 10000),'1000','천원','1','원','만원') PPGCOW_AUC_ATDR_UNT
+			, A.KIOSK_YN
+			, E.CALF_AUC_ATDR_UNT_AM	/*송아지 응찰단위*/
+			, E.NBFCT_AUC_ATDR_UNT_AM /*비육우 응찰단위*/
+			, E.PPGCOW_AUC_ATDR_UNT_AM /*번식우 응찰단위*/
+			, DECODE(E.CALF_AUC_ATDR_UNT_AM,'1000','천원','1','원','만원') CALF_AUC_ATDR_UNT	/*송아지 응찰단위*/
+			, DECODE(E.NBFCT_AUC_ATDR_UNT_AM,'1000','천원','1','원','만원') NBFCT_AUC_ATDR_UNT /*비육우 응찰단위*/
+			, DECODE(E.PPGCOW_AUC_ATDR_UNT_AM,'1000','천원','1','원','만원') PPGCOW_AUC_ATDR_UNT /*번식우 응찰단위*/
  		FROM TB_LA_IS_BM_BZLOC A
-        LEFT JOIN TB_LA_IS_MM_ENV_EST B ON A.NA_BZPLC = B.NA_BZPLC
+ 		LEFT JOIN TB_LA_IS_MM_ENV_EST E ON A.NA_BZPLC = E.NA_BZPLC
  		WHERE 1=1
 		<if test="naBzPlcNo != null and naBzPlcNo != ''">
  			AND A.NA_BZPLCNO = #{naBzPlcNo}

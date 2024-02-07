@@ -1,5 +1,16 @@
 ﻿﻿<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
 <%@ include file="/WEB-INF/__system/taglibs.jsp" %>
+
+<style>
+div.save-box {
+    text-align: center;
+	font-size: 18px;
+}
+div.save-box .info em {
+	color: #1a1a1a;
+	font-weight: 700;
+}
+</style>
 <div class="save-box">
 	<div class="info">
 		<em>${infoData.AUC_OBJ_DSC_NAME} |</em>
@@ -7,10 +18,9 @@
 		<em>${fn:substring(infoData.SRA_INDV_AMNNO, 3, 6)} ${fn:substring(infoData.SRA_INDV_AMNNO, 6, 10)} ${fn:substring(infoData.SRA_INDV_AMNNO, 10, 14)} ${fn:substring(infoData.SRA_INDV_AMNNO, 14, 15)} </em>
 	</div>
 </div>
-
-<fmt:parseDate value="${bloodInfo.LSCHG_DT}" pattern="yyyyMMdd" var="tmpSyncDate" />
-<fmt:formatDate value="${tmpSyncDate}" pattern="yyyy-MM-dd" var="syncDate" />
-<h3 class="tit2"><span class="subTxt" style="position: absolute;right: 10px;font-size:13px;">※종축개량협회제공일 : ${syncDate}</span></h3>
+<fmt:parseDate value="${bloodInfo.LSCHG_DT}" pattern="yyyyMMdd" var="tmpSyncDt" />
+<fmt:formatDate value="${tmpSyncDt}" pattern="yyyy-MM-dd" var="syncDt" />
+<h3 class="tit2"><span class="subTxt" style="position: absolute;right: 10px;font-size:13px;">※한국종축개량협회제공일 : ${syncDt }</span></h3>
 <h3 class="tit">
 	혈통정보
 </h3>
@@ -237,15 +247,3 @@ $(document).ready(function(){
 	//getAiakInfo();
 });
 </script>
-
-
-<style>
-div.save-box {
-    text-align: center;
-	font-size: 18px;
-}
-div.save-box .info em {
-	color: #1a1a1a;
-	font-weight: 700;
-}
-</style>

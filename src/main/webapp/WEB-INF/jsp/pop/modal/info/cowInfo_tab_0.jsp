@@ -217,7 +217,7 @@
 			<tr>
 				<th>백신접종</th>
 				<td>
-					<c:if test="${not empty infoData.VACN_ORDER}">
+					<c:if test="${not empty infoData.VACN_DT_STR}">
 						${infoData.VACN_DT_STR } 접종 <span class="c-blue">(${infoData.VACN_ORDER })</span>
 					</c:if>
 				</td>

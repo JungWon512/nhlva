@@ -822,6 +822,8 @@ public class AuctionController extends CommonController {
         paramMap.put("searchAucObjDsc", param.get("aucObjDsc"));
         paramMap.put("searchAucPrgSq", param.get("aucPrgSq"));
         paramMap.put("searchDate", param.get("aucDt"));
+        //20240206 : 반영필요 : outofmemory 대응용 소스
+        if("0".equals(tabId)) paramMap.put("cowDetailYn", "Y");        
 		List<Map<String,Object>> cowList = auctionService.entrySelectList(paramMap);
 		if(cowList != null && cowList.size() >0) {
 			cowInfo  = cowList.get(0);
@@ -849,20 +851,20 @@ public class AuctionController extends CommonController {
 					SimpleDateFormat formatter = new SimpleDateFormat("yyyyMMdd");
 					
 					String aucDt = (String) param.get("aucDt");
-					Date aucDate = formatter.parse(aucDt);
+					Date aucDate = formatter.parse(aucDt);					
 					
 					if(bloodInfo == null || bloodInfo.isEmpty()) {
+						
 						commonService.callIndvAiakInfo((String)param.get("sraIndvAmnno"));
 						bloodInfo = auctionService.selectIndvBloodInfo(paramMap);
 					}else {
-						String lschgDt = (String)bloodInfo.getOrDefault("LSCHG_DT", "");
-						Date lschgDate = formatter.parse(lschgDt);					
-						if((today.equals(aucDt) && lschgDate.before(aucDate) )) {
+						String lschgDt = (String)bloodInfo.get("LSCHG_DT");
+						Date lschgDate = formatter.parse(lschgDt);
+						if((today.equals(aucDt) && lschgDate.before(aucDate) )) {							
 							commonService.callIndvAiakInfo((String)param.get("sraIndvAmnno"));
-							bloodInfo = auctionService.selectIndvBloodInfo(paramMap);
-						}						
+							bloodInfo = auctionService.selectIndvBloodInfo(paramMap);							
+						}
 					}
-					
 					mav.addObject("bloodInfo",bloodInfo);
 					if("1".equals(tabId)) {
 						mav.addObject("sibList",auctionService.selectListIndvSib(paramMap));
@@ -992,11 +994,10 @@ public class AuctionController extends CommonController {
 		//List<Map<String,Object>> sibList = auctionService.selectListIndvSib(map);
 		
 		//mav.addObject("moveList",moveList);
+		commonService.callIndvAiakInfo((String)param.get("sraIndvAmnno"));
+		//bloodInfo = auctionService.selectIndvBloodInfo(map);
 		Map<String,Object> bloodInfo = auctionService.selectIndvBloodInfo(map);
-		if(bloodInfo == null || bloodInfo.isEmpty()) {
-			commonService.callIndvAiakInfo((String)param.get("sraIndvAmnno"));
-			bloodInfo = auctionService.selectIndvBloodInfo(map);
-		}
+		
 		mav.addObject("bloodInfo",bloodInfo);
 		mav.addObject("sibList",auctionService.selectListIndvSib(map));
 		mav.addObject("postList",auctionService.selectListIndvPost(map));

@@ -601,7 +601,7 @@ public class HttpUtils {
         }catch(RuntimeException re) {
         	log.error(re.getMessage());
         }catch (Exception e) {
-            System.out.println(e.toString());
+        	log.error(e.getMessage());
         }
         return null;
     }
@@ -644,7 +644,7 @@ public class HttpUtils {
         }catch(RuntimeException re) {
         	log.error(re.getMessage());
         }catch (Exception e) {
-            System.err.println(e.toString());
+        	log.error(e.getMessage());
         }
         return null;
 	}
@@ -901,6 +901,7 @@ public class HttpUtils {
 	public Map<String,Object> callApiAiakMap(String barcode) {
 		Map<String, Object> result = new HashMap<String, Object>();
 		String apiResult = this.callApiAiakV2(barcode);
+		
 		if(!apiResult.isEmpty()) {
 			JSONObject jObj = new JSONObject(apiResult);
 			if(jObj != null) {
@@ -941,58 +942,59 @@ public class HttpUtils {
 					if(bloodInfo.has("pgs_name")) result.put("GRFCOW_KPN_NO", bloodInfo.getString("pgs_name"));
 					if(bloodInfo.has("mgs_name")) result.put("MTGRFCOW_KPN_NO", bloodInfo.getString("mgs_name"));
 					
+					boolean errFlag = true;
 					//형매정보 저장
 					if(!siblingInfo.isEmpty()) {
-						siblingInfo.forEach(item ->{
-							if(item instanceof JSONObject) {
-								Map<String, Object> map = new HashMap<String, Object>();
-								JSONObject obj = (JSONObject) item;
-								if(obj.has("barcode")) {
-									String sibBarcode = obj.getString("barcode").trim();
-									if(!sibBarcode.isEmpty()) {
-										map.put("SRA_INDV_AMNNO", "410"+barcode);
-										map.put("SIB_SRA_INDV_AMNNO", "410"+obj.get("barcode"));								
-										map.put("BIRTH", obj.get("birthdate"));
-										map.put("RG_DSC", obj.get("reggu"));
-										map.put("INDV_SEX_C", obj.get("sex"));
+						for(int i = 0;i<siblingInfo.length();i++) {
+							Map<String, Object> map = new HashMap<String, Object>();
+							JSONObject obj = siblingInfo.getJSONObject(i);
+							if(obj.has("barcode")) {
+								String sibBarcode = obj.getString("barcode").trim();
+								if(!sibBarcode.isEmpty()) {
+									map.put("SRA_INDV_AMNNO", "410"+barcode);
+									map.put("SIB_SRA_INDV_AMNNO", "410"+sibBarcode);								
+									map.put("BIRTH", obj.get("birthdate"));
+									map.put("RG_DSC", obj.get("reggu"));//1:기초,2:혈통,3:고등
+									map.put("INDV_SEX_C", obj.get("sex"));//1:암 ,2: 수
+									if(errFlag) {
 										Map<String,Object> butcherInfo= this.callApiOpenDataCattle((String)obj.get("barcode"));
-		                        
+										if(!(Boolean)butcherInfo.get("success")) errFlag=false;
 										map.put("METRB_BBDY_WT", butcherInfo.get("BUTCHERY_WEIGHT"));
 										map.put("MIF_BTC_DT", butcherInfo.get("BUTCHERY_YMD"));
-										map.put("METRB_METQLT_GRD", butcherInfo.get("Q_GRADE_NM"));
-										sibInfo.add(map);
+										map.put("METRB_METQLT_GRD", butcherInfo.get("Q_GRADE_NM"));									
 									}
-								}
-							}
-						});					
+									sibInfo.add(map);											
+								}						
+							}							
+						}
 					}
 					result.put("sibInfo", sibInfo);
 					
 					//후대정보 저장
 					if(!posterityInfo.isEmpty()) {
-						posterityInfo.forEach(item ->{
-							if(item instanceof JSONObject) {
-								Map<String, Object> map = new HashMap<String, Object>();
-								JSONObject obj = (JSONObject) item;
-								if(obj.has("barcode")) {
-									String postBarcode = obj.getString("barcode").trim();
-									if(!postBarcode.isEmpty()) {
-										map.put("SRA_INDV_AMNNO", "410"+barcode);
-										map.put("POST_SRA_INDV_AMNNO", "410"+obj.get("barcode"));
-										map.put("BIRTH", obj.get("birthdate"));
-										map.put("RG_DSC", obj.get("reggu"));
-										map.put("INDV_SEX_C", obj.get("sex"));
-										map.put("KPN_NO", obj.get("sire_name"));
+						for(int i = 0;i<posterityInfo.length();i++) {
+							Map<String, Object> map = new HashMap<String, Object>();
+							JSONObject obj = posterityInfo.getJSONObject(i);
+							if(obj.has("barcode")) {
+								String postBarcode = obj.getString("barcode").trim();
+								if(!postBarcode.isEmpty()) {
+									map.put("SRA_INDV_AMNNO", "410"+barcode);
+									map.put("POST_SRA_INDV_AMNNO", "410"+postBarcode);
+									map.put("BIRTH", obj.get("birthdate"));
+									map.put("RG_DSC", obj.get("reggu"));
+									map.put("INDV_SEX_C", obj.get("sex"));
+									map.put("KPN_NO", obj.get("sire_name"));
+									if(errFlag) {
 										Map<String,Object> butcherInfo= this.callApiOpenDataCattle((String)obj.get("barcode"));
-
+										if(!(Boolean)butcherInfo.get("success")) errFlag=false;
 										map.put("METRB_BBDY_WT", butcherInfo.get("BUTCHERY_WEIGHT"));
 										map.put("MIF_BTC_DT", butcherInfo.get("BUTCHERY_YMD"));
-										map.put("METRB_METQLT_GRD", butcherInfo.get("Q_GRADE_NM"));
-										postInfo.add(map);										
+										map.put("METRB_METQLT_GRD", butcherInfo.get("Q_GRADE_NM"));						
 									}
-								}
+									postInfo.add(map);
+								}	
 							}
-						});					
+						}			
 					}
 					result.put("postInfo", postInfo);
 					
@@ -1009,6 +1011,7 @@ public class HttpUtils {
 		BufferedReader br = null;
 		HttpURLConnection con = null;
 		Map<String,Object> result = new HashMap<String, Object>();
+		result.put("success", true);
 		String response = "";
 		String newOpenDataApiKey = "Z5HnEP8ghGMEUD0ukiBNifYlBV6%2BwI7hxE8hlLI71yY3IirWjvlVwaGsbjRcTWhIzVisaI3%2Fyb4cDhdoa%2BYRcg%3D%3D";
 		//"Z5HnEP8ghGMEUD0ukiBNifYlBV6%2BwI7hxE8hlLI71yY3IirWjvlVwaGsbjRcTWhIzVisaI3%2Fyb4cDhdoa%2BYRcg%3D%3D"
@@ -1047,6 +1050,7 @@ public class HttpUtils {
         }
         catch (Exception e) {
         	log.error("Exception - 공공데이터 쇠고기이력정보 테스트 : ",e);
+        	result.put("success", false);
         } finally {
         	try {
                 if(con != null)con.disconnect();
@@ -1070,7 +1074,7 @@ public class HttpUtils {
                 }
         	}
         	catch(Exception e) {
-                log.error("Exception - 공공데이터 쇠고기이력정보 테스트 : ",e);
+                log.error("Exception - 공공데이터 쇠고기이력정보 JSON변환 : ",e);
         	}
 		}
         return result;

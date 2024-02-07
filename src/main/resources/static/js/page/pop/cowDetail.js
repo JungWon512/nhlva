@@ -75,10 +75,11 @@ var tabLoad = function(tabId){
 	}).done(function (json) {
 //		if(tabId == '1'){
 //			//getAiakInfo();
-//		}else if(tabId == '2'){
-//			//getAiakInfo(drawChart);
-//			drawChart();
-//		}
+//		}else 
+		if(tabId == '2'){
+			//getAiakInfo(drawChart);
+			drawChart();
+		}
 	});
 };
 

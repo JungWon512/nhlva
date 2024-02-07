@@ -335,8 +335,11 @@
 		const sogCowInfoList = (body.sogCowInfoList == null || body.sogCowInfoList == undefined) ? [] : body.sogCowInfoList;
 		
 		let aucData = [];
+		const calfInfo = sogCowInfoList.filter((o)=>{if(o.AUC_OBJ_DSC_NAME === '송아지') return o;})[0]||{CNT_3:0};
+		const nbfCowInfo = sogCowInfoList.filter((o)=>{if(o.AUC_OBJ_DSC_NAME === '비육우') return o;})[0]||{CNT_3:0};
+		const cowInfo = sogCowInfoList.filter((o)=>{if(o.AUC_OBJ_DSC_NAME === '번식우') return o;})[0]||{CNT_3:0};
 		if(sogCowInfoList.length <= 0
-			|| (sogCowInfoList.length > 0 && sogCowInfoList[0].CNT_3 == 0 && sogCowInfoList[3].CNT_3 == 0 && sogCowInfoList[4].CNT_3 == 0)){
+			|| (sogCowInfoList.length > 0 && calfInfo.CNT_3 == 0 && nbfCowInfo.CNT_3 == 0 && cowInfo.CNT_3 == 0)){
 			
 			new Chart(ctx2, {
 					type: 'pie',
@@ -364,7 +367,7 @@
 		}
 		else{
 			
-			aucData.push(sogCowInfoList[0].CNT_3, sogCowInfoList[3].CNT_3, sogCowInfoList[4].CNT_3);
+			aucData.push(calfInfo.CNT_3, nbfCowInfo.CNT_3, cowInfo.CNT_3);
 			
 			new Chart(ctx2, {
 					type: 'pie',

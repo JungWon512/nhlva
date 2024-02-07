@@ -24,7 +24,7 @@
 
 <div id="" class="winpop terms open" >
 	<div class="modal-content">
-		<h3  class="ft20 headSt">제3자 정보제공 동의</h3>
+		<h3  class="ft20 headSt">2023.02.13 제3자 정보제공 동의</h3>
 		<button type="button" class="winpop_close closeBtn"><span class="sr-only">윈도우 팝업 닫기</span></button>
 		<section class="contents">
 			<div class="termsBox gray " style="background: #f1f1f1; !important;">
