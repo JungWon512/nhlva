@@ -133,7 +133,19 @@ public class ApiController {
 		final List<Map<String, Object>> failList = new ArrayList<Map<String, Object>>();
 
 		try {
-			if ("v2".equals(version)) {
+			if ("v1".equals(version)) {
+				int cnt = auctionService.updateAuctionResult(params);
+				
+				if (cnt > 0) {
+					result.put("success", true);
+					result.put("message", "정상적으로 변경되었습니다.");
+				}
+				else {
+					result.put("success", false);
+					result.put("message", "출하우 정보가 없습니다.");
+				}
+			}else {
+
 				if(params.get("list") == null) {
 					result.put("success", false);
 					result.put("message", "필수 인자가 없습니다.");
@@ -167,18 +179,6 @@ public class ApiController {
 				result.put("message", "정상적으로 변경되었습니다.");
 				if (failList.size() > 0) {
 					result.put("failList", failList);
-				}
-			}
-			else {
-				int cnt = auctionService.updateAuctionResult(params);
-				
-				if (cnt > 0) {
-					result.put("success", true);
-					result.put("message", "정상적으로 변경되었습니다.");
-				}
-				else {
-					result.put("success", false);
-					result.put("message", "출하우 정보가 없습니다.");
 				}
 			}
 		}catch (SQLException | RuntimeException | JsonProcessingException re) {

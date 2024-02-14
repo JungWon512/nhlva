@@ -47,11 +47,4 @@ public class TaskBatch {
 		date = LocalDateTime.now();
 		log.info("e: openAgora ::"+date.format(format));
 	}
-
-	@Scheduled(cron = "0/30 * * * * *")
-	public void batchTest() {
-		DateTimeFormatter format = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
-		LocalDateTime date = LocalDateTime.now();
-		log.info("TEST :::"+date.format(format)+" ::: TEST 확인중");		
-	}
 }
