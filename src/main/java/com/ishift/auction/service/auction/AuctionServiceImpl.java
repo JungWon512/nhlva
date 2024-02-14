@@ -591,7 +591,7 @@ public class AuctionServiceImpl implements AuctionService {
 			
 			//params.put("feeInfoList", this.calcFeeInfo(info,params,bizAuctionInfo));
 			
-			List<Map<String, Object>> feeInfoList = this.calcFeeInfo(auctionInfo,params,bizAuctionInfo);			
+			List<Map<String, Object>> feeInfoList = this.calcFeeInfo(true,auctionInfo,params,bizAuctionInfo);			
 			params.put("feeInfoList", feeInfoList);
 			if(feeInfoList.size() >0) auctionDAO.insertFeeInfo(params);
 			
@@ -892,7 +892,7 @@ public class AuctionServiceImpl implements AuctionService {
 				auctionDAO.deleteFeeInfo(info);
 				
 				//수수료 계산로직
-				params.put("feeInfoList", this.calcFeeInfo(info,params,bizAuctionInfo));
+				params.put("feeInfoList", this.calcFeeInfo(false,info,params,bizAuctionInfo));
 				
 				auctionDAO.insertFeeInfo(params);
 				
@@ -1434,7 +1434,8 @@ public class AuctionServiceImpl implements AuctionService {
 		return  auctionDAO.selectIndvBloodInfo(params);		
 	}
 	
-	private List<Map<String, Object>> calcFeeInfo(Map<String, Object> info, Map<String, Object> params, Map<String, Object> bizAuctionInfo) throws SQLException {
+	//flagAucDsc : 단일,일괄경매 체크
+	private List<Map<String, Object>> calcFeeInfo(boolean flagAucDsc ,Map<String, Object> info, Map<String, Object> params, Map<String, Object> bizAuctionInfo) throws SQLException {
 
 		final String naBzplc		= info.get("NA_BZPLC").toString();
 		final String aucDt			= info.get("AUC_DT").toString();
@@ -1451,7 +1452,10 @@ public class AuctionServiceImpl implements AuctionService {
 		final String sgNoPrcDsc		= bizAuctionInfo.getOrDefault("SGNO_PRC_DSC", "1").toString();				// 절사구분 ( 1.소수점 이하 버림, 2. 소수점 이상 절상, 3. 반올림 )
 		final String selStsDsc		= info.getOrDefault("SEL_STS_DSC", "23").toString();						// 경매상태 
 		final int cutAm				= Integer.parseInt(bizAuctionInfo.getOrDefault("CUT_AM", "1").toString());	// 절사금액
-		long sraSbidUpr				= Long.parseLong(info.get("ATDR_AM").toString());							// 응찰금액
+		//단일
+		long sraSbidUpr				= flagAucDsc?Long.parseLong(params.get("sraSbidUpr").toString()):Long.parseLong(info.get("ATDR_AM").toString());							// 응찰금액
+		//일괄
+		//long sraSbidUpr				= Long.parseLong(info.get("ATDR_AM").toString());							// 응찰금액
 		long sraSbidAm				= 0L;
 
 		info.put("naBzplc",			naBzplc);
