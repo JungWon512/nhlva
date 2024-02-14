@@ -655,7 +655,7 @@ public class AuctionServiceImpl implements AuctionService {
 				// 경매 결과가 낙찰일 때 낙찰 수수료 부과
 				else if ("1".equals(feeInfo.get("SBID_YN")) && "22".equals(auctionInfo.getOrDefault("SEL_STS_DSC", ""))) {
 					
-					if ("5".equals(feeInfo.get("PPGCOW_FEE_DSC")) || ppgcowFeeDsc.equals(feeInfo.get("PPGCOW_FEE_DSC"))) {		// 출장우 정보의 번식우 구분코드와 수수료 정보의 번식우 구분코드가 일치하는 경우 
+					if (ppgcowFeeDsc.equals(feeInfo.get("PPGCOW_FEE_DSC"))) {		// 출장우 정보의 번식우 구분코드와 수수료 정보의 번식우 구분코드가 일치하는 경우						
 					
 						// 수수료가 비율인 경우 TB_LA_IS_MH_FEE의 절사구분(SGNO_PRC_DSC)을 참조하여 처리한다.
 						// 1.소수점 이하 버림, 2. 소수점 이상 절상, 3. 반올림
@@ -1141,8 +1141,11 @@ public class AuctionServiceImpl implements AuctionService {
 						feeInfo.put("SRA_TR_FEE", feeAmt);
 					}
 					else if ("1".equals(feeInfo.get("SBID_YN")) && "22".equals(selStsDsc)) {
-						
-						if("5".equals(feeInfo.get("PPGCOW_FEE_DSC")) || ppgcowFeeDsc.equals(feeInfo.get("PPGCOW_FEE_DSC"))) {		// 출장우 정보의 번식우 구분코드와 수수료 정보의 번식우 구분코드가 일치하는 경우 
+
+						String[] arrNaFeeC = {"010", "011"};
+						//출하수수료 / 판매수수료 해당없음 있을시 중복 산정되는 현상 수정
+						if(("5".equals(feeInfo.get("PPGCOW_FEE_DSC")) && !Arrays.asList(arrNaFeeC).contains(feeInfo.get("NA_FEE_C"))) 
+						|| ppgcowFeeDsc.equals(feeInfo.get("PPGCOW_FEE_DSC"))) {		// 출장우 정보의 번식우 구분코드와 수수료 정보의 번식우 구분코드가 일치하는 경우 
 							
 							// 수수료가 비율인 경우 TB_LA_IS_MH_FEE의 절사구분(SGNO_PRC_DSC)을 참조하여 처리한다.
 							// 1.소수점 이하 버림, 2. 소수점 이상 절상, 3. 반올림
