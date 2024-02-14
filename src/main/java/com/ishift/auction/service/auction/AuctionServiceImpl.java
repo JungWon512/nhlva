@@ -145,7 +145,7 @@ public class AuctionServiceImpl implements AuctionService {
 				// 4. 조합 경매 기본 정보 조회
 				final Map<String, Object> bizAuctionInfo = auctionDAO.selectBizAuctionInfo(params);
 				
-				List<Map<String, Object>> feeInfoList = this.calcFeeInfo(auctionInfo,params,bizAuctionInfo);			
+				List<Map<String, Object>> feeInfoList = this.calcFeeInfo(true,auctionInfo,params,bizAuctionInfo);			
 				params.put("feeInfoList", feeInfoList);
 			
 				auctionDAO.insertFeeInfo(params);
