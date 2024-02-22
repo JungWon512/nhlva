@@ -145,7 +145,7 @@ public class AuctionServiceImpl implements AuctionService {
 				// 4. 조합 경매 기본 정보 조회
 				final Map<String, Object> bizAuctionInfo = auctionDAO.selectBizAuctionInfo(params);
 				
-				List<Map<String, Object>> feeInfoList = this.calcFeeInfo(true,auctionInfo,params,bizAuctionInfo);			
+				List<Map<String, Object>> feeInfoList = this.calcFeeInfo(params,auctionInfo,bizAuctionInfo);			
 				params.put("feeInfoList", feeInfoList);
 			
 				auctionDAO.insertFeeInfo(params);
@@ -590,8 +590,9 @@ public class AuctionServiceImpl implements AuctionService {
 		if (auctionInfo != null) {
 			
 			//params.put("feeInfoList", this.calcFeeInfo(info,params,bizAuctionInfo));
-
-			List<Map<String, Object>> feeInfoList = this.calcFeeInfo(true,auctionInfo,params,bizAuctionInfo);			
+			//낙찰가 경매정보에 저장하여 수수료계산하게 수정
+			auctionInfo.put("sraSbidAm", params.get("sraSbidAm"));
+			List<Map<String, Object>> feeInfoList = this.calcFeeInfo(params,auctionInfo,bizAuctionInfo);			
 			params.put("feeInfoList", feeInfoList);
 			if(feeInfoList.size() >0) auctionDAO.insertFeeInfo(params);
 			
@@ -892,7 +893,7 @@ public class AuctionServiceImpl implements AuctionService {
 				auctionDAO.deleteFeeInfo(info);
 				
 				//수수료 계산로직
-				params.put("feeInfoList", this.calcFeeInfo(false,info,params,bizAuctionInfo));
+				params.put("feeInfoList", this.calcFeeInfo(params,info,bizAuctionInfo));
 				
 				auctionDAO.insertFeeInfo(params);
 				
@@ -1435,14 +1436,21 @@ public class AuctionServiceImpl implements AuctionService {
 	}
 	
 	//flagAucDsc : 단일,일괄경매 체크
-	private List<Map<String, Object>> calcFeeInfo(boolean flagAucDsc ,Map<String, Object> info, Map<String, Object> params, Map<String, Object> bizAuctionInfo) throws SQLException {
+	private List<Map<String, Object>> calcFeeInfo(Map<String, Object> params, Map<String, Object> info, Map<String, Object> bizAuctionInfo) throws SQLException {
 
 		Iterator<String> keys = info.keySet().iterator();
 		while(keys.hasNext()) {
 			String key = keys.next();
-			log.debug("######## ::: "+key);
+			if(info.get(key) == null) {
+				switch(key) {
+				case "PPGCOW_FEE_DSC": info.put(key, "5"); break;
+				case "SEL_STS_DSC": info.put(key, "23"); break;
+				default: info.put(key, "0"); break;
+				}
+			}
 			log.debug("{} : {}", key, info.get(key));
 		}
+
 		final String naBzplc		= info.get("NA_BZPLC").toString();
 		final String aucDt			= info.get("AUC_DT").toString();
 		final String aucObjDsc		= info.get("AUC_OBJ_DSC").toString();
@@ -1450,31 +1458,16 @@ public class AuctionServiceImpl implements AuctionService {
 		final String ledSqno		= info.get("LED_SQNO").toString();
 		final String trmnMacoYn		= info.get("TRMN_MACO_YN").toString();				// 중도매인 조합원 여부 ( 0.비조합원, 1.조합원 )
 		final String fhsMacoYn		= info.get("FHS_MACO_YN").toString();				// 출하주 조합원 여부 ( 0.비조합원, 1.조합원 )
-		final String ppgcowFeeDsc	= info.getOrDefault("PPGCOW_FEE_DSC", "5").toString();			// 번식우 수수료 구분코드 > 1.임신우, 2.비임신우, 3.임신우+송아지, 4.비임신우+송아지,  5.해당없음
-		final String trmnAmnno		= (info.get("TRMN_AMNNO") !=null?info.get("TRMN_AMNNO"):"0").toString();				// 중도매인 번호
-		final String lvstAucPtcMnNo	= info.getOrDefault("LVST_AUC_PTC_MN_NO", "0").toString();		// 경매참가번호
-		final String cowSogWt		= info.getOrDefault("COW_SOG_WT", "0").toString();
-		final String aucUprDsc		= bizAuctionInfo.getOrDefault("NBFCT_AUC_UPR_DSC", "1").toString();			// 비육우 경매단가 구분 코드 ( 1. kg 단위, 2. 두 단위 )
-		final String sgNoPrcDsc		= bizAuctionInfo.getOrDefault("SGNO_PRC_DSC", "1").toString();				// 절사구분 ( 1.소수점 이하 버림, 2. 소수점 이상 절상, 3. 반올림 )
-		final String selStsDsc		= info.getOrDefault("SEL_STS_DSC", "23").toString();						// 경매상태 
-		final int cutAm				= Integer.parseInt(bizAuctionInfo.getOrDefault("CUT_AM", "1").toString());	// 절사금액
+		final String ppgcowFeeDsc	= info.get("PPGCOW_FEE_DSC").toString();			// 번식우 수수료 구분코드 > 1.임신우, 2.비임신우, 3.임신우+송아지, 4.비임신우+송아지,  5.해당없음
+		final String selStsDsc		= info.get("SEL_STS_DSC").toString();						// 경매상태 
 		//단일
-		long sraSbidUpr				= flagAucDsc?Long.parseLong(params.get("sraSbidUpr").toString()):Long.parseLong(info.get("ATDR_AM").toString());							// 응찰금액
-		//일괄
-		//long sraSbidUpr				= Long.parseLong(info.get("ATDR_AM").toString());							// 응찰금액
-		long sraSbidAm				= 0L;
+		//long sraSbidUpr				= flagAucDsc?Long.parseLong(params.get("sraSbidUpr").toString()):Long.parseLong(info.get("ATDR_AM").toString());							// 응찰금액
+		long sraSbidAm				= Long.parseLong(info.get("sraSbidAm").toString());
 
 		info.put("naBzplc",			naBzplc);
 		info.put("naBzPlc",			naBzplc);
-		info.put("aucDt",			aucDt);
 		info.put("aucObjDsc",		aucObjDsc);
-		info.put("oslpNo",			oslpNo);
-		info.put("ledSqno",			ledSqno);
-		//info.put("trmnAmnno",		trmnAmnno);
-		//info.put("lvstAucPtcMnNo",	lvstAucPtcMnNo);
-		//info.put("selStsDsc",		selStsDsc);
-		info.put("lsCmeno",			sessionUtill.getEno());
-		info.put("sraSbidUpr",		sraSbidUpr);
+		info.put("aucDt",			aucDt);
 
 		// 8. 수수료 기본 정보 조회
 		final List<Map<String, Object>> feeInfoList = auctionDAO.selectFeeInfo(info);
