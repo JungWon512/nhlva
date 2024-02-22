@@ -590,7 +590,7 @@ public class AuctionServiceImpl implements AuctionService {
 		if (auctionInfo != null) {
 			
 			//params.put("feeInfoList", this.calcFeeInfo(info,params,bizAuctionInfo));
-			
+
 			List<Map<String, Object>> feeInfoList = this.calcFeeInfo(true,auctionInfo,params,bizAuctionInfo);			
 			params.put("feeInfoList", feeInfoList);
 			if(feeInfoList.size() >0) auctionDAO.insertFeeInfo(params);
@@ -1437,6 +1437,12 @@ public class AuctionServiceImpl implements AuctionService {
 	//flagAucDsc : 단일,일괄경매 체크
 	private List<Map<String, Object>> calcFeeInfo(boolean flagAucDsc ,Map<String, Object> info, Map<String, Object> params, Map<String, Object> bizAuctionInfo) throws SQLException {
 
+		Iterator<String> keys = info.keySet().iterator();
+		while(keys.hasNext()) {
+			String key = keys.next();
+			log.debug("######## ::: "+key);
+			log.debug("{} : {}", key, info.get(key));
+		}
 		final String naBzplc		= info.get("NA_BZPLC").toString();
 		final String aucDt			= info.get("AUC_DT").toString();
 		final String aucObjDsc		= info.get("AUC_OBJ_DSC").toString();
@@ -1445,7 +1451,7 @@ public class AuctionServiceImpl implements AuctionService {
 		final String trmnMacoYn		= info.get("TRMN_MACO_YN").toString();				// 중도매인 조합원 여부 ( 0.비조합원, 1.조합원 )
 		final String fhsMacoYn		= info.get("FHS_MACO_YN").toString();				// 출하주 조합원 여부 ( 0.비조합원, 1.조합원 )
 		final String ppgcowFeeDsc	= info.getOrDefault("PPGCOW_FEE_DSC", "5").toString();			// 번식우 수수료 구분코드 > 1.임신우, 2.비임신우, 3.임신우+송아지, 4.비임신우+송아지,  5.해당없음
-		final String trmnAmnno		= info.getOrDefault("TRMN_AMNNO", "0").toString();				// 중도매인 번호
+		final String trmnAmnno		= (info.get("TRMN_AMNNO") !=null?info.get("TRMN_AMNNO"):"0").toString();				// 중도매인 번호
 		final String lvstAucPtcMnNo	= info.getOrDefault("LVST_AUC_PTC_MN_NO", "0").toString();		// 경매참가번호
 		final String cowSogWt		= info.getOrDefault("COW_SOG_WT", "0").toString();
 		final String aucUprDsc		= bizAuctionInfo.getOrDefault("NBFCT_AUC_UPR_DSC", "1").toString();			// 비육우 경매단가 구분 코드 ( 1. kg 단위, 2. 두 단위 )
@@ -1464,9 +1470,9 @@ public class AuctionServiceImpl implements AuctionService {
 		info.put("aucObjDsc",		aucObjDsc);
 		info.put("oslpNo",			oslpNo);
 		info.put("ledSqno",			ledSqno);
-		info.put("trmnAmnno",		trmnAmnno);
-		info.put("lvstAucPtcMnNo",	lvstAucPtcMnNo);
-		info.put("selStsDsc",		selStsDsc);
+		//info.put("trmnAmnno",		trmnAmnno);
+		//info.put("lvstAucPtcMnNo",	lvstAucPtcMnNo);
+		//info.put("selStsDsc",		selStsDsc);
 		info.put("lsCmeno",			sessionUtill.getEno());
 		info.put("sraSbidUpr",		sraSbidUpr);
 
