@@ -1662,4 +1662,9 @@ public class AuctionServiceImpl implements AuctionService {
 		return feeInfoList;
 	}
 
+	@Override
+	public Map<String, Object> selectCowEpdInfo(Map<String, Object> params) throws SQLException{
+		return auctionDAO.selectCowEpdInfo(params);
+	}
+
 }

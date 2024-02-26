@@ -2202,4 +2202,39 @@ public class ApiController {
 		}
 		return result;
 	}
+	
+	@ResponseBody
+	@GetMapping(value = "/api/{version}/epd/info/{naBzplc}/{aucDt}/{aucObjDsc}/{aucPrgSqno}")
+	Map<String, Object> cowEpdInfo(@PathVariable(name = "version") final String version
+									, @PathVariable(name = "naBzplc") final String naBzplc
+									, @PathVariable(name = "aucDt") final String aucDt
+									, @PathVariable(name = "aucObjDsc") final String aucObjDsc
+									, @PathVariable(name = "aucPrgSqno") final String aucPrgSqno) {
+		final Map<String, Object> result = new HashMap<String, Object>();
+		final List<String> entryList = new ArrayList<String>();
+		try {
+			
+			if ("".equals(naBzplc) || "".equals(aucDt) || "".equals(aucObjDsc) || "".equals(aucObjDsc) || "".equals(aucPrgSqno)) {
+				result.put("success", false);
+				result.put("message", "필수인자값을 확인하세요.");
+				return result;
+			}
+			Map<String,Object> params = new HashMap<>();
+			params.put("naBzplc", naBzplc);
+			params.put("aucDt", aucDt);
+			params.put("aucObjDsc", aucObjDsc);
+			params.put("aucPrgSqno", aucPrgSqno);
+			final Map<String, Object> info = auctionService.selectCowEpdInfo(params);
+			
+			result.put("success", true);
+			result.put("message", "조회에 성공했습니다.");
+			result.put("data", info);
+		}catch (SQLException | RuntimeException re) {
+			log.error("ApiController.auctionEntry : {} ",re);
+			result.put("success", false);
+			result.put("entry", entryList);
+			result.put("message", "작업중 오류가 발생했습니다. 관리자에게 문의하세요.");
+		}
+		return result;
+	}
 }
