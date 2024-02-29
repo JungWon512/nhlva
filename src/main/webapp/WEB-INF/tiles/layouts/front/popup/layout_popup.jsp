@@ -13,7 +13,7 @@
     <meta property="og:description" content="한우, 송아지 스마트 경매, 실시간 화상경매" />
     <meta name="description" content="한우, 송아지 스마트 경매, 실시간 화상경매" />
     
-    <meta name="viewport" content="width=device-width,initial-scale=1.0,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=2.0, minimum-scale=1.0, user-scalable=yes,target-densitydpi=medium-dpi">
     <meta name="HandheldFriendly" content="true" />
     <meta name="apple-mobile-web-app-capable" content="yes">
     <!--end::Layout Themes-->
