@@ -956,6 +956,7 @@ public class HttpUtils {
 									map.put("BIRTH", obj.get("birthdate"));
 									map.put("RG_DSC", obj.get("reggu"));//1:기초,2:혈통,3:고등
 									map.put("INDV_SEX_C", obj.get("sex"));//1:암 ,2: 수
+									if(obj.has("sire_name")) map.put("KPN_NO", obj.get("sire_name"));
 									if(errFlag) {
 										Map<String,Object> butcherInfo= this.callApiOpenDataCattle((String)obj.get("barcode"));
 										if(!(Boolean)butcherInfo.get("success")) errFlag=false;
@@ -983,7 +984,7 @@ public class HttpUtils {
 									map.put("BIRTH", obj.get("birthdate"));
 									map.put("RG_DSC", obj.get("reggu"));
 									map.put("INDV_SEX_C", obj.get("sex"));
-									map.put("KPN_NO", obj.get("sire_name"));
+									if(obj.has("sire_name")) map.put("KPN_NO", obj.get("sire_name"));
 									if(errFlag) {
 										Map<String,Object> butcherInfo= this.callApiOpenDataCattle((String)obj.get("barcode"));
 										if(!(Boolean)butcherInfo.get("success")) errFlag=false;
