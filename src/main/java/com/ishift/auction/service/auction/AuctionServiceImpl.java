@@ -562,6 +562,12 @@ public class AuctionServiceImpl implements AuctionService {
 				else if ("3".equals(aucObjDsc)) {
 					aucAtdrUntAm = Integer.parseInt(bizAuctionInfo.getOrDefault("PPGCOW_AUC_ATDR_UNT_AM", "10000").toString());	// 번식우 경매 금액 단위
 				}
+				else if ("5".equals(aucObjDsc)) {					
+					aucAtdrUntAm = Integer.parseInt(bizAuctionInfo.getOrDefault("GT_AUC_ATDR_UNT_AM", "10000").toString());	// 염소 경매 금액 단위
+				}
+				else if ("6".equals(aucObjDsc)) {
+					aucAtdrUntAm = Integer.parseInt(bizAuctionInfo.getOrDefault("HS_AUC_ATDR_UNT_AM", "10000").toString());	// 말 경매 금액 단위
+				}
 				sraSbidAm = sraSbidUpr * aucAtdrUntAm;
 				params.put("sraSbidAm", sraSbidAm);
 			}
@@ -872,6 +878,12 @@ public class AuctionServiceImpl implements AuctionService {
 						}
 						else if ("3".equals(aucObjDsc)) {
 							aucAtdrUntAm = Integer.parseInt(bizAuctionInfo.getOrDefault("PPGCOW_AUC_ATDR_UNT_AM", "10000").toString());	// 번식우 경매 금액 단위
+						}
+						else if ("5".equals(aucObjDsc)) {
+							aucAtdrUntAm = Integer.parseInt(bizAuctionInfo.getOrDefault("GT_AUC_ATDR_UNT_AM", "10000").toString());	// 번식우 경매 금액 단위
+						}
+						else if ("6".equals(aucObjDsc)) {
+							aucAtdrUntAm = Integer.parseInt(bizAuctionInfo.getOrDefault("HS_AUC_ATDR_UNT_AM", "10000").toString());	// 번식우 경매 금액 단위
 						}
 						sraSbidAm = sraSbidUpr * aucAtdrUntAm;
 						info.put("sraSbidAm", sraSbidAm);

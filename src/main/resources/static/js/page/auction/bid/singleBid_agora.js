@@ -289,15 +289,16 @@ var inputNumberVaild = function(el,len){
 }
 
 // 소켓통신 connect 및 이벤트 바인딩 [s]
-var socket = null, auctionConfig = {seData : {}, divisionPriceUnit : ["만 원", "만 원", "만 원", "만 원"]},scData={};;
+var socket = null, auctionConfig = {seData : {}, divisionPriceUnit : ["만 원", "만 원", "만 원", "만 원","", "만 원", "만 원"]},scData={};;
 var socketStart = function(){
 	if(!$('#naBzPlc').val()) return;
 	if(socket){ socket.connect(); return;}
 	var socketHost = (active == 'production')?"cowauction.kr":(active == 'develop')?"xn--e20bw05b.kr":"xn--e20bw05b.kr";
 	//socketHost += ':'+$('#webPort').val();
 	socketHost += ':9001';
-	socket = io.connect('https://'+socketHost + '/6003' + '?auctionHouseCode='  + $('#naBzPlc').val(), {secure:true});
-	//socket = io.connect('http://192.168.0.23:9001/6003?auctionHouseCode=' + $('#naBzPlc').val());
+//	socket = io.connect('https://'+socketHost + '/6003' + '?auctionHouseCode='  + $('#naBzPlc').val(), {secure:true});
+	
+	socket = io.connect('http://192.168.1.53:9001/6003?auctionHouseCode=' + $('#naBzPlc').val());
 	socket.on('connect', connectHandler);
 
 	socket.on('disconnect', disconnectHandler);

@@ -121,6 +121,8 @@
 						, CASE WHEN A.AUC_OBJ_DSC = '1' THEN '송아지'
 								WHEN A.AUC_OBJ_DSC = '2' THEN '비육우'
 								WHEN A.AUC_OBJ_DSC = '3' THEN '번식우'
+								WHEN A.AUC_OBJ_DSC = '5' THEN '염소'
+								WHEN A.AUC_OBJ_DSC = '6' THEN '말'
 								WHEN A.AUC_OBJ_DSC = '0' THEN '일괄'
 								ELSE '' END AS AUC_OBJ_DSC_NM
 						, A.INDV_SEX_C

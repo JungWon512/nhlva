@@ -16,6 +16,8 @@
 				WHEN G.AUC_OBJ_DSC='1' THEN '송아지'
 				WHEN G.AUC_OBJ_DSC='2' THEN '비육우'
 				WHEN G.AUC_OBJ_DSC='3' THEN '번식우'
+				WHEN G.AUC_OBJ_DSC='5' THEN '염소'
+				WHEN G.AUC_OBJ_DSC='6' THEN '말'
 				WHEN G.AUC_OBJ_DSC='0' THEN '일괄'
 				ELSE ''
 			END AUC_OBJ_DSC_NAME
@@ -97,12 +99,16 @@
 				WHEN B.AUC_OBJ_DSC = '1' THEN ROUND(B.FIR_LOWS_SBID_LMT_AM / NVL(J.CALF_AUC_ATDR_UNT_AM, 10000))
 				WHEN B.AUC_OBJ_DSC = '2' THEN ROUND(B.FIR_LOWS_SBID_LMT_AM / NVL(J.NBFCT_AUC_ATDR_UNT_AM, 1))
 				WHEN B.AUC_OBJ_DSC = '3' THEN ROUND(B.FIR_LOWS_SBID_LMT_AM / NVL(J.PPGCOW_AUC_ATDR_UNT_AM, 10000))
+				WHEN B.AUC_OBJ_DSC = '5' THEN ROUND(B.FIR_LOWS_SBID_LMT_AM / NVL(J.GT_AUC_ATDR_UNT_AM, 10000))
+				WHEN B.AUC_OBJ_DSC = '6' THEN ROUND(B.FIR_LOWS_SBID_LMT_AM / NVL(J.HS_AUC_ATDR_UNT_AM, 10000))
 				ELSE ROUND(B.FIR_LOWS_SBID_LMT_AM / 10000)
 			END AS FIR_LOWS_SBID_LMT_UPR
 			, CASE 
 				WHEN B.AUC_OBJ_DSC = '1' THEN ROUND(B.LOWS_SBID_LMT_AM / NVL(J.CALF_AUC_ATDR_UNT_AM, 10000))
 				WHEN B.AUC_OBJ_DSC = '2' THEN ROUND(B.LOWS_SBID_LMT_AM / NVL(J.NBFCT_AUC_ATDR_UNT_AM, 1))
 				WHEN B.AUC_OBJ_DSC = '3' THEN ROUND(B.LOWS_SBID_LMT_AM / NVL(J.PPGCOW_AUC_ATDR_UNT_AM, 10000))
+				WHEN B.AUC_OBJ_DSC = '5' THEN ROUND(B.LOWS_SBID_LMT_AM / NVL(J.GT_AUC_ATDR_UNT_AM, 10000))
+				WHEN B.AUC_OBJ_DSC = '6' THEN ROUND(B.LOWS_SBID_LMT_AM / NVL(J.HS_AUC_ATDR_UNT_AM, 10000))
 				ELSE ROUND(B.LOWS_SBID_LMT_AM / 10000)
 			END AS LOWS_SBID_LMT_UPR
 			, B.LWPR_CHG_NT /* 최저가변경횟수 */
@@ -139,6 +145,8 @@
 			, CASE WHEN B.AUC_OBJ_DSC = '1' THEN ROUND(NVL(J.CALF_AUC_ATDR_UNT_AM, 10000))
 				WHEN B.AUC_OBJ_DSC = '2' THEN ROUND(NVL(J.NBFCT_AUC_ATDR_UNT_AM, 1))
 				WHEN B.AUC_OBJ_DSC = '3' THEN ROUND(NVL(J.PPGCOW_AUC_ATDR_UNT_AM, 10000))
+				WHEN B.AUC_OBJ_DSC = '5' THEN ROUND(NVL(J.GT_AUC_ATDR_UNT_AM, 10000))
+				WHEN B.AUC_OBJ_DSC = '6' THEN ROUND(NVL(J.HS_AUC_ATDR_UNT_AM, 10000))
 				ELSE 10000
 			END AS DIVISION_PRICE
 			, B.LVST_MKT_TRPL_AMNNO
@@ -281,7 +289,7 @@
 		LEFT JOIN TB_LA_IS_MH_AUC_QCN I 
 			ON B.NA_BZPLC = I.NA_BZPLC
 			AND B.AUC_DT = I.AUC_DT
-			AND B.AUC_OBJ_DSC = DECODE(I.AUC_OBJ_DSC,'0',B.AUC_OBJ_DSC,I.AUC_OBJ_DSC) 
+			AND I.AUC_OBJ_DSC = CASE WHEN I.AUC_OBJ_DSC ='0' AND B.AUC_OBJ_DSC IN ('1','2','3') THEN '0' ELSE B.AUC_OBJ_DSC END
 		WHERE 1=1
 		<if test="naBzPlcNo != null and naBzPlcNo != ''">
 			AND D.NA_BZPLCNO = #{naBzPlcNo}
@@ -296,17 +304,31 @@
 		<when test="aucObjDscStn != null and aucObjDscStn != ''">
 			<choose>
 			<when test='"4".equals(aucObjDscStn)'>
-			   AND B.AUC_OBJ_DSC <![CDATA[<>]]> '1'
+			   AND B.AUC_OBJ_DSC IN ('2','3')
 			</when> 
-			<otherwise>
-			   AND B.AUC_OBJ_DSC = CASE WHEN #{aucObjDscStn} = '0' THEN B.AUC_OBJ_DSC ELSE #{aucObjDscStn} END
+			<otherwise>			   		
+				<choose>
+					<when test='"0".equals(aucObjDscStn)'>
+						AND B.AUC_OBJ_DSC IN ('1','2','3')
+					</when>
+					<otherwise>
+						AND B.AUC_OBJ_DSC = #{aucObjDscStn}
+					</otherwise>
+				</choose>
 			</otherwise>
 			</choose>
 		</when>
 		<otherwise>
-		<if test="searchAucObjDsc != null and searchAucObjDsc != ''">
-			AND B.AUC_OBJ_DSC = CASE WHEN TO_CHAR(#{searchAucObjDsc}) = '0' THEN B.AUC_OBJ_DSC ELSE TO_CHAR(#{searchAucObjDsc}) END
-		</if>
+			<if test="searchAucObjDsc != null and searchAucObjDsc != ''">
+				<choose>
+					<when test='"0".equals(searchAucObjDsc)'>
+						AND B.AUC_OBJ_DSC IN ('1','2','3')
+					</when>
+					<otherwise>
+						AND B.AUC_OBJ_DSC = #{searchAucObjDsc}
+					</otherwise>
+				</choose>
+			</if>
 		</otherwise>
 		</choose>
 		<choose>
@@ -521,6 +543,8 @@
 				,CASE WHEN B.AUC_OBJ_DSC = '1' THEN ROUND(B.LOWS_SBID_LMT_AM / NVL(J.CALF_AUC_ATDR_UNT_AM, 10000))
 					WHEN B.AUC_OBJ_DSC = '2' THEN ROUND(B.LOWS_SBID_LMT_AM / NVL(J.NBFCT_AUC_ATDR_UNT_AM, 1))
 					WHEN B.AUC_OBJ_DSC = '3' THEN ROUND(B.LOWS_SBID_LMT_AM / NVL(J.PPGCOW_AUC_ATDR_UNT_AM, 10000))
+					WHEN B.AUC_OBJ_DSC = '5' THEN ROUND(B.LOWS_SBID_LMT_AM / NVL(J.GT_AUC_ATDR_UNT_AM, 10000))
+					WHEN B.AUC_OBJ_DSC = '6' THEN ROUND(B.LOWS_SBID_LMT_AM / NVL(J.HS_AUC_ATDR_UNT_AM, 10000))
 					ELSE ROUND(B.LOWS_SBID_LMT_AM / 10000)
 				END AS LOWS_SBID_LMT_UPR
 				, SUBSTRING(B.SRA_INDV_AMNNO,LENGTH(B.SRA_INDV_AMNNO)-4,5)SRA_INDV_AMNNO /*필터*/
@@ -863,6 +887,8 @@
 				WHEN AUC_OBJ_DSC='1' THEN '송아지'
 				WHEN AUC_OBJ_DSC='2' THEN '비육우'
 				WHEN AUC_OBJ_DSC='3' THEN '번식우'
+				WHEN AUC_OBJ_DSC='5' THEN '염소'
+				WHEN AUC_OBJ_DSC='6' THEN '말'
 				WHEN AUC_OBJ_DSC='0' THEN '일괄'
 				ELSE ''
 				END AUC_OBJ_DSC_NAME
@@ -870,6 +896,7 @@
 				,TO_CHAR(TO_DATE(AUC_DT,'YYYYMMDD'),'D') AUC_DAY
 			FROM TB_LA_IS_MH_AUC_QCN
 			WHERE DEL_YN = 0
+			<!-- 
 			UNION ALL
 			SELECT
 				NA_BZPLC
@@ -878,6 +905,8 @@
 					WHEN AUC_OBJ_DSC='1' THEN '송아지'
 					WHEN AUC_OBJ_DSC='2' THEN '비육우'
 					WHEN AUC_OBJ_DSC='3' THEN '번식우'
+					WHEN AUC_OBJ_DSC='5' THEN '염소'
+					WHEN AUC_OBJ_DSC='6' THEN '말'
 					WHEN AUC_OBJ_DSC='0' THEN '일괄'
 					ELSE ''
 				END AUC_OBJ_DSC_NAME
@@ -885,6 +914,7 @@
 				,TO_CHAR(TO_DATE(AUC_DT,'YYYYMMDD'),'D') AUC_DAY
 			FROM TB_LA_IS_MH_AUC_STN
 			WHERE DEL_YN = 0
+			 -->
 		) A
 		INNER JOIN TB_LA_IS_BM_BZLOC B ON A.NA_BZPLC = B.NA_BZPLC
 		WHERE B.NA_BZPLCNO =#{naBzPlcNo}
@@ -912,6 +942,8 @@
 		   AND NVL(LOWS_SBID_LMT_AM, 0) <![CDATA[<=]]> REGEXP_REPLACE(#{inputUpr}, '[^0-9]') * (SELECT CASE WHEN #{aucObjDsc} = '1' THEN CALF_AUC_ATDR_UNT_AM
 																								WHEN #{aucObjDsc} = '2' THEN NBFCT_AUC_ATDR_UNT_AM
 																								WHEN #{aucObjDsc} = '3' THEN PPGCOW_AUC_ATDR_UNT_AM
+																								WHEN #{aucObjDsc} = '5' THEN GT_AUC_ATDR_UNT_AM
+																								WHEN #{aucObjDsc} = '6' THEN HS_AUC_ATDR_UNT_AM
 																								ELSE 10000
 																							END
 																					  FROM TB_LA_IS_MM_ENV_EST
@@ -1002,6 +1034,8 @@
 			, LOWS_SBID_LMT_AM = (SELECT CASE WHEN TO_CHAR(#{aucObjDsc}) = '1' THEN TO_NUMBER(#{lowsSbidLmtUpr}) * B.CALF_AUC_ATDR_UNT_AM
 											  WHEN TO_CHAR(#{aucObjDsc}) = '2' THEN TO_NUMBER(#{lowsSbidLmtUpr}) * B.NBFCT_AUC_ATDR_UNT_AM
 											  WHEN TO_CHAR(#{aucObjDsc}) = '3' THEN TO_NUMBER(#{lowsSbidLmtUpr}) * B.PPGCOW_AUC_ATDR_UNT_AM
+											  WHEN TO_CHAR(#{aucObjDsc}) = '5' THEN TO_NUMBER(#{lowsSbidLmtUpr}) * B.GT_AUC_ATDR_UNT_AM
+											  WHEN TO_CHAR(#{aucObjDsc}) = '6' THEN TO_NUMBER(#{lowsSbidLmtUpr}) * B.HS_AUC_ATDR_UNT_AM
 											  ELSE TO_NUMBER(#{lowsSbidLmtUpr}) * 10000
 										  END
 									  FROM TB_LA_IS_MM_ENV_EST B
@@ -1101,12 +1135,16 @@
 					WHEN A.AUC_OBJ_DSC = '1' THEN ROUND(A.FIR_LOWS_SBID_LMT_AM / NVL(J.CALF_AUC_ATDR_UNT_AM, 10000))
 					WHEN A.AUC_OBJ_DSC = '2' THEN ROUND(A.FIR_LOWS_SBID_LMT_AM / NVL(J.NBFCT_AUC_ATDR_UNT_AM, 1))
 					WHEN A.AUC_OBJ_DSC = '3' THEN ROUND(A.FIR_LOWS_SBID_LMT_AM / NVL(J.PPGCOW_AUC_ATDR_UNT_AM, 10000))
+					WHEN A.AUC_OBJ_DSC = '5' THEN ROUND(A.FIR_LOWS_SBID_LMT_AM / NVL(J.GT_AUC_ATDR_UNT_AM, 10000))
+					WHEN A.AUC_OBJ_DSC = '6' THEN ROUND(A.FIR_LOWS_SBID_LMT_AM / NVL(J.HS_AUC_ATDR_UNT_AM, 10000))
 					ELSE ROUND(A.FIR_LOWS_SBID_LMT_AM / 10000)
 				END AS FIR_LOWS_SBID_LMT_AM
 				, CASE 
 					WHEN A.AUC_OBJ_DSC = '1' THEN ROUND(A.LOWS_SBID_LMT_AM / NVL(J.CALF_AUC_ATDR_UNT_AM, 10000))
 					WHEN A.AUC_OBJ_DSC = '2' THEN ROUND(A.LOWS_SBID_LMT_AM / NVL(J.NBFCT_AUC_ATDR_UNT_AM, 1))
 					WHEN A.AUC_OBJ_DSC = '3' THEN ROUND(A.LOWS_SBID_LMT_AM / NVL(J.PPGCOW_AUC_ATDR_UNT_AM, 10000))
+					WHEN A.AUC_OBJ_DSC = '5' THEN ROUND(A.LOWS_SBID_LMT_AM / NVL(J.GT_AUC_ATDR_UNT_AM, 10000))
+					WHEN A.AUC_OBJ_DSC = '6' THEN ROUND(A.LOWS_SBID_LMT_AM / NVL(J.HS_AUC_ATDR_UNT_AM, 10000))
 					ELSE ROUND(A.LOWS_SBID_LMT_AM / 10000)
 				END AS LOWS_SBID_LMT_AM
 				, A.SRA_SBID_AM
@@ -1177,15 +1215,29 @@
 			<when test="aucObjDscStn != null and aucObjDscStn != ''">
 				<choose>
 				<when test='"4".equals(aucObjDscStn)'>
-				   AND A.AUC_OBJ_DSC <![CDATA[<>]]> '1'
+				   AND A.AUC_OBJ_DSC IN ('2','3')
 				</when> 
-				<otherwise>
-				   AND A.AUC_OBJ_DSC = CASE WHEN #{aucObjDscStn} = '0' THEN A.AUC_OBJ_DSC ELSE #{aucObjDscStn} END
+				<otherwise>		
+					<choose>
+						<when test='"0".equals(aucObjDscStn)'>
+							AND A.AUC_OBJ_DSC IN ('1','2','3')
+						</when>
+						<otherwise>
+							AND A.AUC_OBJ_DSC = #{aucObjDscStn}
+						</otherwise>
+					</choose>
 				</otherwise>
 				</choose>
 			</when>
 			<when test="aucObjDsc != null and aucObjDsc != ''">
-				   AND A.AUC_OBJ_DSC = DECODE(#{aucObjDsc}, '0', A.AUC_OBJ_DSC,#{aucObjDsc})
+			   <choose>
+					<when test='"0".equals(aucObjDsc)'>
+						AND A.AUC_OBJ_DSC IN ('1','2','3')
+					</when>
+					<otherwise>
+						AND A.AUC_OBJ_DSC = #{aucObjDsc}
+					</otherwise>
+				</choose>
 			</when>
 			</choose>
 			<choose>
@@ -1414,13 +1466,15 @@
 		SELECT A.NA_BZPLC /* 조합 구분 코드 */
 			, A.OSLP_NO /* 출품번호 */
 			, A.AUC_DT
-			, (SELECT C.QCN FROM TB_LA_IS_MH_AUC_QCN C WHERE C.NA_BZPLC = A.NA_BZPLC AND C.AUC_DT = A.AUC_DT AND C.AUC_OBJ_DSC = A.AUC_OBJ_DSC) AS QCN
+			, (SELECT C.QCN FROM TB_LA_IS_MH_AUC_QCN C 
+				WHERE C.NA_BZPLC = A.NA_BZPLC 
+				AND C.AUC_DT = A.AUC_DT 
+				AND C.AUC_OBJ_DSC = CASE WHEN C.AUC_OBJ_DSC ='0' AND A.AUC_OBJ_DSC IN ('1','2','3') THEN '0' ELSE A.AUC_OBJ_DSC END) AS QCN
 			, (SELECT D.AUC_OBJ_DSC
 				FROM TB_LA_IS_MH_AUC_QCN D
 				WHERE D.NA_BZPLC = A.NA_BZPLC
 				AND D.AUC_DT = A.AUC_DT
-				AND DECODE(D.AUC_OBJ_DSC,'0',A.AUC_OBJ_DSC,D.AUC_OBJ_DSC) =
-				A.AUC_OBJ_DSC
+				AND D.AUC_OBJ_DSC = CASE WHEN D.AUC_OBJ_DSC ='0' AND A.AUC_OBJ_DSC IN ('1','2','3') THEN '0' ELSE A.AUC_OBJ_DSC END
 			) AS QCN_AUC_OBJ_DSC
 			, A.AUC_PRG_SQ /* 경매순번 */
 			, A.AUC_OBJ_DSC /* 경매대상구분코드 */
@@ -1487,21 +1541,29 @@
 				WHEN A.AUC_OBJ_DSC = '1' THEN ROUND(A.FIR_LOWS_SBID_LMT_AM / NVL(C.CALF_AUC_ATDR_UNT_AM, 10000))
 				WHEN A.AUC_OBJ_DSC = '2' THEN ROUND(A.FIR_LOWS_SBID_LMT_AM / NVL(C.NBFCT_AUC_ATDR_UNT_AM, 1))
 				WHEN A.AUC_OBJ_DSC = '3' THEN ROUND(A.FIR_LOWS_SBID_LMT_AM / NVL(C.PPGCOW_AUC_ATDR_UNT_AM, 10000))
+				WHEN A.AUC_OBJ_DSC = '5' THEN ROUND(A.FIR_LOWS_SBID_LMT_AM / NVL(C.GT_AUC_ATDR_UNT_AM, 10000))
+				WHEN A.AUC_OBJ_DSC = '6' THEN ROUND(A.FIR_LOWS_SBID_LMT_AM / NVL(C.HS_AUC_ATDR_UNT_AM, 10000))
 				ELSE ROUND(A.FIR_LOWS_SBID_LMT_AM / 10000)
 			END AS FIR_LOWS_SBID_LMT_AM
 			, CASE WHEN A.AUC_OBJ_DSC = '1' THEN ROUND(A.LOWS_SBID_LMT_AM / NVL(C.CALF_AUC_ATDR_UNT_AM, 10000))
 				WHEN A.AUC_OBJ_DSC = '2' THEN ROUND(A.LOWS_SBID_LMT_AM / NVL(C.NBFCT_AUC_ATDR_UNT_AM, 1))
 				WHEN A.AUC_OBJ_DSC = '3' THEN ROUND(A.LOWS_SBID_LMT_AM / NVL(C.PPGCOW_AUC_ATDR_UNT_AM, 10000))
+				WHEN A.AUC_OBJ_DSC = '5' THEN ROUND(A.LOWS_SBID_LMT_AM / NVL(C.GT_AUC_ATDR_UNT_AM, 10000))
+				WHEN A.AUC_OBJ_DSC = '6' THEN ROUND(A.LOWS_SBID_LMT_AM / NVL(C.HS_AUC_ATDR_UNT_AM, 10000))
 				ELSE ROUND(A.LOWS_SBID_LMT_AM / 10000)
 			END AS LOWS_SBID_LMT_AM
 			, CASE WHEN A.AUC_OBJ_DSC = '1' THEN ROUND(A.SRA_SBID_AM / NVL(C.CALF_AUC_ATDR_UNT_AM, 10000))
 				WHEN A.AUC_OBJ_DSC = '2' THEN ROUND(A.SRA_SBID_AM / NVL(C.NBFCT_AUC_ATDR_UNT_AM, 1))
 				WHEN A.AUC_OBJ_DSC = '3' THEN ROUND(A.SRA_SBID_AM / NVL(C.PPGCOW_AUC_ATDR_UNT_AM, 10000))
+				WHEN A.AUC_OBJ_DSC = '5' THEN ROUND(A.SRA_SBID_AM / NVL(C.GT_AUC_ATDR_UNT_AM, 10000))
+				WHEN A.AUC_OBJ_DSC = '6' THEN ROUND(A.SRA_SBID_AM / NVL(C.HS_AUC_ATDR_UNT_AM, 10000))
 				ELSE ROUND(A.SRA_SBID_AM / 10000)
 			END AS SRA_SBID_AM
 			, CASE WHEN A.AUC_OBJ_DSC = '1' THEN ROUND(NVL(C.CALF_AUC_ATDR_UNT_AM, 10000))
 				WHEN A.AUC_OBJ_DSC = '2' THEN ROUND(NVL(C.NBFCT_AUC_ATDR_UNT_AM, 1))
 				WHEN A.AUC_OBJ_DSC = '3' THEN ROUND(NVL(C.PPGCOW_AUC_ATDR_UNT_AM, 10000))
+				WHEN A.AUC_OBJ_DSC = '5' THEN ROUND(NVL(C.GT_AUC_ATDR_UNT_AM, 10000))
+				WHEN A.AUC_OBJ_DSC = '6' THEN ROUND(NVL(C.HS_AUC_ATDR_UNT_AM, 10000))
 				ELSE ROUND(10000)
 			END AS DIVISION_PRICE
 			, A.PPGCOW_FEE_DSC
@@ -1512,6 +1574,8 @@
 			,CASE WHEN A.AUC_OBJ_DSC='1' THEN '송아지'
 					WHEN A.AUC_OBJ_DSC='2' THEN '비육우'
 					WHEN A.AUC_OBJ_DSC='3' THEN '번식우'
+					WHEN A.AUC_OBJ_DSC='5' THEN '염소'
+					WHEN A.AUC_OBJ_DSC='6' THEN '말'
 					WHEN A.AUC_OBJ_DSC='0' THEN '일괄'
 					ELSE ''
 			END AUC_OBJ_DSC_NAME
@@ -1679,6 +1743,8 @@
 			,CASE WHEN A.AUC_OBJ_DSC='1' THEN '송아지'
 					WHEN A.AUC_OBJ_DSC='2' THEN '비육우'
 					WHEN A.AUC_OBJ_DSC='3' THEN '번식우'
+					WHEN A.AUC_OBJ_DSC='5' THEN '염소'
+					WHEN A.AUC_OBJ_DSC='6' THEN '말'
 					WHEN A.AUC_OBJ_DSC='0' THEN '일괄'
 					ELSE ''
 			END AUC_OBJ_DSC_NAME
@@ -1704,6 +1770,8 @@
 			, CASE WHEN A.AUC_OBJ_DSC = '1' THEN ROUND(A.LOWS_SBID_LMT_AM / NVL(J.CALF_AUC_ATDR_UNT_AM, 10000))
 						WHEN A.AUC_OBJ_DSC = '2' THEN ROUND(A.LOWS_SBID_LMT_AM /	NVL(J.NBFCT_AUC_ATDR_UNT_AM, 1))
 						WHEN A.AUC_OBJ_DSC = '3' THEN ROUND(A.LOWS_SBID_LMT_AM /	NVL(J.PPGCOW_AUC_ATDR_UNT_AM, 10000))
+						WHEN A.AUC_OBJ_DSC = '5' THEN ROUND(A.LOWS_SBID_LMT_AM /	NVL(J.GT_AUC_ATDR_UNT_AM, 10000))
+						WHEN A.AUC_OBJ_DSC = '6' THEN ROUND(A.LOWS_SBID_LMT_AM /	NVL(J.HS_AUC_ATDR_UNT_AM, 10000))
 				ELSE ROUND(A.LOWS_SBID_LMT_AM / 10000)
 				END AS LOWS_SBID_LMT_UPR
 			, A.SRA_SBID_AM
@@ -2143,7 +2211,7 @@
 				FROM TB_LA_IS_MH_AUC_QCN B
 				INNER JOIN TB_LA_IS_MH_SOG_COW A ON A.NA_BZPLC = B.NA_BZPLC
 					AND A.AUC_DT = B.AUC_DT
-					AND A.AUC_OBJ_DSC = DECODE(B.AUC_OBJ_DSC,'0',A.AUC_OBJ_DSC,B.AUC_OBJ_DSC)
+					AND B.AUC_OBJ_DSC = CASE WHEN B.AUC_OBJ_DSC ='0' AND A.AUC_OBJ_DSC IN ('1','2','3') THEN '0' ELSE A.AUC_OBJ_DSC END
 				WHERE 1=1
 				<if test="stateFlag != null and stateFlag != ''">
 					<choose>
@@ -2187,8 +2255,15 @@
 		</choose>
 			AND A.AUC_DT = #{searchDate} /* 경매일자 */
 			AND A.NA_BZPLC = #{naBzPlc} /* 사업장 번호 */
-		<if test="searchAucObjDsc != null and searchAucObjDsc != ''">
-			AND A.AUC_OBJ_DSC = CASE WHEN TO_CHAR(#{searchAucObjDsc}) = '0' THEN TO_CHAR(#{searchAucObjDsc}) ELSE AUC_OBJ_DSC END
+		<if test="searchAucObjDsc != null and searchAucObjDsc != ''">		
+			<choose>
+				<when test='"0".equals(searchAucObjDsc)'>
+					AND A.AUC_OBJ_DSC IN ('1','2','3')
+				</when>
+				<otherwise>
+					AND A.AUC_OBJ_DSC = #{searchAucObjDsc}
+				</otherwise>
+			</choose>
 		</if>
 	</select>
 
@@ -2279,9 +2354,15 @@
 				</otherwise>
 			</choose>
 		</if>
-		<if test="searchAucObjDsc != null and searchAucObjDsc != ''">
-			AND A.AUC_OBJ_DSC = CASE WHEN TO_CHAR(#{searchAucObjDsc}) = '0' THEN
-			A.AUC_OBJ_DSC ELSE TO_CHAR(#{searchAucObjDsc}) END
+		<if test="searchAucObjDsc != null and searchAucObjDsc != ''">		
+			<choose>
+				<when test='"0".equals(searchAucObjDsc)'>
+					AND A.AUC_OBJ_DSC IN ('1','2','3')
+				</when>
+				<otherwise>
+					AND A.AUC_OBJ_DSC = #{searchAucObjDsc}
+				</otherwise>
+			</choose>
 		</if>
 		AND B.NA_BZPLC = #{naBzPlc} /* 사업장 번호 */
 		AND A.AUC_DT = #{searchDate} /* 경매일자 */
@@ -2338,9 +2419,15 @@
 				</otherwise>
 			</choose>
 		</if>
-		<if test="searchAucObjDsc != null and searchAucObjDsc != ''">
-			AND A.AUC_OBJ_DSC = CASE WHEN TO_CHAR(#{searchAucObjDsc}) = '0' THEN
-			A.AUC_OBJ_DSC ELSE TO_CHAR(#{searchAucObjDsc}) END
+		<if test="searchAucObjDsc != null and searchAucObjDsc != ''">				
+			<choose>
+				<when test='"0".equals(searchAucObjDsc)'>
+					AND A.AUC_OBJ_DSC IN ('1','2','3')
+				</when>
+				<otherwise>
+					AND A.AUC_OBJ_DSC = #{searchAucObjDsc}
+				</otherwise>
+			</choose>
 		</if>
 		AND A.AUC_DT = #{searchDate}
 		AND A.NA_BZPLC = #{naBzPlc}
@@ -2389,6 +2476,8 @@
 						, (CASE WHEN A.AUC_OBJ_DSC='1' THEN '송아지'
 									WHEN A.AUC_OBJ_DSC='2' THEN '비육우'
 									WHEN A.AUC_OBJ_DSC='3' THEN '번식우'
+									WHEN A.AUC_OBJ_DSC='5' THEN '염소'
+									WHEN A.AUC_OBJ_DSC='6' THEN '말'
 									WHEN A.AUC_OBJ_DSC='0' THEN '일괄'
 									ELSE '' END ) AS AUC_OBJ_DSC_NAME
 						, NVL(A.SRA_SBID_AM,0) SRA_SBID_AM
@@ -2452,9 +2541,15 @@
 		WHERE 1=1
 		AND A.NA_BZPLC = #{naBzPlc}
 		AND A.AUC_DT LIKE #{searchDate} ||'%'
-		<if test="searchAucObjDsc != null and searchAucObjDsc != ''">
-			AND A.AUC_OBJ_DSC = CASE WHEN TO_CHAR(#{searchAucObjDsc}) = '0' THEN
-			A.AUC_OBJ_DSC ELSE TO_CHAR(#{searchAucObjDsc}) END
+		<if test="searchAucObjDsc != null and searchAucObjDsc != ''">				
+			<choose>
+				<when test='"0".equals(searchAucObjDsc)'>
+					AND A.AUC_OBJ_DSC IN ('1','2','3')
+				</when>
+				<otherwise>
+					AND A.AUC_OBJ_DSC = #{searchAucObjDsc}
+				</otherwise>
+			</choose>
 		</if>
 	</select>
 
@@ -2488,6 +2583,8 @@
 						, CASE WHEN A.AUC_OBJ_DSC='1' THEN '송아지' 
 								WHEN A.AUC_OBJ_DSC='2' THEN '비육우'
 								WHEN A.AUC_OBJ_DSC='3' THEN '번식우'
+								WHEN A.AUC_OBJ_DSC='5' THEN '염소'
+								WHEN A.AUC_OBJ_DSC='6' THEN '말'
 								WHEN A.AUC_OBJ_DSC='0' THEN '일괄' ELSE '' END AUC_OBJ_DSC_NAME
 						, NVL(A.SRA_SBID_AM,0) SRA_SBID_AM
 						, NVL(FEE.SRA_TR_FEE,0) SRA_TR_FEE
@@ -2871,6 +2968,8 @@
 		WHEN G.AUC_OBJ_DSC='1' THEN '송아지'
 		WHEN G.AUC_OBJ_DSC='2' THEN '비육우'
 		WHEN G.AUC_OBJ_DSC='3' THEN '번식우'
+		WHEN G.AUC_OBJ_DSC='5' THEN '염소'
+		WHEN G.AUC_OBJ_DSC='6' THEN '말'
 		WHEN G.AUC_OBJ_DSC='0' THEN '일괄'
 		ELSE ''
 		END AUC_OBJ_DSC_NAME
@@ -2951,20 +3050,17 @@
 		, NVL(B.FIR_LOWS_SBID_LMT_AM,'0') FIR_LOWS_SBID_LMT_AM /*
 		최초최저낙찰한도금액(원단위)*/
 		, NVL(B.LOWS_SBID_LMT_AM,'0') LOWS_SBID_LMT_AM /* 최저낙찰한도금액 (최저가-원단위)*/
-		, CASE WHEN B.AUC_OBJ_DSC = '1' THEN ROUND(B.FIR_LOWS_SBID_LMT_AM /
-		NVL(J.CALF_AUC_ATDR_UNT_AM, 10000))
-		WHEN B.AUC_OBJ_DSC = '2' THEN ROUND(B.FIR_LOWS_SBID_LMT_AM /
-		NVL(J.NBFCT_AUC_ATDR_UNT_AM, 1))
-		WHEN B.AUC_OBJ_DSC = '3' THEN ROUND(B.FIR_LOWS_SBID_LMT_AM /
-		NVL(J.PPGCOW_AUC_ATDR_UNT_AM, 10000))
-		ELSE ROUND(B.FIR_LOWS_SBID_LMT_AM / 10000)
-		END AS FIR_LOWS_SBID_LMT_UPR
-		, CASE WHEN B.AUC_OBJ_DSC = '1' THEN ROUND(B.LOWS_SBID_LMT_AM /
-		NVL(J.CALF_AUC_ATDR_UNT_AM, 10000))
-		WHEN B.AUC_OBJ_DSC = '2' THEN ROUND(B.LOWS_SBID_LMT_AM /
-		NVL(J.NBFCT_AUC_ATDR_UNT_AM, 1))
-		WHEN B.AUC_OBJ_DSC = '3' THEN ROUND(B.LOWS_SBID_LMT_AM /
-		NVL(J.PPGCOW_AUC_ATDR_UNT_AM, 10000))
+		, CASE WHEN B.AUC_OBJ_DSC = '1' THEN ROUND(B.FIR_LOWS_SBID_LMT_AM / NVL(J.CALF_AUC_ATDR_UNT_AM, 10000))
+			WHEN B.AUC_OBJ_DSC = '2' THEN ROUND(B.FIR_LOWS_SBID_LMT_AM / NVL(J.NBFCT_AUC_ATDR_UNT_AM, 1))
+			WHEN B.AUC_OBJ_DSC = '3' THEN ROUND(B.FIR_LOWS_SBID_LMT_AM / NVL(J.PPGCOW_AUC_ATDR_UNT_AM, 10000))
+			WHEN B.AUC_OBJ_DSC = '5' THEN ROUND(B.FIR_LOWS_SBID_LMT_AM / NVL(J.GT_AUC_ATDR_UNT_AM, 10000))
+			WHEN B.AUC_OBJ_DSC = '6' THEN ROUND(B.FIR_LOWS_SBID_LMT_AM / NVL(J.HS_AUC_ATDR_UNT_AM, 10000))
+		ELSE ROUND(B.FIR_LOWS_SBID_LMT_AM / 10000) END AS FIR_LOWS_SBID_LMT_UPR
+		, CASE WHEN B.AUC_OBJ_DSC = '1' THEN ROUND(B.LOWS_SBID_LMT_AM /NVL(J.CALF_AUC_ATDR_UNT_AM, 10000))
+		WHEN B.AUC_OBJ_DSC = '2' THEN ROUND(B.LOWS_SBID_LMT_AM /NVL(J.NBFCT_AUC_ATDR_UNT_AM, 1))
+		WHEN B.AUC_OBJ_DSC = '3' THEN ROUND(B.LOWS_SBID_LMT_AM /NVL(J.PPGCOW_AUC_ATDR_UNT_AM, 10000))
+		WHEN B.AUC_OBJ_DSC = '5' THEN ROUND(B.LOWS_SBID_LMT_AM /NVL(J.GT_AUC_ATDR_UNT_AM, 10000))
+		WHEN B.AUC_OBJ_DSC = '6' THEN ROUND(B.LOWS_SBID_LMT_AM /NVL(J.HS_AUC_ATDR_UNT_AM, 10000))
 		ELSE ROUND(B.LOWS_SBID_LMT_AM / 10000)
 		END AS LOWS_SBID_LMT_UPR
 		, B.LWPR_CHG_NT /* 최저가변경횟수 */
@@ -3006,6 +3102,8 @@
 		10000))
 		WHEN B.AUC_OBJ_DSC = '2' THEN ROUND(NVL(J.NBFCT_AUC_ATDR_UNT_AM, 1))
 		WHEN B.AUC_OBJ_DSC = '3' THEN ROUND(NVL(J.PPGCOW_AUC_ATDR_UNT_AM, 10000))
+		WHEN B.AUC_OBJ_DSC = '3' THEN ROUND(NVL(J.GT_AUC_ATDR_UNT_AM, 10000))
+		WHEN B.AUC_OBJ_DSC = '3' THEN ROUND(NVL(J.HS_AUC_ATDR_UNT_AM, 10000))
 		ELSE 10000
 		END AS DIVISION_PRICE
 		, B.LVST_MKT_TRPL_AMNNO

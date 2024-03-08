@@ -22,16 +22,23 @@
 			 , CASE WHEN A.AUC_OBJ_DSC = '1' THEN A.BASE_LMT_AM / NVL(C.CALF_AUC_ATDR_UNT_AM, 10000)
 					WHEN A.AUC_OBJ_DSC = '2' THEN A.BASE_LMT_AM / NVL(C.NBFCT_AUC_ATDR_UNT_AM, 1)
 					WHEN A.AUC_OBJ_DSC = '3' THEN A.BASE_LMT_AM / NVL(C.PPGCOW_AUC_ATDR_UNT_AM, 10000)
+					WHEN A.AUC_OBJ_DSC = '5' THEN A.BASE_LMT_AM / NVL(C.GT_AUC_ATDR_UNT_AM, 10000)
+					WHEN A.AUC_OBJ_DSC = '6' THEN A.BASE_LMT_AM / NVL(C.HS_AUC_ATDR_UNT_AM, 10000)
 					ELSE 9999
 				END AS BASE_LMT_AM
 			 , CASE WHEN A.AUC_OBJ_DSC = '1' THEN C.CALF_AUC_ATDR_UNT_AM
 					WHEN A.AUC_OBJ_DSC = '2' THEN C.NBFCT_AUC_ATDR_UNT_AM 
 					WHEN A.AUC_OBJ_DSC = '3' THEN C.PPGCOW_AUC_ATDR_UNT_AM
+					WHEN A.AUC_OBJ_DSC = '5' THEN C.GT_AUC_ATDR_UNT_AM
+					WHEN A.AUC_OBJ_DSC = '6' THEN C.HS_AUC_ATDR_UNT_AM
 					ELSE 10000
 				END AS DIVISION_PRICE
 			 , C.CALF_AUC_ATDR_UNT_AM AS DIVISION_PRICE1
 			 , C.NBFCT_AUC_ATDR_UNT_AM AS DIVISION_PRICE2
-			 , C.PPGCOW_AUC_ATDR_UNT_AM AS DIVISION_PRICE3
+			 , C.PPGCOW_AUC_ATDR_UNT_AM AS DIVISION_PRICE3			 
+
+			 , C.GT_AUC_ATDR_UNT_AM AS DIVISION_PRICE5
+			 , C.HS_AUC_ATDR_UNT_AM AS DIVISION_PRICE6
 		  FROM TB_LA_IS_MH_AUC_QCN A
 		  LEFT OUTER JOIN TB_LA_IS_MM_ENV_EST C
 			ON (
@@ -110,7 +117,14 @@
 		              WHERE SIMP_TPC = 'SRA_INDV_BRDSRA_RG_DSC') E ON C.MCOW_DSC = E.SIMP_C
 		 WHERE A.NA_BZPLC = #{naBzplc}
 		AND A.AUC_DT  = #{aucDt}
-		AND A.AUC_OBJ_DSC = CASE WHEN #{aucObjDsc} = '0' THEN A.AUC_OBJ_DSC ELSE #{aucObjDsc} END
+		<choose>
+			<when test='"0".equals(aucObjDsc)'>
+				AND A.AUC_OBJ_DSC IN ('1','2','3')
+			</when>
+			<otherwise>
+				AND A.AUC_OBJ_DSC = #{aucObjDsc}
+			</otherwise>
+		</choose>
 		<if test="mAuctionResult !=null and !mAuctionResult.equals('')">
 		 AND A.SEL_STS_DSC = #{mAuctionResult}
 		</if>
@@ -203,16 +217,22 @@
 				 , CASE WHEN A.AUC_OBJ_DSC = '1' THEN ROUND(A.FIR_LOWS_SBID_LMT_AM / NVL(J.CALF_AUC_ATDR_UNT_AM, 10000))
 						WHEN A.AUC_OBJ_DSC = '2' THEN ROUND(A.FIR_LOWS_SBID_LMT_AM / NVL(J.NBFCT_AUC_ATDR_UNT_AM, 1))
 						WHEN A.AUC_OBJ_DSC = '3' THEN ROUND(A.FIR_LOWS_SBID_LMT_AM / NVL(J.PPGCOW_AUC_ATDR_UNT_AM, 10000))
+						WHEN A.AUC_OBJ_DSC = '5' THEN ROUND(A.FIR_LOWS_SBID_LMT_AM / NVL(J.GT_AUC_ATDR_UNT_AM, 10000))
+						WHEN A.AUC_OBJ_DSC = '6' THEN ROUND(A.FIR_LOWS_SBID_LMT_AM / NVL(J.HS_AUC_ATDR_UNT_AM, 10000))
 						ELSE ROUND(A.FIR_LOWS_SBID_LMT_AM / 10000)
 					END AS FIR_LOWS_SBID_LMT_AM
 				 , CASE WHEN A.AUC_OBJ_DSC = '1' THEN ROUND(A.LOWS_SBID_LMT_AM / NVL(J.CALF_AUC_ATDR_UNT_AM, 10000))
 						WHEN A.AUC_OBJ_DSC = '2' THEN ROUND(A.LOWS_SBID_LMT_AM / NVL(J.NBFCT_AUC_ATDR_UNT_AM, 1))
 						WHEN A.AUC_OBJ_DSC = '3' THEN ROUND(A.LOWS_SBID_LMT_AM / NVL(J.PPGCOW_AUC_ATDR_UNT_AM, 10000))
+						WHEN A.AUC_OBJ_DSC = '5' THEN ROUND(A.LOWS_SBID_LMT_AM / NVL(J.GT_AUC_ATDR_UNT_AM, 10000))
+						WHEN A.AUC_OBJ_DSC = '6' THEN ROUND(A.LOWS_SBID_LMT_AM / NVL(J.HS_AUC_ATDR_UNT_AM, 10000))
 						ELSE ROUND(A.LOWS_SBID_LMT_AM / 10000)
 					END AS LOWS_SBID_LMT_AM
 				 , CASE WHEN A.AUC_OBJ_DSC = '1' THEN ROUND(A.SRA_SBID_AM / NVL(J.CALF_AUC_ATDR_UNT_AM, 10000))
 						WHEN A.AUC_OBJ_DSC = '2' THEN ROUND(A.SRA_SBID_AM / NVL(J.NBFCT_AUC_ATDR_UNT_AM, 1))
 						WHEN A.AUC_OBJ_DSC = '3' THEN ROUND(A.SRA_SBID_AM / NVL(J.PPGCOW_AUC_ATDR_UNT_AM, 10000))
+						WHEN A.AUC_OBJ_DSC = '5' THEN ROUND(A.SRA_SBID_AM / NVL(J.GT_AUC_ATDR_UNT_AM, 10000))
+						WHEN A.AUC_OBJ_DSC = '6' THEN ROUND(A.SRA_SBID_AM / NVL(J.HS_AUC_ATDR_UNT_AM, 10000))
 						ELSE ROUND(A.SRA_SBID_AM / 10000)
 					END AS SRA_SBID_AM
 				 , (SELECT F.QCN FROM TB_LA_IS_MH_AUC_QCN F WHERE F.NA_BZPLC = A.NA_BZPLC AND F.AUC_DT = A.AUC_DT AND F.AUC_OBJ_DSC = NVL(#{aucObjDsc}, F.AUC_OBJ_DSC) AND ROWNUM = 1) AS QCN
@@ -256,21 +276,35 @@
 							  FROM TB_LA_IS_MH_ATDR_LOG A
 							 WHERE A.NA_BZPLC = #{naBzplc}
 							   AND A.AUC_DT = #{aucDt}
-						<choose>
-						<when test="aucObjDscStn != null and aucObjDscStn != ''">
 							<choose>
-							<when test='"4".equals(aucObjDscStn)'>
-							   AND A.AUC_OBJ_DSC <![CDATA[<>]]> '1'
-							</when> 
-							<otherwise>
-							   AND A.AUC_OBJ_DSC = CASE WHEN #{aucObjDscStn} = '0' THEN A.AUC_OBJ_DSC ELSE #{aucObjDscStn} END
-							</otherwise>
-							</choose>
-						</when>
-						<otherwise>
-							   AND A.AUC_OBJ_DSC = CASE WHEN #{aucObjDsc} = '0' THEN A.AUC_OBJ_DSC ELSE #{aucObjDsc} END
-						</otherwise>
-						</choose>
+								<when test="aucObjDscStn != null and aucObjDscStn != ''">
+									<choose>
+									<when test='"4".equals(aucObjDscStn)'>
+									   AND A.AUC_OBJ_DSC IN ('2','3') 
+									</when> 
+									<otherwise>									
+										<choose>
+											<when test='"0".equals(aucObjDscStn)'>
+												AND A.AUC_OBJ_DSC IN ('1','2','3')
+											</when>
+											<otherwise>
+												AND A.AUC_OBJ_DSC = #{aucObjDscStn}
+											</otherwise>
+										</choose>
+									</otherwise>
+									</choose>
+								</when>
+								<otherwise>						
+									<choose>
+										<when test='"0".equals(aucObjDsc)'>
+											AND A.AUC_OBJ_DSC IN ('1','2','3')
+										</when>
+										<otherwise>
+											AND A.AUC_OBJ_DSC = #{aucObjDsc}
+										</otherwise>
+									</choose>
+								</otherwise>
+							</choose>						
 							   AND A.RG_SQNO NOT IN ('0', '99999999')
 						 ) B
 					 WHERE B.BID_NUM = 1
@@ -291,22 +325,36 @@
 				ON ( A.NA_BZPLC = J.NA_BZPLC )
 			 WHERE A.NA_BZPLC = #{naBzplc}
 			   AND A.AUC_DT  = #{aucDt}
-		<choose>
-		<when test="aucObjDscStn != null and aucObjDscStn != ''">
-			<choose>
-			<when test='"4".equals(aucObjDscStn)'>
-			   AND A.AUC_OBJ_DSC <![CDATA[<>]]> '1'
-			</when> 
-			<otherwise>
-			   AND A.AUC_OBJ_DSC = CASE WHEN #{aucObjDscStn} = '0' THEN A.AUC_OBJ_DSC ELSE #{aucObjDscStn} END
-			</otherwise>
-			</choose>
-		</when>
-		<otherwise>
-			   AND A.AUC_OBJ_DSC = CASE WHEN #{aucObjDsc} = '0' THEN A.AUC_OBJ_DSC ELSE #{aucObjDsc} END
-		</otherwise>
-		</choose>
 			   AND A.DEL_YN = '0'
+			<choose>
+				<when test="aucObjDscStn != null and aucObjDscStn != ''">
+					<choose>
+					<when test='"4".equals(aucObjDscStn)'>
+					   AND A.AUC_OBJ_DSC IN ('2','3')
+					</when> 
+					<otherwise>						
+						<choose>
+							<when test='"0".equals(aucObjDscStn)'>
+								AND A.AUC_OBJ_DSC IN ('1','2','3')
+							</when>
+							<otherwise>
+								AND A.AUC_OBJ_DSC = #{aucObjDscStn}
+							</otherwise>
+						</choose>
+					</otherwise>
+					</choose>
+				</when>
+				<otherwise>						
+					<choose>
+						<when test='"0".equals(aucObjDsc)'>
+							AND A.AUC_OBJ_DSC IN ('1','2','3')
+						</when>
+						<otherwise>
+							AND A.AUC_OBJ_DSC = #{aucObjDsc}
+						</otherwise>
+					</choose>
+				</otherwise>
+			</choose>
 			<if test="mAuctionResult !=null and !mAuctionResult.equals('')">
 			   AND A.SEL_STS_DSC = #{mAuctionResult}
 			</if>
@@ -332,6 +380,8 @@
 										SELECT CASE WHEN #{item.mEntryType} = '1' THEN TO_NUMBER(#{item.mLowPrice}) * B.CALF_AUC_ATDR_UNT_AM
 													WHEN #{item.mEntryType} = '2' THEN TO_NUMBER(#{item.mLowPrice}) * B.NBFCT_AUC_ATDR_UNT_AM
 													WHEN #{item.mEntryType} = '3' THEN TO_NUMBER(#{item.mLowPrice}) * B.PPGCOW_AUC_ATDR_UNT_AM
+													WHEN #{item.mEntryType} = '5' THEN TO_NUMBER(#{item.mLowPrice}) * B.GT_AUC_ATDR_UNT_AM
+													WHEN #{item.mEntryType} = '6' THEN TO_NUMBER(#{item.mLowPrice}) * B.HS_AUC_ATDR_UNT_AM
 													ELSE TO_NUMBER(#{item.mLowPrice}) * 10000
 												END
 										  FROM TB_LA_IS_MM_ENV_EST B
@@ -480,8 +530,15 @@
 					 , A.*
 				  FROM TB_LA_IS_MH_ATDR_LOG A
 				 WHERE A.NA_BZPLC = #{naBzplc}
-				   AND A.AUC_DT = #{aucDt}
-				   AND A.AUC_OBJ_DSC = CASE WHEN #{aucObjDsc} = '0' THEN A.AUC_OBJ_DSC ELSE #{aucObjDsc} END
+				   AND A.AUC_DT = #{aucDt}		
+					<choose>
+						<when test='"0".equals(aucObjDsc)'>
+							AND A.AUC_OBJ_DSC IN ('1','2','3')
+						</when>
+						<otherwise>
+							AND A.AUC_OBJ_DSC = #{aucObjDsc}
+						</otherwise>
+					</choose>
 				   AND A.OSLP_NO = #{oslpNo}
 				   AND A.RG_SQNO NOT IN ('0', '99999999')
 			 ) B
@@ -571,17 +628,31 @@
 	<when test="aucObjDscStn != null and aucObjDscStn != ''">
 		<choose>
 		<when test='"4".equals(aucObjDscStn)'>
-		   AND AUC_OBJ_DSC <![CDATA[<>]]> '1'
+		   AND AUC_OBJ_DSC IN ('2','3')
 		</when> 
-		<otherwise>
-		   AND AUC_OBJ_DSC = CASE WHEN #{aucObjDscStn} = '0' THEN AUC_OBJ_DSC ELSE #{aucObjDscStn} END
+		<otherwise>							
+			<choose>
+				<when test='"0".equals(aucObjDscStn)'>
+					AND AUC_OBJ_DSC IN ('1','2','3')
+				</when>
+				<otherwise>
+					AND AUC_OBJ_DSC = #{aucObjDscStn}
+				</otherwise>
+			</choose>
 		</otherwise>
 		</choose>
 	</when>
-	<otherwise>
-		   AND AUC_OBJ_DSC = CASE WHEN #{aucObjDsc} = '0' THEN AUC_OBJ_DSC ELSE #{aucObjDsc} END
+	<otherwise>		   					
+		<choose>
+			<when test='"0".equals(aucObjDsc)'>
+				AND AUC_OBJ_DSC IN ('1','2','3')
+			</when>
+			<otherwise>
+				AND AUC_OBJ_DSC = #{aucObjDsc}
+			</otherwise>
+		</choose>
 	</otherwise>
-	</choose>
+	</choose>						
 		   AND AUC_DT = #{aucDt}
 		<if test='"start".equals(status)'>
 		<![CDATA[
@@ -609,15 +680,29 @@
 	<when test="aucObjDscStn != null and aucObjDscStn != ''">
 		<choose>
 		<when test='"4".equals(aucObjDscStn)'>
-		   AND AUC_OBJ_DSC <![CDATA[<>]]> '1'
+		   AND AUC_OBJ_DSC IN ('2','3')
 		</when> 
-		<otherwise>
-		   AND AUC_OBJ_DSC = CASE WHEN #{aucObjDscStn} = '0' THEN AUC_OBJ_DSC ELSE #{aucObjDscStn} END
+		<otherwise>								
+			<choose>
+				<when test='"0".equals(aucObjDscStn)'>
+					AND AUC_OBJ_DSC IN ('1','2','3')
+				</when>
+				<otherwise>
+					AND AUC_OBJ_DSC = #{aucObjDscStn}
+				</otherwise>
+			</choose>
 		</otherwise>
 		</choose>
 	</when>
-	<otherwise>
-		   AND AUC_OBJ_DSC = CASE WHEN #{aucObjDsc} = '0' THEN AUC_OBJ_DSC ELSE #{aucObjDsc} END
+	<otherwise>		   							
+		<choose>
+			<when test='"0".equals(aucObjDsc)'>
+				AND AUC_OBJ_DSC IN ('1','2','3')
+			</when>
+			<otherwise>
+				AND AUC_OBJ_DSC = #{aucObjDsc}
+			</otherwise>
+		</choose>
 	</otherwise>
 	</choose>
 		AND AUC_DT = #{aucDt}
@@ -772,15 +857,29 @@
 		<when test="aucObjDscStn != null and aucObjDscStn != ''">
 			<choose>
 			<when test='"4".equals(aucObjDscStn)'>
-			   AND A.AUC_OBJ_DSC <![CDATA[<>]]> '1'
+			   AND A.AUC_OBJ_DSC IN ('2','3')
 			</when> 
-			<otherwise>
-			   AND A.AUC_OBJ_DSC = CASE WHEN #{aucObjDscStn} = '0' THEN A.AUC_OBJ_DSC ELSE #{aucObjDscStn} END
+			<otherwise>		
+				<choose>
+					<when test='"0".equals(aucObjDscStn)'>
+						AND AUC_OBJ_DSC IN ('1','2','3')
+					</when>
+					<otherwise>
+						AND AUC_OBJ_DSC = #{aucObjDscStn}
+					</otherwise>
+				</choose>
 			</otherwise>
 			</choose>
 		</when>
-		<otherwise>
-			   AND A.AUC_OBJ_DSC = CASE WHEN #{aucObjDsc} = '0' THEN A.AUC_OBJ_DSC ELSE #{aucObjDsc} END
+		<otherwise>					
+			<choose>
+				<when test='"0".equals(aucObjDsc)'>
+					AND AUC_OBJ_DSC IN ('1','2','3')
+				</when>
+				<otherwise>
+					AND AUC_OBJ_DSC = #{aucObjDsc}
+				</otherwise>
+			</choose>
 		</otherwise>
 		</choose>
 		AND NVL(A.DDL_QCN, '0') = #{maxDdlQcn} + 1
@@ -791,7 +890,7 @@
 			<otherwise>
 				AND A.SEL_STS_DSC <![CDATA[<>]]> #{selStsDsc}
 			</otherwise>
-		</choose>		
+		</choose>						
 		AND A.AUC_PRG_SQ <![CDATA[>=]]> #{stAucNo}
 		AND A.AUC_PRG_SQ <![CDATA[<=]]> #{edAucNo}
 	</update>
@@ -835,8 +934,15 @@
 		  LEFT OUTER JOIN TB_LA_IS_MM_FHS C
 		    ON ( A.NA_BZPLC = C.NA_BZPLC AND A.FHS_ID_NO = C.FHS_ID_NO AND A.FARM_AMNNO = C.FARM_AMNNO )
 		 WHERE A.NA_BZPLC = #{naBzplc}
-		   AND A.AUC_DT = #{aucDt}
-		   AND A.AUC_OBJ_DSC = CASE WHEN TO_CHAR(#{aucObjDsc}) = '0' THEN A.AUC_OBJ_DSC ELSE TO_CHAR(#{aucObjDsc}) END
+		   AND A.AUC_DT = #{aucDt}		   			
+		<choose>
+			<when test='"0".equals(aucObjDsc)'>
+				AND A.AUC_OBJ_DSC IN ('1','2','3')
+			</when>
+			<otherwise>
+				AND A.AUC_OBJ_DSC = #{aucObjDsc}
+			</otherwise>
+		</choose>
 		   AND A.OSLP_NO = #{oslpNo}
 		   AND A.LED_SQNO = #{ledSqno}
 	</select>
@@ -994,15 +1100,29 @@
 					<when test="aucObjDscStn != null and aucObjDscStn != ''">
 						<choose>
 						<when test='"4".equals(aucObjDscStn)'>
-						   AND A.AUC_OBJ_DSC <![CDATA[<>]]> '1'
+						   AND A.AUC_OBJ_DSC IN ('2','3')
 						</when> 
-						<otherwise>
-						   AND A.AUC_OBJ_DSC = CASE WHEN #{aucObjDscStn} = '0' THEN A.AUC_OBJ_DSC ELSE #{aucObjDscStn} END
+						<otherwise>								   			
+							<choose>
+								<when test='"0".equals(aucObjDscStn)'>
+									AND AUC_OBJ_DSC IN ('1','2','3')
+								</when>
+								<otherwise>
+									AND AUC_OBJ_DSC = #{aucObjDscStn}
+								</otherwise>
+							</choose>
 						</otherwise>
 						</choose>
 					</when>
-					<otherwise>
-						   AND A.AUC_OBJ_DSC = CASE WHEN #{aucObjDsc} = '0' THEN A.AUC_OBJ_DSC ELSE #{aucObjDsc} END
+					<otherwise>							   			
+						<choose>
+							<when test='"0".equals(aucObjDsc)'>
+								AND AUC_OBJ_DSC IN ('1','2','3')
+							</when>
+							<otherwise>
+								AND AUC_OBJ_DSC = #{aucObjDsc}
+							</otherwise>
+						</choose>
 					</otherwise>
 					</choose>
 						   AND RG_SQNO NOT IN ('0', '99999999')
@@ -1033,15 +1153,29 @@
 	<when test="aucObjDscStn != null and aucObjDscStn != ''">
 		<choose>
 		<when test='"4".equals(aucObjDscStn)'>
-		   AND A.AUC_OBJ_DSC <![CDATA[<>]]> '1'
+		   AND A.AUC_OBJ_DSC IN ('2','3')
 		</when> 
-		<otherwise>
-		   AND A.AUC_OBJ_DSC = CASE WHEN #{aucObjDscStn} = '0' THEN A.AUC_OBJ_DSC ELSE #{aucObjDscStn} END
+		<otherwise>					   			
+			<choose>
+				<when test='"0".equals(aucObjDscStn)'>
+					AND AUC_OBJ_DSC IN ('1','2','3')
+				</when>
+				<otherwise>
+					AND AUC_OBJ_DSC = #{aucObjDscStn}
+				</otherwise>
+			</choose>
 		</otherwise>
 		</choose>
 	</when>
-	<otherwise>
-		   AND A.AUC_OBJ_DSC = CASE WHEN #{aucObjDsc} = '0' THEN A.AUC_OBJ_DSC ELSE #{aucObjDsc} END
+	<otherwise>					   			
+		<choose>
+			<when test='"0".equals(aucObjDsc)'>
+				AND AUC_OBJ_DSC IN ('1','2','3')
+			</when>
+			<otherwise>
+				AND AUC_OBJ_DSC = #{aucObjDsc}
+			</otherwise>
+		</choose>
 	</otherwise>
 	</choose>
 		   AND A.SEL_STS_DSC <![CDATA[<>]]> '22'
@@ -1087,8 +1221,15 @@
 				AND A.FARM_AMNNO = B.FARM_AMNNO
 			 )
 		 WHERE A.NA_BZPLC = #{naBzplc}
-		   AND A.AUC_DT = #{aucDt}
-		   AND A.AUC_OBJ_DSC = CASE WHEN #{aucObjDsc} = '0' THEN A.AUC_OBJ_DSC ELSE #{aucObjDsc} END
+		   AND A.AUC_DT = #{aucDt}		   				
+		<choose>
+			<when test='"0".equals(aucObjDsc)'>
+				AND A.AUC_OBJ_DSC IN ('1','2','3')
+			</when>
+			<otherwise>
+				AND A.AUC_OBJ_DSC = #{aucObjDsc}
+			</otherwise>
+		</choose>
 		   AND A.SEL_STS_DSC <![CDATA[<>]]> '22'
 		   AND A.AUC_PRG_SQ BETWEEN #{stAucNo} AND #{edAucNo}
 		   AND A.LOWS_SBID_LMT_AM > 0
@@ -1135,8 +1276,15 @@
 		SELECT NVL(A.SBID_UPR,0) SBID_UPR
 		FROM TB_LA_IS_MH_SOG_ZIM A
 		INNER JOIN TB_LA_IS_MH_AUC_ENTR B ON A.NA_BZPLC =B.NA_BZPLC 
-								AND A.AUC_DT =B.AUC_DT 
-								AND A.AUC_OBJ_DSC =DECODE(B.AUC_OBJ_DSC,'0',A.AUC_OBJ_DSC,B.AUC_OBJ_DSC) 
+								AND A.AUC_DT =B.AUC_DT 		
+								<choose>
+									<when test='"0".equals(aucObjDsc)'>
+										AND A.AUC_OBJ_DSC IN ('1','2','3')
+									</when>
+									<otherwise>
+										AND A.AUC_OBJ_DSC = #{aucObjDsc}
+									</otherwise>
+								</choose> 
 								AND A.TRMN_AMNNO =B.TRMN_AMNNO 
 		WHERE A.NA_BZPLC = #{naBzplc}
 		AND A.AUC_OBJ_DSC = #{aucObjDsc}
@@ -1165,6 +1313,8 @@
 			 , A.EBBO_PORT_NO4
 			 , A.CALF_AUC_ATDR_UNT_AM
 			 , A.NBFCT_AUC_ATDR_UNT_AM
+			 , A.PPGCOW_AUC_ATDR_UNT_AM
+			 , A.PPGCOW_AUC_ATDR_UNT_AM
 			 , A.PPGCOW_AUC_ATDR_UNT_AM
 			 , A.CNNT_OBJ_SYS_DSC
 			 , A.URL_NM
@@ -1217,8 +1367,15 @@
 		   	<when test="aucObjDscQcn != null and !''.equals(aucObjDscQcn)">
 		   		AND B.AUC_OBJ_DSC = #{aucObjDscQcn}
 		   	</when>
-		   	<otherwise>
-		   		AND DECODE(B.AUC_OBJ_DSC, '0', #{aucObjDsc}, B.AUC_OBJ_DSC) = #{aucObjDsc}
+		   	<otherwise>		
+				<choose>
+					<when test='"0".equals(aucObjDsc)'>
+						AND B.AUC_OBJ_DSC IN ('1','2','3')
+					</when>
+					<otherwise>
+						AND B.AUC_OBJ_DSC = #{aucObjDsc}
+					</otherwise>
+				</choose>
 		   	</otherwise>
 		   </choose>
 	</select>
@@ -1297,16 +1454,22 @@
 				 , CASE WHEN A.AUC_OBJ_DSC = '1' THEN ROUND(A.FIR_LOWS_SBID_LMT_AM / NVL(J.CALF_AUC_ATDR_UNT_AM, 10000))
 						WHEN A.AUC_OBJ_DSC = '2' THEN ROUND(A.FIR_LOWS_SBID_LMT_AM / NVL(J.NBFCT_AUC_ATDR_UNT_AM, 1))
 						WHEN A.AUC_OBJ_DSC = '3' THEN ROUND(A.FIR_LOWS_SBID_LMT_AM / NVL(J.PPGCOW_AUC_ATDR_UNT_AM, 10000))
+						WHEN A.AUC_OBJ_DSC = '5' THEN ROUND(A.FIR_LOWS_SBID_LMT_AM / NVL(J.GT_AUC_ATDR_UNT_AM, 10000))
+						WHEN A.AUC_OBJ_DSC = '6' THEN ROUND(A.FIR_LOWS_SBID_LMT_AM / NVL(J.HS_AUC_ATDR_UNT_AM, 10000))
 						ELSE ROUND(A.FIR_LOWS_SBID_LMT_AM / 10000)
 					END AS FIR_LOWS_SBID_LMT_AM
 				 , CASE WHEN A.AUC_OBJ_DSC = '1' THEN ROUND(A.LOWS_SBID_LMT_AM / NVL(J.CALF_AUC_ATDR_UNT_AM, 10000))
 						WHEN A.AUC_OBJ_DSC = '2' THEN ROUND(A.LOWS_SBID_LMT_AM / NVL(J.NBFCT_AUC_ATDR_UNT_AM, 1))
 						WHEN A.AUC_OBJ_DSC = '3' THEN ROUND(A.LOWS_SBID_LMT_AM / NVL(J.PPGCOW_AUC_ATDR_UNT_AM, 10000))
+						WHEN A.AUC_OBJ_DSC = '5' THEN ROUND(A.LOWS_SBID_LMT_AM / NVL(J.GT_AUC_ATDR_UNT_AM, 10000))
+						WHEN A.AUC_OBJ_DSC = '6' THEN ROUND(A.LOWS_SBID_LMT_AM / NVL(J.HS_AUC_ATDR_UNT_AM, 10000))
 						ELSE ROUND(A.LOWS_SBID_LMT_AM / 10000)
 					END AS LOWS_SBID_LMT_AM
 				 , CASE WHEN A.AUC_OBJ_DSC = '1' THEN ROUND(A.SRA_SBID_AM / NVL(J.CALF_AUC_ATDR_UNT_AM, 10000))
 						WHEN A.AUC_OBJ_DSC = '2' THEN ROUND(A.SRA_SBID_AM / NVL(J.NBFCT_AUC_ATDR_UNT_AM, 1))
 						WHEN A.AUC_OBJ_DSC = '3' THEN ROUND(A.SRA_SBID_AM / NVL(J.PPGCOW_AUC_ATDR_UNT_AM, 10000))
+						WHEN A.AUC_OBJ_DSC = '5' THEN ROUND(A.SRA_SBID_AM / NVL(J.GT_AUC_ATDR_UNT_AM, 10000))
+						WHEN A.AUC_OBJ_DSC = '6' THEN ROUND(A.SRA_SBID_AM / NVL(J.HS_AUC_ATDR_UNT_AM, 10000))
 						ELSE ROUND(A.SRA_SBID_AM / 10000)
 					END AS SRA_SBID_AM
 				 , CASE WHEN A.SEL_STS_DSC = '22' THEN (SELECT Z.SRA_MWMNNM FROM TB_LA_IS_MM_MWMN Z WHERE Z.NA_BZPLC = A.NA_BZPLC AND Z.TRMN_AMNNO = A.TRMN_AMNNO)
@@ -1353,15 +1516,29 @@
 						<when test="aucObjDscStn != null and aucObjDscStn != ''">
 							<choose>
 							<when test='"4".equals(aucObjDscStn)'>
-							   AND A.AUC_OBJ_DSC <![CDATA[<>]]> '1'
+							   AND A.AUC_OBJ_DSC IN ('2','3')
 							</when> 
-							<otherwise>
-							   AND A.AUC_OBJ_DSC = CASE WHEN #{aucObjDscStn} = '0' THEN A.AUC_OBJ_DSC ELSE #{aucObjDscStn} END
+							<otherwise>									
+								<choose>
+									<when test='"0".equals(aucObjDscStn)'>
+										AND A.AUC_OBJ_DSC IN ('1','2','3')
+									</when>
+									<otherwise>
+										AND A.AUC_OBJ_DSC = #{aucObjDscStn}
+									</otherwise>
+								</choose>
 							</otherwise>
 							</choose>
 						</when>
-						<otherwise>
-							   AND A.AUC_OBJ_DSC = CASE WHEN #{aucObjDsc} = '0' THEN A.AUC_OBJ_DSC ELSE #{aucObjDsc} END
+						<otherwise>		
+							<choose>
+								<when test='"0".equals(aucObjDsc)'>
+									AND A.AUC_OBJ_DSC IN ('1','2','3')
+								</when>
+								<otherwise>
+									AND A.AUC_OBJ_DSC = #{aucObjDsc}
+								</otherwise>
+							</choose>
 						</otherwise>
 						</choose>
 							   AND A.RG_SQNO NOT IN ('0', '99999999')
@@ -1400,15 +1577,29 @@
 		<when test="aucObjDscStn != null and aucObjDscStn != ''">
 			<choose>
 			<when test='"4".equals(aucObjDscStn)'>
-			   AND A.AUC_OBJ_DSC <![CDATA[<>]]> '1'
+			   AND A.AUC_OBJ_DSC IN ('2','3')
 			</when> 
-			<otherwise>
-			   AND A.AUC_OBJ_DSC = CASE WHEN #{aucObjDscStn} = '0' THEN A.AUC_OBJ_DSC ELSE #{aucObjDscStn} END
+			<otherwise>		
+				<choose>
+					<when test='"0".equals(aucObjDscStn)'>
+						AND A.AUC_OBJ_DSC IN ('1','2','3')
+					</when>
+					<otherwise>
+						AND A.AUC_OBJ_DSC = #{aucObjDscStn}
+					</otherwise>
+				</choose>			   
 			</otherwise>
 			</choose>
 		</when>
-		<otherwise>
-			   AND A.AUC_OBJ_DSC = CASE WHEN #{aucObjDsc} = '0' THEN A.AUC_OBJ_DSC ELSE #{aucObjDsc} END
+		<otherwise>			   		
+			<choose>
+				<when test='"0".equals(aucObjDsc)'>
+					AND A.AUC_OBJ_DSC IN ('1','2','3')
+				</when>
+				<otherwise>
+					AND A.AUC_OBJ_DSC = #{aucObjDsc}
+				</otherwise>
+			</choose>
 		</otherwise>
 		</choose>
 			<if test="stAucNo !=null and !stAucNo.equals('') and edAucNo !=null and !edAucNo.equals('')">
@@ -1494,6 +1685,5 @@
 		WHERE A.NA_BZPLC = #{naBzplc}
 		AND A.AUC_DT = #{aucDt}
 		AND A.AUC_OBJ_DSC = #{aucObjDsc}
-		AND A.AUC_PRG_SQ = #{aucPrgSqno}
 	</select>
 </mapper>
