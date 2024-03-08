@@ -848,8 +848,8 @@ public class AuctionDAO {
 		return mainDao.selectOne("auction.selectIndvBloodInfo", params);
 	}
 
-	public Map<String, Object> selectCowEpdInfo(Map<String, Object> params) throws SQLException {
-		return mainDao.selectOne("ApiMapper.selectCowEpdInfo", params);
+	public List<Map<String, Object>> selectCowEpdList(Map<String, Object> params) throws SQLException {
+		return mainDao.selectList("ApiMapper.selectCowEpdInfo", params);
 	}
 	
 }

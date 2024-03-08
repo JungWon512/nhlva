@@ -355,7 +355,16 @@ public class ApiController {
 					  .append(this.getStringValue(vo.get("LSCHG_DTM")).replace("|", ",")).append('|')
 					  .append(this.getStringValue(vo.get("SRA_MWMNNM")).replace("|", ",")).append('|')	// 낙찰자 이름
 					  .append(this.getStringValue(vo.get("MTCN")).replace("|", ",")).append('|')	// 월령(이력제)
-					  .append(this.getStringValue(vo.get("RG_DSC_NM")).replace("|", ","));	// 등록 구분
+					  .append(this.getStringValue(vo.get("RG_DSC_NM")).replace("|", ","))	// 등록 구분
+					  .append('|').append(this.getStringValue(vo.get("EPD_VAL_1")).replace("|", ","))
+					  .append('|').append(this.getStringValue(vo.get("EPD_GRD_1")).replace("|", ","))
+					  .append('|').append(this.getStringValue(vo.get("EPD_VAL_2")).replace("|", ","))
+					  .append('|').append(this.getStringValue(vo.get("EPD_GRD_2")).replace("|", ","))
+					  .append('|').append(this.getStringValue(vo.get("EPD_VAL_3")).replace("|", ","))
+					  .append('|').append(this.getStringValue(vo.get("EPD_GRD_3")).replace("|", ","))
+					  .append('|').append(this.getStringValue(vo.get("EPD_VAL_4")).replace("|", ","))
+					  .append('|').append(this.getStringValue(vo.get("EPD_GRD_4")).replace("|", ","))
+					  ;
 
 					entryList.add(sb.toString());
 				}
@@ -2202,7 +2211,7 @@ public class ApiController {
 		}
 		return result;
 	}
-	
+
 	@ResponseBody
 	@GetMapping(value = "/api/{version}/epd/info/{naBzplc}/{aucDt}/{aucObjDsc}/{aucPrgSqno}")
 	Map<String, Object> cowEpdInfo(@PathVariable(name = "version") final String version
@@ -2224,11 +2233,43 @@ public class ApiController {
 			params.put("aucDt", aucDt);
 			params.put("aucObjDsc", aucObjDsc);
 			params.put("aucPrgSqno", aucPrgSqno);
-			final Map<String, Object> info = auctionService.selectCowEpdInfo(params);
+			//final Map<String, Object> info = ;
 			
 			result.put("success", true);
 			result.put("message", "조회에 성공했습니다.");
-			result.put("data", info);
+			result.put("data", auctionService.selectCowEpdList(params));
+		}catch (SQLException | RuntimeException re) {
+			log.error("ApiController.auctionEntry : {} ",re);
+			result.put("success", false);
+			result.put("entry", entryList);
+			result.put("message", "작업중 오류가 발생했습니다. 관리자에게 문의하세요.");
+		}
+		return result;
+	}
+	
+	@ResponseBody
+	@GetMapping(value = "/api/{version}/epd/info/{naBzplc}/{aucDt}/{aucObjDsc}")
+	Map<String, Object> cowEpdList(@PathVariable(name = "version") final String version
+									, @PathVariable(name = "naBzplc") final String naBzplc
+									, @PathVariable(name = "aucDt") final String aucDt
+									, @PathVariable(name = "aucObjDsc") final String aucObjDsc) {
+		final Map<String, Object> result = new HashMap<String, Object>();
+		final List<String> entryList = new ArrayList<String>();
+		try {
+			
+			if ("".equals(naBzplc) || "".equals(aucDt) || "".equals(aucObjDsc) || "".equals(aucObjDsc)) {
+				result.put("success", false);
+				result.put("message", "필수인자값을 확인하세요.");
+				return result;
+			}
+			Map<String,Object> params = new HashMap<>();
+			params.put("naBzplc", naBzplc);
+			params.put("aucDt", aucDt);
+			params.put("aucObjDsc", aucObjDsc);
+			
+			result.put("success", true);
+			result.put("message", "조회에 성공했습니다.");
+			result.put("data", auctionService.selectCowEpdList(params));
 		}catch (SQLException | RuntimeException re) {
 			log.error("ApiController.auctionEntry : {} ",re);
 			result.put("success", false);
