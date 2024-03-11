@@ -20,7 +20,7 @@ public class TaskBatch {
 	 * Agora Project Status : Disabled
 	 * after Channel List Kicking
 	 */
-	@Scheduled(cron = "0 0 14 * * *")
+	
 	public void closeAgora() {
 		DateTimeFormatter format = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
 		LocalDateTime date = LocalDateTime.now();
@@ -34,7 +34,7 @@ public class TaskBatch {
 		log.info("e: closeAgora ::"+date.format(format));
 	}
 
-	@Scheduled(cron = "0 0 4 * * *")
+	
 	public void openAgora() {
 		DateTimeFormatter format = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
 		LocalDateTime date = LocalDateTime.now();
