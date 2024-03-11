@@ -905,9 +905,13 @@ public class AuctionServiceImpl implements AuctionService {
 				auctionDAO.deleteFeeInfo(info);
 				
 				//수수료 계산로직
-				params.put("feeInfoList", this.calcFeeInfo(params,info,bizAuctionInfo));
-				
-				auctionDAO.insertFeeInfo(params);
+				List<Map<String, Object>> feeList = this.calcFeeInfo(info,info,bizAuctionInfo);
+				if (feeList.size() > 0) {
+					info.put("feeInfoList", feeList);
+					auctionDAO.insertFeeInfo(info);
+				}
+				// params.put("feeInfoList", this.calcFeeInfo(params,info,bizAuctionInfo));
+				// auctionDAO.insertFeeInfo(params);
 				
 				this.sendAlamTalkProc(bizAuctionInfo, info);
 			}

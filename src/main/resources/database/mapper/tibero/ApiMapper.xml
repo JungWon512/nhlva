@@ -1105,10 +1105,10 @@
 						<otherwise>								   			
 							<choose>
 								<when test='"0".equals(aucObjDscStn)'>
-									AND AUC_OBJ_DSC IN ('1','2','3')
+									AND A.AUC_OBJ_DSC IN ('1','2','3')
 								</when>
 								<otherwise>
-									AND AUC_OBJ_DSC = #{aucObjDscStn}
+									AND A.AUC_OBJ_DSC = #{aucObjDscStn}
 								</otherwise>
 							</choose>
 						</otherwise>
@@ -1117,10 +1117,10 @@
 					<otherwise>							   			
 						<choose>
 							<when test='"0".equals(aucObjDsc)'>
-								AND AUC_OBJ_DSC IN ('1','2','3')
+								AND A.AUC_OBJ_DSC IN ('1','2','3')
 							</when>
 							<otherwise>
-								AND AUC_OBJ_DSC = #{aucObjDsc}
+								AND A.AUC_OBJ_DSC = #{aucObjDsc}
 							</otherwise>
 						</choose>
 					</otherwise>
@@ -1158,10 +1158,10 @@
 		<otherwise>					   			
 			<choose>
 				<when test='"0".equals(aucObjDscStn)'>
-					AND AUC_OBJ_DSC IN ('1','2','3')
+					AND A.AUC_OBJ_DSC IN ('1','2','3')
 				</when>
 				<otherwise>
-					AND AUC_OBJ_DSC = #{aucObjDscStn}
+					AND A.AUC_OBJ_DSC = #{aucObjDscStn}
 				</otherwise>
 			</choose>
 		</otherwise>
@@ -1170,10 +1170,10 @@
 	<otherwise>					   			
 		<choose>
 			<when test='"0".equals(aucObjDsc)'>
-				AND AUC_OBJ_DSC IN ('1','2','3')
+				AND A.AUC_OBJ_DSC IN ('1','2','3')
 			</when>
 			<otherwise>
-				AND AUC_OBJ_DSC = #{aucObjDsc}
+				AND A.AUC_OBJ_DSC = #{aucObjDsc}
 			</otherwise>
 		</choose>
 	</otherwise>

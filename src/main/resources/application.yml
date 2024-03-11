@@ -84,7 +84,7 @@ spring:
     livereload:
       enabled: true
     restart:
-      enabled: false
+      enabled: true
 spring.profiles: local
 spring.profiles.include:
   - database-local
