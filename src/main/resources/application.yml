@@ -25,9 +25,9 @@ spring:
   application:
     name: Auction
   profiles:
-#    active: local
-    active: develop
-#    active: production
+    active: local
+    # active: develop
+    # active: production
     include:
       - database
       - properties

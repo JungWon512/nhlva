@@ -3,8 +3,8 @@ spring.profiles: database-local
 
 spring:
   datasource: 
-   driver-class-name: com.tmax.tibero.jdbc.TbDriver
-   url: "jdbc:tibero:thin:@115.41.222.25:8629:tibero"
+   driverClassName: com.tmax.tibero.jdbc.TbDriver
+   jdbcUrl: "jdbc:tibero:thin:@115.41.222.25:8629:tibero"
 #   driver-class-name: net.sf.log4jdbc.sql.jdbcapi.DriverSpy
 #   url: "jdbc:log4jdbc:tibero:thin:@115.41.222.25:8629:tibero"
    username: lalm
