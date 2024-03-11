@@ -115,10 +115,12 @@
             <artifactId>commons-collections</artifactId>
             <version>3.2.1</version>
         </dependency>
-     	<dependency>
-			<groupId>com.tmax.tibero</groupId>
-			<artifactId>tibero-jdbc</artifactId>
-			<version>6.0</version>
+    	<dependency>
+			<groupId>tibero6</groupId>
+			<artifactId>tibero6-custom</artifactId>
+			<version>1.0.0</version>
+			<scope>system</scope>
+			<systemPath>${project.basedir}/src/main/resources/static/libs/tibero6-jdbc.jar</systemPath>			
 		</dependency>
         <dependency>
 		    <groupId>com.google.code.gson</groupId>
