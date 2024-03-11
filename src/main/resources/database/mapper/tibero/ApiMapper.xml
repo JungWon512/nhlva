@@ -1473,12 +1473,12 @@
 	
 	<select id="selectCowEpdInfo" parameterType="map" resultType="map">
 		SELECT
-<!-- 			T.NA_BZPLC   -->
-<!-- 			, T.AUC_DT  -->
 			T.AUC_PRG_SQ 
-<!-- 			, T.AUC_OBJ_DSC -->
 			, T.SRA_INDV_AMNNO
-			, EPD_GRD_1||'|' ||EPD_VAL_1||','||EPD_GRD_2||'|' ||EPD_VAL_2||','||EPD_GRD_3||'|' ||EPD_VAL_3||','||EPD_GRD_4||'|' ||EPD_VAL_4 AS EPD
+			, EPD_GRD_1||'|' ||EPD_VAL_1 AS EPD_1
+			, EPD_GRD_2||'|' ||EPD_VAL_2 AS EPD_2
+			, EPD_GRD_3||'|' ||EPD_VAL_3 AS EPD_3
+			, EPD_GRD_4||'|' ||EPD_VAL_4 AS EPD_4
 		FROM(
 			SELECT A.NA_BZPLC  
 				, A.AUC_DT 
