@@ -6,12 +6,14 @@ import java.time.format.DateTimeFormatter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Profile;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
 import com.ishift.auction.service.batch.BatchService;
 
 @Component
+@Profile("production")
 public class TaskBatch {
 	private static Logger log = LoggerFactory.getLogger(TaskBatch.class);
 	@Autowired
