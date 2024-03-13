@@ -356,14 +356,14 @@ public class ApiController {
 					  .append(this.getStringValue(vo.get("SRA_MWMNNM")).replace("|", ",")).append('|')	// 낙찰자 이름
 					  .append(this.getStringValue(vo.get("MTCN")).replace("|", ",")).append('|')	// 월령(이력제)
 					  .append(this.getStringValue(vo.get("RG_DSC_NM")).replace("|", ","))	// 등록 구분
-					  .append('|').append(this.getStringValue(vo.get("EPD_VAL_1")).replace("|", ","))
-					  .append('|').append(this.getStringValue(vo.get("EPD_GRD_1")).replace("|", ","))
-					  .append('|').append(this.getStringValue(vo.get("EPD_VAL_2")).replace("|", ","))
-					  .append('|').append(this.getStringValue(vo.get("EPD_GRD_2")).replace("|", ","))
-					  .append('|').append(this.getStringValue(vo.get("EPD_VAL_3")).replace("|", ","))
-					  .append('|').append(this.getStringValue(vo.get("EPD_GRD_3")).replace("|", ","))
-					  .append('|').append(this.getStringValue(vo.get("EPD_VAL_4")).replace("|", ","))
-					  .append('|').append(this.getStringValue(vo.get("EPD_GRD_4")).replace("|", ","))
+					  //.append('|').append(this.getStringValue(vo.get("EPD_VAL_1")).replace("|", ","))
+					  //.append('|').append(this.getStringValue(vo.get("EPD_GRD_1")).replace("|", ","))
+					  //.append('|').append(this.getStringValue(vo.get("EPD_VAL_2")).replace("|", ","))
+					  //.append('|').append(this.getStringValue(vo.get("EPD_GRD_2")).replace("|", ","))
+					  //.append('|').append(this.getStringValue(vo.get("EPD_VAL_3")).replace("|", ","))
+					  //.append('|').append(this.getStringValue(vo.get("EPD_GRD_3")).replace("|", ","))
+					  //.append('|').append(this.getStringValue(vo.get("EPD_VAL_4")).replace("|", ","))
+					  //.append('|').append(this.getStringValue(vo.get("EPD_GRD_4")).replace("|", ","))
 					  ;
 
 					entryList.add(sb.toString());
