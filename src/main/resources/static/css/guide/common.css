@@ -2991,6 +2991,10 @@ Base styles: contents layer
 	color: #ff0000;
 }
 
+.list_txt p span.c46 {
+	color: #464646;
+}
+
 @media only all and (max-width: 1024px) {
 	.list_downs {
 		display: none;

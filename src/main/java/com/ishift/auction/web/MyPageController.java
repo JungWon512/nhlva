@@ -363,6 +363,7 @@ public class MyPageController {
         	List<Map<String,Object>> list=auctionService.entrySelectList(params);
         	result.put("totPrice", auctionService.selectTotSoldPrice(params));
         	result.put("buyCnt",auctionService.selectCountEntry(params));
+			result.put("johapData", adminService.selectOneJohap(params));
             result.put("data", list);
         }catch (SQLException | RuntimeException re) {
             result.put("success", false);

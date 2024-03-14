@@ -10,7 +10,7 @@
 	<div class="list_search">
 		<ul class="radio_group">
 			<li>
-				<input type="radio" name="searchAucObjDsc" id="ra1" value="" <c:if test="${inputParam.searchAucObjDsc eq '0' || empty inputParam.searchAucObjDsc }">
+				<input type="radio" name="searchAucObjDsc" id="ra1" value="0" <c:if test="${inputParam.searchAucObjDsc eq '0' || empty inputParam.searchAucObjDsc }">
 	                checked
 	             </c:if>/><label for="ra1">전체</label>
 			</li>

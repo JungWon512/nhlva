@@ -43,9 +43,21 @@
 			, E.CALF_AUC_ATDR_UNT_AM	/*송아지 응찰단위*/
 			, E.NBFCT_AUC_ATDR_UNT_AM /*비육우 응찰단위*/
 			, E.PPGCOW_AUC_ATDR_UNT_AM /*번식우 응찰단위*/
-			, DECODE(E.CALF_AUC_ATDR_UNT_AM,'1000','천원','1','원','만원') CALF_AUC_ATDR_UNT	/*송아지 응찰단위*/
-			, DECODE(E.NBFCT_AUC_ATDR_UNT_AM,'1000','천원','1','원','만원') NBFCT_AUC_ATDR_UNT /*비육우 응찰단위*/
+			, E.GT_AUC_ATDR_UNT_AM /*염소 응찰단위*/
+			, E.HS_AUC_ATDR_UNT_AM /*말 응찰단위*/
+			, DECODE(E.CALF_AUC_ATDR_UNT_AM,'1000','천원','1','원','만원') CALF_AUC_ATDR_UNT	 /*송아지 응찰단위*/
+			, DECODE(E.NBFCT_AUC_ATDR_UNT_AM,'1000','천원','1','원','만원') NBFCT_AUC_ATDR_UNT   /*비육우 응찰단위*/
 			, DECODE(E.PPGCOW_AUC_ATDR_UNT_AM,'1000','천원','1','원','만원') PPGCOW_AUC_ATDR_UNT /*번식우 응찰단위*/
+			, DECODE(E.GT_AUC_ATDR_UNT_AM, '1000', '천원', '1', '원', '10000', '만원', '') GT_AUC_ATDR_UNT /*염소 응찰단위*/
+            , DECODE(E.HS_AUC_ATDR_UNT_AM, '1000', '천원', '1', '원', '10000', '만원', '') HS_AUC_ATDR_UNT /*말 응찰단위*/
+            , A.ETC_AUC_OBJ_DSC     /* 기타 경매 대상 */
+            , (
+                SELECT LISTAGG(SIMP_CNM, ',') WITHIN GROUP(ORDER BY SIMP_C)
+                  FROM TB_LA_IS_MH_COMN_APL
+                 WHERE SIMP_TPC = 'AUC_OBJ_DSC'
+                   AND SIMP_C_GRP_SQNO = '8'
+                   AND INSTR(A.ETC_AUC_OBJ_DSC, SIMP_C) > 0
+            ) AS ETC_AUC_OBJ_DSC_NM
  		FROM TB_LA_IS_BM_BZLOC A
  		LEFT JOIN TB_LA_IS_MM_ENV_EST E ON A.NA_BZPLC = E.NA_BZPLC
  		WHERE 1=1

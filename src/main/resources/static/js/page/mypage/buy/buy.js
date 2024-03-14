@@ -149,26 +149,26 @@
 		// 정산서 상세 버튼
 		$(document).on('click','.move_info',function(){	
 			const searchDate = $(this).attr("id").split("_")[0];
-			const aucObjDsc	= $(this).attr("id").split("_")[1];
+			const searchAucObjDsc	= $(this).attr("id").split("_")[1];
 			const place	= $(this).attr("id").split("_")[2];
 			const searchTrmnAmnno = $("#loginNo").val();
-			let searchAucObjDsc = "";
+			// let searchAucObjDsc = "";
 			
-			if (aucObjDsc.toString().indexOf(",") > -1) {
-				searchAucObjDsc = "";
-			} else {
-				switch (aucObjDsc) {
-					case "송아지" :
-						searchAucObjDsc = "1"
-					break;
-					case "비육우" :
-						searchAucObjDsc = "2"
-					break;
-					case "번식우" :
-						searchAucObjDsc = "3"
-					break;
-				}
-			}
+			// if (aucObjDsc.toString().indexOf(",") > -1) {
+			// 	searchAucObjDsc = "";
+			// } else {
+			// 	switch (aucObjDsc) {
+			// 		case "송아지" :
+			// 			searchAucObjDsc = "1"
+			// 		break;
+			// 		case "비육우" :
+			// 			searchAucObjDsc = "2"
+			// 		break;
+			// 		case "번식우" :
+			// 			searchAucObjDsc = "3"
+			// 		break;
+			// 	}
+			// }
 
 			let form = $('<form></form>');
 			form.attr('action', "/my/buyInfo"+location.search);
@@ -207,6 +207,9 @@
 			
 			$('.buy_list div.sum_table div').empty();
 			if($("select[name=searchAucObjDscBuy]").val() == ''){
+				console.log(data.johapData.ETC_AUC_OBJ_DSC_NM?.split(','));
+				const etcList = data.johapData.ETC_AUC_OBJ_DSC?.split(',');
+				const etcNmList = data.johapData.ETC_AUC_OBJ_DSC_NM?.split(',');
 				//0:합계,1:암,2:수,3:기타
 				var tableHtml = '';
 				tableHtml += '		<dl>';
@@ -214,6 +217,9 @@
 				tableHtml += '			<dd><p>송아지</p></dd>';
 				tableHtml += '			<dd><p>비육우</p></dd>';
 				tableHtml += '			<dd><p>번식우</p></dd>';
+			etcNmList.forEach(function(item){
+				tableHtml += '			<dd><p>'+item+'</p></dd>';
+			});
 				tableHtml += '			<dd><p>합계</p></dd>';
 				tableHtml += '		</dl>';
 				tableHtml += '		<dl>';
@@ -221,6 +227,9 @@
 				tableHtml += '			<dd><p><span class="ea">'+fnSetComma(data.buyCnt.CNT_CALF)+'</span>두</p></dd>';
 				tableHtml += '			<dd><p><span class="ea">'+fnSetComma(data.buyCnt.CNT_NO_COW)+'</span>두</p></dd>';
 				tableHtml += '			<dd><p><span class="ea">'+fnSetComma(data.buyCnt.CNT_COW)+'</span>두</p></dd>';
+			etcList.forEach(function(item){
+				tableHtml += '			<dd><p><span class="ea">'+fnSetComma(data.buyCnt["CNT_"+item])+'</span>두</p></dd>';
+			});
 				tableHtml += '			<dd><p><span class="ea">'+fnSetComma(data.buyCnt.CNT)+'</span>두</p></dd>';
 				tableHtml += '		</dl>';
 				tableHtml += '		<dl>';
@@ -228,6 +237,9 @@
 				tableHtml += '			<dd><p><span class="ea">'+fnSetComma(data.buyCnt.CNT_SEX_W_F_1)+'</span>두</p></dd>';
 				tableHtml += '			<dd><p><span class="ea">'+fnSetComma(data.buyCnt.CNT_SEX_W_F_2)+'</span>두</p></dd>';
 				tableHtml += '			<dd><p><span class="ea">'+fnSetComma(data.buyCnt.CNT_SEX_W_F_3)+'</span>두</p></dd>';
+			etcList.forEach(function(item){
+				tableHtml += '			<dd><p><span class="ea">'+fnSetComma(data.buyCnt["CNT_SEX_W_F_"+item])+'</span>두</p></dd>';
+			});
 				tableHtml += '			<dd><p><span class="ea">'+fnSetComma(data.buyCnt.CNT_SEX_W_F)+'</span>두</p></dd>';
 				tableHtml += '		</dl>';
 				tableHtml += '		<dl>';
@@ -235,6 +247,9 @@
 				tableHtml += '			<dd><p><span class="ea">'+fnSetComma(data.buyCnt.CNT_SEX_M_F_1)+'</span>두</p></dd>';
 				tableHtml += '			<dd><p><span class="ea">'+fnSetComma(data.buyCnt.CNT_SEX_M_F_2)+'</span>두</p></dd>';
 				tableHtml += '			<dd><p><span class="ea">'+fnSetComma(data.buyCnt.CNT_SEX_M_F_3)+'</span>두</p></dd>';
+			etcList.forEach(function(item){
+				tableHtml += '			<dd><p><span class="ea">'+fnSetComma(data.buyCnt["CNT_SEX_M_F_"+item])+'</span>두</p></dd>';
+			});
 				tableHtml += '			<dd><p><span class="ea">'+fnSetComma(data.buyCnt.CNT_SEX_M_F)+'</span>두</p></dd>';
 				tableHtml += '		</dl>';
 				tableHtml += '		<dl>';
@@ -242,6 +257,9 @@
 				tableHtml += '			<dd><p><span class="ea">'+fnSetComma(data.buyCnt.CNT_SEX_ETC_F_1)+'</span>두</p></dd>';
 				tableHtml += '			<dd><p><span class="ea">'+fnSetComma(data.buyCnt.CNT_SEX_ETC_F_2)+'</span>두</p></dd>';
 				tableHtml += '			<dd><p><span class="ea">'+fnSetComma(data.buyCnt.CNT_SEX_ETC_F_3)+'</span>두</p></dd>';
+			etcList.forEach(function(item){
+				tableHtml += '			<dd><p><span class="ea">'+fnSetComma(data.buyCnt["CNT_SEX_ETC_F_"+item])+'</span>두</p></dd>';
+			});
 				tableHtml += '			<dd><p><span class="ea">'+fnSetComma(data.buyCnt.CNT_SEX_ETC_F)+'</span>두</p></dd>';
 				tableHtml += '		</dl>';
 			

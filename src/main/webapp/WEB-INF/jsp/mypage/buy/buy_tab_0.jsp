@@ -18,119 +18,23 @@
 				<option id="ra2" value="1" <c:if test="${inputParam.searchAucObjDscBuy eq '1'}">selected</c:if>>송아지</option>
 				<option id="ra3" value="2" <c:if test="${inputParam.searchAucObjDscBuy eq '2'}">selected</c:if>>비육우</option>
 				<option id="ra4" value="3" <c:if test="${inputParam.searchAucObjDscBuy eq '3'}">selected</c:if>>번식우</option>
-			</select>	
+			<!-- 기타 가축 경매를 사용하는 경우 -->
+			<c:if test="${!empty johapData.ETC_AUC_OBJ_DSC and !empty johapData.ETC_AUC_OBJ_DSC_NM}">
+			<c:set var="etcList" value="${fn:split(johapData.ETC_AUC_OBJ_DSC, ',')}" />
+			<c:set var="etcNmList" value="${fn:split(johapData.ETC_AUC_OBJ_DSC_NM, ',')}" />
+			<c:forEach items="${etcList}" var="etc" varStatus="i">
+				<option id="ra${etc}" value="${etc}" <c:if test="${inputParam.searchAucObjDscBuy eq etc}">selected</c:if>>${etcNmList[i.index]}</option>  
+			</c:forEach>
+			</c:if>
+			</select>
 		</div>
 		<div class="btn">
 			<button type="button" class="btn-refresh list_sch sch_buy"></button>
 		</div>
 	</div>
 	<!-- //search-box e -->
-	<c:choose>
-		<c:when test="${empty inputParam.searchAucObjDsc }">
-			<div class="sum_table">
-				<div>
-					<dl>
-						<dt><p>구분</p></dt>
-						<dd><p>송아지</p></dd>
-						<dd><p>비육우</p></dd>
-						<dd><p>번식우</p></dd>
-						<dd><p>합계</p></dd>
-					</dl>
-					<dl>
-						<dt><p>전체</p></dt>
-						<dd>
-							<p><span class="ea">${buyCnt.CNT_CALF}</span>두</p>
-						</dd>
-						<dd>
-							<p><span class="ea">${buyCnt.CNT_NO_COW}</span>두</p>
-						</dd>
-						<dd>
-							<p><span class="ea">${buyCnt.CNT_COW}</span>두</p>
-						</dd>
-						<dd>
-							<p><span class="ea">${buyCnt.CNT}</span>두</p>
-						</dd>
-					</dl>
-					<dl>
-						<dt><p>암</p></dt>
-						<dd>
-							<p><span class="ea">${buyCnt.CNT_SEX_W_F_1}</span>두</p>
-						</dd>
-						<dd>
-							<p><span class="ea">${buyCnt.CNT_SEX_W_F_2}</span>두</p>
-						</dd>
-						<dd>
-							<p><span class="ea">${buyCnt.CNT_SEX_W_F_3}</span>두</p>
-						</dd>
-						<dd>
-							<p><span class="ea">${buyCnt.CNT_SEX_W_F}</span>두</p>
-						</dd>
-					</dl>
-					<dl>
-						<dt><p>수</p></dt>
-						<dd>
-							<p><span class="ea">${buyCnt.CNT_SEX_M_F_1}</span>두</p>
-						</dd>
-						<dd>
-							<p><span class="ea">${buyCnt.CNT_SEX_M_F_2}</span>두</p>
-						</dd>
-						<dd>
-							<p><span class="ea">${buyCnt.CNT_SEX_M_F_3}</span>두</p>
-						</dd>
-						<dd>
-							<p><span class="ea">${buyCnt.CNT_SEX_M_F}</span>두</p>
-						</dd>
-					</dl>
-					<dl>
-						<dt><p>기타</p></dt>
-						<dd>
-							<p><span class="ea">${buyCnt.CNT_SEX_ETC_F_1}</span>두</p>
-						</dd>
-						<dd>
-							<p><span class="ea">${buyCnt.CNT_SEX_ETC_F_2}</span>두</p>
-						</dd>
-						<dd>
-							<p><span class="ea">${buyCnt.CNT_SEX_ETC_F_3}</span>두</p>
-						</dd>
-						<dd>
-							<p><span class="ea">${buyCnt.CNT_SEX_ETC_F}</span>두</p>
-						</dd>
-					</dl>
-				</div>
-			</div> 
-		</c:when>
-		<c:otherwise>
-			<div class="sum_table">
-				<div>
-					<dl class="sumBuy">
-						<dt><p>전체</p></dt>
-						<dd>
-							<p class="cowCnt"><span class="ea">${empty buyCnt.CNT? '0' : buyCnt.CNT}</span>두</p>
-						</dd>
-					</dl>
-					<dl>
-						<dt><p>암</p></dt>
-						<dd>
-							<p class="cowCnt"><span class="ea">${empty buyCnt.CNT_SEX_W_F? '0' : buyCnt.CNT_SEX_W_F}</span>두</p>
-						</dd>
-					</dl>
-					<dl>
-						<dt><p>수</p></dt>
-						<dd>
-							<p class="cowCnt"><span class="ea">${empty buyCnt.CNT_SEX_M_F? '0' : buyCnt.CNT_SEX_M_F }</span>두</p>
-						</dd>
-					</dl>
-					<dl>
-						<dt><p>기타</p></dt>
-						<dd>
-							<p class="cowCnt"><span class="ea">${empty buyCnt.CNT_SEX_ETC_F? '0' : buyCnt.CNT_SEX_ETC_F}</span>두</p>
-						</dd>
-					</dl>
-				</div>
-			</div>
-			<!-- //sum_table e -->
-		</c:otherwise>
-	</c:choose>
+	<%@ include file="/WEB-INF/jsp/auction/common/auctionStat.jsp" %>
+
 	<div class="list_table auction_result">
 		<div class="list_head">
 			<dl>
