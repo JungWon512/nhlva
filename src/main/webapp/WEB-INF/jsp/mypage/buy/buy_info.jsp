@@ -8,7 +8,13 @@
 <input type="hidden" id="johpCd" value="${johapData.NA_BZPLC}"/>
 <div class="bill-detail cow-detail">
 	<div class="list_search">
-		<ul class="radio_group">
+		<c:import url="/common/searchAucObjDsc">
+			<c:param name="type"        value="radio" />
+			<c:param name="naBzplc"     value="${johapData.NA_BZPLC}" />
+			<c:param name="selectName"  value="searchAucObjDsc" />
+			<c:param name="selectValue" value="${inputParam.searchAucObjDsc}" />
+		</c:import>
+		<%-- <ul class="radio_group">
 			<li>
 				<input type="radio" name="searchAucObjDsc" id="ra1" value="0" <c:if test="${inputParam.searchAucObjDsc eq '0' || empty inputParam.searchAucObjDsc }">
 	                checked
@@ -29,7 +35,7 @@
 	                checked
 	            </c:if>/><label for="ra4">번식우</label>
 			</li>
-		</ul>
+		</ul> --%>
 	</div>
 	<div class="cow-basic">
 		<table class="table-detail">
