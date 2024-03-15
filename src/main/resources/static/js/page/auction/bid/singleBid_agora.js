@@ -296,9 +296,9 @@ var socketStart = function(){
 	var socketHost = (active == 'production')?"cowauction.kr":(active == 'develop')?"xn--e20bw05b.kr":"xn--e20bw05b.kr";
 	//socketHost += ':'+$('#webPort').val();
 	socketHost += ':9001';
-//	socket = io.connect('https://'+socketHost + '/6003' + '?auctionHouseCode='  + $('#naBzPlc').val(), {secure:true});
+	socket = io.connect('https://'+socketHost + '/6003' + '?auctionHouseCode='  + $('#naBzPlc').val(), {secure:true});
 	
-	socket = io.connect('http://192.168.1.53:9001/6003?auctionHouseCode=' + $('#naBzPlc').val());
+//	socket = io.connect('http://192.168.1.53:9001/6003?auctionHouseCode=' + $('#naBzPlc').val());
 	socket.on('connect', connectHandler);
 
 	socket.on('disconnect', disconnectHandler);
