@@ -414,32 +414,35 @@
 	    // 전체 낙찰율 데이터
 	    var doughData = ""; 
 	    // 송아지 낙찰두수 및 응찰두수
-	    var barData1 = 0;
-	    var barData2 = 0;
+	    // var barData1 = 0;
+	    // var barData2 = 0;
 	    // 비육우 낙찰두수 및 응찰두수
-	    var barData3 = 0;
-	    var barData4 = 0;
+	    // var barData3 = 0;
+	    // var barData4 = 0;
 	    // 번식우 낙찰두수 및 응찰두수
-	    var barData5 = 0;
-	    var barData6 = 0;
+	    // var barData5 = 0;
+	    // var barData6 = 0;
 	    // 송아지, 비육우, 번식우 map 만들기
 	    let cowData1 = bidList.forEach(item => {
 			if (!item.AUC_OBJ_DSC) {
 				doughData = item.SEL_STS_PERCENT ?? 0
-			} else {
-				if (item.AUC_OBJ_DSC == '1') {
-					barData1 = item.SBID_COW_CNT ?? 0;
-	   				barData2 = item.TOT_ATDR_CNT ?? 0;
-				} else if (item.AUC_OBJ_DSC == '2') {
-					barData3 = item.SBID_COW_CNT ?? 0;
-	   				barData4 = item.TOT_ATDR_CNT ?? 0;
-				} else if (item.AUC_OBJ_DSC == '3') {
-					barData5 = item.SBID_COW_CNT ?? 0;
-		   			barData6 = item.TOT_ATDR_CNT ?? 0;
-				}	
 			}
+			//  else {
+			// 	if (item.AUC_OBJ_DSC == '1') {
+			// 		barData1 = item.SBID_COW_CNT ?? 0;
+	   		// 		barData2 = item.TOT_ATDR_CNT ?? 0;
+			// 	} else if (item.AUC_OBJ_DSC == '2') {
+			// 		barData3 = item.SBID_COW_CNT ?? 0;
+	   		// 		barData4 = item.TOT_ATDR_CNT ?? 0;
+			// 	} else if (item.AUC_OBJ_DSC == '3') {
+			// 		barData5 = item.SBID_COW_CNT ?? 0;
+		   	// 		barData6 = item.TOT_ATDR_CNT ?? 0;
+			// 	}	
+			// }
 		})
 
+		const charData = bidList.slice(1);
+		
 	    var config = {
 	        type : 'doughnut', 
 	        data : {
@@ -472,17 +475,20 @@
 		var config2 = {
 			type: 'bar',
 			data: {
-				labels: ['송아지', '비육우', '번식우'],
+				// labels: ['송아지', '비육우', '번식우'],
+				labels: charData.map(item => item.AUC_OBJ_DSC_NM),
 				datasets: [
 					{
 						label: '낙찰두수',
-						data: [barData1, barData3, barData5],
+						data: charData.map(item => item.SBID_COW_CNT),
+						// data: [barData1, barData3, barData5],
 						borderColor: '#ffcf9f',
 						backgroundColor: '#ffcf9f'
 					},
 					{
 						label: '응찰두수',
-						data: [barData2, barData4, barData6],
+						data: charData.map(item => item.TOT_ATDR_CNT),
+						// data: [barData2, barData4, barData6],
 						borderColor: '#9ad0f5',
 						backgroundColor: '#9ad0f5'
 					}
@@ -504,9 +510,9 @@
 		if (list.length > 0) {
 			fHtml.push('					<tr>                                                                                        ');
 			fHtml.push('						<td>'+ list[0].CLNTNM +'</td>                                                 ');
-			fHtml.push('						<td class="ta-C">'+ list[0].TOT_COW_CNT +'</td>                               ');
-			fHtml.push('						<td class="ta-C">'+ list[0].SBID_COW_CNT +'</td>                              ');
-			fHtml.push('						<td class="ta-C">'+ list[0].TOT_ATDR_CNT +'</td>                              ');
+			fHtml.push('						<td class="ta-C">'+ fnSetComma(list[0].TOT_COW_CNT) +'</td>                               ');
+			fHtml.push('						<td class="ta-C">'+ fnSetComma(list[0].SBID_COW_CNT) +'</td>                              ');
+			fHtml.push('						<td class="ta-C">'+ fnSetComma(list[0].TOT_ATDR_CNT) +'</td>                              ');
 			fHtml.push('					</tr>                                                                                       ');
 		} else {
 			fHtml.push('					<tr>                                                                                        ');
@@ -519,16 +525,16 @@
 				if (myJohapData.NA_BZPLC != list[i].NA_BZPLC) {
 					sHtml.push('			<tr>                                                                                            ');
 					sHtml.push('				<td><a href="javascript:;" id="'+ list[i].NA_BZPLC +'" class="link johapLink">'+ list[i].CLNTNM +'</a></td>       ');				
-					sHtml.push('				<td class="ta-C">'+ list[i].TOT_COW_CNT +'</td>                                                   ');
-					sHtml.push('				<td class="ta-C">'+ list[i].SBID_COW_CNT +'</td>                                                   ');
-					sHtml.push('				<td class="ta-C">'+ list[i].TOT_ATDR_CNT +'</td>                                                  ');
+					sHtml.push('				<td class="ta-C">'+ fnSetComma(list[i].TOT_COW_CNT) +'</td>                                                   ');
+					sHtml.push('				<td class="ta-C">'+ fnSetComma(list[i].SBID_COW_CNT) +'</td>                                                   ');
+					sHtml.push('				<td class="ta-C">'+ fnSetComma(list[i].TOT_ATDR_CNT) +'</td>                                                  ');
 					sHtml.push('			</tr>                                                                                           ');
 				} else {
 					sHtml.push('			<tr style="background-color:#ffcf9f;">                                                                                            ');
 					sHtml.push('				<td>'+ list[i].CLNTNM +'</td>       ');									
-					sHtml.push('				<td class="ta-C">'+ list[i].TOT_COW_CNT +'</td>                                                   ');
-					sHtml.push('				<td class="ta-C">'+ list[i].SBID_COW_CNT +'</td>                                                   ');
-					sHtml.push('				<td class="ta-C">'+ list[i].TOT_ATDR_CNT +'</td>                                                  ');
+					sHtml.push('				<td class="ta-C">'+ fnSetComma(list[i].TOT_COW_CNT) +'</td>                                                   ');
+					sHtml.push('				<td class="ta-C">'+ fnSetComma(list[i].SBID_COW_CNT) +'</td>                                                   ');
+					sHtml.push('				<td class="ta-C">'+ fnSetComma(list[i].TOT_ATDR_CNT) +'</td>                                                  ');
 					sHtml.push('			</tr>                                                                                           ');
 				}
 			}
@@ -570,10 +576,39 @@
 			$("div.simple-board > dl.top .totSraSbidAm").html((data.cowBidCnt.length > 0 ? data.cowBidCnt[0].TOT_SRA_SBID_AM_FORMAT : 0) + " 원");
 			
 			$("div.cont > div.left > .totCowCnt").html((data.cowBidCnt.length > 0 ? data.cowBidCnt[0].TOT_COW_CNT : 0) + " 두");
-			$("ul.cowCnt span.cow1").html((data.cowBidCnt.length > 0 && data.cowBidCnt[1] ? data.cowBidCnt[1].TOT_COW_CNT : 0) + "두");
-			$("ul.cowCnt span.cow2").html((data.cowBidCnt.length > 0 && data.cowBidCnt[2] ? data.cowBidCnt[2].TOT_COW_CNT : 0) + "두");
-			$("ul.cowCnt span.cow3").html((data.cowBidCnt.length > 0 && data.cowBidCnt[3] ? data.cowBidCnt[3].TOT_COW_CNT : 0) + "두");
-			
+			// $("ul.cowCnt span.cow1").html((data.cowBidCnt.length > 0 && data.cowBidCnt[1] ? data.cowBidCnt[1].TOT_COW_CNT : 0) + "두");
+			// $("ul.cowCnt span.cow2").html((data.cowBidCnt.length > 0 && data.cowBidCnt[2] ? data.cowBidCnt[2].TOT_COW_CNT : 0) + "두");
+			// $("ul.cowCnt span.cow3").html((data.cowBidCnt.length > 0 && data.cowBidCnt[3] ? data.cowBidCnt[3].TOT_COW_CNT : 0) + "두");
+			const aucObjDsc = {'1':'송아지', '2':'비육우', '3':'번식우'};
+			let etcObjDsc = {};
+			if (data.myJohapData.ETC_AUC_OBJ_DSC) {
+				const keys = data.myJohapData.ETC_AUC_OBJ_DSC.split(",");
+				const values = data.myJohapData.ETC_AUC_OBJ_DSC_NM.split(",");
+				keys.forEach((key, index) => {
+					etcObjDsc[key] = values[index] ?? '';
+				});
+			}
+
+			const cowList = data.cowBidCnt.filter(item => Object.keys(aucObjDsc).includes(item.AUC_OBJ_DSC));
+			const etcList = data.cowBidCnt.filter(item => Object.keys(etcObjDsc).includes(item.AUC_OBJ_DSC));
+
+			const cowCntHtml = [];
+			Object.keys(aucObjDsc).forEach(key => {
+				const cnt = cowList.filter(item => item.AUC_OBJ_DSC == key)[0]?.TOT_COW_CNT ?? 0;
+				cowCntHtml.push('<li>' + aucObjDsc[key]);
+				cowCntHtml.push(' <span class="num cow'+ key +'">'+ cnt +'두</span>');
+				cowCntHtml.push('</li>');
+			});
+			Object.keys(etcObjDsc).forEach(key => {
+				const cnt = etcList.filter(item => item.AUC_OBJ_DSC == key)[0]?.TOT_COW_CNT ?? 0;
+				if (cnt) {
+					cowCntHtml.push('<li>' + etcObjDsc[key]);
+					cowCntHtml.push(' <span class="num cow'+ key +'">'+ cnt +'두</span>');
+					cowCntHtml.push('</li>');
+				}
+			});
+			$("ul.cowCnt").html(cowCntHtml.join(""));
+
 			// 나의 응찰 현황
 			setDataBidTable(data.cowBidCntList, data.myJohapData);
 			
@@ -626,3 +661,7 @@ var convertScroll = function(){
 		$(this).css('min-height','70px');
 	});	
 }
+
+var fnSetComma = function(num = '') {
+    return num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+  }

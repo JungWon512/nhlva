@@ -6,6 +6,7 @@
 	<!-- 나의 경매내역 > My 현황 > 연/월단위 기준 전체 낙찰두수, 송아지, 비육우, 번식우의 낙찰두수 -->
 	<select id="selectCowBidCnt" parameterType="map" resultType="map">
 		SELECT T.*
+			, NVL(B.SIMP_CNM, '합계') AS AUC_OBJ_DSC_NM
 		FROM (
 			SELECT A.NA_BZPLC
 					, A.AUC_OBJ_DSC
@@ -30,6 +31,13 @@
 			GROUP BY ROLLUP(A.NA_BZPLC, A.AUC_OBJ_DSC)
 			HAVING GROUPING_ID(A.NA_BZPLC, A.AUC_OBJ_DSC) IN ('0', '1')
 		) T
+		LEFT OUTER JOIN TB_LA_IS_MH_COMN_APL B
+		ON ( B.SIMP_TPC = 'AUC_OBJ_DSC'
+				AND
+				B.SIMP_C_GRP_SQNO = '7'
+				AND
+				B.SIMP_C = T.AUC_OBJ_DSC
+			)
 		ORDER BY T.GROUPINGID DESC, T.AUC_OBJ_DSC
 	</select>
 	
@@ -38,6 +46,7 @@
 		SELECT T.*
 				, CASE WHEN TOT_ATDR_CNT !=0 THEN TRUNC((T.SBID_COW_CNT / T.TOT_ATDR_CNT) * 100, 0)
 						ELSE 0 END AS SEL_STS_PERCENT
+				, NVL(B.SIMP_CNM, '합계') AS AUC_OBJ_DSC_NM
 		FROM (
 				SELECT A.NA_BZPLC
 						, A.AUC_OBJ_DSC
@@ -84,6 +93,13 @@
 					GROUP BY ROLLUP(A.NA_BZPLC, A.AUC_OBJ_DSC)
 					HAVING GROUPING_ID(A.NA_BZPLC, A.AUC_OBJ_DSC) IN ('0','1')
 		) T
+		LEFT OUTER JOIN TB_LA_IS_MH_COMN_APL B
+		ON ( B.SIMP_TPC = 'AUC_OBJ_DSC'
+				AND
+				B.SIMP_C_GRP_SQNO = '7'
+				AND
+				B.SIMP_C = T.AUC_OBJ_DSC
+			)
 		ORDER BY T.AUC_OBJ_DSC NULLS FIRST
 	</select>
 
