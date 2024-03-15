@@ -32,7 +32,7 @@
 			<c:import url="/common/searchAucObjDsc">
 				<c:param name="type"        value="select" />
 				<c:param name="selectName"  value="searchAucObjDscBuy" />
-				<c:param name="naBzplc"  value="${johapData.NA_BZPLC}" />
+				<c:param name="naBzplc"     value="${johapData.NA_BZPLC}" />
 				<c:param name="selectValue" value="${inputParam.searchAucObjDscBuy}" />
 			</c:import>
 		</div>

@@ -599,7 +599,15 @@
 				</when>
 			</choose>
 			<if test="searchAucObjDsc != null and searchAucObjDsc != ''">
-				AND B.AUC_OBJ_DSC=TO_CHAR(#{searchAucObjDsc})
+				<choose>
+					<when test='"0".equals(searchAucObjDsc)'>
+						AND B.AUC_OBJ_DSC IN ('1','2','3')
+					</when>
+					<otherwise>
+						AND B.AUC_OBJ_DSC = TO_CHAR(#{searchAucObjDsc})
+					</otherwise>
+				</choose>
+				<!-- AND B.AUC_OBJ_DSC = TO_CHAR(#{searchAucObjDsc}) -->
 			</if>
 			<if test="searchBidAm != null and searchBidAm != ''">
 				AND B.SRA_SBID_UPR <![CDATA[<=]]> TO_CHAR(#{searchBidAm})
@@ -2266,15 +2274,20 @@
 		</choose>
 			AND A.AUC_DT = #{searchDate} /* 경매일자 */
 			AND A.NA_BZPLC = #{naBzPlc} /* 사업장 번호 */
-		<if test="searchAucObjDsc != null and searchAucObjDsc != ''">		
-			<choose>
+		<if test="searchAucObjDsc != null and searchAucObjDsc != ''">
+			AND (
+			(#{searchAucObjDsc} IN ( '0', '1', '2', '3' ) AND AUC_OBJ_DSC IN ( '0', #{searchAucObjDsc} ))
+			OR
+			(#{searchAucObjDsc} NOT IN ( '0', '1', '2', '3' ) AND AUC_OBJ_DSC = #{searchAucObjDsc})
+			)
+			<!-- <choose>
 				<when test='"0".equals(searchAucObjDsc)'>
 					AND A.AUC_OBJ_DSC IN ('1','2','3')
 				</when>
 				<otherwise>
 					AND A.AUC_OBJ_DSC = #{searchAucObjDsc}
 				</otherwise>
-			</choose>
+			</choose> -->
 		</if>
 	</select>
 
