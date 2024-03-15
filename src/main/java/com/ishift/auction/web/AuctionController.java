@@ -116,7 +116,6 @@ public class AuctionController extends CommonController {
 		mav.addObject("johapData", johap);
 		mav.addObject("dateList",datelist);
 		mav.addObject("resultList",list); 
-		mav.addObject("aucObjDscList",commonService.selectAucObjDscList(map));
 		mav.addObject("buyCnt",auctionService.selectSumEntry(map));
 		mav.addObject("subheaderTitle","경매결과 조회");
 		
@@ -181,7 +180,6 @@ public class AuctionController extends CommonController {
 		mav.addObject("subheaderTitle","출장우 조회");
 		mav.addObject("dateList",datelist); 
 		mav.addObject("salesList",list);
-		mav.addObject("aucObjDscList",commonService.selectAucObjDscList(map));
 		mav.addObject("buyCnt",auctionService.selectSumEntry(map));
 		mav.addObject("inputParam", param);
 		mav.addObject("subheaderTitle","출장우 조회");
@@ -1099,5 +1097,16 @@ public class AuctionController extends CommonController {
 			rHtml = "작업중 오류가 발생했습니다. 관리자에게 문의하세요.";
 		}
 		return rHtml;
+	}
+
+	@RequestMapping(value = "/common/searchAucObjDsc",method = { RequestMethod.GET, RequestMethod.POST })	
+	public ModelAndView searchAucObjDsc(@RequestParam Map<String, Object> param) throws Exception {		
+		// 경매결과목록
+		ModelAndView mav = new ModelAndView();
+        Map<String,Object> map = new HashMap<>();
+		mav.addObject("aucObjDscList",commonService.selectAucObjDscList(param));
+		
+		mav.setViewName("auction/common/searchAucObjDsc");
+		return mav;
 	}
 }

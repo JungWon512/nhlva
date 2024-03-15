@@ -79,6 +79,10 @@
         <put-attribute name="content" value="/WEB-INF/tiles/layouts/front/content.jsp"/>
     </definition> 
      
+     
+    <definition name="common/auction/*" extends="popup-modal-layout">
+        <put-attribute name="content" value="/WEB-INF/jsp/auction/common/{1}.jsp"/>
+    </definition>   
     <definition name="pop/modal/*" extends="popup-modal-layout">
         <put-attribute name="content" value="/WEB-INF/jsp/pop/modal/{1}.jsp"/>
     </definition>
@@ -89,6 +93,9 @@
         <put-attribute name="content" value="/WEB-INF/jsp/pop/{1}.jsp"/>
         <put-attribute name="page_footer_script" value="/static/js/page/pop/{1}.js" />
     </definition>
+    <definition name="auction/common/*" extends="popup-modal-layout">
+        <put-attribute name="content" value="/WEB-INF/jsp/auction/common/{1}.jsp"/>
+    </definition>   
     <definition name="auction/*/*" extends="front-layout">
         <put-attribute name="content" value="/WEB-INF/jsp/auction/{1}/{2}.jsp"/>
         <put-attribute name="page_footer_script" value="/static/js/page/auction/{1}/{2}.js" />
@@ -136,5 +143,6 @@
     <definition name="admin/*/*/*" extends="admin-layout">
         <put-attribute name="content" value="/WEB-INF/jsp/admin/{1}/{2}/{3}.jsp"/>
         <put-attribute name="page_footer_script" value="/static/js/page/admin/{1}/{2}/{3}.js" />
-    </definition>   
+    </definition>
+    
 </tiles-definitions>
