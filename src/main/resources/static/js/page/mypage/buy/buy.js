@@ -204,96 +204,44 @@
 				modalAlert('','작업중 오류가 발생했습니다. <br/>관리자에게 문의하세요.');
 				return;
 			}
-			
+			console.log('### data : buyCnt :: ',data.buyCnt);
 			$('.buy_list div.sum_table div').empty();
+			var tableHtml = '';
 			if($("select[name=searchAucObjDscBuy]").val() == ''){
-				console.log(data.johapData.ETC_AUC_OBJ_DSC_NM?.split(','));
-				const etcList = data.johapData.ETC_AUC_OBJ_DSC?.split(',');
-				const etcNmList = data.johapData.ETC_AUC_OBJ_DSC_NM?.split(',');
-				//0:합계,1:암,2:수,3:기타
-				var tableHtml = '';
 				tableHtml += '		<dl>';
 				tableHtml += '			<dt><p>구분</p></dt>';
-				tableHtml += '			<dd><p>송아지</p></dd>';
-				tableHtml += '			<dd><p>비육우</p></dd>';
-				tableHtml += '			<dd><p>번식우</p></dd>';
-			etcNmList.forEach(function(item){
-				tableHtml += '			<dd><p>'+item+'</p></dd>';
+				data.buyCnt.forEach(function(item){
+					tableHtml += '			<dd><p>'+item.AUC_OBJ_DSC_NM+'</p></dd>';
+				});
+				tableHtml += '		</dl>';			
+			};
+			tableHtml += '		<dl>';
+			tableHtml += '			<dt><p>전체</p></dt>';
+			data.buyCnt.forEach(function(item){
+				tableHtml += '			<dd><p><span class="ea">'+fnSetComma(item.TOT_CNT)+'</span>두</p></dd>';			
 			});
-				tableHtml += '			<dd><p>합계</p></dd>';
-				tableHtml += '		</dl>';
-				tableHtml += '		<dl>';
-				tableHtml += '			<dt><p>전체</p></dt>';
-				tableHtml += '			<dd><p><span class="ea">'+fnSetComma(data.buyCnt.CNT_CALF)+'</span>두</p></dd>';
-				tableHtml += '			<dd><p><span class="ea">'+fnSetComma(data.buyCnt.CNT_NO_COW)+'</span>두</p></dd>';
-				tableHtml += '			<dd><p><span class="ea">'+fnSetComma(data.buyCnt.CNT_COW)+'</span>두</p></dd>';
-			etcList.forEach(function(item){
-				tableHtml += '			<dd><p><span class="ea">'+fnSetComma(data.buyCnt["CNT_"+item])+'</span>두</p></dd>';
+			tableHtml += '		</dl>';
+			tableHtml += '		<dl>';
+			tableHtml += '			<dt><p>암</p></dt>';
+			data.buyCnt.forEach(function(item){
+				tableHtml += '			<dd><p><span class="ea">'+fnSetComma(item.W_CNT)+'</span>두</p></dd>';			
 			});
-				tableHtml += '			<dd><p><span class="ea">'+fnSetComma(data.buyCnt.CNT)+'</span>두</p></dd>';
-				tableHtml += '		</dl>';
-				tableHtml += '		<dl>';
-				tableHtml += '			<dt><p>암</p></dt>';
-				tableHtml += '			<dd><p><span class="ea">'+fnSetComma(data.buyCnt.CNT_SEX_W_F_1)+'</span>두</p></dd>';
-				tableHtml += '			<dd><p><span class="ea">'+fnSetComma(data.buyCnt.CNT_SEX_W_F_2)+'</span>두</p></dd>';
-				tableHtml += '			<dd><p><span class="ea">'+fnSetComma(data.buyCnt.CNT_SEX_W_F_3)+'</span>두</p></dd>';
-			etcList.forEach(function(item){
-				tableHtml += '			<dd><p><span class="ea">'+fnSetComma(data.buyCnt["CNT_SEX_W_F_"+item])+'</span>두</p></dd>';
+			tableHtml += '		</dl>';
+			tableHtml += '		<dl>';
+			tableHtml += '			<dt><p>수</p></dt>';
+			data.buyCnt.forEach(function(item){
+				tableHtml += '			<dd><p><span class="ea">'+fnSetComma(item.M_CNT)+'</span>두</p></dd>';			
 			});
-				tableHtml += '			<dd><p><span class="ea">'+fnSetComma(data.buyCnt.CNT_SEX_W_F)+'</span>두</p></dd>';
-				tableHtml += '		</dl>';
-				tableHtml += '		<dl>';
-				tableHtml += '			<dt><p>수</p></dt>';
-				tableHtml += '			<dd><p><span class="ea">'+fnSetComma(data.buyCnt.CNT_SEX_M_F_1)+'</span>두</p></dd>';
-				tableHtml += '			<dd><p><span class="ea">'+fnSetComma(data.buyCnt.CNT_SEX_M_F_2)+'</span>두</p></dd>';
-				tableHtml += '			<dd><p><span class="ea">'+fnSetComma(data.buyCnt.CNT_SEX_M_F_3)+'</span>두</p></dd>';
-			etcList.forEach(function(item){
-				tableHtml += '			<dd><p><span class="ea">'+fnSetComma(data.buyCnt["CNT_SEX_M_F_"+item])+'</span>두</p></dd>';
+			tableHtml += '		</dl>';
+			tableHtml += '		<dl>';
+			tableHtml += '			<dt><p>기타</p></dt>';
+			data.buyCnt.forEach(function(item){
+				tableHtml += '			<dd><p><span class="ea">'+fnSetComma(item.ETC_CNT)+'</span>두</p></dd>';			
 			});
-				tableHtml += '			<dd><p><span class="ea">'+fnSetComma(data.buyCnt.CNT_SEX_M_F)+'</span>두</p></dd>';
-				tableHtml += '		</dl>';
-				tableHtml += '		<dl>';
-				tableHtml += '			<dt><p>기타</p></dt>';
-				tableHtml += '			<dd><p><span class="ea">'+fnSetComma(data.buyCnt.CNT_SEX_ETC_F_1)+'</span>두</p></dd>';
-				tableHtml += '			<dd><p><span class="ea">'+fnSetComma(data.buyCnt.CNT_SEX_ETC_F_2)+'</span>두</p></dd>';
-				tableHtml += '			<dd><p><span class="ea">'+fnSetComma(data.buyCnt.CNT_SEX_ETC_F_3)+'</span>두</p></dd>';
-			etcList.forEach(function(item){
-				tableHtml += '			<dd><p><span class="ea">'+fnSetComma(data.buyCnt["CNT_SEX_ETC_F_"+item])+'</span>두</p></dd>';
-			});
-				tableHtml += '			<dd><p><span class="ea">'+fnSetComma(data.buyCnt.CNT_SEX_ETC_F)+'</span>두</p></dd>';
-				tableHtml += '		</dl>';
-			
-				$('.buy_list div.sum_table div').html(tableHtml);
+			tableHtml += '		</dl>';
 				
-			}else{
-				//0:합계,1:암,2:수,3:기타
-				var tableHtml = '';
-				tableHtml += '	<dl class="sumBuy"> ';
-				tableHtml += '		<dt><p>전체</p></dt> ';
-				tableHtml += '		<dd> ';
-				tableHtml += '			<p class="cowCnt"><span class="ea">'+ (data.buyCnt && data.buyCnt.CNT?fnSetComma(data.buyCnt.CNT):'0') +'</span>두</p> ';
-				tableHtml += '		</dd> ';
-				tableHtml += '	</dl> ';
-				tableHtml += '	<dl> ';
-				tableHtml += '		<dt><p>암</p></dt>';
-				tableHtml += '		<dd>';
-				tableHtml += '			<p class="cowCnt"><span class="ea">'+ (data.buyCnt && data.buyCnt.CNT_SEX_W_F?fnSetComma(data.buyCnt.CNT_SEX_W_F):'0') +'</span>두</p> ';
-				tableHtml += '		</dd> ';
-				tableHtml += '	</dl> ';
-				tableHtml += '	<dl> ';
-				tableHtml += '		<dt><p>수</p></dt>';
-				tableHtml += '		<dd>';
-				tableHtml += '			<p class="cowCnt"><span class="ea">'+ (data.buyCnt && data.buyCnt.CNT_SEX_M?fnSetComma(data.buyCnt.CNT_SEX_M):'0') +'</span>두</p>';
-				tableHtml += '		</dd>';
-				tableHtml += '	</dl>';
-				tableHtml += '	<dl>';
-				tableHtml += '		<dt><p>기타</p></dt>';
-				tableHtml += '		<dd>';
-				tableHtml += '			<p class="cowCnt"><span class="ea">'+ (data.buyCnt && data.buyCnt.CNT_SEX_ETC?fnSetComma(data.buyCnt.CNT_SEX_ETC):'0') +'</span>두</p>';
-				tableHtml += '		</dd>';
-				tableHtml += '	</dl>';
-				$('.buy_list div.sum_table div').html(tableHtml);				
-			}
+			$('.buy_list div.sum_table div').html(tableHtml);
+			
 			
 			$('.auction_result div.list_body ul.bodyBuy').empty();
 			if(data.data.length == 0){

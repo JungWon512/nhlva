@@ -118,7 +118,7 @@ public class MyPageController {
 		paramMap.put("stateFlag", "buy");
 		
 		// 0. 나의 경매내역 > 구매내역
-		mav.addObject("buyCnt",auctionService.selectCountEntry(paramMap));
+		mav.addObject("buyCnt",auctionService.selectSumEntry(paramMap));
 		mav.addObject("buyList", auctionService.entrySelectList(paramMap));		
 		
 		// 1. 나의 경매내역 > 응찰내역
@@ -129,9 +129,12 @@ public class MyPageController {
 		paramMap.put("searchDateState", today);
 		
 		// 정산서 리스트 수수료용 파라메터
-		paramMap.put("searchDate", today);
+		//paramMap.put("searchDate", today);
 		
-		mav.addObject("calendarList", auctionService.selectStateList(paramMap));
+		Map<String, Object> calcInfo = new HashMap<>();
+		calcInfo.putAll(paramMap);
+		calcInfo.put("searchDate", today);
+		mav.addObject("calendarList", auctionService.selectStateList(calcInfo));
 		mav.addObject("title",formatUtil.dateAddDotLenSix(today));
 		
 		//출장우 상세 tab항목 표기
@@ -362,7 +365,7 @@ public class MyPageController {
         	if(params.get("loginNo") != null) params.put("searchTrmnAmnNo", params.get("loginNo"));
         	List<Map<String,Object>> list=auctionService.entrySelectList(params);
         	result.put("totPrice", auctionService.selectTotSoldPrice(params));
-        	result.put("buyCnt",auctionService.selectCountEntry(params));
+        	result.put("buyCnt",auctionService.selectSumEntry(params));
 			result.put("johapData", adminService.selectOneJohap(params));
             result.put("data", list);
         }catch (SQLException | RuntimeException re) {

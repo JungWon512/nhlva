@@ -254,4 +254,8 @@ public class CommonDAO {
 	public List<Map<String, Object>> getIntgNoList(Map<String, Object> params) throws SQLException {
 		return mainDao.selectList("commonMapper.getIntgNoInfo", params);
 	}
+
+	public List<Map<String, Object>> selectAucObjDscList(Map<String, Object> params) throws SQLException {
+		return mainDao.selectList("commonMapper.selectAucObjDscList", params);
+	}
 }

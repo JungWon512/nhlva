@@ -1028,4 +1028,14 @@
 		SELECT * FROM TB_LA_IS_MM_INDV_POSTINF
 		WHERE SRA_INDV_AMNNO LIKE '%'|| #{barcode}
 	</select>
+	
+	<select id="selectAucObjDscList" parameterType="map" resultType="map">
+		SELECT B.SIMP_C AUC_OBJ_DSC
+			,B.SIMP_CNM AUC_OBJ_DSC_NM
+		FROM TB_LA_IS_BM_BZLOC A
+		INNER JOIN TB_LA_IS_MH_COMN_APL B ON A.NA_BZPLC = #{naBzplc}
+										AND B.SIMP_TPC = 'AUC_OBJ_DSC'
+										AND (B.SIMP_C_GRP_SQNO = '1' OR (B.SIMP_C_GRP_SQNO = '8' AND INSTR(A.ETC_AUC_OBJ_DSC,B.SIMP_C) > 0))
+		ORDER BY B.SIMP_C
+	</select>
 </mapper>

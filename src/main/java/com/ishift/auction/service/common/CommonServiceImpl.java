@@ -384,4 +384,8 @@ public class CommonServiceImpl implements CommonService {
 	public List<Map<String, Object>> selectIndvSib(Map<String, Object> params) throws SQLException{
 		return commonDao.selectIndvSib(params);		
 	}
+	
+	public List<Map<String, Object>> selectAucObjDscList(Map<String, Object> params) throws SQLException{
+		return commonDao.selectAucObjDscList(params);		
+	}
 }

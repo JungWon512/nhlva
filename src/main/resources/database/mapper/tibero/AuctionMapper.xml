@@ -3656,4 +3656,126 @@
 		]]>
 	</select>
 	
+	<select id="selectSumEntry" parameterType="map" resultType="map">
+		SELECT 
+			A.NA_BZPLC
+			, A.AUC_OBJ_DSC
+			, A.AUC_OBJ_DSC_NM
+			, NVL(B.TOT_CNT,0) TOT_CNT
+			, NVL(B.M_CNT,0) M_CNT
+			, NVL(B.W_CNT,0) W_CNT
+			, NVL(B.ETC_CNT,0) ETC_CNT
+		FROM (
+			SELECT
+				${naBzplc} NA_BZPLC
+				, B.SIMP_C AUC_OBJ_DSC
+				, B.SIMP_CNM AUC_OBJ_DSC_NM
+				, '0' G_ID
+			FROM TB_LA_IS_BM_BZLOC A
+			INNER JOIN TB_LA_IS_MH_COMN_APL B ON A.NA_BZPLC = ${naBzplc}
+											AND B.SIMP_TPC = 'AUC_OBJ_DSC'
+											AND (B.SIMP_C_GRP_SQNO = '1' OR (B.SIMP_C_GRP_SQNO = '8' AND INSTR(A.ETC_AUC_OBJ_DSC,B.SIMP_C) > 0))
+			UNION ALL					
+			SELECT
+				${naBzplc} NA_BZPLC ,'9','합계','1'
+			FROM DUAL
+		) A
+		LEFT JOIN (
+			SELECT
+				NVL(T.AUC_OBJ_DSC,'9') AUC_OBJ_DSC,
+				GROUPING_ID(T.AUC_OBJ_DSC) G_ID ,
+				COUNT(*) TOT_CNT ,
+				COUNT(CASE WHEN T.INDV_SEX_C IN ('2', '3') THEN 1 END) M_CNT ,
+				COUNT(CASE WHEN T.INDV_SEX_C = '1' THEN 1 END) W_CNT ,
+				COUNT(CASE WHEN T.INDV_SEX_C NOT IN ('1', '2', '3') THEN 1 END) ETC_CNT
+			FROM (
+				SELECT
+					A.NA_BZPLC ,
+					A.AUC_DT ,
+					A.AUC_OBJ_DSC ,
+					A.SRA_INDV_AMNNO ,
+					B.BIRTH ,
+					B.INDV_SEX_C ,
+					CASE
+						WHEN TRUNC(MONTHS_BETWEEN(A.AUC_DT,B.BIRTH)) <![CDATA[<=]]> 4 THEN 4
+						ELSE TRUNC(MONTHS_BETWEEN(A.AUC_DT,B.BIRTH))
+					END MTCN ,
+					CASE
+						WHEN A.AUC_OBJ_DSC = '1' THEN ROUND(A.LOWS_SBID_LMT_AM / NVL(C.CALF_AUC_ATDR_UNT_AM, 10000))
+						WHEN A.AUC_OBJ_DSC = '2' THEN ROUND(A.LOWS_SBID_LMT_AM / NVL(C.NBFCT_AUC_ATDR_UNT_AM, 1))
+						WHEN A.AUC_OBJ_DSC = '3' THEN ROUND(A.LOWS_SBID_LMT_AM / NVL(C.PPGCOW_AUC_ATDR_UNT_AM, 10000))
+						WHEN A.AUC_OBJ_DSC = '5' THEN ROUND(A.LOWS_SBID_LMT_AM / NVL(C.GT_AUC_ATDR_UNT_AM, 10000))
+						WHEN A.AUC_OBJ_DSC = '6' THEN ROUND(A.LOWS_SBID_LMT_AM / NVL(C.HS_AUC_ATDR_UNT_AM, 10000))
+						ELSE ROUND(A.LOWS_SBID_LMT_AM / 10000)
+					END AS LOWS_SBID_LMT_UPR ,
+					F.FTSNM
+				FROM
+					TB_LA_IS_MH_SOG_COW A
+				INNER JOIN TB_LA_IS_MM_INDV B ON
+					A.NA_BZPLC = B.NA_BZPLC
+					AND A.SRA_SRS_DSC = B.SRA_SRS_DSC
+					AND A.SRA_INDV_AMNNO = B.SRA_INDV_AMNNO
+				LEFT OUTER JOIN TB_LA_IS_MM_ENV_EST C ON
+					( A.NA_BZPLC = C.NA_BZPLC )
+				LEFT JOIN TB_LA_IS_MM_FHS F ON
+					A.NA_BZPLC = F.NA_BZPLC
+					AND A.FHS_ID_NO = F.FHS_ID_NO
+					AND A.FARM_AMNNO = F.FARM_AMNNO
+				<where>
+					AND A.NA_BZPLC = #{naBzplc}
+					AND A.AUC_DT = #{searchDate}
+					<if test="indvSexC != null and indvSexC != '' ">
+						AND B.INDV_SEX_C IN (
+						<foreach item="indvSexC" collection="indvSexC" separator=",">
+							#{indvSexC}
+						</foreach>
+						)
+					</if>
+					<if test="searchTxt != null and searchTxt != '' ">
+						AND (
+							SUBSTRING(A.SRA_INDV_AMNNO,LENGTH(A.SRA_INDV_AMNNO)-4,4 ) LIKE '%' || #{searchTxt} ||'%'
+							OR TO_CHAR(A.AUC_PRG_SQ) LIKE '%' || #{searchTxt} ||'%'
+							OR B.KPN_NO LIKE '%' || #{searchTxt} ||'%' /* KPN 추가*/
+							OR F.FTSNM LIKE '%' || #{searchTxt} ||'%' /* 출하주 추가*/
+						)
+					</if>
+					<if test="stateFlag != null and stateFlag != ''">
+						AND A.DEL_YN = '0'
+						<if test='"buy".equals(stateFlag)'>
+							AND A.SEL_STS_DSC = '22'
+						</if>
+					</if>
+					<choose>
+						<when test="searchMbIntgNo != null and searchMbIntgNo != ''">
+							AND EXISTS (
+								SELECT 1 FROM TB_LA_IS_MM_MWMN 
+								WHERE MB_INTG_NO = #{searchMbIntgNo} 
+								AND TRMN_AMNNO = A.TRMN_AMNNO 
+								AND NA_BZPLC = A.NA_BZPLC
+							)
+						</when>
+						<when test="searchTrmnAmnNo != null and searchTrmnAmnNo != ''">
+							AND A.TRMN_AMNNO = #{searchTrmnAmnNo}
+						</when>
+					</choose>
+					
+				</where>					
+			 ) T
+			 <where>			
+				<if test="lowPrice != null and lowPrice != ''">
+					AND T.LOWS_SBID_LMT_UPR BETWEEN TO_CHAR(#{lowPrice}) AND #{highPrice}
+				</if>
+				<if test="startDate != null and startDate != ''">
+					AND T.MTCN BETWEEN TO_CHAR(#{startDate}) AND #{endDate} -1
+					
+				</if>
+			 </where>
+			GROUP BY ROLLUP(T.AUC_OBJ_DSC) 
+		) B ON A.AUC_OBJ_DSC = B.AUC_OBJ_DSC AND A.G_ID = B.G_ID
+		<where>
+			<if test="searchAucObjDsc != null and searchAucObjDsc != ''">
+				AND A.AUC_OBJ_DSC = #{searchAucObjDsc}
+			</if>
+		</where>
+	</select>	
 </mapper>
