@@ -40,12 +40,19 @@
 				</select>	
 			</div>
 			<div class="sort">
+			<%--
 				<select name="searchAucObjDsc" id="searchAucObjDsc">
 					<option id="ra0" value="">전체</option>	
 					<c:forEach items="${aucObjDscList}" var="obj">
 						<option id="ra${obj.AUC_OBJ_DSC }" value="${obj.AUC_OBJ_DSC}" <c:if test="${inputParam.searchAucObjDsc eq obj.AUC_OBJ_DSC}">selected</c:if>>${obj.AUC_OBJ_DSC_NM }</option>
 					</c:forEach>  
 				</select>	
+			--%>
+				<c:import url="/WEB-INF/jsp/auction/common/searchAucObjDsc.jsp">
+					<c:param name="type"        value="select" />
+					<c:param name="selectName"  value="searchAucObjDsc" />
+					<c:param name="selectValue" value="${inputParam.searchAucObjDsc}" />
+				</c:import>
 			</div>
 			<!-- Web화면에서 display -->
 			<div class="kpn">

@@ -13,6 +13,7 @@
                </select>
 		</div>
 		<div class="sort">
+		<%--
 			<select name="searchAucObjDscBuy" id="">
 				<option id="ra1" value="">전체</option>
 				<option id="ra2" value="1" <c:if test="${inputParam.searchAucObjDscBuy eq '1'}">selected</c:if>>송아지</option>
@@ -27,6 +28,12 @@
 			</c:forEach>
 			</c:if>
 			</select>
+		--%>
+			<c:import url="/WEB-INF/jsp/auction/common/searchAucObjDsc.jsp">
+				<c:param name="type"        value="select" />
+				<c:param name="selectName"  value="searchAucObjDscBuy" />
+				<c:param name="selectValue" value="${inputParam.searchAucObjDscBuy}" />
+			</c:import>
 		</div>
 		<div class="btn">
 			<button type="button" class="btn-refresh list_sch sch_buy"></button>

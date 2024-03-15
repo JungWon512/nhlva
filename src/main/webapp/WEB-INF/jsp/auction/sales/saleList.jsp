@@ -40,12 +40,27 @@
 				</select>	
 			</div>
 			<div class="sort">
+				<c:import url="/WEB-INF/jsp/auction/common/searchAucObjDsc.jsp">
+					<c:param name="type"        value="select" />
+					<c:param name="selectName"  value="searchAucObjDsc" />
+					<c:param name="selectValue" value="${inputParam.searchAucObjDsc}" />
+				</c:import>
+			<!--
 				<select name="searchAucObjDsc" id="searchAucObjDsc" >
-					<option id="ra0" value="">전체</option>	
-					<c:forEach items="${aucObjDscList}" var="obj">
-						<option id="ra${obj.AUC_OBJ_DSC }" value="${obj.AUC_OBJ_DSC}" <c:if test="${inputParam.searchAucObjDsc eq obj.AUC_OBJ_DSC}">selected</c:if>>${obj.AUC_OBJ_DSC_NM }</option>
-					</c:forEach>  
+					<option id="ra1" value="">전체</option>
+					<option id="ra2" value="1" <c:if test="${inputParam.searchAucObjDsc eq '1'}">selected</c:if>>송아지</option>
+					<option id="ra3" value="2" <c:if test="${inputParam.searchAucObjDsc eq '2'}">selected</c:if>>비육우</option>
+					<option id="ra4" value="3" <c:if test="${inputParam.searchAucObjDsc eq '3'}">selected</c:if>>번식우</option>  
+				<%-- 기타 가축 경매를 사용하는 경우 --%>
+				<c:if test="${!empty johapData.ETC_AUC_OBJ_DSC and !empty johapData.ETC_AUC_OBJ_DSC_NM}">
+				<c:set var="etcList" value="${fn:split(johapData.ETC_AUC_OBJ_DSC, ',')}" />
+				<c:set var="etcNmList" value="${fn:split(johapData.ETC_AUC_OBJ_DSC_NM, ',')}" />
+				<c:forEach items="${etcList}" var="etc" varStatus="i">
+					<option id="ra${etc}" value="${etc}" <c:if test="${inputParam.searchAucObjDsc eq etc}">selected</c:if>>${etcNmList[i.index]}</option>  
+				</c:forEach>
+				</c:if>
 				</select>	
+			-->
 			</div>
 			<div class="kpn">
 				<div class="filter-text">
