@@ -79,10 +79,6 @@
         <put-attribute name="content" value="/WEB-INF/tiles/layouts/front/content.jsp"/>
     </definition> 
      
-     
-    <definition name="common/auction/*" extends="popup-modal-layout">
-        <put-attribute name="content" value="/WEB-INF/jsp/auction/common/{1}.jsp"/>
-    </definition>   
     <definition name="pop/modal/*" extends="popup-modal-layout">
         <put-attribute name="content" value="/WEB-INF/jsp/pop/modal/{1}.jsp"/>
     </definition>
