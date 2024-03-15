@@ -569,7 +569,7 @@ public interface AuctionService {
 
 	Map<String, Object> selectIndvBloodInfo(Map<String, Object> paramMap) throws SQLException;
 
-	Map<String, Object> selectCowEpdInfo(Map<String, Object> params) throws SQLException;
+	List<Map<String, Object>> selectCowEpdList(Map<String, Object> params) throws SQLException;
 
 	List<Map<String, Object>> selectSumEntry(Map<String, Object> map) throws SQLException;
 	
