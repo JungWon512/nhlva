@@ -12,6 +12,7 @@ import java.security.PrivateKey;
 import java.security.PublicKey;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -162,7 +163,7 @@ public class ApiController {
 				for (Map<String, Object> info : list) {
 					info.put("version", version);
 					try {
-						Map<String, Object> resultMap = auctionService.updateAuctionResultMap(info);
+						Map<String, Object> resultMap = auctionService.updateEtcAuctionResultMap(info);
 						if (resultMap != null && !(boolean)resultMap.get("success")) {
 							failList.add(resultMap);
 						}
@@ -203,7 +204,7 @@ public class ApiController {
 														, @RequestParam final Map<String, Object> params) {
 		final Map<String, Object> result = new HashMap<String, Object>();
 		final List<Map<String, Object>> failList = new ArrayList<Map<String, Object>>();
-
+		final String[] cowObjDsc = {"0", "1", "2", "3"};
 		try {
 			if ("v2".equals(version)) {
 				if(params.get("list") == null) {
@@ -222,7 +223,13 @@ public class ApiController {
 				for (Map<String, Object> info : list) {
 					info.put("version", version);
 					try {
-						Map<String, Object> resultMap = auctionService.updateAuctionResultMap(info);
+						Map<String, Object> resultMap = null;
+						// 경매유형이 한우인 경우
+						if (Arrays.asList(cowObjDsc).contains(params.get("aucObjDsc"))) {
+							resultMap = auctionService.updateAuctionResultMap(info);
+						} else {
+							resultMap = auctionService.updateEtcAuctionResultMap(info);
+						}
 						if (resultMap != null && !(boolean)resultMap.get("success")) {
 							failList.add(resultMap);
 						}

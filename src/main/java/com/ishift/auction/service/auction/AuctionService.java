@@ -233,6 +233,14 @@ public interface AuctionService {
 	Map<String, Object> updateAuctionResultMap(Map<String, Object> params) throws SQLException;
 
 	/**
+	 * 기타가축 경매 결과 업데이트 - 실패시 실패 정보 return
+	 * @param params
+	 * @return
+	 * @throws SQLException
+	 */
+	Map<String, Object> updateEtcAuctionResultMap(Map<String, Object> params) throws SQLException;
+
+	/**
 	 * 일괄 경매 시작
 	 * @param aucStn
 	 * @param params

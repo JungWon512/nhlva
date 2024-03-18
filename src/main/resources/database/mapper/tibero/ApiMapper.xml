@@ -928,13 +928,39 @@
 			 , C.SRA_FED_SPY_YN									/* 사료미사용 여부 */
 			 , C.FTSNM											/* 출하주명 */
 			 , C.CUS_MPNO										/* 휴대전화번호 */
+			 , CASE WHEN A.AUC_OBJ_DSC = '1' THEN D.CALF_AUC_ATDR_UNT_AM
+					WHEN A.AUC_OBJ_DSC = '2' THEN D.NBFCT_AUC_ATDR_UNT_AM
+					WHEN A.AUC_OBJ_DSC = '3' THEN D.PPGCOW_AUC_ATDR_UNT_AM
+					WHEN A.AUC_OBJ_DSC = '5' THEN D.GT_AUC_ATDR_UNT_AM
+					WHEN A.AUC_OBJ_DSC = '6' THEN D.HS_AUC_ATDR_UNT_AM
+					ELSE 10000
+				END AS AUC_ATDR_UNT_AM							/* 경매 입찰 단위 금액 */
+			 , CASE WHEN A.AUC_OBJ_DSC = '2' THEN D.NBFCT_AUC_UPR_DSC
+			 		WHEN A.AUC_OBJ_DSC = '5' THEN D.GT_AUC_UPR_DSC
+			 		WHEN A.AUC_OBJ_DSC = '6' THEN D.GT_AUC_UPR_DSC
+					ELSE '2'
+				END AUC_UPR_DSC									/* 단가기준 */
+			, CASE WHEN A.AUC_OBJ_DSC NOT IN ( '1', '3' ) THEN E.SGNO_PRC_DSC
+					ELSE '1'
+				END AS SGNO_PRC_DSC								/* 절사구분 */
+			, CASE WHEN A.AUC_OBJ_DSC NOT IN ( '1', '3' ) THEN E.CUT_AM
+					ELSE 1
+				END AS CUT_AM									/* 절사단위미만 */
 		  FROM TB_LA_IS_MH_SOG_COW A
 		  LEFT OUTER JOIN TB_LA_IS_MM_MWMN B
 		    ON ( A.NA_BZPLC = B.NA_BZPLC AND A.TRMN_AMNNO = B.TRMN_AMNNO )
 		  LEFT OUTER JOIN TB_LA_IS_MM_FHS C
 		    ON ( A.NA_BZPLC = C.NA_BZPLC AND A.FHS_ID_NO = C.FHS_ID_NO AND A.FARM_AMNNO = C.FARM_AMNNO )
+		  INNER JOIN TB_LA_IS_MM_ENV_EST D
+		    ON ( A.NA_BZPLC = D.NA_BZPLC )
+		  INNER JOIN TB_LA_IS_MH_AUC_QCN E
+		    ON (
+				A.NA_BZPLC = E.NA_BZPLC
+				AND
+				A.AUC_DT = E.AUC_DT
+		   )
 		 WHERE A.NA_BZPLC = #{naBzplc}
-		   AND A.AUC_DT = #{aucDt}		   			
+		   AND A.AUC_DT = #{aucDt}
 		<choose>
 			<when test='"0".equals(aucObjDsc)'>
 				AND A.AUC_OBJ_DSC IN ('1','2','3')
@@ -945,6 +971,11 @@
 		</choose>
 		   AND A.OSLP_NO = #{oslpNo}
 		   AND A.LED_SQNO = #{ledSqno}
+		   AND (
+				(E.AUC_OBJ_DSC = '0' AND A.AUC_OBJ_DSC IN ( '1', '2', '3' ))
+				OR
+				(E.AUC_OBJ_DSC != '0' AND A.AUC_OBJ_DSC = E.AUC_OBJ_DSC)
+		   )
 	</select>
 	
 	<!-- 기등록 수수료 정보 삭제 -->
@@ -984,6 +1015,10 @@
 		<if test="sbidYn != null and sbidYn != ''">
 		   AND A.SBID_YN		= #{sbidYn}
 		</if>
+		   AND '1' = ( CASE WHEN A.AUC_OBJ_DSC IN ( '1', '2', '3' ) OR NVL(A.JNLZ_BSN_DSC, '2') = '2' THEN '1'
+							WHEN '10' BETWEEN A.ST_SOG_WT AND A.ED_SOG_WT THEN '1'
+							ELSE '0'
+						END)
 	</select>
 	
 	<!-- 수수료 정보 저장 -->
@@ -1298,6 +1333,8 @@
 	<select id="selectBizAuctionInfo" parameterType="map" resultType="map">
 		 SELECT A.NA_BZPLC
 			 , A.NBFCT_AUC_UPR_DSC
+			 , A.GT_AUC_UPR_DSC
+			 , A.HS_AUC_UPR_DSC
 			 , A.PHN_AUC_YN
 			 , A.TD_RC_CST
 			 , A.AUC_ATDR_UNT_AM
@@ -1368,14 +1405,11 @@
 		   		AND B.AUC_OBJ_DSC = #{aucObjDscQcn}
 		   	</when>
 		   	<otherwise>		
-				<choose>
-					<when test='"0".equals(aucObjDsc)'>
-						AND B.AUC_OBJ_DSC IN ('1','2','3')
-					</when>
-					<otherwise>
-						AND B.AUC_OBJ_DSC = #{aucObjDsc}
-					</otherwise>
-				</choose>
+				AND (
+					(#{aucObjDsc} IN ('1', '2', '3') AND DECODE(B.AUC_OBJ_DSC, '0', #{aucObjDsc}, B.AUC_OBJ_DSC) = #{aucObjDsc})
+					OR
+					(#{aucObjDsc} NOT IN ( '1', '2', '3' ) AND B.AUC_OBJ_DSC = #{aucObjDsc})
+				)
 		   	</otherwise>
 		   </choose>
 	</select>

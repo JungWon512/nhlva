@@ -612,6 +612,120 @@ public class AuctionServiceImpl implements AuctionService {
 		
 		return result;
 	}
+
+	@Override
+	public Map<String, Object> updateEtcAuctionResultMap(final Map<String, Object> params) throws SQLException {
+		
+		final Map<String, Object> result = new HashMap<String, Object>();
+		
+		params.put("naBzplc", params.get("naBzPlc"));
+		
+		// 1. 필수 인자 체크
+		if ((params.get("naBzPlc") == null && params.get("naBzplc") == null)
+		 || params.get("aucObjDsc") == null
+		 || params.get("aucDt") == null
+		 || params.get("oslpNo") == null
+		 || params.get("ledSqno") == null
+		 || params.get("selStsDsc") == null
+		 || params.get("sraSbidUpr") == null
+		) {
+			// 실패한 정보를 다시 return
+			params.put("message", "필수 인자가 없습니다.");
+			return params;
+		}
+
+		// 2. 조합 경매 기본 정보 조회
+		final Map<String, Object> bizAuctionInfo = auctionDAO.selectBizAuctionInfo(params);
+		
+		// 3. 경매 정보 조회 ( 송아지, 번식우, 비육우 여부, 중도매인, 출하주의 조합 가입 여부, 자가 운송 여부 )
+		final Map<String, Object> info = auctionDAO.selectAuctionInfo(params);
+		if (info == null) {
+			// 조회한 정보가 없는 경우 return
+			params.put("message", "출하우 정보가 없습니다.");
+			return params;
+		}
+		
+		if (bizAuctionInfo == null) {
+			// 조회한 정보가 없는 경우 return
+			params.put("message", "경매 기본 정보가 없습니다.");
+			return params;
+		}
+
+		final String aucUprDsc		= info.getOrDefault("AUC_UPR_DSC", "2").toString();				// 경매단가 구분 코드 ( 1. kg 단위, 2. 두 단위 )
+		final String sgnoPrcDsc		= info.getOrDefault("SGNO_PRC_DSC", "1").toString();				// 절사구분 ( 1.소수점 이하 버림, 2. 소수점 이상 절상, 3. 반올림 )
+		final int cutAm				= Integer.parseInt(info.getOrDefault("CUT_AM", "1").toString());	// 절사금액
+		final String cowSogWt		= (info.get("COW_SOG_WT") == null || "".equals(info.get("COW_SOG_WT"))) ? "0" : info.get("COW_SOG_WT").toString();
+		final long sraSbidUpr		= Long.parseLong(params.get("sraSbidUpr").toString());							// 응찰금액
+		final int aucAtdrUntAm		= Integer.parseInt(info.getOrDefault("AUC_ATDR_UNT_AM", "1").toString());	
+		long sraSbidAm				= 0L;
+		
+		// 4. 낙찰 금액 계산 [s] > 상태가 22인 경우만 낙찰 금액을 새로 계산해준다.
+		if ("22".equals(params.get("selStsDsc"))) {
+			// 2024-03-18 : ycsong
+			// 사업장 정보에 설정한 경매 단가 기준으로 낙찰가를 계산한다. ( 1: KG, 2: 두 )
+			if ("1".equals(aucUprDsc)) {
+				// 중량 정보가 없으면 낙찰가를 0으로 넣어준다.
+				if ("0".equals(cowSogWt)) {
+					params.put("sraSbidAm", 0);
+				}
+				else {
+					double bidAmt = Double.parseDouble(cowSogWt) * sraSbidUpr * aucAtdrUntAm/ cutAm;
+					if ("1".equals(sgnoPrcDsc)) {
+						sraSbidAm = (long)Math.floor(bidAmt) * cutAm;
+					}
+					else if ("2".equals(sgnoPrcDsc)) {
+						sraSbidAm = (long)Math.ceil(bidAmt) * cutAm;
+					}
+					else if ("3".equals(sgnoPrcDsc)) {
+						sraSbidAm = (long)Math.round(bidAmt) * cutAm;
+					}
+					params.put("sraSbidAm", sraSbidAm);
+				}
+			}
+			else {
+				sraSbidAm = sraSbidUpr * aucAtdrUntAm;
+				params.put("sraSbidAm", sraSbidAm);
+			}
+		}
+		// 낙찰 금액 계산 [e]
+		
+		// 5. 경매결과 업데이트
+		int cnt = auctionDAO.updateAuctionResult(params);
+		params.put("chg_pgid", params.getOrDefault("chg_pgid", "API"));
+		params.put("chg_rmk_cntn", params.getOrDefault("chg_rmk_cntn", "API 경매결과 변경"));
+		auctionDAO.insertSogCowLog(params);
+		if (cnt == 0) {
+			// 실패한 정보를 다시 return
+			params.put("message", "출하우 정보가 없습니다.");
+			return params;
+		}
+
+		// 수수료 정보 저장 [s]
+		// 6. 기등록 수수료 정보 삭제
+		auctionDAO.deleteFeeInfo(params);
+		
+		// 7. 경매 정보 조회 ( 송아지, 번식우, 비육우 여부, 중도매인, 출하주의 조합 가입 여부, 자가 운송 여부 )
+		final Map<String, Object> auctionInfo = auctionDAO.selectAuctionInfo(params);
+		
+		// 8. 낙찰인 경우 수수료 정보 저장
+		if (auctionInfo != null) {
+			//params.put("feeInfoList", this.calcFeeInfo(info,params,bizAuctionInfo));
+			//낙찰가 경매정보에 저장하여 수수료계산하게 수정
+			auctionInfo.put("sraSbidAm", params.get("sraSbidAm"));
+			List<Map<String, Object>> feeInfoList = this.calcFeeInfo(params,auctionInfo,bizAuctionInfo);			
+			params.put("feeInfoList", feeInfoList);
+			if(feeInfoList.size() >0) auctionDAO.insertFeeInfo(params);
+			
+			// TODO :: 경매 낙찰시 SMS 발송하도록 설정 한 경우 출하자에게 낙찰가 알림톡 전송
+			this.sendAlamTalkProc(bizAuctionInfo, auctionInfo);
+		}
+		// 수수료 정보 저장 [e]
+		
+		result.put("success", true);
+		result.put("message", "경매내역 변경에 성공했습니다.");
+		
+		return result;
+	}
 	
 	/**
 	 * 낙찰시 알림톡 발송
@@ -1464,7 +1578,6 @@ public class AuctionServiceImpl implements AuctionService {
 				default: info.put(key, "0"); break;
 				}
 			}
-			log.debug("{} : {}", key, info.get(key));
 		}
 
 		final String naBzplc		= info.get("NA_BZPLC").toString();
