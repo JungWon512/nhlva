@@ -83,25 +83,26 @@
 		// 정산서 상세 버튼
 		$(document).on('click','.move_info',function(){	
 			const searchDate = $(this).attr("id").split("_")[0];
-			const aucObjDsc	= $(this).attr("id").split("_")[1];
+			const searchAucObjDsc	= $(this).attr("id").split("_")[1];
 			const place	= $(this).attr("id").split("_")[2];
-			let searchAucObjDsc = "";
+			// let searchAucObjDsc = "";
+			console.log(searchAucObjDsc)
 			
-			if (aucObjDsc.toString().indexOf(",") > -1) {
-				searchAucObjDsc = "";
-			} else {
-				switch (aucObjDsc) {
-					case "송아지" :
-						searchAucObjDsc = "1"
-					break;
-					case "비육우" :
-						searchAucObjDsc = "2"
-					break;
-					case "번식우" :
-						searchAucObjDsc = "3"
-					break;
-				}
-			}
+			// if (aucObjDsc.toString().indexOf(",") > -1) {
+			// 	searchAucObjDsc = "";
+			// } else {
+			// 	switch (aucObjDsc) {
+			// 		case "송아지" :
+			// 			searchAucObjDsc = "1"
+			// 		break;
+			// 		case "비육우" :
+			// 			searchAucObjDsc = "2"
+			// 		break;
+			// 		case "번식우" :
+			// 			searchAucObjDsc = "3"
+			// 		break;
+			// 	}
+			// }
 			let form = $('<form></form>');
 			form.attr('action', "/my/entryInfo"+location.search);
 			form.attr('method', 'post');
@@ -279,31 +280,31 @@
     
     // My 현황 탭
 	var setChart =  function(entryList) {
-		var doughChart;
 		var barChart;
+		const charData = entryList.slice(1);
 		
 	    // 송아지 낙찰평균 및 평균시세
-	    var barData1 = 0;
-	    var barData2 = 0;
+	    // var barData1 = 0;
+	    // var barData2 = 0;
 	    // 비육우 낙찰평균 및 평균시세
-	    var barData3 = 0;
-	    var barData4 = 0;
+	    // var barData3 = 0;
+	    // var barData4 = 0;
 	    // 번식우 낙찰평균 및 평균시세
-	    var barData5 = 0;
-	    var barData6 = 0;
+	    // var barData5 = 0;
+	    // var barData6 = 0;
 	    // 송아지, 비육우, 번식우 map 만들기
-	    let cowData1 = entryList.forEach(item => {
-			if (item.AUC_OBJ_DSC == '1') {
-				barData1 = (Math.round(item.AVG_MY_SBID_AM / 1000 ?? 0));
-	   			barData2 = (Math.round(item.AVG_SBID_AM / 1000 ?? 0));
-			} else if (item.AUC_OBJ_DSC == '2') {
-				barData3 = (Math.round(item.AVG_MY_SBID_AM / 1000 ?? 0));
-	   			barData4 = (Math.round(item.AVG_SBID_AM / 1000 ?? 0));
-			} else if (item.AUC_OBJ_DSC == '3') {
-				barData5 = (Math.round(item.AVG_MY_SBID_AM / 1000 ?? 0));
-	   			barData6 = (Math.round(item.AVG_SBID_AM / 1000 ?? 0));
-			}
-		});
+	    // let cowData1 = entryList.forEach(item => {
+		// 	if (item.AUC_OBJ_DSC == '1') {
+		// 		barData1 = (Math.round(item.AVG_MY_SBID_AM / 1000 ?? 0));
+	   	// 		barData2 = (Math.round(item.AVG_SBID_AM / 1000 ?? 0));
+		// 	} else if (item.AUC_OBJ_DSC == '2') {
+		// 		barData3 = (Math.round(item.AVG_MY_SBID_AM / 1000 ?? 0));
+	   	// 		barData4 = (Math.round(item.AVG_SBID_AM / 1000 ?? 0));
+		// 	} else if (item.AUC_OBJ_DSC == '3') {
+		// 		barData5 = (Math.round(item.AVG_MY_SBID_AM / 1000 ?? 0));
+	   	// 		barData6 = (Math.round(item.AVG_SBID_AM / 1000 ?? 0));
+		// 	}
+		// });
 		
 		// 차트 초기화
 		$('div.barChart').empty();
@@ -315,18 +316,21 @@
 		var config = {
 			type: 'bar',
 			data: {
-				labels: ['송아지', '비육우', '번식우'],
+				// labels: ['송아지', '비육우', '번식우'],
+				labels: charData.map(item => item.AUC_OBJ_DSC_NM),
 				datasets: [
 					{
 						label: '낙찰평균(천원)',
-						data: [barData1, barData3, barData5],
+						data: charData.map(item => (item.AVG_MY_SBID_AM ?? 0) / 1000),
+						// data: [barData1, barData3, barData5],
 						borderColor: '#a5dfdf',
 						backgroundColor: '#a5dfdf',
 						yAxisID: 'y-left'
 					},
 					{
 						label: '평균시세(천원)',
-						data: [barData2, barData4, barData6],
+						data: charData.map(item => (item.AVG_SBID_AM ?? 0) / 1000),
+						// data: [barData2, barData4, barData6],
 						borderColor: '#9ad0f5',
 						backgroundColor: '#9ad0f5',
 						yAxisID: 'y-left'
@@ -445,10 +449,39 @@
 			
 			$("div.cont > div.left > .totCowCnt").html((data.cowEntryCnt.length > 0 ? data.cowEntryCnt[0].TOT_MY_ENTRY_CNT : 0) + " 두");
 			$("div.cont > div.left > .fCowCnt").html("(유찰 " + (data.cowEntryCnt.length > 0 ? data.cowEntryCnt[0].TOT_FBID_CNT : 0) + "두)");
-			$("ul.cowCnt span.cow1").html((data.cowEntryCnt.length > 0 && data.cowEntryCnt[1] ? data.cowEntryCnt[1].TOT_MY_ENTRY_CNT : 0) + "두");
-			$("ul.cowCnt span.cow2").html((data.cowEntryCnt.length > 0 && data.cowEntryCnt[2] ? data.cowEntryCnt[2].TOT_MY_ENTRY_CNT : 0) + "두");
-			$("ul.cowCnt span.cow3").html((data.cowEntryCnt.length > 0 && data.cowEntryCnt[3] ? data.cowEntryCnt[3].TOT_MY_ENTRY_CNT : 0) + "두");
-			
+			// $("ul.cowCnt span.cow1").html((data.cowEntryCnt.length > 0 && data.cowEntryCnt[1] ? data.cowEntryCnt[1].TOT_MY_ENTRY_CNT : 0) + "두");
+			// $("ul.cowCnt span.cow2").html((data.cowEntryCnt.length > 0 && data.cowEntryCnt[2] ? data.cowEntryCnt[2].TOT_MY_ENTRY_CNT : 0) + "두");
+			// $("ul.cowCnt span.cow3").html((data.cowEntryCnt.length > 0 && data.cowEntryCnt[3] ? data.cowEntryCnt[3].TOT_MY_ENTRY_CNT : 0) + "두");
+			const aucObjDsc = {'1':'송아지', '2':'비육우', '3':'번식우'};
+			let etcObjDsc = {};
+			if (data.myJohapData.ETC_AUC_OBJ_DSC) {
+				const keys = data.myJohapData.ETC_AUC_OBJ_DSC.split(",");
+				const values = data.myJohapData.ETC_AUC_OBJ_DSC_NM.split(",");
+				keys.forEach((key, index) => {
+					etcObjDsc[key] = values[index] ?? '';
+				});
+			}
+
+			const cowList = data.cowEntryCnt.filter(item => Object.keys(aucObjDsc).includes(item.AUC_OBJ_DSC));
+			const etcList = data.cowEntryCnt.filter(item => Object.keys(etcObjDsc).includes(item.AUC_OBJ_DSC));
+
+			const cowCntHtml = [];
+			Object.keys(aucObjDsc).forEach(key => {
+				const cnt = cowList.filter(item => item.AUC_OBJ_DSC == key)[0]?.TOT_MY_ENTRY_CNT ?? 0;
+				cowCntHtml.push('<li>' + aucObjDsc[key]);
+				cowCntHtml.push(' <span class="num cow'+ key +'">'+ cnt +'두</span>');
+				cowCntHtml.push('</li>');
+			});
+			Object.keys(etcObjDsc).forEach(key => {
+				const cnt = etcList.filter(item => item.AUC_OBJ_DSC == key)[0]?.TOT_MY_ENTRY_CNT ?? 0;
+				if (cnt) {
+					cowCntHtml.push('<li>' + etcObjDsc[key]);
+					cowCntHtml.push(' <span class="num cow'+ key +'">'+ cnt +'두</span>');
+					cowCntHtml.push('</li>');
+				}
+			});
+			$("ul.cowCnt").html(cowCntHtml.join(""));
+
 			// 나의 출장우 현황
 			setDataEntryTable(data.cowEntryCntList, data.myJohapData);
 			

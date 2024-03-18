@@ -13,12 +13,18 @@
                </select>
 		</div>
 		<div class="sort">
-			<select name="searchAucObjDsc" id="searchAucObjDsc">
+			<%-- <select name="searchAucObjDsc" id="searchAucObjDsc">
 				<option id="ra1" value="">전체</option>
 				<option id="ra2" value="1" <c:if test="${inputParam.searchAucObjDsc eq '1'}">selected</c:if>>송아지</option>
 				<option id="ra3" value="2" <c:if test="${inputParam.searchAucObjDsc eq '2'}">selected</c:if>>비육우</option>
 				<option id="ra4" value="3" <c:if test="${inputParam.searchAucObjDsc eq '3'}">selected</c:if>>번식우</option>
-			</select>	
+			</select>	 --%>
+			<c:import url="/common/searchAucObjDsc">
+				<c:param name="type"        value="select" />
+				<c:param name="selectName"  value="searchAucObjDsc" />
+				<c:param name="naBzplc"     value="${johapData.NA_BZPLC}" />
+				<c:param name="selectValue" value="${inputParam.searchAucObjDsc}" />
+			</c:import>
 		</div>
 		<div class="btn">
 			<button type="button" class="btn-refresh list_sch sch_bid"></button>

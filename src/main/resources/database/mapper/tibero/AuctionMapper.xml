@@ -2585,6 +2585,7 @@
 				, T.AUC_DT
 				, T.AUC_DAY
 				, T.AUC_WEEK_DAY
+				, T.AUC_OBJ_DSC
 				, AGGR_CONCAT (DISTINCT T.AUC_OBJ_DSC_NAME, ',') AUC_OBJ_DSC_NAME
 				, COUNT(*) COW_CNT /* 전체 */
 				, SUM(T.SRA_SBID_AM) AS SRA_SBID_AM
@@ -2647,7 +2648,7 @@
 					AND A.NA_BZPLC = #{naBzplc} /* 사업장 번호 */
 				</if>
 		) T
-		GROUP BY T.NA_BZPLC,  T.CLNTNM, T.AUC_DT, T.NA_BZPLCNO, T.AUC_DAY, T.AUC_WEEK_DAY
+		GROUP BY T.NA_BZPLC,  T.CLNTNM, T.AUC_DT, T.NA_BZPLCNO, T.AUC_DAY, T.AUC_WEEK_DAY, T.AUC_OBJ_DSC
 	</select>
 
 	<!-- 후대정보 -->
