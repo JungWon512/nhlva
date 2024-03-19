@@ -268,6 +268,15 @@ public interface AuctionService {
 	Map<String, Object> auctionFinish(Map<String, Object> aucStn, Map<String, Object> params) throws SQLException;
 
 	/**
+	 * 일괄 경매 종료
+	 * @param aucStn
+	 * @param params
+	 * @return
+	 * @throws SQLException
+	 */
+	Map<String, Object> etcAuctionFinish(Map<String, Object> aucStn, Map<String, Object> params) throws SQLException;
+
+	/**
 	 * 금일 경매차수 조회
 	 * @return
 	 * @throws SQLException

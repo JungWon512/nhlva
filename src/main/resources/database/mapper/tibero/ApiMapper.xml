@@ -1115,6 +1115,24 @@
 			 , B.SRA_FED_SPY_YN									/* 사료미사용 여부 */
 			 , B.FTSNM											/* 출하주명 */
 			 , B.CUS_MPNO										/* 휴대전화번호 */
+			 , CASE WHEN A.AUC_OBJ_DSC = '1' THEN E.CALF_AUC_ATDR_UNT_AM
+					WHEN A.AUC_OBJ_DSC = '2' THEN E.NBFCT_AUC_ATDR_UNT_AM
+					WHEN A.AUC_OBJ_DSC = '3' THEN E.PPGCOW_AUC_ATDR_UNT_AM
+					WHEN A.AUC_OBJ_DSC = '5' THEN E.GT_AUC_ATDR_UNT_AM
+					WHEN A.AUC_OBJ_DSC = '6' THEN E.HS_AUC_ATDR_UNT_AM
+					ELSE 10000
+				END AS AUC_ATDR_UNT_AM							/* 경매 입찰 단위 금액 */
+			 , CASE WHEN A.AUC_OBJ_DSC = '2' THEN E.NBFCT_AUC_UPR_DSC
+			 		WHEN A.AUC_OBJ_DSC = '5' THEN E.GT_AUC_UPR_DSC
+			 		WHEN A.AUC_OBJ_DSC = '6' THEN E.GT_AUC_UPR_DSC
+					ELSE '2'
+				END AUC_UPR_DSC									/* 단가기준 */
+			, CASE WHEN A.AUC_OBJ_DSC NOT IN ( '1', '3' ) THEN F.SGNO_PRC_DSC
+					ELSE '1'
+				END AS SGNO_PRC_DSC								/* 절사구분 */
+			, CASE WHEN A.AUC_OBJ_DSC NOT IN ( '1', '3' ) THEN F.CUT_AM
+					ELSE 1
+				END AS CUT_AM									/* 절사단위미만 */
 		  FROM TB_LA_IS_MH_SOG_COW A
 		  LEFT OUTER JOIN TB_LA_IS_MM_FHS B
 			ON (
@@ -1182,6 +1200,14 @@
 		   		AND
 		   		D.TRMN_AMNNO = C.TRMN_AMNNO
 		   )
+		 INNER JOIN TB_LA_IS_MM_ENV_EST E
+			ON ( A.NA_BZPLC = E.NA_BZPLC )
+		 INNER JOIN TB_LA_IS_MH_AUC_QCN F
+			ON (
+				A.NA_BZPLC = F.NA_BZPLC
+				AND
+				A.AUC_DT = F.AUC_DT
+		   )
 		 WHERE A.NA_BZPLC = #{naBzplc}
 		   AND A.AUC_DT = #{aucDt}
 	<choose>
@@ -1216,6 +1242,11 @@
 		   AND A.SEL_STS_DSC <![CDATA[<>]]> '22'
 		   AND A.AUC_PRG_SQ BETWEEN #{stAucNo} AND #{edAucNo}
 		   AND A.LOWS_SBID_LMT_AM > 0
+		   AND (
+				(F.AUC_OBJ_DSC = '0' AND A.AUC_OBJ_DSC IN ( '1', '2', '3' ))
+				OR
+				(F.AUC_OBJ_DSC != '0' AND A.AUC_OBJ_DSC = F.AUC_OBJ_DSC)
+		   )
 		 ORDER BY A.AUC_PRG_SQ
 	</select>
 	

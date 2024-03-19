@@ -1511,7 +1511,8 @@ public class ApiController {
 						}
 						
 						// 경매 종료
-						returnMap = auctionService.auctionFinish(aucStn, temp);
+						// returnMap = auctionService.auctionFinish(aucStn, temp);
+						returnMap = auctionService.etcAuctionFinish(aucStn, temp);
 						if (returnMap != null && (Boolean)returnMap.get("success")) {
 							result.put("success", true);
 							result.put("message", "경매 종료가 정상 처리되었습니다.");
