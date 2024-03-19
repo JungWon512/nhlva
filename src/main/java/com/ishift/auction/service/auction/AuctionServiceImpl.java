@@ -1588,7 +1588,8 @@ public class AuctionServiceImpl implements AuctionService {
 		final String trmnMacoYn		= info.get("TRMN_MACO_YN").toString();				// 중도매인 조합원 여부 ( 0.비조합원, 1.조합원 )
 		final String fhsMacoYn		= info.get("FHS_MACO_YN").toString();				// 출하주 조합원 여부 ( 0.비조합원, 1.조합원 )
 		final String ppgcowFeeDsc	= info.get("PPGCOW_FEE_DSC").toString();			// 번식우 수수료 구분코드 > 1.임신우, 2.비임신우, 3.임신우+송아지, 4.비임신우+송아지,  5.해당없음
-		final String selStsDsc		= info.get("SEL_STS_DSC").toString();						// 경매상태 
+		final String selStsDsc		= info.get("SEL_STS_DSC").toString();				// 경매상태 
+		final String cowSogWt		= info.get("COW_SOG_WT").toString();
 		//단일
 		//long sraSbidUpr				= flagAucDsc?Long.parseLong(params.get("sraSbidUpr").toString()):Long.parseLong(info.get("ATDR_AM").toString());							// 응찰금액
 		long sraSbidAm				= Long.parseLong(info.get("sraSbidAm").toString());
@@ -1597,6 +1598,7 @@ public class AuctionServiceImpl implements AuctionService {
 		info.put("naBzPlc",			naBzplc);
 		info.put("aucObjDsc",		aucObjDsc);
 		info.put("aucDt",			aucDt);
+		info.put("cowSogWt",		cowSogWt);
 
 		// 8. 수수료 기본 정보 조회
 		final List<Map<String, Object>> feeInfoList = auctionDAO.selectFeeInfo(info);

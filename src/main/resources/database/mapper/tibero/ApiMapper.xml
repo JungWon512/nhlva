@@ -1016,7 +1016,7 @@
 		   AND A.SBID_YN		= #{sbidYn}
 		</if>
 		   AND '1' = ( CASE WHEN A.AUC_OBJ_DSC IN ( '1', '2', '3' ) OR NVL(A.JNLZ_BSN_DSC, '2') = '2' THEN '1'
-							WHEN '10' BETWEEN A.ST_SOG_WT AND A.ED_SOG_WT THEN '1'
+							WHEN NVL(#{cowSogWt}, 0) BETWEEN A.ST_SOG_WT AND A.ED_SOG_WT THEN '1'
 							ELSE '0'
 						END)
 	</select>
