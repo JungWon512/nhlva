@@ -1100,44 +1100,6 @@ public class AuctionServiceImpl implements AuctionService {
 			// 조회한 정보가 없는 경우 return
 			throw new SQLException("조합 경매 기본 정보가 없습니다."); 
 		}
-		
-
-		// final String aucUprDsc		= info.getOrDefault("AUC_UPR_DSC", "2").toString();				// 경매단가 구분 코드 ( 1. kg 단위, 2. 두 단위 )
-		// final String sgnoPrcDsc		= info.getOrDefault("SGNO_PRC_DSC", "1").toString();				// 절사구분 ( 1.소수점 이하 버림, 2. 소수점 이상 절상, 3. 반올림 )
-		// final int cutAm				= Integer.parseInt(info.getOrDefault("CUT_AM", "1").toString());	// 절사금액
-		// final String cowSogWt		= (info.get("COW_SOG_WT") == null || "".equals(info.get("COW_SOG_WT"))) ? "0" : info.get("COW_SOG_WT").toString();
-		// final long sraSbidUpr		= Long.parseLong(params.get("sraSbidUpr").toString());							// 응찰금액
-		// final int aucAtdrUntAm		= Integer.parseInt(info.getOrDefault("AUC_ATDR_UNT_AM", "1").toString());	
-		// long sraSbidAm				= 0L;
-		
-		// // 4. 낙찰 금액 계산 [s] > 상태가 22인 경우만 낙찰 금액을 새로 계산해준다.
-		// if ("22".equals(params.get("selStsDsc"))) {
-		// 	// 2024-03-18 : ycsong
-		// 	// 사업장 정보에 설정한 경매 단가 기준으로 낙찰가를 계산한다. ( 1: KG, 2: 두 )
-		// 	if ("1".equals(aucUprDsc)) {
-		// 		// 중량 정보가 없으면 낙찰가를 0으로 넣어준다.
-		// 		if ("0".equals(cowSogWt)) {
-		// 			params.put("sraSbidAm", 0);
-		// 		}
-		// 		else {
-		// 			double bidAmt = Double.parseDouble(cowSogWt) * sraSbidUpr * aucAtdrUntAm / cutAm;
-		// 			if ("1".equals(sgnoPrcDsc)) {
-		// 				sraSbidAm = (long)Math.floor(bidAmt) * cutAm;
-		// 			}
-		// 			else if ("2".equals(sgnoPrcDsc)) {
-		// 				sraSbidAm = (long)Math.ceil(bidAmt) * cutAm;
-		// 			}
-		// 			else if ("3".equals(sgnoPrcDsc)) {
-		// 				sraSbidAm = (long)Math.round(bidAmt) * cutAm;
-		// 			}
-		// 			params.put("sraSbidAm", sraSbidAm);
-		// 		}
-		// 	}
-		// 	else {
-		// 		sraSbidAm = sraSbidUpr * aucAtdrUntAm;
-		// 		params.put("sraSbidAm", sraSbidAm);
-		// 	}
-		// }
 
 		// 5. 응찰 완료(낙찰 처리 대상) 리스트 조회
 		final List<Map<String, Object>> list = auctionDAO.selectBidCompleteList(params);
