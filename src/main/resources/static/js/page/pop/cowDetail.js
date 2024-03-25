@@ -17,15 +17,20 @@
     	
     	$(document).on('click','.btnCowSearch',function(e){
     		var indvNo = ""+$(this).data('indvNo');
+    		var indvBldDsc = ""+$(this).data('indvBldDsc');
     		if(indvNo && indvNo.length == 15){
-				var param = {
-					naBzplc : $("form[name='frmDetail'] input[name='naBzplc']").val()
-					,sraIndvAmnno : indvNo
-				}
+				//var param = {
+				//	naBzplc : $("form[name='frmDetail'] input[name='naBzplc']").val()
+				//	,sraIndvAmnno : indvNo
+				//}
     			
-    			var title = $(this).closest('tr').find('th').text().trim();
+    			//var title = $(this).closest('tr').find('th').text().trim();
+    			var title = $(this).closest('dl').find('dt').text().trim();
+    			
 	    		$("form[name='frmDetail'] input[name='title']").val(title);
 	    		$("form[name='frmDetail'] input[name='sraIndvAmnno']").val(indvNo);
+	    		$("form[name='frmDetail'] input[name='indvBldDsc']").val(indvBldDsc);
+	    		//$("form[name='frmDetail'] input[name='aucDt']").val(aucDt);
 	    		$("form[name='frmDetail'] input[name='parentObj']").val(JSON.stringify($('form[name=frm]').serializeObject()));
 				var temp = window.location.search.split("&");
 				var params = temp.filter(function(el) {return el != "type=0" && el != "type=1"});
@@ -73,10 +78,11 @@ var tabLoad = function(tabId){
 		error: function(xhr, status, error) {
 		}
 	}).done(function (json) {
-//		if(tabId == '1'){
+		if(tabId == '1'){
 //			//getAiakInfo();
-//		}else 
-		if(tabId == '2'){
+		    showGradient(); // 데이터 불러올때 마지막에 재호출 해주세요
+		    $(".scroll_wrap .fixdCellGrup").on("scroll", showGradient);
+		}else if(tabId == '2'){
 			//getAiakInfo(drawChart);
 			drawChart();
 		}
@@ -188,9 +194,9 @@ var drawChart = function(){
     var epdData = [];
     var mEpdData = [];
     $('td[name^=dscReProduct]').each((i,o)=>{
-    	var data = $(o).text().trim();    	
+    	var data = $(o).next().text();    	
     	epdData.push((data == 'A'? 4:(data == 'B'? 3 : (data == 'C' ? 2 : (data == 'D' ? 1 :0)))));
-    	labels.push($(o).closest('tr').find('th').text().trim());
+    	labels.push($(o).text().trim());
     });
     console.log(epdData);
     var config = {
@@ -238,3 +244,32 @@ var drawChart = function(){
     };
     chart = new Chart(ctx, config);
 }; 
+
+function showGradient() {
+    $(".fixdCellGrup").each(function () {
+        if ($(this).width() < $(this).children().innerWidth() == true) {
+            //sticky 테이블 체크 여부
+            if ($(this).parent(".scroll_wrap").hasClass("left_fixdTbl") == true) {
+                //sticky 테이블 위치 설정
+                var wd = 0;
+                //prettier-ignore
+                $(this).find("thead th.fixd_box").each(function (index, item) {
+                    $(item).css("left", wd + "px");
+                    wd += $(item).outerWidth();
+                });
+                //prettier-ignore
+                $(this).find("tbody tr").each(function () {
+                    var tbody_wd = 0;
+                    //prettier-ignore
+                    $(this).find("td.fixd_box").each(function (index, item) {
+                        $(item).css("left", tbody_wd + "px");
+                        tbody_wd += $(item).outerWidth();
+                    });
+                });
+            }
+        }
+        if ($(this).height() < $(this).children().innerHeight() == true) {
+            $(this).parents(".scroll_wrap").addClass("sc_v_use");
+        }
+    });
+}

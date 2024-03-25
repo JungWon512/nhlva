@@ -190,58 +190,66 @@
 		</table>
 	</div>
 </c:if>
-<h3 class="tit">브루셀라 / 질병검사</h3>
+<h3 class="tit new_tit">
+    구제역 백신접종 및 <br />브루셀라병 검사<i class="ico-vaccine"></i>
+</h3>
 <div class="cow-basic">
-	<table class="table-detail">
+	<table class="table-detail row-table">
 		<colgroup>
-			<col width="23%">
-			<col width="45%">
-			<col width="13%">
-			<col>
+			<col />
+			<col width="30%">
 		</colgroup>
 		<tbody>
-			<tr>
-				<th>브루셀라</th>
-				<td>
+            <tr>
+                <th>브루셀라</th>
+                <th class="bdr-n">경과일</th>
+            </tr>
+            <tr>
+                <td class="bdr-y">
 					<c:if test="${not empty infoData.BRCL_ISP_DT_STR}">
-						<span>${infoData.BRCL_ISP_DT_STR }</span> 검사 <span class="c-blue">(${infoData.BRCL_ISP_RZT_C_NM })</span>
-					</c:if>
-				</td>
-				<th>경과일</th>
+                		<span>${infoData.BRCL_ISP_DT_STR }</span> 검사 <span class="c-blue">(${infoData.BRCL_ISP_RZT_C_NM })</span>
+                	</c:if>
+                </td>                
 				<td class="ta-C">
 					<c:if test="${not empty infoData.BRCL_COMPARE_DT}">
 						${infoData.BRCL_COMPARE_DT }일
 					</c:if>
 				</td>				
-			</tr>
-			<tr>
-				<th>백신접종</th>
-				<td>
+            </tr>
+            
+            <tr>
+                <th>백신접종</th>
+                <th class="bdr-n">경과일</th>
+            </tr>
+            <tr>
+                <td class="bdr-y">
 					<c:if test="${not empty infoData.VACN_DT_STR}">
 						${infoData.VACN_DT_STR } 접종 <span class="c-blue">(${infoData.VACN_ORDER })</span>
 					</c:if>
-				</td>
-				<th>경과일</th>
+                </td>                
 				<td class="ta-C">
 					<c:if test="${not empty infoData.VACN_COMPARE_DT}">
 						${infoData.VACN_COMPARE_DT }일
 					</c:if>
-				</td>		
-			</tr>
-			<tr>
-				<th>결핵검사</th>
-				<td>
-					<c:if test="${not empty infoData.BOVINE_DT_STR}">
-						${infoData.BOVINE_DT_STR } <span class="c-blue">(${infoData.BOVINE_RSLTNM })</span>						
+				</td>				
+            </tr>
+            
+            <tr>
+                <th>결핵검사</th>
+                <th class="bdr-n">경과일</th>
+            </tr>
+            <tr>
+                <td class="bdr-y">
+					<c:if test="${not empty infoData.VACN_DT_STR}">
+						${infoData.VACN_DT_STR } 접종 <span class="c-blue">(${infoData.VACN_ORDER })</span>
 					</c:if>
-				</td>
-				<th>경과일</th>
+                </td>                
 				<td class="ta-C">
-					<c:if test="${not empty infoData.BOVINE_COMPARE_DT}">
-						${infoData.BOVINE_COMPARE_DT }일
+					<c:if test="${not empty infoData.VACN_COMPARE_DT}">
+						${infoData.VACN_COMPARE_DT }일
 					</c:if>
-				</td>		
-			</tr>
+				</td>				
+            </tr>
 		</tbody>
 	</table>
 </div>

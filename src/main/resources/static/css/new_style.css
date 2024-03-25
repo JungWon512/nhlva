@@ -1,0 +1,597 @@
+.cow-detail {
+  overflow: hidden;
+}
+.cow-detail h3.tit.new_tit {
+  line-height: 26px;
+  position: relative;
+}
+.cow-detail h3.tit.new_tit::before {
+  top: 5px;
+  -webkit-transform: translateY(0);
+          transform: translateY(0);
+}
+.cow-detail h3.tit.new_tit .ico-vaccine {
+  position: absolute;
+  right: 0;
+  top: 0;
+  width: 48px;
+  height: 48px;
+  background: url(../images/icon-vaccine.svg) center no-repeat;
+}
+.cow-detail h3.tit.mb10 {
+  margin-bottom: 7px;
+}
+.cow-detail .tit2 {
+  margin-bottom: 15px;
+}
+
+.newGrapy {
+  display: grid;
+  margin-bottom: 24px;
+  grid-template-rows: repeat(3);
+  grid-template-columns: repeat(2, 1fr);
+  gap: 4px 10px;
+}
+.newGrapy .item {
+  border-radius: 8px;
+  text-align: center;
+  padding: 10px;
+}
+.newGrapy .item dl {
+  height: 100%;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: column;
+          flex-direction: column;
+}
+.newGrapy .item dl dt {
+  font-size: 16px;
+  font-weight: 400;
+  color: #767676;
+  line-height: 22px;
+}
+.newGrapy .item dl dd {
+  font-size: 16px;
+  line-height: 20px;
+  font-weight: 700;
+  color: #767676;
+  -webkit-box-flex: 1;
+      -ms-flex: 1;
+          flex: 1;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+}
+.newGrapy .item.line-type {
+  border: 2px solid #eff4ff;
+}
+.newGrapy .item.line-type:nth-of-type(even) {
+  border-color: #fff0f9;
+}
+.newGrapy .item.bg-type {
+  background: #eff4ff;
+  margin-top: 24px;
+  position: relative;
+}
+.newGrapy .item.bg-type:before {
+  content: "";
+  display: block;
+  width: 100%;
+  height: 28px;
+  background: url(/static/images/icon-line-blue.svg) center no-repeat;
+  position: absolute;
+  left: 0;
+  top: -28px;
+}
+.newGrapy .item.bg-type dl dt {
+  color: #618dff;
+  font-weight: 700;
+}
+.newGrapy .item.bg-type dl dd {
+  color: #618dff;
+}
+.newGrapy .item.bg-type:nth-of-type(even) {
+  background: #fff0f9;
+}
+.newGrapy .item.bg-type:nth-of-type(even):before {
+  background: url(/static/images/icon-line-pink.svg) center no-repeat;
+}
+.newGrapy .item.bg-type:nth-of-type(even) dl dt {
+  color: #ff68c3;
+  font-weight: 700;
+}
+.newGrapy .item.bg-type:nth-of-type(even) dl dd {
+  color: #ff68c3;
+}
+
+.cow-detail .txt.mb15 {
+  margin-bottom: 15px;
+}
+
+.tbl_SwpBox {
+  overflow-x: hidden;
+}
+
+.swipTble,
+.swipTble.xs {
+  border-bottom: 1px solid #f0f1f5;
+  margin-bottom: 24px;
+  width: 100%;
+  text-align: center;
+}
+.swipTble thead th,
+.swipTble.xs thead th {
+  border-top: 1px solid #f0f1f5;
+  padding: 8px 4px;
+  border-bottom: 1px solid #f0f1f5;
+  word-break: keep-all;
+}
+.swipTble tbody th,
+.swipTble thead th:first-child,
+.swipTble.xs tbody th,
+.swipTble.xs thead th:first-child {
+  background-color: #f8f8f8;
+  word-break: break-all;
+  padding: 8px;
+}
+.swipTble tbody th p,
+.swipTble thead th:first-child p,
+.swipTble.xs tbody th p,
+.swipTble.xs thead th:first-child p {
+  text-align: left;
+  width: -webkit-fit-content;
+  width: -moz-fit-content;
+  width: fit-content;
+  display: inline-block;
+}
+.swipTble tbody th p a,
+.swipTble thead th:first-child p a,
+.swipTble.xs tbody th p a,
+.swipTble.xs thead th:first-child p a {
+  color: #000;
+  font-weight: 500;
+  font-size: 14px;
+}
+.swipTble tbody th p a:active,
+.swipTble thead th:first-child p a:active,
+.swipTble.xs tbody th p a:active,
+.swipTble.xs thead th:first-child p a:active {
+  text-decoration: underline;
+}
+.swipTble thead th,
+.swipTble.xs thead th {
+  color: #696f7b;
+  font-weight: 500;
+  font-size: 14px;
+  position: relative;
+}
+.swipTble tbody td,
+.swipTble tbody th,
+.swipTble.xs tbody td,
+.swipTble.xs tbody th {
+  color: #000;
+  font-weight: 500;
+  font-size: 14px;
+  position: relative;
+}
+.swipTble tbody td a,
+.swipTble tbody th a,
+.swipTble.xs tbody td a,
+.swipTble.xs tbody th a {
+  color: #000;
+  font-weight: 500;
+  font-size: 14px;
+}
+.swipTble tbody td a:active,
+.swipTble tbody th a:active,
+.swipTble.xs tbody td a:active,
+.swipTble.xs tbody th a:active {
+  text-decoration: underline;
+}
+.swipTble tbody td,
+.swipTble.xs tbody td {
+  padding: 4px 6px;
+  border-bottom: 1px solid #f0f1f5;
+  word-break: keep-all;
+}
+.swipTble .th_flex,
+.swipTble.xs .th_flex {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+  font-size: 13px;
+  line-height: 1.4;
+  font-weight: 500;
+  color: #696f7b;
+}
+.swipTble span,
+.swipTble.xs span {
+  font-weight: inherit;
+}
+.swipTble .btn_sorting,
+.swipTble.xs .btn_sorting {
+  display: -webkit-inline-box;
+  display: -ms-inline-flexbox;
+  display: inline-flex;
+  width: 6px;
+  height: 12px;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: column;
+          flex-direction: column;
+  margin-top: 3px;
+  margin-left: 2px;
+}
+.swipTble .btn_sorting:before,
+.swipTble.xs .btn_sorting:before {
+  content: "";
+  display: block;
+  width: 0;
+  height: 0;
+  border-bottom: 5px solid #696f7b;
+  border-left: 3px solid transparent;
+  border-right: 3px solid transparent;
+}
+.swipTble .btn_sorting:after,
+.swipTble.xs .btn_sorting:after {
+  margin-top: 1px;
+  content: "";
+  display: block;
+  width: 0;
+  height: 0;
+  border-top: 5px solid #696f7b;
+  border-left: 3px solid transparent;
+  border-right: 3px solid transparent;
+}
+.swipTble .btn_sorting.type_up:after,
+.swipTble.xs .btn_sorting.type_up:after {
+  border-top-color: #ccc;
+}
+.swipTble .btn_sorting.type_down:before,
+.swipTble.xs .btn_sorting.type_down:before {
+  border-bottom-color: #ccc;
+}
+
+.sub_data.tbl_SwpBox .swipTble {
+  margin-bottom: 0;
+}
+
+.scroll_wrap {
+  position: relative;
+  margin-bottom: 24px;
+}
+.scroll_wrap * {
+  -ms-touch-action: auto;
+      touch-action: auto;
+}
+.scroll_wrap.sc_v_use:after {
+  right: 5px;
+}
+.scroll_wrap.left_fixdTbl .fixd_box {
+  position: sticky !important;
+  left: 0;
+  z-index: 1;
+}
+.scroll_wrap table.swipTble,
+.scroll_wrap table.swipTble.xs {
+  margin-bottom: 4px;
+  width: 100%;
+  text-align: center;
+}
+.scroll_wrap table.swipTble td,
+.scroll_wrap table.swipTble th,
+.scroll_wrap table.swipTble.xs td,
+.scroll_wrap table.swipTble.xs th {
+  border-bottom: 1px solid #dbdbdb;
+  padding: 8px;
+  word-break: keep-all;
+}
+.scroll_wrap table.swipTble td,
+.scroll_wrap table.swipTble.xs td {
+  padding: 4px 6px;
+}
+.scroll_wrap table.swipTble > tbody th, .scroll_wrap table.swipTble > thead th:first-child,
+.scroll_wrap table.swipTble.xs > tbody th,
+.scroll_wrap table.swipTble.xs > thead th:first-child {
+  background-color: #f8f8f8;
+  word-break: break-all;
+  text-align: left;
+}
+.scroll_wrap table.swipTble > tbody th a, .scroll_wrap table.swipTble > thead th:first-child a,
+.scroll_wrap table.swipTble.xs > tbody th a,
+.scroll_wrap table.swipTble.xs > thead th:first-child a {
+  color: #000;
+  font-weight: 500;
+  font-size: 14px;
+}
+.scroll_wrap table.swipTble > tbody th a:active, .scroll_wrap table.swipTble > thead th:first-child a:active,
+.scroll_wrap table.swipTble.xs > tbody th a:active,
+.scroll_wrap table.swipTble.xs > thead th:first-child a:active {
+  text-decoration: underline;
+}
+.scroll_wrap table.swipTble thead th,
+.scroll_wrap table.swipTble.xs thead th {
+  color: #767676;
+  font-weight: 400;
+  font-size: 16px;
+  position: relative;
+}
+.scroll_wrap table.swipTble tbody td,
+.scroll_wrap table.swipTble tbody th,
+.scroll_wrap table.swipTble.xs tbody td,
+.scroll_wrap table.swipTble.xs tbody th {
+  color: #000;
+  font-weight: 500;
+  font-size: 16px;
+  position: relative;
+}
+.scroll_wrap table.swipTble tbody td a:link,
+.scroll_wrap table.swipTble tbody th a:link,
+.scroll_wrap table.swipTble.xs tbody td a:link,
+.scroll_wrap table.swipTble.xs tbody th a:link {
+  color: #000;
+  font-weight: 500;
+  font-size: 14px;
+}
+.scroll_wrap table.swipTble tbody td a:link:active,
+.scroll_wrap table.swipTble tbody th a:link:active,
+.scroll_wrap table.swipTble.xs tbody td a:link:active,
+.scroll_wrap table.swipTble.xs tbody th a:link:active {
+  text-decoration: underline;
+}
+.scroll_wrap table.swipTble tbody td strong,
+.scroll_wrap table.swipTble tbody th strong,
+.scroll_wrap table.swipTble.xs tbody td strong,
+.scroll_wrap table.swipTble.xs tbody th strong {
+  color: #767676;
+  font-weight: 700;
+  font-size: 16px;
+}
+
+.fixdCellGrup {
+  overflow: auto;
+}
+.fixdCellGrup .fixCell_list {
+  min-width: 100%;
+}
+.fixdCellGrup .fixCell_list table.swipTble, .fixdCellGrup .fixCell_list table.swipTble.xs {
+  border-collapse: separate;
+}
+.fixdCellGrup .fixCell_list table.swipTble thead, .fixdCellGrup .fixCell_list table.swipTble.xs thead {
+  position: sticky;
+  top: 0;
+  z-index: 1;
+}
+.fixdCellGrup .fixCell_list table.swipTble thead th, .fixdCellGrup .fixCell_list table.swipTble.xs thead th {
+  text-align: center;
+  line-height: 1.2;
+  padding: 8px 3px;
+  border-bottom: 1px solid #dbdbdb;
+  border-top: 1px solid #dbdbdb;
+}
+.fixdCellGrup .fixCell_list table.swipTble thead th.thBg, .fixdCellGrup .fixCell_list table.swipTble.xs thead th.thBg {
+  background-color: #f5f5f5;
+  border-right: 1px solid #dbdbdb;
+}
+.fixdCellGrup .fixCell_list table.swipTble thead th.thBg2, .fixdCellGrup .fixCell_list table.swipTble.xs thead th.thBg2 {
+  background-color: #f8f8f8 !important;
+  color: #555;
+}
+.fixdCellGrup .fixCell_list table.swipTble thead th:first-child, .fixdCellGrup .fixCell_list table.swipTble.xs thead th:first-child {
+  border-left: 1px solid #dbdbdb;
+}
+.fixdCellGrup .fixCell_list table.swipTble thead th:last-child, .fixdCellGrup .fixCell_list table.swipTble.xs thead th:last-child {
+  border-right: 1px solid #dbdbdb;
+}
+.fixdCellGrup .fixCell_list table.swipTble td, .fixdCellGrup .fixCell_list table.swipTble th, .fixdCellGrup .fixCell_list table.swipTble.xs td, .fixdCellGrup .fixCell_list table.swipTble.xs th {
+  padding: 2px 4px;
+  background-color: #fff;
+}
+.fixdCellGrup .fixCell_list table.swipTble td span, .fixdCellGrup .fixCell_list table.swipTble th span, .fixdCellGrup .fixCell_list table.swipTble.xs td span, .fixdCellGrup .fixCell_list table.swipTble.xs th span {
+  border-radius: 4px;
+  padding: 2px 0;
+  width: 36px;
+  text-align: center;
+  display: inline-block;
+  font-weight: 600;
+  font-size: 15px;
+  line-height: 1.4;
+}
+.fixdCellGrup .fixCell_list table.swipTble td span.a1, .fixdCellGrup .fixCell_list table.swipTble th span.a1, .fixdCellGrup .fixCell_list table.swipTble.xs td span.a1, .fixdCellGrup .fixCell_list table.swipTble.xs th span.a1 {
+  background-color: #fff4f4;
+  color: #ec4645;
+}
+.fixdCellGrup .fixCell_list table.swipTble td span.a2, .fixdCellGrup .fixCell_list table.swipTble th span.a2, .fixdCellGrup .fixCell_list table.swipTble.xs td span.a2, .fixdCellGrup .fixCell_list table.swipTble.xs th span.a2 {
+  background-color: #effdf9;
+  color: #00ae7d;
+}
+.fixdCellGrup .fixCell_list table.swipTble td span.a3, .fixdCellGrup .fixCell_list table.swipTble th span.a3, .fixdCellGrup .fixCell_list table.swipTble.xs td span.a3, .fixdCellGrup .fixCell_list table.swipTble.xs th span.a3 {
+  background-color: #f9f2e9;
+  color: #a8742a;
+}
+.fixdCellGrup .fixCell_list table.swipTble tbody td,
+.fixdCellGrup .fixCell_list table.swipTble tbody th, .fixdCellGrup .fixCell_list table.swipTble.xs tbody td,
+.fixdCellGrup .fixCell_list table.swipTble.xs tbody th {
+  padding: 8px 4px;
+}
+.fixdCellGrup .fixCell_list table.swipTble tbody td.tdBg,
+.fixdCellGrup .fixCell_list table.swipTble tbody th.tdBg, .fixdCellGrup .fixCell_list table.swipTble.xs tbody td.tdBg,
+.fixdCellGrup .fixCell_list table.swipTble.xs tbody th.tdBg {
+  background-color: #f5f5f5;
+  border-right: 1px solid #dbdbdb;
+}
+.fixdCellGrup .fixCell_list table.swipTble tbody td.tdBg2,
+.fixdCellGrup .fixCell_list table.swipTble tbody th.tdBg2, .fixdCellGrup .fixCell_list table.swipTble.xs tbody td.tdBg2,
+.fixdCellGrup .fixCell_list table.swipTble.xs tbody th.tdBg2 {
+  background-color: #f8f8f8 !important;
+}
+.fixdCellGrup .fixCell_list table.swipTble tbody td:first-child,
+.fixdCellGrup .fixCell_list table.swipTble tbody th:first-child, .fixdCellGrup .fixCell_list table.swipTble.xs tbody td:first-child,
+.fixdCellGrup .fixCell_list table.swipTble.xs tbody th:first-child {
+  border-left: 1px solid #dbdbdb;
+}
+.fixdCellGrup .fixCell_list table.swipTble tbody td:last-child,
+.fixdCellGrup .fixCell_list table.swipTble tbody th:last-child, .fixdCellGrup .fixCell_list table.swipTble.xs tbody td:last-child,
+.fixdCellGrup .fixCell_list table.swipTble.xs tbody th:last-child {
+  border-right: 1px solid #dbdbdb;
+}
+
+.sub_info_txt {
+  color: #999999;
+  font-weight: 400;
+  font-size: 13px;
+}
+.sub_info_txt::before {
+  content: "*";
+  margin-right: 4px;
+  vertical-align: sub;
+}
+
+.sub_tble {
+  border: 1px solid #dbdbdb;
+  width: 100%;
+  margin: 10px 0 0;
+}
+.sub_tble thead > tr {
+  background-color: #f5f5f5;
+  border-bottom: 1px solid #dbdbdb;
+}
+.sub_tble thead > tr th {
+  color: #767676;
+  font-weight: 400;
+  font-size: 16px;
+  padding: 8px 0;
+  text-align: center;
+}
+.sub_tble thead > tr th:first-child {
+  text-align: left;
+  padding-left: 5px;
+}
+.sub_tble thead > tr th.txtR {
+  text-align: right;
+}
+.sub_tble tbody > tr {
+  background-color: #fff;
+}
+.sub_tble tbody > tr td {
+  padding: 7px 0;
+  color: #767676;
+  font-weight: 700;
+  font-size: 16px;
+  border-bottom: 1px solid #dbdbdb;
+}
+.sub_tble tbody > tr td:first-child {
+  padding-left: 5px;
+}
+.sub_tble tbody > tr td span {
+  width: 36px;
+  height: 24px;
+  display: block;
+  border-radius: 4px;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  color: #fff;
+  font-weight: 600;
+  font-size: 15px;
+  background-color: #f0f1f5;
+  margin: 0 auto;
+}
+.sub_tble tbody > tr td span.tagA {
+  background-color: #0066ff;
+}
+.sub_tble tbody > tr td span.tagB {
+  background-color: #2bbc6f;
+}
+.sub_tble tbody > tr td span.tagC {
+  background-color: #ff7917;
+}
+.sub_tble tbody > tr td span.tagD {
+  background-color: #f84b2c;
+}
+.sub_tble tbody > tr td.txtR {
+  text-align: right;
+  color: #1a1a1a;
+}
+
+.tag-info {
+  margin-top: 40px;
+}
+.tag-info .tag-tit {
+  margin-bottom: 15px;
+}
+.tag-info .tag-tit dt {
+  color: #767676;
+  font-weight: 700;
+  font-size: 16px;
+  line-height: 20px;
+}
+.tag-info .tag-tit dd {
+  color: #999999;
+  font-weight: 400;
+  font-size: 16px;
+  line-height: 20px;
+}
+.tag-info table {
+  width: 100%;
+  table-layout: fixed;
+  border: 1px solid #dbdbdb;
+}
+.tag-info table th {
+  background: #f5f5f5;
+  border-bottom: 1px solid #dbdbdb;
+  border-right: 1px solid #dbdbdb;
+  padding: 7px 0;
+}
+.tag-info table th i {
+  display: inline-block;
+  width: 8px;
+  height: 8px;
+  border-radius: 4px;
+  margin-right: 7px;
+  margin-top: -4px;
+  vertical-align: middle;
+}
+.tag-info table th i.tagA {
+  background-color: #0066ff;
+}
+.tag-info table th i.tagB {
+  background-color: #2bbc6f;
+}
+.tag-info table th i.tagC {
+  background-color: #ff7917;
+}
+.tag-info table th i.tagD {
+  background-color: #f84b2c;
+}
+.tag-info table th span {
+  font-size: 16px;
+  font-size: 400;
+  color: #767676;
+}
+.tag-info table td {
+  border-bottom: 1px solid #dbdbdb;
+  padding: 7px 5px;
+}
+.tag-info table tr:last-child th,
+.tag-info table tr:last-child td {
+  border-bottom: 0;
+}

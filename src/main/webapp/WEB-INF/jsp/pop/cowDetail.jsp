@@ -1,5 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
 <%@ include file="/WEB-INF/__system/taglibs.jsp" %>
+<!-- 240324 -->
+<link rel="stylesheet" type="text/css" href="/static/css/new_style.css" />
 <!--begin::Container-->
 <!--${data} -->
 <!--end::Container-->
@@ -19,7 +21,9 @@
 <form name="frmDetail" action="" method="post">
 	<input type="hidden" name="place" value="<c:out value="${param.place}" />" />
 	<input type="hidden" name="naBzplc" value="<c:out value="${param.naBzplc}" />" />
+	<input type="hidden" name="aucDt" value="<c:out value="${param.aucDt}" />" />
 	<input type="hidden" name="sraIndvAmnno" value="" />
+	<input type="hidden" name="indvBldDsc" value="" />
 	<input type="hidden" name="title" value="" />
 	<input type="hidden" name="parentObj" value="" />
 </form>
