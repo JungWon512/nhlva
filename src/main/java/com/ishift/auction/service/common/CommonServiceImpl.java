@@ -362,6 +362,7 @@ public class CommonServiceImpl implements CommonService {
 	private void updateIndvAiakInfo(Map<String, Object> map) throws SQLException {
 		List<Map<String,Object>> postArr = (List<Map<String, Object>>) map.get("postInfo");
 		List<Map<String,Object>> sibArr = (List<Map<String, Object>>) map.get("sibInfo");
+		commonDao.insertIndvAiakInfoLog(map);
 		commonDao.updatetIndvAiakInfo(map);
 		for(Map<String,Object> postMap : postArr) {
 			commonDao.updatetIndvAiakPostInfo(postMap);			
@@ -371,6 +372,25 @@ public class CommonServiceImpl implements CommonService {
 		}
 		commonDao.updateIndvSibMatime(map);
 		commonDao.updateIndvPostMatime(map);
+	}
+
+	public void callIndvAiakInfo(Map<String, Object> param) throws SQLException, RuntimeException{
+		String barcode = (String) param.getOrDefault("sraIndvAmnno","");
+		if(barcode != null && barcode.length() == 15) {
+			barcode = barcode.substring(3);
+		}	
+		Map<String,Object> aiakInfo = httpUtils.callApiAiakMap(barcode);
+		log.debug(aiakInfo.toString());
+		if(aiakInfo != null && !aiakInfo.isEmpty()) {
+			aiakInfo.put("NA_BZPLC", param.get("naBzplc"));
+			aiakInfo.put("AUC_DT", param.get("aucDt"));
+			aiakInfo.put("INDV_BLD_DSC", param.get("indvBldDsc"));
+			aiakInfo.put("CHG_IP_ADDR", param.get("chgIpAddr"));
+			aiakInfo.put("CHG_PGID", param.get("chgPgid"));
+			aiakInfo.put("CHG_RMK_CNTN", param.get("chgRmkCntn"));
+			this.updateIndvAiakInfo(aiakInfo);
+		};
+		
 	}
 	
 	public List<Map<String, Object>> selectBloodInfo(Map<String, Object> params) throws SQLException{

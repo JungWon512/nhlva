@@ -1,9 +1,12 @@
 package com.ishift.auction.web;
 
 import java.sql.SQLException;
+import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
+import java.time.Instant;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
 import java.util.Date;
 import java.util.HashMap;
@@ -21,7 +24,6 @@ import com.ishift.auction.vo.JwtTokenVo;
 
 import lombok.extern.slf4j.Slf4j;
 
-import org.joda.time.DateTime;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -806,7 +808,7 @@ public class AuctionController extends CommonController {
 	}	
 
 	@RequestMapping(value = "/info/getCowInfo",method = { RequestMethod.GET, RequestMethod.POST })	
-	public ModelAndView getCowInfo(@RequestParam Map<String, Object> param) throws Exception {		
+	public ModelAndView getCowInfo(@RequestParam Map<String, Object> param,HttpServletRequest req) throws Exception {		
 		LOGGER.debug("start of results.do");
 
 		LocalDateTime date = LocalDateTime.now();
@@ -849,21 +851,38 @@ public class AuctionController extends CommonController {
 					paramMap.put("sraIndvAmnno", param.get("sraIndvAmnno"));
 					Map<String,Object> bloodInfo = auctionService.selectIndvBloodInfo(paramMap);
 					SimpleDateFormat formatter = new SimpleDateFormat("yyyyMMdd");
+					DateTimeFormatter dateFormat = DateTimeFormatter.ofPattern("yyyyMMddHHmmss");
 					
-					String aucDt = (String) param.get("aucDt");
-					Date aucDate = formatter.parse(aucDt);					
+					String aucDt = (String) param.get("aucDt");					
+					Date aucDay = formatter.parse(aucDt);					
 					
+					
+					LocalDateTime todate = LocalDateTime.now();
+					LocalDateTime sDate = LocalDateTime.parse(aucDt+"040000", dateFormat);
+					LocalDateTime eDate = LocalDateTime.parse(aucDt+"180000", dateFormat);
+					//Duration duration = Duration.between(sDate, eDate);
+
+					Map<String,Object> tempMap = new HashMap<>();
+					tempMap.putAll(param);
+					tempMap.put("chgPgid", "nhlva");
+					tempMap.put("indvBldDsc", "0");
+					tempMap.put("chgRmkCntn", "cowDetail[0]");
+					tempMap.put("chgIpAddr", httpUtils.getClientIp(req));
 					if(bloodInfo == null || bloodInfo.isEmpty()) {
-						
-						commonService.callIndvAiakInfo((String)param.get("sraIndvAmnno"));
+						//오늘이 경매일 이전이거나 경매당일 00~18까지 종개협 데이터 갱신
+						if(todate.isBefore(eDate)) {
+							commonService.callIndvAiakInfo(tempMap);
+						}
 						bloodInfo = auctionService.selectIndvBloodInfo(paramMap);
 					}else {
-						String lschgDt = (String)bloodInfo.get("LSCHG_DT");
-						Date lschgDate = formatter.parse(lschgDt);
-						if((today.equals(aucDt) && lschgDate.before(aucDate) )) {							
-							commonService.callIndvAiakInfo((String)param.get("sraIndvAmnno"));
-							bloodInfo = auctionService.selectIndvBloodInfo(paramMap);							
+						Date lschgDtm = ((Date) bloodInfo.get("LSCHG_DTM"));
+				        LocalDateTime lschgDateTime = Instant.ofEpochMilli(lschgDtm.getTime()).atZone(ZoneId.systemDefault()).toLocalDateTime();
+						
+						if((today.equals(aucDt) && lschgDateTime.isBefore(sDate) )) {
+							//commonService.callIndvAiakInfo((String)param.get("sraIndvAmnno"));
+							commonService.callIndvAiakInfo(tempMap);
 						}
+						bloodInfo = auctionService.selectIndvBloodInfo(paramMap);
 					}
 					mav.addObject("bloodInfo",bloodInfo);
 					if("1".equals(tabId)) {
@@ -978,36 +997,42 @@ public class AuctionController extends CommonController {
 	
 	//DB 데이터를 조회할것인지 인터페이스후 값만 뿌릴것인지?
 	@RequestMapping(value = "/cowDetailFull",method = { RequestMethod.GET, RequestMethod.POST })	
-	public ModelAndView cowDetailFull(@RequestParam Map<String, Object> param) throws Exception {		
+	public ModelAndView cowDetailFull(@RequestParam Map<String, Object> param,HttpServletRequest req) throws Exception {		
 		LOGGER.debug("start of cowDetailFull.do");
 		ModelAndView mav = new ModelAndView();
-        Map<String,Object> map = new HashMap<>();
-        map.put("naBzPlcNo", param.get("place"));        
-        Map<String, Object> johap = adminService.selectOneJohap(map);
-        map.put("naBzplc", param.get("naBzplc"));
-        map.put("sraIndvAmnno", param.get("sraIndvAmnno"));
-		//Map<String,Object> indvData=auctionService.selectIndvDataInfo(map);
-		//map.put("sraIndvAmnno", param.get("sraIndvAmnno"));
+        //Map<String,Object> map = new HashMap<>();        
+        Map<String, Object> johap = adminService.selectOneJohap(param);
+        
+		DateTimeFormatter dateFormat = DateTimeFormatter.ofPattern("yyyyMMddHHmmss");		
+		SimpleDateFormat formatter = new SimpleDateFormat("yyyyMMdd");
+		String aucDt = (String) param.get("aucDt");
+		LocalDateTime toDate = LocalDateTime.now();
 		
-		//List<Map<String,Object>> moveList = auctionService.selectListIndvMove(map);
-		//List<Map<String,Object>> postList = auctionService.selectListIndvPost(map);
-		//List<Map<String,Object>> sibList = auctionService.selectListIndvSib(map);
+		LocalDateTime sDate = LocalDateTime.parse(aucDt+"000000", dateFormat);
+		LocalDateTime eDate = LocalDateTime.parse(aucDt+"180000", dateFormat);
 		
-		//mav.addObject("moveList",moveList);
-		commonService.callIndvAiakInfo((String)param.get("sraIndvAmnno"));
-		//bloodInfo = auctionService.selectIndvBloodInfo(map);
-		Map<String,Object> bloodInfo = auctionService.selectIndvBloodInfo(map);
+		//오늘이 경매일 이전이면서 경매당일 00~18시이면 허용
+		if(Timestamp.valueOf(toDate).before(formatter.parse(aucDt)) || toDate.isAfter(sDate) && toDate.isBefore(eDate)) {
+			Map<String, Object> tempMap = new HashMap<>();
+			tempMap.putAll(param);
+			tempMap.put("chgPgid", "nhlva");
+			tempMap.put("chgRmkCntn", "cowDetailFull["+param.get("indvBldDsc")+"]");
+			tempMap.put("chgIpAddr", httpUtils.getClientIp(req));
+			commonService.callIndvAiakInfo(tempMap);		
+		}
+		Map<String,Object> bloodInfo = auctionService.selectIndvBloodInfo(param);
 		
 		mav.addObject("bloodInfo",bloodInfo);
-		mav.addObject("sibList",auctionService.selectListIndvSib(map));
-		mav.addObject("postList",auctionService.selectListIndvPost(map));
+		mav.addObject("sibList",auctionService.selectListIndvSib(param));
+		mav.addObject("postList",auctionService.selectListIndvPost(param));
 
 		//출장우 상세 tab항목 표기
+		Map<String,Object> map = new HashMap<>();
+		map.putAll(param);
         map.put("simpCGrpSqno", "1");
         map.put("indvPopYn", "Y");
 		mav.addObject("tabList",auctionService.selectListExpitemSet(map));
 
-		//mav.addObject("infoData",indvData);		
 		mav.addObject("johapData",johap);
 		mav.addObject("subheaderTitle",(param.get("title"))+"개체 상세");
 		mav.addObject("inputParam", param);		

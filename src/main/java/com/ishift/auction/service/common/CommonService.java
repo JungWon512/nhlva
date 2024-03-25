@@ -51,5 +51,7 @@ public interface CommonService {
 	List<Map<String, Object>> selectIndvSib(Map<String, Object> params) throws SQLException;
 	void callIndvAiakInfo(String barcode) throws SQLException, RuntimeException;
 
+	void callIndvAiakInfo(Map<String, Object> param) throws SQLException, RuntimeException;
+
 
 }
