@@ -846,10 +846,8 @@ public class AuctionController extends CommonController {
 					mav.addObject("tabList", tabList);
 				break;
 				case "1":
-				case "2":					
-					paramMap.put("naBzplc", param.get("naBzplc"));
-					paramMap.put("sraIndvAmnno", param.get("sraIndvAmnno"));
-					Map<String,Object> bloodInfo = auctionService.selectIndvBloodInfo(paramMap);
+				case "2":
+					Map<String,Object> bloodInfo = auctionService.selectIndvBloodInfo(param);
 					SimpleDateFormat formatter = new SimpleDateFormat("yyyyMMdd");
 					DateTimeFormatter dateFormat = DateTimeFormatter.ofPattern("yyyyMMddHHmmss");
 					
@@ -872,8 +870,8 @@ public class AuctionController extends CommonController {
 						//오늘이 경매일 이전이거나 경매당일 00~18까지 종개협 데이터 갱신
 						if(todate.isBefore(eDate)) {
 							commonService.callIndvAiakInfo(tempMap);
+							bloodInfo = auctionService.selectIndvBloodInfo(param);
 						}
-						bloodInfo = auctionService.selectIndvBloodInfo(paramMap);
 					}else {
 						Date lschgDtm = ((Date) bloodInfo.get("LSCHG_DTM"));
 				        LocalDateTime lschgDateTime = Instant.ofEpochMilli(lschgDtm.getTime()).atZone(ZoneId.systemDefault()).toLocalDateTime();
@@ -881,23 +879,17 @@ public class AuctionController extends CommonController {
 						if((today.equals(aucDt) && lschgDateTime.isBefore(sDate) )) {
 							//commonService.callIndvAiakInfo((String)param.get("sraIndvAmnno"));
 							commonService.callIndvAiakInfo(tempMap);
+							bloodInfo = auctionService.selectIndvBloodInfo(param);
 						}
-						bloodInfo = auctionService.selectIndvBloodInfo(paramMap);
 					}
 					mav.addObject("bloodInfo",bloodInfo);
 					if("1".equals(tabId)) {
-						mav.addObject("sibList",auctionService.selectListIndvSib(paramMap));
-						mav.addObject("postList",auctionService.selectListIndvPost(paramMap));						
+						mav.addObject("sibList",auctionService.selectListIndvSib(param));
+						mav.addObject("postList",auctionService.selectListIndvPost(param));						
 					}
 				break;
 				case "3": //thumnail만 조회
-					paramMap.put("naBzplc", param.get("naBzplc"));
-					paramMap.put("sraIndvAmnno", param.get("sraIndvAmnno"));
-					paramMap.put("aucObjDsc", param.get("aucObjDsc"));
-					paramMap.put("aucDt", param.get("aucDt"));
-					paramMap.put("oslpNo", param.get("oslpNo"));
-					paramMap.put("ledSqNo", param.get("ledSqno"));
-					List<Map<String,Object>> imgList = auctionService.selectListCowImg(paramMap);
+					List<Map<String,Object>> imgList = auctionService.selectListCowImg(param);
 					mav.addObject("imgList",imgList);
 				break;
 			}			
@@ -1040,37 +1032,6 @@ public class AuctionController extends CommonController {
 		return mav;
 	}
 	
-	@RequestMapping(value = "/cowDetailFull_Temp",method = { RequestMethod.GET, RequestMethod.POST })	
-	public ModelAndView cowDetailFull_Temp(@RequestParam Map<String, Object> param) throws Exception {		
-		LOGGER.debug("start of cowDetailFull.do");
-		ModelAndView mav = new ModelAndView();
-        Map<String,Object> map = new HashMap<>();
-                
-        map.put("SRA_INDV_AMNNO", param.get("sraIndvAmnno"));
-		Map<String, Object> indvData = httpUtils.sendPostJsonToMap(map, "4700");
-		mav.addObject("infoData",indvData);
-		
-		Map<String,Object> sibList = httpUtils.sendPostJsonToMap(map, "4900");
-		mav.addObject("sibList",sibList);
-
-		Map<String,Object> openData = httpUtils.getOpenApiAnimalTraceToMap(map);
-		mav.addObject("moveList",openData.get("moveList"));
-		mav.addObject("vacnInfo",openData.get("vacnInfo"));
-		
-		map.put("SRA_INDV_AMNNO", indvData.get("MCOW~"));
-		Map<String,Object> postList = httpUtils.sendPostJsonToMap(map, "4900");
-		mav.addObject("postList",postList);
-
-		//출장우 상세 tab항목 표기
-        map.put("simpCGrpSqno", "1");
-        map.put("indvPopYn", "Y");
-		mav.addObject("tabList",auctionService.selectListExpitemSet(map));
-
-		mav.addObject("subheaderTitle",(param.get("title"))+"개체 상세");
-		mav.addObject("inputParam", param);		
-		mav.setViewName("pop/cowDetailFull");
-		return mav;
-	}
 	@ResponseBody
 	@PostMapping(path = "/auction/api/getInfMca", produces = MediaType.APPLICATION_JSON_VALUE)
     Map<String, Object> getInfCowDetailFull(@RequestBody Map<String,Object> param) {

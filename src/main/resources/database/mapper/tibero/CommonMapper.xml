@@ -819,9 +819,11 @@
 				, EPD_VAL_3                             =   TRIM(#{EPD_VAL_3} )                           
 				, EPD_GRD_3                             =   TRIM(#{EPD_GRD_3} )                           
 				, EPD_VAL_4                             =   TRIM(#{EPD_VAL_4} )                           
-				, EPD_GRD_4                             =   TRIM(#{EPD_GRD_4} )                           
+				, EPD_GRD_4                             =   TRIM(#{EPD_GRD_4} )
+				, INDV_BLD_DSC							=   TRIM(#{INDV_BLD_DSC})                         
 				, LSCHG_DTM                             =   SYSDATE                                 
-				, LSCHGMN_ENO                           =   #{regUsrid}                             
+				, LSCHGMN_ENO                           =   #{regUsrid}
+				, LSCHG_IP                           	=   #{CHG_IP_ADDR}
 		WHEN NOT MATCHED THEN 
 			INSERT(
 				SRA_INDV_AMNNO
@@ -842,10 +844,13 @@
 				, EPD_GRD_3
 				, EPD_VAL_4
 				, EPD_GRD_4
+				, INDV_BLD_DSC
 				, FSRG_DTM
 				, FSRGMN_ENO
+				, FSRG_IP
 				, LSCHG_DTM
 				, LSCHGMN_ENO
+				, LSCHG_IP
 			)VALUES(
 				TRIM(#{SRA_INDV_AMNNO} )
 				, CASE WHEN TRIM(#{MCOW_SRA_INDV_AMNNO} ) IS NOT NULL THEN '410'||TRIM(#{MCOW_SRA_INDV_AMNNO} ) ELSE NULL END
@@ -865,10 +870,13 @@
 				, TRIM(#{EPD_GRD_3} )
 				, TRIM(#{EPD_VAL_4} )
 				, TRIM(#{EPD_GRD_4} )
+				, #{INDV_BLD_DSC}
 				, SYSDATE
 				, #{regUsrid}
+				, #{CHG_IP_ADDR}
 				, SYSDATE
 				, #{regUsrid}
+				, #{CHG_IP_ADDR}
 			)
 	</update>
 	
@@ -1051,10 +1059,13 @@
 			, EPD_GRD_3
 			, EPD_VAL_4
 			, EPD_GRD_4
+			, INDV_BLD_DSC
 			, FSRG_DTM
+			, FSRG_IP
 			, FSRGMN_ENO
 			, LSCHG_DTM
 			, LSCHGMN_ENO
+			, LSCHG_IP
 			, CHG_IP_ADDR
 			, CHG_PGID
 			, CHG_RMK_CNTN
@@ -1078,10 +1089,13 @@
 			, EPD_GRD_3
 			, EPD_VAL_4
 			, EPD_GRD_4
+			, INDV_BLD_DSC
 			, FSRG_DTM
+			, FSRG_IP
 			, FSRGMN_ENO
 			, LSCHG_DTM
 			, LSCHGMN_ENO
+			, LSCHG_IP
 			, #{CHG_IP_ADDR} CHG_IP_ADDR
 			, #{CHG_PGID} CHG_PGID
 			, #{CHG_RMK_CNTN} CHG_RMK_CNTN
