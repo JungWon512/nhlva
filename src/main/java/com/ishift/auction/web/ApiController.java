@@ -1509,10 +1509,13 @@ public class ApiController {
 							result.put("message", "이미 종료된 경매입니다.");
 							return result;
 						}
-						
+						final String[] cowObjDsc = {"0", "1", "2", "3", "4"};
 						// 경매 종료
-						// returnMap = auctionService.auctionFinish(aucStn, temp);
-						returnMap = auctionService.etcAuctionFinish(aucStn, temp);
+						if (Arrays.asList(cowObjDsc).contains(params.get("aucObjDsc"))) {
+							returnMap = auctionService.auctionFinish(aucStn, temp);							
+						}else {
+							returnMap = auctionService.etcAuctionFinish(aucStn, temp);							
+						}
 						if (returnMap != null && (Boolean)returnMap.get("success")) {
 							result.put("success", true);
 							result.put("message", "경매 종료가 정상 처리되었습니다.");
