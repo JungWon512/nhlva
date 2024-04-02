@@ -56,6 +56,7 @@
                     <failOnMissingWebXml>false</failOnMissingWebXml>
                 </configuration>
             </plugin> -->
+
 			<plugin>
 				<groupId>org.springframework.boot</groupId>
 				<artifactId>spring-boot-maven-plugin</artifactId>
@@ -366,31 +367,4 @@
 		<version>2.3.4.RELEASE</version>
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
-
-    <profiles>
-        <profile>
-            <!-- 개인 Local서버 -->
-            <id>local</id>
-            <activation>
-                <activeByDefault>true</activeByDefault>
-            </activation>
-            <properties>
-                <spring.profile.active>local</spring.profile.active>
-            </properties>
-        </profile>
-        <profile>
-            <!-- 개발서버 -->
-            <id>develop</id>
-            <properties>
-                <spring.profile.active>develop</spring.profile.active>
-            </properties>
-        </profile>
-        <profile>
-            <!-- 운영서버 -->
-            <id>production</id>
-            <properties>
-                <spring.profile.active>production</spring.profile.active>
-            </properties>
-        </profile>
-    </profiles>
 </project>
