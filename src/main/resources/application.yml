@@ -25,7 +25,8 @@ spring:
   application:
     name: Auction
   profiles:
-    active: local
+    active: @spring.profile.active@
+    # active: local
     # active: develop
     # active: production
     include:
