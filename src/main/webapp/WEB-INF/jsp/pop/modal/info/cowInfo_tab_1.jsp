@@ -25,11 +25,9 @@
 		<em>${fn:substring(infoData.SRA_INDV_AMNNO, 3, 6)} ${fn:substring(infoData.SRA_INDV_AMNNO, 6, 10)} ${fn:substring(infoData.SRA_INDV_AMNNO, 10, 14)} ${fn:substring(infoData.SRA_INDV_AMNNO, 14, 15)} </em>
     </div>
 </div>
-<fmt:parseDate value="${bloodInfo.LSCHG_DT}" pattern="yyyyMMdd" var="tmpSyncDt" />
-<fmt:formatDate value="${tmpSyncDt}" pattern="yyyy-MM-dd" var="syncDt" />
 
 <h3 class="tit mb10">혈통</h3>
-<h3 class="tit2" style="margin-bottom:15px;"><span class="subTxt" style="font-size: 13px">※한국종축개량협회제공일 : ${syncDt}</span></h3>
+<h3 class="tit2" style="margin-bottom:15px;"><span class="subTxt" style="font-size: 13px">※한국종축개량협회제공일 : ${bloodInfo.LSCHG_DATE}</span></h3>
 <!-- <h3 class="tit2"><span class="subTxt" style="font-size: 13px;color:red;">※한국종축개량협회제공데이터입니다.ㅇㅁ럼ㄴ이람ㄴㅇ리ㅏ</span></h3> -->
 <div class="newGrapy">
     <div class="item line-type">

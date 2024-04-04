@@ -240,13 +240,13 @@
             </tr>
             <tr>
                 <td class="bdr-y">
-					<c:if test="${not empty infoData.VACN_DT_STR}">
-						${infoData.VACN_DT_STR } 접종 <span class="c-blue">(${infoData.VACN_ORDER })</span>
+					<c:if test="${not empty infoData.BOVINE_DT_STR}">
+						${infoData.BOVINE_DT_STR } 접종 <span class="c-blue">(${infoData.BOVINE_RSLTNM })</span>
 					</c:if>
                 </td>                
 				<td class="ta-C">
-					<c:if test="${not empty infoData.VACN_COMPARE_DT}">
-						${infoData.VACN_COMPARE_DT }일
+					<c:if test="${not empty infoData.BOVINE_COMPARE_DT}">
+						${infoData.BOVINE_COMPARE_DT }일
 					</c:if>
 				</td>				
             </tr>

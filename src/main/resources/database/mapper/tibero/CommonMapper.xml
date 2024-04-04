@@ -800,6 +800,7 @@
 			A.SRA_INDV_AMNNO = TRIM(#{SRA_INDV_AMNNO})
 			AND A.NA_BZPLC = TRIM(#{NA_BZPLC})
 			AND A.AUC_DT = TRIM(#{AUC_DT})
+			AND A.INDV_BLD_DSC = TRIM(#{INDV_BLD_DSC})
 		)	
 		WHEN MATCHED THEN 
 			UPDATE SET                         
@@ -819,8 +820,7 @@
 				, EPD_VAL_3                             =   TRIM(#{EPD_VAL_3} )                           
 				, EPD_GRD_3                             =   TRIM(#{EPD_GRD_3} )                           
 				, EPD_VAL_4                             =   TRIM(#{EPD_VAL_4} )                           
-				, EPD_GRD_4                             =   TRIM(#{EPD_GRD_4} )
-				, INDV_BLD_DSC							=   TRIM(#{INDV_BLD_DSC})                         
+				, EPD_GRD_4                             =   TRIM(#{EPD_GRD_4} )                         
 				, LSCHG_DTM                             =   SYSDATE                                 
 				, LSCHGMN_ENO                           =   #{regUsrid}
 				, LSCHG_IP                           	=   #{CHG_IP_ADDR}
@@ -1103,5 +1103,6 @@
 		WHERE SRA_INDV_AMNNO = TRIM(#{SRA_INDV_AMNNO})
 		AND NA_BZPLC = TRIM(#{NA_BZPLC})
 		AND AUC_DT = TRIM(#{AUC_DT})
+		AND INDV_BLD_DSC = TRIM(#{INDV_BLD_DSC})
 	</insert>
 </mapper>

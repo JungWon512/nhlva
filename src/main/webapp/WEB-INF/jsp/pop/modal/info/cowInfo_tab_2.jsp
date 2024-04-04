@@ -5,7 +5,7 @@
 <fmt:formatDate value="${tmpSyncDt}" pattern="yyyy-MM-dd" var="syncDt" />
 <!-- 240306 유전능력 -->
 <h3 class="tit mb10">유전평가결과(EPD)</h3>
-<h3 class="tit2"><span class="subTxt" style="font-size: 13px">※한국종축개량협회제공일 : ${syncDt}</span></h3>
+<h3 class="tit2"><span class="subTxt" style="font-size: 13px">※한국종축개량협회제공일 : ${bloodInfo.LSCHG_DATE}</span></h3>
 <p class="txt">개체 유전능력은 절대값이 아니므로 참고용으로 사용 하시기 바랍니다.</p>
 
 <!-- 기존 차트 -->

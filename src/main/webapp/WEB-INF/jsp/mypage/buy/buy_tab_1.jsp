@@ -32,6 +32,7 @@
 				<dd class="num"><span class="w_view_in">경매</span>번호</dd>
 				<dd class="pd_ea">개체번호</dd>
 				<dd class="pd_sex">성별</dd>
+				<dd class="pd_month">월령</dd>
 				<dd class="pd_kg">중량<span class="w_view_in">(kg)</span></dd>
 				<dd class="pd_pay1">예정가</dd>
 				<dd class="pd_pay2">응찰가</dd>
@@ -57,6 +58,7 @@
 							<dd class="num">${ item.AUC_PRG_SQ }</dd>
 							<dd class="pd_ea textNumber">${ item.SRA_INDV_AMNNO_FORMAT }</dd>
 							<dd class="pd_sex">${ item.INDV_SEX_C_NAME }</dd>
+							<dd class="pd_sex">${ item.MTCN }</dd>
 							<dd class="pd_kg textNumber">
 								<c:choose>
 									<c:when test="${empty item.COW_SOG_WT || item.COW_SOG_WT <= 0}">0</c:when>

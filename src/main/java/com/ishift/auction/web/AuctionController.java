@@ -846,26 +846,27 @@ public class AuctionController extends CommonController {
 					mav.addObject("tabList", tabList);
 				break;
 				case "1":
-				case "2":
-					Map<String,Object> bloodInfo = auctionService.selectIndvBloodInfo(param);
+				case "2":					
 					SimpleDateFormat formatter = new SimpleDateFormat("yyyyMMdd");
 					DateTimeFormatter dateFormat = DateTimeFormatter.ofPattern("yyyyMMddHHmmss");
 					
 					String aucDt = (String) param.get("aucDt");					
-					Date aucDay = formatter.parse(aucDt);					
-					
+					Date aucDay = formatter.parse(aucDt);
 					
 					LocalDateTime todate = LocalDateTime.now();
 					LocalDateTime sDate = LocalDateTime.parse(aucDt+"040000", dateFormat);
 					LocalDateTime eDate = LocalDateTime.parse(aucDt+"180000", dateFormat);
-					//Duration duration = Duration.between(sDate, eDate);
-
+					
 					Map<String,Object> tempMap = new HashMap<>();
 					tempMap.putAll(param);
-					tempMap.put("chgPgid", "nhlva");
 					tempMap.put("indvBldDsc", "0");
+					tempMap.put("chgPgid", "nhlva");
 					tempMap.put("chgRmkCntn", "cowDetail[0]");
 					tempMap.put("chgIpAddr", httpUtils.getClientIp(req));
+					Map<String,Object> bloodInfo = auctionService.selectIndvBloodInfo(tempMap);
+					//Duration duration = Duration.between(sDate, eDate);
+					String test = (String) bloodInfo.get("LSCHG_TIME");
+
 					if(bloodInfo == null || bloodInfo.isEmpty()) {
 						//오늘이 경매일 이전이거나 경매당일 00~18까지 종개협 데이터 갱신
 						if(todate.isBefore(eDate)) {
@@ -1002,17 +1003,18 @@ public class AuctionController extends CommonController {
 		
 		LocalDateTime sDate = LocalDateTime.parse(aucDt+"000000", dateFormat);
 		LocalDateTime eDate = LocalDateTime.parse(aucDt+"180000", dateFormat);
-		
+
+		Map<String, Object> tempMap = new HashMap<>();
+		tempMap.putAll(param);
+		tempMap.put("chgPgid", "nhlva");
+		//tempMap.put("indvBldDsc", "0");
+		tempMap.put("chgRmkCntn", "cowDetailFull["+param.get("indvBldDsc")+"]");
+		tempMap.put("chgIpAddr", httpUtils.getClientIp(req));		
 		//오늘이 경매일 이전이면서 경매당일 00~18시이면 허용
-		if(Timestamp.valueOf(toDate).before(formatter.parse(aucDt)) || toDate.isAfter(sDate) && toDate.isBefore(eDate)) {
-			Map<String, Object> tempMap = new HashMap<>();
-			tempMap.putAll(param);
-			tempMap.put("chgPgid", "nhlva");
-			tempMap.put("chgRmkCntn", "cowDetailFull["+param.get("indvBldDsc")+"]");
-			tempMap.put("chgIpAddr", httpUtils.getClientIp(req));
+		if(Timestamp.valueOf(toDate).before(formatter.parse(aucDt)) || toDate.isAfter(sDate) && toDate.isBefore(eDate)) {			
 			commonService.callIndvAiakInfo(tempMap);		
 		}
-		Map<String,Object> bloodInfo = auctionService.selectIndvBloodInfo(param);
+		Map<String,Object> bloodInfo = auctionService.selectIndvBloodInfo(tempMap);
 		
 		mav.addObject("bloodInfo",bloodInfo);
 		mav.addObject("sibList",auctionService.selectListIndvSib(param));

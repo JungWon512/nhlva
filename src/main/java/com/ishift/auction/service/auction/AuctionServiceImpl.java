@@ -425,7 +425,7 @@ public class AuctionServiceImpl implements AuctionService {
 				}
 			}else {
 				params.put("naBzPlc", params.get("naBzplc"));
-				params.put("chg_pgid", "OFFICE");
+				params.put("chg_pgid", "OFFICE["+params.get("regType")+"]");
 				params.put("chg_rmk_cntn", "출장우정보변경");
 				auctionDAO.insertSogCowLog(params);
 			}
