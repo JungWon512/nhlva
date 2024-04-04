@@ -1003,12 +1003,13 @@
 							   AND DEL_YN		= '0'
 		<choose>
 			<when test="aplDt != null and aplDt != ''">
-							   AND APL_DT <![CDATA[<=]]> #{aplDt})
+							   AND APL_DT <![CDATA[<=]]> #{aplDt}
 			</when>
 			<otherwise>
-							   AND APL_DT <![CDATA[<=]]> #{aucDt})
+							   AND APL_DT <![CDATA[<=]]> #{aucDt}
 			</otherwise>
 		</choose>
+		 )
 		   AND A.AUC_OBJ_DSC	= #{aucObjDsc}
 		   AND A.DEL_YN			= '0'
 		   AND A.NA_BZPLC		= #{naBzplc}
@@ -1016,7 +1017,7 @@
 		   AND A.SBID_YN		= #{sbidYn}
 		</if>
 		   AND '1' = ( CASE WHEN A.AUC_OBJ_DSC IN ( '1', '2', '3' ) OR NVL(A.JNLZ_BSN_DSC, '2') = '2' THEN '1'
-							WHEN NVL(#{cowSogWt}, 0) BETWEEN A.ST_SOG_WT AND A.ED_SOG_WT THEN '1'
+							WHEN NVL(#{cowSogWt}, 0) <![CDATA[>=]]> A.ST_SOG_WT AND NVL(#{cowSogWt}, 0) <![CDATA[<]]> A.ED_SOG_WT THEN '1'
 							ELSE '0'
 						END)
 	</select>
