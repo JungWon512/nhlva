@@ -1588,15 +1588,15 @@ public class AuctionServiceImpl implements AuctionService {
 								feeAmt += Long.parseLong(info.getOrDefault("BLOOD_AM", "0").toString());
 							}
 
-							// 영주축협 송아지 12개월이상 수수료 적용
-							if ("8808990687094".equals(params.get("naBzPlc"))) {
-								if ("1".equals(info.get("MT12_OVR_YN"))) {
-									feeAmt += Long.parseLong(bizAuctionInfo.getOrDefault("MT12_OVR_FEE", "0").toString());
-								}
-								else if ("1".equals(info.get("DNA_YN_CHK"))) {
-									// 친자 검사 여부(DNA_YN_CHK) 수수료
-									feeAmt += Long.parseLong(bizAuctionInfo.getOrDefault("SELFEE_CHK_DNA_YN_FEE", "0").toString());
-								}
+							// 송아지 12개월이상 수수료 적용
+							if ("1".equals(info.get("MT12_OVR_YN")) && "8808990687094".equals(params.get("naBzPlc"))) {
+								//영주축협 
+								feeAmt += Long.parseLong(bizAuctionInfo.getOrDefault("MT12_OVR_FEE", "0").toString());
+							}
+							// 친자 검사 여부(DNA_YN_CHK) 수수료
+							if ("1".equals(info.get("DNA_YN_CHK")) && ("8808990657615".equals(params.get("naBzPlc")) || "8808990687094".equals(params.get("naBzPlc")))) {
+								//영주: 8808990687094 구미: 8808990657615
+								feeAmt += Long.parseLong(bizAuctionInfo.getOrDefault("SELFEE_CHK_DNA_YN_FEE", "0").toString());
 							}
 							
 							// 판매수수료 수기등록(SELFEE_CHK_YN)인 경우 해당 금액(SELFEE_CHK_YN_FEE)을 출하수수료로 부과
