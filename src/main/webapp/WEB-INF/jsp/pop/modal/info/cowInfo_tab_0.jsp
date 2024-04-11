@@ -206,14 +206,20 @@
             </tr>
             <tr>
                 <td class="bdr-y">
-					<c:if test="${not empty infoData.BRCL_ISP_DT_STR}">
-                		<span>${infoData.BRCL_ISP_DT_STR }</span> 검사 <span class="c-blue">(${infoData.BRCL_ISP_RZT_C_NM })</span>
-                	</c:if>
+                	<c:choose>
+						<c:when test="${not empty infoData.BRCL_ISP_DT_STR}">
+	                		<span>${infoData.BRCL_ISP_DT_STR }</span> 검사 <span class="c-blue">(${infoData.BRCL_ISP_RZT_C_NM })</span>
+	                	</c:when>
+	                	<c:otherwise>&nbsp;</c:otherwise>
+                	</c:choose>
                 </td>                
 				<td class="ta-C">
-					<c:if test="${not empty infoData.BRCL_COMPARE_DT}">
-						${infoData.BRCL_COMPARE_DT }일
-					</c:if>
+                	<c:choose>
+						<c:when test="${not empty infoData.BRCL_COMPARE_DT}">
+							${infoData.BRCL_COMPARE_DT }일
+						</c:when>
+	                	<c:otherwise>-</c:otherwise>
+                	</c:choose>
 				</td>				
             </tr>
             
@@ -223,14 +229,20 @@
             </tr>
             <tr>
                 <td class="bdr-y">
-					<c:if test="${not empty infoData.VACN_DT_STR}">
-						${infoData.VACN_DT_STR } 접종 <span class="c-blue">(${infoData.VACN_ORDER })</span>
-					</c:if>
+                	<c:choose>
+						<c:when test="${not empty infoData.VACN_DT_STR}">
+							${infoData.VACN_DT_STR } 접종 <span class="c-blue">(${infoData.VACN_ORDER })</span>
+						</c:when>
+	                	<c:otherwise>&nbsp;</c:otherwise>
+					</c:choose>
                 </td>                
 				<td class="ta-C">
-					<c:if test="${not empty infoData.VACN_COMPARE_DT}">
-						${infoData.VACN_COMPARE_DT }일
-					</c:if>
+                	<c:choose>
+						<c:when test="${not empty infoData.VACN_COMPARE_DT}">
+							${infoData.VACN_COMPARE_DT }일
+						</c:when>
+	                	<c:otherwise>-</c:otherwise>
+					</c:choose>
 				</td>				
             </tr>
             
@@ -240,14 +252,20 @@
             </tr>
             <tr>
                 <td class="bdr-y">
-					<c:if test="${not empty infoData.VACN_DT_STR}">
-						${infoData.VACN_DT_STR } 접종 <span class="c-blue">(${infoData.VACN_ORDER })</span>
-					</c:if>
+                	<c:choose>
+						<c:when test="${not empty infoData.BOVINE_DT_STR}">
+							${infoData.BOVINE_DT_STR } 접종 <span class="c-blue">(${infoData.BOVINE_RSLTNM })</span>
+						</c:when>
+	                	<c:otherwise>&nbsp;</c:otherwise>
+					</c:choose>
                 </td>                
 				<td class="ta-C">
-					<c:if test="${not empty infoData.VACN_COMPARE_DT}">
-						${infoData.VACN_COMPARE_DT }일
-					</c:if>
+                	<c:choose>
+						<c:when test="${not empty infoData.BOVINE_COMPARE_DT}">
+							${infoData.BOVINE_COMPARE_DT }일
+						</c:when>
+	                	<c:otherwise>-</c:otherwise>
+					</c:choose>
 				</td>				
             </tr>
 		</tbody>

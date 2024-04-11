@@ -863,7 +863,8 @@ public class HttpUtils {
             con.setReadTimeout(2000); // InputStream 읽어 오는 Timeout 시간 설정
             con.setRequestMethod("GET");
             con.setRequestProperty("apikey", "KAIA_API8b749c8d2c44700f64f564b5dfd5869a6bbda33c927da182cd515be02b2b0b77");
-            con.setDoOutput(false);            
+            con.setDoOutput(false);
+            con.setUseCaches(false);
 
             StringBuilder sb = new StringBuilder();
             log.info("callApiAiak resp code : "+con.getResponseCode());

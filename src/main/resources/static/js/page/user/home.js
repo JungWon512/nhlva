@@ -26,7 +26,7 @@
 					popHtml.push("<div id='chg_result' class='modal-wrap pop_cow_input'>");
 					popHtml.push("		<div class='modal-content pop_ad_mod'>");
 					popHtml.push("			<div class='modal-head'>");
-					popHtml.push("				<h3>"+noticeInfo.BBRD_TINM+"</h3>");
+					popHtml.push("				<h3 style='font-size:15px'>"+noticeInfo.BBRD_TINM+"</h3>");
 					popHtml.push("				<button type='button' class='modal_popup_close'>닫기</button>");
 					popHtml.push("			</div>");
 					popHtml.push("			<div class='modal-body'>");
@@ -78,3 +78,4 @@
 		Home.init();
 	});
 })(window, window.jQuery);
+ 

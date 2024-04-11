@@ -174,14 +174,8 @@ public class CommonServiceImpl implements CommonService {
 								 params.getOrDefault("SRA_FARM_AMN_STEL", "").toString().trim());											// 자택전화번호
 		params.put("ZIP", params.getOrDefault("SRA_FARM_FZIP", "").toString() + params.getOrDefault("SRA_FARM_RZIP", "").toString());		// 우편번호
 		
-		try {
-			// 농가정보 테이블에서 FHS_ID_NO로 이미 등록된 통합회원 코드가 있는지 조회
-			//final Map<String, Object> fhsInfo = commonDao.getFhsInfo(params);
-			// 통합회원 테이블에서 이름, 생년월일 휴대전화번호로 통합회원 정보 조회
-			//final Map<String, Object> fhsIntgNoInfo = commonDao.getIntgNoInfo(params);
-			log.debug(params.toString());
+		try {			
 			final List<Map<String, Object>> fhsIntgNoList = commonDao.getIntgNoList(params);
-			log.debug("###### :: "+fhsIntgNoList.toString());
 			if(fhsIntgNoList != null && !fhsIntgNoList.isEmpty()) {
 				final Map<String, Object> info = fhsIntgNoList.get(0);
 				if(info != null && !info.isEmpty()) {
@@ -202,7 +196,11 @@ public class CommonServiceImpl implements CommonService {
 					}
 				}			
 			}
-			
+
+			// 농가정보 테이블에서 FHS_ID_NO로 이미 등록된 통합회원 코드가 있는지 조회
+			//final Map<String, Object> fhsInfo = commonDao.getFhsInfo(params);
+			// 통합회원 테이블에서 이름, 생년월일 휴대전화번호로 통합회원 정보 조회
+			//final Map<String, Object> fhsIntgNoInfo = commonDao.getIntgNoInfo(params);
 			/*
 			// 3. 농가 정보 테이블에 통합회원 코드가 있는 경우
 			if (fhsInfo != null && !fhsInfo.isEmpty() && !"-1".equals(fhsInfo.get("MB_INTG_NO"))) {
@@ -355,7 +353,6 @@ public class CommonServiceImpl implements CommonService {
 			barcode = barcode.substring(3);
 		}	
 		Map<String,Object> aiakInfo = httpUtils.callApiAiakMap(barcode);
-		log.debug(aiakInfo.toString());
 		if(aiakInfo != null && !aiakInfo.isEmpty()) this.updateIndvAiakInfo(aiakInfo);
 	}
 

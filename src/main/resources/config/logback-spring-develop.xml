@@ -11,7 +11,7 @@
       <timeBasedFileNamingAndTriggeringPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedFNATP">
         <maxFileSize>50MB</maxFileSize>
       </timeBasedFileNamingAndTriggeringPolicy>
-      <maxHistory>60</maxHistory>
+      <maxHistory>30</maxHistory>
     </rollingPolicy>
     <encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
       <Pattern>${FILE_LOG_PATTERN}</Pattern>
@@ -20,7 +20,7 @@
 
 
   <logger name="jdbc.sqlonly" level="ERROR" />
-  <logger name="jdbc.sqltiming" level="INFO" />
+  <logger name="jdbc.sqltiming" level="ERROR" />
   <logger name="jdbc.audit" level="WARN" />
   <logger name="jdbc.resultset" level="ERROR" />
   <logger name="jdbc.resultsettable" level="ERROR" />
@@ -36,14 +36,12 @@
   <logger name="org.springframework.security" level="ERROR" />
   <springProfile name="production">
     <root level="ERROR">
-      <appender-ref ref="CONSOLE" />
       <appender-ref ref="FILE" />
     </root>
   </springProfile>
 
   <springProfile name="develop">
     <root level="DEBUG">
-      <appender-ref ref="CONSOLE" />
       <appender-ref ref="FILE" />
     </root>
   </springProfile>
@@ -51,7 +49,6 @@
   <springProfile name="local">
     <root level="DEBUG">
       <appender-ref ref="CONSOLE" />
-      <appender-ref ref="FILE" />
     </root>
   </springProfile>
 

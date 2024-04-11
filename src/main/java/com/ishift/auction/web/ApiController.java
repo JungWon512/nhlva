@@ -133,19 +133,7 @@ public class ApiController {
 		final List<Map<String, Object>> failList = new ArrayList<Map<String, Object>>();
 
 		try {
-			if ("v1".equals(version)) {
-				int cnt = auctionService.updateAuctionResult(params);
-				
-				if (cnt > 0) {
-					result.put("success", true);
-					result.put("message", "정상적으로 변경되었습니다.");
-				}
-				else {
-					result.put("success", false);
-					result.put("message", "출하우 정보가 없습니다.");
-				}
-			}else {
-
+			if ("v2".equals(version)) {
 				if(params.get("list") == null) {
 					result.put("success", false);
 					result.put("message", "필수 인자가 없습니다.");
@@ -179,6 +167,18 @@ public class ApiController {
 				result.put("message", "정상적으로 변경되었습니다.");
 				if (failList.size() > 0) {
 					result.put("failList", failList);
+				}
+			}
+			else {
+				int cnt = auctionService.updateAuctionResult(params);
+				
+				if (cnt > 0) {
+					result.put("success", true);
+					result.put("message", "정상적으로 변경되었습니다.");
+				}
+				else {
+					result.put("success", false);
+					result.put("message", "출하우 정보가 없습니다.");
 				}
 			}
 		}catch (SQLException | RuntimeException | JsonProcessingException re) {
@@ -355,16 +355,7 @@ public class ApiController {
 					  .append(this.getStringValue(vo.get("LSCHG_DTM")).replace("|", ",")).append('|')
 					  .append(this.getStringValue(vo.get("SRA_MWMNNM")).replace("|", ",")).append('|')	// 낙찰자 이름
 					  .append(this.getStringValue(vo.get("MTCN")).replace("|", ",")).append('|')	// 월령(이력제)
-					  .append(this.getStringValue(vo.get("RG_DSC_NM")).replace("|", ","))	// 등록 구분
-					  //.append('|').append(this.getStringValue(vo.get("EPD_VAL_1")).replace("|", ","))
-					  //.append('|').append(this.getStringValue(vo.get("EPD_GRD_1")).replace("|", ","))
-					  //.append('|').append(this.getStringValue(vo.get("EPD_VAL_2")).replace("|", ","))
-					  //.append('|').append(this.getStringValue(vo.get("EPD_GRD_2")).replace("|", ","))
-					  //.append('|').append(this.getStringValue(vo.get("EPD_VAL_3")).replace("|", ","))
-					  //.append('|').append(this.getStringValue(vo.get("EPD_GRD_3")).replace("|", ","))
-					  //.append('|').append(this.getStringValue(vo.get("EPD_VAL_4")).replace("|", ","))
-					  //.append('|').append(this.getStringValue(vo.get("EPD_GRD_4")).replace("|", ","))
-					  ;
+					  .append(this.getStringValue(vo.get("RG_DSC_NM")).replace("|", ","));	// 등록 구분
 
 					entryList.add(sb.toString());
 				}
@@ -2211,7 +2202,7 @@ public class ApiController {
 		}
 		return result;
 	}
-
+	
 	@ResponseBody
 	@GetMapping(value = "/api/{version}/epd/info/{naBzplc}/{aucDt}/{aucObjDsc}/{aucPrgSqno}")
 	Map<String, Object> cowEpdInfo(@PathVariable(name = "version") final String version
@@ -2233,7 +2224,6 @@ public class ApiController {
 			params.put("aucDt", aucDt);
 			params.put("aucObjDsc", aucObjDsc);
 			params.put("aucPrgSqno", aucPrgSqno);
-			//final Map<String, Object> info = ;
 			
 			result.put("success", true);
 			result.put("message", "조회에 성공했습니다.");

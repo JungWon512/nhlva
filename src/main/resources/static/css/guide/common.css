@@ -4144,6 +4144,11 @@ Base styles: contents layer
 	width: 12%;
 }
 
+.auction_bid .list_head dl dd.pd_month, .auction_bid .list_body dl dd.pd_month
+	{
+	width: 12%;
+}
+
 .auction_bid .list_head dl dd.pd_pay1, .auction_bid .list_body dl dd.pd_pay1
 	{
 	width: 12%;
@@ -4169,7 +4174,7 @@ Base styles: contents layer
 		display: none;
 	}
 	.auction_bid .list_head dl dd.num, .auction_bid .list_body dl dd.num {
-		width: 10%;
+		width: 9%;
 	}
 	.auction_bid .list_head dl dd.pd_ea, .auction_bid .list_body dl dd.pd_ea
 		{
@@ -4183,21 +4188,26 @@ Base styles: contents layer
 		overflow: hidden;
 		white-space: nowrap;
 	}
+	.auction_bid .list_head dl dd.pd_month, .auction_bid .list_body dl dd.pd_month
+		{
+		width: 10%;
+		text-align: center;
+	}
 	.auction_bid .list_head dl dd.pd_kg, .auction_bid .list_body dl dd.pd_kg
 		{
 		display: none;
 	}
 	.auction_bid .list_head dl dd.pd_pay1, .auction_bid .list_body dl dd.pd_pay1
 		{
-		width: 19%;
+		width: 16%;
 	}
 	.auction_bid .list_head dl dd.pd_pay2, .auction_bid .list_body dl dd.pd_pay2
 		{
-		width: 19%;
+		width: 16%;
 	}
 	.auction_bid .list_head dl dd.pd_pay3, .auction_bid .list_body dl dd.pd_pay3
 		{
-		width: 19%;
+		width: 16%;
 	}
 	.auction_bid .list_head dl dd.pd_state, .auction_bid .list_body dl dd.pd_state
 		{

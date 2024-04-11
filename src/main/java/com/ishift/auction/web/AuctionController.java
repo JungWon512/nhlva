@@ -844,15 +844,15 @@ public class AuctionController extends CommonController {
 					mav.addObject("tabList", tabList);
 				break;
 				case "1":
-				case "2":					
+				case "2":
 					paramMap.put("naBzplc", param.get("naBzplc"));
 					paramMap.put("sraIndvAmnno", param.get("sraIndvAmnno"));
 					Map<String,Object> bloodInfo = auctionService.selectIndvBloodInfo(paramMap);
 					SimpleDateFormat formatter = new SimpleDateFormat("yyyyMMdd");
 					
-					String aucDt = (String) param.get("aucDt");
+					String aucDt = (String) param.get("aucDt");					
 					Date aucDate = formatter.parse(aucDt);					
-					
+
 					if(bloodInfo == null || bloodInfo.isEmpty()) {
 						
 						commonService.callIndvAiakInfo((String)param.get("sraIndvAmnno"));
@@ -988,7 +988,6 @@ public class AuctionController extends CommonController {
         map.put("sraIndvAmnno", param.get("sraIndvAmnno"));
 		//Map<String,Object> indvData=auctionService.selectIndvDataInfo(map);
 		//map.put("sraIndvAmnno", param.get("sraIndvAmnno"));
-		
 		//List<Map<String,Object>> moveList = auctionService.selectListIndvMove(map);
 		//List<Map<String,Object>> postList = auctionService.selectListIndvPost(map);
 		//List<Map<String,Object>> sibList = auctionService.selectListIndvSib(map);
@@ -1015,37 +1014,6 @@ public class AuctionController extends CommonController {
 		return mav;
 	}
 	
-	@RequestMapping(value = "/cowDetailFull_Temp",method = { RequestMethod.GET, RequestMethod.POST })	
-	public ModelAndView cowDetailFull_Temp(@RequestParam Map<String, Object> param) throws Exception {		
-		LOGGER.debug("start of cowDetailFull.do");
-		ModelAndView mav = new ModelAndView();
-        Map<String,Object> map = new HashMap<>();
-                
-        map.put("SRA_INDV_AMNNO", param.get("sraIndvAmnno"));
-		Map<String, Object> indvData = httpUtils.sendPostJsonToMap(map, "4700");
-		mav.addObject("infoData",indvData);
-		
-		Map<String,Object> sibList = httpUtils.sendPostJsonToMap(map, "4900");
-		mav.addObject("sibList",sibList);
-
-		Map<String,Object> openData = httpUtils.getOpenApiAnimalTraceToMap(map);
-		mav.addObject("moveList",openData.get("moveList"));
-		mav.addObject("vacnInfo",openData.get("vacnInfo"));
-		
-		map.put("SRA_INDV_AMNNO", indvData.get("MCOW~"));
-		Map<String,Object> postList = httpUtils.sendPostJsonToMap(map, "4900");
-		mav.addObject("postList",postList);
-
-		//출장우 상세 tab항목 표기
-        map.put("simpCGrpSqno", "1");
-        map.put("indvPopYn", "Y");
-		mav.addObject("tabList",auctionService.selectListExpitemSet(map));
-
-		mav.addObject("subheaderTitle",(param.get("title"))+"개체 상세");
-		mav.addObject("inputParam", param);		
-		mav.setViewName("pop/cowDetailFull");
-		return mav;
-	}
 	@ResponseBody
 	@PostMapping(path = "/auction/api/getInfMca", produces = MediaType.APPLICATION_JSON_VALUE)
     Map<String, Object> getInfCowDetailFull(@RequestBody Map<String,Object> param) {

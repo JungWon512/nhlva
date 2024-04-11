@@ -201,7 +201,7 @@ $(document).ready(function() {
 			if(kko_id) {
 				try{
 					Kakao.init(kko_id);
-					AgoraRTC.setLogLevel(4);				
+					//AgoraRTC.setLogLevel(4);				
 				}catch(e){console.log(e);};				
 			}
 			

@@ -5,6 +5,7 @@
     var setLayout = function() {
     	if($('div.tab_list ul li a.cowTab_2').length > 0){
     		$('div.tab_area.cowTab_2').show();
+    		showGradient(); // 데이터 불러올때 마지막에 재호출 해주세요
     		//epdChartDraw();
     	}
 		//getAiakInfo();
@@ -372,4 +373,34 @@ function epdChartDraw(){
 	    }           
 	};
 	chart = new Chart(ctx, config);
+}
+
+
+function showGradient() {
+    $(".fixdCellGrup").each(function () {
+        if ($(this).width() < $(this).children().innerWidth() == true) {
+            //sticky 테이블 체크 여부
+            if ($(this).parent(".scroll_wrap").hasClass("left_fixdTbl") == true) {
+                //sticky 테이블 위치 설정
+                var wd = 0;
+                //prettier-ignore
+                $(this).find("thead th.fixd_box").each(function (index, item) {
+                    $(item).css("left", wd + "px");
+                    wd += $(item).outerWidth();
+                });
+                //prettier-ignore
+                $(this).find("tbody tr").each(function () {
+                    var tbody_wd = 0;
+                    //prettier-ignore
+                    $(this).find("td.fixd_box").each(function (index, item) {
+                        $(item).css("left", tbody_wd + "px");
+                        tbody_wd += $(item).outerWidth();
+                    });
+                });
+            }
+        }
+        if ($(this).height() < $(this).children().innerHeight() == true) {
+            $(this).parents(".scroll_wrap").addClass("sc_v_use");
+        }
+    });
 }

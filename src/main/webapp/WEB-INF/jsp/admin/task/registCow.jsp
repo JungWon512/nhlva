@@ -245,7 +245,8 @@
 						<th>비고</th>
 						<td>
 							<div class="inp">
-								<textarea name="rmkCntn" style="border:none;" maxlength="100">${sogCowInfo.RMK_CNTN}</textarea>
+								<input type="text" name="rmkCntn" style="border:none;" maxlength="100" value="${sogCowInfo.RMK_CNTN}"/>
+<%-- 								<textarea type="text" name="rmkCntn" style="border:none;" maxlength="100" >${sogCowInfo.RMK_CNTN}</textarea> --%>
 							</div>
 						</td>
 					</tr>
