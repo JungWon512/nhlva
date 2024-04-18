@@ -589,5 +589,7 @@ public interface AuctionService {
 	List<Map<String, Object>> selectCowEpdList(Map<String, Object> params) throws SQLException;
 
 	List<Map<String, Object>> selectSumEntry(Map<String, Object> map) throws SQLException;
+
+	Map<String, Object> getBzlocInfo(Map<String, Object> params) throws SQLException;
 	
 }

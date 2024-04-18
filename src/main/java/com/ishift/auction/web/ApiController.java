@@ -2279,4 +2279,24 @@ public class ApiController {
 		}
 		return result;
 	}
+	
+	@ResponseBody
+	@PostMapping(value = "/api/{version}/auction/select/bzloc"
+				, consumes = MediaType.APPLICATION_FORM_URLENCODED_VALUE
+				, produces = MediaType.APPLICATION_JSON_VALUE)
+	public Map<String, Object> getBzlocInfo(@PathVariable(name = "version") String version
+														, @RequestParam final Map<String, Object> params) {
+		final Map<String, Object> result = new HashMap<String, Object>();
+		try {
+			result.put("success", true);
+			result.put("message", "조회에 성공했습니다.");
+			result.put("data", auctionService.getBzlocInfo(params));			
+		}catch (Exception e) {
+			log.error("ApiController.getBzloc : {} ",e);
+			result.put("success", false);
+			result.put("data", null);
+			result.put("message", "작업중 오류가 발생했습니다. 관리자에게 문의하세요.");
+		}
+		return result;		
+	}
 }

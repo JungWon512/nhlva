@@ -1961,5 +1961,8 @@ public class AuctionServiceImpl implements AuctionService {
 	public List<Map<String, Object>> selectSumEntry(Map<String, Object> params) throws SQLException{
 		return auctionDAO.selectSumEntry(params);
 	}
-
+	@Override
+	public Map<String, Object> getBzlocInfo(Map<String, Object> params) throws SQLException{
+		return auctionDAO.getBzlocInfo(params);
+	}
 }
