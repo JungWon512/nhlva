@@ -27,8 +27,8 @@
 </div>
 
 <h3 class="tit mb10">혈통</h3>
-<h3 class="tit2" style="margin-bottom:15px;"><span class="subTxt" style="font-size: 13px">※한국종축개량협회제공일 : ${bloodInfo.LSCHG_DATE}</span></h3>
-<!-- <h3 class="tit2"><span class="subTxt" style="font-size: 13px;color:red;">※한국종축개량협회제공데이터입니다.ㅇㅁ럼ㄴ이람ㄴㅇ리ㅏ</span></h3> -->
+<h3 class="tit2" style="margin-bottom:1px;"><span class="subTxt" style="font-size: 13px">※한국종축개량협회제공일 : ${bloodInfo.LSCHG_DATE}</span></h3>
+<h3 class="tit2"><span class="subTxt" style="font-size: 13px;color:red;">※해당정보는 참고용으로,최종구매전 종축개량협회 홈페이지에서 확인하시기바랍니다.</span></h3>
 <div class="newGrapy">
     <div class="item line-type">
         <dl>
