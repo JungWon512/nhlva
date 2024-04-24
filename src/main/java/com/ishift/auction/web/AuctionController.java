@@ -797,7 +797,11 @@ public class AuctionController extends CommonController {
 		mav.addObject("tabList",tabList);
 		
 		//mav.addObject("johapData",johap);
-		mav.addObject("subheaderTitle","출장우 상세");
+		if("5".equals(param.get("aucObjDsc")) || "6".equals(param.get("aucObjDsc"))) {
+			mav.addObject("subheaderTitle","출장염소 상세");			
+		}else {
+			mav.addObject("subheaderTitle","출장우 상세");			
+		}
 		//mav.setViewName("auction/sales/cowDetail");
 		mav.addObject("inputParam", param);		
 		mav.setViewName("pop/cowDetail");

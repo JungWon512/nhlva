@@ -8,7 +8,7 @@
 </c:if>
 </c:forEach>
 
-<h3 class="tit">출장우</h3>
+<h3 class="tit">${(inputParam.aucObjDsc ne '5' and inputParam.aucObjDsc ne '6')?'출장우':'출장염소'}</h3>
 <div class="cow-basic">
 	<table class="table-detail">
 		<colgroup>
@@ -31,14 +31,16 @@
 				<th>예정가</th>
 				<td colspan="2" class="bdr-y"><span class="c-red">${infoData.LOWS_SBID_LMT_UPR }</span></td>
 			</tr>
-			<tr>
-				<th>개체번호</th>
-				<td colspan="3">${infoData.SRA_INDV_AMNNO}</td>
-			</tr>
+			<c:if test="${inputParam.aucObjDsc ne '5' and inputParam.aucObjDsc ne '6'}">
+				<tr>
+					<th>개체번호</th>
+					<td colspan="3">${infoData.SRA_INDV_AMNNO}</td>
+				</tr>
 			<tr>
 				<th>개월령</th>
 				<td colspan="3">${infoData.BIRTH_MONTH }</td>
 			</tr>
+			</c:if>
 			<tr>
 				<th>출하주</th>
 				<td colspan="3">${infoData.FTSNM }</td>
@@ -47,32 +49,49 @@
 				<th>지역</th>
 				<td colspan="3">${infoData.ADDRESS }</td>
 			</tr>
-			<tr>
-				<th>등록구분</th>
-				<td class="ta-C bdr-y">${infoData.RG_DSC_NAME }</td>
-				<th>어미구분</th>
-				<td class="ta-C bdr-y">${infoData.MCOW_DSC_NAME }</td>
-			</tr>
-			<tr>
-				<th>중량</th>
-				<td class="ta-C bdr-y">${infoData.COW_SOG_WT }Kg</td>
-				<th>KPN</th>
-				<td class="ta-C">${infoData.KPN_NO_STR }</td>
-			</tr>
-			<c:if test="${bdln_yn eq '1'}">
-			<tr>
-				<th>체장</th>
-				<td class="ta-C bdr-y">${infoData.BDLN_VAL }</td>
-				<th>체고</th>
-				<td class="ta-C">${infoData.BDHT_VAL }</td>
-			</tr>
+			
+			<c:choose>
+				<c:when test="${inputParam.aucObjDsc ne '5' and inputParam.aucObjDsc ne '6'}">
+					<tr>
+						<th>등록구분</th>
+						<td class="ta-C bdr-y">${infoData.RG_DSC_NAME }</td>
+						<th>어미구분</th>
+						<td class="ta-C bdr-y">${infoData.MCOW_DSC_NAME }</td>
+					</tr>
+					<tr>
+						<th>중량</th>
+						<td class="ta-C bdr-y">${infoData.COW_SOG_WT }Kg</td>
+						<th>KPN</th>
+						<td class="ta-C">${infoData.KPN_NO_STR }</td>
+					</tr>
+				</c:when>
+				<c:otherwise>
+					<tr>
+						<th>등록구분</th>
+						<td colspan="3">${infoData.RG_DSC_NAME }</td>
+					</tr>
+					<tr>
+						<th>중량</th>
+						<td colspan="3">${infoData.COW_SOG_WT }Kg</td>
+					</tr>
+				</c:otherwise>
+			</c:choose>
+			<c:if test="${inputParam.aucObjDsc ne '5' and inputParam.aucObjDsc ne '6'}">
+				<c:if test="${bdln_yn eq '1'}">
+				<tr>
+					<th>체장</th>
+					<td class="ta-C bdr-y">${infoData.BDLN_VAL }</td>
+					<th>체고</th>
+					<td class="ta-C">${infoData.BDHT_VAL }</td>
+				</tr>
+				</c:if>
+				<tr>
+					<th>계대</th>
+					<td class="ta-C bdr-y">${infoData.SRA_INDV_PASG_QCN }</td>
+					<th>산차</th>
+					<td class="ta-C">${infoData.MATIME }</td>
+				</tr>
 			</c:if>
-			<tr>
-				<th>계대</th>
-				<td class="ta-C bdr-y">${infoData.SRA_INDV_PASG_QCN }</td>
-				<th>산차</th>
-				<td class="ta-C">${infoData.MATIME }</td>
-			</tr>
 			<c:if test="${inputParam.resultPopYn eq 'Y' }">
 				<tr>
 					<th>낙찰가</th>
@@ -89,160 +108,162 @@
 	</table>
 </div>
 
-<c:if test="${matingList.size() > 0 }">
-	<h3 class="tit">교배정보</h3>
-	<div class="cow-basic">
-		<table class="table-detail">
-			<colgroup>
-				<col width="10%">
-				<col width="12%">
-				<col width="18%">
-				<col width="12%">
-				<col width="16%">
-				<col width="16%">
-				<col width="14%">
-			</colgroup>
-			<tbody>
-				<tr>
-					<th class="ta-C">산차</th>
-					<th class="ta-C">교배 차수</th>
-					<th class="ta-C">교배일자</th>
-					<th class="ta-C">수정방법</th>
-					<th class="ta-C">KPN</th>
-					<th class="ta-C">인공수정사</th>
-					<th class="ta-C">교배농가</th>
-				</tr>			
-				<c:forEach items="${ childBirthList }" var="item" varStatus="st">
+<c:if test="${inputParam.aucObjDsc ne '5' and inputParam.aucObjDsc ne '6'}">
+	<c:if test="${matingList.size() > 0 }">
+		<h3 class="tit">교배정보</h3>
+		<div class="cow-basic">
+			<table class="table-detail">
+				<colgroup>
+					<col width="10%">
+					<col width="12%">
+					<col width="18%">
+					<col width="12%">
+					<col width="16%">
+					<col width="16%">
+					<col width="14%">
+				</colgroup>
+				<tbody>
 					<tr>
-						<td class="ta-C fz-32 bdr-y">${ item.CRSBD_MATIME }</td>
-						<td class="ta-C fz-32 bdr-y">${ item.CRSBD_QCN }</td>
-						<td class="ta-C fz-32 bdr-y">${ item.CRSBD_DT_STR }</td>
-						<td class="ta-C fz-32 bdr-y">${ item.FERT_METHC }</td>
-						<td class="ta-C fz-32 bdr-y">${ item.SRA_KPN_NO }</td>
-						<td class="ta-C fz-32 bdr-y">${ item.FERT_AMRNM }</td>
-						<td class="ta-C fz-32 bdr-y">${ item.SRA_FARMNM }</td>
-					</tr>
-				</c:forEach>
-			</tbody>
-		</table>
-	</div>
-</c:if>
-
-<c:if test="${childBirthList.size() > 0 }">
-	<h3 class="tit">분만정보</h3>
-	<div class="cow-basic">
-		<table class="table-detail">
-			<colgroup>
-				<col width="10%">
-				<col width="10%">
-				<col width="25%">
-				<col width="13%">
-				<col width="22%">
-				<col width="25%">
-			</colgroup>
-			<tbody>
-				<tr>
-					<th class="ta-C">산차</th>
-					<th class="ta-C">분만<br/>구분</th>
-					<th class="ta-C">분만일자</th>
-					<th class="ta-C">성별</th>
-					<th class="ta-C">생시체중</th>
-					<th class="ta-C bdr-n">송아지 귀표번호<br/>(KPN)</th>
-				</tr>			
-				<c:forEach items="${ childBirthList }" var="item" varStatus="st">
+						<th class="ta-C">산차</th>
+						<th class="ta-C">교배 차수</th>
+						<th class="ta-C">교배일자</th>
+						<th class="ta-C">수정방법</th>
+						<th class="ta-C">KPN</th>
+						<th class="ta-C">인공수정사</th>
+						<th class="ta-C">교배농가</th>
+					</tr>			
+					<c:forEach items="${ childBirthList }" var="item" varStatus="st">
+						<tr>
+							<td class="ta-C fz-32 bdr-y">${ item.CRSBD_MATIME }</td>
+							<td class="ta-C fz-32 bdr-y">${ item.CRSBD_QCN }</td>
+							<td class="ta-C fz-32 bdr-y">${ item.CRSBD_DT_STR }</td>
+							<td class="ta-C fz-32 bdr-y">${ item.FERT_METHC }</td>
+							<td class="ta-C fz-32 bdr-y">${ item.SRA_KPN_NO }</td>
+							<td class="ta-C fz-32 bdr-y">${ item.FERT_AMRNM }</td>
+							<td class="ta-C fz-32 bdr-y">${ item.SRA_FARMNM }</td>
+						</tr>
+					</c:forEach>
+				</tbody>
+			</table>
+		</div>
+	</c:if>
+	
+	<c:if test="${childBirthList.size() > 0 }">
+		<h3 class="tit">분만정보</h3>
+		<div class="cow-basic">
+			<table class="table-detail">
+				<colgroup>
+					<col width="10%">
+					<col width="10%">
+					<col width="25%">
+					<col width="13%">
+					<col width="22%">
+					<col width="25%">
+				</colgroup>
+				<tbody>
 					<tr>
-						<td class="ta-C fz-32 bdr-y">${ item.MATIME }</td>
-						<td class="ta-C fz-32 bdr-y">${ item.PTUR_DSC }</td>
-						<td class="ta-C fz-32 bdr-y">${ item.PTUR_DT_STR }</td>
-						<td class="ta-C fz-32 bdr-y">${ item.INDV_SEX_C_NAME }</td>
-						<td class="ta-C fz-32 bdr-y">${ item.LFTM_WGH } kg</td>
-						<td class="ta-C fz-32">${ item.CALF_SRA_INDV_EART_NO_STR }<br><span class="fz-32">${item.SRA_KPN_NO}</span></td>
-					</tr>
-				</c:forEach>
-			</tbody>
-		</table>
-	</div>
-</c:if>
-
-<c:if test="${moveList.size() > 0 }">
-	<h3 class="tit">이동정보</h3>
+						<th class="ta-C">산차</th>
+						<th class="ta-C">분만<br/>구분</th>
+						<th class="ta-C">분만일자</th>
+						<th class="ta-C">성별</th>
+						<th class="ta-C">생시체중</th>
+						<th class="ta-C bdr-n">송아지 귀표번호<br/>(KPN)</th>
+					</tr>			
+					<c:forEach items="${ childBirthList }" var="item" varStatus="st">
+						<tr>
+							<td class="ta-C fz-32 bdr-y">${ item.MATIME }</td>
+							<td class="ta-C fz-32 bdr-y">${ item.PTUR_DSC }</td>
+							<td class="ta-C fz-32 bdr-y">${ item.PTUR_DT_STR }</td>
+							<td class="ta-C fz-32 bdr-y">${ item.INDV_SEX_C_NAME }</td>
+							<td class="ta-C fz-32 bdr-y">${ item.LFTM_WGH } kg</td>
+							<td class="ta-C fz-32">${ item.CALF_SRA_INDV_EART_NO_STR }<br><span class="fz-32">${item.SRA_KPN_NO}</span></td>
+						</tr>
+					</c:forEach>
+				</tbody>
+			</table>
+		</div>
+	</c:if>
+	
+	<c:if test="${moveList.size() > 0 }">
+		<h3 class="tit">이동정보</h3>
+		<div class="cow-basic">
+			<table class="table-detail">
+				<colgroup>
+					<col width="23%">
+					<col width="37%">
+					<col width="40%">
+				</colgroup>
+				<tbody>
+					<tr>
+						<th>구분</th>
+						<th class="ta-C">소유자</th>
+						<th class="ta-C bdr-n">사육지</th>
+					</tr>			
+					<c:forEach items="${ moveList }" var="item" varStatus="st">
+						<tr>
+							<td class="ta-C bdr-y">${ item.REGTYPE }</td>
+							<td class="ta-C bdr-y">${ item.FARMERNM_MASKING }<br><span class="fz-32">${item.REGYMD}</span></td>
+							<td class="fz-32">${ item.FARMADDR_MASKING }</td>
+						</tr>
+					</c:forEach>
+				</tbody>
+			</table>
+		</div>
+	</c:if>
+	<h3 class="tit">브루셀라 / 질병검사</h3>
 	<div class="cow-basic">
 		<table class="table-detail">
 			<colgroup>
 				<col width="23%">
-				<col width="37%">
-				<col width="40%">
+				<col width="45%">
+				<col width="13%">
+				<col>
 			</colgroup>
 			<tbody>
 				<tr>
-					<th>구분</th>
-					<th class="ta-C">소유자</th>
-					<th class="ta-C bdr-n">사육지</th>
-				</tr>			
-				<c:forEach items="${ moveList }" var="item" varStatus="st">
-					<tr>
-						<td class="ta-C bdr-y">${ item.REGTYPE }</td>
-						<td class="ta-C bdr-y">${ item.FARMERNM_MASKING }<br><span class="fz-32">${item.REGYMD}</span></td>
-						<td class="fz-32">${ item.FARMADDR_MASKING }</td>
-					</tr>
-				</c:forEach>
+					<th>브루셀라</th>
+					<td>
+						<c:if test="${not empty infoData.BRCL_ISP_DT_STR}">
+							<span>${infoData.BRCL_ISP_DT_STR }</span> 검사 <span class="c-blue">(${infoData.BRCL_ISP_RZT_C_NM })</span>
+						</c:if>
+					</td>
+					<th>경과일</th>
+					<td class="ta-C">
+						<c:if test="${not empty infoData.BRCL_COMPARE_DT}">
+							${infoData.BRCL_COMPARE_DT }일
+						</c:if>
+					</td>				
+				</tr>
+				<tr>
+					<th>백신접종</th>
+					<td>
+						<c:if test="${not empty infoData.VACN_DT_STR}">
+							${infoData.VACN_DT_STR } 접종 <span class="c-blue">(${infoData.VACN_ORDER })</span>
+						</c:if>
+					</td>
+					<th>경과일</th>
+					<td class="ta-C">
+						<c:if test="${not empty infoData.VACN_COMPARE_DT}">
+							${infoData.VACN_COMPARE_DT }일
+						</c:if>
+					</td>		
+				</tr>
+				<tr>
+					<th>결핵검사</th>
+					<td>
+						<c:if test="${not empty infoData.BOVINE_DT_STR}">
+							${infoData.BOVINE_DT_STR } <span class="c-blue">(${infoData.BOVINE_RSLTNM })</span>						
+						</c:if>
+					</td>
+					<th>경과일</th>
+					<td class="ta-C">
+						<c:if test="${not empty infoData.BOVINE_COMPARE_DT}">
+							${infoData.BOVINE_COMPARE_DT }일
+						</c:if>
+					</td>		
+				</tr>
 			</tbody>
 		</table>
 	</div>
 </c:if>
-<h3 class="tit">브루셀라 / 질병검사</h3>
-<div class="cow-basic">
-	<table class="table-detail">
-		<colgroup>
-			<col width="23%">
-			<col width="45%">
-			<col width="13%">
-			<col>
-		</colgroup>
-		<tbody>
-			<tr>
-				<th>브루셀라</th>
-				<td>
-					<c:if test="${not empty infoData.BRCL_ISP_DT_STR}">
-						<span>${infoData.BRCL_ISP_DT_STR }</span> 검사 <span class="c-blue">(${infoData.BRCL_ISP_RZT_C_NM })</span>
-					</c:if>
-				</td>
-				<th>경과일</th>
-				<td class="ta-C">
-					<c:if test="${not empty infoData.BRCL_COMPARE_DT}">
-						${infoData.BRCL_COMPARE_DT }일
-					</c:if>
-				</td>				
-			</tr>
-			<tr>
-				<th>백신접종</th>
-				<td>
-					<c:if test="${not empty infoData.VACN_DT_STR}">
-						${infoData.VACN_DT_STR } 접종 <span class="c-blue">(${infoData.VACN_ORDER })</span>
-					</c:if>
-				</td>
-				<th>경과일</th>
-				<td class="ta-C">
-					<c:if test="${not empty infoData.VACN_COMPARE_DT}">
-						${infoData.VACN_COMPARE_DT }일
-					</c:if>
-				</td>		
-			</tr>
-			<tr>
-				<th>결핵검사</th>
-				<td>
-					<c:if test="${not empty infoData.BOVINE_DT_STR}">
-						${infoData.BOVINE_DT_STR } <span class="c-blue">(${infoData.BOVINE_RSLTNM })</span>						
-					</c:if>
-				</td>
-				<th>경과일</th>
-				<td class="ta-C">
-					<c:if test="${not empty infoData.BOVINE_COMPARE_DT}">
-						${infoData.BOVINE_COMPARE_DT }일
-					</c:if>
-				</td>		
-			</tr>
-		</tbody>
-	</table>
-</div>
 <p class="fz-36 c-gray">* 경매일 기준 정보입니다.</p>
