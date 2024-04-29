@@ -101,6 +101,12 @@
 						<input type="checkbox" id="filter_chk3" name="indvSexC"  class="indvSexC" value="3"  <c:if test="${fn:contains(inputParam.indvSexC, '3')}">
 								checked </c:if> ><label for="filter_chk3">거세</label>
 					</li>
+					<c:if test="${!empty johapData.ETC_AUC_OBJ_DSC and !empty johapData.ETC_AUC_OBJ_DSC_NM}">
+						<li>
+							<input type="checkbox" id="filter_chk4" name="indvSexC"  class="indvSexC" value="7"  <c:if test="${fn:contains(inputParam.indvSexC, '7')}">
+									checked </c:if> ><label for="filter_chk4">새끼</label>
+						</li>
+					</c:if>
 				</ul>
 			</div>
 			<div class="range-box">
