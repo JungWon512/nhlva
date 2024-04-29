@@ -61,6 +61,9 @@
 				ELSE '-' 
 			END MCOW_DSC_NAME
 			, CASE
+				WHEN B.AUC_OBJ_DSC='5' AND A.RG_DSC = '1' THEN '일반'
+				WHEN B.AUC_OBJ_DSC='5' AND A.RG_DSC = '2' THEN '육용'
+				WHEN B.AUC_OBJ_DSC='5' AND A.RG_DSC = '3' THEN '약용'
 				WHEN A.RG_DSC = '01' THEN '기초'
 				WHEN A.RG_DSC = '02' THEN '혈통'
 				WHEN A.RG_DSC = '03' THEN '고등'
