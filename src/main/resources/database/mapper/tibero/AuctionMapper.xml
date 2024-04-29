@@ -69,7 +69,7 @@
 			END RG_DSC_NAME
 			, NVL(A.KPN_NO,'-') KPN_NO /* KPN번호 (KPN) */
 			, NVL(REPLACE (A.KPN_NO,'KPN',''),'-') KPN_NO_STR /* KPN번호 (KPN 제거) */
-			, A.INDV_SEX_C /* 개체성별구분코드: 0없음1암2수3거세4미경산5비거세6프리마틴9공통 (성별) */
+			, A.INDV_SEX_C /* 개체성별구분코드: 0없음1암2수3거세4미경산5비거세6프리마틴7새끼9공통 (성별) */
 			, CASE
 				WHEN A.INDV_SEX_C = 0 THEN '없음'
 				WHEN A.INDV_SEX_C = 1 THEN '암'
@@ -78,6 +78,7 @@
 				WHEN A.INDV_SEX_C = 4 THEN '미경산'
 				WHEN A.INDV_SEX_C = 5 THEN '비거세'
 				WHEN A.INDV_SEX_C = 6 THEN '프리마틴'
+				WHEN A.INDV_SEX_C = 7 THEN '새끼'
 				WHEN A.INDV_SEX_C = 9 THEN '공통'
 				ELSE '없음'
 			END INDV_SEX_C_NAME
