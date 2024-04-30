@@ -1880,7 +1880,7 @@ public class AuctionServiceImpl implements AuctionService {
 
 							// 영주축협 송아지 12개월이상 수수료 적용
 							if ("8808990687094".equals(params.get("naBzPlc"))) {
-								if ("1".equals(info.get("MT12_OVR_YN"))) {
+								if ("1".equals(info.get("MT12_OVR_YN")) && "1".equals(aucObjDsc)) {
 									feeAmt += Long.parseLong(bizAuctionInfo.getOrDefault("MT12_OVR_FEE", "0").toString());
 								}
 								else if ("1".equals(info.get("DNA_YN_CHK"))) {
