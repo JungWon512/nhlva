@@ -492,7 +492,6 @@ var fnSearch = function(){
 	temp.set("1", ["1", "4", "6"]);
 	temp.set("2", ["0", "2", "5", "9"]);
 	temp.set("3", ["3"]);
-	temp.set("7", ["7"]);
 	
 	var chkArr = [];
 	$("input[name=indvSexC]:checked").each(function(){
