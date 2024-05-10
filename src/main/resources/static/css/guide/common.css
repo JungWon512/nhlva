@@ -4008,9 +4008,18 @@ Base styles: contents layer
 		{
 		display: none;
 	}
+	.auction_result .list_head dl dd.name.goat, .auction_result .list_body dl dd.name.goat
+		{
+		display: block;
+		width: unset;
+	}
 	.auction_result .list_head dl dd.pd_ea, .auction_result .list_body dl dd.pd_ea
 		{
 		width: 25%;
+	}
+	.auction_result .list_head dl dd.pd_ea.goat, .auction_result .list_body dl dd.pd_ea.goat
+		{
+		display: none;
 	}
 	.auction_result .list_head dl dd.pd_sex, .auction_result .list_body dl dd.pd_sex
 		{

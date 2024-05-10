@@ -941,6 +941,10 @@ public class AuctionController extends CommonController {
 		param.put("entryType", "A");		
 		if(param.get("loginNo") != null) param.put("searchTrmnAmnNo", param.get("loginNo"));
 
+		Map<String,Object> map = new HashMap<>();
+        map.put("naBzPlcNo", param.get("naBzPlcNo"));        
+        Map<String, Object> johap = adminService.selectOneJohap(map);
+
 		List<Map<String,Object>> datelist=auctionService.selectAucDateList(param);
 		if(param != null && param.get("searchDate") != null &&  !"".equals(param.get("searchDate"))) {
 			param.put("searchDate", param.get("searchDate"));			
@@ -972,6 +976,7 @@ public class AuctionController extends CommonController {
 					mav.addObject("bidCnt", auctionService.selectBidLogListCnt(param));
 				break;
 			}
+			mav.addObject("johapData", johap);
 			mav.addObject("dateList", datelist);
 		}catch(SQLException |RuntimeException  e) {
 			log.error("AuctionController.bidPopupDetail : {} ",e);			

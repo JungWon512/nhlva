@@ -261,7 +261,14 @@
 			<div class="list_head">
 				<dl>
 					<dd class="num" style="width: 12%; "><a role="button"  href="javascript:;"   class="btn-sort numUpDown ${empty inputParam.numUpDown  ? '' :  inputParam.numUpDown eq '2' ? 'is-down' : 'is-up' }">번호</a></dd>
-					<dd class="pd_ea">개체</dd>
+					<c:choose>
+						<c:when test="${inputParam.searchAucObjDsc eq '5'}">
+							<dd class="name">출하주</dd>
+						</c:when>
+						<c:otherwise>
+							<dd class="pd_ea">개체</dd>
+						</c:otherwise>
+					</c:choose> 
 					<dd class="pd_date"><a role="button"  href="javascript:;"  class="btn-sort birthUpDown ${empty inputParam.birthUpDown ? '' :  inputParam.birthUpDown eq '2' ? 'is-up' : 'is-down' }">생년월</a></dd>
 					<dd class="pd_sex">성별</dd>
 					<dd class="pd_kpn">KPN</dd>
@@ -307,9 +314,16 @@
 						<input type="hidden" class="commitYn" name="commitYn_${st.index }" value="${item.COMMIT_YN}"/>
 						<dl>
 							<dd class="num">${ item.AUC_PRG_SQ }</dd>
-							<dd class="pd_ea">
-									<a href="javascript:;"><span class="" fullstr="${ item.SRA_INDV_AMNNO}">${ item.SRA_INDV_AMNNO_FORMAT_F}</span></a>               
-							</dd>
+							<c:choose>
+								<c:when test="${inputParam.searchAucObjDsc eq '5'}">
+									<dd class="name">${item.FTSNM}</dd>
+								</c:when>
+								<c:otherwise>
+									<dd class="pd_ea">
+										<a href="javascript:;"><span class="" fullstr="${ item.SRA_INDV_AMNNO}">${ item.SRA_INDV_AMNNO_FORMAT_F}</span></a>               
+									</dd>
+								</c:otherwise>
+							</c:choose> 
 							<dd class="pd_date">${ item.BIRTH_MO}</dd>
 							<dd class="pd_sex">${ item.INDV_SEX_C_NAME}</dd>
 							<dd class="pd_kpn">${item.KPN_NO_STR}</dd>

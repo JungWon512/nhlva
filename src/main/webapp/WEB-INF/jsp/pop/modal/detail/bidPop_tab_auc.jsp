@@ -16,7 +16,10 @@
 				<option value="1" ${inputParam.searchAucObjDsc eq '1' ? 'selected' : ''}>송아지</option>
 				<option value="2" ${inputParam.searchAucObjDsc eq '2' ? 'selected' : ''}>비육우</option>
 				<option value="3" ${inputParam.searchAucObjDsc eq '3' ? 'selected' : ''}>번식우</option>
-			</select>	
+				<c:if test="${johapData.ETC_AUC_OBJ_DSC eq '5'}">
+					<option value="5" ${inputParam.searchAucObjDsc eq '5' ? 'selected' : ''}>염소</option>
+				</c:if>
+			</select>
 		</div>
 		<div class="btn">
 			<button type="button" id="btn_refreshAuc" class="btn-refresh"></button>
@@ -86,7 +89,14 @@
 		<div class="list_head">
 			<dl>
 				<dd class="num">번호</dd>
-				<dd class="pd_ea">개체</dd>
+				<c:choose>
+					<c:when test="${inputParam.searchAucObjDsc eq '5'}">
+						<dd class="name">출하주</dd>
+					</c:when>
+					<c:otherwise>
+						<dd class="pd_ea">개체</dd>
+					</c:otherwise>
+				</c:choose>
 				<dd class="pd_date"><a role="button" href="javascript:;" class="">생년월</a></dd>
 				<dd class="pd_sex">성별</dd>
 				<dd class="pd_kpn">KPN</dd>
@@ -131,9 +141,16 @@
 		               	<input type="hidden" class="commitYn" name="commitYn_${st.index }" value="${vo.COMMIT_YN}"/>
 						<dl>
 							<dd class="num">${vo.AUC_PRG_SQ }</dd>
-							<dd class="pd_ea">
-								<a href="javascript:;">${vo.SRA_INDV_AMNNO_FORMAT_F }</a>
-							</dd>
+							<c:choose>
+								<c:when test="${inputParam.searchAucObjDsc eq '5'}">
+									<dd class="name">${vo.FTSNM}</dd>
+								</c:when>
+								<c:otherwise>
+									<dd class="pd_ea">
+										<a href="javascript:;">${vo.SRA_INDV_AMNNO_FORMAT_F }</a>
+									</dd>
+								</c:otherwise>
+							</c:choose>
 							<dd class="pd_date">${vo.BIRTH_MO }</dd>
 							<dd class="pd_sex">${vo.INDV_SEX_C_NAME }</dd>
 							<dd class="pd_kpn">${vo.KPN_NO_STR }</dd>

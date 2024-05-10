@@ -17,10 +17,10 @@
 		</c:if>
 		<li>
 			<sec:authorize access="hasRole('ROLE_BIDDER')">
-				<a href="javascript:goAuctionApp();" class="auction_join">경매 응찰</a>
+				<a href="javascript:goAuctionApp();" class="auction_join">${fn:contains(aucDate[0].AUC_OBJ_DSC, 5) ? '염소' : ''} 경매 응찰</a>
 			</sec:authorize>
 			<sec:authorize access="!hasRole('ROLE_BIDDER')">
-				<a href="javascript:goLoginPage();" class="auction_join">경매 응찰</a>
+				<a href="javascript:goLoginPage();" class="auction_join">${fn:contains(aucDate[0].AUC_OBJ_DSC, 5) ? '염소' : ''}  경매 응찰</a>
 			</sec:authorize>
 		</li>
 		<li>

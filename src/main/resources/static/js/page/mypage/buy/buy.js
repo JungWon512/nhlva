@@ -265,6 +265,15 @@
 				sHtml.push("</dl></li>");
 				$('.auction_result div.list_body ul.bodyBuy').append(sHtml.join(""));
 			});
+
+			if ($('select[name=searchAucObjDscBuy]').val() === '5') {
+				$('.name').addClass('goat');
+				$('.pd_ea').addClass('goat');
+			} else {
+				$('.name').removeClass('goat');
+				$('.pd_ea').removeClass('goat');
+			}
+
 			convertScroll();
 		});	
 	}
@@ -302,8 +311,12 @@
 					sHtml.push("<li style='background-color:#fbfbb0;'><dl>");					
 				}
 				sHtml.push(" <dd class='date'>"+getStringValue(item.AUC_DT_STR)+"</dd>");	
-				sHtml.push(" <dd class='num'>"+getStringValue(item.AUC_PRG_SQ)+"</dd>");	
-				sHtml.push(" <dd class='pd_ea textNumber'>"+getStringValue(item.SRA_INDV_AMNNO_FORMAT)+"</dd>");	
+				sHtml.push(" <dd class='num'>"+getStringValue(item.AUC_PRG_SQ)+"</dd>");
+				if ($('select[name=searchAucObjDscBid]').val() === '5') {
+					sHtml.push(" <dd class='name'>"+getStringValue(item.FTSNM)+"</dd>");
+				} else {
+					sHtml.push(" <dd class='pd_ea textNumber'>"+getStringValue(item.SRA_INDV_AMNNO_FORMAT)+"</dd>");	
+				}
 				sHtml.push(" <dd class='pd_sex'>"+getStringValue(item.INDV_SEX_C_NAME)+"</dd>");	
 				sHtml.push(" <dd class='pd_kg textNumber'>"+fnSetComma(getStringValue(item.COW_SOG_WT))+"</dd>");	
 				sHtml.push(" <dd class='pd_pay1 textNumber'>"+fnSetComma(getStringValue(item.LOWS_SBID_LMT_UPR))+"</dd>");	
@@ -313,6 +326,13 @@
 				sHtml.push("</dl></li>");
 				$('.auction_bid div.list_body ul.bodyBid').append(sHtml.join(""));
 			});
+
+			if ($('select[name=searchAucObjDscBid]').val() === '5') {
+				$('.auction_bid .list_head .pd_ea').html('출하주');
+			} else {
+				$('.auction_bid .list_head .pd_ea').html('개체번호');
+			}
+
 			convertScroll();
 		});	
 	}
