@@ -15,7 +15,7 @@
 		<div class="sort">
 		<%--
 			<select name="searchAucObjDscBuy" id="">
-				<option id="ra1" value="">전체</option>
+				<option id="ra1" value="" <c:if test="${inputParam.searchAucObjDscBuy eq ''}">selected</c:if>>전체</option>
 				<option id="ra2" value="1" <c:if test="${inputParam.searchAucObjDscBuy eq '1'}">selected</c:if>>송아지</option>
 				<option id="ra3" value="2" <c:if test="${inputParam.searchAucObjDscBuy eq '2'}">selected</c:if>>비육우</option>
 				<option id="ra4" value="3" <c:if test="${inputParam.searchAucObjDscBuy eq '3'}">selected</c:if>>번식우</option>

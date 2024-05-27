@@ -21,13 +21,13 @@
 		<dl>
 			<dt><p>암</p></dt>
 			<c:forEach items="${ buyCnt }" var="obj" varStatus="st">
-				<dd><p><span class="ea">${obj.M_CNT }</span>두</p></dd>
+				<dd><p><span class="ea">${obj.W_CNT }</span>두</p></dd>
 			</c:forEach>
 		</dl>
 		<dl>
 			<dt><p>수</p></dt>
 			<c:forEach items="${ buyCnt }" var="obj" varStatus="st">
-				<dd><p><span class="ea">${obj.W_CNT }</span>두</p></dd>
+				<dd><p><span class="ea">${obj.M_CNT }</span>두</p></dd>
 			</c:forEach>
 		</dl>
 		<dl>

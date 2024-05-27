@@ -46,7 +46,12 @@
 			<dl>
 				<dd class="date">경매일자</dd>
 				<dd class="num"><span class="w_view_in">경매</span>번호</dd>
-				<dd class="pd_ea">개체번호</dd>
+				<c:choose>
+					<c:when test="${inputParam.searchAucObjDscBid eq '5'}"><dd class="pd_ea">출하주</dd></c:when>
+					<c:otherwise>
+						<dd class="pd_ea">개체번호</dd>
+					</c:otherwise>
+				</c:choose>
 				<dd class="pd_sex">성별</dd>
 				<dd class="pd_kg">중량<span class="w_view_in">(kg)</span></dd>
 				<dd class="pd_pay1">예정가</dd>
@@ -71,7 +76,12 @@
 						<dl>
 							<dd class="date">${ item.AUC_DT_STR }</dd>
 							<dd class="num">${ item.AUC_PRG_SQ }</dd>
-							<dd class="pd_ea textNumber">${ item.SRA_INDV_AMNNO_FORMAT }</dd>
+							<c:choose>
+								<c:when test="${inputParam.searchAucObjDscBid eq '5'}"><dd class="pd_name">${item.FTSNM}</dd></c:when>
+								<c:otherwise>
+									<dd class="pd_ea textNumber">${ item.SRA_INDV_AMNNO_FORMAT }</dd>
+								</c:otherwise>
+							</c:choose>
 							<dd class="pd_sex">${ item.INDV_SEX_C_NAME }</dd>
 							<dd class="pd_kg textNumber">
 								<c:choose>

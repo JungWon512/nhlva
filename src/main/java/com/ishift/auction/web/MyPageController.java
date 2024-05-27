@@ -10,7 +10,6 @@ import java.util.List;
 import java.util.Map;
 
 import javax.annotation.security.PermitAll;
-import javax.annotation.security.RolesAllowed;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -116,7 +115,15 @@ public class MyPageController {
 		List<Map<String,Object>> datelist= auctionService.selectAucDateList(paramMap);
 		paramMap.put("searchDate", datelist.size() > 0 ? datelist.get(0).get("AUC_DT") : null);
 		paramMap.put("stateFlag", "buy");
-		
+
+		Boolean hasEtcEsc = datelist.size() > 0 ? datelist.get(0).get("AUC_OBJ_DSC").toString().contains("5") : false;
+		// 염소경매 존재 시 염소 selected 처리 및 조회
+		if (hasEtcEsc && params.get("searchAucObjDsc") == null) {
+			paramMap.put("searchAucObjDsc", "5");
+			params.put("searchAucObjDscBuy", "5");
+			params.put("searchAucObjDscBid", "5");
+		}
+
 		// 0. 나의 경매내역 > 구매내역
 		mav.addObject("buyCnt",auctionService.selectSumEntry(paramMap));
 		mav.addObject("buyList", auctionService.entrySelectList(paramMap));		
@@ -363,6 +370,7 @@ public class MyPageController {
         result.put("success", true);
         try {        	
         	if(params.get("loginNo") != null) params.put("searchTrmnAmnNo", params.get("loginNo"));
+			if("''".equals(params.get("searchAucObjDsc"))) params.put("searchAucObjDsc", null);
         	List<Map<String,Object>> list=auctionService.entrySelectList(params);
         	result.put("totPrice", auctionService.selectTotSoldPrice(params));
         	result.put("buyCnt",auctionService.selectSumEntry(params));
@@ -388,7 +396,8 @@ public class MyPageController {
         result.put("success", true);
         try {        	
         	if(params.get("loginNo") != null) params.put("searchTrmnAmnNo", params.get("loginNo"));
-        	List<Map<String,Object>> list=auctionService.selectBidLogList(params);
+        	if("''".equals(params.get("searchAucObjDsc"))) params.put("searchAucObjDsc", null);
+			List<Map<String,Object>> list=auctionService.selectBidLogList(params);
             result.put("data", list);
         }catch (SQLException | RuntimeException re) {
             result.put("success", false);

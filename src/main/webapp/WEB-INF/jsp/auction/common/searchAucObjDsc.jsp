@@ -4,7 +4,7 @@
 <c:choose>
 <c:when test="${param.type eq 'select'}">
 	<select name="${param.selectName}" id="${param.selectName}" >
-		<option id="ra0" value="">전체</option>	
+		<option id="ra0" value="''">전체</option>	
 		<c:forEach items="${aucObjDscList}" var="vo">
 			<option id="ra${vo.AUC_OBJ_DSC }" value="${vo.AUC_OBJ_DSC}" <c:if test="${param.selectValue eq vo.AUC_OBJ_DSC}">selected</c:if>>${vo.AUC_OBJ_DSC_NM}</option>
 		</c:forEach>

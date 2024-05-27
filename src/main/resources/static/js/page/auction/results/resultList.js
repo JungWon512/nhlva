@@ -1,7 +1,14 @@
 ;(function ($, win, doc) {
 
     var COMMONS = win.auction["commons"];
-    
+
+	if ($('#searchAucObjDsc').val() === '5') {
+		$('.auction_result .list_head dl dd.pd_ea').addClass('goat');
+		$('.auction_result .list_head dl dd.name').addClass('goat');
+		$('.auction_result .list_body dl dd.pd_ea').addClass('goat');
+		$('.auction_result .list_body dl dd.name').addClass('goat');
+	}
+
     var setLayout = function() {
 		$('.list_table .list_body li dd').each(function(){
 			if(!$(this).text()) $(this).text('-');

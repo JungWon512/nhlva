@@ -2,6 +2,14 @@
 	
     var COMMONS = win.auction["commons"];
 
+	if ($('select[name=searchAucObjDscBuy]').val() === '5') {
+		$('.name').addClass('goat');
+		$('.pd_ea').addClass('goat');
+	} else {
+		$('.name').removeClass('goat');
+		$('.pd_ea').removeClass('goat');
+	}
+
     var setBinding = function() {
         $(document).on("click",".tab_list ul > li", function(){
 			var tabId = $(this).find('a.act').attr('data-tab-id');
@@ -207,7 +215,7 @@
 			console.log('### data : buyCnt :: ',data.buyCnt);
 			$('.buy_list div.sum_table div').empty();
 			var tableHtml = '';
-			if($("select[name=searchAucObjDscBuy]").val() == ''){
+			if($("select[name=searchAucObjDscBuy]").val() == '' || $("select[name=searchAucObjDscBuy]").val() == "''"){
 				tableHtml += '		<dl>';
 				tableHtml += '			<dt><p>구분</p></dt>';
 				data.buyCnt.forEach(function(item){

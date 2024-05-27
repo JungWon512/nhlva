@@ -3109,6 +3109,11 @@ Base styles: contents layer
 		font-size: 16px;
 		padding: 10px 0;
 	}
+
+	.list_table .list_body dl dd.name {
+		font-size: 16px;
+		color: #007eff;
+	}
 }
 
 .list_table .list_body dl dd.pd_ea {

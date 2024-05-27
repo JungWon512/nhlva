@@ -13,15 +13,6 @@ import java.util.Map;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import com.ishift.auction.util.FormatUtil;
-import com.ishift.auction.util.HttpUtils;
-import com.ishift.auction.vo.BidUserDetails;
-import com.ishift.auction.vo.FarmUserDetails;
-import com.ishift.auction.vo.JwtTokenVo;
-
-import lombok.extern.slf4j.Slf4j;
-
-import org.joda.time.DateTime;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -40,8 +31,15 @@ import com.ishift.auction.service.admin.AdminService;
 import com.ishift.auction.service.auction.AuctionService;
 import com.ishift.auction.service.common.CommonService;
 import com.ishift.auction.util.Constants;
+import com.ishift.auction.util.FormatUtil;
+import com.ishift.auction.util.HttpUtils;
 import com.ishift.auction.util.JwtTokenUtil;
 import com.ishift.auction.util.SessionUtill;
+import com.ishift.auction.vo.BidUserDetails;
+import com.ishift.auction.vo.FarmUserDetails;
+import com.ishift.auction.vo.JwtTokenVo;
+
+import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 @RestController 
@@ -109,7 +107,14 @@ public class AuctionController extends CommonController {
 		if(param.get("searchBirthDay") != null) map.put("searchBirthDay", param.get("searchBirthDay"));
 		
 		map.putAll(param);		
-	
+
+		Boolean hasEtcEsc = datelist.size() > 0 ? datelist.get(0).get("AUC_OBJ_DSC").toString().contains("5") : false;
+
+		// 염소경매 존재 시 염소 selected 처리 및 조회
+		if (hasEtcEsc && map.get("searchAucObjDsc") == null) {
+			map.put("searchAucObjDsc", "5");
+			param.put("searchAucObjDsc", "5");
+		}
 		List<Map<String,Object>> list=auctionService.entrySelectList(map);
 		
 		mav.addObject("inputParam", param);
@@ -168,6 +173,16 @@ public class AuctionController extends CommonController {
 		map.putAll(param); 
 		
 		map.put("loginNo", sessionUtill.getUserId()); 
+
+		List<Map<String, Object>> aucDatelist = auctionService.selectCalendarList(map);
+
+		Boolean hasEtcEsc = aucDatelist.size() > 0 ? aucDatelist.get(0).get("AUC_OBJ_DSC").toString().contains("5") : false;
+
+		// 염소경매 존재 시 염소 selected 처리 및 조회
+		if (hasEtcEsc && map.get("searchAucObjDsc") == null) {
+			map.put("searchAucObjDsc", "5");
+			param.put("searchAucObjDsc", "5");
+		}
 		List<Map<String,Object>> list=auctionService.entrySelectList(map);
 
 //		for(Map<String,Object> entry : list) {
@@ -952,6 +967,13 @@ public class AuctionController extends CommonController {
 			String tempDate= datelist.size() > 0 ? (String)datelist.get(0).get("AUC_DT") :null;
 			param.put("searchDate",tempDate);
 		}
+
+		Boolean hasEtcEsc = datelist.size() > 0 ? datelist.get(0).get("AUC_OBJ_DSC").toString().contains("5") : false;
+
+		// 염소경매 존재 시 염소 selected 처리 및 조회
+		if ("''".equals(param.get("searchAucObjDsc"))) param.put("searchAucObjDsc", null);
+		else if (hasEtcEsc && param.get("searchAucObjDsc") == null) param.put("searchAucObjDsc", "5");
+
 		try {
 			switch(tabId) {
 				case "auc":

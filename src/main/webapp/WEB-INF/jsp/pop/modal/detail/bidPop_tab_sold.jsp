@@ -14,7 +14,7 @@
 		</div>
 		<div class="sort">
 			<select name="searchAucObjDscSold" id="searchAucObjDscSold">
-				<option value="">전체</option>
+				<option value="''">전체</option>
 				<option value="1" ${inputParam.searchAucObjDsc eq '1' ? 'selected' : ''}>송아지</option>
 				<option value="2" ${inputParam.searchAucObjDsc eq '2' ? 'selected' : ''}>비육우</option>
 				<option value="3" ${inputParam.searchAucObjDsc eq '3' ? 'selected' : ''}>번식우</option>
