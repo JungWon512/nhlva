@@ -150,7 +150,10 @@
 								<dd class="name">${vo.FTSNM }</dd>
 								<dd class="pd_dsc">${vo.AUC_OBJ_DSC_NAME }</dd>
 								<dd class="pd_sex">${vo.INDV_SEX_C_NAME }</dd>
-								<dd class="pd_kg"><fmt:formatNumber value="${empty vo.COW_SOG_WT or vo.COW_SOG_WT <= 0 ? '0' : fn:split(vo.COW_SOG_WT,'.')[0]}" type="number" /></dd>
+								<dd class="pd_kg">								
+									<fmt:formatNumber value="${vo.COW_SOG_WT}" var="COW_SOG_WT" type="number" pattern="#"/>
+									${empty COW_SOG_WT or COW_SOG_WT le 0 ? '0' : COW_SOG_WT}			
+								</dd>
 								<dd class="pd_pay1">
 									<c:choose>
 										<c:when test="${vo.LOWS_SBID_LMT_AM eq '' || vo.LOWS_SBID_LMT_AM == null || vo.LOWS_SBID_LMT_AM <= 0}">-</c:when>

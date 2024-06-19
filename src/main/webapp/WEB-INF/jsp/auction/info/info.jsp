@@ -1,5 +1,15 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
 <%@ include file="/WEB-INF/__system/taglibs.jsp" %>
+<div class="banner_box" style="margin:0 0 25px;">
+	<ul>
+		<li moveUrl="https://livestock.nonghyup.com/main/main.do">
+			<a href="javascript:;">
+				<img src="/static/images/guide/pc_banner.jpg" alt="" class="pc_banner">
+				<img src="/static/images/guide/new_mo_banner.jpg" alt="" class="mo_banner">
+			</a>
+		</li>
+	</ul>
+</div>
 <div class="auction_info">
 	<h3>경매안내</h3>
 	<dl class="board_top">

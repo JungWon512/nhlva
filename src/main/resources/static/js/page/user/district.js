@@ -3,10 +3,16 @@
 	var District = function () {
 
 		var addEvent = function(){
-			//$(document).on("click",".btn_more", function(){
-			//	$('ul.choice_area li').show();
-			//	$('.btn_more').hide();
-			//});			
+			$(".banner_box ul li").click(function(){
+				moveExUrl($(this).attr('moveUrl'));
+			});
+			$(".banner_box ul").slick({
+				dots: true,
+				adaptiveHeight: true,
+				arrows:false,
+			    autoplay: true,
+			    autoplaySpeed: 2000
+			});	
 		};
 
 		return {

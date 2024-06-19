@@ -28,7 +28,6 @@
 			<dd class="num"><span class="w_view_in">경매</span>번호</dd>
 			<dd class="pd_ea">개체<span class="w_view_in">번호</span></dd>
 			<dd class="pd_sex">성별</dd>
-			<dd class="pd_month">월령</dd>
 			<dd class="pd_pay1">예정가</dd>
 			<dd class="pd_pay3">응찰가</dd>
 			<dd class="pd_pay2">낙찰가</dd>
@@ -51,7 +50,6 @@
 						<dd class="num">${vo.AUC_PRG_SQ }</dd>
 						<dd class="pd_ea">${vo.SRA_INDV_AMNNO_FORMAT }</dd>
 						<dd class="pd_sex">${vo.INDV_SEX_C_NAME }</dd>
-						<dd class="pd_sex">${vo.MTCN }</dd>
 						<dd class="pd_pay1">							
 							<c:choose>
 								<c:when test="${vo.LOWS_SBID_LMT_UPR eq '' || vo.LOWS_SBID_LMT_UPR == null || vo.LOWS_SBID_LMT_UPR <= 0}">-</c:when>

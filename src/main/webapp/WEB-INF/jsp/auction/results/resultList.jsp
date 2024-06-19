@@ -40,12 +40,20 @@
 				</select>	
 			</div>
 			<div class="sort">
+			<%--
 				<select name="searchAucObjDsc" id="searchAucObjDsc">
-					<option id="ra1" value="">전체</option>
-					<option id="ra2" value="1" <c:if test="${inputParam.searchAucObjDsc eq '1'}">selected</c:if>>송아지</option>
-					<option id="ra3" value="2" <c:if test="${inputParam.searchAucObjDsc eq '2'}">selected</c:if>>비육우</option>
-					<option id="ra4" value="3" <c:if test="${inputParam.searchAucObjDsc eq '3'}">selected</c:if>>번식우</option>  
+					<option id="ra0" value="">전체</option>	
+					<c:forEach items="${aucObjDscList}" var="obj">
+						<option id="ra${obj.AUC_OBJ_DSC }" value="${obj.AUC_OBJ_DSC}" <c:if test="${inputParam.searchAucObjDsc eq obj.AUC_OBJ_DSC}">selected</c:if>>${obj.AUC_OBJ_DSC_NM }</option>
+					</c:forEach>  
 				</select>	
+			--%>
+				<c:import url="/common/searchAucObjDsc">
+					<c:param name="type"        value="select" />
+					<c:param name="naBzplc"     value="${johapData.NA_BZPLC}" />
+					<c:param name="selectName"  value="searchAucObjDsc" />
+					<c:param name="selectValue" value="${inputParam.searchAucObjDsc}" />
+				</c:import>
 			</div>
 			<!-- Web화면에서 display -->
 			<div class="kpn">
@@ -114,116 +122,18 @@
 			<button class="del_btn dateBtn" style="display : none;">월령</button>
 			<button class="del_btn priceBtn" style="display : none;">예정가</button>
 		</div>
-		<c:choose>
-			<c:when test="${empty inputParam.searchAucObjDsc }">
-				<div class="sum_table">
-					<div>
-						<dl>
-							<dt><p>구분</p></dt>
-							<dd><p>송아지</p></dd>
-							<dd><p>비육우</p></dd>
-							<dd><p>번식우</p></dd>
-							<dd><p>합계</p></dd>
-						</dl>
-						<dl>
-							<dt><p>전체</p></dt>
-							<dd>
-								<p><span class="ea">${buyCnt.CNT_CALF}</span>두</p>
-							</dd>
-							<dd>
-								<p><span class="ea">${buyCnt.CNT_NO_COW}</span>두</p>
-							</dd>
-							<dd>
-								<p><span class="ea">${buyCnt.CNT_COW}</span>두</p>
-							</dd>
-							<dd>
-								<p><span class="ea">${buyCnt.CNT}</span>두</p>
-							</dd>
-						</dl>
-						<dl>
-							<dt><p>암</p></dt>
-							<dd>
-								<p><span class="ea">${buyCnt.CNT_SEX_W_F_1}</span>두</p>
-							</dd>
-							<dd>
-								<p><span class="ea">${buyCnt.CNT_SEX_W_F_2}</span>두</p>
-							</dd>
-							<dd>
-								<p><span class="ea">${buyCnt.CNT_SEX_W_F_3}</span>두</p>
-							</dd>
-							</dd>
-							<dd>
-								<p><span class="ea">${buyCnt.CNT_SEX_W_F}</span>두</p>
-							</dd>
-						</dl>
-						<dl>
-							<dt><p>수</p></dt>
-							<dd>
-								<p><span class="ea">${buyCnt.CNT_SEX_M_F_1}</span>두</p>
-							</dd>
-							<dd>
-								<p><span class="ea">${buyCnt.CNT_SEX_M_F_2}</span>두</p>
-							</dd>
-							<dd>
-								<p><span class="ea">${buyCnt.CNT_SEX_M_F_3}</span>두</p>
-							</dd>
-							</dd>
-							<dd>
-								<p><span class="ea">${buyCnt.CNT_SEX_M_F}</span>두</p>
-							</dd>
-						</dl>
-						<dl>
-							<dt><p>기타</p></dt>
-							<dd>
-								<p><span class="ea">${buyCnt.CNT_SEX_ETC_F_1}</span>두</p>
-							</dd>
-							<dd>
-								<p><span class="ea">${buyCnt.CNT_SEX_ETC_F_2}</span>두</p>
-							</dd>
-							<dd>
-								<p><span class="ea">${buyCnt.CNT_SEX_ETC_F_3}</span>두</p>
-							</dd>
-							<dd>
-								<p><span class="ea">${buyCnt.CNT_SEX_ETC_F}</span>두</p>
-							</dd>
-						</dl>
-					</div>
-				</div> 
-			</c:when>
-			<c:otherwise>
-				<div class="sum_table">
-					<div>
-						<dl>
-							<dt><p>전체</p></dt>
-							<dd>
-								<p><span class="ea">${buyCnt.CNT}</span>두</p>
-							</dd>
-						</dl>
-						<dl>
-							<dt><p>암</p></dt>
-							<dd>
-								<p><span class="ea">${buyCnt.CNT_SEX_W_F}</span>두</p>
-							</dd>
-						</dl>
-						<dl>
-							<dt><p>수</p></dt>
-							<dd>
-								<p><span class="ea">${buyCnt.CNT_SEX_M_F}</span>두</p>
-							</dd>
-						</dl>
-						<dl>
-							<dt><p>기타</p></dt>
-							<dd>
-								<p><span class="ea">${buyCnt.CNT_SEX_ETC_F}</span>두</p>
-							</dd>
-						</dl>
-					</div>
-				</div>
-			</c:otherwise>
-		</c:choose>
-		<!-- //list_search e -->
+
+		<%@ include file="/WEB-INF/jsp/auction/common/auctionStat.jsp" %>
+
 		<div class="list_txt">
-			<p>*경매단위 : 송아지(${johapData.CALF_AUC_ATDR_UNT}), 비육우(${johapData.NBFCT_AUC_ATDR_UNT}), 번식우(${johapData.PPGCOW_AUC_ATDR_UNT}).</p>
+			<p>
+				*경매단위 :
+				<span class="c46">송아지(${johapData.CALF_AUC_ATDR_UNT}),</span>
+				<span class="c46">비육우(${johapData.NBFCT_AUC_ATDR_UNT}),</span>
+				<span class="c46">번식우(${johapData.PPGCOW_AUC_ATDR_UNT})</span>
+				<span class="c46" style="display: ${empty johapData.GT_AUC_ATDR_UNT ? 'none' : ''}">,염소(${johapData.GT_AUC_ATDR_UNT})</span>
+				<span class="c46" style="display: ${empty johapData.HS_AUC_ATDR_UNT ? 'none' : ''}">,말(${johapData.HS_AUC_ATDR_UNT})</span>
+			</p>
 		</div>
 		<div class="list_downs">
 			<ul>

@@ -10,6 +10,7 @@ import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
@@ -111,15 +112,21 @@ public class AuctionController extends CommonController {
 		if(param.get("searchBirthDay") != null) map.put("searchBirthDay", param.get("searchBirthDay"));
 		
 		map.putAll(param);		
-	
+
+		Boolean hasEtcEsc = datelist.size() > 0 ? datelist.get(0).get("AUC_OBJ_DSC").toString().contains("5") : false;
+
+		// 염소경매 존재 시 염소 selected 처리 및 조회
+		if (hasEtcEsc && map.get("searchAucObjDsc") == null) {
+			map.put("searchAucObjDsc", "5");
+			param.put("searchAucObjDsc", "5");
+		}
 		List<Map<String,Object>> list=auctionService.entrySelectList(map);
 		
 		mav.addObject("inputParam", param);
 		mav.addObject("johapData", johap);
 		mav.addObject("dateList",datelist);
 		mav.addObject("resultList",list); 
-		mav.addObject("resultList",list);
-		mav.addObject("buyCnt",auctionService.selectCountEntry(map));
+		mav.addObject("buyCnt",auctionService.selectSumEntry(map));
 		mav.addObject("subheaderTitle","경매결과 조회");
 		
 		mav.setViewName("auction/results/resultList");
@@ -171,6 +178,16 @@ public class AuctionController extends CommonController {
 		map.putAll(param); 
 		
 		map.put("loginNo", sessionUtill.getUserId()); 
+
+		List<Map<String, Object>> aucDatelist = auctionService.selectCalendarList(map);
+
+		Boolean hasEtcEsc = aucDatelist.size() > 0 ? aucDatelist.get(0).get("AUC_OBJ_DSC").toString().contains("5") : false;
+
+		// 염소경매 존재 시 염소 selected 처리 및 조회
+		if (hasEtcEsc && map.get("searchAucObjDsc") == null) {
+			map.put("searchAucObjDsc", "5");
+			param.put("searchAucObjDsc", "5");
+		}
 		List<Map<String,Object>> list=auctionService.entrySelectList(map);
 
 //		for(Map<String,Object> entry : list) {
@@ -183,8 +200,8 @@ public class AuctionController extends CommonController {
 		mav.addObject("subheaderTitle","출장우 조회");
 		mav.addObject("dateList",datelist); 
 		mav.addObject("salesList",list);
+		mav.addObject("buyCnt",auctionService.selectSumEntry(map));
 		mav.addObject("inputParam", param);
-		mav.addObject("buyCnt",auctionService.selectCountEntry(map));
 		mav.addObject("subheaderTitle","출장우 조회");
 		// mav.addObject("today",date.format(DateTimeFormatter.ofPattern("yyyy-MM-dd")));
 		mav.setViewName("auction/sales/saleList");
@@ -800,7 +817,11 @@ public class AuctionController extends CommonController {
 		mav.addObject("tabList",tabList);
 		
 		//mav.addObject("johapData",johap);
-		mav.addObject("subheaderTitle","출장우 상세");
+		if("5".equals(param.get("aucObjDsc")) || "6".equals(param.get("aucObjDsc"))) {
+			mav.addObject("subheaderTitle","출장염소 상세");			
+		}else {
+			mav.addObject("subheaderTitle","출장우 상세");			
+		}
 		//mav.setViewName("auction/sales/cowDetail");
 		mav.addObject("inputParam", param);		
 		mav.setViewName("pop/cowDetail");
@@ -855,7 +876,7 @@ public class AuctionController extends CommonController {
 					
 					LocalDateTime todate = LocalDateTime.now();
 					LocalDateTime sDate = LocalDateTime.parse(aucDt+"040000", dateFormat);
-					LocalDateTime eDate = LocalDateTime.parse(aucDt+"180000", dateFormat);
+					LocalDateTime eDate = LocalDateTime.parse(aucDt+"183000", dateFormat);
 					
 					Map<String,Object> tempMap = new HashMap<>();
 					tempMap.putAll(param);
@@ -865,13 +886,13 @@ public class AuctionController extends CommonController {
 					tempMap.put("chgIpAddr", httpUtils.getClientIp(req));
 					Map<String,Object> bloodInfo = auctionService.selectIndvBloodInfo(tempMap);
 					//Duration duration = Duration.between(sDate, eDate);
-					String test = (String) bloodInfo.get("LSCHG_TIME");
+					//String test = (String) bloodInfo.get("LSCHG_TIME");
 
 					if(bloodInfo == null || bloodInfo.isEmpty()) {
 						//오늘이 경매일 이전이거나 경매당일 00~18까지 종개협 데이터 갱신
 						if(todate.isBefore(eDate)) {
 							commonService.callIndvAiakInfo(tempMap);
-							bloodInfo = auctionService.selectIndvBloodInfo(param);
+							bloodInfo = auctionService.selectIndvBloodInfo(tempMap);
 						}
 					}else {
 						Date lschgDtm = ((Date) bloodInfo.get("LSCHG_DTM"));
@@ -880,17 +901,24 @@ public class AuctionController extends CommonController {
 						if((today.equals(aucDt) && lschgDateTime.isBefore(sDate) )) {
 							//commonService.callIndvAiakInfo((String)param.get("sraIndvAmnno"));
 							commonService.callIndvAiakInfo(tempMap);
-							bloodInfo = auctionService.selectIndvBloodInfo(param);
+							bloodInfo = auctionService.selectIndvBloodInfo(tempMap);
 						}
 					}
+										
 					mav.addObject("bloodInfo",bloodInfo);
 					if("1".equals(tabId)) {
-						mav.addObject("sibList",auctionService.selectListIndvSib(param));
-						mav.addObject("postList",auctionService.selectListIndvPost(param));						
+						mav.addObject("sibList",auctionService.selectListIndvSib(tempMap));
+						mav.addObject("postList",auctionService.selectListIndvPost(tempMap));						
 					}
 				break;
 				case "3": //thumnail만 조회
-					List<Map<String,Object>> imgList = auctionService.selectListCowImg(param);
+					paramMap.put("naBzplc", param.get("naBzplc"));
+					paramMap.put("sraIndvAmnno", param.get("sraIndvAmnno"));
+					paramMap.put("aucObjDsc", param.get("aucObjDsc"));
+					paramMap.put("aucDt", param.get("aucDt"));
+					paramMap.put("oslpNo", param.get("oslpNo"));
+					paramMap.put("ledSqNo", param.get("ledSqno"));
+					List<Map<String,Object>> imgList = auctionService.selectListCowImg(paramMap);
 					mav.addObject("imgList",imgList);
 				break;
 			}			
@@ -950,6 +978,10 @@ public class AuctionController extends CommonController {
 		param.put("entryType", "A");		
 		if(param.get("loginNo") != null) param.put("searchTrmnAmnNo", param.get("loginNo"));
 
+		Map<String,Object> map = new HashMap<>();
+        map.put("naBzPlcNo", param.get("naBzPlcNo"));        
+        Map<String, Object> johap = adminService.selectOneJohap(map);
+
 		List<Map<String,Object>> datelist=auctionService.selectAucDateList(param);
 		if(param != null && param.get("searchDate") != null &&  !"".equals(param.get("searchDate"))) {
 			param.put("searchDate", param.get("searchDate"));			
@@ -957,6 +989,13 @@ public class AuctionController extends CommonController {
 			String tempDate= datelist.size() > 0 ? (String)datelist.get(0).get("AUC_DT") :null;
 			param.put("searchDate",tempDate);
 		}
+
+		Boolean hasEtcEsc = datelist.size() > 0 ? datelist.get(0).get("AUC_OBJ_DSC").toString().contains("5") : false;
+
+		// 염소경매 존재 시 염소 selected 처리 및 조회
+		if ("''".equals(param.get("searchAucObjDsc"))) param.put("searchAucObjDsc", null);
+		else if (hasEtcEsc && param.get("searchAucObjDsc") == null) param.put("searchAucObjDsc", "5");
+
 		try {
 			switch(tabId) {
 				case "auc":
@@ -981,6 +1020,7 @@ public class AuctionController extends CommonController {
 					mav.addObject("bidCnt", auctionService.selectBidLogListCnt(param));
 				break;
 			}
+			mav.addObject("johapData", johap);
 			mav.addObject("dateList", datelist);
 		}catch(SQLException |RuntimeException  e) {
 			log.error("AuctionController.bidPopupDetail : {} ",e);			
@@ -1002,19 +1042,32 @@ public class AuctionController extends CommonController {
 		LocalDateTime toDate = LocalDateTime.now();
 		
 		LocalDateTime sDate = LocalDateTime.parse(aucDt+"000000", dateFormat);
-		LocalDateTime eDate = LocalDateTime.parse(aucDt+"180000", dateFormat);
+		LocalDateTime eDate = LocalDateTime.parse(aucDt+"183000", dateFormat);
 
 		Map<String, Object> tempMap = new HashMap<>();
 		tempMap.putAll(param);
 		tempMap.put("chgPgid", "nhlva");
 		//tempMap.put("indvBldDsc", "0");
 		tempMap.put("chgRmkCntn", "cowDetailFull["+param.get("indvBldDsc")+"]");
-		tempMap.put("chgIpAddr", httpUtils.getClientIp(req));		
-		//오늘이 경매일 이전이면서 경매당일 00~18시이면 허용
-		if(Timestamp.valueOf(toDate).before(formatter.parse(aucDt)) || toDate.isAfter(sDate) && toDate.isBefore(eDate)) {			
-			commonService.callIndvAiakInfo(tempMap);		
-		}
+		tempMap.put("chgIpAddr", httpUtils.getClientIp(req));
 		Map<String,Object> bloodInfo = auctionService.selectIndvBloodInfo(tempMap);
+				
+		if(bloodInfo == null || bloodInfo.isEmpty()) {
+			//오늘이 경매일 이전이거나 경매당일 00~18까지 종개협 데이터 갱신
+			if(toDate.isBefore(eDate)) {
+				commonService.callIndvAiakInfo(tempMap);
+				bloodInfo = auctionService.selectIndvBloodInfo(tempMap);
+			}
+		}else {
+			Date lschgDtm = ((Date) bloodInfo.get("LSCHG_DTM"));
+	        LocalDateTime lschgDateTime = Instant.ofEpochMilli(lschgDtm.getTime()).atZone(ZoneId.systemDefault()).toLocalDateTime();
+	        String today = toDate.format(DateTimeFormatter.ofPattern("yyyyMMdd"));
+			if((today.equals(aucDt) && lschgDateTime.isBefore(sDate) )) {
+				//commonService.callIndvAiakInfo((String)param.get("sraIndvAmnno"));
+				commonService.callIndvAiakInfo(tempMap);
+				bloodInfo = auctionService.selectIndvBloodInfo(tempMap);
+			}
+		}
 		
 		mav.addObject("bloodInfo",bloodInfo);
 		mav.addObject("sibList",auctionService.selectListIndvSib(param));
@@ -1071,20 +1124,31 @@ public class AuctionController extends CommonController {
 		return result;
 	}
 
-	@ResponseBody
-	@RequestMapping(value = "/info/getAiakInfo", method = { RequestMethod.GET, RequestMethod.POST })
-	public String testAiak(@RequestParam Map<String, Object> params) throws Exception {
-		String rHtml= "";
-		try {
-			if(params.get("barcode") == null) {
-				throw new Exception("귀표번호를 입력해주시기 바랍니다.");
-			}
-			String barcode ="";
-			if(params.get("barcode") != null) barcode = (String)params.get("barcode");
-			rHtml = httpUtils.callApiAiak(barcode);
-		}catch(RuntimeException re) {		//SQLException |
-			rHtml = "작업중 오류가 발생했습니다. 관리자에게 문의하세요.";
-		}
-		return rHtml;
+//	@ResponseBody
+//	@RequestMapping(value = "/info/getAiakInfo", method = { RequestMethod.GET, RequestMethod.POST })
+//	public String testAiak(@RequestParam Map<String, Object> params) throws Exception {
+//		String rHtml= "";
+//		try {
+//			if(params.get("barcode") == null) {
+//				throw new Exception("귀표번호를 입력해주시기 바랍니다.");
+//			}
+//			String barcode ="";
+//			if(params.get("barcode") != null) barcode = (String)params.get("barcode");
+//			rHtml = httpUtils.callApiAiak(barcode);
+//		}catch(RuntimeException re) {		//SQLException |
+//			rHtml = "작업중 오류가 발생했습니다. 관리자에게 문의하세요.";
+//		}
+//		return rHtml;
+//	}
+
+	@RequestMapping(value = "/common/searchAucObjDsc",method = { RequestMethod.GET, RequestMethod.POST })	
+	public ModelAndView searchAucObjDsc(@RequestParam Map<String, Object> param) throws Exception {		
+		// 경매결과목록
+		ModelAndView mav = new ModelAndView();
+        Map<String,Object> map = new HashMap<>();
+		mav.addObject("aucObjDscList",commonService.selectAucObjDscList(param));
+		
+		mav.setViewName("auction/common/searchAucObjDsc");
+		return mav;
 	}
 }

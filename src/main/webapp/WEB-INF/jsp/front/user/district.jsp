@@ -13,6 +13,16 @@
 			</li>
 		</ul>
 	</div>
+	<div class="banner_box">
+		<ul>
+			<li moveUrl="https://livestock.nonghyup.com/main/main.do">
+				<a href="javascript:;">
+					<img src="/static/images/guide/pc_banner.jpg" alt="" class="pc_banner">
+					<img src="/static/images/guide/new_mo_banner.jpg" alt="" class="mo_banner">
+				</a>
+			</li>
+		</ul>
+	</div>
 	<div class="back_area">
 		<a href="javascript:pageMove('/home');"><img src="/static/images/guide/ico_back.svg">전국 가축시장 보기</a>
 	</div>

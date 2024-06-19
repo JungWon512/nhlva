@@ -104,7 +104,10 @@
 								<dd class="name">${ vo.FTSNM }</dd>
 								<dd class="pd_ea">${ vo.SRA_INDV_AMNNO_FORMAT }</dd>
 								<dd class="pd_sex">${ vo.INDV_SEX_C_NAME }</dd>
-								<dd class="pd_kg"> ${(vo.COW_SOG_WT eq '' || vo.COW_SOG_WT == null || vo.COW_SOG_WT <= 0 ) ? '0' : fn:split(vo.COW_SOG_WT,'.')[0]} </dd>
+								<dd class="pd_kg">
+									<fmt:formatNumber value="${vo.COW_SOG_WT}" var="COW_SOG_WT" type="number" pattern="#"/> 
+									${(COW_SOG_WT eq '' || COW_SOG_WT == null || COW_SOG_WT <= 0 ) ? '0' : COW_SOG_WT} 
+								</dd>
 								<dd class="pd_kpn">${ vo.KPN_NO_STR }</dd>
 								<dd class="pd_pay1">${(vo.LOWS_SBID_LMT_AM eq '' || vo.LOWS_SBID_LMT_AM == null || vo.LOWS_SBID_LMT_AM <= 0 ) ? '-' : vo.LOWS_SBID_LMT_AM <= 0 ? '0' : fn:split(vo.LOWS_SBID_LMT_UPR,'.')[0]}</dd>
 								<dd class="pd_pay2">${(vo.SRA_SBID_UPR eq '' || vo.SRA_SBID_UPR == null || vo.SRA_SBID_UPR <= 0 ) ? '-' : vo.SRA_SBID_UPR <= 0 ? '0' : fn:split(vo.SRA_SBID_UPR,'.')[0]}</dd>

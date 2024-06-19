@@ -297,7 +297,10 @@
 							<dd class="name ftsnm" style="white-space: nowrap;overflow: hidden;text-overflow: ellipsis;">${ vo.FTSNM }</dd>
 							<dd class="pd_ea sraIndvAmnno">${ vo.SRA_INDV_AMNNO_FORMAT_F }</dd>
 							<dd class="pd_sex indvSexC">${ vo.INDV_SEX_C_NAME }</dd>
-							<dd class="pd_kg cowSogWt">${(vo.COW_SOG_WT eq '' || vo.COW_SOG_WT == null) ? '0' : fn:split(vo.COW_SOG_WT,'.')[0]}</dd>
+							<dd class="pd_kg cowSogWt">								
+								<fmt:formatNumber value="${vo.COW_SOG_WT}" var="COW_SOG_WT" type="number" pattern="#"/> 
+								${(COW_SOG_WT eq '' || COW_SOG_WT == null || COW_SOG_WT <= 0 ) ? '0' : COW_SOG_WT} 
+							</dd>
 							<dd class="pd_kpn kpnNo">${ vo.KPN_NO_STR }</dd>
 							<dd class="pd_num1 sraIndvPasgQcn">${ vo.SRA_INDV_PASG_QCN }</dd>							
 							<dd class="pd_pay1 lowsSbidLmtAm">

@@ -35,6 +35,7 @@
 	
 	<input type="hidden" id="aucDate" value="${dateVo.AUC_DT}" />
 
+	<fmt:formatNumber value="${watchList[0].COW_SOG_WT}" var="WATCH_COW_SOG_WT" type="number" pattern="#"/>
 <%-- 	<div class="auction_seeBox" style="${johapData.AUC_DSC eq '2'?'margin-bottom: 0px;':'' }"> --%>
 	<div class="auction_seeBox">
 		<div class="seeBox_top">
@@ -80,7 +81,7 @@
 										<dl>
 											<dt>중량(Kg)</dt>
 											<dd class="cowSogWt">
-												<fmt:formatNumber value="${empty watchList[0].COW_SOG_WT or watchList[0].COW_SOG_WT <= 0 ? '0' : fn:split(watchList[0].COW_SOG_WT,'.')[0]}" type="number" />
+												${empty WATCH_COW_SOG_WT or 0 ge WATCH_COW_SOG_WT ? '-' : WATCH_COW_SOG_WT}
 											</dd>
 										</dl>
 									</li>
@@ -151,7 +152,7 @@
 									<li>
 										<dl>
 											<dt>중량</dt>
-											<dd class="cowSogWt"><fmt:formatNumber value="${empty watchList[0].COW_SOG_WT or watchList[0].COW_SOG_WT <= 0 ? '0' : fn:split(watchList[0].COW_SOG_WT,'.')[0]}" type="number" /></dd>
+											<dd class="cowSogWt">${empty WATCH_COW_SOG_WT or 0 ge WATCH_COW_SOG_WT ? '-' : WATCH_COW_SOG_WT}</dd>											
 										</dl>
 									</li>
 									<li>
@@ -262,8 +263,9 @@
 							<dd class="name ftsnm txtShort">${ vo.FTSNM }</dd>
 							<dd class="pd_ea sraIndvAmnno">${ vo.SRA_INDV_AMNNO_FORMAT_F }</dd>
 							<dd class="pd_sex indvSexC">${ vo.INDV_SEX_C_NAME }</dd>
-							<dd class="pd_kg cowSogWt textNumber">
-								<fmt:formatNumber value="${(empty vo.COW_SOG_WT || vo.COW_SOG_WT <= 0 ) ? '0' : fn:split(vo.COW_SOG_WT,'.')[0]}" type="number" />
+							<dd class="pd_kg cowSogWt textNumber">		
+								<fmt:formatNumber value="${vo.COW_SOG_WT}" var="COW_SOG_WT" type="number" pattern="#"/>
+								${empty COW_SOG_WT or 0 ge COW_SOG_WT ? '-' : COW_SOG_WT}
 							</dd>
 							<dd class="pd_kpn kpnNo">${ vo.KPN_NO_STR }</dd>
 							<dd class="pd_num1 sraIndvPasgQcn">${ vo.SRA_INDV_PASG_QCN }</dd>

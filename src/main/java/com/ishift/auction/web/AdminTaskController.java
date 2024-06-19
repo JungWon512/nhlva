@@ -8,6 +8,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import javax.servlet.http.HttpServletRequest;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
@@ -24,6 +26,7 @@ import com.amazonaws.SdkClientException;
 import com.ishift.auction.service.admin.AdminService;
 import com.ishift.auction.service.admin.task.AdminTaskService;
 import com.ishift.auction.service.auction.AuctionService;
+import com.ishift.auction.service.common.CommonService;
 import com.ishift.auction.util.SessionUtill;
 import com.ishift.auction.vo.AdminUserDetails;
 import com.ishift.auction.util.HttpUtils;
@@ -52,6 +55,9 @@ public class AdminTaskController extends CommonController {
 	
 	@Autowired
 	HttpUtils httpUtils;
+	
+	@Autowired
+	private CommonService commonService;
 
 	/**
 	 * 관리자 > 경매업무 > 메인화면
@@ -360,10 +366,25 @@ public class AdminTaskController extends CommonController {
 	 */
 	@ResponseBody
 	@PostMapping(value = "/office/task/searchIndvAjax")
-	public Map<String, Object> searchIndvAjax(@RequestBody final Map<String, Object> params) {
+	public Map<String, Object> searchIndvAjax(@RequestBody final Map<String, Object> params, HttpServletRequest req) {
 		Map<String, Object> result = new HashMap<String, Object>();
 		try {
 			result = adminTaskService.searchIndvAmnno(params);
+
+			try {
+				Map<String,Object> tempMap = new HashMap<>();
+				tempMap.putAll(params);			
+				tempMap.put("sraIndvAmnno", (String)params.get("sra_indv_amnno"));
+				tempMap.put("naBzplc", sessionUtill.getNaBzplc());
+				tempMap.put("aucDt", (String)params.get("auc_dt"));
+				tempMap.put("indvBldDsc", "0");
+				tempMap.put("chgPgid", "nhlva");
+				tempMap.put("chgRmkCntn", "searchIndvDetails[0]");
+				tempMap.put("chgIpAddr", httpUtils.getClientIp(req));
+				commonService.callIndvAiakInfo(tempMap);			
+			}catch(Exception e) {
+				log.error("AdminTaskServiceImpl.searchIndvAmnno AiakInfo err : {}",e);
+			}
 		}
 		catch(SQLException se) {
 			log.error("SQLException::AdminTaskController.searchIndvAjax : {} ", se);

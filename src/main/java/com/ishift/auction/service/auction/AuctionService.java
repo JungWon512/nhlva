@@ -233,6 +233,14 @@ public interface AuctionService {
 	Map<String, Object> updateAuctionResultMap(Map<String, Object> params) throws SQLException;
 
 	/**
+	 * 기타가축 경매 결과 업데이트 - 실패시 실패 정보 return
+	 * @param params
+	 * @return
+	 * @throws SQLException
+	 */
+	Map<String, Object> updateEtcAuctionResultMap(Map<String, Object> params) throws SQLException;
+
+	/**
 	 * 일괄 경매 시작
 	 * @param aucStn
 	 * @param params
@@ -258,6 +266,15 @@ public interface AuctionService {
 	 * @throws SQLException
 	 */
 	Map<String, Object> auctionFinish(Map<String, Object> aucStn, Map<String, Object> params) throws SQLException;
+
+	/**
+	 * 일괄 경매 종료
+	 * @param aucStn
+	 * @param params
+	 * @return
+	 * @throws SQLException
+	 */
+	Map<String, Object> etcAuctionFinish(Map<String, Object> aucStn, Map<String, Object> params) throws SQLException;
 
 	/**
 	 * 금일 경매차수 조회
@@ -570,5 +587,9 @@ public interface AuctionService {
 	Map<String, Object> selectIndvBloodInfo(Map<String, Object> paramMap) throws SQLException;
 
 	List<Map<String, Object>> selectCowEpdList(Map<String, Object> params) throws SQLException;
+
+	List<Map<String, Object>> selectSumEntry(Map<String, Object> map) throws SQLException;
+
+	Map<String, Object> getBzlocInfo(Map<String, Object> params) throws SQLException;
 	
 }

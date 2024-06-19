@@ -1,4 +1,4 @@
-﻿<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
+﻿﻿<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
 <%@ include file="/WEB-INF/__system/taglibs.jsp" %>
 
 <!-- 240306 혈통/후대  -->
@@ -218,7 +218,7 @@
         <div class="fixCell_list" style="width: 660px">
             <table class="swipTble cow">
                 <caption>
-                    형매정보
+                    후대정보
                 </caption>
                 <colgroup>
                     <col style="width: 80px" />
@@ -252,7 +252,7 @@
 					</c:if>
 					<c:forEach items="${ postList }" var="item" varStatus="st">
                     	<tr>
-                        	<th class="fixd_box tdBg"><strong>${item.SIB_SRA_INDV_AMNNO_STR }</strong></th>
+                        	<th class="fixd_box tdBg"><strong>${item.POST_SRA_INDV_AMNNO_STR }</strong></th>
 	                        <td><strong>${item.MATIME }</strong></td>
     	                    <td><strong>${item.RG_DSC_NAME }</strong></td>
         	                <td><strong>${item.INDV_SEX_C_NAME }</strong></td>

@@ -239,7 +239,7 @@ var viewIntervalFunc = function(index){
 				,{scrollInertia:0}
 			);
 		}	
-	},1000*5)
+	},1000*7)
 };
 var noInfoIntervalFun = function(index){
 	var index = 0;
@@ -255,7 +255,7 @@ var noInfoIntervalFun = function(index){
 			,$(".billboard-noBid .list-body ul").find('.mCSB_container').find('li:eq('+(index)+')')
 			,{scrollInertia:0}
 		);
-	},1000*5)
+	},1000*7)
 };
 
 var fnReloadView = function(rgSqno,aucObjDsc,aucYn,nextBidYn){	

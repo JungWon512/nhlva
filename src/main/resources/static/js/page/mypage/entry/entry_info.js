@@ -207,3 +207,14 @@ var convertScroll = function(){
 		$(this).css('min-height','70px');
 	});	
 }
+
+var fnSetComma = function(str) {
+	//return (str != undefined && str.toString().replace(/[^0-9]/gi, '') != "") ? str.toString().replace(/[^0-9]/gi, '').replace(/\B(?=(\d{3})+(?!\d))/g, ",") : (str ? str : "0");
+	if (!str || str.toString().replace(/[^0-9]/gi, '') == "") {
+		return (str ? str : "0");
+	}
+	
+	const delim = str.toString().substring(0,1) == '-' ? '-' : '';
+	
+	return delim + str.toString().replace(/[^0-9]/gi, '').replace(/\B(?=(\d{3})+(?!\d))/g, ",") ;
+}

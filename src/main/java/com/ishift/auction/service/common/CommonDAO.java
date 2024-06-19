@@ -258,4 +258,8 @@ public class CommonDAO {
 	public int insertIndvAiakInfoLog(Map<String, Object> params) throws SQLException {
 		return mainDao.update("commonMapper.insertIndvAiakInfoLog", params);
 	}
+
+	public List<Map<String, Object>> selectAucObjDscList(Map<String, Object> params) throws SQLException {
+		return mainDao.selectList("commonMapper.selectAucObjDscList", params);
+	}
 }

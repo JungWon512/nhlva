@@ -71,12 +71,12 @@ public class CommonServiceImpl implements CommonService {
 			}
 			
 			dataMap4700.putAll(params);
-			Iterator<String> keys = dataMap4700.keySet().iterator();
-			while(keys.hasNext()) {
-				String key = keys.next();
-				//log.debug("######## ::: "+key);
-				log.debug("{} : {}", key, dataMap4700.get(key).toString().trim());
-			}
+			//Iterator<String> keys = dataMap4700.keySet().iterator();
+			//while(keys.hasNext()) {
+			//	String key = keys.next();
+			//	//log.debug("######## ::: "+key);
+			//	log.debug("{} : {}", key, dataMap4700.get(key).toString().trim());
+			//}
 			
 			// 3. 조회 된 개체정보 저장
 			dataMap4700.put("NA_BZPLC", sessionUtil.getNaBzplc());
@@ -100,10 +100,9 @@ public class CommonServiceImpl implements CommonService {
 			//this.updateIndvPostInfo(params);
 			
 			//5. 종축개량 데이터 조회 후 해당 데이터 기준으로 MERGE
-			String barcode = (String)params.get("sra_indv_amnno");
-			if(barcode.length() == 15) barcode = barcode.substring(3);
-			Map<String,Object> aiakInfo = httpUtils.callApiAiakMap(barcode);
-			if(aiakInfo != null && !aiakInfo.isEmpty()) this.updateIndvAiakInfo(aiakInfo);
+			//tempMap.put("chgIpAddr", httpUtils.getClientIp(req));
+			//Map<String,Object> aiakInfo = httpUtils.callApiAiakMap(tempMap);
+			//if(aiakInfo != null && !aiakInfo.isEmpty()) this.updateIndvAiakInfo(aiakInfo);
 			
 			//6. 후대/ 형매 MERGE이후 산차 재계산하여 UPDATE
 		}
@@ -175,13 +174,7 @@ public class CommonServiceImpl implements CommonService {
 		params.put("ZIP", params.getOrDefault("SRA_FARM_FZIP", "").toString() + params.getOrDefault("SRA_FARM_RZIP", "").toString());		// 우편번호
 		
 		try {
-			// 농가정보 테이블에서 FHS_ID_NO로 이미 등록된 통합회원 코드가 있는지 조회
-			//final Map<String, Object> fhsInfo = commonDao.getFhsInfo(params);
-			// 통합회원 테이블에서 이름, 생년월일 휴대전화번호로 통합회원 정보 조회
-			//final Map<String, Object> fhsIntgNoInfo = commonDao.getIntgNoInfo(params);
-			log.debug(params.toString());
 			final List<Map<String, Object>> fhsIntgNoList = commonDao.getIntgNoList(params);
-			log.debug("###### :: "+fhsIntgNoList.toString());
 			if(fhsIntgNoList != null && !fhsIntgNoList.isEmpty()) {
 				final Map<String, Object> info = fhsIntgNoList.get(0);
 				if(info != null && !info.isEmpty()) {
@@ -355,14 +348,12 @@ public class CommonServiceImpl implements CommonService {
 			barcode = barcode.substring(3);
 		}	
 		Map<String,Object> aiakInfo = httpUtils.callApiAiakMap(barcode);
-		log.debug(aiakInfo.toString());
 		if(aiakInfo != null && !aiakInfo.isEmpty()) this.updateIndvAiakInfo(aiakInfo);
 	}
 
 	private void updateIndvAiakInfo(Map<String, Object> map) throws SQLException {
 		List<Map<String,Object>> postArr = (List<Map<String, Object>>) map.get("postInfo");
 		List<Map<String,Object>> sibArr = (List<Map<String, Object>>) map.get("sibInfo");
-		commonDao.insertIndvAiakInfoLog(map);
 		commonDao.updatetIndvAiakInfo(map);
 		for(Map<String,Object> postMap : postArr) {
 			commonDao.updatetIndvAiakPostInfo(postMap);			
@@ -373,14 +364,14 @@ public class CommonServiceImpl implements CommonService {
 		commonDao.updateIndvSibMatime(map);
 		commonDao.updateIndvPostMatime(map);
 	}
-
+	
 	public void callIndvAiakInfo(Map<String, Object> param) throws SQLException, RuntimeException{
 		String barcode = (String) param.getOrDefault("sraIndvAmnno","");
 		if(barcode != null && barcode.length() == 15) {
 			barcode = barcode.substring(3);
 		}	
 		Map<String,Object> aiakInfo = httpUtils.callApiAiakMap(barcode);
-		log.debug(aiakInfo.toString());
+		
 		if(aiakInfo != null && !aiakInfo.isEmpty()) {
 			aiakInfo.put("NA_BZPLC", param.get("naBzplc"));
 			aiakInfo.put("AUC_DT", param.get("aucDt"));
@@ -389,6 +380,7 @@ public class CommonServiceImpl implements CommonService {
 			aiakInfo.put("CHG_PGID", param.get("chgPgid"));
 			aiakInfo.put("CHG_RMK_CNTN", param.get("chgRmkCntn"));
 			this.updateIndvAiakInfo(aiakInfo);
+			commonDao.insertIndvAiakInfoLog(aiakInfo);
 		};
 		
 	}
@@ -403,5 +395,9 @@ public class CommonServiceImpl implements CommonService {
 
 	public List<Map<String, Object>> selectIndvSib(Map<String, Object> params) throws SQLException{
 		return commonDao.selectIndvSib(params);		
+	}
+	
+	public List<Map<String, Object>> selectAucObjDscList(Map<String, Object> params) throws SQLException{
+		return commonDao.selectAucObjDscList(params);		
 	}
 }

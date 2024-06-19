@@ -27,12 +27,8 @@
 					<dl>
 						<dd class="col1" data-amnno="${item.SRA_INDV_AMNNO}" data-auc-obj-dsc="${item.AUC_OBJ_DSC}" data-oslp-no="${item.OSLP_NO}" data-led-sqno="${item.LED_SQNO}">${item.AUC_PRG_SQ}</dd>
 						<dd class="col2">
-							<c:choose>
-								<c:when test="${empty item.COW_SOG_WT or item.COW_SOG_WT <= 0}">-</c:when>
-								<c:otherwise>
-									<fmt:formatNumber value="${fn:split(item.COW_SOG_WT,'.')[0]}" type="number" />
-								</c:otherwise>
-							</c:choose>
+							<fmt:formatNumber value="${item.COW_SOG_WT}" var="COW_SOG_WT" type="number" pattern="#"/>
+							${empty COW_SOG_WT or COW_SOG_WT <= 0 ? 0 : COW_SOG_WT}							
 						</dd>
 						<dd class="col2">
 							<c:choose>

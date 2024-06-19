@@ -30,7 +30,7 @@
 	</div>
 	<div class="banner_box">
 		<ul>
-			<li>
+			<li moveUrl="https://livestock.nonghyup.com/main/main.do">
 				<a href="javascript:;">
 					<img src="/static/images/guide/pc_banner.jpg" alt="" class="pc_banner">
 					<img src="/static/images/guide/new_mo_banner.jpg" alt="" class="mo_banner">

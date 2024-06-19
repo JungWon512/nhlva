@@ -12,7 +12,7 @@
 	<input type="hidden" name="placeNm" 					id="placeNm" 						value="${inputParam.placeNm}">
 </form>
 	
-<div class="chk_step1 dash-tit">
+<div class="chk_step1 dash-tit pc-mt0">
 	<div class="main-tab">
 		<ul>
 			<li>
@@ -23,8 +23,18 @@
 			</li>
 		</ul>
 	</div>
+	<div class="banner_box">
+		<ul>
+			<li moveUrl="https://livestock.nonghyup.com/main/main.do">
+				<a href="javascript:;">
+					<img src="/static/images/guide/pc_banner.jpg" alt="" class="pc_banner">
+					<img src="/static/images/guide/new_mo_banner.jpg" alt="" class="mo_banner">
+				</a>
+			</li>
+		</ul>
+	</div>
 </div>
-<div class="board-main page-board-main">
+<div class="board-main page-board-main pc-mt10">
 	<div class="sec-board">
 		<div class="tit-area">
 			<h2 class="sec-tit" style="margin-bottom:10px;">최근 가축시장 시세</h2>

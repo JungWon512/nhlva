@@ -12,6 +12,7 @@ import java.security.PrivateKey;
 import java.security.PublicKey;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -133,19 +134,7 @@ public class ApiController {
 		final List<Map<String, Object>> failList = new ArrayList<Map<String, Object>>();
 
 		try {
-			if ("v1".equals(version)) {
-				int cnt = auctionService.updateAuctionResult(params);
-				
-				if (cnt > 0) {
-					result.put("success", true);
-					result.put("message", "정상적으로 변경되었습니다.");
-				}
-				else {
-					result.put("success", false);
-					result.put("message", "출하우 정보가 없습니다.");
-				}
-			}else {
-
+			if ("v2".equals(version)) {
 				if(params.get("list") == null) {
 					result.put("success", false);
 					result.put("message", "필수 인자가 없습니다.");
@@ -162,7 +151,7 @@ public class ApiController {
 				for (Map<String, Object> info : list) {
 					info.put("version", version);
 					try {
-						Map<String, Object> resultMap = auctionService.updateAuctionResultMap(info);
+						Map<String, Object> resultMap = auctionService.updateEtcAuctionResultMap(info);
 						if (resultMap != null && !(boolean)resultMap.get("success")) {
 							failList.add(resultMap);
 						}
@@ -179,6 +168,18 @@ public class ApiController {
 				result.put("message", "정상적으로 변경되었습니다.");
 				if (failList.size() > 0) {
 					result.put("failList", failList);
+				}
+			}
+			else {
+				int cnt = auctionService.updateAuctionResult(params);
+				
+				if (cnt > 0) {
+					result.put("success", true);
+					result.put("message", "정상적으로 변경되었습니다.");
+				}
+				else {
+					result.put("success", false);
+					result.put("message", "출하우 정보가 없습니다.");
 				}
 			}
 		}catch (SQLException | RuntimeException | JsonProcessingException re) {
@@ -203,7 +204,7 @@ public class ApiController {
 														, @RequestParam final Map<String, Object> params) {
 		final Map<String, Object> result = new HashMap<String, Object>();
 		final List<Map<String, Object>> failList = new ArrayList<Map<String, Object>>();
-
+		final String[] cowObjDsc = {"0", "1", "2", "3"};
 		try {
 			if ("v2".equals(version)) {
 				if(params.get("list") == null) {
@@ -222,7 +223,13 @@ public class ApiController {
 				for (Map<String, Object> info : list) {
 					info.put("version", version);
 					try {
-						Map<String, Object> resultMap = auctionService.updateAuctionResultMap(info);
+						Map<String, Object> resultMap = null;
+						// 경매유형이 한우인 경우
+						if (Arrays.asList(cowObjDsc).contains(params.get("aucObjDsc"))) {
+							resultMap = auctionService.updateAuctionResultMap(info);
+						} else {
+							resultMap = auctionService.updateEtcAuctionResultMap(info);
+						}
 						if (resultMap != null && !(boolean)resultMap.get("success")) {
 							failList.add(resultMap);
 						}
@@ -355,16 +362,7 @@ public class ApiController {
 					  .append(this.getStringValue(vo.get("LSCHG_DTM")).replace("|", ",")).append('|')
 					  .append(this.getStringValue(vo.get("SRA_MWMNNM")).replace("|", ",")).append('|')	// 낙찰자 이름
 					  .append(this.getStringValue(vo.get("MTCN")).replace("|", ",")).append('|')	// 월령(이력제)
-					  .append(this.getStringValue(vo.get("RG_DSC_NM")).replace("|", ","))	// 등록 구분
-					  //.append('|').append(this.getStringValue(vo.get("EPD_VAL_1")).replace("|", ","))
-					  //.append('|').append(this.getStringValue(vo.get("EPD_GRD_1")).replace("|", ","))
-					  //.append('|').append(this.getStringValue(vo.get("EPD_VAL_2")).replace("|", ","))
-					  //.append('|').append(this.getStringValue(vo.get("EPD_GRD_2")).replace("|", ","))
-					  //.append('|').append(this.getStringValue(vo.get("EPD_VAL_3")).replace("|", ","))
-					  //.append('|').append(this.getStringValue(vo.get("EPD_GRD_3")).replace("|", ","))
-					  //.append('|').append(this.getStringValue(vo.get("EPD_VAL_4")).replace("|", ","))
-					  //.append('|').append(this.getStringValue(vo.get("EPD_GRD_4")).replace("|", ","))
-					  ;
+					  .append(this.getStringValue(vo.get("RG_DSC_NM")).replace("|", ","));	// 등록 구분
 
 					entryList.add(sb.toString());
 				}
@@ -1511,9 +1509,13 @@ public class ApiController {
 							result.put("message", "이미 종료된 경매입니다.");
 							return result;
 						}
-						
+						final String[] cowObjDsc = {"0", "1", "2", "3", "4"};
 						// 경매 종료
-						returnMap = auctionService.auctionFinish(aucStn, temp);
+						if (Arrays.asList(cowObjDsc).contains(params.get("aucObjDsc"))) {
+							returnMap = auctionService.auctionFinish(aucStn, temp);							
+						}else {
+							returnMap = auctionService.etcAuctionFinish(aucStn, temp);							
+						}
 						if (returnMap != null && (Boolean)returnMap.get("success")) {
 							result.put("success", true);
 							result.put("message", "경매 종료가 정상 처리되었습니다.");
@@ -2211,6 +2213,7 @@ public class ApiController {
 		}
 		return result;
 	}
+	
 
 	@ResponseBody
 	@GetMapping(value = "/api/{version}/epd/info/{naBzplc}/{aucDt}/{aucObjDsc}/{aucPrgSqno}")
@@ -2233,7 +2236,6 @@ public class ApiController {
 			params.put("aucDt", aucDt);
 			params.put("aucObjDsc", aucObjDsc);
 			params.put("aucPrgSqno", aucPrgSqno);
-			//final Map<String, Object> info = ;
 			
 			result.put("success", true);
 			result.put("message", "조회에 성공했습니다.");
@@ -2275,5 +2277,25 @@ public class ApiController {
 			result.put("message", "작업중 오류가 발생했습니다. 관리자에게 문의하세요.");
 		}
 		return result;
+	}
+	
+	@ResponseBody
+	@PostMapping(value = "/api/{version}/auction/select/bzloc"
+				, consumes = MediaType.APPLICATION_FORM_URLENCODED_VALUE
+				, produces = MediaType.APPLICATION_JSON_VALUE)
+	public Map<String, Object> getBzlocInfo(@PathVariable(name = "version") String version
+														, @RequestParam final Map<String, Object> params) {
+		final Map<String, Object> result = new HashMap<String, Object>();
+		try {
+			result.put("success", true);
+			result.put("message", "조회에 성공했습니다.");
+			result.put("data", auctionService.getBzlocInfo(params));			
+		}catch (Exception e) {
+			log.error("ApiController.getBzloc : {} ",e);
+			result.put("success", false);
+			result.put("data", null);
+			result.put("message", "작업중 오류가 발생했습니다. 관리자에게 문의하세요.");
+		}
+		return result;		
 	}
 }

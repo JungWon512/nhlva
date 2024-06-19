@@ -3,6 +3,18 @@
     var COMMONS = win.auction["commons"];
     
     var setLayout = function() {
+		
+		$(".banner_box ul li").click(function(){
+			moveExUrl($(this).attr('moveUrl'));
+		});
+		$(".banner_box ul").slick({
+			dots: true,
+			adaptiveHeight: true,
+			arrows:false,
+		    autoplay: true,
+		    autoplaySpeed: 2000
+		});
+		
 		$('.list_table .list_body li dd').each(function(){
 			if(!$(this).text()) $(this).text('-');
 		});

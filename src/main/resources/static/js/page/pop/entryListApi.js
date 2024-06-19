@@ -180,7 +180,6 @@
         $(document).on("click", ".auction_bid > .list_body > ul > li", function(){
 			try{
 				const aucPrgSq = $(this).find("dd.num").text().replace(/[^0-9.]/g,'').replace(/(\..*)\./g,'$1');;
-				setCookieLimitDay('bidPopAucPrgSq',aucPrgSq);
 				// 안드로이드
 				if (window.auctionBridge) {
 					window.auctionBridge.setAucPrgSq(aucPrgSq);
@@ -288,17 +287,6 @@ var fn_Load = function(tabId){
 			$('div.tab_area.'+tabId).append(html);
 			$("div.tab_area").not("."+tabId).hide();
 			$('div.tab_area.'+tabId).show();
-			var bidPopAucPrgSq = getCookie('bidPopAucPrgSq');
-			if(tabId == 'bid' && bidPopAucPrgSq){				
-				//scroll 이동
-				var tr = $('.auction_bid .list_body li').filter(function(i,obj){
-					var aucPrgSq = $(this).find('dl dd.num').text().trim();
-					if(aucPrgSq==bidPopAucPrgSq) return {obj:this,idx:i};
-				});		
-				tr.addClass('act');	
-				var scH = $('.auction_bid .list_body ul li').eq(tr.index()).position().top-$('.auction_bid .list_body ul li:first').position().top;
-				$('.auction_bid .list_body ul').animate({scrollTop: scH},1000);
-			}
 		},
 		error: function(xhr, status, error) {
 		}

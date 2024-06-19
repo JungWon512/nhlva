@@ -5,6 +5,7 @@
     var setLayout = function() {
     	if($('div.tab_list ul li a.cowTab_2').length > 0){
     		$('div.tab_area.cowTab_2').show();
+    		showGradient(); // 데이터 불러올때 마지막에 재호출 해주세요
     		//epdChartDraw();
     	}
 		//getAiakInfo();
@@ -235,97 +236,6 @@ function getInfMca(params){
 	return result;
 }
 
-var getAiakInfo = function(callback){
-	fnShowLoadingImg();
-	var param = new Object();
-	param.barcode = ($('form[name="frm"] input[name=sraIndvAmnno]').val()||'').substr(3);
-	$.ajax({
-		url: '/info/getAiakInfo',
-		data: param,
-		type: 'POST',
-		dataType: 'html',
-		async : true,
-		success : function(html) {
-			if($(html).find('table') && $(html).find('table').length > 0){		
-				var bloodInfo = $(html).find('table').get(1);
-				$(bloodInfo).find('tbody tr').each((i,e)=>{
-					var bloodTxt ='';
-					if(i != '2' && i != '4' && i != '5'){
-						bloodTxt+='[KPN] '+($.trim($(e).find('td:eq(1)').text())||'-')+'<br/>';
-					}
-					bloodTxt+=' '+($.trim($(e).find('td:eq(3)').text())||'-')||'-';					
-					$('td[name=blInfo_'+(i)+']').html(bloodTxt);
-				});
-				var postIndvInfo = $(html).find('table').get(6);
-				$('table.postIndvTable tbody').empty();
-				var postHtml = '<tr><td rowspan="2" colspan="5" class="ta-C">-</td></tr>';
-				if($(postIndvInfo).find('tbody tr td').length > 1){
-					postHtml='';
-					$(postIndvInfo).find('tbody tr').each((i,e)=>{
-						postHtml += '<tr>';
-						postHtml += '	<td rowspan="2" class="ta-C bg-gray matime">'+(($(e).find('td:eq(0)').text()||'-'))+'</td>';
-						postHtml += '	<td rowspan="2" class="ta-C sraIndvAmnno">'+(($(e).find('td:eq(2)').text()||'-'))+'</td>';
-						postHtml += '	<td class="ta-C rgDsc">'+(($.trim($(e).find('td:eq(3)').text())||'-'))+'</td>';
-						postHtml += '	<td class="ta-C indvSexC">'+(($.trim($(e).find('td:eq(4)').text())||'-'))+'</td>';
-						postHtml += '	<td class="ta-C birth">'+(($.trim($(e).find('td:eq(5)').text())||'-'))+'</td>';
-						postHtml += '</tr>';
-						postHtml += '<tr>';
-						postHtml += '	<td class="ta-C metrbMetqltGrd">'+(($.trim($(e).find('td:eq(9)').text())||'-'))+'</td>';
-						postHtml += '	<td class="ta-C metrbBbdyWt">'+(($.trim($(e).find('td:eq(8)').text())||'-'))+'</td>';
-						postHtml += '	<td class="ta-C mifBtcDt">'+(($.trim($(e).find('td:eq(10)').text())||'-'))+'</td>';
-						postHtml += '</tr>';
-					});
-				}
-				$('table.postIndvTable tbody').append(postHtml);
-	
-				var sibIndvInfo = $(html).find('table').get(7);
-				$('table.sibIndvTable tbody').empty(); 
-				var sibHtml = '<tr><td rowspan="2" colspan="5" class="ta-C">-</td></tr>';
-				if($(sibIndvInfo).find('tbody tr td').length > 1){
-					sibHtml='';
-					$(sibIndvInfo).find('tbody tr').each((i,e)=>{						
-						sibHtml += '<tr>';
-						sibHtml += '	<td rowspan="2" class="ta-C bg-gray matime">'+(($(e).find('td:eq(0)').text()||'-'))+'</td>';
-						sibHtml += '	<td rowspan="2" class="ta-C sraIndvAmnno">'+(($(e).find('td:eq(2)').text()||'-'))+'</td>';
-						sibHtml += '	<td class="ta-C rgDsc">'+(($.trim($(e).find('td:eq(3)').text())||'-'))+'</td>';
-						sibHtml += '	<td class="ta-C indvSexC">'+(($.trim($(e).find('td:eq(4)').text())||'-'))+'</td>';
-						sibHtml += '	<td class="ta-C birth">'+(($.trim($(e).find('td:eq(5)').text())||'-'))+'</td>';
-						sibHtml += '</tr>';
-						sibHtml += '<tr>';
-						sibHtml += '	<td class="ta-C metrbMetqltGrd">'+(($.trim($(e).find('td:eq(9)').text())||'-'))+'</td>';
-						sibHtml += '	<td class="ta-C metrbBbdyWt">'+(($.trim($(e).find('td:eq(8)').text())||'-'))+'</td>';
-						sibHtml += '	<td class="ta-C mifBtcDt">'+(($.trim($(e).find('td:eq(10)').text())||'-'))+'</td>';
-						sibHtml += '</tr>';
-					});
-				}
-				$('table.sibIndvTable tbody').append(sibHtml);				
-				var epdInfo = $(html).find('table').get(4);
-				$(epdInfo).find('tbody tr:eq(0) td:not(.t1)').each((i,e)=>{
-					var txt = $.trim($(e).text()||'-');
-					$('td[name=reProduct'+(i+1)+']').text(txt);
-				});
-				$(epdInfo).find('tbody tr:eq(1) td:not(.t1)').each((i,e)=>{
-					var txt = $.trim($(e).text()||'');
-					$('td[name=dscReProduct'+(i+1)+'] span').text(txt);
-				});
-				$('div.tab_area h3.tit2:eq(0) .subTxt').html('※한국종축개량협회 제공');	
-			}else{
-				//$('div.tab_area h3.tit2:eq(0) .subTxt').html('※축산경제통합시스템 제공');
-				modalAlert('', '종축개량협회 등재 내역에<br/> 조회되지 않는 개체입니다.<br/>확인바랍니다.');
-			}
-		},
-		error: function(xhr, status, error) {
-			//$('div.tab_area h3.tit2:eq(0) .subTxt').html('※축산경제통합시스템 제공');
-			modalAlert('', '종축개량협회 등재 내역에<br/> 조회되지 않는 개체입니다.<br/>확인바랍니다.');
-		}
-	}).done(function (json) {
-		if(callback)callback();	
-		setTimeout(function(){
-			fnHideLoadingImg();
-		},1000);
-	});
-};
-
 function epdChartDraw(){
 
 	//차트 생성
@@ -372,4 +282,34 @@ function epdChartDraw(){
 	    }           
 	};
 	chart = new Chart(ctx, config);
+}
+
+
+function showGradient() {
+    $(".fixdCellGrup").each(function () {
+        if ($(this).width() < $(this).children().innerWidth() == true) {
+            //sticky 테이블 체크 여부
+            if ($(this).parent(".scroll_wrap").hasClass("left_fixdTbl") == true) {
+                //sticky 테이블 위치 설정
+                var wd = 0;
+                //prettier-ignore
+                $(this).find("thead th.fixd_box").each(function (index, item) {
+                    $(item).css("left", wd + "px");
+                    wd += $(item).outerWidth();
+                });
+                //prettier-ignore
+                $(this).find("tbody tr").each(function () {
+                    var tbody_wd = 0;
+                    //prettier-ignore
+                    $(this).find("td.fixd_box").each(function (index, item) {
+                        $(item).css("left", tbody_wd + "px");
+                        tbody_wd += $(item).outerWidth();
+                    });
+                });
+            }
+        }
+        if ($(this).height() < $(this).children().innerHeight() == true) {
+            $(this).parents(".scroll_wrap").addClass("sc_v_use");
+        }
+    });
 }

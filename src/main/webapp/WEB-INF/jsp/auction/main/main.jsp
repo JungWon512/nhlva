@@ -1,6 +1,17 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
 <%@ include file="/WEB-INF/__system/taglibs.jsp" %>
+<div class="banner_box" style="margin:0 0 25px;">
+	<ul>
+		<li moveUrl="https://livestock.nonghyup.com/main/main.do">
+			<a href="javascript:;">
+				<img src="/static/images/guide/pc_banner.jpg" alt="" class="pc_banner">
+				<img src="/static/images/guide/new_mo_banner.jpg" alt="" class="mo_banner">
+			</a>
+		</li>
+	</ul>
+</div>
 <div class="auction_choice">
+	
 	<h3>실시간경매</h3>
 	<dl>
 		<!--<dt><span>${fn:substring(johapData.CLNTNM,0,8) }</span></dt>-->
@@ -17,10 +28,10 @@
 		</c:if>
 		<li>
 			<sec:authorize access="hasRole('ROLE_BIDDER')">
-				<a href="javascript:goAuctionApp();" class="auction_join">경매 응찰</a>
+				<a href="javascript:goAuctionApp();" class="auction_join">${fn:contains(aucDate[0].AUC_OBJ_DSC, 5) ? '염소' : ''} 경매 응찰</a>
 			</sec:authorize>
 			<sec:authorize access="!hasRole('ROLE_BIDDER')">
-				<a href="javascript:goLoginPage();" class="auction_join">경매 응찰</a>
+				<a href="javascript:goLoginPage();" class="auction_join">${fn:contains(aucDate[0].AUC_OBJ_DSC, 5) ? '염소' : ''}  경매 응찰</a>
 			</sec:authorize>
 		</li>
 		<li>

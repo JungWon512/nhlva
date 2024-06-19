@@ -765,3 +765,23 @@ var fnHideLoadingImg = function() {
 	$("#loading-prograss").hide();
 	$('body').css('overflow-y','auto');
 };
+
+//외부 브라우저 이동
+var moveExUrl = function(exUrl) {
+	try {
+		// 안드로이드
+		if (window.auctionBridge) {
+			window.auctionBridge.callUrl(exUrl);
+		}
+		// 아이폰
+		else if(isIos()) {
+			window.webkit.messageHandlers.moveWebUrl.postMessage(exUrl);
+		}
+		else {
+			window.open(exUrl); 
+		}
+	}
+	catch(e) {
+		//window.open(exUrl); 
+	}
+};

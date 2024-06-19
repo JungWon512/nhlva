@@ -337,6 +337,9 @@
 					<li>개인정보 처리 방침
 						<a  href="#" onclick="location.href='/privacy';return false;"  id="20230213" style="color: #007eff;">[내용보기]</a>
 					</li>
+					<li>2024.01.10 개인정보 처리방침
+						<a  href="#" onclick="location.href='/privacy240514';return false;"  id="20240514" style="color: #007eff;">[내용보기]</a>
+					</li>
 					<li>2023.11.07 개인정보 처리방침
 						<a  href="#" onclick="location.href='/privacy240112';return false;"  id="20240112" style="color: #007eff;">[내용보기]</a>
 					</li>

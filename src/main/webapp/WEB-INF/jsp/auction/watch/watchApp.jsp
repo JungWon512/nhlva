@@ -59,7 +59,8 @@
 							<dd class="pd_ea sraIndvAmnno">${ vo.SRA_INDV_AMNNO_FORMAT_F }</dd>
 							<dd class="pd_sex indvSexC">${ vo.INDV_SEX_C_NAME }</dd>
 							<dd class="pd_kg cowSogWt textNumber">
-								<fmt:formatNumber value="${(empty vo.COW_SOG_WT or vo.COW_SOG_WT <= 0 ) ? '0' : fn:split(vo.COW_SOG_WT,'.')[0]}" type="number" />
+								<fmt:formatNumber value="${vo.COW_SOG_WT}" var="COW_SOG_WT" type="number" pattern="#"/>
+								${empty COW_SOG_WT or COW_SOG_WT le 0 ? '-' : COW_SOG_WT}								
 							</dd>
 							<dd class="pd_kpn kpnNo">${ vo.KPN_NO_STR }</dd>
 							<dd class="pd_num1 sraIndvPasgQcn">${ vo.SRA_INDV_PASG_QCN }</dd>

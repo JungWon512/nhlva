@@ -289,7 +289,7 @@ var inputNumberVaild = function(el,len){
 }
 
 // 소켓통신 connect 및 이벤트 바인딩 [s]
-var socket = null, auctionConfig = {seData : {}, divisionPriceUnit : ["만 원", "만 원", "만 원", "만 원"]},scData={};;
+var socket = null, auctionConfig = {seData : {}, divisionPriceUnit : ["만 원", "만 원", "만 원", "만 원","", "만 원", "만 원"]},scData={};;
 var socketStart = function(){
 	if(!$('#naBzPlc').val()) return;
 	if(socket){ socket.connect(); return;}

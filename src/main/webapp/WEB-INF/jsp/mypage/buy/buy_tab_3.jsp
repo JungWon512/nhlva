@@ -43,9 +43,9 @@
 						<em class="fc-red totCowCnt"></em>
 					</div>
 					<ul class="cowCnt">
-						<li>송아지 <span class="num cow1"></span></li>
+						<%-- <li>송아지 <span class="num cow1"></span></li>
 						<li>비육우 <span class="num cow2"></span></li>
-						<li>번식우 <span class="num cow3"></span></li>
+						<li>번식우 <span class="num cow3"></span></li> --%>
 					</ul>
 				</div>
 			</div>

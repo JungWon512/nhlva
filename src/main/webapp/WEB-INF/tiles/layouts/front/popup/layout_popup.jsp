@@ -1,10 +1,9 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ include file="/WEB-INF/__system/taglibs.jsp"%>
-<!DOCTYPE html>
-<html lang="en">
 <jsp:useBean id="now" class="java.util.Date" />
 <fmt:formatDate value="${now}" pattern="yyyyMMddHH" var="version" />
-
+<!DOCTYPE html>
+<html lang="en">
 <!--begin::Head-->
 <head>
     <!-- Google Tag Manager -->

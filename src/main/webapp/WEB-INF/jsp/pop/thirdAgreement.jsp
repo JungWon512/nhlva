@@ -34,7 +34,7 @@
 					<p class="ft12">본인은 스마트 가축시장 플랫폼 서비스를 이용하기 위해, 아래의 내용과 같이 본인의
 						개인정보를 제공하는 것에 동의합니다.</p>
 					<ul class="pd10">
-						<li class="ft12">※ 이용자는 개인정보 제공 동의를 거부할 권리가 있으며, 동의 거부 시 “NH가축시장 플랫폼” 이용이 불가합니다.</li>
+						<li class="ft12">※ 이용자는 개인정보 제공 동의를 거부할 권리가 있으며, 동의 거부 시 “스마트 가축시장 플랫폼” 이용이 불가합니다.</li>
 					</ul>
 					<table class="tb1" order="1" cellspacing="0" cellpadding="0" style='border-collapse: collapse; border: none; width: 100%;'>
 						<tr>
@@ -80,7 +80,7 @@
 							</td>
 							<td  class="tdLine" rowspan="2" valign="middle" style='width: 168; height: 190; '>
 								<p class="">
-									<span class="ft11" style='font-family: "Noto Sans CJK KR"; color: #0c0c0c; line-height: 160%'>성명, 생년월일, 휴대폰번호, 농장명, 농장주소, 사육정보, 낙찰정보, NH가축시장 플랫폼 거래내역</span>
+									<span class="ft11" style='font-family: "Noto Sans CJK KR"; color: #0c0c0c; line-height: 160%'>성명, 생년월일, 휴대폰번호, 농장명, 농장주소, 사육정보, 낙찰정보, 스마트 가축시장 플랫폼 거래내역</span>
 								</p>
 							</td>
 							<td class="tdLine"  rowspan="2" valign="middle" style='width: 168; height: 190; '>

@@ -14,11 +14,14 @@
 		</div>
 		<div class="sort">
 			<select name="searchAucObjDscSold" id="searchAucObjDscSold">
-				<option value="">전체</option>
+				<option value="''">전체</option>
 				<option value="1" ${inputParam.searchAucObjDsc eq '1' ? 'selected' : ''}>송아지</option>
 				<option value="2" ${inputParam.searchAucObjDsc eq '2' ? 'selected' : ''}>비육우</option>
 				<option value="3" ${inputParam.searchAucObjDsc eq '3' ? 'selected' : ''}>번식우</option>
-			</select>	
+				<c:if test="${johapData.ETC_AUC_OBJ_DSC eq '5'}">
+					<option value="5" ${inputParam.searchAucObjDsc eq '5' ? 'selected' : ''}>염소</option>
+				</c:if>
+			</select>
 		</div>
 		<div class="btn">
 			<button type="button" id="btn_refreshSold" class="btn-refresh"></button>
@@ -34,6 +37,9 @@
 						<dd><p>송아지</p></dd>
 						<dd><p>비육우</p></dd>
 						<dd><p>번식우</p></dd>
+						<c:if test="${johapData.ETC_AUC_OBJ_DSC eq '5'}">
+							<dd><p>염소</p></dd>
+						</c:if>
 						<dd><p>합계</p></dd>
 					</dl>
 					<dl>
@@ -47,6 +53,11 @@
 						<dd>
 							<p><span class="ea">${buyCnt.CNT_COW}</span>두</p>
 						</dd>
+						<c:if test="${johapData.ETC_AUC_OBJ_DSC eq '5'}">
+							<dd>
+								<p><span class="ea">${buyCnt.CNT_5}</span>두</p>
+							</dd>
+						</c:if>
 						<dd>
 							<p><span class="ea">${buyCnt.CNT}</span>두</p>
 						</dd>
@@ -62,6 +73,11 @@
 						<dd>
 							<p><span class="ea">${buyCnt.CNT_SEX_W_F_3}</span>두</p>
 						</dd>
+						<c:if test="${johapData.ETC_AUC_OBJ_DSC eq '5'}">
+							<dd>
+								<p><span class="ea">${buyCnt.CNT_SEX_W_F_5}</span>두</p>
+							</dd>
+						</c:if>
 						<dd>
 							<p><span class="ea">${buyCnt.CNT_SEX_W_F}</span>두</p>
 						</dd>
@@ -77,6 +93,11 @@
 						<dd>
 							<p><span class="ea">${buyCnt.CNT_SEX_M_F_3}</span>두</p>
 						</dd>
+						<c:if test="${johapData.ETC_AUC_OBJ_DSC eq '5'}">
+							<dd>
+								<p><span class="ea">${buyCnt.CNT_SEX_M_F_5}</span>두</p>
+							</dd>
+						</c:if>
 						<dd>
 							<p><span class="ea">${buyCnt.CNT_SEX_M_F}</span>두</p>
 						</dd>
@@ -92,6 +113,11 @@
 						<dd>
 							<p><span class="ea">${buyCnt.CNT_SEX_ETC_F_3}</span>두</p>
 						</dd>
+						<c:if test="${johapData.ETC_AUC_OBJ_DSC eq '5'}">
+							<dd>
+								<p><span class="ea">${buyCnt.CNT_SEX_ETC_F_5}</span>두</p>
+							</dd>
+						</c:if>
 						<dd>
 							<p><span class="ea">${buyCnt.CNT_SEX_ETC_F}</span>두</p>
 						</dd>
@@ -169,7 +195,7 @@
 							<dd class="pd_sex">${vo.INDV_SEX_C_NAME }</dd>
 							<dd class="pd_kg textNumber">${vo.COW_SOG_WT }</dd>
 							<dd class="pd_kpn">${vo.KPN_NO_STR }</dd>
-							<dd class="pd_num1"><fmt:formatNumber value="${fn:split(vo.COW_SOG_WT,'.')[0]}" type="number" /></dd>
+							<dd class="pd_num1"><fmt:formatNumber value="${vo.COW_SOG_WT}" type="number" pattern="#"/></dd>
 							<dd class="pd_pay1 textNumber">
 								<c:choose>
 									<c:when test="${vo.LOWS_SBID_LMT_AM eq '' || vo.LOWS_SBID_LMT_AM == null || vo.LOWS_SBID_LMT_AM <= 0}">-</c:when>

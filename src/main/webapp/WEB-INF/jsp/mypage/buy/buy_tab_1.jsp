@@ -13,12 +13,28 @@
                </select>
 		</div>
 		<div class="sort">
+		<%--
 			<select name="searchAucObjDscBid" id="">
 				<option id="ra1" value="">전체</option>
 				<option id="ra2" value="1" <c:if test="${inputParam.searchAucObjDscBid eq '1'}">selected</c:if>>송아지</option>
 				<option id="ra3" value="2" <c:if test="${inputParam.searchAucObjDscBid eq '2'}">selected</c:if>>비육우</option>
 				<option id="ra4" value="3" <c:if test="${inputParam.searchAucObjDscBid eq '3'}">selected</c:if>>번식우</option>
+			<!-- 기타 가축 경매를 사용하는 경우 -->
+			<c:if test="${!empty johapData.ETC_AUC_OBJ_DSC and !empty johapData.ETC_AUC_OBJ_DSC_NM}">
+			<c:set var="etcList" value="${fn:split(johapData.ETC_AUC_OBJ_DSC, ',')}" />
+			<c:set var="etcNmList" value="${fn:split(johapData.ETC_AUC_OBJ_DSC_NM, ',')}" />
+			<c:forEach items="${etcList}" var="etc" varStatus="i">
+				<option id="ra${etc}" value="${etc}" <c:if test="${inputParam.searchAucObjDscBid eq etc}">selected</c:if>>${etcNmList[i.index]}</option>  
+			</c:forEach>
+			</c:if>
 			</select>	
+		--%>
+			<c:import url="/common/searchAucObjDsc">
+				<c:param name="type"        value="select" />
+				<c:param name="selectName"  value="searchAucObjDscBid" />
+				<c:param name="naBzplc"  value="${johapData.NA_BZPLC}" />
+				<c:param name="selectValue" value="${inputParam.searchAucObjDscBid}" />
+			</c:import>
 		</div>
 		<div class="btn">
 			<button type="button" class="btn-refresh list_sch sch_bid"></button>
@@ -30,9 +46,13 @@
 			<dl>
 				<dd class="date">경매일자</dd>
 				<dd class="num"><span class="w_view_in">경매</span>번호</dd>
-				<dd class="pd_ea">개체번호</dd>
+				<c:choose>
+					<c:when test="${inputParam.searchAucObjDscBid eq '5'}"><dd class="pd_ea">출하주</dd></c:when>
+					<c:otherwise>
+						<dd class="pd_ea">개체번호</dd>
+					</c:otherwise>
+				</c:choose>
 				<dd class="pd_sex">성별</dd>
-				<dd class="pd_month">월령</dd>
 				<dd class="pd_kg">중량<span class="w_view_in">(kg)</span></dd>
 				<dd class="pd_pay1">예정가</dd>
 				<dd class="pd_pay2">응찰가</dd>
@@ -56,16 +76,16 @@
 						<dl>
 							<dd class="date">${ item.AUC_DT_STR }</dd>
 							<dd class="num">${ item.AUC_PRG_SQ }</dd>
-							<dd class="pd_ea textNumber">${ item.SRA_INDV_AMNNO_FORMAT }</dd>
+							<c:choose>
+								<c:when test="${inputParam.searchAucObjDscBid eq '5'}"><dd class="pd_name">${item.FTSNM}</dd></c:when>
+								<c:otherwise>
+									<dd class="pd_ea textNumber">${ item.SRA_INDV_AMNNO_FORMAT }</dd>
+								</c:otherwise>
+							</c:choose>
 							<dd class="pd_sex">${ item.INDV_SEX_C_NAME }</dd>
-							<dd class="pd_sex">${ item.MTCN }</dd>
-							<dd class="pd_kg textNumber">
-								<c:choose>
-									<c:when test="${empty item.COW_SOG_WT || item.COW_SOG_WT <= 0}">0</c:when>
-									<c:otherwise>
-										<fmt:formatNumber value="${fn:split(item.COW_SOG_WT,'.')[0]}" type="number" />
-									</c:otherwise>
-								</c:choose>
+							<dd class="pd_kg textNumber">							
+								<fmt:formatNumber value="${item.COW_SOG_WT}" var="COW_SOG_WT" type="number" pattern="#"/>
+								${(empty COW_SOG_WT || COW_SOG_WT <= 0) ? 0 : COW_SOG_WT}
 							</dd>
 							<dd class="pd_pay1 textNumber">
 								<c:choose>

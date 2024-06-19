@@ -3,6 +3,9 @@
 	var Home = function () {
 
 		var addEvent = function(){
+			$(".banner_box ul li").click(function(){
+				moveExUrl($(this).attr('moveUrl'));
+			});
 			$(".banner_box ul").slick({
 				dots: true,
 				adaptiveHeight: true,

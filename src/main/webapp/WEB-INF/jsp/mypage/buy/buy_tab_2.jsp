@@ -29,7 +29,7 @@
 					</li>
 				</c:if>
 				<c:forEach items="${ calendarList }" var="vo">
-					<li id="${vo.AUC_DT}_${vo.AUC_OBJ_DSC_NAME}_${vo.NA_BZPLCNO}" class="move_info buy_tab3">
+					<li id="${vo.AUC_DT}_${vo.AUC_OBJ_DSC}_${vo.NA_BZPLCNO}" class="move_info buy_tab3">
 						<dl>
 							<dt>
 								<p>${vo.AUC_DAY }</p>

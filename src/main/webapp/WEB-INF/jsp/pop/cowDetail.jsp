@@ -33,15 +33,15 @@
 		</button>
 		<c:set var="tabTotCnt" value="0"/>
 		<c:forEach items="${ tabList }" var="item" varStatus="st">
-			<c:if test="${(inputParam.bidPopYn ne 'N' and item.SIMP_C ne '3' and item.SIMP_C ne '4' and item.VISIB_YN eq '1') or (inputParam.bidPopYn eq 'N' and item.SIMP_C ne '4' and item.VISIB_YN eq '1')}">
+			<c:if test="${(inputParam.aucObjDsc ne '5' and inputParam.aucObjDsc ne '6') and ((inputParam.bidPopYn ne 'N' and item.SIMP_C ne '3' and item.SIMP_C ne '4' and item.VISIB_YN eq '1') or (inputParam.bidPopYn eq 'N' and item.SIMP_C ne '4' and item.VISIB_YN eq '1'))}">
 				<c:set var="tabTotCnt" value="${tabTotCnt+1}"/>
 			</c:if>
 		</c:forEach>
 		<div class="tab_list item-${tabTotCnt+1}">
 		<ul>
-			<li><a href="javascript:;" class="${param.tabId eq '0' or empty param.tabId ? 'act':'' }" data-tab-id="0">출장우</a></li>
+			<li><a href="javascript:;" class="${param.tabId eq '0' or empty param.tabId ? 'act':'' }" data-tab-id="0">${(inputParam.aucObjDsc ne '5' and inputParam.aucObjDsc ne '6')?'출장우':'출장염소'}</a></li>
 			<c:forEach items="${ tabList }" var="item" varStatus="st">
-				<c:if test="${item.VISIB_YN eq '1' && item.SIMP_C ne '4'}">
+				<c:if test="${(inputParam.aucObjDsc ne '5' and inputParam.aucObjDsc ne '6') and (item.VISIB_YN eq '1' && item.SIMP_C ne '4')}">
 					<c:if test="${!(item.SIMP_C eq '3' and inputParam.bidPopYn ne 'N')}">
 						<li><a href="javascript:;" class="${(param.tabId eq item.SIMP_C)?'act':'' }" data-tab-id="${item.SIMP_C }">${item.SIMP_CNM }</a></li>
 					</c:if>
