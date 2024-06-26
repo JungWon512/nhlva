@@ -785,3 +785,22 @@ var moveExUrl = function(exUrl) {
 		//window.open(exUrl); 
 	}
 };
+
+var commonAdsLog = function(param){
+	console.log('{}',param);
+	$.ajax({
+		url: '/auction/api/insertAdsLog',
+		data: JSON.stringify(param),
+		type: 'POST',
+		async: false,
+		dataType: 'json',
+		beforeSend: function (xhr) {
+			xhr.setRequestHeader("Accept", "application/json");
+			xhr.setRequestHeader("Content-Type", "application/json");
+		},
+		success : function(data) {
+			console.log(data);
+		}
+	});
+	
+}

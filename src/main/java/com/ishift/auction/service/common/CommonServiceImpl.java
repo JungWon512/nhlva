@@ -400,4 +400,38 @@ public class CommonServiceImpl implements CommonService {
 	public List<Map<String, Object>> selectAucObjDscList(Map<String, Object> params) throws SQLException{
 		return commonDao.selectAucObjDscList(params);		
 	}
+
+	public int callRenderingAdsLog(String pgid,String ip) throws SQLException{
+		int insertNum = 0;
+		String url="";
+		String pcFilePath="";
+		String moFilePath="";
+		switch(pgid){
+			default:
+				url="https://livestock.nonghyup.com/main/main.do";
+				pcFilePath="/static/images/guide/pc_banner.jpg";
+				moFilePath="/static/images/guide/new_mo_banner.jpg";
+			break;
+		}
+
+		Map<String,Object> adsMap = new HashMap<>();
+		adsMap.put("pgid", pgid);
+		adsMap.put("url_nm", url);
+		adsMap.put("proc_flag", "R");
+		adsMap.put("fsrg_ip", ip);
+
+		adsMap.put("banner_file_path", pcFilePath);
+		adsMap.put("device_type", "PC");
+		insertNum +=this.insertAdsLog(adsMap);
+
+
+		adsMap.put("banner_file_path", moFilePath);
+		adsMap.put("device_type", "MO");
+		insertNum +=this.insertAdsLog(adsMap);		
+		return insertNum;
+	}
+
+	public int insertAdsLog(Map<String, Object> params) throws SQLException{
+		return commonDao.insertAdsLog(params);		
+	}
 }

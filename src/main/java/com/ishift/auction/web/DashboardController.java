@@ -7,6 +7,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import javax.servlet.http.HttpServletRequest;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,8 +26,10 @@ import org.springframework.web.servlet.ModelAndView;
 
 import com.ishift.auction.service.admin.AdminService;
 import com.ishift.auction.service.auction.AuctionService;
+import com.ishift.auction.service.common.CommonService;
 import com.ishift.auction.service.dashboard.DashBoardService;
 import com.ishift.auction.util.DateUtil;
+import com.ishift.auction.util.HttpUtils;
 import com.ishift.auction.util.SessionUtill;
 import com.ishift.auction.vo.AdminUserDetails;
 
@@ -45,6 +49,12 @@ public class DashboardController {
 	
 	@Autowired
 	private SessionUtill sessionUtill;
+
+	@Autowired
+	private HttpUtils httpUtils;
+	
+	@Autowired
+	private CommonService commonService;
 	
 	/**
 	 * 대시보드 기본 월 설정하는 메소드
@@ -106,7 +116,7 @@ public class DashboardController {
 	 * @throws SQLException 
 	 */
 	@RequestMapping(value = "/dashboard/main",method = { RequestMethod.GET, RequestMethod.POST })
-	public ModelAndView dashboard(@RequestParam Map<String, Object> params) throws Exception {
+	public ModelAndView dashboard(@RequestParam Map<String, Object> params,HttpServletRequest req) throws Exception {
 		// 메인화면 현황
 		ModelAndView mav = new ModelAndView("dashboard/main");
 		// 기준 날짜 range (초기값 10)
@@ -133,7 +143,12 @@ public class DashboardController {
 		mav.addObject("title", title);
 		mav.addObject("searchDate", searchDate);
 		mav.addObject("searchPreDate", searchPreDate);
-		mav.addObject("inputParam", params);		
+		mav.addObject("inputParam", params);	
+		try {			
+			commonService.callRenderingAdsLog("dashboard/main",httpUtils.getClientIp(req));
+		}catch (Exception e) {
+			log.error(e.getMessage()+"|| 배너광고 로그 등록중 err : {}",e);
+		}	
 		return mav;
 	}
 	@PostMapping(value = "/dashboard/main_ajax", produces = MediaType.APPLICATION_JSON_VALUE)

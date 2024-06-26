@@ -1117,4 +1117,27 @@
 		AND AUC_DT = TRIM(#{AUC_DT})
 		AND INDV_BLD_DSC = TRIM(#{INDV_BLD_DSC})
 	</insert>
+		
+	<insert id="insertAdsLog" parameterType="hashMap">
+	INSERT INTO TB_LA_IS_MM_BANNER_ADS(
+		FILE_PATH
+		, PGID
+		, DEVICE_TYPE
+		, URL_NM
+		, PROC_FLAG
+		, FSRG_DTM
+		, FSRG_ENO
+		, FSRG_IP
+	)VALUES
+	(
+		#{banner_file_path}
+		, #{pgid}
+		, #{device_type}
+		, #{url_nm}
+		, #{proc_flag}
+		, SYSDATE
+		, #{eno}
+		, #{fsrg_ip}
+	)
+	</insert>
 </mapper>

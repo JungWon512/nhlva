@@ -53,4 +53,7 @@ public interface CommonService {
 	void callIndvAiakInfo(Map<String, Object> param) throws SQLException, RuntimeException;
 	List<Map<String, Object>> selectAucObjDscList(Map<String, Object> params) throws SQLException;
 
+	int callRenderingAdsLog(String pgid,String ip) throws SQLException;
+	
+	int insertAdsLog(Map<String, Object> params) throws SQLException;
 }

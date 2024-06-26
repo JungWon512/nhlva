@@ -134,7 +134,7 @@ public class AuctionController extends CommonController {
 	}
 
 	@RequestMapping(value = "/sales",method = { RequestMethod.GET, RequestMethod.POST })
-	public ModelAndView sales(@RequestParam Map<String,Object> param) throws Exception {
+	public ModelAndView sales(@RequestParam Map<String,Object> param,HttpServletRequest req ) throws Exception {
 		// 경매예정목록
 		String place = (String) param.get("place"); 
 		LOGGER.debug("start of sales.do"); 
@@ -196,6 +196,13 @@ public class AuctionController extends CommonController {
 //		} 
 		if(sessionUtill.getUserId() != null) param.put("loginNo", sessionUtill.getUserId());
 		param.put("authRole", sessionUtill.getRoleConfirm());
+
+		try {			
+			commonService.callRenderingAdsLog("sales",httpUtils.getClientIp(req));
+		}catch (Exception e) {
+			log.error(e.getMessage()+"|| 배너광고 로그 등록중 err : {}",e);
+		}
+		
 		mav.addObject("johapData", johap);
 		mav.addObject("subheaderTitle","출장우 조회");
 		mav.addObject("dateList",datelist); 
@@ -357,6 +364,7 @@ public class AuctionController extends CommonController {
 							   , HttpServletResponse res) throws Exception {
 		// 조합메인(main)
 		LOGGER.debug("start of main.do");
+		String adsPgId = "main";
 		LocalDateTime date = LocalDateTime.now();
 		String today = date.format(DateTimeFormatter.ofPattern("yyyyMMdd"));
 
@@ -391,11 +399,13 @@ public class AuctionController extends CommonController {
 		
 		if(bizList.size() <= 0 || aucYn < 1 ) {
 			//경매를 안하는 곳이면
+			adsPgId = "noinfo";
 			mav.setViewName("auction/info/noinfo");
 			mav.addObject("subheaderTitle","경매안내");
 		}
 		else if(dateVo != null && today.equals(dateVo.get("AUC_DT")) && aucCnt > 0){
 			//경매진행중
+			adsPgId = "main";
 			mav.setViewName("auction/main/main");
 			mav.addObject("subheaderTitle","경매참여");
 			
@@ -427,10 +437,17 @@ public class AuctionController extends CommonController {
 			tempMap.put("searchAucDt", date.format(DateTimeFormatter.ofPattern("yyyyMM")));
 			List<Map<String,Object>> dateList = auctionService.selectCalendarList(tempMap);
 			mav.addObject("dateList",dateList);
-			
+
+			adsPgId = "info";
 			mav.addObject("today", today);
 			mav.setViewName("auction/info/info");
 			mav.addObject("subheaderTitle","경매안내");
+		}
+
+		try {			
+			commonService.callRenderingAdsLog(adsPgId,httpUtils.getClientIp(req));
+		}catch (Exception e) {
+			log.error(e.getMessage()+"|| 배너광고 로그 등록중 err : {}",e);
 		}
 		return mav;
 	}	
@@ -1150,5 +1167,23 @@ public class AuctionController extends CommonController {
 		
 		mav.setViewName("auction/common/searchAucObjDsc");
 		return mav;
+	}
+	
+	@ResponseBody
+	@PostMapping(path = "/auction/api/insertAdsLog", produces = MediaType.APPLICATION_JSON_VALUE)
+	Map<String, Object> insertAdsLog(@RequestBody Map<String,Object> params,HttpServletRequest req) {
+		Map<String, Object> result = new HashMap<>();
+		try {
+			params.put("fsrg_ip", httpUtils.getClientIp(req));
+			int cnt = commonService.insertAdsLog(params);
+			result.put("data", cnt);
+			result.put("success", (cnt > 0));
+		}
+		catch (RuntimeException | SQLException re) {
+			result.put("success", false);
+			result.put("message", "작업중 오류가 발생했습니다. 관리자에게 문의하세요.");
+			log.error("AuctionController.insertUpdateZim : {} ",re);
+		}
+		return result;
 	}
 }

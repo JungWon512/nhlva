@@ -5,6 +5,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import javax.servlet.http.HttpServletRequest;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -14,8 +16,12 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.ishift.auction.service.auction.AuctionService;
+import com.ishift.auction.service.common.CommonService;
 import com.ishift.auction.util.HttpUtils;
 
+import lombok.extern.slf4j.Slf4j;
+
+@Slf4j
 @RestController
 public class FrontController {
 	
@@ -24,6 +30,9 @@ public class FrontController {
 
 	@Autowired
 	private HttpUtils httpUtils;
+	
+	@Autowired
+	private CommonService commonService;
 	
 	@RequestMapping(value = "/", method = { RequestMethod.GET, RequestMethod.POST })
 	public ModelAndView init() throws Exception {
@@ -34,24 +43,35 @@ public class FrontController {
 	}
 
 	@RequestMapping(value = "/home", method = { RequestMethod.GET, RequestMethod.POST })
-	public ModelAndView main() throws Exception {
+	public ModelAndView main(HttpServletRequest req) throws Exception {
 		// 전국지도 - 8개군에서 선택
 		ModelAndView mav = new ModelAndView();
 		Map<String, Object> map = new HashMap<>();
 		mav.addObject("bizList", auctionService.selectBizList(map));
 		mav.setViewName("front/user/home");
+		try {			
+			commonService.callRenderingAdsLog("home",httpUtils.getClientIp(req));
+		}catch (Exception e) {
+			log.error(e.getMessage()+"|| 배너광고 로그 등록중 err : {}",e);
+		}
 		return mav;
 	}
 	
 	@RequestMapping(value = "/district", method = { RequestMethod.GET, RequestMethod.POST })
 	public ModelAndView area(@RequestParam(name = "loc", required = false) String loc,
-							 @RequestParam(name = "auctingYn", required = false) String auctingYn) throws Exception {
+							 @RequestParam(name = "auctingYn", required = false) String auctingYn,HttpServletRequest req) throws Exception {
 		// 전국지도 - 시/군 선택
 		ModelAndView mav = new ModelAndView();
 		Map<String, Object> map = new HashMap<>();
 		map.put("naBzPlcLoc", loc);
 		map.put("auctingYn", auctingYn);
 		List<Map<String, Object>> list = auctionService.selectBizLocList(map);
+		try {
+			Map<String,Object> adsMap = new HashMap<>();
+			commonService.callRenderingAdsLog("district",httpUtils.getClientIp(req));
+		}catch (Exception e) {
+			log.error(e.getMessage()+"|| 배너광고 로그 등록중 err : {}",e);
+		}
 		mav.addObject("locList", list);
 		mav.setViewName("front/user/district");
 		return mav;
