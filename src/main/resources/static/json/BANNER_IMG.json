@@ -1,0 +1,46 @@
+{
+	"data" : [
+		{
+			"pgid" : "district"
+			, "pcFilePath":"/static/images/guide/pc_banner.jpg"
+			, "moFilePath":"/static/images/guide/new_mo_banner.jpg"
+			, "url":"https://livestock.nonghyup.com/main/main.do"
+		},
+		{
+			"pgid" : "sales"
+			, "pcFilePath":"/static/images/guide/pc_banner.jpg"
+			, "moFilePath":"/static/images/guide/new_mo_banner.jpg"
+			, "url":"https://livestock.nonghyup.com/main/main.do"
+		},
+		{
+			"pgid" : "main"
+			, "pcFilePath":"/static/images/guide/pc_banner.jpg"
+			, "moFilePath":"/static/images/guide/new_mo_banner.jpg"
+			, "url":"https://livestock.nonghyup.com/main/main.do"
+		},
+		{
+			"pgid" : "home"
+			, "pcFilePath":"/static/images/guide/pc_banner.jpg"
+			, "moFilePath":"/static/images/guide/new_mo_banner.jpg"
+			, "url":"https://livestock.nonghyup.com/main/main.do"
+		},
+		{
+			"pgid" : "info"
+			, "pcFilePath":"/static/images/guide/pc_banner.jpg"
+			, "moFilePath":"/static/images/guide/new_mo_banner.jpg"
+			, "url":"https://livestock.nonghyup.com/main/main.do"
+		},
+		{
+			"pgid" : "district"
+			, "pcFilePath":"/static/images/guide/pc_banner.jpg"
+			, "moFilePath":"/static/images/guide/new_mo_banner.jpg"
+			, "url":"https://livestock.nonghyup.com/main/main.do"
+		},
+		{
+			"pgid" : "dashboard/main"
+			, "pcFilePath":"/static/images/guide/pc_banner.jpg"
+			, "moFilePath":"/static/images/guide/new_mo_banner.jpg"
+			, "url":"https://livestock.nonghyup.com/main/main.do"
+		}
+	]
+}

@@ -28,12 +28,13 @@
 			</li>
 		</ul>
 	</div>
+	
 	<div class="banner_box">
 		<ul>
-			<li moveUrl="https://livestock.nonghyup.com/main/main.do">
+			<li moveUrl="${bannerInfo.url}">
 				<a href="javascript:;">
-					<img src="/static/images/guide/pc_banner.jpg" alt="" class="pc_banner">
-					<img src="/static/images/guide/new_mo_banner.jpg" alt="" class="mo_banner">
+					<img src="${bannerInfo.pcFilePath}" alt="" class="pc_banner">
+					<img src="${bannerInfo.moFilePath}" alt="" class="mo_banner">
 				</a>
 			</li>
 		</ul>

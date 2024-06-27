@@ -56,4 +56,6 @@ public interface CommonService {
 	int callRenderingAdsLog(String pgid,String ip) throws SQLException;
 	
 	int insertAdsLog(Map<String, Object> params) throws SQLException;
+	public Map<String, Object> readJsonFile(String pgid);
+	
 }

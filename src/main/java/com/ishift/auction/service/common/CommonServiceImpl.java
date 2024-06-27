@@ -1,12 +1,17 @@
 package com.ishift.auction.service.common;
 
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.sql.SQLException;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
-
+import org.apache.commons.lang.StringUtils;
+import org.json.JSONArray;
+import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.ClassPathResource;
 import org.springframework.stereotype.Service;
 import org.springframework.util.ObjectUtils;
 
@@ -403,29 +408,20 @@ public class CommonServiceImpl implements CommonService {
 
 	public int callRenderingAdsLog(String pgid,String ip) throws SQLException{
 		int insertNum = 0;
-		String url="";
-		String pcFilePath="";
-		String moFilePath="";
-		switch(pgid){
-			default:
-				url="https://livestock.nonghyup.com/main/main.do";
-				pcFilePath="/static/images/guide/pc_banner.jpg";
-				moFilePath="/static/images/guide/new_mo_banner.jpg";
-			break;
-		}
 
 		Map<String,Object> adsMap = new HashMap<>();
+		Map<String,Object> bannerInfo = this.readJsonFile(pgid);
 		adsMap.put("pgid", pgid);
-		adsMap.put("url_nm", url);
+		adsMap.put("url_nm", bannerInfo.get("url"));
 		adsMap.put("proc_flag", "R");
 		adsMap.put("fsrg_ip", ip);
 
-		adsMap.put("banner_file_path", pcFilePath);
+		adsMap.put("banner_file_path", bannerInfo.get("pcFilePath"));
 		adsMap.put("device_type", "PC");
 		insertNum +=this.insertAdsLog(adsMap);
 
 
-		adsMap.put("banner_file_path", moFilePath);
+		adsMap.put("banner_file_path", bannerInfo.get("moFilePath"));
 		adsMap.put("device_type", "MO");
 		insertNum +=this.insertAdsLog(adsMap);		
 		return insertNum;
@@ -433,5 +429,34 @@ public class CommonServiceImpl implements CommonService {
 
 	public int insertAdsLog(Map<String, Object> params) throws SQLException{
 		return commonDao.insertAdsLog(params);		
+	}
+	
+	public Map<String, Object> readJsonFile(String pgid){
+		Map<String, Object> result = new HashMap<>();
+				
+		try{ 
+			String filePath =new ClassPathResource("static/json/BANNER_IMG.json").getFile().getPath();
+			log.info("readJsonFile Json FilePahth :: {}",filePath);
+			String str = StringUtils.join(Files.readAllLines(Paths.get(filePath)), "");
+            JSONObject bannerAds = new JSONObject(str);
+            if(!bannerAds.isEmpty() && bannerAds.has("data")) {
+            	if(bannerAds.get("data") instanceof JSONArray) {
+            		JSONArray adsData = bannerAds.getJSONArray("data");
+            		for(int i = 0;i<adsData.length();i++) {
+            			JSONObject obj = adsData.getJSONObject(i);
+            			if(obj.has("pgid") && pgid.equals(obj.getString("pgid")) ) {
+            				result.put("pgid", pgid);
+            				result.put("pcFilePath", obj.has("pcFilePath")?obj.getString("pcFilePath"):"");
+            				result.put("moFilePath", obj.has("moFilePath")?obj.getString("moFilePath"):"");
+            				result.put("url", obj.has("url")?obj.getString("url"):"");
+            				return result;
+            			}
+            		}
+            	}                
+            }
+		}catch(Exception e) {
+			log.info("readJsonFile {}",e);
+		}
+		return result;
 	}
 }

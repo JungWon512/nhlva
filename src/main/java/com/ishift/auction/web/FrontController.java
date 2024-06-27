@@ -47,13 +47,15 @@ public class FrontController {
 		// 전국지도 - 8개군에서 선택
 		ModelAndView mav = new ModelAndView();
 		Map<String, Object> map = new HashMap<>();
-		mav.addObject("bizList", auctionService.selectBizList(map));
-		mav.setViewName("front/user/home");
-		try {			
+		try {
+			Map<String,Object> bannerJson = commonService.readJsonFile("home");
+			mav.addObject("bannerInfo", bannerJson);
 			commonService.callRenderingAdsLog("home",httpUtils.getClientIp(req));
 		}catch (Exception e) {
 			log.error(e.getMessage()+"|| 배너광고 로그 등록중 err : {}",e);
 		}
+		mav.addObject("bizList", auctionService.selectBizList(map));
+		mav.setViewName("front/user/home");
 		return mav;
 	}
 	
